@@ -1,6 +1,10 @@
+import Dropdown from '@/components/atoms/dropdown';
+import Icon from '@/components/atoms/icon';
 import type { Meta, StoryObj } from '@storybook/react';
+import { DynamicIcon } from 'lucide-react/dynamic';
 import Breadcrumb from './Breadcrumb';
 import type { BreadcrumbItem } from './types';
+import { useBreadcrumb } from './useBreadcrumb';
 
 /**
  * ## DESCRIPTION
@@ -15,7 +19,7 @@ import type { BreadcrumbItem } from './types';
  */
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: 'Atoms/Breadcrumb',
+  title: 'Molecules/Breadcrumb',
   component: Breadcrumb,
   argTypes: {
     maxItem: {
@@ -48,18 +52,401 @@ const items: BreadcrumbItem[] = [
 export const Default: Story = {
   args: {
     items,
-    variant: 'solid',
-    separator: '/',
-    size: 'md',
+    variant: null,
     rounded: false,
-    className: 'text-white',
-    shadow: false,
+    size: 'md',
+    colorText: '',
+    separator: '/',
+    iconCollapse: 'ellipsis',
     startContent: undefined,
     endContent: undefined,
     hideSeparator: false,
-    maxItem: 2,
+    maxItem: 0,
     itemsBeforeCollapse: 1,
     itemsAfterCollapse: 1,
-    iconCollapse: 'ellipsis'
+    className: '',
+    shadow: false
   }
+};
+
+/**
+ * - **Sizes**: Different size variants for the breadcrumb component (sm, md, lg).
+ *   This demonstrates how the breadcrumb scales across different size requirements for various UI contexts.
+ */
+export const Sizes: Story = {
+  render: () => (
+    <div>
+      <Breadcrumb items={items} size='sm' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
+      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
+      <Breadcrumb items={items} size='lg' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
+    </div>
+  )
+};
+
+/**
+ * - **Colors**: Text color variations using the colorText prop.
+ *   This shows how to apply different color themes to breadcrumb text for better visual integration with your design system.
+ */
+export const Colors: Story = {
+  render: () => (
+    <div>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        colorText='red'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        colorText='blue'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        colorText='indigo'
+      />
+    </div>
+  )
+};
+
+/**
+ * - **Visual Variants**: Different visual styles including bordered, solid, and default variants.
+ *   This demonstrates the various background and border styling options available for the breadcrumb component.
+ */
+export const Variants: Story = {
+  render: () => (
+    <div className='flex flex-col gap-0.5'>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        variant='bordered'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        variant='solid'
+        colorText='white'
+      />
+      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
+    </div>
+  )
+};
+
+/**
+ * - **Border Radius**: Toggle between rounded and square corners using the rounded prop.
+ *   This shows how to control the corner styling of breadcrumb containers for different design aesthetics.
+ */
+export const Rounded: Story = {
+  render: () => (
+    <div className='flex flex-col gap-0.5'>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        rounded={true}
+        variant='solid'
+        colorText='white'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        variant='solid'
+        colorText='white'
+      />
+    </div>
+  )
+};
+
+/**
+ * - **Separators**: Different types of separators including text characters (/, |, >) and dynamic icons.
+ *   This demonstrates the flexibility of the separator prop to use both string characters and icon names.
+ */
+export const Separators: Story = {
+  render: () => (
+    <div className='flex flex-col gap-0.5'>
+      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
+      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='|' />
+      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='>' />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='chevron-right'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='arrow-right'
+      />
+    </div>
+  )
+};
+
+/**
+ * - **Hidden Separators**: Toggle separator visibility with the hideSeparator prop.
+ *   This is useful when you want to display breadcrumb items without visual separators between them.
+ */
+export const HiddenSeparators: Story = {
+  render: () => (
+    <div className='flex flex-col gap-0.5'>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        hideSeparator={false}
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        hideSeparator={true}
+      />
+    </div>
+  )
+};
+
+/**
+ * - **Start and End Content**: Add icons or content at the beginning and end of the breadcrumb.
+ *   This enhances the breadcrumb with contextual icons like home icons at the start or external link indicators at the end.
+ */
+export const WithStartEndContent: Story = {
+  render: () => (
+    <div>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        startContent='home'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        endContent='external-link'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        startContent='home'
+        endContent='external-link'
+      />
+    </div>
+  )
+};
+
+/**
+ * - **Maximum Items and Collapse**: Control the number of visible items with automatic collapsing using icons.
+ *   This is essential for managing long breadcrumb trails by showing only key items and collapsing the middle ones.
+ */
+export const MaxItemsAndCollapse: Story = {
+  render: () => (
+    <div className='flex flex-col gap-0.5'>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={2}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        iconCollapse='ellipsis-vertical'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={2}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        iconCollapse='ellipsis'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={2}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        iconCollapse='airplay'
+      />
+    </div>
+  )
+};
+
+/**
+ * - **Custom Collapse Elements**: Use custom JSX elements instead of icons for collapsed breadcrumb sections.
+ *   This provides complete control over the visual representation of collapsed items, allowing for interactive buttons or styled elements.
+ */
+
+// mapper from breadcrumb items to dropdown items
+const breadcrumbItemsToDropdownSchema = (breadcrumbItems: BreadcrumbItem[], title = 'Rutas ocultas') => {
+  if (breadcrumbItems.length === 0) {
+    return [];
+  }
+
+  return [
+    { type: 'label' as const, label: title },
+    { type: 'separator' as const },
+    ...breadcrumbItems.map((item) => ({
+      type: 'item' as const,
+      label: item.title,
+      onClick: () => {
+        if (item.href) {
+          window.location.href = item.href;
+        }
+      },
+      startContent: <Icon name='chevron-right' size={14} />
+    }))
+  ];
+};
+
+function getDropdownForItems(items: BreadcrumbItem[], maxItem: number, before: number, after: number) {
+  const { getHiddenItems } = useBreadcrumb({ items, maxItem, itemsBeforeCollapse: before, itemsAfterCollapse: after });
+  return breadcrumbItemsToDropdownSchema(getHiddenItems());
+}
+
+const maxItem = 2;
+const itemsBeforeCollapse = 1;
+const itemsAfterCollapse = 1;
+
+export const WithJsxElmentCollapsed: Story = {
+  render: () => {
+    return (
+      <div className='flex gap-4 items-start min-h-[250px] p-4'>
+        <Breadcrumb
+          items={items}
+          size='md'
+          maxItem={maxItem}
+          itemsAfterCollapse={itemsAfterCollapse}
+          itemsBeforeCollapse={itemsBeforeCollapse}
+          collapsedElement={
+            <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
+              <DynamicIcon name='ellipsis-vertical' />
+            </Dropdown>
+          }
+        />
+      </div>
+    );
+  }
+};
+
+/**
+ * - **Complete Examples**: Comprehensive demonstrations combining multiple props and features.
+ *   These examples show real-world usage scenarios with various combinations of styling, icons, collapsing, and visual effects.
+ */
+export const CompleteExample: Story = {
+  render: () => (
+    <div className='flex flex-col gap-0.5'>
+      <Breadcrumb
+        items={items}
+        size='lg'
+        maxItem={2}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='chevron-right'
+        variant='bordered'
+        rounded={true}
+        shadow={true}
+        startContent='home'
+        endContent='external-link'
+        colorText='blue'
+        iconCollapse='more-horizontal'
+        collapsedElement={
+          <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
+            <DynamicIcon name='ellipsis-vertical' className='text-blue-500' />
+          </Dropdown>
+        }
+      />
+      <Breadcrumb
+        items={items}
+        size='lg'
+        maxItem={2}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='|'
+        variant='solid'
+        rounded={false}
+        shadow={false}
+        colorText='white'
+        iconCollapse='ellipsis'
+        className='text-white'
+      />
+    </div>
+  )
+};
+
+/**
+ * - **Custom CSS Classes**: Apply custom styling through the className prop.
+ *   This demonstrates how to extend the default breadcrumb appearance with custom borders, gradients, and other CSS effects.
+ */
+export const CustomClassName: Story = {
+  render: () => (
+    <div className='flex flex-col gap-0.5'>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        className='border-2 border-dashed border-red-500'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        className='bg-gradient-to-r from-purple-400 to-pink-400 text-white p-2'
+      />
+    </div>
+  )
 };

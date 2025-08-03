@@ -5,39 +5,8 @@ import type { JSX } from 'react';
 export const breadcrumbVariants = cva('flex items-center gap-1 text-sm font-medium transition-colors', {
   variants: {
     variant: {
-      solid: [
-        'p-3',
-        'rounded',
-        'rounded-xl',
-        'bg-[#282828]',
-        'opacity-70',
-        'border-secondary',
-        'dark:hover:bg-accent',
-        'dark:hover:shadow-secondary'
-      ],
-      bordered: [
-        'text-text-light',
-        'bg-transparent',
-        'border-transparent',
-        'hover:bg-gray-light-600',
-        'hover:border-gray-light-600',
-        'hover:shadow-transparent',
-        'dark:text-text-dark',
-        'dark:border-transparent',
-        'dark:hover:bg-gray-dark-400',
-        'dark:hover:border-gray-dark-400',
-        'dark:hover:shadow-gray-900'
-      ],
-      light: [
-        'text-secondary',
-        'border-transparent',
-        'bg-transparent',
-        'hover:text-text-dark',
-        'dark:text-text-dark',
-        'hover:border-accent',
-        'hover:bg-accent',
-        'hover:shadow-secondary'
-      ]
+      solid: ['rounded', 'rounded-xl', 'bg-[#282828]', 'opacity-70'],
+      bordered: ['rounded', 'rounded-xl', 'border-2', 'border-solid']
     },
     rounded: {
       true: 'rounded-full',
@@ -54,7 +23,7 @@ export const breadcrumbVariants = cva('flex items-center gap-1 text-sm font-medi
     }
   },
   defaultVariants: {
-    variant: 'solid',
+    variant: null,
     size: 'md'
   }
 });
@@ -77,55 +46,58 @@ export type BreadcrumbProps = {
    * @control select
    * @default solid
    */
-  variant: BreadCrumbVariants;
+  variant?: BreadCrumbVariants;
+
+  /**
+   * @control boolean
+   * @default false
+   */
+  rounded?: boolean;
 
   /** @control text*/
-  separator: SeparatorVariants;
+  colorText?: string;
 
   /**
    * @control select
    * @default md
    */
-  size: BreadcrumbSizeVariants;
+  size?: BreadcrumbSizeVariants;
+
+  /** @control text*/
+  separator?: SeparatorVariants;
 
   /**
    * @control boolean
    * @default false
    */
-  rounded: boolean;
-
-  /**
-   * @control boolean
-   * @default false
-   */
-  shadow: boolean;
-
-  /**
-   * @control boolean
-   * @default false
-   */
-  hideSeparator: boolean;
+  hideSeparator?: boolean;
 
   /** @control text*/
-  className?: string;
+  startContent?: DynamicIconName | undefined;
 
   /** @control text*/
-  startContent: DynamicIconName | undefined;
+  endContent?: DynamicIconName | undefined;
 
   /** @control text*/
-  endContent: DynamicIconName | undefined;
+  maxItem: number;
 
   /** @control text*/
-  maxItem?: number;
+  itemsBeforeCollapse: number;
 
   /** @control text*/
-  itemsBeforeCollapse?: number;
-
-  /** @control text*/
-  itemsAfterCollapse?: number;
+  itemsAfterCollapse: number;
 
   /** @control text*/
   iconCollapse?: DynamicIconName;
 
-  collapseElement?: JSX.Element;
+  collapsedElement?: JSX.Element;
+
+  /**
+   * @control boolean
+   * @default false
+   */
+  shadow?: boolean;
+
+  /** @control text*/
+  className?: string;
 };

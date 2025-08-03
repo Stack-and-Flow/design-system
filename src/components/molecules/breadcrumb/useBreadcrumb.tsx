@@ -10,7 +10,7 @@ type UseBreadcrumbProps = BreadcrumbProps & {
 
 export const useBreadcrumb = ({
   items,
-  variant = 'solid',
+  variant,
   size = 'md',
   rounded = false,
   className = '',
@@ -25,9 +25,37 @@ export const useBreadcrumb = ({
   iconCollapse,
   collapsedElement
 }: UseBreadcrumbProps) => {
+  const classText = (colorText: string): string => {
+    switch (colorText) {
+      case 'white':
+        return 'text-white';
+      case 'red':
+        return 'text-red-500';
+      case 'blue':
+        return 'text-blue-500';
+      case 'gray':
+        return 'text-gray-500';
+      case 'indigo':
+        return 'text-indigo-500';
+      default:
+        return 'text-black';
+    }
+  };
+
   const renderSeparator = (separator: string | IconName): string | JSX.Element => {
     const controlString = /[->/|](?![a-zA-Z0-9])/;
     return controlString.test(separator) ? separator : <DynamicIcon name={separator as IconName} />;
+  };
+
+  const getHiddenItems = (): BreadcrumbItem[] => {
+    if (items.length <= maxItem) {
+      return [];
+    }
+
+    const startIndex = itemsBeforeCollapse;
+    const endIndex = items.length - itemsAfterCollapse;
+
+    return items.slice(startIndex, endIndex);
   };
 
   const itemsCollapsed = (
@@ -85,6 +113,8 @@ export const useBreadcrumb = ({
     processedItems,
     iconCollapse,
     renderSeparator,
-    isBreadcrumbItem
+    isBreadcrumbItem,
+    classText,
+    getHiddenItems
   };
 };
