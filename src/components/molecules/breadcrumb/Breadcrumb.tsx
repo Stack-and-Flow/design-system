@@ -54,7 +54,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ ...props }) => {
             </li>
             <li>
               {!hideSeparator && index < processedItems.length - 1 && (
-                <span className={`px-1 ${classText(props.colorText ?? '')}`} aria-hidden={separator !== '/'}>
+                <span className={`px-1 ${classText(props.colorText ?? '')}`} aria-hidden={separator === '/'}>
                   {separator && renderSeparator(separator)}
                 </span>
               )}
