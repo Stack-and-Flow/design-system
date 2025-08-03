@@ -5,12 +5,17 @@ import type { JSX } from 'react';
 export const breadcrumbVariants = cva('flex items-center gap-1 text-sm font-medium transition-colors', {
   variants: {
     variant: {
-      solid: ['rounded', 'rounded-xl', 'bg-[#282828]', 'opacity-70'],
+      outline: '',
       bordered: ['rounded', 'rounded-xl', 'border-2', 'border-solid']
     },
     rounded: {
       true: 'rounded-full',
       false: 'rounded-md'
+    },
+    bgColor: {
+      none: '',
+      primary: 'bg-secondary dark:bg-primary',
+      secondary: 'bg-gray-dark-400 dark:bg-gray-dark-400'
     },
     shadow: {
       true: 'hover:shadow-custom-sm',
@@ -29,8 +34,9 @@ export const breadcrumbVariants = cva('flex items-center gap-1 text-sm font-medi
 });
 
 type BreadCrumbVariants = VariantProps<typeof breadcrumbVariants>['variant'];
+type BgColor = NonNullable<VariantProps<typeof breadcrumbVariants>['bgColor']>;
+type BreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['size']>;
 type SeparatorVariants = DynamicIconName | '/' | '|' | '>';
-type BreadcrumbSizeVariants = 'md' | 'sm' | 'lg';
 
 export type BreadcrumbItem = {
   title: string;
@@ -47,6 +53,12 @@ export type BreadcrumbProps = {
    * @default solid
    */
   variant?: BreadCrumbVariants;
+
+  /**
+   * @control select
+   * @default default
+   */
+  bgColor?: BgColor;
 
   /**
    * @control boolean
