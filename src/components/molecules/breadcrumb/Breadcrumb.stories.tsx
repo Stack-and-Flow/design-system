@@ -53,6 +53,7 @@ export const Default: Story = {
   args: {
     items,
     variant: null,
+    bgColor: 'none',
     rounded: false,
     size: 'md',
     colorText: '',
@@ -144,7 +145,8 @@ export const Variants: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        variant='solid'
+        variant='outline'
+        bgColor='primary'
         colorText='white'
       />
       <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
@@ -155,6 +157,7 @@ export const Variants: Story = {
 /**
  * - **Border Radius**: Toggle between rounded and square corners using the rounded prop.
  *   This shows how to control the corner styling of breadcrumb containers for different design aesthetics.
+ *   Toggle true or false.
  */
 export const Rounded: Story = {
   render: () => (
@@ -167,8 +170,7 @@ export const Rounded: Story = {
         itemsBeforeCollapse={1}
         separator='/'
         rounded={true}
-        variant='solid'
-        colorText='white'
+        variant='bordered'
       />
       <Breadcrumb
         items={items}
@@ -177,8 +179,7 @@ export const Rounded: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        variant='solid'
-        colorText='white'
+        variant='bordered'
       />
     </div>
   )
@@ -320,11 +321,6 @@ export const MaxItemsAndCollapse: Story = {
   )
 };
 
-/**
- * - **Custom Collapse Elements**: Use custom JSX elements instead of icons for collapsed breadcrumb sections.
- *   This provides complete control over the visual representation of collapsed items, allowing for interactive buttons or styled elements.
- */
-
 // mapper from breadcrumb items to dropdown items
 const breadcrumbItemsToDropdownSchema = (breadcrumbItems: BreadcrumbItem[], title = 'Rutas ocultas') => {
   if (breadcrumbItems.length === 0) {
@@ -356,23 +352,27 @@ const maxItem = 2;
 const itemsBeforeCollapse = 1;
 const itemsAfterCollapse = 1;
 
+/**
+ * - **Custom Collapse Elements**: Use custom JSX elements instead of icons for collapsed breadcrumb sections.
+ *   This provides complete control over the visual representation of collapsed items, allowing for interactive buttons or styled elements.
+ *   In the current example, the dropdown defined in the atoms section has been used.
+ */
+
 export const WithJsxElmentCollapsed: Story = {
   render: () => {
     return (
-      <div className='flex gap-4 items-start min-h-[250px] p-4'>
-        <Breadcrumb
-          items={items}
-          size='md'
-          maxItem={maxItem}
-          itemsAfterCollapse={itemsAfterCollapse}
-          itemsBeforeCollapse={itemsBeforeCollapse}
-          collapsedElement={
-            <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
-              <DynamicIcon name='ellipsis-vertical' />
-            </Dropdown>
-          }
-        />
-      </div>
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={maxItem}
+        itemsAfterCollapse={itemsAfterCollapse}
+        itemsBeforeCollapse={itemsBeforeCollapse}
+        collapsedElement={
+          <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
+            <DynamicIcon name='ellipsis-vertical' />
+          </Dropdown>
+        }
+      />
     );
   }
 };
@@ -411,12 +411,10 @@ export const CompleteExample: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='|'
-        variant='solid'
+        variant='outline'
         rounded={false}
         shadow={false}
-        colorText='white'
         iconCollapse='ellipsis'
-        className='text-white'
       />
     </div>
   )

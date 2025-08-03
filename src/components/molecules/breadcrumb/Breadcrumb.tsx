@@ -20,12 +20,13 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ ...props }) => {
     size,
     startContent,
     variant,
+    bgColor,
     classText
   } = useBreadcrumb({ ...props });
 
   return (
     <nav aria-label='Breadcrumb'>
-      <ol className={cn('w-auto', className, breadcrumbVariants({ variant, size, rounded, shadow }))}>
+      <ol className={cn('w-auto', className, breadcrumbVariants({ variant, bgColor, size, rounded, shadow }))}>
         {processedItems.map((item, index) => (
           <React.Fragment key={`breadcrumb-${index}`}>
             <li className='flex items-center'>

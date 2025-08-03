@@ -11,6 +11,7 @@ type UseBreadcrumbProps = BreadcrumbProps & {
 export const useBreadcrumb = ({
   items,
   variant,
+  bgColor,
   size = 'md',
   rounded = false,
   className = '',
@@ -102,6 +103,7 @@ export const useBreadcrumb = ({
   return {
     items,
     variant,
+    bgColor,
     size,
     rounded,
     className,
