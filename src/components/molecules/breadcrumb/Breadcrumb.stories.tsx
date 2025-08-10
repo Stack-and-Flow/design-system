@@ -52,21 +52,21 @@ const items: BreadcrumbItem[] = [
 export const Default: Story = {
   args: {
     items,
-    variant: null,
-    bgColor: 'none',
-    rounded: false,
+    variant: 'solid',
+    bgColor: 'default',
+    rounded: 'md',
     size: 'md',
     colorText: '',
     separator: '/',
-    iconCollapse: 'ellipsis',
+    iconCollapse: 'accessibility',
     startContent: undefined,
     endContent: undefined,
     hideSeparator: false,
     maxItem: 0,
     itemsBeforeCollapse: 1,
     itemsAfterCollapse: 1,
-    className: '',
-    shadow: false
+    className: ''
+    // shadow:
   }
 };
 
@@ -169,7 +169,7 @@ export const Rounded: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        rounded={true}
+        rounded={'sm'}
         variant='bordered'
       />
       <Breadcrumb
@@ -179,6 +179,7 @@ export const Rounded: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
+        rounded='none'
         variant='bordered'
       />
     </div>
@@ -392,8 +393,8 @@ export const CompleteExample: Story = {
         itemsBeforeCollapse={1}
         separator='chevron-right'
         variant='bordered'
-        rounded={true}
-        shadow={true}
+        rounded={'sm'}
+        // shadow={true}
         startContent='home'
         endContent='external-link'
         colorText='blue'
@@ -412,8 +413,8 @@ export const CompleteExample: Story = {
         itemsBeforeCollapse={1}
         separator='|'
         variant='outline'
-        rounded={false}
-        shadow={false}
+        // rounded={false}
+        // shadow={false}
         iconCollapse='ellipsis'
       />
     </div>
