@@ -1,42 +1,58 @@
 import type { DynamicIconName } from '@/components/utils/types';
 import { type VariantProps, cva } from 'class-variance-authority';
-import type { JSX } from 'react';
+import type { ReactNode } from 'react';
 
-export const breadcrumbVariants = cva('flex items-center gap-1 text-sm font-medium transition-colors', {
-  variants: {
-    variant: {
-      outline: '',
-      bordered: ['rounded', 'rounded-xl', 'border-2', 'border-solid']
+export const breadcrumbVariants = cva(
+  'w-full max-w-full box-border overflow-hidden flex flex-row gap-2 justify-center items-center p-2 font-mono whitespace-pre-wrap text-text-light dark:text-text-dark text-justify',
+  {
+    variants: {
+      variant: {
+        solid: '',
+        outline: 'border-2 bg-transparent',
+        bordered: ['rounded', 'rounded-xl', 'border-2', 'border-solid'],
+        ghost: 'bg-transparent'
+      },
+      rounded: {
+        xs: 'rounded-xs',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
+        xl: 'rounded-xl',
+        full: 'rounded-full',
+        none: 'rounded-none'
+      },
+      bgColor: {
+        default: 'dark:hover:bg-gray-800',
+        primary: 'bg-secondary hover:bg-secondary/90 dark:bg-accent dark:hover:bg-accent/90',
+        secondary: 'bg-gray-400 hover:bg-gray-500 dark:bg-gray-600 dark:hover:bg-gray-500',
+        transparent: 'bg-transparent'
+      },
+      size: {
+        xs: 'text-xs px-1 py-1',
+        sm: 'text-xs px-2 py-1',
+        md: 'text-sm px-2 py-2',
+        lg: 'text-base px-3 py-2',
+        xl: 'text-lg px-4 py-3'
+      },
+      alignment: {
+        left: 'justify-start',
+        center: 'justify-center',
+        right: 'justify-end'
+      }
     },
-    rounded: {
-      true: 'rounded-full',
-      false: 'rounded-md'
-    },
-    bgColor: {
-      none: '',
-      primary: 'bg-secondary dark:bg-primary',
-      secondary: 'bg-gray-dark-400 dark:bg-gray-dark-400'
-    },
-    shadow: {
-      true: 'hover:shadow-custom-sm',
-      false: ''
-    },
-    size: {
-      md: 'px-md h-10 fs-base tablet:fs-base-tablet',
-      lg: 'px-lg h-12 fs-h6 tablet:fs-h6-tablet',
-      sm: 'px-sm h-8 fs-small tablet:fs-small-tablet'
+    defaultVariants: {
+      variant: 'solid',
+      rounded: 'md',
+      bgColor: 'default',
+      size: 'md',
+      alignment: 'left'
     }
-  },
-  defaultVariants: {
-    variant: null,
-    size: 'md'
   }
-});
+);
 
-type BreadCrumbVariants = VariantProps<typeof breadcrumbVariants>['variant'];
-type BgColor = NonNullable<VariantProps<typeof breadcrumbVariants>['bgColor']>;
-type BreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['size']>;
-type SeparatorVariants = DynamicIconName | '/' | '|' | '>';
+export type BreadCrumbVariants = VariantProps<typeof breadcrumbVariants>;
+
+type Size = 'sm' | 'md' | 'lg';
 
 export type BreadcrumbItem = {
   title: string;
@@ -44,72 +60,22 @@ export type BreadcrumbItem = {
   target?: '_blank' | '_self' | '_parent' | '_top' | undefined;
 };
 
-export type BreadcrumbProps = {
-  /** Props for the Breadcrumb component */
+export interface BreadcrumbProps extends BreadCrumbVariants {
   items: BreadcrumbItem[];
-
-  /**
-   * @control select
-   * @default solid
-   */
-  variant?: BreadCrumbVariants;
-
-  /**
-   * @control select
-   * @default default
-   */
-  bgColor?: BgColor;
-
-  /**
-   * @control boolean
-   * @default false
-   */
-  rounded?: boolean;
-
-  /** @control text*/
+  variant?: 'solid' | 'outline' | 'bordered';
+  bgColor?: 'default' | 'primary' | 'secondary';
+  rounded?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'none';
   colorText?: string;
-
-  /**
-   * @control select
-   * @default md
-   */
-  size?: BreadcrumbSizeVariants;
-
-  /** @control text*/
-  separator?: SeparatorVariants;
-
-  /**
-   * @control boolean
-   * @default false
-   */
+  size?: Size;
+  separator?: ReactNode;
   hideSeparator?: boolean;
-
-  /** @control text*/
   startContent?: DynamicIconName | undefined;
-
-  /** @control text*/
   endContent?: DynamicIconName | undefined;
-
-  /** @control text*/
   maxItem: number;
-
-  /** @control text*/
   itemsBeforeCollapse: number;
-
-  /** @control text*/
   itemsAfterCollapse: number;
-
-  /** @control text*/
   iconCollapse?: DynamicIconName;
-
-  collapsedElement?: JSX.Element;
-
-  /**
-   * @control boolean
-   * @default false
-   */
-  shadow?: boolean;
-
-  /** @control text*/
+  collapsedElement?: ReactNode;
   className?: string;
-};
+  'aria-label'?: string;
+}

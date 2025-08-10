@@ -3,9 +3,11 @@ import { DynamicIcon, type IconName } from 'lucide-react/dynamic';
 import type { FC } from 'react';
 import React from 'react';
 import Link from '../../atoms/link';
+import './breadcrumb.css';
 import { type BreadcrumbProps, breadcrumbVariants } from './types';
 import { useBreadcrumb } from './useBreadcrumb';
 
+//TODO: APPLY MARGIN/PADDING PARAMS, ICON SIZE, SEPARATOR CLASS ICON CLASS
 const Breadcrumb: FC<BreadcrumbProps> = ({ ...props }) => {
   const {
     processedItems,
@@ -16,7 +18,6 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ ...props }) => {
     hideSeparator,
     rounded,
     separator,
-    shadow,
     size,
     startContent,
     variant,
@@ -26,39 +27,51 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ ...props }) => {
 
   return (
     <nav aria-label='Breadcrumb'>
-      <ol className={cn('w-auto', className, breadcrumbVariants({ variant, bgColor, size, rounded, shadow }))}>
+      <ol className={cn('w-auto', className, breadcrumbVariants({ variant, bgColor, size, rounded }))}>
         {processedItems.map((item, index) => (
           <React.Fragment key={`breadcrumb-${index}`}>
             <li className='flex items-center'>
               {isBreadcrumbItem(item) ? (
                 <>
                   {startContent && (
-                    <DynamicIcon name={startContent as IconName} className={classText(props.colorText ?? '')} />
+                    <span>
+                      <DynamicIcon
+                        name={startContent as IconName}
+                        className={cn('breadcrumb-link', classText(props.colorText ?? ''))}
+                        size={18}
+                      />
+                    </span>
                   )}
                   <Link
                     title={item.title}
                     href={item.href}
                     target={item.target}
                     size={size}
-                    className={classText(props.colorText ?? '')}
+                    className={cn(classText(props.colorText ?? ''))}
                   >
                     {item.title}
                   </Link>
                   {endContent && (
-                    <DynamicIcon name={endContent as IconName} className={classText(props.colorText ?? '')} />
+                    <span>
+                      <DynamicIcon
+                        name={endContent as IconName}
+                        className={cn('breadcrumb-link', classText(props.colorText ?? ''))}
+                        size={18}
+                      />
+                    </span>
                   )}
                 </>
               ) : (
                 <span>{item}</span>
               )}
             </li>
-            <li>
-              {!hideSeparator && index < processedItems.length - 1 && (
-                <span className={`px-1 ${classText(props.colorText ?? '')}`} aria-hidden={separator === '/'}>
+            {!hideSeparator && index < processedItems.length - 1 && (
+              <li>
+                <span className={cn(classText(props.colorText ?? ''))} aria-hidden={separator === '/'}>
                   {separator && renderSeparator(separator)}
                 </span>
-              )}
-            </li>
+              </li>
+            )}
           </React.Fragment>
         ))}
       </ol>
