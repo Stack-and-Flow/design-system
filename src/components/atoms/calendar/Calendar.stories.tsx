@@ -124,7 +124,9 @@ export const WithSelectedAndDisabledDates: Story = {
   args: {
     selectedDate: new Date(new Date().getFullYear(), new Date().getMonth(), 15),
     onDateChange: (date) => console.log('Date changed:', date),
-    disabledDates: [new Date(new Date().setDate(10)), new Date(new Date().setDate(20))]
+    selectedDate: new Date(currentYear, currentMonth, 15),
+    onDateChange: (date) => console.log('Date changed:', date),
+    disabledDates: [new Date(currentYear, currentMonth, 10), new Date(currentYear, currentMonth, 20)]
   }
 };
 
