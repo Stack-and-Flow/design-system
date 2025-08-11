@@ -46,7 +46,7 @@ export const useCalendar = ({
     return firstDay === 0 ? 6 : firstDay - 1;
   };
 
-  // Genera el array de días para el calendario
+  // Generates the array of days for the calendar
   const daysInCalendar = useMemo(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
