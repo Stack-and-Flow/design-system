@@ -1,23 +1,34 @@
-import { cn } from '@/lib/utils';
 import type { FC } from 'react';
 import type { DividerProps } from './types';
 import { useDivider } from './useDivider';
 
 const Divider: FC<DividerProps> = ({ ...props }) => {
-  const { orientation, widthSize, heightSize, horizontalColor, verticalColor } = useDivider(props);
-  const widthVertical = 'w-px';
+  const { orientation, widthHorizontalSize, heightVerticalSize, colorDivider } = useDivider(props);
   return orientation === 'horizontal' ? (
-    <div style={{ marginBlock: '1rem' }}>
-      <hr className={cn(horizontalColor)} style={{ width: widthSize }} />
-    </div>
+    <div
+      style={{
+        height: '1px',
+        boxShadow: `0px 1px 7px 2px ${colorDivider}`,
+        backgroundColor: colorDivider,
+        width: widthHorizontalSize
+      }}
+    ></div>
   ) : (
-    <div className={cn(widthVertical, verticalColor)} style={{ height: heightSize }} />
+    <div
+      style={{
+        width: '1px',
+        boxShadow: `0px 1px 7px 2px ${colorDivider}`,
+        backgroundColor: colorDivider,
+        height: heightVerticalSize
+      }}
+    />
   );
 };
 
 export default Divider;
 
 /* 
+
 
 
 import { cn } from '@/lib/utils';

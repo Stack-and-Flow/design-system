@@ -2,33 +2,42 @@ import type { DividerProps } from './types';
 
 export const useDivider = ({
   orientation = 'horizontal',
-  width = 'sm',
-  height = 'sm',
-  horizontalColor = 'text-primary',
-  verticalColor = 'bg-primary'
+  horizontalWidth = 'sm',
+  verticalHeight = 'sm',
+  colors = 'primary'
 }: DividerProps) => {
   // Additional logic can be added here if needed
+  const sizeHorizontalWidth = {
+    xs: '3rem',
+    sm: '6rem',
+    md: '10rem',
+    lg: '30rem',
+    xl: '60rem'
+  };
 
-  const sizeHeight = {
+  const sizeVerticalHeight = {
     sm: '2rem',
     md: '3rem',
     lg: '5rem'
   };
 
-  const sizeWidth = {
-    sm: '15rem',
-    md: '30rem',
-    lg: '45rem'
+  const colorLine = {
+    primary: '#830213',
+    light: '#ef8f96',
+    dark: '#510b10',
+    success: '#138a3d',
+    info: '#f97316'
   };
 
-  const widthSize = sizeWidth[width];
-  const heightSize = sizeHeight[height];
+  const widthHorizontalSize = sizeHorizontalWidth[horizontalWidth];
+  const heightVerticalSize = sizeVerticalHeight[verticalHeight];
+  const colorDivider = colorLine[colors];
+
   return {
     orientation,
-    widthSize,
-    heightSize,
-    horizontalColor,
-    verticalColor
+    widthHorizontalSize,
+    heightVerticalSize,
+    colorDivider
   };
 };
 

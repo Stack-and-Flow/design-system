@@ -17,20 +17,47 @@ type Story = StoryObj<typeof Divider>;
 
 export const Default: Story = {
   args: {
-    width: 'sm'
+    horizontalWidth: 'sm',
+    verticalHeight: 'sm',
+    colors: 'primary'
   }
 };
 
 export const Horizontal: Story = {
   render: () => (
-    <div>
-      <Divider width='sm' />
-      <Divider width='md' />
-      <Divider width='lg' />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <Divider horizontalWidth='xs' />
+      <Divider horizontalWidth='sm' />
+      <Divider horizontalWidth='md' />
+      <Divider horizontalWidth='lg' />
+      <Divider horizontalWidth='xl' />
     </div>
   )
 };
 
+export const Vertical: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem' }}>
+      <Divider orientation='vertical' verticalHeight='sm' />
+      <Divider orientation='vertical' verticalHeight='md' />
+      <Divider orientation='vertical' verticalHeight='lg' />
+    </div>
+  )
+};
+
+export const ColorsHorizontal: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <Divider horizontalWidth='xs' colors='primary' />
+      <Divider horizontalWidth='sm' colors='light' />
+      <Divider horizontalWidth='md' colors='dark' />
+      <Divider horizontalWidth='lg' colors='success' />
+      <Divider horizontalWidth='xl' colors='info' />
+    </div>
+  )
+};
+
+/* 
 export const Dark: Story = {
   render: () => (
     <div>
@@ -39,8 +66,8 @@ export const Dark: Story = {
       <Divider width='lg' horizontalColor='text-gray-dark-100' />
     </div>
   )
-};
-
+}; */
+/* 
 export const Light: Story = {
   render: () => (
     <div className='bg-amber-50 py-3 px-8'>
@@ -49,8 +76,8 @@ export const Light: Story = {
       <Divider width='lg' horizontalColor='text-gray-dark-900' />
     </div>
   )
-};
-
+}; */
+/* 
 export const Vertical: Story = {
   render: () => (
     <>
@@ -86,3 +113,4 @@ export const VerticalDark: Story = {
     </>
   )
 };
+ */

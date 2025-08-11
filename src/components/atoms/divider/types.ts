@@ -1,35 +1,17 @@
-import type { BgThemeColors, TextThemeColors } from '@/components/utils/types';
-
 export type DividerProps = {
   /** Props for the Divider component */
 
+  /** @control select */
   orientation?: 'horizontal' | 'vertical';
 
-  /**
-   * @control select
-   * @default sm
-   */
+  /** @control select */
+  horizontalWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-  width?: 'sm' | 'md' | 'lg';
+  /** @control select */
+  verticalHeight?: 'sm' | 'md' | 'lg';
 
-  /**
-   * @control select
-   * @default sm
-   */
-
-  height?: 'sm' | 'md' | 'lg';
-
-  /**
-   * @control select
-   */
-
-  horizontalColor?: TextThemeColors;
-
-  /**
-   * @control select
-   */
-
-  verticalColor?: BgThemeColors;
+  /** @control text */
+  colors?: 'primary' | 'light' | 'dark' | 'success' | 'info';
 };
 
 /* 
