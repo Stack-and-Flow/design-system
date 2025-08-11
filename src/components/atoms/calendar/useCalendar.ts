@@ -118,7 +118,7 @@ export const useCalendar = ({
     });
   };
 
-  // Agrupa los días en semanas de 7 días
+  // Groups the days into weeks of 7 days
   const groupDaysIntoWeeks = (days: typeof daysInCalendar) => {
     const weeks = [];
     for (let i = 0; i < days.length; i += 7) {
