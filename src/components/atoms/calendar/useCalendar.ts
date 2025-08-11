@@ -17,7 +17,7 @@ const monthNames = [
   'December'
 ];
 
-// Nombres de los días de la semana abreviados
+// Abbreviated names of the days of the week
 const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export const useCalendar = ({
