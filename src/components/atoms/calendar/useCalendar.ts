@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CalendarProps } from './types';
 
-// Nombres de los meses en inglés
+// Month names in English
 const monthNames = [
   'January',
   'February',
