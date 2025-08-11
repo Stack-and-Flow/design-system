@@ -63,7 +63,7 @@ export const useCalendar = ({
     const startDayIndex = getStartDayOfMonth(year, month);
     const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-    // Días del mes anterior
+    // Days from the previous month
     for (let i = startDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, daysInPrevMonth - i);
       const isDisabled = disabledDates.some((d) => isSameDay(d, date));
