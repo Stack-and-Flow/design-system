@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CalendarProps } from './types';
 
-// Nombres de los meses en inglés
+// Month names in English
 const monthNames = [
   'January',
   'February',
@@ -17,7 +17,7 @@ const monthNames = [
   'December'
 ];
 
-// Nombres de los días de la semana abreviados
+// Abbreviated weekday names
 const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export const useCalendar = ({
@@ -35,18 +35,18 @@ export const useCalendar = ({
     }
   }, [initialSelectedDate]);
 
-  // Comprueba si dos fechas son el mismo día
+  // Checks if two dates are the same day
   const isSameDay = (d1: Date, d2: Date): boolean => {
     return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
   };
 
-  // Obtiene el índice del día de la semana ajustado para que lunes sea 0
+  // Gets the index of the first day of the month (Monday as 0)
   const getStartDayOfMonth = (year: number, month: number): number => {
     const firstDay = new Date(year, month, 1).getDay();
     return firstDay === 0 ? 6 : firstDay - 1;
   };
 
-  // Genera el array de días para el calendario
+  // Generates the array of days for the calendar
   const daysInCalendar = useMemo(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -63,14 +63,14 @@ export const useCalendar = ({
     const startDayIndex = getStartDayOfMonth(year, month);
     const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-    // Días del mes anterior
+    // Days from the previous month
     for (let i = startDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, daysInPrevMonth - i);
       const isDisabled = disabledDates.some((d) => isSameDay(d, date));
       days.push({ date, isCurrentMonth: false, isToday: false, isSelected: false, isDisabled });
     }
 
-    // Días del mes actual
+    // Days from the current month
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       const isToday = isSameDay(date, today);
@@ -79,7 +79,7 @@ export const useCalendar = ({
       days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled });
     }
 
-    // Días del mes siguiente
+    // Days from the next month
     const totalDaysDisplayed = days.length;
     const remainingCells = 42 - totalDaysDisplayed;
 
@@ -118,7 +118,7 @@ export const useCalendar = ({
     });
   };
 
-  // Agrupa los días en semanas de 7 días
+  // Groups days into weeks of 7 days
   const groupDaysIntoWeeks = (days: typeof daysInCalendar) => {
     const weeks = [];
     for (let i = 0; i < days.length; i += 7) {
