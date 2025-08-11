@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type React from 'react';
 import { Calendar } from './index';
 
 /**
@@ -52,7 +53,7 @@ const meta: Meta<typeof Calendar> = {
     layout: 'centered'
   },
   tags: ['autodocs'],
-  render: (args) => <Calendar {...args} />,
+  render: (args: React.ComponentProps<typeof Calendar>) => <Calendar {...args} />,
   argTypes: {
     selectedDate: {
       control: 'date',
@@ -76,6 +77,42 @@ const meta: Meta<typeof Calendar> = {
         type: { summary: 'Date[]' },
         defaultValue: { summary: '[]' }
       }
+    },
+    theme: {
+      control: { type: 'radio' },
+      options: ['light', 'dark'],
+      description: 'Color theme of the calendar (light or dark).',
+      table: {
+        type: { summary: '"light" | "dark"' },
+        defaultValue: { summary: 'light' }
+      }
+    },
+    variant: {
+      control: { type: 'radio' },
+      options: ['filled', 'outlined'],
+      description: 'Visual variant of the calendar (filled or outlined).',
+      table: {
+        type: { summary: '"filled" | "outlined"' },
+        defaultValue: { summary: 'filled' }
+      }
+    },
+    size: {
+      control: { type: 'radio' },
+      options: ['sm', 'md', 'lg'],
+      description: 'Size of the calendar (small, medium, large).',
+      table: {
+        type: { summary: '"sm" | "md" | "lg"' },
+        defaultValue: { summary: 'md' }
+      }
+    },
+    radius: {
+      control: { type: 'radio' },
+      options: ['none', 'sm', 'md', 'lg'],
+      description: 'Border radius of the calendar.',
+      table: {
+        type: { summary: '"none" | "sm" | "md" | "lg" | number' },
+        defaultValue: { summary: 'md' }
+      }
     }
   }
 };
@@ -90,7 +127,81 @@ type Story = StoryObj<typeof Calendar>;
 export const Default: Story = {
   args: {
     selectedDate: null,
-    onDateChange: (date) => console.log('Date changed:', date)
+    onDateChange: (date: Date) => console.log('Date changed:', date)
+  }
+};
+/**
+ * - **Dark Mode**: Calendar with dark theme.
+ */
+export const DarkMode: Story = {
+  args: {
+    ...Default.args,
+    theme: 'dark'
+  }
+};
+
+/**
+ * - **Outlined Variant**: Calendar with outlined variant.
+ */
+export const Outlined: Story = {
+  args: {
+    ...Default.args,
+    variant: 'outlined'
+  }
+};
+
+/**
+ * - **Sizes**: Calendar in small, medium, and large sizes.
+ */
+export const Small: Story = {
+  args: {
+    ...Default.args,
+    size: 'sm'
+  }
+};
+
+export const Medium: Story = {
+  args: {
+    ...Default.args,
+    size: 'md'
+  }
+};
+
+export const Large: Story = {
+  args: {
+    ...Default.args,
+    size: 'lg'
+  }
+};
+
+/**
+ * - **Border Radius**: Calendar with different border radius options.
+ */
+export const RadiusNone: Story = {
+  args: {
+    ...Default.args,
+    radius: 'none'
+  }
+};
+
+export const RadiusSm: Story = {
+  args: {
+    ...Default.args,
+    radius: 'sm'
+  }
+};
+
+export const RadiusMd: Story = {
+  args: {
+    ...Default.args,
+    radius: 'md'
+  }
+};
+
+export const RadiusLg: Story = {
+  args: {
+    ...Default.args,
+    radius: 'lg'
   }
 };
 
@@ -123,7 +234,7 @@ export const WithDisabledDates: Story = {
 export const WithSelectedAndDisabledDates: Story = {
   args: {
     selectedDate: new Date(new Date().getFullYear(), new Date().getMonth(), 15),
-    onDateChange: (date) => console.log('Date changed:', date),
+    onDateChange: (date: Date) => console.log('Date changed:', date),
     disabledDates: [new Date(new Date().setDate(10)), new Date(new Date().setDate(20))]
   }
 };
@@ -159,7 +270,7 @@ export const WithMultipleDisabledDates: Story = {
     return (
       <Calendar
         selectedDate={null}
-        onDateChange={(date) => console.log('Date changed:', date)}
+        onDateChange={(date: Date) => console.log('Date changed:', date)}
         disabledDates={disabledDates}
       />
     );
