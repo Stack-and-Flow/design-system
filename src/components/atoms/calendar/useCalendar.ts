@@ -70,7 +70,7 @@ export const useCalendar = ({
       days.push({ date, isCurrentMonth: false, isToday: false, isSelected: false, isDisabled });
     }
 
-    // Días del mes actual
+    // Days of the current month
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       const isToday = isSameDay(date, today);
