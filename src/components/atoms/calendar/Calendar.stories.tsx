@@ -112,7 +112,10 @@ export const WithSelectedDate: Story = {
 export const WithDisabledDates: Story = {
   args: {
     ...Default.args,
-    disabledDates: [new Date(new Date().setDate(10)), new Date(new Date().setDate(20))]
+    disabledDates: [
+      new Date(new Date().getFullYear(), new Date().getMonth(), 10),
+      new Date(new Date().getFullYear(), new Date().getMonth(), 20)
+    ]
   }
 };
 
