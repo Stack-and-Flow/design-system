@@ -35,7 +35,7 @@ export const useCalendar = ({
     }
   }, [initialSelectedDate]);
 
-  // Comprueba si dos fechas son el mismo día
+  // Checks if two dates are the same day
   const isSameDay = (d1: Date, d2: Date): boolean => {
     return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
   };
