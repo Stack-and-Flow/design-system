@@ -79,7 +79,7 @@ export const useCalendar = ({
       days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled });
     }
 
-    // Días del mes siguiente
+    // Days from the next month
     const totalDaysDisplayed = days.length;
     const remainingCells = 42 - totalDaysDisplayed;
 
