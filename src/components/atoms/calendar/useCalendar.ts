@@ -40,7 +40,7 @@ export const useCalendar = ({
     return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
   };
 
-  // Obtiene el índice del día de la semana ajustado para que lunes sea 0
+  // Gets the index of the weekday adjusted so that Monday is 0
   const getStartDayOfMonth = (year: number, month: number): number => {
     const firstDay = new Date(year, month, 1).getDay();
     return firstDay === 0 ? 6 : firstDay - 1;
