@@ -1,13 +1,21 @@
+/**
+ * Accessibility Note:
+ * The Dropdown component (Radix UI) used for month/year selectors may inject `aria-expanded` on elements with role="row" or <tr>,
+ * which is not allowed by the ARIA spec and may trigger accessibility linter errors.
+ * This is a known limitation of the third-party library and cannot be fixed from the Calendar component.
+ * If strict ARIA compliance is required, consider using a different dropdown implementation.
+ */
 import type React from 'react';
+import Dropdown from '../dropdown';
 import type { CalendarProps } from './types';
 import { useCalendar } from './useCalendar';
 
 // Functional calendar component for date visualization and selection
 export const Calendar: React.FC<CalendarProps> = ({
-  theme = 'light',
   variant = 'filled',
   size = 'md',
   radius = 'md',
+  show = true,
   ...props
 }) => {
   const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } =
@@ -16,9 +24,16 @@ export const Calendar: React.FC<CalendarProps> = ({
   // Accessible label for the grid
   const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 
-  // Classes for dark mode and variants
-  const themeClasses = theme === 'dark' ? 'bg-gray-900 text-gray-100 shadow-black' : 'bg-white text-gray-900 shadow-lg';
-  const variantClasses = variant === 'outlined' ? 'border border-gray-300' : '';
+  // Classes for dark mode and variants (automatic dark mode)
+  const themeClasses = 'bg-white text-gray-900 shadow-lg dark:bg-gray-900 dark:text-gray-100 dark:shadow-black';
+  const variantClasses =
+    variant === 'outlined'
+      ? 'border border-gray-300 dark:border-gray-600'
+      : variant === 'soft'
+        ? 'bg-red-100 dark:bg-red-900'
+        : variant === 'ghost'
+          ? 'bg-transparent'
+          : '';
   const sizeMap = {
     sm: 'p-2 w-64',
     md: 'p-4 w-80',
@@ -49,13 +64,23 @@ export const Calendar: React.FC<CalendarProps> = ({
     props.onDateChange?.(newDate);
   };
 
+  if (!show) {
+    return null;
+  }
+
   return (
-    <div className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses}`} role='application'>
+    <div
+      className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses} transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn`}
+      role='application'
+      style={{
+        animation: 'fadeIn 0.3s'
+      }}
+    >
       {/* Calendar header with month and year selector */}
       <div className='flex justify-between items-center mb-4 gap-2'>
         <button
           onClick={goToPrevMonth}
-          className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'} focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-200`}
+          className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-200'
           aria-label='Previous month'
         >
           <svg
@@ -69,34 +94,40 @@ export const Calendar: React.FC<CalendarProps> = ({
           </svg>
         </button>
         <div className='flex items-center gap-2'>
-          <select
-            className={`bg-transparent outline-none font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}
-            value={currentDate.getMonth()}
-            onChange={handleMonthChange}
-            aria-label='Select month'
+          <Dropdown
+            items={monthNames.map((name, idx) => ({
+              type: 'item',
+              label: name,
+              onClick: () => handleMonthChange({ target: { value: idx.toString() } } as any)
+            }))}
           >
-            {monthNames.map((name, idx) => (
-              <option key={name} value={idx}>
-                {name}
-              </option>
-            ))}
-          </select>
-          <select
-            className={`bg-transparent outline-none font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}
-            value={currentDate.getFullYear()}
-            onChange={handleYearChange}
-            aria-label='Select year'
+            <button
+              type='button'
+              className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
+              aria-label='Select month'
+            >
+              {monthNames[currentDate.getMonth()]}
+            </button>
+          </Dropdown>
+          <Dropdown
+            items={years.map((year) => ({
+              type: 'item',
+              label: year.toString(),
+              onClick: () => handleYearChange({ target: { value: year.toString() } } as any)
+            }))}
           >
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
+            <button
+              type='button'
+              className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
+              aria-label='Select year'
+            >
+              {currentDate.getFullYear()}
+            </button>
+          </Dropdown>
         </div>
         <button
           onClick={goToNextMonth}
-          className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'} focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-200`}
+          className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-200'
           aria-label='Next month'
         >
           <svg
@@ -118,13 +149,13 @@ export const Calendar: React.FC<CalendarProps> = ({
       <div role='grid' aria-labelledby='month-year-label'>
         {/* Weekday names */}
         <div
-          className={`grid grid-cols-7 text-center text-xs font-medium uppercase mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+          className='grid grid-cols-7 text-center text-xs font-medium uppercase mb-2 text-gray-500 dark:text-gray-400'
           role='rowgroup'
         >
           <div role='row' className='contents'>
             {weekdayNames.map((day) => (
-              <div key={day} className='py-1' role='columnheader' aria-label={day}>
-                {day}
+              <div key={day} className='py-1' role='columnheader'>
+                <span aria-label={day}>{day}</span>
               </div>
             ))}
           </div>
@@ -142,28 +173,26 @@ export const Calendar: React.FC<CalendarProps> = ({
                     ${size === 'sm' ? 'w-8 h-8 text-xs' : size === 'lg' ? 'w-12 h-12 text-base' : 'w-10 h-10 text-sm'}
                     ${
                       day.isCurrentMonth
-                        ? theme === 'dark'
-                          ? 'text-gray-100 hover:bg-gray-800'
-                          : 'text-gray-900 hover:bg-gray-100'
-                        : theme === 'dark'
-                          ? 'text-gray-400'
-                          : 'text-gray-500'
+                        ? 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800'
+                        : 'text-gray-700 dark:text-gray-300'
                     }
                     ${
                       day.isSelected
                         ? variant === 'outlined'
-                          ? 'border-2 border-red-700 text-red-700 bg-transparent rounded-full'
-                          : 'bg-red-700 text-white rounded-full'
+                          ? 'border-2 border-red-700 text-red-700 bg-transparent rounded-full dark:border-red-400 dark:text-red-400'
+                          : variant === 'soft'
+                            ? 'bg-red-200 text-red-900 rounded-full dark:bg-red-900 dark:text-red-100'
+                            : variant === 'ghost'
+                              ? 'text-red-700 font-bold underline rounded-full dark:text-red-300'
+                              : 'bg-red-700 text-white rounded-full dark:bg-red-400 dark:text-gray-900'
                         : ''
                     }
-                    ${day.isToday && !day.isSelected ? 'border-2 border-red-600' : ''}
-                    ${
-                      day.isDisabled
-                        ? theme === 'dark'
-                          ? 'cursor-not-allowed bg-gray-800 text-gray-700'
-                          : 'cursor-not-allowed bg-gray-50 text-gray-300'
-                        : 'cursor-pointer'
-                    }
+                    ${day.isToday && !day.isSelected ? 'border-2 border-red-600 dark:border-red-400' : ''}
+          ${
+            day.isDisabled
+              ? 'cursor-not-allowed bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200'
+              : 'cursor-pointer'
+          }
                     transition-all duration-150 ease-in-out
                   `}
                   style={{ borderRadius: typeof radius === 'number' ? radius : undefined }}

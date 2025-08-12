@@ -23,7 +23,11 @@ const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const useCalendar = ({
   selectedDate: initialSelectedDate = null,
   onDateChange,
-  disabledDates = []
+  disabledDates = [],
+  minDate,
+  maxDate,
+  disabled = false,
+  readOnly = false
 }: CalendarProps) => {
   const [currentDate, setCurrentDate] = useState(initialSelectedDate || new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate);
@@ -66,7 +70,10 @@ export const useCalendar = ({
     // Days from the previous month
     for (let i = startDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, daysInPrevMonth - i);
-      const isDisabled = disabledDates.some((d) => isSameDay(d, date));
+      const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
+      const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
+      const isDisabled =
+        disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
       days.push({ date, isCurrentMonth: false, isToday: false, isSelected: false, isDisabled });
     }
 
@@ -75,7 +82,10 @@ export const useCalendar = ({
       const date = new Date(year, month, i);
       const isToday = isSameDay(date, today);
       const isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
-      const isDisabled = disabledDates.some((d) => isSameDay(d, date));
+      const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
+      const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
+      const isDisabled =
+        disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
       days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled });
     }
 
@@ -85,7 +95,10 @@ export const useCalendar = ({
 
     for (let i = 1; i <= remainingCells; i++) {
       const date = new Date(year, month + 1, i);
-      const isDisabled = disabledDates.some((d) => isSameDay(d, date));
+      const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
+      const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
+      const isDisabled =
+        disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
       days.push({ date, isCurrentMonth: false, isToday: false, isSelected: false, isDisabled });
     }
 
@@ -93,7 +106,7 @@ export const useCalendar = ({
   }, [currentDate, selectedDate, disabledDates]);
 
   const handleDayClick = (date: Date, isDisabled: boolean) => {
-    if (isDisabled) {
+    if (isDisabled || disabled || readOnly) {
       return;
     }
     setSelectedDate(date);
