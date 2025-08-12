@@ -4,44 +4,66 @@ import { Calendar } from './index';
 
 /**
  * ## DESCRIPTION
- * The Calendar component is a versatile date picker that allows users to select dates from a calendar interface.
- * It supports various configurations, including disabled dates, default selected dates, and custom date change handlers.
- * The component is designed to be accessible and customizable, making it suitable for a wide range of use cases.
+ * The Calendar component is a versatile, accessible date picker for React.
+ * It supports a wide range of visual and functional props, including dark mode, variants, border radius, sizes, and more.
  *
  * ## FEATURES
- * - **Date Selection**: Click on any available date to select it
- * - **Disabled Dates**: Prevent selection of specific dates by passing them in the `disabledDates` array
- * - **Current Date Highlighting**: The current date is visually highlighted in the calendar
- * - **Month Navigation**: Navigate between months using the previous/next buttons
- * - **Responsive Design**: Adapts to different screen sizes and containers
+ * - **Date Selection**: Click any available date to select it.
+ * - **Disabled Dates**: Prevent selection of specific dates via the `disabledDates` array.
+ * - **Min/Max Date**: Limit selectable dates with `minDate` and `maxDate` props.
+ * - **Read-Only/Disabled**: Make the calendar read-only (`readOnly`) or fully disabled (`disabled`).
+ * - **Current Date Highlighting**: The current date is visually highlighted.
+ * - **Month/Year Navigation**: Navigate months/years using custom dropdown selectors (Radix UI based).
+ * - **Variants**: Choose between `filled`, `outlined`, `soft`, and `ghost` visual styles.
+ * - **Sizes & Radius**: Control size (`sm`, `md`, `lg`) and border radius (`none`, `sm`, `md`, `lg`, or number).
+ * - **Show/Hide**: Animate calendar visibility with the `show` prop.
+ * - **Accessibility**: ARIA roles, keyboard navigation, and color contrast are supported. See note below for known limitations.
+ * - **Dark Mode**: Automatic dark mode support using Tailwind's `dark:` classes.
  *
  * ## USAGE
- * The Calendar component accepts the following main props:
  *
- * ### selectedDate
- * The currently selected date. Can be `null` if no date is selected.
+ * ### Basic Example
  * ```tsx
  * <Calendar selectedDate={new Date()} onDateChange={handleDateChange} />
  * ```
  *
- * ### onDateChange
- * Callback function that is called when a date is selected.
+ * ### All Props
  * ```tsx
- * const handleDateChange = (date: Date) => {
- *   console.log('Selected date:', date);
- * };
+ * <Calendar
+ *   selectedDate={new Date()}
+ *   onDateChange={handleDateChange}
+ *   disabledDates={[new Date(2024, 0, 15)]}
+ *   minDate={new Date(2024, 0, 10)}
+ *   maxDate={new Date(2024, 0, 25)}
+ *   variant="outlined"
+ *   size="lg"
+ *   radius="md"
+ *   show={true}
+ *   disabled={false}
+ *   readOnly={false}
+ * />
  * ```
  *
- * ### disabledDates
- * Array of dates that should be disabled and cannot be selected.
- * ```tsx
- * const disabledDates = [
- *   new Date(2024, 0, 15), // January 15, 2024
- *   new Date(2024, 0, 20)  // January 20, 2024
- * ];
- * <Calendar disabledDates={disabledDates} onDateChange={handleDateChange} />
- * ```
+ * ### Prop Reference
+ * - `selectedDate: Date | null` — The currently selected date.
+ * - `onDateChange: (date: Date) => void` — Callback when a date is selected.
+ * - `disabledDates: Date[]` — Array of dates to disable.
+ * - `minDate: Date` — Minimum selectable date.
+ * - `maxDate: Date` — Maximum selectable date.
+ * - `variant: 'filled' | 'outlined' | 'soft' | 'ghost'` — Visual style.
+ * - `size: 'sm' | 'md' | 'lg'` — Calendar size.
+ * - `radius: 'none' | 'sm' | 'md' | 'lg' | number` — Border radius.
+ * - `show: boolean` — Show/hide the calendar with animation.
+ * - `disabled: boolean` — Disables all interaction and selection.
+ * - `readOnly: boolean` — Makes the calendar read-only (dates visible, not selectable).
  *
+ * ## ACCESSIBILITY
+ * - Uses ARIA roles (`application`, `grid`, `gridcell`, etc.) and keyboard navigation.
+ * - Color contrast is ensured for all states (selected, disabled, out-of-month, etc.).
+ * - **Known limitation:** The Dropdown component (Radix UI) used for month/year selectors may inject `aria-expanded` on elements with role="row" or `<tr>`, which is not allowed by the ARIA spec and may trigger accessibility linter errors. This cannot be fixed from the Calendar component.
+ *
+ * ## STORYBOOK CONTROLS
+ * All props are available as Storybook controls for live editing and testing.
  */
 const meta: Meta<typeof Calendar> = {
   title: 'Atoms/Calendar',
@@ -78,15 +100,6 @@ const meta: Meta<typeof Calendar> = {
         defaultValue: { summary: '[]' }
       }
     },
-    theme: {
-      control: { type: 'radio' },
-      options: ['light', 'dark'],
-      description: 'Color theme of the calendar (light or dark).',
-      table: {
-        type: { summary: '"light" | "dark"' },
-        defaultValue: { summary: 'light' }
-      }
-    },
     variant: {
       control: { type: 'radio' },
       options: ['filled', 'outlined'],
@@ -113,6 +126,46 @@ const meta: Meta<typeof Calendar> = {
         type: { summary: '"none" | "sm" | "md" | "lg" | number' },
         defaultValue: { summary: 'md' }
       }
+    },
+    show: {
+      control: { type: 'boolean' },
+      description: 'Show or hide the calendar with animation.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
+    },
+    minDate: {
+      control: 'date',
+      description: 'The minimum selectable date. Dates before this will be disabled.',
+      table: {
+        type: { summary: 'Date' },
+        defaultValue: { summary: 'undefined' }
+      }
+    },
+    maxDate: {
+      control: 'date',
+      description: 'The maximum selectable date. Dates after this will be disabled.',
+      table: {
+        type: { summary: 'Date' },
+        defaultValue: { summary: 'undefined' }
+      }
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Disables all interaction and selection in the calendar.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    readOnly: {
+      control: 'boolean',
+      description: 'Makes the calendar read-only (dates are visible but cannot be selected).',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
     }
   }
 };
@@ -130,13 +183,36 @@ export const Default: Story = {
     onDateChange: (date: Date) => console.log('Date changed:', date)
   }
 };
+
 /**
- * - **Dark Mode**: Calendar with dark theme.
+ * - **Disabled Calendar**: All dates are disabled and cannot be interacted with.
  */
-export const DarkMode: Story = {
+export const Disabled: Story = {
   args: {
     ...Default.args,
-    theme: 'dark'
+    disabled: true
+  }
+};
+
+/**
+ * - **Read-Only Calendar**: Dates are visible but cannot be selected.
+ */
+export const ReadOnly: Story = {
+  args: {
+    ...Default.args,
+    readOnly: true
+  }
+};
+
+/**
+ * - **With Min/Max Date**: Calendar with a minimum and maximum selectable date.
+ *   Dates outside this range are disabled and cannot be selected.
+ */
+export const WithMinMaxDate: Story = {
+  args: {
+    ...Default.args,
+    minDate: new Date(new Date().getFullYear(), new Date().getMonth(), 5),
+    maxDate: new Date(new Date().getFullYear(), new Date().getMonth(), 25)
   }
 };
 
@@ -147,61 +223,6 @@ export const Outlined: Story = {
   args: {
     ...Default.args,
     variant: 'outlined'
-  }
-};
-
-/**
- * - **Sizes**: Calendar in small, medium, and large sizes.
- */
-export const Small: Story = {
-  args: {
-    ...Default.args,
-    size: 'sm'
-  }
-};
-
-export const Medium: Story = {
-  args: {
-    ...Default.args,
-    size: 'md'
-  }
-};
-
-export const Large: Story = {
-  args: {
-    ...Default.args,
-    size: 'lg'
-  }
-};
-
-/**
- * - **Border Radius**: Calendar with different border radius options.
- */
-export const RadiusNone: Story = {
-  args: {
-    ...Default.args,
-    radius: 'none'
-  }
-};
-
-export const RadiusSm: Story = {
-  args: {
-    ...Default.args,
-    radius: 'sm'
-  }
-};
-
-export const RadiusMd: Story = {
-  args: {
-    ...Default.args,
-    radius: 'md'
-  }
-};
-
-export const RadiusLg: Story = {
-  args: {
-    ...Default.args,
-    radius: 'lg'
   }
 };
 
