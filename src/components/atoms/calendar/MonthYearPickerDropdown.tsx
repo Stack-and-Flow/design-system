@@ -1,5 +1,6 @@
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
+
 // Inject custom scrollbar-hiding CSS once
 const injectCustomScrollbarStyle = () => {
   if (document.getElementById('custom-scrollbar-style')) {
@@ -36,20 +37,20 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
     injectCustomScrollbarStyle();
   }, []);
 
-  // Refs for scroll containers and selected items
   const monthsContainerRef = useRef<HTMLDivElement>(null);
   const yearsContainerRef = useRef<HTMLDivElement>(null);
   const selectedMonthRef = useRef<HTMLButtonElement>(null);
   const selectedYearRef = useRef<HTMLButtonElement>(null);
+
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  // Scroll selected month/year into center view on mount or when selection changes
+
   useEffect(() => {
     if (selectedMonthRef.current && monthsContainerRef.current) {
-      selectedMonthRef.current.scrollIntoView({ block: 'center', behavior: 'auto' });
+      selectedMonthRef.current.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
     if (selectedYearRef.current && yearsContainerRef.current) {
-      selectedYearRef.current.scrollIntoView({ block: 'center', behavior: 'auto' });
+      selectedYearRef.current.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
   }, [selectedMonth, selectedYear]);
 
@@ -64,10 +65,14 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
     return false;
   };
 
+  const handleSelect = () => {
+    onChange(selectedYear, selectedMonth);
+  };
+
   return (
     <div className='absolute inset-0 z-10 flex flex-col bg-white dark:bg-gray-900 rounded-lg animate-fadeIn w-full h-full'>
       <div className='flex-1 flex flex-col justify-center items-center w-full h-full p-0'>
-        <div className='flex w-full h-full gap-2 px-4 py-6 overflow-x-auto overflow-y-visible min-h-[200px]'>
+        <div className='flex w-full h-[200px] gap-2 px-4 py-6 overflow-x-auto overflow-y-auto custom-scrollbar'>
           {/* Months */}
           <div
             className='flex-1 flex flex-col gap-1 overflow-y-auto max-h-full pr-1 custom-scrollbar'
@@ -87,7 +92,6 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
                     return;
                   }
                   setSelectedMonth(idx);
-                  onChange(selectedYear, idx);
                 }}
                 aria-current={idx === selectedMonth ? 'true' : undefined}
                 disabled={isMonthDisabled(selectedYear, idx)}
@@ -120,12 +124,17 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
             ))}
           </div>
         </div>
-        <button
-          className='self-end m-2 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-xs text-blue-500 dark:text-blue-400'
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
+        <div className='flex justify-end p-2 gap-2'>
+          <button
+            className='px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-sm text-blue-500 dark:text-blue-400'
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button className='px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700 text-sm' onClick={handleSelect}>
+            Select
+          </button>
+        </div>
       </div>
     </div>
   );

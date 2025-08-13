@@ -161,7 +161,10 @@ type Story = StoryObj<typeof Calendar>;
 export const Default: Story = {
   args: {
     selectedDate: null,
-    onDateChange: (date: Date) => console.log('Date changed:', date)
+    onDateChange: (date: Date) => console.log('Date changed:', date),
+    size: 'md',
+    show: true,
+    disabled: false
   },
   parameters: {
     docs: {

@@ -53,7 +53,7 @@ export const Calendar: React.FC<CalendarProps> = ({
 
   return (
     <div
-      className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses} transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn relative`}
+      className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses} transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn min-h-[300px]`}
       role='application'
       style={{ animation: 'fadeIn 0.3s' }}
     >
@@ -101,32 +101,30 @@ export const Calendar: React.FC<CalendarProps> = ({
 
       {/* Fullscreen month/year picker view */}
       {pickerMode === 'month' && (
-        <div className='w-full h-full'>
-          <MonthYearPickerDropdown
-            currentYear={currentDate.getFullYear()}
-            currentMonth={currentDate.getMonth()}
-            minDate={
-              props.minDate
-                ? new Date(props.minDate.getFullYear(), props.minDate.getMonth(), props.minDate.getDate())
-                : undefined
-            }
-            maxDate={
-              props.maxDate
-                ? new Date(props.maxDate.getFullYear(), props.maxDate.getMonth(), props.maxDate.getDate())
-                : undefined
-            }
-            onChange={(year, month) => {
-              const newDate = new Date(currentDate);
-              newDate.setFullYear(year);
-              newDate.setMonth(month);
-              props.onDateChange?.(newDate);
-              setPickerMode('calendar');
-            }}
-            onCancel={() => setPickerMode('calendar')}
-            years={years}
-            monthNames={monthNames}
-          />
-        </div>
+        <MonthYearPickerDropdown
+          currentYear={currentDate.getFullYear()}
+          currentMonth={currentDate.getMonth()}
+          minDate={
+            props.minDate
+              ? new Date(props.minDate.getFullYear(), props.minDate.getMonth(), props.minDate.getDate())
+              : undefined
+          }
+          maxDate={
+            props.maxDate
+              ? new Date(props.maxDate.getFullYear(), props.maxDate.getMonth(), props.maxDate.getDate())
+              : undefined
+          }
+          onChange={(year, month) => {
+            const newDate = new Date(currentDate);
+            newDate.setFullYear(year);
+            newDate.setMonth(month);
+            props.onDateChange?.(newDate);
+            setPickerMode('calendar');
+          }}
+          onCancel={() => setPickerMode('calendar')}
+          years={years}
+          monthNames={monthNames}
+        />
       )}
 
       {/* Regular calendar view */}
