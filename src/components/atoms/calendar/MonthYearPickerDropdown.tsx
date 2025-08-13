@@ -85,7 +85,7 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
               <button
                 key={month}
                 ref={idx === selectedMonth ? selectedMonthRef : undefined}
-                className={`w-full py-1.5 px-3 rounded-md font-semibold text-base text-left transition-colors duration-150 ${idx === selectedMonth ? 'bg-red-600 text-white dark:bg-red-400 dark:text-gray-900' : 'hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'} ${isMonthDisabled(selectedYear, idx) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`w-full py-1.5 px-3 rounded-md font-semibold text-base text-left transition-colors duration-150 ${idx === selectedMonth ? 'bg-red-600 text-white dark:bg-red-600 dark:text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'} ${isMonthDisabled(selectedYear, idx) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 style={{ letterSpacing: '0.01em', fontSize: '0.95rem' }}
                 onClick={() => {
                   if (isMonthDisabled(selectedYear, idx)) {
@@ -113,7 +113,7 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
               <button
                 key={year}
                 ref={year === selectedYear ? selectedYearRef : undefined}
-                className={`w-full py-1.5 px-3 rounded-md font-semibold text-base text-left transition-colors duration-150 ${year === selectedYear ? 'bg-red-600 text-white dark:bg-red-400 dark:text-gray-900' : 'hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'}`}
+                className={`w-full py-1.5 px-3 rounded-md font-semibold text-base text-left transition-colors duration-150 ${year === selectedYear ? 'bg-red-600 text-white dark:bg-red-600 dark:text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'}`}
                 style={{ letterSpacing: '0.01em', fontSize: '0.95rem' }}
                 onClick={() => setSelectedYear(year)}
                 aria-current={year === selectedYear ? 'true' : undefined}
@@ -126,12 +126,15 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
         </div>
         <div className='flex justify-end p-2 gap-2'>
           <button
-            className='px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-sm text-blue-500 dark:text-blue-400'
+            className='px-2 py-1 rounded bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-sm transition-colors duration-150'
             onClick={onCancel}
           >
             Cancel
           </button>
-          <button className='px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700 text-sm' onClick={handleSelect}>
+          <button
+            className='px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 text-sm transition-colors duration-150'
+            onClick={handleSelect}
+          >
             Select
           </button>
         </div>
