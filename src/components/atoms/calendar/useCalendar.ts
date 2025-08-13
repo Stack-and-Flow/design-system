@@ -28,17 +28,26 @@ export const useCalendar = ({
   maxDate,
   disabled = false,
   readOnly = false,
-  firstDayOfWeek = 1 // Monday by default
+  firstDayOfWeek = 1, // Monday by default
+  range,
+  onRangeChange
 }: CalendarProps & { firstDayOfWeek?: number }) => {
-  const [currentDate, setCurrentDate] = useState(initialSelectedDate || new Date());
+  const [currentDate, setCurrentDate] = useState(initialSelectedDate || (range?.[0] ?? new Date()));
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate);
+  const [selectedRange, setSelectedRange] = useState<[Date | null, Date | null]>(range ?? [null, null]);
 
   useEffect(() => {
     setSelectedDate(initialSelectedDate);
     if (initialSelectedDate) {
       setCurrentDate(initialSelectedDate);
     }
-  }, [initialSelectedDate]);
+    if (range) {
+      setSelectedRange(range);
+      if (range[0]) {
+        setCurrentDate(range[0]);
+      }
+    }
+  }, [initialSelectedDate, range]);
 
   // Checks if two dates are the same day
   const isSameDay = (d1: Date, d2: Date): boolean => {
@@ -66,6 +75,9 @@ export const useCalendar = ({
       isToday: boolean;
       isSelected: boolean;
       isDisabled: boolean;
+      isInRange: boolean;
+      isRangeStart: boolean;
+      isRangeEnd: boolean;
     }[] = [];
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -79,7 +91,24 @@ export const useCalendar = ({
       const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
       const isDisabled =
         disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
-      days.push({ date, isCurrentMonth: false, isToday: false, isSelected: false, isDisabled });
+      const isInRange = !!(
+        selectedRange[0] &&
+        selectedRange[1] &&
+        date >= selectedRange[0] &&
+        date <= selectedRange[1]
+      );
+      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
+      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
+      days.push({
+        date,
+        isCurrentMonth: false,
+        isToday: false,
+        isSelected: false,
+        isDisabled,
+        isInRange,
+        isRangeStart,
+        isRangeEnd
+      });
     }
 
     // Days from the current month
@@ -91,7 +120,15 @@ export const useCalendar = ({
       const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
       const isDisabled =
         disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
-      days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled });
+      const isInRange = !!(
+        selectedRange[0] &&
+        selectedRange[1] &&
+        date >= selectedRange[0] &&
+        date <= selectedRange[1]
+      );
+      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
+      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
+      days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled, isInRange, isRangeStart, isRangeEnd });
     }
 
     // Days from the next month
@@ -104,7 +141,24 @@ export const useCalendar = ({
       const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
       const isDisabled =
         disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
-      days.push({ date, isCurrentMonth: false, isToday: false, isSelected: false, isDisabled });
+      const isInRange = !!(
+        selectedRange[0] &&
+        selectedRange[1] &&
+        date >= selectedRange[0] &&
+        date <= selectedRange[1]
+      );
+      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
+      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
+      days.push({
+        date,
+        isCurrentMonth: false,
+        isToday: false,
+        isSelected: false,
+        isDisabled,
+        isInRange,
+        isRangeStart,
+        isRangeEnd
+      });
     }
 
     return days;
@@ -114,9 +168,25 @@ export const useCalendar = ({
     if (isDisabled || disabled || readOnly) {
       return;
     }
-    setSelectedDate(date);
-    if (onDateChange) {
-      onDateChange(date);
+    if (onRangeChange) {
+      // Range selection logic: first click sets start, second click sets end, third click resets
+      if (!selectedRange[0] || (selectedRange[0] && selectedRange[1])) {
+        setSelectedRange([date, null]);
+        onRangeChange([date, null]);
+      } else if (selectedRange[0] && !selectedRange[1]) {
+        if (date < selectedRange[0]) {
+          setSelectedRange([date, selectedRange[0]]);
+          onRangeChange([date, selectedRange[0]]);
+        } else {
+          setSelectedRange([selectedRange[0], date]);
+          onRangeChange([selectedRange[0], date]);
+        }
+      }
+    } else {
+      setSelectedDate(date);
+      if (onDateChange) {
+        onDateChange(date);
+      }
     }
   };
 
@@ -151,6 +221,7 @@ export const useCalendar = ({
   return {
     currentDate,
     selectedDate,
+    selectedRange,
     daysInCalendar,
     weeks,
     monthNames,
@@ -163,6 +234,7 @@ export const useCalendar = ({
     goToPrevMonth,
     goToNextMonth,
     onDateChange,
+    onRangeChange,
     disabledDates
   };
 };

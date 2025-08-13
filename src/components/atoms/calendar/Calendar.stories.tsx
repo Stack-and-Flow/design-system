@@ -16,26 +16,6 @@ import { Calendar } from './index';
  * - Full keyboard and screen reader accessibility
  * - All visual variants, sizes, radius, theme, disabled, and readOnly states managed with class-variance-authority (CVA)
  *
- * ### Usage
- * ```tsx
- * <Calendar selectedDate={new Date()} onDateChange={handleDateChange} variant="filled" size="md" radius="md" theme="light" />
- * ```
- *
- * ### Props
- * - `selectedDate: Date | null` — The currently selected date
- * - `onDateChange: (date: Date) => void` — Callback when a date is selected
- * - `disabledDates?: Date[]` — Array of dates to disable
- * - `minDate?: Date` — Minimum selectable date
- * - `maxDate?: Date` — Maximum selectable date
- * - `variant?: 'filled' | 'outlined' | 'soft' | 'ghost'` — Visual style (CVA)
- * - `size?: 'sm' | 'md' | 'lg'` — Calendar size (CVA)
- * - `radius?: 'none' | 'sm' | 'md' | 'lg' | number` — Border radius (CVA for string, inline for number)
- * - `theme?: 'light' | 'dark'` — Theme (CVA)
- * - `show?: boolean` — Show/hide the calendar with animation (CVA)
- * - `disabled?: boolean` — Disables all interaction and selection (CVA)
- * - `readOnly?: boolean` — Makes the calendar read-only (dates visible, not selectable) (CVA)
- * - `firstDayOfWeek?: number` — The first day of the week (0 = Sunday, 1 = Monday, ... 6 = Saturday)
- *
  * ### Accessibility
  * - Uses ARIA roles and keyboard navigation
  * - Color contrast for all states
@@ -52,26 +32,9 @@ const meta: Meta<typeof Calendar> = {
   argTypes: {
     selectedDate: {
       control: 'date',
-      description: 'The currently selected date in the calendar.',
-      table: {
-        type: { summary: 'Date | null' },
-        defaultValue: { summary: 'null' }
-      }
-    },
-    onDateChange: {
-      action: 'dateChanged',
-      description: 'Callback that executes when the selected date changes.',
-      table: {
-        type: { summary: '(date: Date) => void' }
-      }
-    },
-    disabledDates: {
-      control: 'object',
-      description: 'Array of dates that should be disabled.',
-      table: {
-        type: { summary: 'Date[]' },
-        defaultValue: { summary: '[]' }
-      }
+      description: 'The currently selected date in the calendar.'
+      // theme control removed
+      // Removed invalid summary property
     },
     variant: {
       control: { type: 'radio' },
@@ -156,15 +119,6 @@ const meta: Meta<typeof Calendar> = {
         type: { summary: 'number' },
         defaultValue: { summary: '0' }
       }
-    },
-    theme: {
-      control: { type: 'radio' },
-      options: ['light', 'dark'],
-      description: 'Theme of the calendar (light or dark).',
-      table: {
-        type: { summary: '"light" | "dark"' },
-        defaultValue: { summary: 'light' }
-      }
     }
   }
 };
@@ -172,10 +126,7 @@ const meta: Meta<typeof Calendar> = {
 export default meta;
 
 type Story = StoryObj<typeof Calendar>;
-
-/**
- * - **Default Calendar**: A basic calendar with no date selected and all dates enabled.
- */
+// ...existing code...
 
 export const Default: Story = {
   args: {
@@ -184,11 +135,7 @@ export const Default: Story = {
     size: 'md',
     show: true,
     disabled: false,
-
-    // theme and radius are controlled by Storybook controls
-    firstDayOfWeek: 1,
-
-    theme: 'dark'
+    firstDayOfWeek: 1
   },
   parameters: {
     docs: {
@@ -286,86 +233,106 @@ export const WithDisabledDates: Story = {
   }
 };
 
-export const WithSelectedAndDisabledDates: Story = {
+export const CustomSelectedAndDisabledDates: Story = {
   args: {
+    ...Default.args,
     selectedDate: new Date(new Date().getFullYear(), new Date().getMonth(), 15),
-    onDateChange: (date: Date) => console.log('Date changed:', date),
-    disabledDates: [new Date(new Date().setDate(10)), new Date(new Date().setDate(20))]
+    disabledDates: [
+      new Date(new Date().getFullYear(), new Date().getMonth(), 10),
+      new Date(new Date().getFullYear(), new Date().getMonth(), 20),
+      new Date(new Date().getFullYear(), new Date().getMonth(), 5),
+      new Date(new Date().getFullYear(), new Date().getMonth(), 12),
+      new Date(new Date().getFullYear(), new Date().getMonth(), 18),
+      new Date(new Date().getFullYear(), new Date().getMonth(), 25)
+    ]
+  },
+  argTypes: {
+    selectedDate: {
+      control: 'date',
+      description: 'The currently selected date in the calendar.'
+    },
+    disabledDates: {
+      control: 'object',
+      description: 'Array of dates that should be disabled.'
+    }
   },
   parameters: {
     docs: {
       description: {
-        story: 'Calendar with a selected date and some dates disabled.'
+        story:
+          'Calendar with a customizable selected date and multiple disabled dates. Use the controls to test different scenarios, including past dates.'
       }
     }
   }
 };
 
-export const WithPastSelectedDate: Story = {
+export const RangeSelection: Story = {
   args: {
     ...Default.args,
-    selectedDate: new Date(2024, 0, 15)
+    range: [
+      new Date(new Date().getFullYear(), new Date().getMonth(), 10),
+      new Date(new Date().getFullYear(), new Date().getMonth(), 15)
+    ],
+    onRangeChange: (range: [Date | null, Date | null]) => {
+      console.log('Range changed:', range);
+    }
   },
   parameters: {
     docs: {
       description: {
-        story: 'Calendar with a selected date in the past.'
+        story:
+          'Calendar with range (multidate) selection enabled. Click to select a start and end date; all dates in between will be highlighted.'
       }
     }
   }
 };
 
-export const WithMultipleDisabledDates: Story = {
-  render: () => {
-    const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
-    const disabledDates = [
-      new Date(currentYear, currentMonth, 5),
-      new Date(currentYear, currentMonth, 12),
-      new Date(currentYear, currentMonth, 18),
-      new Date(currentYear, currentMonth, 25)
-    ];
-    return (
-      <Calendar
-        selectedDate={null}
-        onDateChange={(date: Date) => console.log('Date changed:', date)}
-        disabledDates={disabledDates}
-      />
-    );
-  },
+export const Sizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+      <div>
+        <h3 style={{ marginBottom: '0.5rem' }}>Small</h3>
+        <Calendar size='sm' id='calendar-sm' />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '0.5rem' }}>Medium</h3>
+        <Calendar size='md' id='calendar-md' />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '0.5rem' }}>Large</h3>
+        <Calendar size='lg' id='calendar-lg' />
+      </div>
+    </div>
+  ),
   parameters: {
     docs: {
       description: {
-        story: 'Calendar with multiple disabled dates in the current month.'
+        story: 'Showcase of all calendar sizes: small, medium, and large.'
       }
     }
   }
 };
 
-export const MondayFirst: Story = {
+export const Radius: Story = {
   args: {
     ...Default.args,
-    firstDayOfWeek: 1
+    radius: 'md'
   },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Calendar with Monday as the first day of the week.'
+  argTypes: {
+    radius: {
+      control: { type: 'select' },
+      options: ['none', 'sm', 'md', 'lg', 0, 4, 8, 16, 24, 32],
+      description: 'Border radius of the calendar. Accepts string (none, sm, md, lg) or number (px).',
+      table: {
+        type: { summary: '"none" | "sm" | "md" | "lg" | number' },
+        defaultValue: { summary: 'md' }
       }
     }
-  }
-};
-
-export const SaturdayFirst: Story = {
-  args: {
-    ...Default.args,
-    firstDayOfWeek: 6
   },
   parameters: {
     docs: {
       description: {
-        story: 'Calendar with Saturday as the first day of the week.'
+        story: 'Calendar with selectable border radius. Use the select control to change the radius.'
       }
     }
   }
