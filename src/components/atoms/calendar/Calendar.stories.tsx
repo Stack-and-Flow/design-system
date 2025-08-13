@@ -1,81 +1,51 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type React from 'react';
 import { Calendar } from './index';
 
 /**
- * ## DESCRIPTION
- * The Calendar component is a versatile, accessible date picker for React.
- * It supports a wide range of visual and functional props, including dark mode, variants, border radius, sizes, and more.
+ * ## Calendar
  *
- * ## FEATURES
- * - **Date Selection**: Click any available date to select it.
- * - **Disabled Dates**: Prevent selection of specific dates via the `disabledDates` array.
- * - **Min/Max Date**: Limit selectable dates with `minDate` and `maxDate` props.
- * - **Read-Only/Disabled**: Make the calendar read-only (`readOnly`) or fully disabled (`disabled`).
- * - **Current Date Highlighting**: The current date is visually highlighted.
- * - **Month/Year Navigation**: Navigate months/years using custom dropdown selectors (Radix UI based).
- * - **Variants**: Choose between `filled`, `outlined`, `soft`, and `ghost` visual styles.
- * - **Sizes & Radius**: Control size (`sm`, `md`, `lg`) and border radius (`none`, `sm`, `md`, `lg`, or number).
- * - **Show/Hide**: Animate calendar visibility with the `show` prop.
- * - **Accessibility**: ARIA roles, keyboard navigation, and color contrast are supported. See note below for known limitations.
- * - **Dark Mode**: Automatic dark mode support using Tailwind's `dark:` classes.
+ * A highly customizable, accessible calendar/date picker component for React.
  *
- * ## USAGE
+ * ### Features
+ * - Date selection with visual feedback
+ * - Month/year picker with two-column HeroUI-style dropdown
+ * - Dark mode and multiple visual variants
+ * - Customizable size and border radius
+ * - Min/max and disabled dates
+ * - Read-only and disabled modes
+ * - Full keyboard and screen reader accessibility
  *
- * ### Basic Example
+ * ### Usage
  * ```tsx
  * <Calendar selectedDate={new Date()} onDateChange={handleDateChange} />
  * ```
  *
- * ### All Props
- * ```tsx
- * <Calendar
- *   selectedDate={new Date()}
- *   onDateChange={handleDateChange}
- *   disabledDates={[new Date(2024, 0, 15)]}
- *   minDate={new Date(2024, 0, 10)}
- *   maxDate={new Date(2024, 0, 25)}
- *   variant="outlined"
- *   size="lg"
- *   radius="md"
- *   show={true}
- *   disabled={false}
- *   readOnly={false}
- * />
- * ```
+ * ### Props
+ * - `selectedDate: Date | null` — The currently selected date
+ * - `onDateChange: (date: Date) => void` — Callback when a date is selected
+ * - `disabledDates?: Date[]` — Array of dates to disable
+ * - `minDate?: Date` — Minimum selectable date
+ * - `maxDate?: Date` — Maximum selectable date
+ * - `variant?: 'filled' | 'outlined' | 'soft' | 'ghost'` — Visual style
+ * - `size?: 'sm' | 'md' | 'lg'` — Calendar size
+ * - `radius?: 'none' | 'sm' | 'md' | 'lg' | number` — Border radius
+ * - `show?: boolean` — Show/hide the calendar with animation
+ * - `disabled?: boolean` — Disables all interaction and selection
+ * - `readOnly?: boolean` — Makes the calendar read-only (dates visible, not selectable)
  *
- * ### Prop Reference
- * - `selectedDate: Date | null` — The currently selected date.
- * - `onDateChange: (date: Date) => void` — Callback when a date is selected.
- * - `disabledDates: Date[]` — Array of dates to disable.
- * - `minDate: Date` — Minimum selectable date.
- * - `maxDate: Date` — Maximum selectable date.
- * - `variant: 'filled' | 'outlined' | 'soft' | 'ghost'` — Visual style.
- * - `size: 'sm' | 'md' | 'lg'` — Calendar size.
- * - `radius: 'none' | 'sm' | 'md' | 'lg' | number` — Border radius.
- * - `show: boolean` — Show/hide the calendar with animation.
- * - `disabled: boolean` — Disables all interaction and selection.
- * - `readOnly: boolean` — Makes the calendar read-only (dates visible, not selectable).
- *
- * ## ACCESSIBILITY
- * - Uses ARIA roles (`application`, `grid`, `gridcell`, etc.) and keyboard navigation.
- * - Color contrast is ensured for all states (selected, disabled, out-of-month, etc.).
- * - **Known limitation:** The Dropdown component (Radix UI) used for month/year selectors may inject `aria-expanded` on elements with role="row" or `<tr>`, which is not allowed by the ARIA spec and may trigger accessibility linter errors. This cannot be fixed from the Calendar component.
- *
- * ## STORYBOOK CONTROLS
- * All props are available as Storybook controls for live editing and testing.
+ * ### Accessibility
+ * - Uses ARIA roles and keyboard navigation
+ * - Color contrast for all states
+ * - Month/year picker is fully contained and accessible
  */
 const meta: Meta<typeof Calendar> = {
   title: 'Atoms/Calendar',
   component: Calendar,
   parameters: {
-    docs: {
-      autodocs: true
-    },
+    docs: { autodocs: true },
     layout: 'centered'
   },
   tags: ['autodocs'],
-  render: (args: React.ComponentProps<typeof Calendar>) => <Calendar {...args} />,
   argTypes: {
     selectedDate: {
       control: 'date',
@@ -102,10 +72,10 @@ const meta: Meta<typeof Calendar> = {
     },
     variant: {
       control: { type: 'radio' },
-      options: ['filled', 'outlined'],
-      description: 'Visual variant of the calendar (filled or outlined).',
+      options: ['filled', 'outlined', 'soft', 'ghost'],
+      description: 'Visual variant of the calendar.',
       table: {
-        type: { summary: '"filled" | "outlined"' },
+        type: { summary: '"filled" | "outlined" | "soft" | "ghost"' },
         defaultValue: { summary: 'filled' }
       }
     },
@@ -177,117 +147,148 @@ type Story = StoryObj<typeof Calendar>;
 /**
  * - **Default Calendar**: A basic calendar with no date selected and all dates enabled.
  */
+
 export const Default: Story = {
   args: {
     selectedDate: null,
     onDateChange: (date: Date) => console.log('Date changed:', date)
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A basic calendar with no date selected and all dates enabled.'
+      }
+    }
   }
 };
 
-/**
- * - **Disabled Calendar**: All dates are disabled and cannot be interacted with.
- */
+// Default first, then variants and feature stories
+
 export const Disabled: Story = {
   args: {
     ...Default.args,
     disabled: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with all interaction disabled.'
+      }
+    }
   }
 };
 
-/**
- * - **Read-Only Calendar**: Dates are visible but cannot be selected.
- */
 export const ReadOnly: Story = {
   args: {
     ...Default.args,
     readOnly: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar in read-only mode (dates visible, not selectable).'
+      }
+    }
   }
 };
 
-/**
- * - **With Min/Max Date**: Calendar with a minimum and maximum selectable date.
- *   Dates outside this range are disabled and cannot be selected.
- */
 export const WithMinMaxDate: Story = {
   args: {
     ...Default.args,
     minDate: new Date(new Date().getFullYear(), new Date().getMonth(), 5),
     maxDate: new Date(new Date().getFullYear(), new Date().getMonth(), 25)
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with a minimum and maximum selectable date.'
+      }
+    }
   }
 };
 
-/**
- * - **Outlined Variant**: Calendar with outlined variant.
- */
 export const Outlined: Story = {
   args: {
     ...Default.args,
     variant: 'outlined'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with the outlined visual variant.'
+      }
+    }
   }
 };
 
-/**
- * - **With Selected Date**: A calendar with a pre-selected date (15th of current month).
- *   This shows how the calendar looks when a date is already selected.
- */
 export const WithSelectedDate: Story = {
   args: {
     ...Default.args,
     selectedDate: new Date(new Date().getFullYear(), new Date().getMonth(), 15)
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with a specific date selected.'
+      }
+    }
   }
 };
 
-/**
- * - **With Disabled Dates**: A calendar with certain dates disabled (10th and 20th of current month).
- *   Disabled dates cannot be selected and are visually distinct.
- */
 export const WithDisabledDates: Story = {
   args: {
     ...Default.args,
     disabledDates: [new Date(new Date().setDate(10)), new Date(new Date().setDate(20))]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with specific dates disabled.'
+      }
+    }
   }
 };
 
-/**
- * - **Selected Date with Disabled Dates**: Combines both selected date and disabled dates functionality.
- *   Shows how the calendar handles both features simultaneously.
- */
 export const WithSelectedAndDisabledDates: Story = {
   args: {
     selectedDate: new Date(new Date().getFullYear(), new Date().getMonth(), 15),
     onDateChange: (date: Date) => console.log('Date changed:', date),
     disabledDates: [new Date(new Date().setDate(10)), new Date(new Date().setDate(20))]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with a selected date and some dates disabled.'
+      }
+    }
   }
 };
 
-/**
- * - **Past Date Selected**: A calendar with a date from the past selected (January 15, 2024).
- *   Useful for testing historical date selection and display.
- */
 export const WithPastSelectedDate: Story = {
   args: {
     ...Default.args,
     selectedDate: new Date(2024, 0, 15)
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with a selected date in the past.'
+      }
+    }
   }
 };
 
-/**
- * - **Multiple Disabled Dates**: A calendar with multiple disabled dates throughout the month.
- *   Demonstrates how the calendar handles a larger set of disabled dates.
- */
 export const WithMultipleDisabledDates: Story = {
   render: () => {
     const today = new Date();
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
-
     const disabledDates = [
       new Date(currentYear, currentMonth, 5),
       new Date(currentYear, currentMonth, 12),
       new Date(currentYear, currentMonth, 18),
       new Date(currentYear, currentMonth, 25)
     ];
-
     return (
       <Calendar
         selectedDate={null}
@@ -295,5 +296,12 @@ export const WithMultipleDisabledDates: Story = {
         disabledDates={disabledDates}
       />
     );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with multiple disabled dates in the current month.'
+      }
+    }
   }
 };
