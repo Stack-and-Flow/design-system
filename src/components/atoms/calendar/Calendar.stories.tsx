@@ -10,14 +10,15 @@ import { Calendar } from './index';
  * - Date selection with visual feedback
  * - Month/year picker with two-column HeroUI-style dropdown
  * - Dark mode and multiple visual variants
- * - Customizable size and border radius
+ * - Customizable size and border radius (string or number)
  * - Min/max and disabled dates
  * - Read-only and disabled modes
  * - Full keyboard and screen reader accessibility
+ * - All visual variants, sizes, radius, theme, disabled, and readOnly states managed with class-variance-authority (CVA)
  *
  * ### Usage
  * ```tsx
- * <Calendar selectedDate={new Date()} onDateChange={handleDateChange} />
+ * <Calendar selectedDate={new Date()} onDateChange={handleDateChange} variant="filled" size="md" radius="md" theme="light" />
  * ```
  *
  * ### Props
@@ -26,12 +27,13 @@ import { Calendar } from './index';
  * - `disabledDates?: Date[]` — Array of dates to disable
  * - `minDate?: Date` — Minimum selectable date
  * - `maxDate?: Date` — Maximum selectable date
- * - `variant?: 'filled' | 'outlined' | 'soft' | 'ghost'` — Visual style
- * - `size?: 'sm' | 'md' | 'lg'` — Calendar size
- * - `radius?: 'none' | 'sm' | 'md' | 'lg' | number` — Border radius
- * - `show?: boolean` — Show/hide the calendar with animation
- * - `disabled?: boolean` — Disables all interaction and selection
- * - `readOnly?: boolean` — Makes the calendar read-only (dates visible, not selectable)
+ * - `variant?: 'filled' | 'outlined' | 'soft' | 'ghost'` — Visual style (CVA)
+ * - `size?: 'sm' | 'md' | 'lg'` — Calendar size (CVA)
+ * - `radius?: 'none' | 'sm' | 'md' | 'lg' | number` — Border radius (CVA for string, inline for number)
+ * - `theme?: 'light' | 'dark'` — Theme (CVA)
+ * - `show?: boolean` — Show/hide the calendar with animation (CVA)
+ * - `disabled?: boolean` — Disables all interaction and selection (CVA)
+ * - `readOnly?: boolean` — Makes the calendar read-only (dates visible, not selectable) (CVA)
  * - `firstDayOfWeek?: number` — The first day of the week (0 = Sunday, 1 = Monday, ... 6 = Saturday)
  *
  * ### Accessibility
@@ -90,9 +92,8 @@ const meta: Meta<typeof Calendar> = {
       }
     },
     radius: {
-      control: { type: 'radio' },
-      options: ['none', 'sm', 'md', 'lg'],
-      description: 'Border radius of the calendar.',
+      control: { type: 'text' },
+      description: 'Border radius of the calendar. Accepts string (none, sm, md, lg) or number (px).',
       table: {
         type: { summary: '"none" | "sm" | "md" | "lg" | number' },
         defaultValue: { summary: 'md' }
@@ -155,6 +156,15 @@ const meta: Meta<typeof Calendar> = {
         type: { summary: 'number' },
         defaultValue: { summary: '0' }
       }
+    },
+    theme: {
+      control: { type: 'radio' },
+      options: ['light', 'dark'],
+      description: 'Theme of the calendar (light or dark).',
+      table: {
+        type: { summary: '"light" | "dark"' },
+        defaultValue: { summary: 'light' }
+      }
     }
   }
 };
@@ -174,7 +184,11 @@ export const Default: Story = {
     size: 'md',
     show: true,
     disabled: false,
-    firstDayOfWeek: 1
+
+    // theme and radius are controlled by Storybook controls
+    firstDayOfWeek: 1,
+
+    theme: 'dark'
   },
   parameters: {
     docs: {

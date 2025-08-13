@@ -1,5 +1,7 @@
 import React from 'react';
 import { MonthYearPickerDropdown } from './MonthYearPickerDropdown';
+import { calendarCva } from './calendarCva';
+import { dayCva } from './dayCva';
 import type { CalendarProps } from './types';
 import { useCalendar } from './useCalendar';
 
@@ -10,6 +12,9 @@ export const Calendar: React.FC<CalendarProps> = ({
   size = 'md',
   radius = 'md',
   show = true,
+  theme = 'light',
+  disabled = false,
+  readOnly = false,
   ...props
 }) => {
   const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } = useCalendar({
@@ -23,32 +28,12 @@ export const Calendar: React.FC<CalendarProps> = ({
   // Accessible label for the grid
   const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 
-  // Classes for dark mode and variants (automatic dark mode)
-  const themeClasses = 'bg-white text-gray-900 shadow-lg dark:bg-gray-900 dark:text-gray-100 dark:shadow-black';
-  const variantClasses =
-    variant === 'outlined'
-      ? 'border border-gray-300 dark:border-gray-600'
-      : variant === 'soft'
-        ? 'bg-red-100 dark:bg-red-900'
-        : variant === 'ghost'
-          ? 'bg-transparent'
-          : '';
-  const sizeMap = {
-    sm: 'p-2 w-64',
-    md: 'p-4 w-80',
-    lg: 'p-6 w-96'
-  };
-  const sizeClasses = sizeMap[size] || sizeMap.md;
-  const radiusMap = {
-    none: 'rounded-none',
-    sm: 'rounded',
-    md: 'rounded-lg',
-    lg: 'rounded-2xl'
-  };
-  const radiusClasses = typeof radius === 'number' ? `rounded-[${radius}px]` : radiusMap[radius] || radiusMap.md;
-
   // Header: month and year selector (combined)
   const years = Array.from({ length: 21 }, (_, i) => 2015 + i); // 2015-2035 for a wide range
+
+  // Determine radius for CVA and style
+  const radiusCva = typeof radius === 'number' ? undefined : radius;
+  const radiusStyle = typeof radius === 'number' ? { borderRadius: radius } : undefined;
 
   if (!show) {
     return null;
@@ -56,9 +41,9 @@ export const Calendar: React.FC<CalendarProps> = ({
 
   return (
     <div
-      className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses} transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn min-h-[300px]`}
+      className={calendarCva({ variant, size, radius: radiusCva, theme, show, disabled, readOnly })}
       role='application'
-      style={{ animation: 'fadeIn 0.3s' }}
+      style={{ animation: 'fadeIn 0.3s', ...radiusStyle }}
     >
       {/* Header: month and year, click to open picker */}
       <div className='flex justify-between items-center mb-4 gap-2'>
@@ -157,33 +142,14 @@ export const Calendar: React.FC<CalendarProps> = ({
                   {week.map((day, dayIndex) => (
                     <div
                       key={dayIndex}
-                      className={`
-                        flex items-center justify-center font-medium select-none
-                        ${size === 'sm' ? 'w-8 h-8 text-xs' : size === 'lg' ? 'w-12 h-12 text-base' : 'w-10 h-10 text-sm'}
-                        ${
-                          day.isCurrentMonth
-                            ? 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800'
-                            : 'text-gray-700 dark:text-gray-300'
-                        }
-                        ${
-                          day.isSelected
-                            ? variant === 'outlined'
-                              ? 'border-2 border-red-700 text-red-700 bg-transparent rounded-full dark:border-red-400 dark:text-red-400'
-                              : variant === 'soft'
-                                ? 'bg-red-200 text-red-900 rounded-full dark:bg-red-900 dark:text-red-100'
-                                : variant === 'ghost'
-                                  ? 'text-red-700 font-bold underline rounded-full dark:text-red-300'
-                                  : 'bg-red-700 text-white rounded-full dark:bg-red-400 dark:text-gray-900'
-                            : ''
-                        }
-                        ${day.isToday && !day.isSelected ? 'border-2 border-red-600 dark:border-red-400' : ''}
-              ${
-                day.isDisabled
-                  ? 'cursor-not-allowed bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200'
-                  : 'cursor-pointer'
-              }
-                        transition-all duration-150 ease-in-out
-                      `}
+                      className={dayCva({
+                        size,
+                        isCurrentMonth: day.isCurrentMonth,
+                        isSelected: day.isSelected,
+                        variant,
+                        isToday: day.isToday,
+                        isDisabled: day.isDisabled
+                      })}
                       style={{ borderRadius: typeof radius === 'number' ? radius : undefined }}
                       onClick={() => handleDayClick(day.date, day.isDisabled)}
                       role='gridcell'
