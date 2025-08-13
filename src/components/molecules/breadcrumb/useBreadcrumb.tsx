@@ -4,109 +4,177 @@ import type { BreadcrumbItem, BreadcrumbProps } from './types';
 
 type BreadcrumbItemCollapsed = BreadcrumbItem | ReactNode;
 
+const ACCESSIBLE_TEXT_COLORS: Record<
+  NonNullable<BreadcrumbProps['bgColor']>,
+  {
+    light: string;
+    dark: string;
+    hover: string;
+    separator: string;
+  }
+> = {
+  default: {
+    light: 'text-slate-700 hover:text-slate-900',
+    dark: 'dark:text-slate-200 dark:hover:text-white',
+    hover: 'hover:text-slate-900 dark:hover:text-white',
+    separator: 'text-slate-500 dark:text-slate-400'
+  },
+  primary: {
+    light: 'text-white',
+    dark: 'dark:text-white',
+    hover: 'hover:text-blue-50',
+    separator: 'text-blue-100 dark:text-blue-200'
+  },
+  secondary: {
+    light: 'text-slate-700',
+    dark: 'dark:text-slate-200',
+    hover: 'hover:text-slate-900 dark:hover:text-white',
+    separator: 'text-slate-500 dark:text-slate-400'
+  },
+  success: {
+    light: 'text-white',
+    dark: 'dark:text-white',
+    hover: 'hover:text-green-50',
+    separator: 'text-green-100 dark:text-green-200'
+  },
+  warning: {
+    light: 'text-white',
+    dark: 'dark:text-white',
+    hover: 'hover:text-amber-50',
+    separator: 'text-amber-100 dark:text-amber-200'
+  },
+  error: {
+    light: 'text-white',
+    dark: 'dark:text-white',
+    hover: 'hover:text-red-50',
+    separator: 'text-red-100 dark:text-red-200'
+  },
+  transparent: {
+    light: 'text-slate-700',
+    dark: 'dark:text-slate-200',
+    hover: 'hover:text-slate-900 dark:hover:text-white',
+    separator: 'text-slate-500 dark:text-slate-400'
+  }
+};
+
+const ACCESSIBLE_BORDER_COLORS: Record<NonNullable<BreadcrumbProps['bgColor']>, string> = {
+  default: 'border-slate-300 dark:border-slate-600',
+  primary: 'border-blue-600 dark:border-blue-500',
+  secondary: 'border-slate-300 dark:border-slate-600',
+  success: 'border-green-600 dark:border-green-500',
+  warning: 'border-amber-500 dark:border-amber-400',
+  error: 'border-red-600 dark:border-red-500',
+  transparent: 'border-transparent'
+};
+
+export interface ProcessedBreadcrumbItem {
+  item: BreadcrumbItemCollapsed;
+  isLast: boolean;
+}
+
 export const useBreadcrumb = ({
   items,
-  variant,
-  bgColor,
+  variant = 'regular',
+  bgColor = 'default',
   size = 'md',
+  iconSizes = 18,
   rounded = 'md',
   className = '',
   startContent,
   endContent,
   hideSeparator = false,
-  separator,
-  maxItem = 2,
+  separator = '/',
+  maxItem = 0,
   itemsBeforeCollapse = 1,
   itemsAfterCollapse = 1,
-  iconCollapse,
-  collapsedElement
+  iconCollapse = 'more-horizontal',
+  collapsedElement,
+  colorText
 }: BreadcrumbProps) => {
-  const classText = (colorText: string): string => {
-    switch (colorText) {
-      case 'white':
-        return 'text-white';
-      case 'red':
-        return 'text-red-500';
-      case 'blue':
-        return 'text-blue-500 hover:text-blue-700';
-      case 'gray':
-        return 'text-gray-500';
-      case 'indigo':
-        return 'text-indigo-500';
-      default:
-        return '';
+  const getAccessibleTextColors = () => {
+    if (colorText) {
+      return {
+        text: colorText,
+        separator: colorText
+      };
     }
+    const colors = ACCESSIBLE_TEXT_COLORS[bgColor] || ACCESSIBLE_TEXT_COLORS.default;
+    return {
+      text: `${colors.light} ${colors.dark} ${colors.hover}`,
+      separator: `${colors.light} ${colors.dark} ${colors.hover}`
+    };
+  };
+
+  const getBorderColorClass = (): string => {
+    return ACCESSIBLE_BORDER_COLORS[bgColor] || '';
   };
 
   const renderSeparator = (separator: ReactNode): ReactNode => {
     if (typeof separator === 'string') {
       const controlString = /[->/|](?![a-zA-Z0-9])/;
       return controlString.test(separator) ? (
-        <span>{separator}</span>
+        <span className={`text-[${iconSizes}px] ${getAccessibleTextColors().separator}`}>{separator}</span>
       ) : (
-        <DynamicIcon name={separator as IconName} size={18} />
+        <DynamicIcon name={separator as IconName} size={iconSizes} className={getAccessibleTextColors().separator} />
       );
     }
     return separator;
   };
 
   const getHiddenItems = (): BreadcrumbItem[] => {
-    if (items.length <= maxItem) {
+    if (maxItem === 0 || items.length <= maxItem) {
       return [];
     }
-
-    const startIndex = itemsBeforeCollapse;
-    const endIndex = items.length - itemsAfterCollapse;
-
-    return items.slice(startIndex, endIndex);
+    return items.slice(itemsBeforeCollapse, items.length - itemsAfterCollapse);
   };
 
-  const itemsCollapsed = (
-    items: BreadcrumbItem[],
-    maxItemToShow: number,
-    itemsAfterCollapseToShow: number,
-    itemsBeforeCollapseToShow: number
-  ): BreadcrumbItemCollapsed[] => {
-    if (items.length <= maxItemToShow) {
+  const itemsCollapsed = (): BreadcrumbItemCollapsed[] => {
+    if (
+      maxItem === 0 ||
+      items.length <= maxItem ||
+      maxItem < 2 ||
+      itemsBeforeCollapse + itemsAfterCollapse > maxItem ||
+      itemsBeforeCollapse > maxItem - 1 ||
+      itemsAfterCollapse > maxItem - 1
+    ) {
       return items;
     }
 
-    if (maxItemToShow < 2) {
-      return items;
-    }
-    if (itemsBeforeCollapseToShow + itemsAfterCollapseToShow > maxItemToShow) {
-      return items;
-    }
-    if (itemsBeforeCollapseToShow > maxItemToShow - 1) {
-      return items;
-    }
-    if (itemsAfterCollapseToShow > maxItemToShow - 1) {
-      return items;
-    }
-
-    const firstElementBeforeCollapse = items.slice(0, itemsBeforeCollapseToShow);
-    const lastElementsAfterCollapse = items.slice(-itemsAfterCollapseToShow);
-
-    const collapsedElementJsx: ReactNode = collapsedElement || (
-      <span key='collapsed-icon'>
-        <DynamicIcon name={iconCollapse as IconName} size={18} />
+    const collapsedElementJsx: ReactNode = collapsedElement ?? (
+      <span
+        key='collapsed-icon'
+        className={`hover:cursor-pointer ${getAccessibleTextColors().text}`}
+        title={`${getHiddenItems().length} hidden items`}
+        role='button'
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            // Aquí se podría expandir el breadcrumb
+          }
+        }}
+      >
+        {iconCollapse && <DynamicIcon name={iconCollapse as IconName} size={iconSizes} />}
       </span>
     );
 
-    return [...firstElementBeforeCollapse, collapsedElementJsx, ...lastElementsAfterCollapse];
+    return [...items.slice(0, itemsBeforeCollapse), collapsedElementJsx, ...items.slice(-itemsAfterCollapse)];
   };
 
-  const isBreadcrumbItem = (item: BreadcrumbItem | ReactNode): item is BreadcrumbItem => {
-    return typeof item === 'object' && item !== null && 'title' in item && 'href' in item;
-  };
+  const isBreadcrumbItem = (item: BreadcrumbItem | ReactNode): item is BreadcrumbItem =>
+    typeof item === 'object' && item !== null && 'title' in item && 'href' in item;
 
-  const processedItems = itemsCollapsed(items, maxItem, itemsAfterCollapse, itemsBeforeCollapse);
+  const processedItems: ProcessedBreadcrumbItem[] = itemsCollapsed().map((item, index, arr) => ({
+    item,
+    isLast: index === arr.length - 1
+  }));
 
   return {
     items,
     variant,
     bgColor,
     size,
+    iconSizes,
     rounded,
     className,
     startContent,
@@ -117,7 +185,8 @@ export const useBreadcrumb = ({
     iconCollapse,
     renderSeparator,
     isBreadcrumbItem,
-    classText,
+    getAccessibleTextColors,
+    getBorderColorClass,
     getHiddenItems
   };
 };

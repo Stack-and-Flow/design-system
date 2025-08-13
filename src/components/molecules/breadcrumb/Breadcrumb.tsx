@@ -3,12 +3,22 @@ import { DynamicIcon, type IconName } from 'lucide-react/dynamic';
 import type { FC } from 'react';
 import React from 'react';
 import Link from '../../atoms/link';
+import Text from '../../atoms/text';
 import './breadcrumb.css';
 import { type BreadcrumbProps, breadcrumbVariants } from './types';
 import { useBreadcrumb } from './useBreadcrumb';
 
-//TODO: APPLY MARGIN/PADDING PARAMS, ICON SIZE, SEPARATOR CLASS ICON CLASS
-const Breadcrumb: FC<BreadcrumbProps> = ({ ...props }) => {
+const Breadcrumb: FC<BreadcrumbProps> = (props) => {
+  const {
+    maxItem = 0,
+    itemsBeforeCollapse = 1,
+    itemsAfterCollapse = 1,
+    separatorClassName,
+    itemClassName,
+    containerClassName,
+    ...restProps
+  } = props;
+
   const {
     processedItems,
     renderSeparator,
@@ -19,55 +29,79 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ ...props }) => {
     rounded,
     separator,
     size,
+    iconSizes,
     startContent,
     variant,
     bgColor,
-    classText
-  } = useBreadcrumb({ ...props });
+    getAccessibleTextColors
+  } = useBreadcrumb({
+    ...restProps,
+    maxItem,
+    itemsBeforeCollapse,
+    itemsAfterCollapse
+  });
+
+  const accessibleColors = getAccessibleTextColors();
 
   return (
-    <nav aria-label='Breadcrumb'>
-      <ol className={cn('w-auto', className, breadcrumbVariants({ variant, bgColor, size, rounded }))}>
-        {processedItems.map((item, index) => (
+    <nav aria-label={props['aria-label'] ?? 'Breadcrumb navigation'} role='navigation' className={containerClassName}>
+      <ol className={cn('w-auto', breadcrumbVariants({ variant, bgColor, size, rounded }), className)}>
+        {processedItems.map(({ item, isLast }, index) => (
           <React.Fragment key={`breadcrumb-${index}`}>
-            <li className='flex items-center'>
+            <li className={cn('flex items-center', itemClassName)}>
               {isBreadcrumbItem(item) ? (
                 <>
                   {startContent && (
-                    <span>
+                    <span className='mr-1'>
                       <DynamicIcon
                         name={startContent as IconName}
-                        className={cn('breadcrumb-link', classText(props.colorText ?? ''))}
-                        size={18}
+                        className={cn('breadcrumb-link', accessibleColors.text)}
+                        size={iconSizes}
+                        aria-hidden='true'
                       />
                     </span>
                   )}
-                  <Link
-                    title={item.title}
-                    href={item.href}
-                    target={item.target}
-                    size={size}
-                    className={cn(classText(props.colorText ?? ''))}
-                  >
-                    {item.title}
-                  </Link>
+
+                  {isLast ? (
+                    <Text
+                      tag='span'
+                      className={cn(accessibleColors.text, 'cursor-default font-medium')}
+                      aria-current='page'
+                    >
+                      {item.title}
+                    </Text>
+                  ) : (
+                    <Link
+                      title={item.title}
+                      href={item.href}
+                      target={item.target}
+                      size='md'
+                      className={cn(accessibleColors.text)}
+                      aria-label={`Go to ${item.title}`}
+                    >
+                      {item.title}
+                    </Link>
+                  )}
+
                   {endContent && (
-                    <span>
+                    <span className='ml-1'>
                       <DynamicIcon
                         name={endContent as IconName}
-                        className={cn('breadcrumb-link', classText(props.colorText ?? ''))}
-                        size={18}
+                        className={cn('breadcrumb-link', accessibleColors.text)}
+                        size={iconSizes}
+                        aria-hidden='true'
                       />
                     </span>
                   )}
                 </>
               ) : (
-                <span>{item}</span>
+                <span className={accessibleColors.text}>{item}</span>
               )}
             </li>
-            {!hideSeparator && index < processedItems.length - 1 && (
+
+            {!hideSeparator && !isLast && (
               <li>
-                <span className={cn(classText(props.colorText ?? ''))} aria-hidden={separator === '/'}>
+                <span className={cn(accessibleColors.separator, separatorClassName)} aria-hidden='true'>
                   {separator && renderSeparator(separator)}
                 </span>
               </li>
