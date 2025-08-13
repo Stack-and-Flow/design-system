@@ -32,6 +32,7 @@ import { Calendar } from './index';
  * - `show?: boolean` — Show/hide the calendar with animation
  * - `disabled?: boolean` — Disables all interaction and selection
  * - `readOnly?: boolean` — Makes the calendar read-only (dates visible, not selectable)
+ * - `firstDayOfWeek?: number` — The first day of the week (0 = Sunday, 1 = Monday, ... 6 = Saturday)
  *
  * ### Accessibility
  * - Uses ARIA roles and keyboard navigation
@@ -146,6 +147,14 @@ const meta: Meta<typeof Calendar> = {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
       }
+    },
+    firstDayOfWeek: {
+      control: { type: 'number', min: 0, max: 6 },
+      description: 'The first day of the week (0 = Sunday, 1 = Monday, ... 6 = Saturday).',
+      table: {
+        type: { summary: 'number' },
+        defaultValue: { summary: '0' }
+      }
     }
   }
 };
@@ -164,19 +173,20 @@ export const Default: Story = {
     onDateChange: (date: Date) => console.log('Date changed:', date),
     size: 'md',
     show: true,
-    disabled: false
+    disabled: false,
+    firstDayOfWeek: 1
   },
   parameters: {
     docs: {
       description: {
-        story: 'A basic calendar with no date selected and all dates enabled.'
+        story:
+          'A basic calendar with no date selected and all dates enabled. You can change the first day of the week using the control.'
       }
     }
   }
 };
 
 // Default first, then variants and feature stories
-
 export const Disabled: Story = {
   args: {
     ...Default.args,
@@ -314,6 +324,34 @@ export const WithMultipleDisabledDates: Story = {
     docs: {
       description: {
         story: 'Calendar with multiple disabled dates in the current month.'
+      }
+    }
+  }
+};
+
+export const MondayFirst: Story = {
+  args: {
+    ...Default.args,
+    firstDayOfWeek: 1
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with Monday as the first day of the week.'
+      }
+    }
+  }
+};
+
+export const SaturdayFirst: Story = {
+  args: {
+    ...Default.args,
+    firstDayOfWeek: 6
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Calendar with Saturday as the first day of the week.'
       }
     }
   }

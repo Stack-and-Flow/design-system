@@ -17,8 +17,8 @@ const monthNames = [
   'December'
 ];
 
-// Abbreviated weekday names
-const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+// Abbreviated weekday names (starting from Sunday)
+const baseWeekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export const useCalendar = ({
   selectedDate: initialSelectedDate = null,
@@ -27,8 +27,9 @@ export const useCalendar = ({
   minDate,
   maxDate,
   disabled = false,
-  readOnly = false
-}: CalendarProps) => {
+  readOnly = false,
+  firstDayOfWeek = 1 // Monday by default
+}: CalendarProps & { firstDayOfWeek?: number }) => {
   const [currentDate, setCurrentDate] = useState(initialSelectedDate || new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate);
 
@@ -44,11 +45,15 @@ export const useCalendar = ({
     return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
   };
 
-  // Gets the index of the first day of the month (Monday as 0)
+  // Gets the index of the first day of the month (customizable)
   const getStartDayOfMonth = (year: number, month: number): number => {
     const firstDay = new Date(year, month, 1).getDay();
-    return firstDay === 0 ? 6 : firstDay - 1;
+    // Adjust so that firstDayOfWeek is 0=Sunday, 1=Monday, etc.
+    return (firstDay - firstDayOfWeek + 7) % 7;
   };
+
+  // Rotate weekday names according to firstDayOfWeek
+  const weekdayNames = [...baseWeekdayNames.slice(firstDayOfWeek), ...baseWeekdayNames.slice(0, firstDayOfWeek)];
 
   // Generates the array of days for the calendar
   const daysInCalendar = useMemo(() => {
@@ -103,7 +108,7 @@ export const useCalendar = ({
     }
 
     return days;
-  }, [currentDate, selectedDate, disabledDates]);
+  }, [currentDate, selectedDate, disabledDates, minDate, maxDate, disabled, readOnly, firstDayOfWeek]);
 
   const handleDayClick = (date: Date, isDisabled: boolean) => {
     if (isDisabled || disabled || readOnly) {
