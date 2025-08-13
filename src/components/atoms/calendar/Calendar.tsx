@@ -5,14 +5,17 @@ import { useCalendar } from './useCalendar';
 
 // Functional calendar component for date visualization and selection
 export const Calendar: React.FC<CalendarProps> = ({
+  firstDayOfWeek = 1, // Monday as default
   variant = 'filled',
   size = 'md',
   radius = 'md',
   show = true,
   ...props
 }) => {
-  const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } =
-    useCalendar(props);
+  const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } = useCalendar({
+    ...props,
+    firstDayOfWeek
+  });
 
   // State for picker mode (months/years)
   const [pickerMode, setPickerMode] = React.useState<'calendar' | 'month' | 'year'>('calendar');

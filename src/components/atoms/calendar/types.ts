@@ -9,15 +9,10 @@ export interface CalendarProps {
   variant?: CalendarVariant;
   size?: CalendarSize;
   radius?: CalendarRadius;
-  show?: boolean; // Controls visibility of the calendar
+  show?: boolean;
   maxDate?: Date;
   minDate?: Date;
-  /**
-   * If true, disables all interaction and selection in the calendar.
-   */
   disabled?: boolean;
-  /**
-   * If true, makes the calendar read-only (dates are visible but cannot be selected).
-   */
   readOnly?: boolean;
+  firstDayOfWeek?: number;
 }
