@@ -5,8 +5,8 @@
  * This is a known limitation of the third-party library and cannot be fixed from the Calendar component.
  * If strict ARIA compliance is required, consider using a different dropdown implementation.
  */
-import type React from 'react';
-import Dropdown from '../dropdown';
+import React from 'react';
+import { MonthYearPickerDropdown } from './MonthYearPickerDropdown';
 import type { CalendarProps } from './types';
 import { useCalendar } from './useCalendar';
 
@@ -20,6 +20,9 @@ export const Calendar: React.FC<CalendarProps> = ({
 }) => {
   const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } =
     useCalendar(props);
+
+  // Estado para el modo selector (meses/años)
+  const [pickerMode, setPickerMode] = React.useState<'calendar' | 'month' | 'year'>('calendar');
 
   // Accessible label for the grid
   const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
@@ -48,21 +51,8 @@ export const Calendar: React.FC<CalendarProps> = ({
   };
   const radiusClasses = typeof radius === 'number' ? `rounded-[${radius}px]` : radiusMap[radius] || radiusMap.md;
 
-  // Header: month and year selector
-  const years = Array.from({ length: 21 }, (_, i) => new Date().getFullYear() - 10 + i);
-
-  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newMonth = parseInt(e.target.value, 10);
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newMonth);
-    props.onDateChange?.(newDate);
-  };
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newYear = parseInt(e.target.value, 10);
-    const newDate = new Date(currentDate);
-    newDate.setFullYear(newYear);
-    props.onDateChange?.(newDate);
-  };
+  // Header: month and year selector (combined)
+  const years = Array.from({ length: 21 }, (_, i) => 2015 + i); // 2015-2035 for a wide range
 
   if (!show) {
     return null;
@@ -72,11 +62,9 @@ export const Calendar: React.FC<CalendarProps> = ({
     <div
       className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses} transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn`}
       role='application'
-      style={{
-        animation: 'fadeIn 0.3s'
-      }}
+      style={{ animation: 'fadeIn 0.3s' }}
     >
-      {/* Calendar header with month and year selector */}
+      {/* Header: mes y año, click para abrir selector */}
       <div className='flex justify-between items-center mb-4 gap-2'>
         <button
           onClick={goToPrevMonth}
@@ -93,38 +81,14 @@ export const Calendar: React.FC<CalendarProps> = ({
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M15 19l-7-7 7-7'></path>
           </svg>
         </button>
-        <div className='flex items-center gap-2'>
-          <Dropdown
-            items={monthNames.map((name, idx) => ({
-              type: 'item',
-              label: name,
-              onClick: () => handleMonthChange({ target: { value: idx.toString() } } as any)
-            }))}
-          >
-            <button
-              type='button'
-              className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
-              aria-label='Select month'
-            >
-              {monthNames[currentDate.getMonth()]}
-            </button>
-          </Dropdown>
-          <Dropdown
-            items={years.map((year) => ({
-              type: 'item',
-              label: year.toString(),
-              onClick: () => handleYearChange({ target: { value: year.toString() } } as any)
-            }))}
-          >
-            <button
-              type='button'
-              className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
-              aria-label='Select year'
-            >
-              {currentDate.getFullYear()}
-            </button>
-          </Dropdown>
-        </div>
+        <button
+          type='button'
+          className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
+          aria-label='Elegir mes y año'
+          onClick={() => setPickerMode('month')}
+        >
+          {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+        </button>
         <button
           onClick={goToNextMonth}
           className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-200'
@@ -142,73 +106,96 @@ export const Calendar: React.FC<CalendarProps> = ({
         </button>
       </div>
 
-      {/* Calendar grid with accessible label */}
-      <h2 id='month-year-label' className='sr-only'>
-        {monthYearLabel}
-      </h2>
-      <div role='grid' aria-labelledby='month-year-label'>
-        {/* Weekday names */}
-        <div
-          className='grid grid-cols-7 text-center text-xs font-medium uppercase mb-2 text-gray-500 dark:text-gray-400'
-          role='rowgroup'
-        >
-          <div role='row' className='contents'>
-            {weekdayNames.map((day) => (
-              <div key={day} className='py-1' role='columnheader'>
-                <span aria-label={day}>{day}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Vista de selección de mes/año a pantalla completa */}
+      {pickerMode === 'month' && (
+        <MonthYearPickerDropdown
+          currentYear={currentDate.getFullYear()}
+          currentMonth={currentDate.getMonth()}
+          minDate={props.minDate}
+          maxDate={props.maxDate}
+          onChange={(year, month) => {
+            const newDate = new Date(currentDate);
+            newDate.setFullYear(year);
+            newDate.setMonth(month);
+            props.onDateChange?.(newDate);
+            setPickerMode('calendar');
+          }}
+          onCancel={() => setPickerMode('calendar')}
+          years={years}
+          monthNames={monthNames}
+        />
+      )}
 
-        {/* Grid of days */}
-        <div className='grid grid-cols-7 gap-1' role='rowgroup'>
-          {weeks.map((week, weekIndex) => (
-            <div key={weekIndex} role='row' className='contents'>
-              {week.map((day, dayIndex) => (
-                <div
-                  key={dayIndex}
-                  className={`
-                    flex items-center justify-center font-medium select-none
-                    ${size === 'sm' ? 'w-8 h-8 text-xs' : size === 'lg' ? 'w-12 h-12 text-base' : 'w-10 h-10 text-sm'}
-                    ${
-                      day.isCurrentMonth
-                        ? 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800'
-                        : 'text-gray-700 dark:text-gray-300'
-                    }
-                    ${
-                      day.isSelected
-                        ? variant === 'outlined'
-                          ? 'border-2 border-red-700 text-red-700 bg-transparent rounded-full dark:border-red-400 dark:text-red-400'
-                          : variant === 'soft'
-                            ? 'bg-red-200 text-red-900 rounded-full dark:bg-red-900 dark:text-red-100'
-                            : variant === 'ghost'
-                              ? 'text-red-700 font-bold underline rounded-full dark:text-red-300'
-                              : 'bg-red-700 text-white rounded-full dark:bg-red-400 dark:text-gray-900'
-                        : ''
-                    }
-                    ${day.isToday && !day.isSelected ? 'border-2 border-red-600 dark:border-red-400' : ''}
-          ${
-            day.isDisabled
-              ? 'cursor-not-allowed bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200'
-              : 'cursor-pointer'
-          }
-                    transition-all duration-150 ease-in-out
-                  `}
-                  style={{ borderRadius: typeof radius === 'number' ? radius : undefined }}
-                  onClick={() => handleDayClick(day.date, day.isDisabled)}
-                  role='gridcell'
-                  aria-selected={day.isSelected ? 'true' : 'false'}
-                  aria-disabled={day.isDisabled ? 'true' : 'false'}
-                  tabIndex={day.isDisabled ? -1 : 0}
-                >
-                  {day.date.getDate()}
+      {/* Calendario normal */}
+      {pickerMode === 'calendar' && (
+        <>
+          <h2 id='month-year-label' className='sr-only'>
+            {monthYearLabel}
+          </h2>
+          <div role='grid' aria-labelledby='month-year-label'>
+            {/* Weekday names */}
+            <div
+              className='grid grid-cols-7 text-center text-xs font-medium uppercase mb-2 text-gray-500 dark:text-gray-400'
+              role='rowgroup'
+            >
+              <div role='row' className='contents'>
+                {weekdayNames.map((day) => (
+                  <div key={day} className='py-1' role='columnheader'>
+                    <span>{day}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Grid of days */}
+            <div className='grid grid-cols-7 gap-1' role='rowgroup'>
+              {weeks.map((week, weekIndex) => (
+                <div key={weekIndex} role='row' className='contents'>
+                  {week.map((day, dayIndex) => (
+                    <div
+                      key={dayIndex}
+                      className={`
+                        flex items-center justify-center font-medium select-none
+                        ${size === 'sm' ? 'w-8 h-8 text-xs' : size === 'lg' ? 'w-12 h-12 text-base' : 'w-10 h-10 text-sm'}
+                        ${
+                          day.isCurrentMonth
+                            ? 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800'
+                            : 'text-gray-700 dark:text-gray-300'
+                        }
+                        ${
+                          day.isSelected
+                            ? variant === 'outlined'
+                              ? 'border-2 border-red-700 text-red-700 bg-transparent rounded-full dark:border-red-400 dark:text-red-400'
+                              : variant === 'soft'
+                                ? 'bg-red-200 text-red-900 rounded-full dark:bg-red-900 dark:text-red-100'
+                                : variant === 'ghost'
+                                  ? 'text-red-700 font-bold underline rounded-full dark:text-red-300'
+                                  : 'bg-red-700 text-white rounded-full dark:bg-red-400 dark:text-gray-900'
+                            : ''
+                        }
+                        ${day.isToday && !day.isSelected ? 'border-2 border-red-600 dark:border-red-400' : ''}
+              ${
+                day.isDisabled
+                  ? 'cursor-not-allowed bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200'
+                  : 'cursor-pointer'
+              }
+                        transition-all duration-150 ease-in-out
+                      `}
+                      style={{ borderRadius: typeof radius === 'number' ? radius : undefined }}
+                      onClick={() => handleDayClick(day.date, day.isDisabled)}
+                      role='gridcell'
+                      aria-selected={day.isSelected ? 'true' : 'false'}
+                      aria-disabled={day.isDisabled ? 'true' : 'false'}
+                      tabIndex={day.isDisabled ? -1 : 0}
+                    >
+                      {day.date.getDate()}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
