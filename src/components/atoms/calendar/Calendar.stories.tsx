@@ -106,20 +106,30 @@ const meta: Meta<typeof Calendar> = {
       }
     },
     minDate: {
-      control: 'date',
-      description: 'The minimum selectable date. Dates before this will be disabled.',
+      control: { type: 'date' },
+      description:
+        'The minimum selectable date (time is ignored; only date is used). Dates before this will be disabled.',
       table: {
-        type: { summary: 'Date' },
+        type: { summary: 'Date (time ignored)' },
         defaultValue: { summary: 'undefined' }
-      }
+      },
+      transform: (value: any) =>
+        value
+          ? new Date(new Date(value).getFullYear(), new Date(value).getMonth(), new Date(value).getDate())
+          : undefined
     },
     maxDate: {
-      control: 'date',
-      description: 'The maximum selectable date. Dates after this will be disabled.',
+      control: { type: 'date' },
+      description:
+        'The maximum selectable date (time is ignored; only date is used). Dates after this will be disabled.',
       table: {
-        type: { summary: 'Date' },
+        type: { summary: 'Date (time ignored)' },
         defaultValue: { summary: 'undefined' }
-      }
+      },
+      transform: (value: any) =>
+        value
+          ? new Date(new Date(value).getFullYear(), new Date(value).getMonth(), new Date(value).getDate())
+          : undefined
     },
     disabled: {
       control: 'boolean',
