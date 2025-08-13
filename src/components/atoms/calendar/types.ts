@@ -15,4 +15,5 @@ export interface CalendarProps {
   disabled?: boolean;
   readOnly?: boolean;
   firstDayOfWeek?: number;
+  theme?: 'light' | 'dark';
 }
