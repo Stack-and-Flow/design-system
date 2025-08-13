@@ -3,6 +3,8 @@ export type CalendarSize = 'sm' | 'md' | 'lg';
 export type CalendarRadius = 'none' | 'sm' | 'md' | 'lg' | number;
 
 export interface CalendarProps {
+  /** Unique id for ARIA labeling (accessibility) */
+  id?: string;
   selectedDate?: Date | null;
   onDateChange?: (date: Date) => void;
   disabledDates?: Date[];
@@ -16,4 +18,6 @@ export interface CalendarProps {
   readOnly?: boolean;
   firstDayOfWeek?: number;
   theme?: 'light' | 'dark';
+  range?: [Date | null, Date | null]; // start and end date
+  onRangeChange?: (range: [Date | null, Date | null]) => void;
 }

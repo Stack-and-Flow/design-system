@@ -6,7 +6,7 @@ export const calendarCva = cva(
     variants: {
       variant: {
         filled: 'bg-white text-gray-900 shadow-lg dark:bg-gray-900 dark:text-gray-100 dark:shadow-black',
-        outlined: 'border border-gray-300 dark:border-gray-600',
+        outlined: 'border border-gray-500 dark:border-gray-600',
         soft: 'bg-red-100 dark:bg-red-900',
         ghost: 'bg-transparent'
       },
@@ -30,7 +30,7 @@ export const calendarCva = cva(
         false: 'hidden opacity-0 scale-95'
       },
       disabled: {
-        true: 'pointer-events-none opacity-60',
+        true: 'pointer-events-none opacity-60 relative after:absolute after:inset-0 after:bg-black/60 after:rounded-inherit after:pointer-events-none',
         false: ''
       },
       readOnly: {

@@ -15,6 +15,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   theme = 'light',
   disabled = false,
   readOnly = false,
+  id,
   ...props
 }) => {
   const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } = useCalendar({
@@ -43,14 +44,19 @@ export const Calendar: React.FC<CalendarProps> = ({
     <div
       className={calendarCva({ variant, size, radius: radiusCva, theme, show, disabled, readOnly })}
       role='application'
-      style={{ animation: 'fadeIn 0.3s', ...radiusStyle }}
+      style={{
+        animation: 'fadeIn 0.3s',
+        ...radiusStyle,
+        ...(readOnly ? { pointerEvents: 'none', opacity: 0.8 } : {})
+      }}
     >
       {/* Header: month and year, click to open picker */}
       <div className='flex justify-between items-center mb-4 gap-2'>
         <button
-          onClick={goToPrevMonth}
-          className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-200'
+          onClick={readOnly ? undefined : goToPrevMonth}
+          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 transition-colors duration-200 ${variant === 'outlined' ? 'text-gray-900 dark:text-white' : ''}`}
           aria-label='Previous month'
+          disabled={readOnly}
         >
           <svg
             className='w-5 h-5'
@@ -59,21 +65,23 @@ export const Calendar: React.FC<CalendarProps> = ({
             viewBox='0 0 24 24'
             xmlns='http://www.w3.org/2000/svg'
           >
-            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M15 19l-7-7 7-7'></path>
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3' d='M15 19l-7-7 7-7'></path>
           </svg>
         </button>
         <button
           type='button'
           className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
           aria-label='Choose month and year'
-          onClick={() => setPickerMode('month')}
+          onClick={readOnly ? undefined : () => setPickerMode('month')}
+          disabled={readOnly}
         >
           {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
         </button>
         <button
-          onClick={goToNextMonth}
-          className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-200'
+          onClick={readOnly ? undefined : goToNextMonth}
+          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 transition-colors duration-200 ${variant === 'outlined' ? 'text-gray-900 dark:text-white' : ''}`}
           aria-label='Next month'
+          disabled={readOnly}
         >
           <svg
             className='w-5 h-5'
@@ -82,7 +90,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             viewBox='0 0 24 24'
             xmlns='http://www.w3.org/2000/svg'
           >
-            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M9 5l7 7-7 7'></path>
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3' d='M9 5l7 7-7 7'></path>
           </svg>
         </button>
       </div>
@@ -118,10 +126,10 @@ export const Calendar: React.FC<CalendarProps> = ({
       {/* Regular calendar view */}
       {pickerMode === 'calendar' && (
         <>
-          <h2 id='month-year-label' className='sr-only'>
+          <h2 id={`month-year-label-${id ?? 'default'}`} className='sr-only'>
             {monthYearLabel}
           </h2>
-          <div role='grid' aria-labelledby='month-year-label'>
+          <div role='grid' aria-labelledby={`month-year-label-${id ?? 'default'}`}>
             {/* Weekday names */}
             <div
               className='grid grid-cols-7 text-center text-xs font-medium uppercase mb-2 text-gray-500 dark:text-gray-400'
@@ -148,14 +156,17 @@ export const Calendar: React.FC<CalendarProps> = ({
                         isSelected: day.isSelected,
                         variant,
                         isToday: day.isToday,
-                        isDisabled: day.isDisabled
+                        isDisabled: day.isDisabled || readOnly,
+                        isInRange: day.isInRange,
+                        isRangeStart: day.isRangeStart,
+                        isRangeEnd: day.isRangeEnd
                       })}
                       style={{ borderRadius: typeof radius === 'number' ? radius : undefined }}
-                      onClick={() => handleDayClick(day.date, day.isDisabled)}
+                      onClick={readOnly ? undefined : () => handleDayClick(day.date, day.isDisabled)}
                       role='gridcell'
                       aria-selected={day.isSelected ? 'true' : 'false'}
-                      aria-disabled={day.isDisabled ? 'true' : 'false'}
-                      tabIndex={day.isDisabled ? -1 : 0}
+                      aria-disabled={day.isDisabled || readOnly ? 'true' : 'false'}
+                      tabIndex={day.isDisabled || readOnly ? -1 : 0}
                     >
                       {day.date.getDate()}
                     </div>
