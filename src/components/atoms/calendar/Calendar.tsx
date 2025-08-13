@@ -1,10 +1,3 @@
-/**
- * Accessibility Note:
- * The Dropdown component (Radix UI) used for month/year selectors may inject `aria-expanded` on elements with role="row" or <tr>,
- * which is not allowed by the ARIA spec and may trigger accessibility linter errors.
- * This is a known limitation of the third-party library and cannot be fixed from the Calendar component.
- * If strict ARIA compliance is required, consider using a different dropdown implementation.
- */
 import React from 'react';
 import { MonthYearPickerDropdown } from './MonthYearPickerDropdown';
 import type { CalendarProps } from './types';
@@ -21,7 +14,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } =
     useCalendar(props);
 
-  // Estado para el modo selector (meses/años)
+  // State for picker mode (months/years)
   const [pickerMode, setPickerMode] = React.useState<'calendar' | 'month' | 'year'>('calendar');
 
   // Accessible label for the grid
@@ -60,11 +53,11 @@ export const Calendar: React.FC<CalendarProps> = ({
 
   return (
     <div
-      className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses} transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn`}
+      className={`font-inter ${themeClasses} ${variantClasses} ${sizeClasses} ${radiusClasses} transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn relative`}
       role='application'
       style={{ animation: 'fadeIn 0.3s' }}
     >
-      {/* Header: mes y año, click para abrir selector */}
+      {/* Header: month and year, click to open picker */}
       <div className='flex justify-between items-center mb-4 gap-2'>
         <button
           onClick={goToPrevMonth}
@@ -84,7 +77,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         <button
           type='button'
           className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
-          aria-label='Elegir mes y año'
+          aria-label='Choose month and year'
           onClick={() => setPickerMode('month')}
         >
           {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
@@ -106,27 +99,37 @@ export const Calendar: React.FC<CalendarProps> = ({
         </button>
       </div>
 
-      {/* Vista de selección de mes/año a pantalla completa */}
+      {/* Fullscreen month/year picker view */}
       {pickerMode === 'month' && (
-        <MonthYearPickerDropdown
-          currentYear={currentDate.getFullYear()}
-          currentMonth={currentDate.getMonth()}
-          minDate={props.minDate}
-          maxDate={props.maxDate}
-          onChange={(year, month) => {
-            const newDate = new Date(currentDate);
-            newDate.setFullYear(year);
-            newDate.setMonth(month);
-            props.onDateChange?.(newDate);
-            setPickerMode('calendar');
-          }}
-          onCancel={() => setPickerMode('calendar')}
-          years={years}
-          monthNames={monthNames}
-        />
+        <div className='w-full h-full'>
+          <MonthYearPickerDropdown
+            currentYear={currentDate.getFullYear()}
+            currentMonth={currentDate.getMonth()}
+            minDate={
+              props.minDate
+                ? new Date(props.minDate.getFullYear(), props.minDate.getMonth(), props.minDate.getDate())
+                : undefined
+            }
+            maxDate={
+              props.maxDate
+                ? new Date(props.maxDate.getFullYear(), props.maxDate.getMonth(), props.maxDate.getDate())
+                : undefined
+            }
+            onChange={(year, month) => {
+              const newDate = new Date(currentDate);
+              newDate.setFullYear(year);
+              newDate.setMonth(month);
+              props.onDateChange?.(newDate);
+              setPickerMode('calendar');
+            }}
+            onCancel={() => setPickerMode('calendar')}
+            years={years}
+            monthNames={monthNames}
+          />
+        </div>
       )}
 
-      {/* Calendario normal */}
+      {/* Regular calendar view */}
       {pickerMode === 'calendar' && (
         <>
           <h2 id='month-year-label' className='sr-only'>
