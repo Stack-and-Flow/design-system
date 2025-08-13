@@ -1,4 +1,5 @@
 nav > ol > li > a,
 nav > ol > li > span {
   padding: 0px;
+  text-decoration: none;
 }

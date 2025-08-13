@@ -23,7 +23,7 @@ const meta: Meta<typeof Breadcrumb> = {
   component: Breadcrumb,
   argTypes: {
     maxItem: {
-      control: { type: 'number', min: 2 }
+      control: { type: 'number', min: 0 }
     },
     itemsBeforeCollapse: {
       control: { type: 'number', min: 1 }
@@ -52,11 +52,10 @@ const items: BreadcrumbItem[] = [
 export const Default: Story = {
   args: {
     items,
-    variant: 'solid',
+    variant: 'bordered',
     bgColor: 'default',
     rounded: 'md',
     size: 'md',
-    colorText: '',
     separator: '/',
     iconCollapse: 'accessibility',
     startContent: undefined,
@@ -66,7 +65,6 @@ export const Default: Story = {
     itemsBeforeCollapse: 1,
     itemsAfterCollapse: 1,
     className: ''
-    // shadow:
   }
 };
 
@@ -76,7 +74,7 @@ export const Default: Story = {
  */
 export const Sizes: Story = {
   render: () => (
-    <div>
+    <div className='flex flex-col gap-2'>
       <Breadcrumb items={items} size='sm' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
       <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
       <Breadcrumb items={items} size='lg' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
@@ -90,7 +88,7 @@ export const Sizes: Story = {
  */
 export const Colors: Story = {
   render: () => (
-    <div>
+    <div className='flex flex-col gap-2'>
       <Breadcrumb
         items={items}
         size='md'
@@ -98,7 +96,8 @@ export const Colors: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        colorText='red'
+        variant='underlined'
+        colorText='text-red-500'
       />
       <Breadcrumb
         items={items}
@@ -107,7 +106,8 @@ export const Colors: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        colorText='blue'
+        variant='underlined'
+        colorText='text-blue-500'
       />
       <Breadcrumb
         items={items}
@@ -116,7 +116,8 @@ export const Colors: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        colorText='indigo'
+        variant='underlined'
+        colorText='text-indigo'
       />
     </div>
   )
@@ -128,7 +129,7 @@ export const Colors: Story = {
  */
 export const Variants: Story = {
   render: () => (
-    <div className='flex flex-col gap-0.5'>
+    <div className='flex flex-col gap-2'>
       <Breadcrumb
         items={items}
         size='md'
@@ -137,6 +138,7 @@ export const Variants: Story = {
         itemsBeforeCollapse={1}
         separator='/'
         variant='bordered'
+        bgColor='transparent'
       />
       <Breadcrumb
         items={items}
@@ -145,11 +147,18 @@ export const Variants: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        variant='outline'
-        bgColor='primary'
-        colorText='white'
+        variant='underlined'
+        colorText='text-black'
       />
-      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        variant='regular'
+      />
     </div>
   )
 };
@@ -169,8 +178,8 @@ export const Rounded: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        rounded={'sm'}
-        variant='bordered'
+        rounded='none'
+        variant='underlined'
       />
       <Breadcrumb
         items={items}
@@ -179,8 +188,38 @@ export const Rounded: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        rounded='none'
-        variant='bordered'
+        rounded={'xs'}
+        variant='underlined'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        rounded='sm'
+        variant='underlined'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        rounded='md'
+        variant='underlined'
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        rounded='full'
+        variant='underlined'
       />
     </div>
   )
@@ -222,26 +261,15 @@ export const Separators: Story = {
  */
 export const HiddenSeparators: Story = {
   render: () => (
-    <div className='flex flex-col gap-0.5'>
-      <Breadcrumb
-        items={items}
-        size='md'
-        maxItem={0}
-        itemsAfterCollapse={1}
-        itemsBeforeCollapse={1}
-        separator='/'
-        hideSeparator={false}
-      />
-      <Breadcrumb
-        items={items}
-        size='md'
-        maxItem={0}
-        itemsAfterCollapse={1}
-        itemsBeforeCollapse={1}
-        separator='/'
-        hideSeparator={true}
-      />
-    </div>
+    <Breadcrumb
+      items={items}
+      size='md'
+      maxItem={0}
+      itemsAfterCollapse={1}
+      itemsBeforeCollapse={1}
+      separator='/'
+      hideSeparator={true}
+    />
   )
 };
 
@@ -251,7 +279,7 @@ export const HiddenSeparators: Story = {
  */
 export const WithStartEndContent: Story = {
   render: () => (
-    <div>
+    <div className='flex flex-col gap-2'>
       <Breadcrumb
         items={items}
         size='md'
@@ -259,6 +287,7 @@ export const WithStartEndContent: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
+        variant='underlined'
         startContent='home'
       />
       <Breadcrumb
@@ -268,6 +297,7 @@ export const WithStartEndContent: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
+        variant='underlined'
         endContent='external-link'
       />
       <Breadcrumb
@@ -278,6 +308,7 @@ export const WithStartEndContent: Story = {
         itemsBeforeCollapse={1}
         separator='/'
         startContent='home'
+        variant='underlined'
         endContent='external-link'
       />
     </div>
@@ -290,35 +321,16 @@ export const WithStartEndContent: Story = {
  */
 export const MaxItemsAndCollapse: Story = {
   render: () => (
-    <div className='flex flex-col gap-0.5'>
-      <Breadcrumb
-        items={items}
-        size='md'
-        maxItem={2}
-        itemsAfterCollapse={1}
-        itemsBeforeCollapse={1}
-        separator='/'
-        iconCollapse='ellipsis-vertical'
-      />
-      <Breadcrumb
-        items={items}
-        size='md'
-        maxItem={2}
-        itemsAfterCollapse={1}
-        itemsBeforeCollapse={1}
-        separator='/'
-        iconCollapse='ellipsis'
-      />
-      <Breadcrumb
-        items={items}
-        size='md'
-        maxItem={2}
-        itemsAfterCollapse={1}
-        itemsBeforeCollapse={1}
-        separator='/'
-        iconCollapse='airplay'
-      />
-    </div>
+    <Breadcrumb
+      items={items}
+      size='md'
+      maxItem={2}
+      itemsAfterCollapse={1}
+      itemsBeforeCollapse={1}
+      separator='/'
+      variant='underlined'
+      iconCollapse='ellipsis-vertical'
+    />
   )
 };
 
@@ -368,6 +380,7 @@ export const WithJsxElmentCollapsed: Story = {
         maxItem={maxItem}
         itemsAfterCollapse={itemsAfterCollapse}
         itemsBeforeCollapse={itemsBeforeCollapse}
+        variant='underlined'
         collapsedElement={
           <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
             <DynamicIcon name='ellipsis-vertical' />
@@ -392,16 +405,15 @@ export const CompleteExample: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='chevron-right'
-        variant='bordered'
+        variant='underlined'
         rounded={'sm'}
-        // shadow={true}
         startContent='home'
         endContent='external-link'
         colorText='blue'
         iconCollapse='more-horizontal'
         collapsedElement={
           <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
-            <DynamicIcon name='ellipsis-vertical' className='text-blue-500' />
+            <DynamicIcon name='ellipsis-vertical' />
           </Dropdown>
         }
       />
@@ -412,9 +424,7 @@ export const CompleteExample: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='|'
-        variant='outline'
-        // rounded={false}
-        // shadow={false}
+        variant='underlined'
         iconCollapse='ellipsis'
       />
     </div>
@@ -435,6 +445,7 @@ export const CustomClassName: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
+        variant='underlined'
         className='border-2 border-dashed border-red-500'
       />
       <Breadcrumb
@@ -448,4 +459,135 @@ export const CustomClassName: Story = {
       />
     </div>
   )
+};
+
+export const WithBadgeCollapse: Story = {
+  render: () => {
+    const longItems: BreadcrumbItem[] = [
+      { title: 'Home', href: '/' },
+      { title: 'Library', href: '/library' },
+      { title: 'Documents', href: '/library/documents' },
+      { title: 'Projects', href: '/library/documents/projects' },
+      { title: 'Annual Report', href: '/library/documents/projects/annual' }
+    ];
+
+    return (
+      <div className='flex flex-col gap-0.5'>
+        <Breadcrumb
+          items={longItems}
+          size='md'
+          maxItem={3}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={1}
+          separator='chevron-right'
+          variant='underlined'
+          rounded='sm'
+          startContent='home'
+          colorText='text-blue-600 dark:text-blue-400'
+          collapsedElement={
+            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
+              <span className='inline-flex items-center justify-center h-5 min-w-[20px] px-1.5 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-full cursor-pointer'>
+                +{longItems.length - maxItem}
+              </span>
+            </Dropdown>
+          }
+        />
+
+        <Breadcrumb
+          items={longItems}
+          size='md'
+          maxItem={3}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={1}
+          separator='/'
+          variant='bordered'
+          bgColor='primary'
+          colorText='text-white'
+          collapsedElement={
+            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
+              <span className='inline-flex items-center justify-center h-5 min-w-[20px] px-1.5 text-xs font-medium bg-blue-600 hover:bg-blue-400 text-white rounded-full cursor-pointer'>
+                +{longItems.length - maxItem}
+              </span>
+            </Dropdown>
+          }
+        />
+      </div>
+    );
+  }
+};
+
+/**
+ * - **Interactive Dropdown**: Modern dropdown with transitions and hover effects
+ */
+export const ModernDropdown: Story = {
+  render: () => {
+    const longItems: BreadcrumbItem[] = [
+      { title: 'Home', href: '/' },
+      { title: 'Library', href: '/library' },
+      { title: 'Documents', href: '/library/documents' },
+      { title: 'Projects', href: '/library/documents/projects' },
+      { title: 'Annual Report', href: '/library/documents/projects/annual' }
+    ];
+
+    return (
+      <div className='flex flex-col gap-4'>
+        <Breadcrumb
+          items={longItems}
+          size='md'
+          maxItem={3}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={1}
+          separator='chevron-right'
+          variant='underlined'
+          colorText='text-slate-600 dark:text-slate-400'
+          collapsedElement={
+            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
+              <span className='inline-flex items-center justify-center h-6 px-2 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'>
+                {longItems.length - maxItem} more
+              </span>
+            </Dropdown>
+          }
+        />
+
+        <Breadcrumb
+          items={longItems}
+          size='md'
+          maxItem={3}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={1}
+          separator='chevron-right'
+          variant='underlined'
+          colorText='text-blue-600 dark:text-blue-400'
+          collapsedElement={
+            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
+              <span className='inline-flex items-center justify-center h-7 min-w-[28px] px-2 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors'>
+                +{longItems.length - maxItem}
+              </span>
+            </Dropdown>
+          }
+        />
+
+        <Breadcrumb
+          items={longItems}
+          size='md'
+          maxItem={3}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={1}
+          separator='/'
+          variant='underlined'
+          rounded='lg'
+          colorText='text-gray-700 dark:text-gray-300'
+          className='shadow-sm'
+          collapsedElement={
+            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
+              <button className='inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'>
+                <Icon name='more-horizontal' size={14} />
+                <span>{longItems.length - maxItem} more</span>
+              </button>
+            </Dropdown>
+          }
+        />
+      </div>
+    );
+  }
 };
