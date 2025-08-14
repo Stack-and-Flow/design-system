@@ -250,7 +250,7 @@ export const Disabled: Story = {
 
 export const ReadOnly: Story = {
   args: {
-    selectedDate: new Date(2025, 7, 15),
+    selectedDate: null,
     onDateChange: () => {
       /* noop */
     },
