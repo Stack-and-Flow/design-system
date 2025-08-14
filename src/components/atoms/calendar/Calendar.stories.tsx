@@ -251,7 +251,7 @@ export const SizesVertical: Story = {
           size='lg'
           selectedDate={null}
           onDateChange={() => {
-            /* noop */
+            /* nono */
           }}
         />
       </div>
@@ -308,7 +308,7 @@ export const Disabled: Story = {
   args: {
     selectedDate: null,
     onDateChange: () => {
-      /* noop */
+      /* nono */
     },
     size: 'md',
     show: true,
@@ -328,7 +328,7 @@ export const ReadOnly: Story = {
   args: {
     selectedDate: new Date(),
     onDateChange: () => {
-      /* noop */
+      /* nono */
     },
     size: 'md',
     show: true,
@@ -509,7 +509,7 @@ export const WithRadius: Story = {
           radius={radius}
           selectedDate={null}
           onDateChange={() => {
-            /* noop */
+            /* nono */
           }}
           size='md'
           show={true}
