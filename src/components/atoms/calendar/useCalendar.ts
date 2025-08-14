@@ -154,6 +154,14 @@ export const useCalendar = ({
       const isDisabled =
         disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
 
+      // ReadOnly, no day selected
+      if (readOnly) {
+        isSelected = false;
+        isRangeStart = false;
+        isRangeEnd = false;
+        isInRange = false;
+      }
+
       days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled, isInRange, isRangeStart, isRangeEnd });
     }
 

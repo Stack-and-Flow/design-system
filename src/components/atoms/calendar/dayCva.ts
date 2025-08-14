@@ -51,19 +51,19 @@ export const dayCva = cva(
         isRangeStart: false,
         isRangeEnd: false,
         variant: 'filled',
-        class: 'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-none'
+        class: 'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-none'
       },
       {
         isInRange: true,
         isRangeStart: true,
         variant: 'filled',
-        class: 'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-l-full'
+        class: 'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-l-full'
       },
       {
         isInRange: true,
         isRangeEnd: true,
         variant: 'filled',
-        class: 'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-r-full'
+        class: 'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-r-full'
       },
       // Disabled days in range (filled)
       {
@@ -153,12 +153,12 @@ export const dayCva = cva(
         isSelected: true,
         variant: 'filled',
         class:
-          'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-full hover:bg-secondary/80 dark:hover:bg-accent/80'
+          'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-full hover:bg-secondary/80 dark:hover:bg-accent/80'
       },
       {
         isToday: true,
         isSelected: false,
-        class: 'border-2 border-red-400'
+        class: 'border-2 border-red-400 text-gray-900 dark:text-gray-100'
       }
     ],
     defaultVariants: {
