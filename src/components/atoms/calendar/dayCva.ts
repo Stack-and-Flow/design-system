@@ -51,40 +51,43 @@ export const dayCva = cva(
         isRangeStart: false,
         isRangeEnd: false,
         variant: 'filled',
-        class: 'bg-red-400 text-gray-900 rounded-none'
+        class: 'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-none'
       },
       {
         isInRange: true,
         isRangeStart: true,
         variant: 'filled',
-        class: 'bg-red-400 text-gray-900 rounded-l-full'
+        class: 'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-l-full'
       },
       {
         isInRange: true,
         isRangeEnd: true,
         variant: 'filled',
-        class: 'bg-red-400 text-gray-900 rounded-r-full'
+        class: 'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-r-full'
       },
       // Disabled days in range (filled)
       {
         isInRange: true,
         isDisabled: true,
         variant: 'filled',
-        class: 'bg-red-400 text-gray-900 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
+        class:
+          'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
       },
       {
         isInRange: true,
         isRangeStart: true,
         isDisabled: true,
         variant: 'filled',
-        class: 'bg-red-400 text-gray-900 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
+        class:
+          'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
       },
       {
         isInRange: true,
         isRangeEnd: true,
         isDisabled: true,
         variant: 'filled',
-        class: 'bg-red-400 text-gray-900 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
+        class:
+          'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
       },
       // Outlined variant
       {
@@ -139,7 +142,8 @@ export const dayCva = cva(
       {
         isSelected: true,
         variant: 'soft',
-        class: 'bg-red-900 text-red-100 rounded-full hover:bg-red-700 hover:text-red-50'
+        class:
+          'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-full hover:bg-secondary/80 dark:hover:bg-accent/80'
       },
       {
         isSelected: true,
@@ -149,7 +153,8 @@ export const dayCva = cva(
       {
         isSelected: true,
         variant: 'filled',
-        class: 'bg-red-400 text-gray-900 rounded-full hover:bg-red-300 hover:text-gray-900'
+        class:
+          'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-full hover:bg-secondary/80 dark:hover:bg-accent/80'
       },
       {
         isToday: true,
