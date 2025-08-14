@@ -18,5 +18,4 @@ export interface CalendarProps {
   readOnly?: boolean;
   firstDayOfWeek?: number;
   theme?: 'light' | 'dark';
-  // Eliminado: range y onRangeChange. Usar selectedDate y onDateChange para ambos modos.
 }
