@@ -33,8 +33,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   const years = Array.from({ length: 21 }, (_, i) => 2015 + i); // 2015-2035 for a wide range
 
   // Determine radius for CVA and style
-  const radiusCva = typeof radius === 'number' ? undefined : radius;
-  const radiusStyle = typeof radius === 'number' ? { borderRadius: radius } : undefined;
+  const radiusCva = radius;
 
   if (!show) {
     return null;
@@ -46,7 +45,6 @@ export const Calendar: React.FC<CalendarProps> = ({
       role='application'
       style={{
         animation: 'fadeIn 0.3s',
-        ...radiusStyle,
         ...(readOnly ? { pointerEvents: 'none', opacity: 0.8 } : {})
       }}
     >
@@ -153,15 +151,14 @@ export const Calendar: React.FC<CalendarProps> = ({
                       className={dayCva({
                         size,
                         isCurrentMonth: day.isCurrentMonth,
-                        isSelected: day.isSelected,
+                        isSelected: day.isSelected && !day.isRangeStart,
                         variant,
                         isToday: day.isToday,
                         isDisabled: day.isDisabled || readOnly,
-                        isInRange: day.isInRange,
+                        isInRange: day.isInRange || day.isRangeStart,
                         isRangeStart: day.isRangeStart,
                         isRangeEnd: day.isRangeEnd
                       })}
-                      style={{ borderRadius: typeof radius === 'number' ? radius : undefined }}
                       onClick={readOnly ? undefined : () => handleDayClick(day.date, day.isDisabled)}
                       role='gridcell'
                       aria-selected={day.isSelected ? 'true' : 'false'}

@@ -28,26 +28,37 @@ export const useCalendar = ({
   maxDate,
   disabled = false,
   readOnly = false,
-  firstDayOfWeek = 1, // Monday by default
-  range,
-  onRangeChange
+  firstDayOfWeek = 1 // Monday by default
 }: CalendarProps & { firstDayOfWeek?: number }) => {
-  const [currentDate, setCurrentDate] = useState(initialSelectedDate || (range?.[0] ?? new Date()));
-  const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate);
-  const [selectedRange, setSelectedRange] = useState<[Date | null, Date | null]>(range ?? [null, null]);
+  // selectedDate puede ser Date|null o [Date|null,Date|null]
+  const [currentDate, setCurrentDate] = useState(() => {
+    if (Array.isArray(initialSelectedDate)) {
+      return initialSelectedDate[0] ?? new Date();
+    }
+    return initialSelectedDate ?? new Date();
+  });
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    Array.isArray(initialSelectedDate) ? null : initialSelectedDate
+  );
+  const [selectedRange, setSelectedRange] = useState<[Date | null, Date | null]>(
+    Array.isArray(initialSelectedDate) ? initialSelectedDate : [null, null]
+  );
 
   useEffect(() => {
-    setSelectedDate(initialSelectedDate);
-    if (initialSelectedDate) {
-      setCurrentDate(initialSelectedDate);
-    }
-    if (range) {
-      setSelectedRange(range);
-      if (range[0]) {
-        setCurrentDate(range[0]);
+    if (Array.isArray(initialSelectedDate)) {
+      setSelectedRange(initialSelectedDate);
+      if (initialSelectedDate[0]) {
+        setCurrentDate(initialSelectedDate[0]);
       }
+      setSelectedDate(null);
+    } else {
+      setSelectedDate(initialSelectedDate);
+      if (initialSelectedDate) {
+        setCurrentDate(initialSelectedDate);
+      }
+      setSelectedRange([null, null]);
     }
-  }, [initialSelectedDate, range]);
+  }, [initialSelectedDate]);
 
   // Checks if two dates are the same day
   const isSameDay = (d1: Date, d2: Date): boolean => {
@@ -115,19 +126,34 @@ export const useCalendar = ({
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       const isToday = isSameDay(date, today);
-      const isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
+      let isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
+      let isRangeStart = false;
+      let isRangeEnd = false;
+      let isInRange = false;
+
+      // Range logic
+      if (selectedRange[0]) {
+        isRangeStart = isSameDay(date, selectedRange[0]);
+        // If only start is set and selectedDate is adjacent, switch style
+        if (
+          !selectedRange[1] &&
+          isRangeStart &&
+          selectedDate &&
+          Math.abs((selectedDate.getTime() - selectedRange[0].getTime()) / (1000 * 60 * 60 * 24)) === 1
+        ) {
+          isSelected = false;
+        }
+      }
+      if (selectedRange[1]) {
+        isRangeEnd = isSameDay(date, selectedRange[1]);
+        isInRange = !!(selectedRange[0] && selectedRange[1] && date >= selectedRange[0] && date <= selectedRange[1]);
+      }
+
       const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
       const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
       const isDisabled =
         disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
-      const isInRange = !!(
-        selectedRange[0] &&
-        selectedRange[1] &&
-        date >= selectedRange[0] &&
-        date <= selectedRange[1]
-      );
-      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
-      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
+
       days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled, isInRange, isRangeStart, isRangeEnd });
     }
 
@@ -168,25 +194,27 @@ export const useCalendar = ({
     if (isDisabled || disabled || readOnly) {
       return;
     }
-    if (onRangeChange) {
-      // Range selection logic: first click sets start, second click sets end, third click resets
+    // If selectedDate is a range, handle range selection
+    if (Array.isArray(initialSelectedDate)) {
+      // First click: set start, visually mark as selected
       if (!selectedRange[0] || (selectedRange[0] && selectedRange[1])) {
         setSelectedRange([date, null]);
-        onRangeChange([date, null]);
+        onDateChange?.([date, null]);
+        setSelectedDate(date); // Mark start date as selected for visual feedback
       } else if (selectedRange[0] && !selectedRange[1]) {
         if (date < selectedRange[0]) {
           setSelectedRange([date, selectedRange[0]]);
-          onRangeChange([date, selectedRange[0]]);
+          onDateChange?.([date, selectedRange[0]]);
+          setSelectedDate(date); // Mark new start date
         } else {
           setSelectedRange([selectedRange[0], date]);
-          onRangeChange([selectedRange[0], date]);
+          onDateChange?.([selectedRange[0], date]);
+          setSelectedDate(selectedRange[0]); // Keep start visually selected
         }
       }
     } else {
       setSelectedDate(date);
-      if (onDateChange) {
-        onDateChange(date);
-      }
+      onDateChange?.(date);
     }
   };
 
@@ -220,8 +248,8 @@ export const useCalendar = ({
 
   return {
     currentDate,
-    selectedDate,
-    selectedRange,
+    selectedDate: Array.isArray(initialSelectedDate) ? null : selectedDate,
+    selectedRange: Array.isArray(initialSelectedDate) ? selectedRange : [null, null],
     daysInCalendar,
     weeks,
     monthNames,
@@ -234,7 +262,6 @@ export const useCalendar = ({
     goToPrevMonth,
     goToNextMonth,
     onDateChange,
-    onRangeChange,
     disabledDates
   };
 };
