@@ -51,19 +51,40 @@ export const dayCva = cva(
         isRangeStart: false,
         isRangeEnd: false,
         variant: 'filled',
-        class: 'bg-red-500 text-white rounded-none dark:bg-red-400 dark:text-gray-900'
+        class: 'bg-red-400 text-gray-900 rounded-none'
       },
       {
         isInRange: true,
         isRangeStart: true,
         variant: 'filled',
-        class: 'bg-red-700 text-white rounded-l-full dark:bg-red-400 dark:text-gray-900'
+        class: 'bg-red-400 text-gray-900 rounded-l-full'
       },
       {
         isInRange: true,
         isRangeEnd: true,
         variant: 'filled',
-        class: 'bg-red-700 text-white rounded-r-full dark:bg-red-400 dark:text-gray-900'
+        class: 'bg-red-400 text-gray-900 rounded-r-full'
+      },
+      // Disabled days in range (filled)
+      {
+        isInRange: true,
+        isDisabled: true,
+        variant: 'filled',
+        class: 'bg-red-400 text-gray-900 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
+      },
+      {
+        isInRange: true,
+        isRangeStart: true,
+        isDisabled: true,
+        variant: 'filled',
+        class: 'bg-red-400 text-gray-900 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
+      },
+      {
+        isInRange: true,
+        isRangeEnd: true,
+        isDisabled: true,
+        variant: 'filled',
+        class: 'bg-red-400 text-gray-900 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
       },
       // Outlined variant
       {
@@ -71,51 +92,69 @@ export const dayCva = cva(
         isRangeStart: false,
         isRangeEnd: false,
         variant: 'outlined',
-        class:
-          'bg-red-100 text-red-700 border border-red-500 rounded-none dark:bg-red-900 dark:text-red-100 dark:border-red-400'
+        class: 'bg-red-900 text-red-100 border border-red-400 rounded-none'
       },
       {
         isInRange: true,
         isRangeStart: true,
         variant: 'outlined',
-        class:
-          'bg-red-200 text-red-900 border-2 border-red-700 rounded-l-full dark:bg-red-900 dark:text-red-100 dark:border-red-400'
+        class: 'bg-red-900 text-red-100 border-2 border-red-400 rounded-l-full'
       },
       {
         isInRange: true,
         isRangeEnd: true,
         variant: 'outlined',
+        class: 'bg-red-900 text-red-100 border-2 border-red-400 rounded-r-full'
+      },
+      // Disabled days in range (outlined)
+      {
+        isInRange: true,
+        isDisabled: true,
+        variant: 'outlined',
         class:
-          'bg-red-200 text-red-900 border-2 border-red-700 rounded-r-full dark:bg-red-900 dark:text-red-100 dark:border-red-400'
+          'bg-red-900 text-red-100 border border-red-400 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
+      },
+      {
+        isInRange: true,
+        isRangeStart: true,
+        isDisabled: true,
+        variant: 'outlined',
+        class:
+          'bg-red-900 text-red-100 border-2 border-red-400 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
+      },
+      {
+        isInRange: true,
+        isRangeEnd: true,
+        isDisabled: true,
+        variant: 'outlined',
+        class:
+          'bg-red-900 text-red-100 border-2 border-red-400 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
       },
       {
         isSelected: true,
         variant: 'outlined',
         class:
-          'border-2 border-red-700 text-red-700 bg-transparent rounded-full dark:border-red-400 dark:text-red-400 hover:border-red-400 hover:text-red-500 dark:hover:border-red-300 dark:hover:text-red-300'
+          'border-2 border-red-400 text-red-400 bg-transparent rounded-full hover:border-red-300 hover:text-red-300'
       },
       {
         isSelected: true,
         variant: 'soft',
-        class:
-          'bg-red-200 text-red-900 rounded-full dark:bg-red-900 dark:text-red-100 hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-700 dark:hover:text-red-50'
+        class: 'bg-red-900 text-red-100 rounded-full hover:bg-red-700 hover:text-red-50'
       },
       {
         isSelected: true,
         variant: 'ghost',
-        class:
-          'text-red-700 font-bold underline rounded-full dark:text-red-300 hover:text-red-500 dark:hover:text-red-200'
+        class: 'text-red-300 font-bold underline rounded-full hover:text-red-200'
       },
       {
         isSelected: true,
         variant: 'filled',
-        class:
-          'bg-red-700 text-white rounded-full dark:bg-red-400 dark:text-gray-900 hover:bg-red-500 hover:text-white dark:hover:bg-red-300 dark:hover:text-gray-900'
+        class: 'bg-red-400 text-gray-900 rounded-full hover:bg-red-300 hover:text-gray-900'
       },
       {
         isToday: true,
         isSelected: false,
-        class: 'border-2 border-red-600 dark:border-red-400'
+        class: 'border-2 border-red-400'
       }
     ],
     defaultVariants: {
