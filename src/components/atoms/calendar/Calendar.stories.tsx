@@ -73,30 +73,20 @@ const meta: Meta<typeof Calendar> = {
       }
     },
     minDate: {
-      control: { type: 'date' },
-      description:
-        'The minimum selectable date (time is ignored; only date is used). Dates before this will be disabled.',
+      control: 'date',
+      description: 'The minimum selectable date (time ignored; only date is used). Dates before this will be disabled.',
       table: {
         type: { summary: 'Date (time ignored)' },
         defaultValue: { summary: 'undefined' }
-      },
-      transform: (value: any) =>
-        value
-          ? new Date(new Date(value).getFullYear(), new Date(value).getMonth(), new Date(value).getDate())
-          : undefined
+      }
     },
     maxDate: {
-      control: { type: 'date' },
-      description:
-        'The maximum selectable date (time is ignored; only date is used). Dates after this will be disabled.',
+      control: 'date',
+      description: 'The maximum selectable date (time ignored; only date is used). Dates after this will be disabled.',
       table: {
         type: { summary: 'Date (time ignored)' },
         defaultValue: { summary: 'undefined' }
-      },
-      transform: (value: any) =>
-        value
-          ? new Date(new Date(value).getFullYear(), new Date(value).getMonth(), new Date(value).getDate())
-          : undefined
+      }
     },
     disabled: {
       control: 'boolean',
@@ -135,7 +125,9 @@ type Story = StoryObj<typeof Calendar>;
 export const Default: Story = {
   args: {
     selectedDate: null,
-    onDateChange: (date) => console.log('Selected date:', date),
+    onDateChange: () => {
+      /* noop */
+    },
     size: 'md',
     variant: 'filled',
     radius: 'md',
@@ -195,85 +187,15 @@ export const ShowTransition: Story = {
             onDateChange={() => {
               /* noop */
             }}
+            size='md'
+            variant='filled'
+            radius='md'
+            disabled={false}
+            firstDayOfWeek={1}
           />
         </div>
       </div>
     );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstrates the calendar appearing with a slide-down transition, similar to a modal.'
-      }
-    }
-  }
-};
-
-export const SizesVertical: Story = {
-  render: () => (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2rem',
-        alignItems: 'flex-start',
-        background: '#fff',
-        padding: '2rem',
-        borderRadius: '1rem'
-      }}
-    >
-      <div>
-        <div style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>Small</div>
-        <Calendar
-          id='calendar-sm'
-          size='sm'
-          selectedDate={null}
-          onDateChange={() => {
-            /* noop */
-          }}
-        />
-      </div>
-      <div>
-        <div style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>Medium</div>
-        <Calendar
-          id='calendar-md'
-          size='md'
-          selectedDate={null}
-          onDateChange={() => {
-            /* noop */
-          }}
-        />
-      </div>
-      <div>
-        <div style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>Large</div>
-        <Calendar
-          id='calendar-lg'
-          size='lg'
-          selectedDate={null}
-          onDateChange={() => {
-            /* nono */
-          }}
-        />
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Displays all calendar sizes (sm, md, lg) stacked vertically for easy comparison.'
-      }
-    }
-  }
-};
-
-export const SingleSelection: Story = {
-  args: {
-    selectedDate: null,
-    onDateChange: (date) => console.log('Selected date:', date),
-    size: 'md',
-    show: true,
-    disabled: false,
-    firstDayOfWeek: 1
   },
   parameters: {
     docs: {
@@ -287,7 +209,9 @@ export const SingleSelection: Story = {
 export const RangeSelection: Story = {
   args: {
     selectedDate: [null, null],
-    onDateChange: (range) => console.log('Rango seleccionado:', range),
+    onDateChange: () => {
+      /* noop */
+    },
     size: 'md',
     show: true,
     disabled: false,
@@ -308,7 +232,7 @@ export const Disabled: Story = {
   args: {
     selectedDate: null,
     onDateChange: () => {
-      /* nono */
+      /* noop */
     },
     size: 'md',
     show: true,
@@ -326,9 +250,9 @@ export const Disabled: Story = {
 
 export const ReadOnly: Story = {
   args: {
-    selectedDate: new Date(),
+    selectedDate: new Date(2025, 7, 15),
     onDateChange: () => {
-      /* nono */
+      /* noop */
     },
     size: 'md',
     show: true,
@@ -348,7 +272,9 @@ export const ReadOnly: Story = {
 export const WithMinMax: Story = {
   args: {
     selectedDate: null,
-    onDateChange: (date) => console.log('Fecha seleccionada:', date),
+    onDateChange: () => {
+      /* noop */
+    },
     minDate: new Date(2025, 7, 10),
     maxDate: new Date(2025, 7, 20),
     size: 'md',
@@ -373,7 +299,9 @@ export const Outlined: Story = {
     show: true,
     disabled: false,
     firstDayOfWeek: 1,
-    onDateChange: (date) => console.log('Selected date:', date)
+    onDateChange: () => {
+      /* noop */
+    }
   },
   parameters: {
     docs: {
@@ -391,7 +319,9 @@ export const WithSelectedDate: Story = {
     show: true,
     disabled: false,
     firstDayOfWeek: 1,
-    onDateChange: (date) => console.log('Selected date:', date)
+    onDateChange: () => {
+      /* noop */
+    }
   },
   parameters: {
     docs: {
@@ -410,7 +340,9 @@ export const WithDisabledDates: Story = {
     show: true,
     disabled: false,
     firstDayOfWeek: 1,
-    onDateChange: (date) => console.log('Selected date:', date)
+    onDateChange: () => {
+      /* noop */
+    }
   },
   parameters: {
     docs: {
@@ -429,7 +361,9 @@ export const CustomSelectedAndDisabledDates: Story = {
     show: true,
     disabled: false,
     firstDayOfWeek: 1,
-    onDateChange: (date) => console.log('Selected date:', date)
+    onDateChange: () => {
+      /* noop */
+    }
   },
   parameters: {
     docs: {
@@ -509,7 +443,7 @@ export const WithRadius: Story = {
           radius={radius}
           selectedDate={null}
           onDateChange={() => {
-            /* nono */
+            /* noop */
           }}
           size='md'
           show={true}
