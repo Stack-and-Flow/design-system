@@ -31,6 +31,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       disabled,
       readOnly,
       firstDayOfWeek,
+      highlightedDates: props.highlightedDates,
       ...props
     });
 
@@ -199,21 +200,48 @@ export const Calendar: React.FC<CalendarProps> = ({
                       const end = dragStart > dragEnd ? dragStart : dragEnd;
                       isDragInRange = day.date >= start && day.date <= end;
                     }
+                    // Only apply highlight if not selected
+                    const isSelectedDay = day.isSelected && !day.isRangeStart;
+                    let highlightClass;
+                    let highlightStyle;
+                    if (day.isHighlighted) {
+                      if (isSelectedDay) {
+                        // Only apply border from highlightStyle if present
+                        if (day.highlightStyle?.border) {
+                          highlightStyle = { border: day.highlightStyle.border };
+                        }
+                        // Optionally merge border class if present
+                        if (day.highlightClassName?.includes('border')) {
+                          highlightClass = day.highlightClassName
+                            .split(' ')
+                            .filter((c) => c.includes('border'))
+                            .join(' ');
+                        }
+                      } else {
+                        highlightClass = day.highlightClassName;
+                        highlightStyle = day.highlightStyle;
+                      }
+                    }
                     return (
                       <div
                         key={dayIndex}
-                        className={dayCva({
-                          size,
-                          isCurrentMonth: day.isCurrentMonth,
-                          isSelected: day.isSelected && !day.isRangeStart,
-                          variant,
-                          isToday: day.isToday,
-                          isDisabled: day.isDisabled || readOnly,
-                          isInRange: day.isInRange || day.isRangeStart || isDragInRange,
-                          isRangeStart:
-                            day.isRangeStart || (isDragInRange && dragStart && isSameDay(day.date, dragStart)),
-                          isRangeEnd: day.isRangeEnd || (isDragInRange && dragEnd && isSameDay(day.date, dragEnd))
-                        })}
+                        className={[
+                          dayCva({
+                            size,
+                            isCurrentMonth: day.isCurrentMonth,
+                            isSelected: day.isSelected && !day.isRangeStart,
+                            variant,
+                            isToday: day.isToday,
+                            isDisabled: day.isDisabled || readOnly,
+                            isInRange: day.isInRange || day.isRangeStart || isDragInRange,
+                            isRangeStart:
+                              day.isRangeStart || (isDragInRange && dragStart && isSameDay(day.date, dragStart)),
+                            isRangeEnd: day.isRangeEnd || (isDragInRange && dragEnd && isSameDay(day.date, dragEnd))
+                          }),
+                          highlightClass
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
                         onMouseDown={
                           readOnly || day.isDisabled
                             ? undefined
@@ -252,7 +280,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                         aria-selected={day.isSelected ? 'true' : 'false'}
                         aria-disabled={day.isDisabled || readOnly ? 'true' : 'false'}
                         tabIndex={day.isDisabled || readOnly ? -1 : 0}
-                        style={{ userSelect: 'none' }}
+                        style={{ userSelect: 'none', ...highlightStyle }}
                       >
                         {day.date.getDate()}
                       </div>
