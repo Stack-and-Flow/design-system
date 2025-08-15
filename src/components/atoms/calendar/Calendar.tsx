@@ -16,12 +16,66 @@ export const Calendar: React.FC<CalendarProps> = ({
   disabled = false,
   readOnly = false,
   id,
+  minDate,
+  maxDate,
+  onDateChange,
+  selectedDate,
   ...props
 }) => {
-  const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth } = useCalendar({
-    ...props,
-    firstDayOfWeek
-  });
+  const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth, isSameDay } =
+    useCalendar({
+      selectedDate,
+      onDateChange,
+      minDate,
+      maxDate,
+      disabled,
+      readOnly,
+      firstDayOfWeek,
+      ...props
+    });
+
+  // Drag state for range selection
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [dragStart, setDragStart] = React.useState<Date | null>(null);
+  const [dragEnd, setDragEnd] = React.useState<Date | null>(null);
+
+  // Effect to handle global mouseup for drag & drop range selection
+  React.useEffect(() => {
+    if (!isDragging) {
+      return;
+    }
+    const handleGlobalMouseUp = () => {
+      setIsDragging(false);
+      if (dragStart && dragEnd && !isSameDay(dragStart, dragEnd)) {
+        handleDayClick(dragEnd, false);
+      }
+      setDragStart(null);
+      setDragEnd(null);
+    };
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isDragging, dragStart, dragEnd, handleDayClick, isSameDay]);
+
+  // Effect to handle global mouseup for drag & drop range selection
+  React.useEffect(() => {
+    if (!isDragging) {
+      return;
+    }
+    const handleGlobalMouseUp = () => {
+      setIsDragging(false);
+      if (dragStart && dragEnd && !isSameDay(dragStart, dragEnd)) {
+        handleDayClick(dragEnd, false);
+      }
+      setDragStart(null);
+      setDragEnd(null);
+    };
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isDragging, dragStart, dragEnd, handleDayClick, isSameDay]);
 
   // State for picker mode (months/years)
   const [pickerMode, setPickerMode] = React.useState<'calendar' | 'month' | 'year'>('calendar');
@@ -98,21 +152,13 @@ export const Calendar: React.FC<CalendarProps> = ({
         <MonthYearPickerDropdown
           currentYear={currentDate.getFullYear()}
           currentMonth={currentDate.getMonth()}
-          minDate={
-            props.minDate
-              ? new Date(props.minDate.getFullYear(), props.minDate.getMonth(), props.minDate.getDate())
-              : undefined
-          }
-          maxDate={
-            props.maxDate
-              ? new Date(props.maxDate.getFullYear(), props.maxDate.getMonth(), props.maxDate.getDate())
-              : undefined
-          }
+          minDate={minDate ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()) : undefined}
+          maxDate={maxDate ? new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate()) : undefined}
           onChange={(year, month) => {
             const newDate = new Date(currentDate);
             newDate.setFullYear(year);
             newDate.setMonth(month);
-            props.onDateChange?.(newDate);
+            onDateChange?.(newDate);
             setPickerMode('calendar');
           }}
           onCancel={() => setPickerMode('calendar')}
@@ -145,29 +191,73 @@ export const Calendar: React.FC<CalendarProps> = ({
             <div className='grid grid-cols-7 gap-1' role='rowgroup'>
               {weeks.map((week, weekIndex) => (
                 <div key={weekIndex} role='row' className='contents'>
-                  {week.map((day, dayIndex) => (
-                    <div
-                      key={dayIndex}
-                      className={dayCva({
-                        size,
-                        isCurrentMonth: day.isCurrentMonth,
-                        isSelected: day.isSelected && !day.isRangeStart,
-                        variant,
-                        isToday: day.isToday,
-                        isDisabled: day.isDisabled || readOnly,
-                        isInRange: day.isInRange || day.isRangeStart,
-                        isRangeStart: day.isRangeStart,
-                        isRangeEnd: day.isRangeEnd
-                      })}
-                      onClick={readOnly ? undefined : () => handleDayClick(day.date, day.isDisabled)}
-                      role='gridcell'
-                      aria-selected={day.isSelected ? 'true' : 'false'}
-                      aria-disabled={day.isDisabled || readOnly ? 'true' : 'false'}
-                      tabIndex={day.isDisabled || readOnly ? -1 : 0}
-                    >
-                      {day.date.getDate()}
-                    </div>
-                  ))}
+                  {week.map((day, dayIndex) => {
+                    // Determine if day is in drag range
+                    let isDragInRange = false;
+                    if (dragStart && dragEnd) {
+                      const start = dragStart < dragEnd ? dragStart : dragEnd;
+                      const end = dragStart > dragEnd ? dragStart : dragEnd;
+                      isDragInRange = day.date >= start && day.date <= end;
+                    }
+                    return (
+                      <div
+                        key={dayIndex}
+                        className={dayCva({
+                          size,
+                          isCurrentMonth: day.isCurrentMonth,
+                          isSelected: day.isSelected && !day.isRangeStart,
+                          variant,
+                          isToday: day.isToday,
+                          isDisabled: day.isDisabled || readOnly,
+                          isInRange: day.isInRange || day.isRangeStart || isDragInRange,
+                          isRangeStart:
+                            day.isRangeStart || (isDragInRange && dragStart && isSameDay(day.date, dragStart)),
+                          isRangeEnd: day.isRangeEnd || (isDragInRange && dragEnd && isSameDay(day.date, dragEnd))
+                        })}
+                        onMouseDown={
+                          readOnly || day.isDisabled
+                            ? undefined
+                            : () => {
+                                setIsDragging(true);
+                                setDragStart(day.date);
+                                setDragEnd(day.date);
+                              }
+                        }
+                        onMouseEnter={
+                          isDragging && !readOnly && !day.isDisabled ? () => setDragEnd(day.date) : undefined
+                        }
+                        onMouseUp={
+                          isDragging && !readOnly && !day.isDisabled
+                            ? () => {
+                                setIsDragging(false);
+                                if (dragStart && dragEnd && !isSameDay(dragStart, dragEnd)) {
+                                  // Call handleDayClick for range selection
+                                  handleDayClick(dragEnd, false);
+                                }
+                                setDragStart(null);
+                                setDragEnd(null);
+                              }
+                            : undefined
+                        }
+                        onClick={
+                          readOnly || day.isDisabled
+                            ? undefined
+                            : () => {
+                                if (!isDragging) {
+                                  handleDayClick(day.date, day.isDisabled);
+                                }
+                              }
+                        }
+                        role='gridcell'
+                        aria-selected={day.isSelected ? 'true' : 'false'}
+                        aria-disabled={day.isDisabled || readOnly ? 'true' : 'false'}
+                        tabIndex={day.isDisabled || readOnly ? -1 : 0}
+                        style={{ userSelect: 'none' }}
+                      >
+                        {day.date.getDate()}
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>
