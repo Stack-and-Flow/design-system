@@ -1,28 +1,31 @@
+import { CalendarDate } from '@internationalized/date';
+import { startOfWeek } from '@internationalized/date';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Calendar } from './index';
 import type { CalendarRadius } from './types';
 
 /**
- * ## Calendar
- *
- * A highly customizable, accessible calendar/date picker component for React.
- *
- * ### Features
- * - Date selection with visual feedback
- * - Month/year picker with two-column HeroUI-style dropdown
- * - Dark mode and multiple visual variants
- * - Customizable size and border radius (string only)
- * - Min/max and disabled dates
- * - Read-only and disabled modes
- * - Full keyboard and screen reader accessibility
- * - All visual variants, sizes, radius, disabled, and readOnly states managed with class-variance-authority (CVA)
- *
- * ### Accessibility
- * - Uses ARIA roles and keyboard navigation
- * - Color contrast for all states
- * - Month/year picker is fully contained and accessible
- */
+    ## DESCRIPTION
+    The Calendar component is a highly customizable and accessible date picker for React, supporting internationalized dates and advanced visual variants.
+
+    ## FEATURES
+    - **Date Selection**: Visual feedback for single and range selection.
+    - **Month/Year Picker**: Two-column HeroUI-style dropdown for fast navigation.
+    - **Dark Mode & Variants**: Multiple visual styles (`filled`, `outlined`, `soft`, `ghost`).
+    - **Customizable Size & Radius**: Choose from `sm`, `md`, `lg` sizes and border radius.
+    - **Min/Max & Disabled Dates**: Restrict selectable dates and disable specific days.
+    - **Read-Only & Disabled Modes**: Prevent interaction when needed.
+    - **Keyboard & Screen Reader Accessibility**: Full ARIA support and keyboard navigation.
+    - **CVA Integration**: All variants, sizes, radius, disabled, and readOnly states managed with class-variance-authority (CVA).
+    - **Internationalized Date Support**: Use `@internationalized/date` (`CalendarDate`) for locale-aware date logic.
+    - **Animations**: Smooth transitions for showing/hiding the calendar.
+
+    ## ACCESSIBILITY
+    - Uses ARIA roles and keyboard navigation
+    - Ensures color contrast for all states
+    - Month/year picker is fully contained and accessible
+    */
 
 const meta: Meta<typeof Calendar> = {
   title: 'Atoms/Calendar',
@@ -353,6 +356,90 @@ export const WithDisabledDates: Story = {
   }
 };
 
+export const WithCalendarDate: Story = {
+  render: () => {
+    const [locale, setLocale] = useState('en-US');
+    const today = new Date();
+    let calendarDate = new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    calendarDate = startOfWeek(calendarDate, locale);
+    return (
+      <div style={{ padding: '2rem' }}>
+        <label
+          htmlFor='locale-select'
+          style={{
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            display: 'block',
+            background: 'var(--ds-bg, #fff)',
+            color: 'var(--ds-label, #222)',
+            padding: '0.25rem 0.5rem',
+            borderRadius: '0.25rem'
+          }}
+        >
+          Locale:
+        </label>
+        <select
+          id='locale-select'
+          value={locale}
+          onChange={(e) => setLocale(e.target.value)}
+          style={{
+            marginBottom: '2rem',
+            padding: '0.5rem',
+            fontSize: '1rem',
+            background: 'var(--ds-bg, #fff)',
+            color: 'var(--ds-label, #222)',
+            border: '1px solid #ccc',
+            borderRadius: '0.25rem'
+          }}
+        >
+          <option value='en-US'>English (US)</option>
+          <option value='es-ES'>Español (ES)</option>
+          <option value='en-GB'>English (UK)</option>
+        </select>
+        <Calendar
+          selectedDate={new Date(calendarDate.year, calendarDate.month - 1, calendarDate.day)}
+          onDateChange={() => {
+            /* noop */
+          }}
+          size='md'
+          show={true}
+        />
+        <div
+          style={{
+            marginTop: '1rem',
+            display: 'inline-flex',
+            alignItems: 'center',
+            background:
+              typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? '#222'
+                : '#fff',
+            color:
+              typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? '#fff'
+                : '#222',
+            border: '2px dashed #e9a23b',
+            borderRadius: '0.25rem',
+            padding: '0.25rem 0.75rem'
+          }}
+        >
+          <span style={{ fontWeight: 'bold', marginRight: '0.5rem' }}>CalendarDate:</span>
+          <code tabIndex={0} style={{ background: 'transparent', color: 'inherit', fontWeight: 'bold' }}>
+            {calendarDate.toString()}
+          </code>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates how to use @internationalized/date to get the current date and pass it to the Calendar component.'
+      }
+    }
+  }
+};
+
 export const CustomSelectedAndDisabledDates: Story = {
   args: {
     selectedDate: new Date(2025, 7, 15),
@@ -388,13 +475,13 @@ document.head.appendChild(selectStyle);
 const style = document.createElement('style');
 style.innerHTML = `
   .calendar-radius-bg {
-    background: black;
-    color: white;
+    background: white;
+    color: black;
   }
   @media (prefers-color-scheme: dark) {
     .calendar-radius-bg {
-      background: white;
-      color: black;
+      background: black;
+      color: white;
     }
   }
 `;

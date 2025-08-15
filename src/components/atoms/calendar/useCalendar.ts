@@ -1,4 +1,10 @@
+import { CalendarDate } from '@internationalized/date';
 import { useEffect, useMemo, useState } from 'react';
+// Utility to convert a native JS Date object to a CalendarDate
+function dateToCalendarDate(date: Date): CalendarDate {
+  // Converts a JS Date object to a CalendarDate (ISO calendar)
+  return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+}
 import type { CalendarProps } from './types';
 
 // Month names in English
@@ -30,7 +36,7 @@ export const useCalendar = ({
   readOnly = false,
   firstDayOfWeek = 1 // Monday by default
 }: CalendarProps & { firstDayOfWeek?: number }) => {
-  // selectedDate puede ser Date|null o [Date|null,Date|null]
+  // selectedDate can be Date|null or [Date|null, Date|null]
   const [currentDate, setCurrentDate] = useState(() => {
     if (Array.isArray(initialSelectedDate)) {
       return initialSelectedDate[0] ?? new Date();
@@ -60,22 +66,18 @@ export const useCalendar = ({
     }
   }, [initialSelectedDate]);
 
-  // Checks if two dates are the same day
   const isSameDay = (d1: Date, d2: Date): boolean => {
     return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
   };
 
-  // Gets the index of the first day of the month (customizable)
   const getStartDayOfMonth = (year: number, month: number): number => {
     const firstDay = new Date(year, month, 1).getDay();
     // Adjust so that firstDayOfWeek is 0=Sunday, 1=Monday, etc.
     return (firstDay - firstDayOfWeek + 7) % 7;
   };
 
-  // Rotate weekday names according to firstDayOfWeek
   const weekdayNames = [...baseWeekdayNames.slice(firstDayOfWeek), ...baseWeekdayNames.slice(0, firstDayOfWeek)];
 
-  // Generates the array of days for the calendar
   const daysInCalendar = useMemo(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -131,7 +133,7 @@ export const useCalendar = ({
       let isRangeEnd = false;
       let isInRange = false;
 
-      // Range logic
+      // Range selection logic
       if (selectedRange[0]) {
         isRangeStart = isSameDay(date, selectedRange[0]);
         // If only start is set and selectedDate is adjacent, switch style
@@ -154,7 +156,7 @@ export const useCalendar = ({
       const isDisabled =
         disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
 
-      // ReadOnly, no day selected
+      // In readOnly mode, no day should be selected
       if (readOnly) {
         isSelected = false;
         isRangeStart = false;
@@ -254,8 +256,12 @@ export const useCalendar = ({
   const weeks = groupDaysIntoWeeks(daysInCalendar);
   const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 
+  // Example usage: convert the current date to CalendarDate
+  const currentCalendarDate = dateToCalendarDate(currentDate);
+
   return {
     currentDate,
+    currentCalendarDate,
     selectedDate: Array.isArray(initialSelectedDate) ? null : selectedDate,
     selectedRange: Array.isArray(initialSelectedDate) ? selectedRange : [null, null],
     daysInCalendar,
