@@ -1,4 +1,5 @@
 import { CalendarDate } from '@internationalized/date';
+import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 // Utility to convert a native JS Date object to a CalendarDate
 function dateToCalendarDate(date: Date): CalendarDate {
@@ -34,7 +35,8 @@ export const useCalendar = ({
   maxDate,
   disabled = false,
   readOnly = false,
-  firstDayOfWeek = 1 // Monday by default
+  firstDayOfWeek = 1, // Monday by default
+  highlightedDates = []
 }: CalendarProps & { firstDayOfWeek?: number }) => {
   // selectedDate can be Date|null or [Date|null, Date|null]
   const [currentDate, setCurrentDate] = useState(() => {
@@ -91,6 +93,9 @@ export const useCalendar = ({
       isInRange: boolean;
       isRangeStart: boolean;
       isRangeEnd: boolean;
+      isHighlighted?: boolean;
+      highlightClassName?: string;
+      highlightStyle?: React.CSSProperties;
     }[] = [];
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -112,6 +117,7 @@ export const useCalendar = ({
       );
       const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
       const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
+      const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
       days.push({
         date,
         isCurrentMonth: false,
@@ -120,7 +126,10 @@ export const useCalendar = ({
         isDisabled,
         isInRange,
         isRangeStart,
-        isRangeEnd
+        isRangeEnd,
+        isHighlighted: !!highlight,
+        highlightClassName: highlight?.className,
+        highlightStyle: highlight?.style
       });
     }
 
@@ -164,7 +173,20 @@ export const useCalendar = ({
         isInRange = false;
       }
 
-      days.push({ date, isCurrentMonth: true, isToday, isSelected, isDisabled, isInRange, isRangeStart, isRangeEnd });
+      const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
+      days.push({
+        date,
+        isCurrentMonth: true,
+        isToday,
+        isSelected,
+        isDisabled,
+        isInRange,
+        isRangeStart,
+        isRangeEnd,
+        isHighlighted: !!highlight,
+        highlightClassName: highlight?.className,
+        highlightStyle: highlight?.style
+      });
     }
 
     // Days from the next month
@@ -185,6 +207,7 @@ export const useCalendar = ({
       );
       const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
       const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
+      const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
       days.push({
         date,
         isCurrentMonth: false,
@@ -193,7 +216,10 @@ export const useCalendar = ({
         isDisabled,
         isInRange,
         isRangeStart,
-        isRangeEnd
+        isRangeEnd,
+        isHighlighted: !!highlight,
+        highlightClassName: highlight?.className,
+        highlightStyle: highlight?.style
       });
     }
 
@@ -277,5 +303,6 @@ export const useCalendar = ({
     goToNextMonth,
     onDateChange,
     disabledDates
+    // highlightedDates is not returned, only used for day decoration
   };
 };

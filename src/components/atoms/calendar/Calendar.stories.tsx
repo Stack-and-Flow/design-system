@@ -20,6 +20,7 @@ import type { CalendarRadius } from './types';
     - **CVA Integration**: All variants, sizes, radius, disabled, and readOnly states managed with class-variance-authority (CVA).
     - **Internationalized Date Support**: Use `@internationalized/date` (`CalendarDate`) for locale-aware date logic.
     - **Animations**: Smooth transitions for showing/hiding the calendar.
+    - **Custom Highlighted Dates**: Highlight any date with custom colors or styles using the `highlightedDates` prop (e.g., holidays, events).
 
     ## ACCESSIBILITY
     - Uses ARIA roles and keyboard navigation
@@ -456,6 +457,80 @@ export const CustomSelectedAndDisabledDates: Story = {
     docs: {
       description: {
         story: 'Calendar with a selected date and custom disabled dates.'
+      }
+    }
+  }
+};
+
+export const HighlightedDates: Story = {
+  render: () => {
+    // Example: highlight holidays and events
+    const today = new Date();
+    const eventDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
+    const holidayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 5);
+    const highlightedDates = [
+      {
+        date: eventDate,
+        className: 'bg-green-500 text-white font-bold',
+        style: { border: '2px solid #22c55e' }
+      },
+      {
+        date: holidayDate,
+        className: 'bg-yellow-400 text-black font-bold',
+        style: { border: '2px dashed #eab308' }
+      }
+    ];
+    return (
+      <div
+        style={{
+          padding: '2rem',
+          background: 'white',
+          borderRadius: '1rem',
+          maxWidth: 380,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1rem'
+        }}
+      >
+        <h3 style={{ marginBottom: 0, color: '#830213', alignSelf: 'flex-start' }}>Highlighted Dates Example</h3>
+        <div style={{ width: '100%' }}>
+          <Calendar highlightedDates={highlightedDates} show={true} size='md' variant='filled' />
+        </div>
+        <div style={{ marginTop: 0, fontSize: '0.95rem', width: '100%' }}>
+          <span
+            style={{
+              background: '#22c55e',
+              color: '#18191e',
+              fontWeight: 'bold',
+              padding: '2px 8px',
+              borderRadius: '4px'
+            }}
+          >
+            Green
+          </span>
+          : Event
+          <br />
+          <span
+            style={{
+              background: '#eab308',
+              color: '#18191e',
+              fontWeight: 'bold',
+              padding: '2px 8px',
+              borderRadius: '4px'
+            }}
+          >
+            Yellow
+          </span>
+          : Holiday
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates how to highlight custom dates (e.g., holidays, events) with custom colors and styles.'
       }
     }
   }
