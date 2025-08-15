@@ -10,7 +10,7 @@ import type { CalendarRadius } from './types';
     The Calendar component is a highly customizable and accessible date picker for React, supporting internationalized dates and advanced visual variants.
 
     ## FEATURES
-    - **Date Selection**: Visual feedback for single and range selection.
+    - **Date Selection**: Visual feedback for single and range selection ( drag&drop).
     - **Month/Year Picker**: Two-column HeroUI-style dropdown for fast navigation.
     - **Dark Mode & Variants**: Multiple visual styles (`filled`, `outlined`, `soft`, `ghost`).
     - **Customizable Size & Radius**: Choose from `sm`, `md`, `lg` sizes and border radius.
@@ -456,6 +456,62 @@ export const CustomSelectedAndDisabledDates: Story = {
     docs: {
       description: {
         story: 'Calendar with a selected date and custom disabled dates.'
+      }
+    }
+  }
+};
+
+export const Sizes: Story = {
+  render: () => {
+    const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          alignItems: 'flex-start',
+          padding: '2rem',
+          borderRadius: '1rem',
+          background: 'black',
+          color: 'white'
+        }}
+        className='calendar-radius-bg'
+      >
+        <label htmlFor='size-select' style={{ fontWeight: 'bold' }}>
+          Select calendar size:
+        </label>
+        <select
+          id='size-select'
+          value={size}
+          onChange={(e) => setSize(e.target.value as 'sm' | 'md' | 'lg')}
+          style={{ padding: '0.5rem', borderRadius: '0.5rem', fontSize: '1rem' }}
+        >
+          <option value='sm' style={{ color: 'black' }}>
+            Small
+          </option>
+          <option value='md' style={{ color: 'black' }}>
+            Medium
+          </option>
+          <option value='lg' style={{ color: 'black' }}>
+            Large
+          </option>
+        </select>
+        <Calendar
+          size={size}
+          selectedDate={null}
+          onDateChange={() => {
+            /* noop */
+          }}
+          show={true}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactively select the calendar size (sm, md, lg).'
       }
     }
   }
