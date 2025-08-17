@@ -32,6 +32,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       readOnly,
       firstDayOfWeek,
       highlightedDates: props.highlightedDates,
+      locale: props.locale,
       ...props
     });
 
@@ -165,6 +166,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           onCancel={() => setPickerMode('calendar')}
           years={years}
           monthNames={monthNames}
+          locale={props.locale}
         />
       )}
 

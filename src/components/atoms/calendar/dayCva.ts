@@ -28,7 +28,7 @@ export const dayCva = cva(
         false: ''
       },
       isDisabled: {
-        true: 'text-gray-300 bg-transparent cursor-default pointer-events-none opacity-50 dark:text-gray-500 dark:bg-transparent',
+        true: 'opacity-80 pointer-events-none',
         false: 'cursor-pointer'
       },
       isInRange: {
@@ -142,7 +142,7 @@ export const dayCva = cva(
         isSelected: true,
         variant: 'soft',
         class:
-          'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-full hover:bg-secondary/80 dark:hover:bg-accent/80'
+          'bg-red-100 text-red-700 rounded-full hover:bg-red-200 dark:bg-red-700 dark:text-white dark:hover:bg-red-500'
       },
       {
         isSelected: true,
@@ -153,7 +153,12 @@ export const dayCva = cva(
         isSelected: true,
         variant: 'filled',
         class:
-          'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-full hover:bg-secondary/80 dark:hover:bg-accent/80'
+          'bg-red-600 text-white rounded-full hover:bg-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-500'
+      },
+      {
+        isSelected: true,
+        variant: 'outlined',
+        class: 'border-2 border-red-400 bg-transparent rounded-full hover:border-red-300'
       },
       {
         isToday: true,

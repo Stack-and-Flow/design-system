@@ -21,4 +21,6 @@ export interface CalendarProps {
   theme?: 'light' | 'dark';
   /** Array of highlighted dates with custom styles or classes. */
   highlightedDates?: { date: Date; className?: string; style?: React.CSSProperties }[];
+  /** Locale code for weekday and month names (e.g., 'en', 'es'). */
+  locale?: string;
 }
