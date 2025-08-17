@@ -1,7 +1,7 @@
 import { CalendarDate } from '@internationalized/date';
 import { startOfWeek } from '@internationalized/date';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar } from './index';
 import type { CalendarRadius } from './types';
 
@@ -404,6 +404,7 @@ export const WithCalendarDate: Story = {
           }}
           size='md'
           show={true}
+          locale={locale.startsWith('es') ? 'es' : 'en'}
         />
         <div
           style={{
@@ -464,6 +465,20 @@ export const CustomSelectedAndDisabledDates: Story = {
 
 export const HighlightedDates: Story = {
   render: () => {
+    // Utilidad para calcular color de texto accesible según fondo
+    function getContrastText(bgColor: string): string {
+      // bgColor en formato hex: #RRGGBB
+      if (!bgColor) {
+        return '#222';
+      }
+      const hex = bgColor.replace('#', '');
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      // YIQ formula
+      const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+      return yiq >= 128 ? '#222' : '#fff';
+    }
     // Example: highlight holidays and events
     const today = new Date();
     const eventDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
@@ -471,29 +486,40 @@ export const HighlightedDates: Story = {
     const highlightedDates = [
       {
         date: eventDate,
-        className: 'bg-green-500 text-white font-bold',
-        style: { border: '2px solid #22c55e' }
+        className: 'font-bold',
+        style: { border: '2px solid #22c55e', background: '#22c55e', color: getContrastText('#22c55e') }
       },
       {
         date: holidayDate,
-        className: 'bg-yellow-400 text-black font-bold',
-        style: { border: '2px dashed #eab308' }
+        className: 'font-bold',
+        style: { border: '2px dashed #eab308', background: '#eab308', color: getContrastText('#eab308') }
       }
     ];
+    // Detect dark mode using Storybook's global theme class
+    let isDark = false;
+    if (typeof document !== 'undefined') {
+      isDark = document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
+    }
+    const bgColor = isDark ? '#18191e' : '#fff';
+    const textColor = getContrastText(bgColor);
     return (
       <div
         style={{
           padding: '2rem',
-          background: 'white',
+          background: bgColor,
           borderRadius: '1rem',
           maxWidth: 380,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '1rem'
+          gap: '1rem',
+          color: textColor,
+          boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
         }}
       >
-        <h3 style={{ marginBottom: 0, color: '#830213', alignSelf: 'flex-start' }}>Highlighted Dates Example</h3>
+        <h3 style={{ marginBottom: 0, color: isDark ? '#eab308' : '#830213', alignSelf: 'flex-start' }}>
+          Highlighted Dates Example
+        </h3>
         <div style={{ width: '100%' }}>
           <Calendar highlightedDates={highlightedDates} show={true} size='md' variant='filled' />
         </div>
@@ -501,28 +527,50 @@ export const HighlightedDates: Story = {
           <span
             style={{
               background: '#22c55e',
-              color: '#18191e',
+              color: getContrastText('#22c55e'),
               fontWeight: 'bold',
               padding: '2px 8px',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              marginRight: '0.5rem',
+              border: '1px solid #198c4c',
+              textShadow: getContrastText('#22c55e') === '#fff' ? '0 1px 2px #198c4c' : 'none'
             }}
           >
             Green
           </span>
-          : Event
+          <span
+            style={{
+              color: isDark ? '#fff' : '#222',
+              fontWeight: 'bold',
+              textShadow: isDark ? '0 1px 2px #000' : '0 1px 2px #fff'
+            }}
+          >
+            : Event
+          </span>
           <br />
           <span
             style={{
               background: '#eab308',
-              color: '#18191e',
+              color: getContrastText('#eab308'),
               fontWeight: 'bold',
               padding: '2px 8px',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              marginRight: '0.5rem',
+              border: '1px solid #b58903',
+              textShadow: getContrastText('#eab308') === '#fff' ? '0 1px 2px #b58903' : 'none'
             }}
           >
             Yellow
           </span>
-          : Holiday
+          <span
+            style={{
+              color: isDark ? '#fff' : '#222',
+              fontWeight: 'bold',
+              textShadow: isDark ? '0 1px 2px #000' : '0 1px 2px #fff'
+            }}
+          >
+            : Holiday
+          </span>
         </div>
       </div>
     );
@@ -539,6 +587,27 @@ export const HighlightedDates: Story = {
 export const Sizes: Story = {
   render: () => {
     const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+    const [isDark, setIsDark] = useState(() => {
+      if (typeof document !== 'undefined') {
+        return document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
+      }
+      return false;
+    });
+    useEffect(() => {
+      const handler = () => {
+        setIsDark(document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark');
+      };
+      window.addEventListener('themechange', handler);
+      // fallback: listen to class changes
+      const observer = new MutationObserver(handler);
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+      return () => {
+        window.removeEventListener('themechange', handler);
+        observer.disconnect();
+      };
+    }, []);
+    const bgColor = isDark ? '#18191e' : '#fff';
+    const textColor = isDark ? '#fff' : '#222';
     return (
       <div
         style={{
@@ -548,10 +617,10 @@ export const Sizes: Story = {
           alignItems: 'flex-start',
           padding: '2rem',
           borderRadius: '1rem',
-          background: 'black',
-          color: 'white'
+          background: bgColor,
+          color: textColor,
+          boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
         }}
-        className='calendar-radius-bg'
       >
         <label htmlFor='size-select' style={{ fontWeight: 'bold' }}>
           Select calendar size:
@@ -560,15 +629,22 @@ export const Sizes: Story = {
           id='size-select'
           value={size}
           onChange={(e) => setSize(e.target.value as 'sm' | 'md' | 'lg')}
-          style={{ padding: '0.5rem', borderRadius: '0.5rem', fontSize: '1rem' }}
+          style={{
+            padding: '0.5rem',
+            borderRadius: '0.5rem',
+            fontSize: '1rem',
+            background: bgColor,
+            color: textColor,
+            border: '1px solid #ccc'
+          }}
         >
-          <option value='sm' style={{ color: 'black' }}>
+          <option value='sm' style={{ color: '#222' }}>
             Small
           </option>
-          <option value='md' style={{ color: 'black' }}>
+          <option value='md' style={{ color: '#222' }}>
             Medium
           </option>
-          <option value='lg' style={{ color: 'black' }}>
+          <option value='lg' style={{ color: '#222' }}>
             Large
           </option>
         </select>
@@ -621,6 +697,26 @@ document.head.appendChild(style);
 export const WithRadius: Story = {
   render: () => {
     const [radius, setRadius] = useState<CalendarRadius>('md');
+    const [isDark, setIsDark] = useState(() => {
+      if (typeof document !== 'undefined') {
+        return document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
+      }
+      return false;
+    });
+    useEffect(() => {
+      const handler = () => {
+        setIsDark(document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark');
+      };
+      window.addEventListener('themechange', handler);
+      const observer = new MutationObserver(handler);
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+      return () => {
+        window.removeEventListener('themechange', handler);
+        observer.disconnect();
+      };
+    }, []);
+    const bgColor = isDark ? '#18191e' : '#fff';
+    const textColor = isDark ? '#fff' : '#222';
     return (
       <div
         style={{
@@ -630,10 +726,10 @@ export const WithRadius: Story = {
           alignItems: 'flex-start',
           padding: '2rem',
           borderRadius: '1rem',
-          background: 'black',
-          color: 'white'
+          background: bgColor,
+          color: textColor,
+          boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
         }}
-        className='calendar-radius-bg'
       >
         <label htmlFor='radius-select' style={{ fontWeight: 'bold' }}>
           Select border radius:
@@ -642,18 +738,25 @@ export const WithRadius: Story = {
           id='radius-select'
           value={radius}
           onChange={(e) => setRadius(e.target.value as CalendarRadius)}
-          style={{ padding: '0.5rem', borderRadius: '0.5rem', fontSize: '1rem' }}
+          style={{
+            padding: '0.5rem',
+            borderRadius: '0.5rem',
+            fontSize: '1rem',
+            background: bgColor,
+            color: textColor,
+            border: '1px solid #ccc'
+          }}
         >
-          <option value='none' style={{ color: 'black' }}>
+          <option value='none' style={{ color: '#222' }}>
             None
           </option>
-          <option value='sm' style={{ color: 'black' }}>
+          <option value='sm' style={{ color: '#222' }}>
             Small
           </option>
-          <option value='md' style={{ color: 'black' }}>
+          <option value='md' style={{ color: '#222' }}>
             Medium
           </option>
-          <option value='lg' style={{ color: 'black' }}>
+          <option value='lg' style={{ color: '#222' }}>
             Large
           </option>
         </select>

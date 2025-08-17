@@ -8,24 +8,43 @@ function dateToCalendarDate(date: Date): CalendarDate {
 }
 import type { CalendarProps } from './types';
 
-// Month names in English
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
+// Month names by locale
+const monthNamesByLocale: Record<string, string[]> = {
+  en: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ],
+  es: [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+  ]
+};
 
 // Abbreviated weekday names (starting from Sunday)
-const baseWeekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const weekdayNamesByLocale: Record<string, string[]> = {
+  en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+};
 
 export const useCalendar = ({
   selectedDate: initialSelectedDate = null,
@@ -36,8 +55,9 @@ export const useCalendar = ({
   disabled = false,
   readOnly = false,
   firstDayOfWeek = 1, // Monday by default
-  highlightedDates = []
-}: CalendarProps & { firstDayOfWeek?: number }) => {
+  highlightedDates = [],
+  locale = 'en'
+}: CalendarProps & { firstDayOfWeek?: number; locale?: string }) => {
   // selectedDate can be Date|null or [Date|null, Date|null]
   const [currentDate, setCurrentDate] = useState(() => {
     if (Array.isArray(initialSelectedDate)) {
@@ -78,7 +98,13 @@ export const useCalendar = ({
     return (firstDay - firstDayOfWeek + 7) % 7;
   };
 
+  const baseWeekdayNames = weekdayNamesByLocale[locale] || weekdayNamesByLocale['en'];
   const weekdayNames = [...baseWeekdayNames.slice(firstDayOfWeek), ...baseWeekdayNames.slice(0, firstDayOfWeek)];
+
+  // Memoized month names by locale
+  const monthNames = useMemo(() => {
+    return monthNamesByLocale[locale] || monthNamesByLocale['en'];
+  }, [locale]);
 
   const daysInCalendar = useMemo(() => {
     const year = currentDate.getFullYear();

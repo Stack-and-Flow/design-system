@@ -21,6 +21,7 @@ export interface MonthYearPickerDropdownProps {
   maxDate?: Date;
   onChange: (year: number, month: number) => void;
   onCancel: () => void;
+  locale?: string;
 }
 
 export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = ({
@@ -31,7 +32,8 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
   minDate,
   maxDate,
   onChange,
-  onCancel
+  onCancel,
+  locale = 'en'
 }) => {
   useEffect(() => {
     injectCustomScrollbarStyle();
@@ -68,6 +70,13 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
   const handleSelect = () => {
     onChange(selectedYear, selectedMonth);
   };
+
+  // Traducciones para los botones
+  const buttonLabels: Record<string, { cancel: string; select: string }> = {
+    en: { cancel: 'Cancel', select: 'Select' },
+    es: { cancel: 'Cancelar', select: 'Seleccionar' }
+  };
+  const labels = buttonLabels[locale as keyof typeof buttonLabels] || buttonLabels['en'];
 
   return (
     <div className='absolute inset-0 z-10 flex flex-col bg-white dark:bg-gray-900 rounded-lg animate-fadeIn w-full h-full'>
@@ -129,13 +138,13 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
             className='px-2 py-1 rounded bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-sm transition-colors duration-150'
             onClick={onCancel}
           >
-            Cancel
+            {labels.cancel}
           </button>
           <button
             className='px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 text-sm transition-colors duration-150'
             onClick={handleSelect}
           >
-            Select
+            {labels.select}
           </button>
         </div>
       </div>
