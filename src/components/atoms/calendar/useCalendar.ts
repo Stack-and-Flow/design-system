@@ -202,7 +202,7 @@ export const useCalendar = ({
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
       days.push({
         date,
-        isCurrentMonth: true,
+        isCurrentMonth: !(isDisabled && (isBeforeMin || isAfterMax || disabledDates.some((d) => isSameDay(d, date)))),
         isToday,
         isSelected,
         isDisabled,
