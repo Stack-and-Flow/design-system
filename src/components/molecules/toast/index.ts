@@ -1,3 +1,3 @@
-import Toast from './Toast';
 export * from './types';
-export default Toast;
+export { toast } from './toast';
+export { Toaster } from './Toaster';

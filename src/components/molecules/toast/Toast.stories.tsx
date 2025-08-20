@@ -1,5 +1,8 @@
+import Button from '@/components/atoms/button/Button.tsx';
 import type { Meta, StoryObj } from '@storybook/react';
-import Toast from './Toast';
+import Toast from './ToastItem';
+import { Toaster } from './Toaster';
+import { toast } from './toast';
 
 const meta: Meta<typeof Toast> = {
   title: 'Molecules/Toast',
@@ -9,14 +12,30 @@ const meta: Meta<typeof Toast> = {
       autodocs: true
     }
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <div className='w-screen h-screen'>
+        <Toaster duration={5000} />
+        <Story />
+      </div>
+    )
+  ]
 };
 export default meta;
 
 type Story = StoryObj<typeof Toast>;
 
+/**
+ * - Default variant is `default`.
+ */
 export const Default: Story = {
-  args: {
-    name: 'Default Name'
-  }
+  render: () => <Button text='Show toast' onClick={() => toast('Hello, world!')} />
+};
+
+/**
+ * - Success variant is `success`.
+ */
+export const Success: Story = {
+  render: () => <Button text='Show toast' onClick={() => toast.success('Hello, world!')} />
 };
