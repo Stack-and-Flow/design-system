@@ -1,20 +1,46 @@
+import { useState } from 'react';
 import type { SwitchProps } from './types';
-// import { switchVariants } from './types';
+import {
+  switchBase,
+  switchEndContent,
+  switchHiddenInput,
+  switchLabel,
+  switchStartContent,
+  switchThumb,
+  switchThumbIcon,
+  switchTrack,
+  switchWrapper
+} from './types';
 export const useSwitch = ({
   label,
   className = '',
   size = 'md',
-  color = 'primary',
+  color = 'default',
   labelPlacement = 'right',
-  withIcon = false,
-  thumbIcon = false,
   variant = 'default',
   rounded = true,
-  checked = false,
-  disabled = false
+  checked: checkedProp,
+  defaultChecked,
+  onChange,
+  disabled = false,
+  thumbIcon = false,
+  startContent = null,
+  endContent = null,
+  role,
+  ariaChecked,
+  ariaLabel
 }: SwitchProps) => {
-  // DEFINIR LOS ESTILOS EN EL CVA
-  // const switchClass = switchVariants({ size, color, labelPlacement, variant, rounded });
+  const [isChecked, setIsChecked] = useState(defaultChecked);
+
+  const isControlled = checkedProp !== undefined;
+  const checked = isControlled ? checkedProp : isChecked;
+
+  const handleChange = (value: boolean) => {
+    if (!isControlled) {
+      setIsChecked(value);
+    }
+    onChange?.(value);
+  };
 
   return {
     label,
@@ -24,10 +50,23 @@ export const useSwitch = ({
     variant,
     rounded,
     labelPlacement,
-    withIcon,
+    disabled,
     thumbIcon,
+    startContent,
+    endContent,
     checked,
-    disabled
-    // switchClass,
+    onChange: handleChange,
+    switchBase: switchBase({ labelPlacement }),
+    switchWrapper: switchWrapper({ size, disabled, rounded }),
+    switchStartContent: switchStartContent({}),
+    switchHiddenInput: switchHiddenInput({}),
+    switchTrack: switchTrack({ size, color, rounded }),
+    switchThumb: switchThumb({ size, variant }),
+    switchThumbIcon: switchThumbIcon({}),
+    switchEndContent: switchEndContent({}),
+    switchLabel: switchLabel({ size, disabled }),
+    role,
+    ariaChecked,
+    ariaLabel
   };
 };
