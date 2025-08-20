@@ -28,7 +28,7 @@ export const dayCva = cva(
         false: ''
       },
       isDisabled: {
-        true: 'opacity-80 pointer-events-none',
+        true: 'text-gray-400 bg-transparent opacity-80 pointer-events-none dark:text-gray-500 dark:bg-transparent',
         false: 'cursor-pointer'
       },
       isInRange: {

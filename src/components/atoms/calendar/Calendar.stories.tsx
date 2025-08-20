@@ -496,84 +496,8 @@ export const HighlightedDates: Story = {
       }
     ];
     // Detect dark mode using Storybook's global theme class
-    let isDark = false;
-    if (typeof document !== 'undefined') {
-      isDark = document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
-    }
-    const bgColor = isDark ? '#18191e' : '#fff';
-    const textColor = getContrastText(bgColor);
-    return (
-      <div
-        style={{
-          padding: '2rem',
-          background: bgColor,
-          borderRadius: '1rem',
-          maxWidth: 380,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1rem',
-          color: textColor,
-          boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
-        }}
-      >
-        <h3 style={{ marginBottom: 0, color: isDark ? '#eab308' : '#830213', alignSelf: 'flex-start' }}>
-          Highlighted Dates Example
-        </h3>
-        <div style={{ width: '100%' }}>
-          <Calendar highlightedDates={highlightedDates} show={true} size='md' variant='filled' />
-        </div>
-        <div style={{ marginTop: 0, fontSize: '0.95rem', width: '100%' }}>
-          <span
-            style={{
-              background: '#22c55e',
-              color: getContrastText('#22c55e'),
-              fontWeight: 'bold',
-              padding: '2px 8px',
-              borderRadius: '4px',
-              marginRight: '0.5rem',
-              border: '1px solid #198c4c',
-              textShadow: getContrastText('#22c55e') === '#fff' ? '0 1px 2px #198c4c' : 'none'
-            }}
-          >
-            Green
-          </span>
-          <span
-            style={{
-              color: isDark ? '#fff' : '#222',
-              fontWeight: 'bold',
-              textShadow: isDark ? '0 1px 2px #000' : '0 1px 2px #fff'
-            }}
-          >
-            : Event
-          </span>
-          <br />
-          <span
-            style={{
-              background: '#eab308',
-              color: getContrastText('#eab308'),
-              fontWeight: 'bold',
-              padding: '2px 8px',
-              borderRadius: '4px',
-              marginRight: '0.5rem',
-              border: '1px solid #b58903',
-              textShadow: getContrastText('#eab308') === '#fff' ? '0 1px 2px #b58903' : 'none'
-            }}
-          >
-            Yellow
-          </span>
-          <span
-            style={{
-              color: isDark ? '#fff' : '#222',
-              fontWeight: 'bold',
-              textShadow: isDark ? '0 1px 2px #000' : '0 1px 2px #fff'
-            }}
-          >
-            : Holiday
-          </span>
-        </div>
-      </div>
-    );
+    // Eliminados isDark, bgColor y textColor porque ya no se usan
+    return <Calendar highlightedDates={highlightedDates} show={true} size='md' variant='filled' />;
   },
   parameters: {
     docs: {
@@ -606,7 +530,7 @@ export const Sizes: Story = {
         observer.disconnect();
       };
     }, []);
-    const bgColor = isDark ? '#18191e' : '#fff';
+    const bgColor = isDark ? '#18191e' : '#d1d5db'; // gris más oscuro en tema claro
     const textColor = isDark ? '#fff' : '#222';
     return (
       <div
@@ -633,18 +557,18 @@ export const Sizes: Story = {
             padding: '0.5rem',
             borderRadius: '0.5rem',
             fontSize: '1rem',
-            background: bgColor,
-            color: textColor,
+            background: isDark ? '#18191e' : bgColor,
+            color: isDark ? '#fff' : textColor,
             border: '1px solid #ccc'
           }}
         >
-          <option value='sm' style={{ color: '#222' }}>
+          <option value='sm' style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
             Small
           </option>
-          <option value='md' style={{ color: '#222' }}>
+          <option value='md' style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
             Medium
           </option>
-          <option value='lg' style={{ color: '#222' }}>
+          <option value='lg' style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
             Large
           </option>
         </select>
@@ -715,7 +639,7 @@ export const WithRadius: Story = {
         observer.disconnect();
       };
     }, []);
-    const bgColor = isDark ? '#18191e' : '#fff';
+    const bgColor = isDark ? '#18191e' : '#d1d5db'; // gris más oscuro en tema claro
     const textColor = isDark ? '#fff' : '#222';
     return (
       <div
@@ -742,21 +666,21 @@ export const WithRadius: Story = {
             padding: '0.5rem',
             borderRadius: '0.5rem',
             fontSize: '1rem',
-            background: bgColor,
-            color: textColor,
+            background: isDark ? '#18191e' : bgColor,
+            color: isDark ? '#fff' : textColor,
             border: '1px solid #ccc'
           }}
         >
-          <option value='none' style={{ color: '#222' }}>
+          <option value='none' style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
             None
           </option>
-          <option value='sm' style={{ color: '#222' }}>
+          <option value='sm' style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
             Small
           </option>
-          <option value='md' style={{ color: '#222' }}>
+          <option value='md' style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
             Medium
           </option>
-          <option value='lg' style={{ color: '#222' }}>
+          <option value='lg' style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
             Large
           </option>
         </select>
