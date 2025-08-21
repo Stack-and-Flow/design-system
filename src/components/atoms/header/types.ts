@@ -1,8 +1,6 @@
-import type { VariantProps } from 'tailwind-variants';
-import { tv } from 'tailwind-variants';
+import { type VariantProps, cva } from 'class-variance-authority';
 
-export const headerVariants = tv({
-  base: 'font-normal leading-[1.2] text-text-light dark:text-text-dark',
+export const headerVariants = cva(['font-normal leading-[1.2] text-text-light dark:text-text-dark'], {
   variants: {
     font: {
       primary: 'font-primary',
@@ -10,12 +8,12 @@ export const headerVariants = tv({
       secondaryBold: 'font-secondary-bold'
     },
     tag: {
-      h1: 'fs-h1',
-      h2: 'fs-h2',
-      h3: 'fs-h3',
-      h4: 'fs-h4',
-      h5: 'fs-h5',
-      h6: 'fs-h6'
+      h1: 'fs-h1 tablet:fs-tablet-h1',
+      h2: 'fs-h2 tablet:fs-tablet-h2',
+      h3: 'fs-h3 tablet:fs-tablet-h3',
+      h4: 'fs-h4 tablet:fs-tablet-h4',
+      h5: 'fs-h5 tablet:fs-tablet-h5',
+      h6: 'fs-h6 tablet:fs-tablet-h6'
     },
     prominent: {
       true: 'font-bold',
@@ -27,14 +25,15 @@ export const headerVariants = tv({
     }
   },
   defaultVariants: {
-    size: undefined,
-    color: 'default',
-    prominent: false
+    font: 'primary',
+    tag: 'h1',
+    prominent: false,
+    srOnly: false
   }
 });
 
-export type HeaderVariant = keyof typeof headerVariants.variants.tag;
-export type HeaderFont = keyof typeof headerVariants.variants.font;
+export type HeaderVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+export type HeaderFont = 'primary' | 'secondary' | 'secondaryBold';
 
 export type HeaderProps = {
   /** @control text */

@@ -4,7 +4,7 @@ import { useText } from './useText';
 
 const Text: FC<TextProps> = ({ ...props }) => {
   const { tag, isHtml, sanitizedHtml, children, ...rest } = useText(props);
-  const Component = tag;
+  const Component = tag ?? 'p';
   if (isHtml && typeof sanitizedHtml === 'string') {
     return (
       // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
@@ -12,7 +12,7 @@ const Text: FC<TextProps> = ({ ...props }) => {
     );
   }
 
-  return <Component {...props}>{children}</Component>;
+  return <Component {...rest}>{children}</Component>;
 };
 
 export default Text;

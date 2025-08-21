@@ -1,9 +1,7 @@
+import { type VariantProps, cva } from 'class-variance-authority';
 import type { ReactNode } from 'react';
-import type { VariantProps } from 'tailwind-variants';
-import { tv } from 'tailwind-variants';
 
-export const textVariants = tv({
-  base: 'font-normal leading-[1.2] text-text-light dark:text-text-dark tracking-widest',
+export const textVariants = cva(['font-normal leading-[1.2] text-text-light dark:text-text-dark tracking-widest'], {
   variants: {
     font: {
       primary: 'font-primary',
@@ -25,14 +23,15 @@ export const textVariants = tv({
     }
   },
   defaultVariants: {
-    size: undefined,
-    color: 'default',
-    prominent: false
+    font: 'secondary',
+    tag: 'p',
+    prominent: false,
+    srOnly: false
   }
 });
 
-export type TextVariant = keyof typeof textVariants.variants.tag;
-export type TextFont = keyof typeof textVariants.variants.font;
+export type TextVariant = 'p' | 'small' | 'span';
+export type TextFont = 'primary' | 'secondary' | 'secondaryBold';
 
 type BaseTextProps = {
   /**
