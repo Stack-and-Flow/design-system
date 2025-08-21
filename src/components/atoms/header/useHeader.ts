@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { type HeaderProps, headerVariants } from './types';
 
 export const useHeader = ({
-  font = 'secondaryBold',
+  font = 'primary',
   tag = 'h1',
   prominent = false,
   className,
@@ -33,8 +33,8 @@ export const useHeader = ({
 
   const prop = {
     className: cn(
+      fontSize ? fontByTag(fontSize) : headerVariants({ tag }),
       headerVariants({ font, prominent, srOnly }),
-      fontSize ? fontByTag(fontSize) : cn(headerVariants({ tag })),
       className
     ),
     id: id || undefined,
