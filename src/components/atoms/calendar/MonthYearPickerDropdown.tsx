@@ -1,17 +1,6 @@
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-// Inject custom scrollbar-hiding CSS once
-const injectCustomScrollbarStyle = () => {
-  if (document.getElementById('custom-scrollbar-style')) {
-    return;
-  }
-  const style = document.createElement('style');
-  style.id = 'custom-scrollbar-style';
-  style.innerHTML = `.custom-scrollbar::-webkit-scrollbar { width: 0 !important; height: 0 !important; } .custom-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }`;
-  document.head.appendChild(style);
-};
-
 export interface MonthYearPickerDropdownProps {
   currentYear: number;
   currentMonth: number;
@@ -35,9 +24,11 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
   onCancel,
   locale = 'en'
 }) => {
-  useEffect(() => {
-    injectCustomScrollbarStyle();
-  }, []);
+  // Inline scrollbar hide styles
+  const scrollbarHideStyle: React.CSSProperties = {
+    scrollbarWidth: 'none', // Firefox
+    msOverflowStyle: 'none' // IE 10+
+  };
 
   const monthsContainerRef = useRef<HTMLDivElement>(null);
   const yearsContainerRef = useRef<HTMLDivElement>(null);
@@ -71,7 +62,7 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
     onChange(selectedYear, selectedMonth);
   };
 
-  // Traducciones para los botones
+  // Buttons translate
   const buttonLabels: Record<string, { cancel: string; select: string }> = {
     en: { cancel: 'Cancel', select: 'Select' },
     es: { cancel: 'Cancelar', select: 'Seleccionar' }
@@ -81,14 +72,15 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
   return (
     <div className='absolute inset-0 z-10 flex flex-col bg-white dark:bg-gray-900 rounded-lg animate-fadeIn w-full h-full'>
       <div className='flex-1 flex flex-col justify-center items-center w-full h-full p-0'>
-        <div className='flex w-full h-[200px] gap-2 px-4 py-6 overflow-x-auto overflow-y-auto custom-scrollbar'>
+        <div className='flex w-full h-[200px] gap-2 px-4 py-6 overflow-x-auto overflow-y-auto'>
           {/* Months */}
           <div
-            className='flex-1 flex flex-col gap-1 overflow-y-auto max-h-full pr-1 custom-scrollbar'
+            className='flex-1 flex flex-col gap-1 overflow-y-auto max-h-full pr-1'
             tabIndex={0}
             role='listbox'
             aria-label='Months'
             ref={monthsContainerRef}
+            style={scrollbarHideStyle}
           >
             {monthNames.map((month, idx) => (
               <button
@@ -112,11 +104,12 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
           </div>
           {/* Years */}
           <div
-            className='flex-1 flex flex-col gap-1 overflow-y-auto max-h-full pl-1 custom-scrollbar'
+            className='flex-1 flex flex-col gap-1 overflow-y-auto max-h-full pl-1'
             tabIndex={0}
             role='listbox'
             aria-label='Years'
             ref={yearsContainerRef}
+            style={scrollbarHideStyle}
           >
             {years.map((year) => (
               <button
