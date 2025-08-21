@@ -24,9 +24,8 @@ type Story = StoryObj<typeof Header>;
 export const Default: Story = {
   args: {
     children: 'Lorem ipsum',
-    font: 'secondaryBold',
-    tag: 'h1',
     prominent: false,
+    className: '',
     srOnly: false
   }
 };
@@ -35,7 +34,7 @@ export const Default: Story = {
  * - Different header tags (h1, h2, h3, h4, h5, h6) with primary font.
  */
 
-export const PrimaryH1: Story = {
+export const PrimaryHeader: Story = {
   render: () => (
     <div className='flex flex-col gap-4 items-center justify-center'>
       <Header tag='h1' font='primary'>
@@ -64,7 +63,7 @@ export const PrimaryH1: Story = {
  * - Differnt header tags (h1, h2, h3, h4, h5, h6) with secondary font.
  */
 
-export const SecondaryH1: Story = {
+export const SecondaryHeader: Story = {
   render: () => (
     <div className='flex flex-col gap-4 items-center justify-center'>
       <Header tag='h1' font='secondary'>
@@ -93,7 +92,7 @@ export const SecondaryH1: Story = {
  * - Differnt header tags (h1, h2, h3, h4, h5, h6) with secondaryBold font.
  */
 
-export const SecondaryH1Bold: Story = {
+export const SecondaryHeaderBold: Story = {
   render: () => (
     <div className='flex flex-col gap-4 items-center justify-center'>
       <Header tag='h1' font='secondaryBold'>

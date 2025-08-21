@@ -128,6 +128,22 @@ export const CustomColors: Story = {
     className: 'text-yellow dark:text-pink'
   }
 };
+/**
+ * - This option allows you to customize the text size using Tailwind CSS classes.
+ * - You can specify any valid Tailwind CSS size class to change the text size.
+ */
+
+export const CustomSize: Story = {
+  args: {
+    children: 'Lorem ipsum',
+    font: 'secondary',
+    tag: 'p',
+    prominent: false,
+    srOnly: false,
+    isHtml: false,
+    className: 'text-2xl'
+  }
+};
 
 /**
  * - This option allows you to set the `aria-live` attribute for accessibility.
