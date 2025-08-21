@@ -30,7 +30,12 @@ type Story = StoryObj<typeof Toast>;
  * - Default variant is `default`.
  */
 export const Default: Story = {
-  render: () => <Button text='Show toast' onClick={() => toast('Hello, world!')} />
+  render: () => (
+    <>
+      <Button text='Show toast' onClick={() => toast('Hello, world!')} />
+      <Button text='Show toast 2' onClick={() => toast('Hi! How are you?')} />
+    </>
+  )
 };
 
 /**

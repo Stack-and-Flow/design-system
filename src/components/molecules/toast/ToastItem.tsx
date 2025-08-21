@@ -1,29 +1,42 @@
 import { cn } from '@/lib/utils';
 import React from 'react';
-import type { ToastProps } from './types.ts';
+import type { ToastProps } from './types';
 
-const ToastItem = ({ message, onClose, duration, type = 'default' }: ToastProps) => {
+type ToastItemProps = ToastProps & { id: string | string };
+
+const colors = {
+  default: '#333',
+  success: '#3fb950',
+  error: '#ff3b3b'
+};
+
+const ToastItem = ({ id, message, onClose, duration, type = 'default' }: ToastItemProps) => {
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
   React.useEffect(() => {
-    const timer = setTimeout(onClose, duration);
-    return () => clearTimeout(timer);
-  }, []);
+    timerRef.current = setTimeout(() => {
+      onClose(id);
+    }, duration);
 
-  const colors = {
-    default: '#333',
-    success: '#3fb950',
-    error: '#ff3b3b'
-  };
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [id, duration, onClose]);
 
   return (
     <div
       className={cn('text-white px-6 py-3 flex items-center justify-between rounded-sm min-w-52')}
-      style={{
-        backgroundColor: colors[type]
-      }}
+      style={{ backgroundColor: colors[type] }}
       role='alert'
     >
       <span>{message}</span>
-      <button onClick={onClose} className='text-white cursor-pointer border-none font-bold' aria-label='Cerrar'>
+      <button
+        onClick={() => onClose(id)}
+        className='text-white cursor-pointer border-none font-bold'
+        aria-label='Cerrar'
+      >
         ×
       </button>
     </div>

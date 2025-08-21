@@ -20,7 +20,7 @@ export type Subscriber = (toast: ToastItem) => void;
 // Props for the <Toast /> component
 export type ToastProps = {
   message: string;
-  onClose: () => void;
+  onClose: (id: string) => void;
   duration: number;
   type?: ToastType;
 };
