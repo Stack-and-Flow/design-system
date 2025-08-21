@@ -1,76 +1,9 @@
 import { DynamicIcon, type IconName } from 'lucide-react/dynamic';
 import type { ReactNode } from 'react';
-import type { BreadcrumbItem, BreadcrumbProps } from './types';
+import type { BreadcrumbItem, BreadcrumbProps, ProcessedBreadcrumbItem } from './types';
+import { ACCESSIBLE_BORDER_COLORS, ACCESSIBLE_TEXT_COLORS, BREADCRUMB_TEXT_COLORS, SEPARATOR_PATTERNS } from './types';
 
 type BreadcrumbItemCollapsed = BreadcrumbItem | ReactNode;
-
-const ACCESSIBLE_TEXT_COLORS: Record<
-  NonNullable<BreadcrumbProps['bgColor']>,
-  {
-    light: string;
-    dark: string;
-    hover: string;
-    separator: string;
-  }
-> = {
-  default: {
-    light: 'text-slate-700 hover:text-slate-900',
-    dark: 'dark:text-slate-200 dark:hover:text-white',
-    hover: 'hover:text-slate-900 dark:hover:text-white',
-    separator: 'text-slate-500 dark:text-slate-400'
-  },
-  primary: {
-    light: 'text-white',
-    dark: 'dark:text-white',
-    hover: 'hover:text-blue-50',
-    separator: 'text-blue-100 dark:text-blue-200'
-  },
-  secondary: {
-    light: 'text-slate-700',
-    dark: 'dark:text-slate-200',
-    hover: 'hover:text-slate-900 dark:hover:text-white',
-    separator: 'text-slate-500 dark:text-slate-400'
-  },
-  success: {
-    light: 'text-white',
-    dark: 'dark:text-white',
-    hover: 'hover:text-green-50',
-    separator: 'text-green-100 dark:text-green-200'
-  },
-  warning: {
-    light: 'text-white',
-    dark: 'dark:text-white',
-    hover: 'hover:text-amber-50',
-    separator: 'text-amber-100 dark:text-amber-200'
-  },
-  error: {
-    light: 'text-white',
-    dark: 'dark:text-white',
-    hover: 'hover:text-red-50',
-    separator: 'text-red-100 dark:text-red-200'
-  },
-  transparent: {
-    light: 'text-slate-700',
-    dark: 'dark:text-slate-200',
-    hover: 'hover:text-slate-900 dark:hover:text-white',
-    separator: 'text-slate-500 dark:text-slate-400'
-  }
-};
-
-const ACCESSIBLE_BORDER_COLORS: Record<NonNullable<BreadcrumbProps['bgColor']>, string> = {
-  default: 'border-slate-300 dark:border-slate-600',
-  primary: 'border-blue-600 dark:border-blue-500',
-  secondary: 'border-slate-300 dark:border-slate-600',
-  success: 'border-green-600 dark:border-green-500',
-  warning: 'border-amber-500 dark:border-amber-400',
-  error: 'border-red-600 dark:border-red-500',
-  transparent: 'border-transparent'
-};
-
-export interface ProcessedBreadcrumbItem {
-  item: BreadcrumbItemCollapsed;
-  isLast: boolean;
-}
 
 export const useBreadcrumb = ({
   items,
@@ -89,19 +22,39 @@ export const useBreadcrumb = ({
   itemsAfterCollapse = 1,
   iconCollapse = 'more-horizontal',
   collapsedElement,
-  colorText
+  textColor,
+  colorSeparator,
+  onCollapsedClick,
+  showTooltip = false,
+  truncateLength,
+  showHomeIcon = false,
+  homeIcon = 'home'
 }: BreadcrumbProps) => {
   const getAccessibleTextColors = () => {
-    if (colorText) {
+    if (textColor) {
+      const predefinedColor = BREADCRUMB_TEXT_COLORS[textColor as keyof typeof BREADCRUMB_TEXT_COLORS];
+      if (predefinedColor) {
+        return {
+          text: predefinedColor,
+          separator: colorSeparator || predefinedColor
+        };
+      }
+
+      const hasUtilities = textColor.includes('dark:') || textColor.includes('hover:');
+      const finaltextColor = hasUtilities
+        ? textColor
+        : `${textColor} dark:${textColor.replace('text-', 'dark:text-')} hover:opacity-80`;
+
       return {
-        text: colorText,
-        separator: colorText
+        text: finaltextColor,
+        separator: colorSeparator || finaltextColor
       };
     }
+
     const colors = ACCESSIBLE_TEXT_COLORS[bgColor] || ACCESSIBLE_TEXT_COLORS.default;
     return {
       text: `${colors.light} ${colors.dark} ${colors.hover}`,
-      separator: `${colors.light} ${colors.dark} ${colors.hover}`
+      separator: colorSeparator || `${colors.separator}`
     };
   };
 
@@ -111,18 +64,35 @@ export const useBreadcrumb = ({
 
   const renderSeparator = (separator: ReactNode): ReactNode => {
     if (typeof separator === 'string') {
-      const controlString = /[->/|](?![a-zA-Z0-9])/;
-      return controlString.test(separator) ? (
-        <span className={`text-[${iconSizes}px] ${getAccessibleTextColors().separator}`}>{separator}</span>
+      return SEPARATOR_PATTERNS.controlString.test(separator) ? (
+        <span
+          className={`text-[${iconSizes}px] ${getAccessibleTextColors().separator}`}
+          aria-hidden='true'
+          title='Breadcrumb separator'
+        >
+          {separator}
+        </span>
       ) : (
-        <DynamicIcon name={separator as IconName} size={iconSizes} className={getAccessibleTextColors().separator} />
+        <DynamicIcon
+          name={separator as IconName}
+          size={iconSizes}
+          className={getAccessibleTextColors().separator}
+          aria-hidden='true'
+        />
       );
     }
     return separator;
   };
 
+  const truncateText = (text: string, length?: number): string => {
+    if (!length || text.length <= length) {
+      return text;
+    }
+    return `${text.slice(0, length)}...`;
+  };
+
   const getHiddenItems = (): BreadcrumbItem[] => {
-    if (maxItem === 0 || items.length <= maxItem) {
+    if (items.length <= maxItem) {
       return [];
     }
     return items.slice(itemsBeforeCollapse, items.length - itemsAfterCollapse);
@@ -140,21 +110,31 @@ export const useBreadcrumb = ({
       return items;
     }
 
+    const hiddenItems = getHiddenItems();
+    const hiddenItemsText = hiddenItems.map((item) => item.title).join(', ');
     const collapsedElementJsx: ReactNode = collapsedElement ?? (
       <span
         key='collapsed-icon'
-        className={`hover:cursor-pointer ${getAccessibleTextColors().text}`}
-        title={`${getHiddenItems().length} hidden items`}
+        className={`hover:cursor-pointer ${getAccessibleTextColors().text} transition-colors inline-flex items-center`}
+        title={
+          showTooltip
+            ? `${hiddenItems.length} hidden items: ${hiddenItemsText}`
+            : `Show ${hiddenItems.length} hidden items`
+        }
         role='button'
         tabIndex={0}
+        onClick={() => onCollapsedClick?.(hiddenItems)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            // Aquí se podría expandir el breadcrumb
+            onCollapsedClick?.(hiddenItems);
           }
         }}
       >
-        {iconCollapse && <DynamicIcon name={iconCollapse as IconName} size={iconSizes} />}
+        {iconCollapse && <DynamicIcon name={iconCollapse as IconName} size={iconSizes} aria-hidden='true' />}
+        <span className='sr-only'>
+          Show {hiddenItems.length} hidden navigation items: {hiddenItemsText}
+        </span>
       </span>
     );
 
@@ -187,6 +167,11 @@ export const useBreadcrumb = ({
     isBreadcrumbItem,
     getAccessibleTextColors,
     getBorderColorClass,
-    getHiddenItems
+    getHiddenItems,
+    truncateText,
+    showTooltip,
+    truncateLength,
+    showHomeIcon,
+    homeIcon
   };
 };
