@@ -30,7 +30,7 @@ export const calendarCva = cva(
         false: 'hidden opacity-0 scale-95'
       },
       disabled: {
-        true: 'pointer-events-none opacity-60 relative after:absolute after:inset-0 after:bg-black/60 after:rounded-inherit after:pointer-events-none',
+        true: 'pointer-events-none',
         false: ''
       },
       readOnly: {

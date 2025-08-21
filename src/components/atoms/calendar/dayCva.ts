@@ -28,7 +28,7 @@ export const dayCva = cva(
         false: ''
       },
       isDisabled: {
-        true: 'text-gray-400 bg-transparent opacity-80 pointer-events-none dark:text-gray-500 dark:bg-transparent',
+        true: 'text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 dark:bg-transparent',
         false: 'cursor-pointer'
       },
       isInRange: {
@@ -45,25 +45,51 @@ export const dayCva = cva(
       }
     },
     compoundVariants: [
-      // Range selection styles
+      // Range selection styles with hover for light and dark
       {
         isInRange: true,
         isRangeStart: false,
         isRangeEnd: false,
         variant: 'filled',
-        class: 'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-none'
+        class:
+          'bg-secondary text-white rounded-none hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
       },
       {
         isInRange: true,
         isRangeStart: true,
         variant: 'filled',
-        class: 'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-l-full'
+        class:
+          'bg-secondary text-white rounded-l-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
       },
       {
         isInRange: true,
         isRangeEnd: true,
         variant: 'filled',
-        class: 'bg-secondary text-white dark:bg-accent dark:text-gray-100 rounded-r-full'
+        class:
+          'bg-secondary text-white rounded-r-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
+      },
+      // Range selection styles with hover for light and dark
+      {
+        isInRange: true,
+        isRangeStart: false,
+        isRangeEnd: false,
+        variant: 'filled',
+        class:
+          'bg-secondary text-white rounded-none hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
+      },
+      {
+        isInRange: true,
+        isRangeStart: true,
+        variant: 'filled',
+        class:
+          'bg-secondary text-white rounded-l-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
+      },
+      {
+        isInRange: true,
+        isRangeEnd: true,
+        variant: 'filled',
+        class:
+          'bg-secondary text-white rounded-r-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
       },
       // Disabled days in range (filled)
       {
@@ -133,6 +159,7 @@ export const dayCva = cva(
         class:
           'bg-red-900 text-red-100 border-2 border-red-400 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
       },
+      // Selected variants
       {
         isSelected: true,
         variant: 'outlined',
@@ -156,12 +183,7 @@ export const dayCva = cva(
         class:
           'bg-red-600 text-white rounded-full hover:bg-red-400 hover:text-white dark:bg-red-600 dark:text-white dark:hover:bg-red-400 dark:hover:text-white'
       },
-      {
-        isSelected: true,
-        variant: 'outlined',
-        class:
-          'border-2 border-red-400 bg-transparent rounded-full hover:bg-red-400 hover:text-white dark:hover:bg-red-400 dark:hover:text-white'
-      },
+      // Today variant
       {
         isToday: true,
         isSelected: false,

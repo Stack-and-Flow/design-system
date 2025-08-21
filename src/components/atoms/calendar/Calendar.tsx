@@ -101,7 +101,8 @@ export const Calendar: React.FC<CalendarProps> = ({
       role='application'
       style={{
         animation: 'fadeIn 0.3s',
-        ...(readOnly ? { pointerEvents: 'none', opacity: 0.8 } : {})
+        ...(readOnly ? { pointerEvents: 'none' } : {}),
+        ...(disabled ? { pointerEvents: 'none' } : {})
       }}
     >
       {/* Header: month and year, click to open picker */}
