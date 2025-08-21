@@ -4,6 +4,10 @@ export const dayCva = cva(
   'flex items-center justify-center font-medium select-none transition-all duration-150 ease-in-out',
   {
     variants: {
+      readOnly: {
+        true: '', // No visual styles, only interaction is removed in the component
+        false: ''
+      },
       size: {
         sm: 'w-8 h-8 text-xs',
         md: 'w-10 h-10 text-sm',
@@ -45,30 +49,14 @@ export const dayCva = cva(
       }
     },
     compoundVariants: [
-      // Range selection styles with hover for light and dark
+      // Disabled days of current month should look like out-of-month days in light theme
       {
-        isInRange: true,
-        isRangeStart: false,
-        isRangeEnd: false,
-        variant: 'filled',
-        class:
-          'bg-secondary text-white rounded-none hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
+        isCurrentMonth: true,
+        isDisabled: true,
+        readOnly: false,
+        class: 'text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 dark:bg-transparent'
       },
-      {
-        isInRange: true,
-        isRangeStart: true,
-        variant: 'filled',
-        class:
-          'bg-secondary text-white rounded-l-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
-      },
-      {
-        isInRange: true,
-        isRangeEnd: true,
-        variant: 'filled',
-        class:
-          'bg-secondary text-white rounded-r-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
-      },
-      // Range selection styles with hover for light and dark
+      // Range selection styles with hover for light and dark (filled)
       {
         isInRange: true,
         isRangeStart: false,
@@ -115,7 +103,7 @@ export const dayCva = cva(
         class:
           'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
       },
-      // Outlined variant
+      // Outlined variant (range)
       {
         isInRange: true,
         isRangeStart: false,

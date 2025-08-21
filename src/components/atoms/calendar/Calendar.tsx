@@ -235,18 +235,19 @@ export const Calendar: React.FC<CalendarProps> = ({
                             isSelected: day.isSelected && !day.isRangeStart,
                             variant,
                             isToday: day.isToday,
-                            isDisabled: day.isDisabled || readOnly,
+                            isDisabled: day.isDisabled,
                             isInRange: day.isInRange || day.isRangeStart || isDragInRange,
                             isRangeStart:
                               day.isRangeStart || (isDragInRange && dragStart && isSameDay(day.date, dragStart)),
                             isRangeEnd: day.isRangeEnd || (isDragInRange && dragEnd && isSameDay(day.date, dragEnd))
                           }),
-                          highlightClass
+                          highlightClass,
+                          readOnly ? 'pointer-events-none select-none' : '' // visual interaction out
                         ]
                           .filter(Boolean)
                           .join(' ')}
                         onMouseDown={
-                          readOnly || day.isDisabled
+                          day.isDisabled
                             ? undefined
                             : () => {
                                 setIsDragging(true);
@@ -254,11 +255,9 @@ export const Calendar: React.FC<CalendarProps> = ({
                                 setDragEnd(day.date);
                               }
                         }
-                        onMouseEnter={
-                          isDragging && !readOnly && !day.isDisabled ? () => setDragEnd(day.date) : undefined
-                        }
+                        onMouseEnter={isDragging && !day.isDisabled ? () => setDragEnd(day.date) : undefined}
                         onMouseUp={
-                          isDragging && !readOnly && !day.isDisabled
+                          isDragging && !day.isDisabled
                             ? () => {
                                 setIsDragging(false);
                                 if (dragStart && dragEnd && !isSameDay(dragStart, dragEnd)) {
@@ -271,7 +270,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                             : undefined
                         }
                         onClick={
-                          readOnly || day.isDisabled
+                          day.isDisabled
                             ? undefined
                             : () => {
                                 if (!isDragging) {
