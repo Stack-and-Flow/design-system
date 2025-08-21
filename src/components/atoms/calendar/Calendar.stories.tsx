@@ -7,26 +7,30 @@ import type { CalendarRadius } from './types';
 
 /**
     ## DESCRIPTION
-    The Calendar component is a highly customizable and accessible date picker for React, supporting internationalized dates and advanced visual variants.
+    The Calendar component is a highly customizable and accessible date picker for React, supporting internationalized dates, advanced visual variants, and modern UX features.
 
     ## FEATURES
-    - **Date Selection**: Visual feedback for single and range selection ( drag&drop).
-    - **Month/Year Picker**: Two-column HeroUI-style dropdown for fast navigation.
-    - **Dark Mode & Variants**: Multiple visual styles (`filled`, `outlined`, `soft`, `ghost`).
-    - **Customizable Size & Radius**: Choose from `sm`, `md`, `lg` sizes and border radius.
+    - **Date Selection**: Visual feedback for single and range selection, including drag & drop for ranges.
+    - **Month/Year Picker**: Two-column, HeroUI-style dropdown for fast navigation, with scrollbars hidden for a cleaner UI.
+    - **Dark Mode & Variants**: Multiple visual styles (`filled`, `outlined`, `soft`, `ghost`) and full dark mode support.
+    - **Customizable Size & Radius**: Choose from `sm`, `md`, `lg` sizes and border radius options.
     - **Min/Max & Disabled Dates**: Restrict selectable dates and disable specific days.
     - **Read-Only & Disabled Modes**: Prevent interaction when needed.
     - **Keyboard & Screen Reader Accessibility**: Full ARIA support and keyboard navigation.
     - **CVA Integration**: All variants, sizes, radius, disabled, and readOnly states managed with class-variance-authority (CVA).
-    - **Internationalized Date Support**: Use `@internationalized/date` (`CalendarDate`) for locale-aware date logic.
+    - **Internationalized Date Support**: Uses `@internationalized/date` (`CalendarDate`) for locale-aware date logic.
     - **Animations**: Smooth transitions for showing/hiding the calendar.
     - **Custom Highlighted Dates**: Highlight any date with custom colors or styles using the `highlightedDates` prop (e.g., holidays, events).
+    - **Performance Optimizations**: Improved memoization and initialization order for faster rendering and reduced re-renders.
+    - **No Runtime CSS Injection**: All styles are managed via Tailwind/CVA or inline styles—no runtime CSS injection.
+    - **Maintainable Styling**: Compound variants for day styling are split into helper arrays for easier customization and maintainability.
+    - **Standardized Props**: Calendar component props are now standardized for clarity and maintainability.
 
     ## ACCESSIBILITY
     - Uses ARIA roles and keyboard navigation
     - Ensures color contrast for all states
     - Month/year picker is fully contained and accessible
-    */
+*/
 
 const meta: Meta<typeof Calendar> = {
   title: 'Atoms/Calendar',

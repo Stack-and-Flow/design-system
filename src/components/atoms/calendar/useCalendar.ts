@@ -1,5 +1,5 @@
 import { CalendarDate } from '@internationalized/date';
-import type React from 'react';
+// import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 // Utility to convert a native JS Date object to a CalendarDate
 function dateToCalendarDate(date: Date): CalendarDate {
@@ -58,6 +58,15 @@ export const useCalendar = ({
   highlightedDates = [],
   locale = 'en'
 }: CalendarProps & { firstDayOfWeek?: number; locale?: string }) => {
+  // Groups days into weeks of 7 days
+  const groupDaysIntoWeeks = (days: any[]) => {
+    const weeks = [];
+    for (let i = 0; i < days.length; i += 7) {
+      weeks.push(days.slice(i, i + 7));
+    }
+    return weeks;
+  };
+
   // selectedDate can be Date|null or [Date|null, Date|null]
   const [currentDate, setCurrentDate] = useState(() => {
     if (Array.isArray(initialSelectedDate)) {
@@ -106,29 +115,13 @@ export const useCalendar = ({
     return monthNamesByLocale[locale] || monthNamesByLocale['en'];
   }, [locale]);
 
-  const daysInCalendar = useMemo(() => {
+  // Memoize previous month days
+  const prevMonthDays = useMemo(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    const today = new Date();
-    const days: {
-      date: Date;
-      isCurrentMonth: boolean;
-      isToday: boolean;
-      isSelected: boolean;
-      isDisabled: boolean;
-      isInRange: boolean;
-      isRangeStart: boolean;
-      isRangeEnd: boolean;
-      isHighlighted?: boolean;
-      highlightClassName?: string;
-      highlightStyle?: React.CSSProperties;
-    }[] = [];
-
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
     const startDayIndex = getStartDayOfMonth(year, month);
     const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-    // Days from the previous month
+    const days = [];
     for (let i = startDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, daysInPrevMonth - i);
       const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
@@ -158,8 +151,16 @@ export const useCalendar = ({
         highlightStyle: highlight?.style
       });
     }
+    return days;
+  }, [currentDate, disabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
 
-    // Days from the current month
+  // Memoize current month days
+  const currentMonthDays = useMemo(() => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const today = new Date();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days = [];
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       const isToday = isSameDay(date, today);
@@ -167,11 +168,8 @@ export const useCalendar = ({
       let isRangeStart = false;
       let isRangeEnd = false;
       let isInRange = false;
-
-      // Range selection logic
       if (selectedRange[0]) {
         isRangeStart = isSameDay(date, selectedRange[0]);
-        // If only start is set and selectedDate is adjacent, switch style
         if (
           !selectedRange[1] &&
           isRangeStart &&
@@ -185,20 +183,16 @@ export const useCalendar = ({
         isRangeEnd = isSameDay(date, selectedRange[1]);
         isInRange = !!(selectedRange[0] && selectedRange[1] && date >= selectedRange[0] && date <= selectedRange[1]);
       }
-
       const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
       const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
       const isDisabled =
         disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
-
-      // In readOnly mode, no day should be selected
       if (readOnly) {
         isSelected = false;
         isRangeStart = false;
         isRangeEnd = false;
         isInRange = false;
       }
-
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
       days.push({
         date,
@@ -214,11 +208,18 @@ export const useCalendar = ({
         highlightStyle: highlight?.style
       });
     }
+    return days;
+  }, [currentDate, selectedDate, disabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
 
-    // Days from the next month
-    const totalDaysDisplayed = days.length;
+  // Memoize next month days
+  const nextMonthDays = useMemo(() => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const startDayIndex = getStartDayOfMonth(year, month);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const totalDaysDisplayed = startDayIndex + daysInMonth;
     const remainingCells = 42 - totalDaysDisplayed;
-
+    const days = [];
     for (let i = 1; i <= remainingCells; i++) {
       const date = new Date(year, month + 1, i);
       const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
@@ -248,9 +249,16 @@ export const useCalendar = ({
         highlightStyle: highlight?.style
       });
     }
-
     return days;
-  }, [currentDate, selectedDate, disabledDates, minDate, maxDate, disabled, readOnly, firstDayOfWeek]);
+  }, [currentDate, disabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
+
+  // Concatenate all days
+  const daysInCalendar = useMemo(() => {
+    return [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
+  }, [prevMonthDays, currentMonthDays, nextMonthDays]);
+
+  // Memoize weeks
+  const weeks = useMemo(() => groupDaysIntoWeeks(daysInCalendar), [daysInCalendar]);
 
   const handleDayClick = (date: Date, isDisabled: boolean) => {
     if (isDisabled || disabled || readOnly) {
@@ -297,15 +305,9 @@ export const useCalendar = ({
   };
 
   // Groups days into weeks of 7 days
-  const groupDaysIntoWeeks = (days: typeof daysInCalendar) => {
-    const weeks = [];
-    for (let i = 0; i < days.length; i += 7) {
-      weeks.push(days.slice(i, i + 7));
-    }
-    return weeks;
-  };
+  // (removed duplicate declaration)
 
-  const weeks = groupDaysIntoWeeks(daysInCalendar);
+  // weeks is now memoized above
   const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
 
   // Example usage: convert the current date to CalendarDate

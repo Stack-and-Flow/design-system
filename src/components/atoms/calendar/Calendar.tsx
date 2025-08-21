@@ -20,7 +20,8 @@ export const Calendar: React.FC<CalendarProps> = ({
   maxDate,
   onDateChange,
   selectedDate,
-  ...props
+  highlightedDates,
+  locale
 }) => {
   const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth, isSameDay } =
     useCalendar({
@@ -31,34 +32,14 @@ export const Calendar: React.FC<CalendarProps> = ({
       disabled,
       readOnly,
       firstDayOfWeek,
-      highlightedDates: props.highlightedDates,
-      locale: props.locale,
-      ...props
+      highlightedDates,
+      locale
     });
 
   // Drag state for range selection
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStart, setDragStart] = React.useState<Date | null>(null);
   const [dragEnd, setDragEnd] = React.useState<Date | null>(null);
-
-  // Effect to handle global mouseup for drag & drop range selection
-  React.useEffect(() => {
-    if (!isDragging) {
-      return;
-    }
-    const handleGlobalMouseUp = () => {
-      setIsDragging(false);
-      if (dragStart && dragEnd && !isSameDay(dragStart, dragEnd)) {
-        handleDayClick(dragEnd, false);
-      }
-      setDragStart(null);
-      setDragEnd(null);
-    };
-    window.addEventListener('mouseup', handleGlobalMouseUp);
-    return () => {
-      window.removeEventListener('mouseup', handleGlobalMouseUp);
-    };
-  }, [isDragging, dragStart, dragEnd, handleDayClick, isSameDay]);
 
   // Effect to handle global mouseup for drag & drop range selection
   React.useEffect(() => {
@@ -167,7 +148,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           onCancel={() => setPickerMode('calendar')}
           years={years}
           monthNames={monthNames}
-          locale={props.locale}
+          locale={locale}
         />
       )}
 
@@ -217,7 +198,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                         if (day.highlightClassName?.includes('border')) {
                           highlightClass = day.highlightClassName
                             .split(' ')
-                            .filter((c) => c.includes('border'))
+                            .filter((c: string) => c.includes('border'))
                             .join(' ');
                         }
                       } else {
