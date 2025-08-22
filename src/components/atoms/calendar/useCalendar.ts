@@ -118,10 +118,12 @@ export const useCalendar = ({
 
   // Normalize disabledDates to ignore time
   const normalizedDisabledDates = useMemo(() => {
+    // Normalize disabledDates to local midnight, ignoring timezone
     return disabledDates.map((d) => {
-      const copy = new Date(d);
-      copy.setHours(0, 0, 0, 0);
-      return copy;
+      // Always use local date, not UTC, to avoid timezone issues from Storybook controls
+      const localDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      localDate.setHours(0, 0, 0, 0);
+      return localDate;
     });
   }, [disabledDates]);
 
@@ -321,9 +323,6 @@ export const useCalendar = ({
       return newDate;
     });
   };
-
-  // Groups days into weeks of 7 days
-  // (removed duplicate declaration)
 
   // weeks is now memoized above
   const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
