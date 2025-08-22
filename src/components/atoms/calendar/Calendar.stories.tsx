@@ -322,7 +322,7 @@ export const Outlined: Story = {
 
 export const WithSelectedDate: Story = {
   args: {
-    selectedDate: new Date(2025, 7, 15),
+    selectedDate: new Date(2025, 7, 19),
     size: 'md',
     show: true,
     disabled: false,
@@ -448,7 +448,7 @@ export const WithCalendarDate: Story = {
 
 export const CustomSelectedAndDisabledDates: Story = {
   args: {
-    selectedDate: new Date(2025, 7, 15),
+    selectedDate: new Date(2025, 7, 18),
     disabledDates: [new Date(2025, 7, 10), new Date(2025, 7, 12), new Date(2025, 7, 18)],
     size: 'md',
     show: true,
@@ -469,9 +469,7 @@ export const CustomSelectedAndDisabledDates: Story = {
 
 export const HighlightedDates: Story = {
   render: () => {
-    // Utilidad para calcular color de texto accesible según fondo
     function getContrastText(bgColor: string): string {
-      // bgColor en formato hex: #RRGGBB
       if (!bgColor) {
         return '#222';
       }
@@ -479,11 +477,10 @@ export const HighlightedDates: Story = {
       const r = parseInt(hex.substring(0, 2), 16);
       const g = parseInt(hex.substring(2, 4), 16);
       const b = parseInt(hex.substring(4, 6), 16);
-      // YIQ formula
       const yiq = (r * 299 + g * 587 + b * 114) / 1000;
       return yiq >= 128 ? '#222' : '#fff';
     }
-    // Example: highlight holidays and events
+
     const today = new Date();
     const eventDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
     const holidayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 5);
@@ -499,8 +496,7 @@ export const HighlightedDates: Story = {
         style: { border: '2px dashed #eab308', background: '#eab308', color: getContrastText('#eab308') }
       }
     ];
-    // Detect dark mode using Storybook's global theme class
-    // Eliminados isDark, bgColor y textColor porque ya no se usan
+
     return <Calendar highlightedDates={highlightedDates} show={true} size='md' variant='filled' />;
   },
   parameters: {
@@ -526,7 +522,7 @@ export const Sizes: Story = {
         setIsDark(document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark');
       };
       window.addEventListener('themechange', handler);
-      // fallback: listen to class changes
+
       const observer = new MutationObserver(handler);
       observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
       return () => {
@@ -534,7 +530,7 @@ export const Sizes: Story = {
         observer.disconnect();
       };
     }, []);
-    const bgColor = isDark ? '#18191e' : '#d1d5db'; // gris más oscuro en tema claro
+    const bgColor = isDark ? '#18191e' : '#d1d5db';
     const textColor = isDark ? '#fff' : '#222';
     return (
       <div
@@ -596,7 +592,6 @@ export const Sizes: Story = {
   }
 };
 
-// Custom style for WithRadius dropdown selected option
 const selectStyle = document.createElement('style');
 selectStyle.innerHTML = `
   .calendar-radius-bg select:focus option:checked,
@@ -643,7 +638,7 @@ export const WithRadius: Story = {
         observer.disconnect();
       };
     }, []);
-    const bgColor = isDark ? '#18191e' : '#d1d5db'; // gris más oscuro en tema claro
+    const bgColor = isDark ? '#18191e' : '#d1d5db';
     const textColor = isDark ? '#fff' : '#222';
     return (
       <div
