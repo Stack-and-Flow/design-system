@@ -174,6 +174,7 @@ export const useCalendar = ({
     const days = [];
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
+      date.setHours(0, 0, 0, 0);
       const isToday = isSameDay(date, today);
       let isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
       let isRangeStart = false;
@@ -197,7 +198,7 @@ export const useCalendar = ({
       const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
       const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
       const isDisabled =
-        disabled || readOnly || disabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
+        disabled || readOnly || normalizedDisabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
       if (readOnly) {
         isSelected = false;
         isRangeStart = false;
@@ -207,7 +208,7 @@ export const useCalendar = ({
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
       days.push({
         date,
-        isCurrentMonth: !(isDisabled && (isBeforeMin || isAfterMax || disabledDates.some((d) => isSameDay(d, date)))),
+        isCurrentMonth: true,
         isToday,
         isSelected,
         isDisabled,
