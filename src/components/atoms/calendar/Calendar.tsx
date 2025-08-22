@@ -20,6 +20,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   maxDate,
   onDateChange,
   selectedDate,
+  disabledDates,
   highlightedDates,
   locale
 }) => {
@@ -32,6 +33,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       disabled,
       readOnly,
       firstDayOfWeek,
+      disabledDates,
       highlightedDates,
       locale
     });

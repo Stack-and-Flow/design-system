@@ -365,8 +365,19 @@ export const WithCalendarDate: Story = {
   render: () => {
     const [locale, setLocale] = useState('en-US');
     const today = new Date();
-    let calendarDate = new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate());
-    calendarDate = startOfWeek(calendarDate, locale);
+    const [calendarDate, setCalendarDate] = useState(() =>
+      startOfWeek(new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate()), locale)
+    );
+
+    // Update calendarDate when locale changes
+    useEffect(() => {
+      const newCalendarDate = startOfWeek(
+        new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate()),
+        locale
+      );
+      setCalendarDate(newCalendarDate);
+    }, [locale]);
+
     return (
       <div style={{ padding: '2rem' }}>
         <label
@@ -449,7 +460,7 @@ export const WithCalendarDate: Story = {
 export const CustomSelectedAndDisabledDates: Story = {
   args: {
     selectedDate: new Date(2025, 7, 18),
-    disabledDates: [new Date(2025, 7, 10), new Date(2025, 7, 12), new Date(2025, 7, 18)],
+    disabledDates: [new Date(2025, 7, 10), new Date(2025, 7, 12), new Date(2025, 7, 18), new Date(2025, 7, 31)],
     size: 'md',
     show: true,
     disabled: false,

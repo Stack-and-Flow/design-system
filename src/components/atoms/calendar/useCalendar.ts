@@ -1,12 +1,12 @@
+// useCalendar.ts - Fixed version with better date normalization
 import { CalendarDate } from '@internationalized/date';
-// import type React from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import type { CalendarProps } from './types';
+
 // Utility to convert a native JS Date object to a CalendarDate
 function dateToCalendarDate(date: Date): CalendarDate {
-  // Converts a JS Date object to a CalendarDate (ISO calendar)
   return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
 }
-import type { CalendarProps } from './types';
 
 // Month names by locale
 const monthNamesByLocale: Record<string, string[]> = {
@@ -49,15 +49,32 @@ const weekdayNamesByLocale: Record<string, string[]> = {
 export const useCalendar = ({
   selectedDate: initialSelectedDate = null,
   onDateChange,
-  disabledDates = [],
+  disabledDates = [], // Make sure this has a default value
   minDate,
   maxDate,
   disabled = false,
   readOnly = false,
-  firstDayOfWeek = 1, // Monday by default
+  firstDayOfWeek = 1,
   highlightedDates = [],
   locale = 'en'
 }: CalendarProps & { firstDayOfWeek?: number; locale?: string }) => {
+  // Helper function to normalize date to local midnight (ignore time and timezone)
+  const normalizeDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  };
+
+  // Helper function to check if a date is disabled
+  const isDateDisabled = (date: Date): boolean => {
+    const normalizedDate = normalizeDate(date);
+    return disabledDates.some((disabledDate) => {
+      const normalizedDisabledDate = normalizeDate(disabledDate);
+      return normalizedDate === normalizedDisabledDate;
+    });
+  };
+
   // Groups days into weeks of 7 days
   const groupDaysIntoWeeks = (days: any[]) => {
     const weeks = [];
@@ -74,28 +91,14 @@ export const useCalendar = ({
     }
     return initialSelectedDate ?? new Date();
   });
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     Array.isArray(initialSelectedDate) ? null : initialSelectedDate
   );
+
   const [selectedRange, setSelectedRange] = useState<[Date | null, Date | null]>(
     Array.isArray(initialSelectedDate) ? initialSelectedDate : [null, null]
   );
-
-  useEffect(() => {
-    if (Array.isArray(initialSelectedDate)) {
-      setSelectedRange(initialSelectedDate);
-      if (initialSelectedDate[0]) {
-        setCurrentDate(initialSelectedDate[0]);
-      }
-      setSelectedDate(null);
-    } else {
-      setSelectedDate(initialSelectedDate);
-      if (initialSelectedDate) {
-        setCurrentDate(initialSelectedDate);
-      }
-      setSelectedRange([null, null]);
-    }
-  }, [initialSelectedDate]);
 
   // Compare only year, month, day (ignore time)
   const isSameDay = (d1: Date, d2: Date): boolean => {
@@ -104,7 +107,6 @@ export const useCalendar = ({
 
   const getStartDayOfMonth = (year: number, month: number): number => {
     const firstDay = new Date(year, month, 1).getDay();
-    // Adjust so that firstDayOfWeek is 0=Sunday, 1=Monday, etc.
     return (firstDay - firstDayOfWeek + 7) % 7;
   };
 
@@ -116,16 +118,26 @@ export const useCalendar = ({
     return monthNamesByLocale[locale] || monthNamesByLocale['en'];
   }, [locale]);
 
-  // Normalize disabledDates to ignore time
-  const normalizedDisabledDates = useMemo(() => {
-    // Normalize disabledDates to local midnight, ignoring timezone
-    return disabledDates.map((d) => {
-      // Always use local date, not UTC, to avoid timezone issues from Storybook controls
-      const localDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-      localDate.setHours(0, 0, 0, 0);
-      return localDate;
-    });
-  }, [disabledDates]);
+  // Helper function to check if date is in min/max range
+  const isDateInRange = (date: Date): boolean => {
+    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+    if (minDate) {
+      const minDateOnly = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+      if (dateOnly < minDateOnly) {
+        return false;
+      }
+    }
+
+    if (maxDate) {
+      const maxDateOnly = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+      if (dateOnly > maxDateOnly) {
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   // Memoize previous month days
   const prevMonthDays = useMemo(() => {
@@ -134,13 +146,12 @@ export const useCalendar = ({
     const startDayIndex = getStartDayOfMonth(year, month);
     const daysInPrevMonth = new Date(year, month, 0).getDate();
     const days = [];
+
     for (let i = startDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, daysInPrevMonth - i);
       date.setHours(0, 0, 0, 0);
-      const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
-      const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
-      const isDisabled =
-        disabled || readOnly || normalizedDisabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
+
+      const isDisabled = disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
       const isInRange = !!(
         selectedRange[0] &&
         selectedRange[1] &&
@@ -150,6 +161,7 @@ export const useCalendar = ({
       const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
       const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
+
       days.push({
         date,
         isCurrentMonth: false,
@@ -165,7 +177,7 @@ export const useCalendar = ({
       });
     }
     return days;
-  }, [currentDate, normalizedDisabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
+  }, [currentDate, disabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
 
   // Memoize current month days
   const currentMonthDays = useMemo(() => {
@@ -174,14 +186,17 @@ export const useCalendar = ({
     const today = new Date();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const days = [];
+
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       date.setHours(0, 0, 0, 0);
+
       const isToday = isSameDay(date, today);
       let isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
       let isRangeStart = false;
       let isRangeEnd = false;
       let isInRange = false;
+
       if (selectedRange[0]) {
         isRangeStart = isSameDay(date, selectedRange[0]);
         if (
@@ -193,21 +208,23 @@ export const useCalendar = ({
           isSelected = false;
         }
       }
+
       if (selectedRange[1]) {
         isRangeEnd = isSameDay(date, selectedRange[1]);
         isInRange = !!(selectedRange[0] && selectedRange[1] && date >= selectedRange[0] && date <= selectedRange[1]);
       }
-      const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
-      const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
-      const isDisabled =
-        disabled || readOnly || normalizedDisabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
+
+      const isDisabled = disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
+
       if (readOnly) {
         isSelected = false;
         isRangeStart = false;
         isRangeEnd = false;
         isInRange = false;
       }
+
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
+
       days.push({
         date,
         isCurrentMonth: true,
@@ -234,13 +251,12 @@ export const useCalendar = ({
     const totalDaysDisplayed = startDayIndex + daysInMonth;
     const remainingCells = 42 - totalDaysDisplayed;
     const days = [];
+
     for (let i = 1; i <= remainingCells; i++) {
       const date = new Date(year, month + 1, i);
       date.setHours(0, 0, 0, 0);
-      const isBeforeMin = minDate ? date < new Date(minDate.setHours(0, 0, 0, 0)) : false;
-      const isAfterMax = maxDate ? date > new Date(maxDate.setHours(23, 59, 59, 999)) : false;
-      const isDisabled =
-        disabled || readOnly || normalizedDisabledDates.some((d) => isSameDay(d, date)) || isBeforeMin || isAfterMax;
+
+      const isDisabled = disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
       const isInRange = !!(
         selectedRange[0] &&
         selectedRange[1] &&
@@ -250,6 +266,7 @@ export const useCalendar = ({
       const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
       const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
+
       days.push({
         date,
         isCurrentMonth: false,
@@ -276,14 +293,13 @@ export const useCalendar = ({
   const weeks = useMemo(() => groupDaysIntoWeeks(daysInCalendar), [daysInCalendar]);
 
   const handleDayClick = (date: Date, isDisabled: boolean) => {
-    // Defensive: always check normalizedDisabledDates
-    const normalizedDate = new Date(date);
-    normalizedDate.setHours(0, 0, 0, 0);
-    const isActuallyDisabled =
-      isDisabled || disabled || readOnly || normalizedDisabledDates.some((d) => isSameDay(d, normalizedDate));
+    // Check if date is actually disabled
+    const isActuallyDisabled = isDisabled || disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
+
     if (isActuallyDisabled) {
       return;
     }
+
     // If selectedDate is a range, handle range selection
     if (Array.isArray(initialSelectedDate)) {
       // First click: set start, visually mark as selected
@@ -348,6 +364,5 @@ export const useCalendar = ({
     goToNextMonth,
     onDateChange,
     disabledDates
-    // highlightedDates is not returned, only used for day decoration
   };
 };
