@@ -148,12 +148,12 @@ export const dayCva = cva(
       }
     },
     compoundVariants: [
-      // Disabled days of current month should look like out-of-month days in light theme
+      // Disabled days of current month should always look like out-of-month days (highest priority)
       {
         isCurrentMonth: true,
         isDisabled: true,
-        readOnly: false,
-        class: 'text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 dark:bg-transparent'
+        class:
+          'text-gray-400 !text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 !dark:text-gray-500 dark:bg-transparent'
       },
       ...filledRangeVariants,
       ...filledDisabledRangeVariants,
