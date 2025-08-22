@@ -29,7 +29,7 @@ import type { CalendarRadius } from './types';
     ## ACCESSIBILITY
     - Uses ARIA roles and keyboard navigation
     - Ensures color contrast for all states
-    - Month/year picker is fully contained and accessible
+    - Month/year picker is fully contained and accessible now
 */
 
 const meta: Meta<typeof Calendar> = {
