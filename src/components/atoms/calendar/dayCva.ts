@@ -117,17 +117,17 @@ export const dayCva = cva(
         false: 'text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 dark:bg-transparent'
       },
       isSelected: {
-        true: '', // handled below
+        true: '',
         false: ''
       },
       variant: {
-        outlined: '', // handled below
+        outlined: '',
         soft: '',
         ghost: '',
         filled: ''
       },
       isToday: {
-        true: '', // handled below
+        true: '',
         false: ''
       },
       isDisabled: {
