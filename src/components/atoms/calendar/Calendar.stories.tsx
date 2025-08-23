@@ -6,30 +6,31 @@ import { Calendar } from './index';
 import type { CalendarRadius } from './types';
 
 /**
-    ## DESCRIPTION
-    The Calendar component is a highly customizable and accessible date picker for React, supporting internationalized dates, advanced visual variants, and modern UX features.
+  ## DESCRIPTION
+  The Calendar component is a highly customizable and accessible date picker for React, supporting internationalized dates, advanced visual variants, multi-month views, and modern UX features.
 
-    ## FEATURES
-    - **Date Selection**: Visual feedback for single and range selection, including drag & drop for ranges.
-    - **Month/Year Picker**: Two-column, HeroUI-style dropdown for fast navigation, with scrollbars hidden for a cleaner UI.
-    - **Dark Mode & Variants**: Multiple visual styles (`filled`, `outlined`, `soft`, `ghost`) and full dark mode support.
-    - **Customizable Size & Radius**: Choose from `sm`, `md`, `lg` sizes and border radius options.
-    - **Min/Max & Disabled Dates**: Restrict selectable dates and disable specific days.
-    - **Read-Only & Disabled Modes**: Prevent interaction when needed.
-    - **Keyboard & Screen Reader Accessibility**: Full ARIA support and keyboard navigation.
-    - **CVA Integration**: All variants, sizes, radius, disabled, and readOnly states managed with class-variance-authority (CVA).
-    - **Internationalized Date Support**: Uses `@internationalized/date` (`CalendarDate`) for locale-aware date logic.
-    - **Animations**: Smooth transitions for showing/hiding the calendar.
-    - **Custom Highlighted Dates**: Highlight any date with custom colors or styles using the `highlightedDates` prop (e.g., holidays, events).
-    - **Performance Optimizations**: Improved memoization and initialization order for faster rendering and reduced re-renders.
-    - **No Runtime CSS Injection**: All styles are managed via Tailwind/CVA or inline styles—no runtime CSS injection.
-    - **Maintainable Styling**: Compound variants for day styling are split into helper arrays for easier customization and maintainability.
-    - **Standardized Props**: Calendar component props are now standardized for clarity and maintainability.
+  ## FEATURES
+  - **Date Selection**: Visual feedback for single and range selection, including drag & drop for ranges.
+  - **Multi-Month View**: Display 1, 2, or 3 months side-by-side with a unified header and perfectly centered navigation controls.
+  - **Month/Year Picker**: Two-column, HeroUI-style dropdown for fast navigation, with scrollbars hidden for a cleaner UI.
+  - **Dark Mode & Variants**: Multiple visual styles (`filled`, `outlined`, `soft`, `ghost`) and full dark mode support.
+  - **Customizable Size & Radius**: Choose from `sm`, `md`, `lg` sizes and border radius options.
+  - **Min/Max & Disabled Dates**: Restrict selectable dates and disable specific days.
+  - **Read-Only & Disabled Modes**: Prevent interaction when needed.
+  - **Keyboard & Screen Reader Accessibility**: Full ARIA support and keyboard navigation.
+  - **CVA Integration**: All variants, sizes, radius, disabled, and readOnly states managed with class-variance-authority (CVA).
+  - **Internationalized Date Support**: Uses `@internationalized/date` (`CalendarDate`) for locale-aware date logic.
+  - **Animations**: Smooth transitions for showing/hiding the calendar.
+  - **Custom Highlighted Dates**: Highlight any date with custom colors or styles using the `highlightedDates` prop (e.g., holidays, events).
+  - **Performance Optimizations**: Improved memoization and initialization order for faster rendering and reduced re-renders.
+  - **No Runtime CSS Injection**: All styles are managed via Tailwind/CVA or inline styles—no runtime CSS injection.
+  - **Maintainable Styling**: Compound variants for day styling are split into helper arrays for easier customization and maintainability.
+  - **Standardized Props**: Calendar component props are now standardized for clarity and maintainability.
 
-    ## ACCESSIBILITY
-    - Uses ARIA roles and keyboard navigation
-    - Ensures color contrast for all states
-    - Month/year picker is fully contained and accessible now
+  ## ACCESSIBILITY
+  - Uses ARIA roles and keyboard navigation
+  - Ensures color contrast for all states
+  - Month/year picker and multi-month view are fully contained and accessible
 */
 
 const meta: Meta<typeof Calendar> = {
@@ -452,6 +453,90 @@ export const WithCalendarDate: Story = {
       description: {
         story:
           'Demonstrates how to use @internationalized/date to get the current date and pass it to the Calendar component.'
+      }
+    }
+  }
+};
+
+export const VisibleMonths: Story = {
+  render: () => {
+    const [visibleMonths, setVisibleMonths] = useState<number>(2);
+    const [isDark, setIsDark] = useState(() => {
+      if (typeof document !== 'undefined') {
+        return document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
+      }
+      return false;
+    });
+    useEffect(() => {
+      const handler = () => {
+        setIsDark(document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark');
+      };
+      window.addEventListener('themechange', handler);
+      const observer = new MutationObserver(handler);
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+      return () => {
+        window.removeEventListener('themechange', handler);
+        observer.disconnect();
+      };
+    }, []);
+    const bgColor = isDark ? '#18191e' : '#d1d5db';
+    const textColor = isDark ? '#fff' : '#222';
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          alignItems: 'flex-start',
+          padding: '2rem',
+          borderRadius: '1rem',
+          background: bgColor,
+          color: textColor,
+          boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
+        }}
+      >
+        <label htmlFor='visible-months-select' style={{ fontWeight: 'bold' }}>
+          Select number of visible months:
+        </label>
+        <select
+          id='visible-months-select'
+          value={visibleMonths}
+          onChange={(e) => setVisibleMonths(Number(e.target.value))}
+          style={{
+            padding: '0.5rem',
+            borderRadius: '0.5rem',
+            fontSize: '1rem',
+            background: isDark ? '#18191e' : bgColor,
+            color: isDark ? '#fff' : textColor,
+            border: '1px solid #ccc'
+          }}
+        >
+          <option value={1} style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
+            1
+          </option>
+          <option value={2} style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
+            2
+          </option>
+          <option value={3} style={{ background: isDark ? '#18191e' : '#fff', color: isDark ? '#fff' : '#222' }}>
+            3
+          </option>
+        </select>
+        <Calendar
+          visibleMonths={visibleMonths}
+          selectedDate={null}
+          onDateChange={() => {
+            // No-op for Storybook
+          }}
+          size='md'
+          show={true}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactively select the number of visible months (1, 2, or 3).'
       }
     }
   }
