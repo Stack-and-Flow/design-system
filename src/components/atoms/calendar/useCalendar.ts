@@ -152,7 +152,7 @@ export const useCalendar = ({
       const date = new Date(year, month - 1, daysInPrevMonth - i);
       date.setHours(0, 0, 0, 0);
 
-      const isDisabled = disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
+      const isDisabled = disabled || !isDateInRange(date) || isDateDisabled(date);
       const isInRange = !!(
         selectedRange[0] &&
         selectedRange[1] &&
@@ -181,35 +181,27 @@ export const useCalendar = ({
     // Current month days
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const currDays = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       date.setHours(0, 0, 0, 0);
 
-      const isToday = isSameDay(date, new Date());
-      let isSelected = !!(selectedDate && isSameDay(date, selectedDate));
-      let isRangeStart = false;
-      let isRangeEnd = false;
-      let isInRange = false;
-
-      if (Array.isArray(initialSelectedDate)) {
-        isSelected = !!(
-          (selectedRange[0] && isSameDay(date, selectedRange[0])) ||
-          (selectedRange[1] && isSameDay(date, selectedRange[1]))
-        );
-        isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
-        isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
-        isInRange = !!(selectedRange[0] && selectedRange[1] && date >= selectedRange[0] && date <= selectedRange[1]);
-      }
-
-      const isDisabled = disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
-
-      if (readOnly) {
-        isSelected = false;
-        isRangeStart = false;
-        isRangeEnd = false;
-        isInRange = false;
-      }
-
+      const isToday = isSameDay(date, today);
+      const isSelected = !!(
+        (Array.isArray(initialSelectedDate) ? false : selectedDate && isSameDay(date, selectedDate)) ||
+        (selectedRange[0] && isSameDay(date, selectedRange[0])) ||
+        (selectedRange[1] && isSameDay(date, selectedRange[1]))
+      );
+      const isDisabled = disabled || !isDateInRange(date) || isDateDisabled(date);
+      const isInRange = !!(
+        selectedRange[0] &&
+        selectedRange[1] &&
+        date >= selectedRange[0] &&
+        date <= selectedRange[1]
+      );
+      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
+      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
 
       currDays.push({
@@ -235,7 +227,7 @@ export const useCalendar = ({
       const date = new Date(year, month + 1, i);
       date.setHours(0, 0, 0, 0);
 
-      const isDisabled = disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
+      const isDisabled = disabled || !isDateInRange(date) || isDateDisabled(date);
       const isInRange = !!(
         selectedRange[0] &&
         selectedRange[1] &&
@@ -297,7 +289,7 @@ export const useCalendar = ({
 
   const handleDayClick = (date: Date, isDisabled: boolean) => {
     // Check if date is actually disabled
-    const isActuallyDisabled = isDisabled || disabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
+    const isActuallyDisabled = isDisabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
 
     if (isActuallyDisabled) {
       return;
