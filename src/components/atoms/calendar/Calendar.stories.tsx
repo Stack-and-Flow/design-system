@@ -544,7 +544,7 @@ export const VisibleMonths: Story = {
 
 export const CustomSelectedAndDisabledDates: Story = {
   args: {
-    selectedDate: new Date(2025, 7, 18),
+    selectedDate: new Date(2025, 7, 1),
     disabledDates: [new Date(2025, 7, 10), new Date(2025, 7, 12), new Date(2025, 7, 18), new Date(2025, 7, 31)],
     size: 'md',
     show: true,
