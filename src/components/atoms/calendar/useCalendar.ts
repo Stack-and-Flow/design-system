@@ -1,4 +1,3 @@
-// useCalendar.ts - Fixed version with better date normalization
 import { CalendarDate } from '@internationalized/date';
 import { useMemo, useState } from 'react';
 import type { CalendarProps } from './types';
@@ -56,8 +55,9 @@ export const useCalendar = ({
   readOnly = false,
   firstDayOfWeek = 1,
   highlightedDates = [],
-  locale = 'en'
-}: CalendarProps & { firstDayOfWeek?: number; locale?: string }) => {
+  locale = 'en',
+  visibleMonths = 1
+}: CalendarProps & { firstDayOfWeek?: number; locale?: string; visibleMonths?: number }) => {
   // Helper function to normalize date to local midnight (ignore time and timezone)
   const normalizeDate = (date: Date): string => {
     const year = date.getFullYear();
@@ -139,14 +139,15 @@ export const useCalendar = ({
     return true;
   };
 
-  // Memoize previous month days
-  const prevMonthDays = useMemo(() => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+  // Function to compute days for a specific month
+  const getMonthDays = (monthDate: Date) => {
+    const year = monthDate.getFullYear();
+    const month = monthDate.getMonth();
+
+    // Prev month days
     const startDayIndex = getStartDayOfMonth(year, month);
     const daysInPrevMonth = new Date(year, month, 0).getDate();
-    const days = [];
-
+    const prevDays = [];
     for (let i = startDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, daysInPrevMonth - i);
       date.setHours(0, 0, 0, 0);
@@ -162,7 +163,7 @@ export const useCalendar = ({
       const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
 
-      days.push({
+      prevDays.push({
         date,
         isCurrentMonth: false,
         isToday: false,
@@ -176,41 +177,27 @@ export const useCalendar = ({
         highlightStyle: highlight?.style
       });
     }
-    return days;
-  }, [currentDate, disabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
 
-  // Memoize current month days
-  const currentMonthDays = useMemo(() => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const today = new Date();
+    // Current month days
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const days = [];
-
+    const currDays = [];
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       date.setHours(0, 0, 0, 0);
 
-      const isToday = isSameDay(date, today);
-      let isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
+      const isToday = isSameDay(date, new Date());
+      let isSelected = !!(selectedDate && isSameDay(date, selectedDate));
       let isRangeStart = false;
       let isRangeEnd = false;
       let isInRange = false;
 
-      if (selectedRange[0]) {
-        isRangeStart = isSameDay(date, selectedRange[0]);
-        if (
-          !selectedRange[1] &&
-          isRangeStart &&
-          selectedDate &&
-          Math.abs((selectedDate.getTime() - selectedRange[0].getTime()) / (1000 * 60 * 60 * 24)) === 1
-        ) {
-          isSelected = false;
-        }
-      }
-
-      if (selectedRange[1]) {
-        isRangeEnd = isSameDay(date, selectedRange[1]);
+      if (Array.isArray(initialSelectedDate)) {
+        isSelected = !!(
+          (selectedRange[0] && isSameDay(date, selectedRange[0])) ||
+          (selectedRange[1] && isSameDay(date, selectedRange[1]))
+        );
+        isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
+        isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
         isInRange = !!(selectedRange[0] && selectedRange[1] && date >= selectedRange[0] && date <= selectedRange[1]);
       }
 
@@ -225,7 +212,7 @@ export const useCalendar = ({
 
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
 
-      days.push({
+      currDays.push({
         date,
         isCurrentMonth: true,
         isToday,
@@ -239,19 +226,11 @@ export const useCalendar = ({
         highlightStyle: highlight?.style
       });
     }
-    return days;
-  }, [currentDate, selectedDate, disabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
 
-  // Memoize next month days
-  const nextMonthDays = useMemo(() => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const startDayIndex = getStartDayOfMonth(year, month);
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    // Next month days
     const totalDaysDisplayed = startDayIndex + daysInMonth;
-    const remainingCells = 42 - totalDaysDisplayed;
-    const days = [];
-
+    const remainingCells = 42 - totalDaysDisplayed; // 6 weeks
+    const nextDays = [];
     for (let i = 1; i <= remainingCells; i++) {
       const date = new Date(year, month + 1, i);
       date.setHours(0, 0, 0, 0);
@@ -267,7 +246,7 @@ export const useCalendar = ({
       const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
       const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
 
-      days.push({
+      nextDays.push({
         date,
         isCurrentMonth: false,
         isToday: false,
@@ -281,16 +260,40 @@ export const useCalendar = ({
         highlightStyle: highlight?.style
       });
     }
-    return days;
-  }, [currentDate, disabledDates, minDate, maxDate, disabled, readOnly, selectedRange, highlightedDates]);
 
-  // Concatenate all days
-  const daysInCalendar = useMemo(() => {
-    return [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
-  }, [prevMonthDays, currentMonthDays, nextMonthDays]);
+    const daysInCalendar = [...prevDays, ...currDays, ...nextDays];
+    const weeks = groupDaysIntoWeeks(daysInCalendar);
 
-  // Memoize weeks
-  const weeks = useMemo(() => groupDaysIntoWeeks(daysInCalendar), [daysInCalendar]);
+    return { weeks, daysInCalendar, label: `${monthNames[month]} ${year}` };
+  };
+
+  // Compute month datas for visible months
+  const monthDatas = useMemo(() => {
+    const datas = [];
+    for (let i = 0; i < visibleMonths; i++) {
+      const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
+      const monthDayData = getMonthDays(monthDate);
+      datas.push({
+        monthDate,
+        weeks: monthDayData.weeks,
+        label: monthDayData.label
+      });
+    }
+    return datas;
+  }, [
+    currentDate,
+    visibleMonths,
+    selectedDate,
+    selectedRange,
+    disabledDates,
+    minDate,
+    maxDate,
+    disabled,
+    readOnly,
+    highlightedDates,
+    firstDayOfWeek,
+    locale
+  ]);
 
   const handleDayClick = (date: Date, isDisabled: boolean) => {
     // Check if date is actually disabled
@@ -340,22 +343,18 @@ export const useCalendar = ({
     });
   };
 
-  // weeks is now memoized above
-  const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-
   // Example usage: convert the current date to CalendarDate
   const currentCalendarDate = dateToCalendarDate(currentDate);
 
   return {
+    monthDatas,
+    weekdayNames,
+    monthNames,
     currentDate,
+    setCurrentDate,
     currentCalendarDate,
     selectedDate: Array.isArray(initialSelectedDate) ? null : selectedDate,
     selectedRange: Array.isArray(initialSelectedDate) ? selectedRange : [null, null],
-    daysInCalendar,
-    weeks,
-    monthNames,
-    weekdayNames,
-    monthYearLabel,
     isSameDay,
     getStartDayOfMonth,
     groupDaysIntoWeeks,

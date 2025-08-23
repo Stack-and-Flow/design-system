@@ -188,6 +188,25 @@ export const dayCva = cva(
         isToday: true,
         isSelected: false,
         class: 'border-2 border-red-400 text-gray-900 dark:text-gray-100'
+      },
+      // Override rounded for range start and end when selected - to fix overriding of rounded-full
+      {
+        isSelected: true,
+        isRangeStart: true,
+        isRangeEnd: false,
+        class: 'rounded-l-full !rounded-r-none'
+      },
+      {
+        isSelected: true,
+        isRangeStart: false,
+        isRangeEnd: true,
+        class: 'rounded-r-full !rounded-l-none'
+      },
+      {
+        isSelected: true,
+        isRangeStart: true,
+        isRangeEnd: true,
+        class: 'rounded-full'
       }
     ],
     defaultVariants: {

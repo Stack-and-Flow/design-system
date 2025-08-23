@@ -22,21 +22,32 @@ export const Calendar: React.FC<CalendarProps> = ({
   selectedDate,
   disabledDates,
   highlightedDates,
-  locale
+  locale,
+  visibleMonths = 1
 }) => {
-  const { weeks, weekdayNames, monthNames, currentDate, handleDayClick, goToPrevMonth, goToNextMonth, isSameDay } =
-    useCalendar({
-      selectedDate,
-      onDateChange,
-      minDate,
-      maxDate,
-      disabled,
-      readOnly,
-      firstDayOfWeek,
-      disabledDates,
-      highlightedDates,
-      locale
-    });
+  const {
+    monthDatas,
+    weekdayNames,
+    monthNames,
+    currentDate,
+    setCurrentDate,
+    handleDayClick,
+    goToPrevMonth,
+    goToNextMonth,
+    isSameDay
+  } = useCalendar({
+    selectedDate,
+    onDateChange,
+    minDate,
+    maxDate,
+    disabled,
+    readOnly,
+    firstDayOfWeek,
+    disabledDates,
+    highlightedDates,
+    locale,
+    visibleMonths
+  });
 
   // Drag state for range selection
   const [isDragging, setIsDragging] = React.useState(false);
@@ -65,9 +76,6 @@ export const Calendar: React.FC<CalendarProps> = ({
   // State for picker mode (months/years)
   const [pickerMode, setPickerMode] = React.useState<'calendar' | 'month' | 'year'>('calendar');
 
-  // Accessible label for the grid
-  const monthYearLabel = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-
   // Header: month and year selector (combined)
   const years = Array.from({ length: 21 }, (_, i) => 2015 + i); // 2015-2035 for a wide range
 
@@ -78,9 +86,26 @@ export const Calendar: React.FC<CalendarProps> = ({
     return null;
   }
 
+  // Compute header label for single or multi-month
+  let headerLabel = '';
+  if (monthDatas.length === 1) {
+    headerLabel = monthDatas[0].label;
+  } else {
+    const first = monthDatas[0];
+    const last = monthDatas[monthDatas.length - 1];
+    const firstMonth = monthNames[first.monthDate.getMonth()];
+    const lastMonth = monthNames[last.monthDate.getMonth()];
+    const firstYear = first.monthDate.getFullYear();
+    const lastYear = last.monthDate.getFullYear();
+    headerLabel =
+      firstYear === lastYear
+        ? `${firstMonth} - ${lastMonth} ${firstYear}`
+        : `${firstMonth} ${firstYear} - ${lastMonth} ${lastYear}`;
+  }
+
   return (
     <div
-      className={calendarCva({ variant, size, radius: radiusCva, theme, show, disabled, readOnly })}
+      className={`${calendarCva({ variant, size, radius: radiusCva, theme, show, disabled, readOnly })} ${visibleMonths > 1 ? 'w-auto' : ''}`}
       role='application'
       style={{
         animation: 'fadeIn 0.3s',
@@ -113,7 +138,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           onClick={readOnly ? undefined : () => setPickerMode('month')}
           disabled={readOnly}
         >
-          {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+          {headerLabel}
         </button>
         <button
           onClick={readOnly ? undefined : goToNextMonth}
@@ -144,7 +169,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             const newDate = new Date(currentDate);
             newDate.setFullYear(year);
             newDate.setMonth(month);
-            onDateChange?.(newDate);
+            setCurrentDate(newDate); // Fixed: change view date, not selected date
             setPickerMode('calendar');
           }}
           onCancel={() => setPickerMode('calendar')}
@@ -156,126 +181,133 @@ export const Calendar: React.FC<CalendarProps> = ({
 
       {/* Regular calendar view */}
       {pickerMode === 'calendar' && (
-        <>
-          <h2 id={`month-year-label-${id ?? 'default'}`} className='sr-only'>
-            {monthYearLabel}
-          </h2>
-          <div role='grid' aria-labelledby={`month-year-label-${id ?? 'default'}`}>
-            {/* Weekday names */}
-            <div
-              className='grid grid-cols-7 text-center text-xs font-medium uppercase mb-2 text-gray-500 dark:text-gray-400'
-              role='rowgroup'
-            >
-              <div role='row' className='contents'>
-                {weekdayNames.map((day) => (
-                  <div key={day} className='py-1' role='columnheader'>
-                    <span>{day}</span>
+        <div className={visibleMonths > 1 ? 'flex flex-row gap-4' : ''}>
+          {monthDatas.map((monthData, index) => (
+            <div key={monthData.label}>
+              <h2 id={`month-year-label-${id ?? 'default'}-${index}`} className='sr-only'>
+                {monthData.label}
+              </h2>
+              <div role='grid' aria-labelledby={`month-year-label-${id ?? 'default'}-${index}`}>
+                {/* Weekday names */}
+                <div
+                  className='grid grid-cols-7 text-center text-xs font-medium uppercase mb-2 text-gray-500 dark:text-gray-400'
+                  role='rowgroup'
+                >
+                  <div role='row' className='contents'>
+                    {weekdayNames.map((day) => (
+                      <div key={day} className='py-1' role='columnheader'>
+                        <span>{day}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                {/* Grid of days */}
+                <div className='grid grid-cols-7 gap-1' role='rowgroup'>
+                  {monthData.weeks.map((week, weekIndex) => (
+                    <div key={weekIndex} role='row' className='contents'>
+                      {week.map((day, dayIndex) => {
+                        // Determine if day is in drag range
+                        let isDragInRange = false;
+                        let isDragRangeStart = false;
+                        let isDragRangeEnd = false;
+                        if (dragStart && dragEnd) {
+                          const start = dragStart < dragEnd ? dragStart : dragEnd;
+                          const end = dragStart > dragEnd ? dragStart : dragEnd;
+                          isDragInRange = day.date >= start && day.date <= end;
+                          isDragRangeStart = isSameDay(day.date, start);
+                          isDragRangeEnd = isSameDay(day.date, end);
+                        }
+                        // Only apply highlight if not selected
+                        const isSelectedDay = day.isSelected;
+                        let highlightClass;
+                        let highlightStyle;
+                        if (day.isHighlighted) {
+                          if (isSelectedDay) {
+                            // Only apply border from highlightStyle if present
+                            if (day.highlightStyle?.border) {
+                              highlightStyle = { border: day.highlightStyle.border };
+                            }
+                            // Optionally merge border class if present
+                            if (day.highlightClassName?.includes('border')) {
+                              highlightClass = day.highlightClassName
+                                .split(' ')
+                                .filter((c: string) => c.includes('border'))
+                                .join(' ');
+                            }
+                          } else {
+                            highlightClass = day.highlightClassName;
+                            highlightStyle = day.highlightStyle;
+                          }
+                        }
+                        return (
+                          <div
+                            key={dayIndex}
+                            className={[
+                              dayCva({
+                                size,
+                                isCurrentMonth: day.isCurrentMonth,
+                                isSelected: day.isSelected,
+                                variant,
+                                isToday: day.isToday,
+                                isDisabled: day.isDisabled,
+                                isInRange: day.isInRange || isDragInRange,
+                                isRangeStart: day.isRangeStart || isDragRangeStart,
+                                isRangeEnd: day.isRangeEnd || isDragRangeEnd
+                              }),
+                              highlightClass,
+                              readOnly ? 'pointer-events-none select-none' : '' // visual interaction out
+                            ]
+                              .filter(Boolean)
+                              .join(' ')}
+                            onMouseDown={
+                              day.isDisabled
+                                ? undefined
+                                : () => {
+                                    setIsDragging(true);
+                                    setDragStart(day.date);
+                                    setDragEnd(day.date);
+                                  }
+                            }
+                            onMouseEnter={isDragging && !day.isDisabled ? () => setDragEnd(day.date) : undefined}
+                            onMouseUp={
+                              isDragging && !day.isDisabled
+                                ? () => {
+                                    setIsDragging(false);
+                                    if (dragStart && dragEnd && !isSameDay(dragStart, dragEnd)) {
+                                      // Call handleDayClick for range selection
+                                      handleDayClick(dragEnd, false);
+                                    }
+                                    setDragStart(null);
+                                    setDragEnd(null);
+                                  }
+                                : undefined
+                            }
+                            onClick={
+                              day.isDisabled
+                                ? undefined
+                                : () => {
+                                    if (!isDragging) {
+                                      handleDayClick(day.date, day.isDisabled);
+                                    }
+                                  }
+                            }
+                            role='gridcell'
+                            aria-selected={day.isSelected ? 'true' : 'false'}
+                            aria-disabled={day.isDisabled || readOnly ? 'true' : 'false'}
+                            tabIndex={day.isDisabled || readOnly ? -1 : 0}
+                            style={{ userSelect: 'none', ...highlightStyle }}
+                          >
+                            {day.date.getDate()}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            {/* Grid of days */}
-            <div className='grid grid-cols-7 gap-1' role='rowgroup'>
-              {weeks.map((week, weekIndex) => (
-                <div key={weekIndex} role='row' className='contents'>
-                  {week.map((day, dayIndex) => {
-                    // Determine if day is in drag range
-                    let isDragInRange = false;
-                    if (dragStart && dragEnd) {
-                      const start = dragStart < dragEnd ? dragStart : dragEnd;
-                      const end = dragStart > dragEnd ? dragStart : dragEnd;
-                      isDragInRange = day.date >= start && day.date <= end;
-                    }
-                    // Only apply highlight if not selected
-                    const isSelectedDay = day.isSelected && !day.isRangeStart;
-                    let highlightClass;
-                    let highlightStyle;
-                    if (day.isHighlighted) {
-                      if (isSelectedDay) {
-                        // Only apply border from highlightStyle if present
-                        if (day.highlightStyle?.border) {
-                          highlightStyle = { border: day.highlightStyle.border };
-                        }
-                        // Optionally merge border class if present
-                        if (day.highlightClassName?.includes('border')) {
-                          highlightClass = day.highlightClassName
-                            .split(' ')
-                            .filter((c: string) => c.includes('border'))
-                            .join(' ');
-                        }
-                      } else {
-                        highlightClass = day.highlightClassName;
-                        highlightStyle = day.highlightStyle;
-                      }
-                    }
-                    return (
-                      <div
-                        key={dayIndex}
-                        className={[
-                          dayCva({
-                            size,
-                            isCurrentMonth: day.isCurrentMonth,
-                            isSelected: day.isSelected && !day.isRangeStart,
-                            variant,
-                            isToday: day.isToday,
-                            isDisabled: day.isDisabled,
-                            isInRange: day.isInRange || day.isRangeStart || isDragInRange,
-                            isRangeStart:
-                              day.isRangeStart || (isDragInRange && dragStart && isSameDay(day.date, dragStart)),
-                            isRangeEnd: day.isRangeEnd || (isDragInRange && dragEnd && isSameDay(day.date, dragEnd))
-                          }),
-                          highlightClass,
-                          readOnly ? 'pointer-events-none select-none' : '' // visual interaction out
-                        ]
-                          .filter(Boolean)
-                          .join(' ')}
-                        onMouseDown={
-                          day.isDisabled
-                            ? undefined
-                            : () => {
-                                setIsDragging(true);
-                                setDragStart(day.date);
-                                setDragEnd(day.date);
-                              }
-                        }
-                        onMouseEnter={isDragging && !day.isDisabled ? () => setDragEnd(day.date) : undefined}
-                        onMouseUp={
-                          isDragging && !day.isDisabled
-                            ? () => {
-                                setIsDragging(false);
-                                if (dragStart && dragEnd && !isSameDay(dragStart, dragEnd)) {
-                                  // Call handleDayClick for range selection
-                                  handleDayClick(dragEnd, false);
-                                }
-                                setDragStart(null);
-                                setDragEnd(null);
-                              }
-                            : undefined
-                        }
-                        onClick={
-                          day.isDisabled
-                            ? undefined
-                            : () => {
-                                if (!isDragging) {
-                                  handleDayClick(day.date, day.isDisabled);
-                                }
-                              }
-                        }
-                        role='gridcell'
-                        aria-selected={day.isSelected ? 'true' : 'false'}
-                        aria-disabled={day.isDisabled || readOnly ? 'true' : 'false'}
-                        tabIndex={day.isDisabled || readOnly ? -1 : 0}
-                        style={{ userSelect: 'none', ...highlightStyle }}
-                      >
-                        {day.date.getDate()}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
+          ))}
+        </div>
       )}
     </div>
   );

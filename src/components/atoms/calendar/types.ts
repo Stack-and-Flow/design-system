@@ -23,4 +23,6 @@ export interface CalendarProps {
   highlightedDates?: { date: Date; className?: string; style?: React.CSSProperties }[];
   /** Locale code for weekday and month names (e.g., 'en', 'es'). */
   locale?: string;
+  /** Number of visible months (1 for single, 2+ for multi-month view). */
+  visibleMonths?: number;
 }
