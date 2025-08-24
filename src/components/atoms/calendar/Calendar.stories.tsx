@@ -26,11 +26,14 @@ import type { CalendarRadius } from './types';
   - **No Runtime CSS Injection**: All styles are managed via Tailwind/CVA or inline styles—no runtime CSS injection.
   - **Maintainable Styling**: Compound variants for day styling are split into helper arrays for easier customization and maintainability.
   - **Standardized Props**: Calendar component props are now standardized for clarity and maintainability.
+  - **Custom Color Prop**: The `color` prop allows you to select accessible color schemes for selected days and ranges. It supports a wide palette and works for all visual variants (`filled`, `outlined`, `soft`, `ghost`).
+  - **Dynamic Hover Fix**: Improved hover effect for non-selected days, using a subtle background for better visual integration and accessibility. The hover color is now correctly prioritized.
 
   ## ACCESSIBILITY
   - Uses ARIA roles and keyboard navigation
   - Ensures color contrast for all states
   - Month/year picker and multi-month view are fully contained and accessible
+  - Custom color schemes for selected/range days are designed to meet WCAG 2 AA contrast requirements.
 */
 
 const meta: Meta<typeof Calendar> = {
