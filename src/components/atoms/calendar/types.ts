@@ -4,8 +4,32 @@ export type CalendarSize = 'sm' | 'md' | 'lg';
 export type CalendarRadius = 'none' | 'sm' | 'md' | 'lg';
 
 export interface CalendarProps {
-  /** Unique id for ARIA labeling (accessibility) */
-  id?: string;
+  color?:
+    | 'default'
+    | 'orange'
+    | 'orange-light'
+    | 'orange-dark'
+    | 'yellow'
+    | 'yellow-light'
+    | 'yellow-dark'
+    | 'green'
+    | 'green-light'
+    | 'green-dark'
+    | 'teal'
+    | 'teal-light'
+    | 'teal-dark'
+    | 'blue'
+    | 'blue-light'
+    | 'blue-dark'
+    | 'indigo'
+    | 'indigo-light'
+    | 'indigo-dark'
+    | 'purple'
+    | 'purple-light'
+    | 'purple-dark'
+    | 'pink'
+    | 'pink-light'
+    | 'pink-dark';
   selectedDate?: Date | null | [Date | null, Date | null];
   onDateChange?: (date: Date | null | [Date | null, Date | null]) => void;
   disabledDates?: Date[];

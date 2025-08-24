@@ -6,22 +6,19 @@ const filledRangeVariants = [
     isRangeStart: false,
     isRangeEnd: false,
     variant: 'filled' as const,
-    class:
-      'bg-secondary text-white rounded-none hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
+    class: 'bg-red-600 text-white rounded-none dark:bg-red-600 dark:text-white'
   },
   {
     isInRange: true,
     isRangeStart: true,
     variant: 'filled' as const,
-    class:
-      'bg-secondary text-white rounded-l-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
+    class: 'bg-red-600 text-white rounded-l-full dark:bg-red-600 dark:text-white'
   },
   {
     isInRange: true,
     isRangeEnd: true,
     variant: 'filled' as const,
-    class:
-      'bg-secondary text-white rounded-r-full hover:bg-red-400 hover:text-white dark:bg-accent dark:text-gray-100 dark:hover:bg-red-400 dark:hover:text-white'
+    class: 'bg-red-600 text-white rounded-r-full dark:bg-red-600 dark:text-white'
   }
 ];
 
@@ -31,7 +28,7 @@ const filledDisabledRangeVariants = [
     isDisabled: true,
     variant: 'filled' as const,
     class:
-      'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-red-600 text-gray-900 dark:bg-red-600 dark:text-gray-100 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
   },
   {
     isInRange: true,
@@ -39,7 +36,7 @@ const filledDisabledRangeVariants = [
     isDisabled: true,
     variant: 'filled' as const,
     class:
-      'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-red-600 text-gray-900 dark:bg-red-600 dark:text-gray-100 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
   },
   {
     isInRange: true,
@@ -47,7 +44,7 @@ const filledDisabledRangeVariants = [
     isDisabled: true,
     variant: 'filled' as const,
     class:
-      'bg-secondary text-gray-900 dark:bg-accent dark:text-gray-100 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-red-600 text-gray-900 dark:bg-red-600 dark:text-gray-100 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
   }
 ];
 
@@ -113,7 +110,7 @@ export const dayCva = cva(
         lg: 'w-12 h-12 text-base'
       },
       isCurrentMonth: {
-        true: 'text-gray-900 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-100',
+        true: 'text-gray-900 dark:text-gray-100',
         false: 'text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 dark:bg-transparent'
       },
       isSelected: {
@@ -145,6 +142,10 @@ export const dayCva = cva(
       isRangeEnd: {
         true: '',
         false: ''
+      },
+      theme: {
+        light: '',
+        dark: ''
       }
     },
     compoundVariants: [
@@ -163,25 +164,22 @@ export const dayCva = cva(
       {
         isSelected: true,
         variant: 'outlined' as const,
-        class: 'border-2 border-red-400 bg-transparent rounded-full hover:border-red-300'
+        class: 'border-2 border-red-400 bg-transparent rounded-full'
       },
       {
         isSelected: true,
         variant: 'soft' as const,
-        class:
-          'bg-red-100 text-red-700 rounded-full hover:bg-red-400 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-400 dark:hover:text-white'
+        class: 'bg-red-100 text-red-700 rounded-full dark:bg-red-700 dark:text-white'
       },
       {
         isSelected: true,
         variant: 'ghost' as const,
-        class:
-          'text-red-300 font-bold underline rounded-full hover:bg-red-400 hover:text-white dark:hover:bg-red-400 dark:hover:text-white'
+        class: 'text-red-300 font-bold underline rounded-full'
       },
       {
         isSelected: true,
         variant: 'filled' as const,
-        class:
-          'bg-red-600 text-white rounded-full hover:bg-red-400 hover:text-white dark:bg-red-600 dark:text-white dark:hover:bg-red-400 dark:hover:text-white'
+        class: 'bg-red-600 text-white rounded-full dark:bg-red-600 dark:text-white'
       },
       // Today variant
       {
@@ -207,6 +205,33 @@ export const dayCva = cva(
         isRangeStart: true,
         isRangeEnd: true,
         class: 'rounded-full'
+      },
+      // Prevent hover on selected or range days
+      {
+        isSelected: true,
+        class: '!hover:bg-transparent !hover:text-inherit'
+      },
+      {
+        isInRange: true,
+        class: '!hover:bg-transparent !hover:text-inherit'
+      },
+      // Hover effect for non-selected current-month days in light theme
+      {
+        isCurrentMonth: true,
+        isSelected: false,
+        isInRange: false,
+        isDisabled: false,
+        theme: 'light',
+        class: 'hover:bg-gray-300 hover:text-gray-900'
+      },
+      // Hover effect for non-selected current-month days in dark theme
+      {
+        isCurrentMonth: true,
+        isSelected: false,
+        isInRange: false,
+        isDisabled: false,
+        theme: 'dark',
+        class: 'hover:!bg-gray-100 hover:!text-gray-900'
       }
     ],
     defaultVariants: {
@@ -215,7 +240,8 @@ export const dayCva = cva(
       isSelected: false,
       variant: 'filled',
       isToday: false,
-      isDisabled: false
+      isDisabled: false,
+      theme: 'light'
     }
   }
 );

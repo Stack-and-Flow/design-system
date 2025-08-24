@@ -7,7 +7,54 @@ function dateToCalendarDate(date: Date): CalendarDate {
   return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
 }
 
+// Utility to lighten a hex color for hover effects
+// Converts hex to RGB, increases brightness, and returns hex
+export function lightenColor(hex: string, percent: number): string {
+  // Remove # if present
+  hex = hex.replace(/^#/, '');
+  // Parse hex to RGB
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  // Increase brightness by percent (0-100)
+  const factor = 1 + percent / 100;
+  const newR = Math.min(255, Math.round(r * factor));
+  const newG = Math.min(255, Math.round(g * factor));
+  const newB = Math.min(255, Math.round(b * factor));
+  // Convert back to hex
+  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+}
+
 // Month names by locale
+// Color palette mapping for Calendar color prop
+export const calendarColorPalette: Record<string, string> = {
+  default: '#e11d48', // current color (red)
+  orange: '#f97316',
+  'orange-light': '#fda65c',
+  'orange-dark': '#d94e08',
+  yellow: '#eab308',
+  'yellow-light': '#fde047',
+  'yellow-dark': '#b58903',
+  green: '#22c55e',
+  'green-light': '#5ee78b',
+  'green-dark': '#138a3d',
+  teal: '#14b8a6',
+  'teal-light': '#40dfcb',
+  'teal-dark': '#0a7f74',
+  blue: '#3b82f6',
+  'blue-light': '#7bb0fa',
+  'blue-dark': '#1e4ed8',
+  indigo: '#6366f1',
+  'indigo-light': '#9ca3fa',
+  'indigo-dark': '#4338ca',
+  purple: '#8b5cf6',
+  'purple-light': '#c4b5fd',
+  'purple-dark': '#6d28d9',
+  pink: '#ec4899',
+  'pink-light': '#fda4cf',
+  'pink-dark': '#be185d'
+};
+
 const monthNamesByLocale: Record<string, string[]> = {
   en: [
     'January',
@@ -188,11 +235,7 @@ export const useCalendar = ({
       date.setHours(0, 0, 0, 0);
 
       const isToday = isSameDay(date, today);
-      const isSelected = !!(
-        (Array.isArray(initialSelectedDate) ? false : selectedDate && isSameDay(date, selectedDate)) ||
-        (selectedRange[0] && isSameDay(date, selectedRange[0])) ||
-        (selectedRange[1] && isSameDay(date, selectedRange[1]))
-      );
+      const isSelected = !!(selectedDate && isSameDay(date, selectedDate));
       const isDisabled = disabled || !isDateInRange(date) || isDateDisabled(date);
       const isInRange = !!(
         selectedRange[0] &&
@@ -262,14 +305,37 @@ export const useCalendar = ({
   // Compute month datas for visible months
   const monthDatas = useMemo(() => {
     const datas = [];
-    for (let i = 0; i < visibleMonths; i++) {
-      const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
+    if (visibleMonths === 1) {
+      // Current month only
+      const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
       const monthDayData = getMonthDays(monthDate);
       datas.push({
         monthDate,
         weeks: monthDayData.weeks,
         label: monthDayData.label
       });
+    } else if (visibleMonths === 2) {
+      // Current and next month
+      for (let i = 0; i < 2; i++) {
+        const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
+        const monthDayData = getMonthDays(monthDate);
+        datas.push({
+          monthDate,
+          weeks: monthDayData.weeks,
+          label: monthDayData.label
+        });
+      }
+    } else if (visibleMonths === 3) {
+      // Previous, current, and next month
+      for (let i = -1; i <= 1; i++) {
+        const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
+        const monthDayData = getMonthDays(monthDate);
+        datas.push({
+          monthDate,
+          weeks: monthDayData.weeks,
+          label: monthDayData.label
+        });
+      }
     }
     return datas;
   }, [
