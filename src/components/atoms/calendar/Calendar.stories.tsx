@@ -42,6 +42,41 @@ const meta: Meta<typeof Calendar> = {
   },
   tags: ['autodocs'],
   argTypes: {
+    color: {
+      control: { type: 'select' },
+      options: [
+        'default',
+        'orange',
+        'orange-light',
+        'orange-dark',
+        'yellow',
+        'yellow-light',
+        'yellow-dark',
+        'green',
+        'green-light',
+        'green-dark',
+        'teal',
+        'teal-light',
+        'teal-dark',
+        'blue',
+        'blue-light',
+        'blue-dark',
+        'indigo',
+        'indigo-light',
+        'indigo-dark',
+        'purple',
+        'purple-light',
+        'purple-dark',
+        'pink',
+        'pink-light',
+        'pink-dark'
+      ],
+      description: 'Color scheme for selected days and ranges.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'default' }
+      }
+    },
     selectedDate: {
       control: 'date',
       description: 'The currently selected date in the calendar.'
@@ -143,7 +178,8 @@ export const Default: Story = {
     show: true,
     disabled: false,
     readOnly: false,
-    firstDayOfWeek: 1
+    firstDayOfWeek: 1,
+    color: 'default'
   },
   parameters: {
     docs: {
@@ -225,7 +261,8 @@ export const RangeSelection: Story = {
     show: true,
     disabled: false,
     firstDayOfWeek: 1,
-    variant: 'filled'
+    variant: 'filled',
+    color: 'default'
   },
   parameters: {
     docs: {
@@ -246,7 +283,8 @@ export const Disabled: Story = {
     size: 'md',
     show: true,
     disabled: true,
-    firstDayOfWeek: 1
+    firstDayOfWeek: 1,
+    color: 'default'
   },
   parameters: {
     docs: {
@@ -267,7 +305,8 @@ export const ReadOnly: Story = {
     show: true,
     disabled: false,
     readOnly: true,
-    firstDayOfWeek: 1
+    firstDayOfWeek: 1,
+    color: 'default'
   },
   parameters: {
     docs: {
@@ -289,7 +328,8 @@ export const WithMinMax: Story = {
     size: 'md',
     show: true,
     disabled: false,
-    firstDayOfWeek: 1
+    firstDayOfWeek: 1,
+    color: 'default'
   },
   parameters: {
     docs: {
@@ -310,7 +350,8 @@ export const Outlined: Story = {
     firstDayOfWeek: 1,
     onDateChange: () => {
       /* noop */
-    }
+    },
+    color: 'default'
   },
   parameters: {
     docs: {
@@ -330,7 +371,8 @@ export const WithSelectedDate: Story = {
     firstDayOfWeek: 1,
     onDateChange: () => {
       /* noop */
-    }
+    },
+    color: 'default'
   },
   parameters: {
     docs: {
@@ -351,7 +393,8 @@ export const WithDisabledDates: Story = {
     firstDayOfWeek: 1,
     onDateChange: () => {
       /* noop */
-    }
+    },
+    color: 'default'
   },
   parameters: {
     docs: {
