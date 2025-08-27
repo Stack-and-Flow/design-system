@@ -42,7 +42,9 @@ const Switch: FC<SwitchProps> = ({ ...props }) => {
 
         <span className={switchTrack}>
           {startContent && <span className={switchStartContent}>{startContent}</span>}
-          <span className={switchThumb}>{thumbIcon && <span className={switchThumbIcon}>{thumbIcon}</span>}</span>
+          <span className={switchThumb} data-thumb={true}>
+            {thumbIcon && <span className={switchThumbIcon}>{thumbIcon}</span>}
+          </span>
           {endContent && <span className={switchEndContent}>{endContent}</span>}
         </span>
       </label>
