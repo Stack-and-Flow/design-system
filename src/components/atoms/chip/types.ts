@@ -73,8 +73,14 @@ export const chipVariants = cva(
       {
         color: 'primary',
         variant: 'shadow',
-        class:
-          'bg-[var(--color-primary)] text-[var(--color-text-dark)] shadow-[var(--shadow-custom-sm)] hover:shadow-[var(--shadow-custom-md)]'
+        class: [
+          'bg-[var(--color-primary)] text-[var(--color-text-dark)] border border-transparent',
+          'shadow-none',
+          'drop-shadow-[0_16px_16px_color-mix(in_srgb,var(--color-primary)_70%,transparent)]',
+          'dark:drop-shadow-[0_16px_16px_color-mix(in_srgb,var(--color-primary)_70%,transparent)]',
+          'active:translate-y-[0.5px]',
+          'hover:bg-[var(--color-red-600)] dark:hover:bg-[var(--color-red-700)]'
+        ].join(' ')
       },
       {
         color: 'primary',
