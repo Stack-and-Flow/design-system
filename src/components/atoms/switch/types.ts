@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 
 export const switchBase = cva(
   [
-    'relative inline-flex items-center cursor-pointer gap-2',
+    'relative inline-flex items-center cursor-pointer',
     'transition-colors duration-200 ease-in-out',
     'focus:outline-none focus:ring-2 focus:ring-offset-2',
     'text-gray-dark-900 dark:text-gray-light-300',
@@ -12,10 +12,10 @@ export const switchBase = cva(
   {
     variants: {
       labelPlacement: {
-        top: 'flex-col-reverse gap-4',
-        right: 'flex-row gap-4',
-        bottom: 'flex-col gap-4',
-        left: 'flex-row-reverse gap-4'
+        top: 'flex-col-reverse gap-2',
+        right: 'flex-row gap-2',
+        bottom: 'flex-col gap-2',
+        left: 'flex-row-reverse gap-2'
       }
     },
     defaultVariants: {
@@ -33,8 +33,8 @@ export const switchWrapper = cva(
     variants: {
       size: {
         sm: 'w-9 h-5',
-        md: 'w-12 h-8',
-        lg: 'w-16 h-10'
+        md: 'w-12 h-6',
+        lg: 'w-16 h-8'
       },
       rounded: {
         true: 'rounded-full',
@@ -54,17 +54,20 @@ export const switchWrapper = cva(
 export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center transition-colors duration-300'], {
   variants: {
     size: {
-      sm: 'w-8 h-4 p-0.5 peer-checked:[&>span]:translate-x-4.5',
-      md: 'w-10 h-5 p-0.5 peer-checked:[&>span]:translate-x-5.5',
-      lg: 'w-12 h-6 p-0.5 peer-checked:[&>span]:translate-x-8'
+      sm: 'w-8 h-2 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-4',
+      md: 'w-10 h-3 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-5.5',
+      lg: 'w-12 h-4 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-8'
     },
     color: {
-      default: 'bg-transparent-300 peer-checked:bg-blue-500',
-      primary: 'bg-transparent-300 peer-checked:bg-primary',
-      success: 'bg-transparent-300 peer-checked:bg-green-500',
-      warning: 'bg-transparent-300 peer-checked:bg-yellow-500',
-      danger: 'bg-transparent-300 peer-checked:bg-red-500',
-      disabled: 'bg-transparent-300 peer-checked:bg-blue-500 opacity-30'
+      default: 'bg-transparent-300 peer-checked:bg-primary dark:peer-checked:bg-accent',
+      disabled: 'bg-transparent-300 peer-checked:bg-primary opacity-50'
+    },
+    variant: {
+      default: '',
+      bordered: 'bg-transparent border border-gray-600 peer-checked:bg-gray-600 border-gray-light-500 pr-[2px]',
+      glass:
+        'bg-white/30 backdrop-blur-md border border-white/30 shadow-md peer-checked:bg-primary/70 border-primary/50 dark:peer-checked:bg-accent/60 backdrop-blur-md ',
+      shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-primary/90'
     },
     rounded: {
       true: 'rounded-full',
@@ -82,20 +85,17 @@ export const switchThumb = cva(['absolute rounded-full transition-transform dura
   variants: {
     size: {
       sm: 'h-3 w-3',
-      md: 'h-4.5 w-4.5',
-      lg: 'h-6 w-6'
+      md: 'h-4 w-4',
+      lg: 'h-5 w-5'
     },
-    variant: {
-      default: 'bg-white shadow-md',
-      flat: 'bg-gray-200 dark:bg-white-600',
-      glass: 'bg-white/50 backdrop-blur-md shadow-inner',
-      shadow: 'bg-white drop-shadow-lg drop-shadow-white',
-      neon: 'bg-gray-light-100 shadow-[0_0_10px_#ec4899]'
+    color: {
+      default: 'bg-white',
+      disabled: 'bg-white opacity-70'
     }
   },
   defaultVariants: {
     size: 'md',
-    variant: 'default'
+    color: 'default'
   }
 });
 
@@ -115,17 +115,17 @@ export const switchLabel = cva(['select-none'], {
   }
 });
 export const switchStartContent = cva(
-  'mr-1 flex items-center justify-center transition-opacity duration-300 pointer-events-none text-white/90 peer-checked:opacity-0'
+  'absolute left-1.5 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100 peer-checked:opacity-0'
 );
 export const switchEndContent = cva(
-  'ml-1 flex items-center justify-center transition-opacity duration-300 pointer-events-none text-white/90 opacity-0 peer-checked:opacity-100'
+  'absolute right-2 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100 peer-checked:opacity-0'
 );
 export const switchHiddenInput = cva('sr-only peer');
 export const switchThumbIcon = cva('flex items-center justify-center w-full h-full');
 
 type SwitchSize = 'sm' | 'md' | 'lg';
-type SwitchColor = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'disabled';
-type SwitchVariants = 'default' | 'flat' | 'shadow' | 'neon' | 'glass';
+type SwitchColor = 'default' | 'disabled';
+type SwitchVariants = 'default' | 'bordered' | 'glass' | 'shadow';
 type SwitchRounded = true | false;
 type SwitchLabelPlacement = 'top' | 'right' | 'bottom' | 'left';
 

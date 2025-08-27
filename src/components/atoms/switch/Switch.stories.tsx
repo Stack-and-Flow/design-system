@@ -76,34 +76,6 @@ export const Disabled: Story = {
 };
 
 /**
- * The `Switch` component supports different **color schemes** to represent meaning or
- * to align with a product’s design system.
- *
- * Available options:
- * - `Default`: neutral styling, suitable for general use.
- * - `Primary`: emphasizes main actions or settings.
- * - `Success`: often used for positive states, confirmations, or activations.
- * - `Warning`: represents caution or a setting that may require attention.
- * - `Danger`: indicates destructive or critical actions.
- *
- * Use colors consistently to help users quickly understand the intent of the toggle.
- */
-
-export const Color: Story = {
-  render: () => {
-    return (
-      <div className='flex gap-6'>
-        <Switch color='default' label='Default Switch' defaultChecked={true} />
-        <Switch color='primary' label='Primary Switch' defaultChecked={true} />
-        <Switch color='success' label='Success Switch' defaultChecked={true} />
-        <Switch color='warning' label='Warning Switch' defaultChecked={true} />
-        <Switch color='danger' label='Danger Switch' defaultChecked={true} />
-      </div>
-    );
-  }
-};
-
-/**
  * The `Switch` component supports multiple **visual variants** that change its
  * overall style and appearance.
  *
@@ -121,10 +93,9 @@ export const Variant: Story = {
     return (
       <div className='flex gap-4'>
         <Switch variant='default' label='Default Variant' defaultChecked={true} />
-        <Switch variant='flat' label='Flat Variant' defaultChecked={true} />
+        <Switch variant='bordered' label='Bordered Variant' defaultChecked={true} />
         <Switch variant='glass' label='Glass Variant' defaultChecked={true} />
         <Switch variant='shadow' label='Shadow Variant' defaultChecked={true} />
-        <Switch variant='neon' label='Neon Variant' defaultChecked={true} />
       </div>
     );
   }
@@ -168,8 +139,36 @@ export const WithThumbIcon: Story = {
         <Switch
           label='With Thumb Icon'
           size='lg'
-          color='primary'
-          thumbIcon={<Icon name='moon' colorDark='dark:text-primary' color='text-accent-dark' size={18} />}
+          color='default'
+          thumbIcon={<Icon name='moon' colorDark='dark:text-primary' color='text-accent-dark' size={16} />}
+          defaultChecked={true}
+        />
+      </div>
+    );
+  }
+};
+
+/**
+ * The `Switch` component can display **custom icons** at both ends, enhancing
+ * its visual meaning.
+ *
+ * Typical use cases:
+ * - A **moon/sun icon** for dark mode toggles.
+ * - A **lock/unlock icon** for privacy or security settings.
+ * - Any visual metaphor that helps users quickly understand the state.
+ *
+ * The `startContent` and `endContent` props accept ReactNodes, allowing full
+ * customization with your own icons or SVGs.
+ */
+export const WithIcon: Story = {
+  render: () => {
+    return (
+      <div>
+        <Switch
+          size='lg'
+          endContent={<Icon name='sun' size={20} colorDark='dark:text-gray-light-100' />}
+          startContent={<Icon name='moon' size={20} colorDark='dark:text-gray-light-100' />}
+          label='With Icons'
           defaultChecked={true}
         />
       </div>
@@ -195,9 +194,9 @@ export const LabelPlacement: Story = {
   render: () => {
     return (
       <div className='flex gap-6'>
-        <Switch label='Left Label' labelPlacement='left' color='success' defaultChecked={true} />
+        <Switch label='Left Label' labelPlacement='left' defaultChecked={true} />
         <Switch label='Right Label' labelPlacement='right' defaultChecked={true} />
-        <Switch label='Bottom Label' labelPlacement='bottom' color='success' defaultChecked={true} />
+        <Switch label='Bottom Label' labelPlacement='bottom' defaultChecked={true} />
         <Switch label='Top Label' labelPlacement='top' defaultChecked={true} />
       </div>
     );
