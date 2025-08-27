@@ -75,13 +75,18 @@ export function useChip(props: ChipProps) {
       ? '[&_svg]:h-3.5 [&_svg]:w-3.5'
       : size === 'lg'
         ? '[&_svg]:h-4.5 [&_svg]:w-4.5'
-        : '[&_svg]:h-4   [&_svg]:w-4';
+        : '[&_svg]:h-4 [&_svg]:w-4';
+
+  const closeBtnBoxBySize =
+    size === 'sm' ? 'h-[18px] w-[18px]' : size === 'lg' ? 'h-[20px] w-[20px]' : 'h-[18px] w-[18px]';
+
+  const closeGlyphSizeBySize = size === 'sm' ? 'text-[16px]' : size === 'lg' ? 'text-[20px]' : 'text-[18px]';
 
   const slots = {
     base: cn(
       baseClasses,
       'min-w-0',
-      pieceCount > 1 && 'gap-2',
+      pieceCount > 1 && (closable ? 'gap-1' : 'gap-2'),
       className,
       classNames?.base,
       interactive ? 'cursor-pointer' : 'cursor-auto',
@@ -91,19 +96,17 @@ export function useChip(props: ChipProps) {
     content: cn('truncate', classNames?.content),
     dot: cn('inline-block w-2 h-2 rounded-full shrink-0 bg-[var(--chip-dot)]', classNames?.dot),
     avatar: cn('shrink-0 ltr:mr-2 rtl:ml-2', classNames?.avatar),
+
     closeButton: cn(
-      'relative ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full',
-      'shrink-0 aspect-square leading-none',
-      'pointer-events-auto cursor-pointer select-none',
-      'transition-all duration-150',
-      'hover:bg-[currentColor]/12 dark:hover:bg-[currentColor]/22',
-      'hover:ring-1 hover:ring-current hover:ring-inset',
-      'focus-visible:outline-none',
-      'focus-visible:ring-2 focus-visible:ring-accent',
+      'relative inline-flex items-center justify-center overflow-visible',
+      'shrink-0 leading-none select-none pointer-events-auto cursor-pointer',
+      'p-0 m-0 ltr:-ml-0.5 rtl:-mr-0.5 rounded',
+      closeBtnBoxBySize,
+      closeGlyphSizeBySize,
+      'text-white dark:text-white font-bold',
+      'hover:bg-transparent hover:ring-0',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
       'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,white)]',
-      '[&_svg]:h-3.5 [&_svg]:w-3.5 [&_svg]:stroke-current',
-      'hover:[&_svg]:scale-110 hover:[&_svg]:opacity-90',
-      'motion-reduce:transition-none motion-reduce:[&_svg]:transform-none',
       classNames?.closeButton
     )
   };
@@ -124,7 +127,6 @@ export function useChip(props: ChipProps) {
       const fake = new MouseEvent('click', { bubbles: true });
       (e.currentTarget as HTMLElement).dispatchEvent(fake);
     }
-
     if (closable && (e.key === 'Delete' || e.key === 'Backspace')) {
       e.preventDefault();
       onClose?.();

@@ -158,7 +158,7 @@ export const StartEndContent: Story = {
     color: 'primary',
     startContent: <Trash2 />,
     endContent: (
-      <IconButton aria-label='Close' variant='ghost' className='p-0'>
+      <IconButton aria-label='Close' className='p-0'>
         <Icon className='h-4 w-4' aria-hidden={true} name='bold' />
       </IconButton>
     )
@@ -176,88 +176,6 @@ export const Clickable: Story = {
 };
 
 /**
- * Chips can be added to a list.
- */
-/** Chips can be added to a list (with visible label and help text). */
-export const AddableList: Story = {
-  render: () => {
-    const [items, setItems] = React.useState<string[]>([]);
-    const [val, setVal] = React.useState('');
-    const inputId = React.useId();
-    const labelId = `${inputId}-label`;
-    const helpId = `${inputId}-help`;
-
-    const add = (raw: string) => {
-      const v = raw.trim();
-      if (!v) {
-        return;
-      }
-      setItems((prev) => (prev.includes(v) ? prev : [...prev, v]));
-      setVal('');
-    };
-
-    const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      const commit =
-        e.key === 'Enter' || e.key === 'Tab' || e.key === ',' || (e.ctrlKey && (e.key === ' ' || e.code === 'Space')); // Ctrl + Espacio
-
-      if (commit) {
-        e.preventDefault();
-        add(val);
-        return;
-      }
-
-      if (e.key === 'Backspace' && val === '' && items.length) {
-        e.preventDefault();
-        setItems((prev) => prev.slice(0, -1));
-      }
-    };
-
-    return (
-      <div className='space-y-2'>
-        <label
-          id={labelId}
-          htmlFor={inputId}
-          className='block text-sm font-medium text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]'
-        >
-          Chip List
-        </label>
-
-        <div
-          role='group'
-          aria-labelledby={labelId}
-          aria-describedby={helpId}
-          className='flex min-h-10 items-center flex-wrap gap-2 rounded-md
-                     border px-2 py-2
-                     border-[var(--color-gray-light-300)] bg-white
-                     dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)]'
-        >
-          {items.map((label, idx) => (
-            <Chip key={label} closable={true} onClose={() => setItems(items.filter((_, i) => i !== idx))}>
-              {label}
-            </Chip>
-          ))}
-
-          <input
-            id={inputId}
-            aria-describedby={helpId}
-            className='min-w-[200px] flex-1 bg-transparent outline-none
-                       text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]'
-            value={val}
-            onChange={(e) => setVal(e.target.value)}
-            onKeyDown={onKeyDown}
-          />
-        </div>
-
-        <p id={helpId} className='text-xs text-[var(--color-gray-light-800)] dark:text-[var(--color-gray-dark-300)]'>
-          Type and press <kbd>Enter</kbd>, <kbd>Tab</kbd>, or <kbd>Ctrl</kbd>+<kbd>Space</kbd> to add. When the field is
-          empty, <kbd>Backspace</kbd> removes the last chip.
-        </p>
-      </div>
-    );
-  }
-};
-
-/**
  * Closable chips can be removed from a list.
  */
 export const ClosableList = () => {
@@ -266,7 +184,7 @@ export const ClosableList = () => {
   return (
     <div className='flex gap-2 flex-wrap'>
       {items.map((label, idx) => (
-        <Chip key={label} closable={true} onClose={() => setItems(items.filter((_, i) => i !== idx))}>
+        <Chip key={label} size='md' closable={true} onClose={() => setItems(items.filter((_, i) => i !== idx))}>
           {label}
         </Chip>
       ))}
