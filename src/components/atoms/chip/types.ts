@@ -9,8 +9,9 @@ export const chipVariants = cva(
     'font-secondary-bold whitespace-nowrap leading-[1.2]',
     'disabled:pointer-events-none disabled:opacity-60',
     'focus-visible:outline-none',
-    'focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] dark:focus-visible:ring-[var(--color-text-dark)]',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,white)]'
+    'data-[interactive=true]:focus-visible:ring-2 data-[interactive=true]:focus-visible:ring-[var(--color-accent)]',
+    'dark:data-[interactive=true]:focus-visible:ring-[var(--color-text-dark)]',
+    'data-[interactive=true]:focus-visible:ring-offset-2 data-[interactive=true]:focus-visible:ring-offset-[var(--surface-bg,white)]'
   ],
   {
     variants: {
@@ -41,34 +42,39 @@ export const chipVariants = cva(
       {
         color: 'primary',
         variant: 'solid',
-        class:
-          'bg-[var(--color-primary)] text-[var(--color-text-dark)] hover:bg-[var(--color-red-600)] dark:hover:bg-[var(--color-red-700)] active:translate-y-[0.5px]'
+        class: [
+          'bg-[var(--color-primary)] text-[var(--color-text-dark)]',
+          'data-[interactive=true]:hover:bg-[var(--color-red-600)] dark:data-[interactive=true]:hover:bg-[var(--color-red-700)]',
+          'data-[interactive=true]:active:translate-y-[0.5px]'
+        ].join(' ')
       },
       {
         color: 'primary',
         variant: 'light',
-        class: 'text-[var(--color-primary)] hover:bg-[var(--color-white)] dark:hover:bg-[var(--color-red-200)]'
+        class:
+          'text-[var(--color-primary)] data-[interactive=true]:hover:bg-[var(--color-white)] dark:data-[interactive=true]:hover:bg-[var(--color-red-200)]'
       },
       {
         color: 'primary',
         variant: 'flat',
-        class: 'bg-[var(--color-red-100)] text-[var(--color-primary)] hover:bg-[var(--color-red-200)]'
+        class:
+          'bg-[var(--color-red-100)] text-[var(--color-primary)] data-[interactive=true]:hover:bg-[var(--color-red-200)]'
       },
       {
         color: 'primary',
         variant: 'faded',
         class: [
           'bg-[var(--color-gray-dark-200)] border-[var(--color-gray-light-300)]',
-          'text-[var(--color-primary)] hover:bg-[var(--color-gray-light-200)]',
+          'text-[var(--color-primary)] data-[interactive=true]:hover:bg-[var(--color-gray-light-200)]',
           'dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)] dark:text-[var(--color-accent)]',
-          'dark:hover:bg-[var(--color-gray-dark-600)]'
+          'dark:data-[interactive=true]:hover:bg-[var(--color-gray-dark-600)]'
         ].join(' ')
       },
       {
         color: 'primary',
         variant: 'bordered',
         class:
-          'text-[var(--color-primary)] border-[var(--color-primary)] hover:bg-[var(--color-red-100)] dark:hover:bg-[var(--color-gray-dark-700)]'
+          'text-[var(--color-primary)] border-[var(--color-primary)] data-[interactive=true]:hover:bg-[var(--color-red-100)] dark:data-[interactive=true]:hover:bg-[var(--color-gray-dark-700)]'
       },
       {
         color: 'primary',
@@ -78,52 +84,51 @@ export const chipVariants = cva(
           'shadow-none',
           'drop-shadow-[0_16px_16px_color-mix(in_srgb,var(--color-primary)_70%,transparent)]',
           'dark:drop-shadow-[0_16px_16px_color-mix(in_srgb,var(--color-primary)_70%,transparent)]',
-          'active:translate-y-[0.5px]',
-          'hover:bg-[var(--color-red-600)] dark:hover:bg-[var(--color-red-700)]'
+          'data-[interactive=true]:active:translate-y-[0.5px]',
+          'data-[interactive=true]:hover:bg-[var(--color-red-600)] dark:data-[interactive=true]:hover:bg-[var(--color-red-700)]'
         ].join(' ')
       },
-      {
-        color: 'primary',
-        variant: 'dot',
-        class: '[--chip-dot:var(--color-primary)]'
-      },
+      { color: 'primary', variant: 'dot', class: '[--chip-dot:var(--color-primary)]' },
 
       /* ----------------- SECONDARY ----------------- */
       {
         color: 'secondary',
         variant: 'solid',
-        class:
-          'bg-[var(--color-gray-light-900)] text-[var(--color-text-dark)] hover:bg-[var(--color-gray-light-800)] dark:bg-[var(--color-gray-dark-200)] dark:text-[var(--color-text-light)] dark:hover:bg-[var(--color-gray-dark-300)]'
+        class: [
+          'bg-[var(--color-gray-light-900)] text-[var(--color-text-dark)]',
+          'data-[interactive=true]:hover:bg-[var(--color-gray-light-800)]',
+          'dark:bg-[var(--color-gray-dark-200)] dark:text-[var(--color-text-light)] dark:data-[interactive=true]:hover:bg-[var(--color-gray-dark-300)]'
+        ].join(' ')
       },
       {
         color: 'secondary',
         variant: 'light',
         class:
-          'text-[var(--color-text-light)] hover:bg-[var(--color-gray-light-200)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-gray-dark-700)]'
+          'text-[var(--color-text-light)] data-[interactive=true]:hover:bg-[var(--color-gray-light-200)] dark:text-[var(--color-text-dark)] dark:data-[interactive=true]:hover:bg-[var(--color-gray-dark-700)]'
       },
       {
         color: 'secondary',
         variant: 'flat',
         class:
-          'bg-[var(--color-gray-light-200)] text-[var(--color-text-light)] hover:bg-[var(--color-gray-light-300)] dark:bg-[var(--color-gray-dark-800)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-gray-dark-700)]'
+          'bg-[var(--color-gray-light-200)] text-[var(--color-text-light)] data-[interactive=true]:hover:bg-[var(--color-gray-light-300)] dark:bg-[var(--color-gray-dark-800)] dark:text-[var(--color-text-dark)] dark:data-[interactive=true]:hover:bg-[var(--color-gray-dark-700)]'
       },
       {
         color: 'secondary',
         variant: 'faded',
         class:
-          'bg-[var(--color-gray-light-100)] text-[var(--color-text-light)] border-[var(--color-gray-light-300)] hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:text-[var(--color-text-dark)] dark:border-[var(--color-gray-dark-600)]'
+          'bg-[var(--color-gray-light-100)] text-[var(--color-text-light)] border-[var(--color-gray-light-300)] data-[interactive=true]:hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:text-[var(--color-text-dark)] dark:border-[var(--color-gray-dark-600)]'
       },
       {
         color: 'secondary',
         variant: 'bordered',
         class:
-          'text-[var(--color-text-light)] border-[var(--color-gray-light-400)] hover:bg-[var(--color-gray-light-200)] dark:text-[var(--color-text-dark)] dark:border-[var(--color-gray-dark-400)] dark:hover:bg-[var(--color-gray-dark-700)]'
+          'text-[var(--color-text-light)] border-[var(--color-gray-light-400)] data-[interactive=true]:hover:bg-[var(--color-gray-light-200)] dark:text-[var(--color-text-dark)] dark:border-[var(--color-gray-dark-400)] dark:data-[interactive=true]:hover:bg-[var(--color-gray-dark-700)]'
       },
       {
         color: 'secondary',
         variant: 'shadow',
         class:
-          'bg-[var(--color-gray-light-900)] text-[var(--color-text-dark)] shadow-[0_10px_22px_-6px_rgba(0,0,0,.35),0_6px_14px_rgba(0,0,0,.25)] hover:shadow-[0_14px_26px_-8px_rgba(0,0,0,.45),0_10px_20px_rgba(0,0,0,.30)]'
+          'bg-[var(--color-gray-light-900)] text-[var(--color-text-dark)] shadow-[0_10px_22px_-6px_rgba(0,0,0,.35),0_6px_14px_rgba(0,0,0,.25)] data-[interactive=true]:hover:shadow-[0_14px_26px_-8px_rgba(0,0,0,.45),0_10px_20px_rgba(0,0,0,.30)]'
       },
       {
         color: 'secondary',
@@ -136,36 +141,37 @@ export const chipVariants = cva(
         color: 'success',
         variant: 'solid',
         class:
-          'bg-[var(--color-green,#22c55e)] text-[var(--color-text-light)] hover:bg-[var(--color-green-dark,#16a34a)]'
+          'bg-[var(--color-green,#22c55e)] text-[var(--color-text-light)] data-[interactive=true]:hover:bg-[var(--color-green-dark,#16a34a)]'
       },
       {
         color: 'success',
         variant: 'light',
-        class: 'text-[var(--color-green)] hover:bg-[color-mix(in_srgb,var(--color-green)_15%,transparent)]'
+        class:
+          'text-[var(--color-green)] data-[interactive=true]:hover:bg-[color-mix(in_srgb,var(--color-green)_15%,transparent)]'
       },
       {
         color: 'success',
         variant: 'flat',
         class:
-          'bg-[color-mix(in_srgb,var(--color-green)_15%,transparent)] text-[var(--color-green)] hover:bg-[color-mix(in_srgb,var(--color-green)_22%,transparent)]'
+          'bg-[color-mix(in_srgb,var(--color-green)_15%,transparent)] text-[var(--color-green)] data-[interactive=true]:hover:bg-[color-mix(in_srgb,var(--color-green)_22%,transparent)]'
       },
       {
         color: 'success',
         variant: 'faded',
         class:
-          'bg-[var(--color-gray-light-100)] text-[var(--color-green)] border-[var(--color-gray-light-300)] hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)]'
+          'bg-[var(--color-gray-light-100)] text-[var(--color-green)] border-[var(--color-gray-light-300)] data-[interactive=true]:hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)]'
       },
       {
         color: 'success',
         variant: 'bordered',
         class:
-          'text-[var(--color-green)] border-[var(--color-green)] hover:bg-[color-mix(in_srgb,var(--color-green)_12%,transparent)]'
+          'text-[var(--color-green)] border-[var(--color-green)] data-[interactive=true]:hover:bg-[color-mix(in_srgb,var(--color-green)_12%,transparent)]'
       },
       {
         color: 'success',
         variant: 'shadow',
         class:
-          'bg-[var(--color-green,#22c55e)] text-[var(--color-text-light)] shadow-[0_10px_22px_-6px_rgba(34,197,94,.45),0_6px_14px_rgba(34,197,94,.30)] hover:shadow-[0_14px_26px_-8px_rgba(34,197,94,.55),0_10px_20px_rgba(34,197,94,.35)]'
+          'bg-[var(--color-green,#22c55e)] text-[var(--color-text-light)] shadow-[0_10px_22px_-6px_rgba(34,197,94,.45),0_6px_14px_rgba(34,197,94,.30)] data-[interactive=true]:hover:shadow-[0_14px_26px_-8px_rgba(34,197,94,.55),0_10px_20px_rgba(34,197,94,.35)]'
       },
       { color: 'success', variant: 'dot', class: '[--chip-dot:var(--color-green)]' },
 
@@ -173,36 +179,38 @@ export const chipVariants = cva(
       {
         color: 'warning',
         variant: 'solid',
-        class: 'bg-[var(--color-yellow)] text-[var(--color-text-light)] hover:bg-[var(--color-yellow-dark)]'
+        class:
+          'bg-[var(--color-yellow)] text-[var(--color-text-light)] data-[interactive=true]:hover:bg-[var(--color-yellow-dark)]'
       },
       {
         color: 'warning',
         variant: 'light',
-        class: 'text-[var(--color-yellow)] hover:bg-[color-mix(in_srgb,var(--color-yellow)_18%,transparent)]'
+        class:
+          'text-[var(--color-yellow)] data-[interactive=true]:hover:bg-[color-mix(in_srgb,var(--color-yellow)_18%,transparent)]'
       },
       {
         color: 'warning',
         variant: 'flat',
         class:
-          'bg-[var(--color-yellow-light)] text-[var(--color-yellow-dark)] hover:bg-[color-mix(in_srgb,var(--color-yellow)_30%,transparent)]'
+          'bg-[var(--color-yellow-light)] text-[var(--color-yellow-dark)] data-[interactive=true]:hover:bg-[color-mix(in_srgb,var(--color-yellow)_30%,transparent)]'
       },
       {
         color: 'warning',
         variant: 'faded',
         class:
-          'bg-[var(--color-gray-light-100)] text-[var(--color-yellow-dark)] border-[var(--color-gray-light-300)] hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)]'
+          'bg-[var(--color-gray-light-100)] text-[var(--color-yellow-dark)] border-[var(--color-gray-light-300)] data-[interactive=true]:hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)]'
       },
       {
         color: 'warning',
         variant: 'bordered',
         class:
-          'text-[var(--color-yellow-dark)] border-[var(--color-yellow)] hover:bg-[color-mix(in_srgb,var(--color-yellow)_15%,transparent)]'
+          'text-[var(--color-yellow-dark)] border-[var(--color-yellow)] data-[interactive=true]:hover:bg-[color-mix(in_srgb,var(--color-yellow)_15%,transparent)]'
       },
       {
         color: 'warning',
         variant: 'shadow',
         class:
-          'bg-[var(--color-yellow)] text-black shadow-[0_10px_22px_-6px_rgba(234,179,8,.45),0_6px_14px_rgba(234,179,8,.30)] hover:shadow-[0_14px_26px_-8px_rgba(234,179,8,.55),0_10px_20px_rgba(234,179,8,.35)]'
+          'bg-[var(--color-yellow)] text-black shadow-[0_10px_22px_-6px_rgba(234,179,8,.45),0_6px_14px_rgba(234,179,8,.30)] data-[interactive=true]:hover:shadow-[0_14px_26px_-8px_rgba(234,179,8,.55),0_10px_20px_rgba(234,179,8,.35)]'
       },
       { color: 'warning', variant: 'dot', class: '[--chip-dot:var(--color-yellow)]' },
 
@@ -210,30 +218,37 @@ export const chipVariants = cva(
       {
         color: 'danger',
         variant: 'solid',
-        class: 'bg-[var(--color-accent)] text-[var(--color-text-dark)] hover:bg-[var(--color-red-700)]'
+        class:
+          'bg-[var(--color-accent)] text-[var(--color-text-dark)] data-[interactive=true]:hover:bg-[var(--color-red-700)]'
       },
-      { color: 'danger', variant: 'light', class: 'text-[var(--color-accent)] hover:bg-[var(--color-red-100)]' },
+      {
+        color: 'danger',
+        variant: 'light',
+        class: 'text-[var(--color-accent)] data-[interactive=true]:hover:bg-[var(--color-red-100)]'
+      },
       {
         color: 'danger',
         variant: 'flat',
-        class: 'bg-[var(--color-accent)] text-[var(--color-red-600)] hover:bg-[var(--color-red-200)]'
+        class:
+          'bg-[var(--color-accent)] text-[var(--color-red-600)] data-[interactive=true]:hover:bg-[var(--color-red-200)]'
       },
       {
         color: 'danger',
         variant: 'faded',
         class:
-          'bg-[var(--color-accent)] text-[var(--color-red-600)] border-[var(--color-gray-light-300)] hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)]'
+          'bg-[var(--color-accent)] text-[var(--color-red-600)] border-[var(--color-gray-light-300)] data-[interactive=true]:hover:bg-[var(--color-gray-light-200)] dark:bg-[var(--color-gray-dark-700)] dark:border-[var(--color-gray-dark-600)]'
       },
       {
         color: 'danger',
         variant: 'bordered',
-        class: 'text-[var(--color-accent)] border-[var(--color-red-600)] hover:bg-[var(--color-red-100)]'
+        class:
+          'text-[var(--color-accent)] border-[var(--color-red-600)] data-[interactive=true]:hover:bg-[var(--color-red-100)]'
       },
       {
         color: 'danger',
         variant: 'shadow',
         class:
-          'bg-[var(--color-accent)] text-[var(--color-text-dark)] shadow-[0_10px_22px_-6px_rgba(220,38,38,.45),0_6px_14px_rgba(220,38,38,.30)] hover:shadow-[0_14px_26px_-8px_rgba(220,38,38,.55),0_10px_20px_rgba(220,38,38,.35)]'
+          'bg-[var(--color-accent)] text-[var(--color-text-dark)] shadow-[0_10px_22px_-6px_rgba(220,38,38,.45),0_6px_14px_rgba(220,38,38,.30)] data-[interactive=true]:hover:shadow-[0_14px_26px_-8px_rgba(220,38,38,.55),0_10px_20px_rgba(220,38,38,.35)]'
       },
       { color: 'danger', variant: 'dot', class: '[--chip-dot:var(--color-accent)]' },
 
@@ -261,12 +276,12 @@ export const chipVariants = cva(
   }
 );
 
-type RadiusSize = 'none' | 'sm' | 'md' | 'lg' | 'full';
-type Animation = 'default' | 'pulse' | 'bounce' | 'ping';
+export type RadiusSize = 'none' | 'sm' | 'md' | 'lg' | 'full';
+export type Animation = 'default' | 'pulse' | 'bounce' | 'ping';
 
-type ChipVariant = VariantProps<typeof chipVariants>['variant'];
-type ChipColorVariants = VariantProps<typeof chipVariants>['color'];
-type ChipSizeVariants = VariantProps<typeof chipVariants>['size'];
+export type ChipVariant = VariantProps<typeof chipVariants>['variant'];
+export type ChipColorVariants = VariantProps<typeof chipVariants>['color'];
+export type ChipSizeVariants = VariantProps<typeof chipVariants>['size'];
 
 export type ChipProps = {
   children?: React.ReactNode;

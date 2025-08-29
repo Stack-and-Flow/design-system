@@ -30,4 +30,5 @@ export const Chip = React.forwardRef<HTMLElement, ChipProps>((props, ref) => {
     </Tag>
   );
 });
+
 Chip.displayName = 'Chip';

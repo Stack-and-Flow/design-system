@@ -22,9 +22,7 @@ const meta: Meta<typeof Chip> = {
   title: 'Atoms/Chip',
   component: Chip,
   parameters: {
-    docs: {
-      autodocs: true
-    }
+    docs: { autodocs: true }
   },
   tags: ['autodocs'],
   argTypes: {
@@ -39,8 +37,10 @@ const meta: Meta<typeof Chip> = {
     defaultSelected: { control: 'boolean' },
     closable: { control: 'boolean' },
     onClose: { action: 'onClose' },
-    onClick: { action: 'onClick' },
     onSelectedChange: { action: 'onSelectedChange' }
+  },
+  args: {
+    onClick: undefined
   }
 };
 export default meta;
@@ -56,7 +56,14 @@ export const Default: Story = {
     animation: 'default',
     as: 'div',
     selectable: false,
-    closable: false
+    closable: false,
+    onClick: undefined // 🔧 fuerza no interactivo
+  },
+  parameters: {
+    actions: { disable: true } // 🔧 evita auto-actions en esta story
+  },
+  argTypes: {
+    onClick: { table: { disable: true }, control: false } // 🔧 oculta control y acción
   }
 };
 
@@ -69,10 +76,7 @@ export const Default: Story = {
  * - `lg` → Large
  */
 export const Size: Story = {
-  args: {
-    variant: 'light'
-  },
-
+  args: { variant: 'light' },
   render: () => (
     <div className='flex items-center gap-4'>
       <Chip size='sm'>Small</Chip>
@@ -84,13 +88,6 @@ export const Size: Story = {
 
 /**
  * The `color` prop sets background and text color.
- *
- * Available options:
- * - `primary`
- * - `secondary`
- * - `success`
- * - `warning`
- * - `danger`
  */
 export const Color: Story = {
   render: () => (
@@ -106,14 +103,6 @@ export const Color: Story = {
 
 /**
  * The `variant` prop defines visual style modifications for the chip.
- *
- * Available options:
- * - `solid` → Default filled appearance.
- * - `flat` → Lower background opacity, text remains solid.
- * - `shadow` → Adds a soft shadow.
- * - `bordered` → Outline style.
- * - `light`/`faded` → Softer neutral looks.
- * - `dot` → Prepends a circular status indicator; combine with text or use `ariaLabel` when text is absent.
  */
 export const Variant: Story = {
   render: () => (
@@ -133,9 +122,6 @@ export const Variant: Story = {
 
 /**
  * The `radius` prop controls the corner roundness.
- *
- * Available options:
- * - `none`, `sm`, `md`, `lg`, `full`(default)
  */
 export const Radius: Story = {
   render: () => (
@@ -172,6 +158,10 @@ export const Clickable: Story = {
   args: {
     children: 'Clickable',
     as: 'button'
+  },
+  // 👇 Sólo esta story publica un onClick como action
+  argTypes: {
+    onClick: { action: 'onClick' }
   }
 };
 
@@ -226,7 +216,6 @@ export const WithAvatar: Story = {
   render: () => (
     <div className='flex items-center gap-4'>
       <Chip avatar={<Avatar src='/images/logo-dark-background.png' alt='EG' size='sm' />}>EGDEV</Chip>
-
       <Chip
         color='primary'
         avatar={<div className='h-6 w-6 rounded-full bg-accent text-white grid place-items-center text-[10px]'>AP</div>}
@@ -237,23 +226,17 @@ export const WithAvatar: Story = {
   )
 };
 
-/**
- * With text → shows a circular indicator before the label.
- */
+/** With text → shows a circular indicator before the label. */
 export const DotWithText: Story = {
   args: { variant: 'dot', color: 'primary', children: 'Pending' }
 };
 
-/**
- * Dot only → provide `ariaLabel` for accessibility.
- */
+/** Dot only → provide `ariaLabel` for accessibility. */
 export const DotOnlyAccessible: Story = {
   args: { variant: 'dot', color: 'primary', ariaLabel: 'Online' }
 };
 
-/**
- * You can override slot styles with `classNames`.
- */
+/** You can override slot styles with `classNames`. */
 export const WithClassNamesOverrides: Story = {
   args: {
     children: 'Custom Slots',
@@ -268,9 +251,7 @@ export const WithClassNamesOverrides: Story = {
   }
 };
 
-/**
- * Stress test for long labels
- */
+/** Stress test for long labels */
 export const Stress: Story = {
   render: () => (
     <div className='max-w-[260px] space-x-2'>

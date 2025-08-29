@@ -47,7 +47,7 @@ export function useChip(props: ChipProps) {
   const startKind = startContent == null ? 'default' : isText(startContent) ? 'text' : 'icon';
   const endKind = endContent == null ? 'default' : isText(endContent) ? 'text' : 'icon';
 
-  const interactive = !!onClick || !!selectable;
+  const interactive = !!onClick || !!selectable; // ← define interactividad
   const Tag: 'div' | 'button' = as ?? (interactive ? 'button' : 'div');
 
   const baseClasses = chipVariants({
@@ -169,6 +169,7 @@ export function useChip(props: ChipProps) {
       ...rest,
       ...a11yProps,
       'aria-label': computedAriaLabel,
+      'data-interactive': interactive ? 'true' : 'false',
       onClick: interactive ? handleActivate : onClick
     },
     pieces: { avatar, startContent, endContent, children },
