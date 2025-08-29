@@ -47,7 +47,7 @@ export function useChip(props: ChipProps) {
   const startKind = startContent == null ? 'default' : isText(startContent) ? 'text' : 'icon';
   const endKind = endContent == null ? 'default' : isText(endContent) ? 'text' : 'icon';
 
-  const interactive = !!onClick || !!selectable; // ← define interactividad
+  const interactive = !!onClick || !!selectable; // define interactividad
   const Tag: 'div' | 'button' = as ?? (interactive ? 'button' : 'div');
 
   const baseClasses = chipVariants({
@@ -141,7 +141,12 @@ export function useChip(props: ChipProps) {
     onClose?.();
   };
 
-  const computedAriaLabel = isDot && !hasChildren ? ariaLabel : undefined;
+  // A11y: dot-only necesita role válido para usar aria-label en un div no interactivo
+  const isDotOnly = isDot && !hasChildren;
+  const computedAriaLabel = isDotOnly ? ariaLabel : undefined;
+
+  const computedRole = Tag === 'button' ? undefined : interactive ? 'button' : isDotOnly ? 'img' : undefined;
+
   const a11yProps =
     Tag === 'button'
       ? {
@@ -151,7 +156,7 @@ export function useChip(props: ChipProps) {
           'aria-pressed': selectable ? isSelected : undefined
         }
       : {
-          role: interactive ? 'button' : undefined,
+          role: computedRole,
           tabIndex: interactive ? 0 : undefined,
           'aria-disabled': isDisabled || undefined,
           'aria-pressed': selectable ? isSelected : undefined,

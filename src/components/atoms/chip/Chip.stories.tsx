@@ -57,13 +57,13 @@ export const Default: Story = {
     as: 'div',
     selectable: false,
     closable: false,
-    onClick: undefined // 🔧 fuerza no interactivo
+    onClick: undefined
   },
   parameters: {
-    actions: { disable: true } // 🔧 evita auto-actions en esta story
+    actions: { disable: true }
   },
   argTypes: {
-    onClick: { table: { disable: true }, control: false } // 🔧 oculta control y acción
+    onClick: { table: { disable: true }, control: false }
   }
 };
 
@@ -159,7 +159,6 @@ export const Clickable: Story = {
     children: 'Clickable',
     as: 'button'
   },
-  // 👇 Sólo esta story publica un onClick como action
   argTypes: {
     onClick: { action: 'onClick' }
   }
@@ -247,7 +246,14 @@ export const WithClassNamesOverrides: Story = {
     },
     closable: true,
     animation: 'bounce',
-    as: 'button'
+    as: 'div',
+    onClick: undefined
+  },
+  parameters: {
+    actions: { disable: true }
+  },
+  argTypes: {
+    onClick: { table: { disable: true }, control: false }
   }
 };
 
