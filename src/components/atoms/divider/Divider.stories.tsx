@@ -18,55 +18,87 @@ type Story = StoryObj<typeof Divider>;
 export const Default: Story = {
   args: {
     orientation: 'horizontal',
-    colorsX: 'primary'
+    color: 'primary',
+    sizeWidth: 'lg'
   }
 };
 
-export const Horizontal: Story = {
+/**
+ * In the horizontal orientation, we have 5 sizes: XS, SM, MD, LG, and full.
+ */
+
+export const HorizontalSize: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
+      <Divider orientation='horizontal' sizeWidth='xs' />
+      <Divider orientation='horizontal' sizeWidth='sm' />
+      <Divider orientation='horizontal' sizeWidth='md' />
       <Divider orientation='horizontal' sizeWidth='lg' />
+      <Divider orientation='horizontal' sizeWidth='full' />
     </div>
   )
 };
 
-export const Vertical: Story = {
+/**
+ * Vertically, there are three measurements: SM, MD, and LG.
+ */
+export const VerticalSize: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <Divider orientation='vertical' sizeWidth='sm' />
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+      <Divider orientation='vertical' sizeHeight='sm' />
+      <Divider orientation='vertical' sizeHeight='md' />
+      <Divider orientation='vertical' sizeHeight='lg' />
     </div>
   )
 };
 
-export const colors: Story = {
+/**
+ * We have 4 colours in any orientation.
+ */
+
+export const HorizontalColor: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <Divider orientation='horizontal' colorsX='primary' />
-      <Divider orientation='horizontal' colorsX='secondary' />
-      <Divider orientation='horizontal' colorsX='info' />
-      <Divider orientation='horizontal' colorsX='success' />
-      <Divider orientation='horizontal' colorsX='primaryDegrade' />
-      <Divider orientation='horizontal' colorsX='secondaryDegrade' />
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
+      <Divider orientation='horizontal' color='primary' />
+      <Divider orientation='horizontal' color='secondary' />
+      <Divider orientation='horizontal' color='success' />
+      <Divider orientation='horizontal' color='warning' />
     </div>
   )
 };
 
-export const colorsshadow: Story = {
+export const VerticalColor: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <Divider orientation='horizontal' shadow={true} colorsX='primaryDegrade' />
-      <Divider orientation='horizontal' colorsX='primaryDegrade' />
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+      <Divider orientation='vertical' color='primary' />
+      <Divider orientation='vertical' color='secondary' />
+      <Divider orientation='vertical' color='success' />
+      <Divider orientation='vertical' color='warning' />
     </div>
   )
 };
+
+/**
+ * There are two hover effects: ‘bright’ and ‘zoom’.
+ */
+export const Hover: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem' }}>
+      <Divider orientation='horizontal' hover='bright' />
+      <Divider orientation='horizontal' hover='zoom' />
+    </div>
+  )
+};
+
+/**
+ * In the animation, we have created two different ones, ‘kitt’ and “border”. The first one recalls a great effect such as the well-known ‘kitt’, 🚗 the fantastic car.
+ */
 
 export const animation: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <Divider orientation='horizontal' animated='pulse' />
-      <Divider orientation='horizontal' animated='ping' />
-      <Divider orientation='horizontal' animated='bounce' />
-      <Divider orientation='horizontal' />
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem' }}>
+      <Divider orientation='horizontal' animation='kitt' />
+      <Divider orientation='horizontal' animation='border' />
     </div>
   )
 };
