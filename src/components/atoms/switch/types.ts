@@ -60,11 +60,12 @@ export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center 
     },
     color: {
       default: 'bg-transparent-300 peer-checked:bg-primary dark:peer-checked:bg-accent',
-      disabled: 'bg-transparent-300 peer-checked:bg-primary opacity-50'
+      disabled: 'bg-transparent-300 peer-checked:bg-primary opacity-50',
+      transparent: 'bg-transparent border border-gray-400 peer-checked:border-red-500'
     },
     variant: {
       default: '',
-      bordered: 'bg-transparent border border-gray-600 peer-checked:bg-gray-600 border-gray-light-500 pr-[2px]',
+      bordered: 'border',
       glass:
         'bg-white/30 backdrop-blur-md border border-white/30 shadow-md peer-checked:bg-primary/70 border-primary/50 dark:peer-checked:bg-accent/60 backdrop-blur-md ',
       shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-primary/90'
@@ -90,7 +91,8 @@ export const switchThumb = cva(['absolute rounded-full transition-transform dura
     },
     color: {
       default: 'bg-white',
-      disabled: 'bg-white opacity-70'
+      disabled: 'bg-white opacity-70',
+      transparent: 'bg-white'
     }
   },
   defaultVariants: {
@@ -124,7 +126,7 @@ export const switchHiddenInput = cva('sr-only peer');
 export const switchThumbIcon = cva('flex items-center justify-center w-full h-full');
 
 type SwitchSize = 'sm' | 'md' | 'lg';
-type SwitchColor = 'default' | 'disabled';
+type SwitchColor = 'default' | 'disabled' | 'transparent';
 type SwitchVariants = 'default' | 'bordered' | 'glass' | 'shadow';
 type SwitchRounded = true | false;
 type SwitchLabelPlacement = 'top' | 'right' | 'bottom' | 'left';
@@ -140,7 +142,7 @@ export type SwitchProps = {
   size?: SwitchSize;
   /**
    * @control select
-   * @default secondary
+   * @default default
    */
   color?: SwitchColor;
   /**

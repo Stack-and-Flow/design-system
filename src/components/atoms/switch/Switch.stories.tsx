@@ -93,7 +93,7 @@ export const Variant: Story = {
     return (
       <div className='flex gap-4'>
         <Switch variant='default' label='Default Variant' defaultChecked={true} />
-        <Switch variant='bordered' label='Bordered Variant' defaultChecked={true} />
+        <Switch variant='bordered' label='Bordered Variant' defaultChecked={true} color='transparent' />
         <Switch variant='glass' label='Glass Variant' defaultChecked={true} />
         <Switch variant='shadow' label='Shadow Variant' defaultChecked={true} />
       </div>
