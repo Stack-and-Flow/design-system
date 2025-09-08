@@ -18,7 +18,7 @@ type Story = StoryObj<typeof Divider>;
 export const Default: Story = {
   args: {
     orientation: 'horizontal',
-    color: 'primary',
+    color: 'bg-primary',
     sizeWidth: 'lg'
   }
 };
@@ -53,27 +53,12 @@ export const VerticalSize: Story = {
 };
 
 /**
- * We have 4 colours in any orientation.
+ * You can customise the colour of the line with a class name.
  */
-
-export const HorizontalColor: Story = {
+export const Color: Story = {
   render: () => (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
-      <Divider orientation='horizontal' color='primary' />
-      <Divider orientation='horizontal' color='secondary' />
-      <Divider orientation='horizontal' color='success' />
-      <Divider orientation='horizontal' color='warning' />
-    </div>
-  )
-};
-
-export const VerticalColor: Story = {
-  render: () => (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-      <Divider orientation='vertical' color='primary' />
-      <Divider orientation='vertical' color='secondary' />
-      <Divider orientation='vertical' color='success' />
-      <Divider orientation='vertical' color='warning' />
+      <Divider orientation='horizontal' color='bg-primary' />
     </div>
   )
 };
@@ -86,19 +71,6 @@ export const Hover: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem' }}>
       <Divider orientation='horizontal' hover='bright' />
       <Divider orientation='horizontal' hover='zoom' />
-    </div>
-  )
-};
-
-/**
- * In the animation, we have created two different ones, ‘kitt’ and “border”. The first one recalls a great effect such as the well-known ‘kitt’, 🚗 the fantastic car.
- */
-
-export const animation: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem' }}>
-      <Divider orientation='horizontal' animation='kitt' />
-      <Divider orientation='horizontal' animation='border' />
     </div>
   )
 };

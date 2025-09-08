@@ -93,31 +93,3 @@
     opacity: 0;
   }
 }
-
-@keyframes border {
-  0%,
-  100% {
-    box-shadow: 0 0 5px #e7000b, 0 0 10px #e7000b, 0 0 15px #e7000b;
-  }
-  50% {
-    box-shadow: 0 0 10px #45556c, 0 0 20px #45556c, 0 0 30px #45556c;
-  }
-}
-
-@keyframes kitt-scanX {
-  0% {
-    transform: translateX(0%);
-  }
-  50% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes kitt-scanY {
-  0% {
-    transform: translateY(0%);
-  }
-  50% {
-    transform: translateY(100%);
-  }
-}

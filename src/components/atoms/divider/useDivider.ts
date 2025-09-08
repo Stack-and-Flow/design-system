@@ -2,22 +2,22 @@ import { type DividerProps, dividerVariants } from './types';
 
 export const useDivider = ({
   orientation = 'horizontal',
-  color = 'primary',
+  color = 'bg-accent',
   sizeWidth = 'sm',
   sizeHeight = 'lg',
-  hover = 'none',
-  animation = 'none'
+  hover = 'none'
 }: DividerProps) => {
   // Additional logic can be added here if needed
 
-  const dividerClass = dividerVariants({ orientation, color, sizeWidth, sizeHeight, hover, animation });
+  const dividerClass = dividerVariants({ orientation, sizeWidth, sizeHeight, hover });
 
   return {
     orientation,
+    color,
     dividerClass,
     sizeWidth,
     sizeHeight,
-    hover,
-    animation
+    hover
   };
 };
+('');
