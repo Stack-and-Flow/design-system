@@ -4,21 +4,30 @@ import { cva } from 'class-variance-authority';
 export const dividerVariants = cva('', {
   variants: {
     orientation: {
-      horizontal: 'border-none h-px',
-      vertical: 'border-none w-px'
+      horizontal: 'border-none pt-px',
+      vertical: 'border-none pl-px'
     },
-
-    sizeWidth: {
-      xs: 'w-8',
-      sm: 'w-16',
-      md: 'w-32',
-      lg: 'w-96',
-      full: 'w-2xl'
+    thicknessY: {
+      thin: 'w-px',
+      medium: 'w-[2px]',
+      thick: 'w-[4px]'
     },
-    sizeHeight: {
-      sm: 'h-8',
-      md: 'h-16',
-      lg: 'h-32'
+    lengthX: {
+      xs: 'pl-8',
+      sm: 'pl-16',
+      md: 'pl-32',
+      lg: 'pl-64',
+      full: 'pl-96'
+    },
+    thicknessX: {
+      thin: 'h-px',
+      medium: 'h-[2px]',
+      thick: 'h-[4px]'
+    },
+    lengthY: {
+      sm: 'pt-8',
+      md: 'pt-16',
+      lg: 'pt-32'
     },
     hover: {
       none: '',
@@ -29,23 +38,26 @@ export const dividerVariants = cva('', {
   compoundVariants: [
     {
       orientation: 'horizontal',
-      class: 'h-px'
+      class: 'pt-px'
     },
     {
       orientation: 'vertical',
-      class: 'w-px'
+      class: 'pl-px'
     }
   ],
   defaultVariants: {
     orientation: 'horizontal',
-    sizeWidth: 'md',
-    sizeHeight: 'md'
+    lengthX: 'md',
+    lengthY: 'md',
+    thicknessY: 'thin'
   }
 });
 
 type DividerOrientation = 'horizontal' | 'vertical';
 type DividerWidth = 'xs' | 'sm' | 'md' | 'lg' | 'full';
+type ThicknessX = 'thin' | 'medium' | 'thick';
 type DividerHeight = 'sm' | 'md' | 'lg';
+type ThicknessY = 'thin' | 'medium' | 'thick';
 type DividerHover = 'none' | 'bright' | 'zoom';
 
 export type DividerProps = {
@@ -67,13 +79,25 @@ export type DividerProps = {
    * @control select
    * @default lg
    */
-  sizeWidth?: DividerWidth;
+  lengthX?: DividerWidth;
+
+  /**
+   * @control select
+   * @default thin
+   */
+  thicknessX?: ThicknessX;
 
   /**
    * @control select
    * @default md
    */
-  sizeHeight?: DividerHeight;
+  lengthY?: DividerHeight;
+
+  /**
+   * @control select
+   * @default thin
+   */
+  thicknessY?: ThicknessY;
 
   /**
    * @control select

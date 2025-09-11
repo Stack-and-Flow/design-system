@@ -19,7 +19,7 @@ export const Default: Story = {
   args: {
     orientation: 'horizontal',
     color: 'bg-primary',
-    sizeWidth: 'lg'
+    lengthX: 'lg'
   }
 };
 
@@ -30,11 +30,24 @@ export const Default: Story = {
 export const HorizontalSize: Story = {
   render: () => (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
-      <Divider orientation='horizontal' sizeWidth='xs' />
-      <Divider orientation='horizontal' sizeWidth='sm' />
-      <Divider orientation='horizontal' sizeWidth='md' />
-      <Divider orientation='horizontal' sizeWidth='lg' />
-      <Divider orientation='horizontal' sizeWidth='full' />
+      <Divider orientation='horizontal' lengthX='xs' />
+      <Divider orientation='horizontal' lengthX='sm' />
+      <Divider orientation='horizontal' lengthX='md' />
+      <Divider orientation='horizontal' lengthX='lg' />
+      <Divider orientation='horizontal' lengthX='full' />
+    </div>
+  )
+};
+
+/**
+ * In both orientations, we have three thicknesses.
+ */
+export const HorizontalThickness: Story = {
+  render: () => (
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
+      <Divider orientation='horizontal' lengthX='xs' thicknessX='thin' />
+      <Divider orientation='horizontal' lengthX='sm' thicknessX='medium' />
+      <Divider orientation='horizontal' lengthX='md' thicknessX='thick' />
     </div>
   )
 };
@@ -45,9 +58,22 @@ export const HorizontalSize: Story = {
 export const VerticalSize: Story = {
   render: () => (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-      <Divider orientation='vertical' sizeHeight='sm' />
-      <Divider orientation='vertical' sizeHeight='md' />
-      <Divider orientation='vertical' sizeHeight='lg' />
+      <Divider orientation='vertical' lengthY='sm' />
+      <Divider orientation='vertical' lengthY='md' />
+      <Divider orientation='vertical' lengthY='lg' />
+    </div>
+  )
+};
+
+/**
+ * In both orientations, we have three thicknesses.
+ */
+export const VerticalThickness: Story = {
+  render: () => (
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+      <Divider orientation='vertical' lengthY='sm' thicknessY='thin' />
+      <Divider orientation='vertical' lengthY='md' thicknessY='medium' />
+      <Divider orientation='vertical' lengthY='lg' thicknessY='thick' />
     </div>
   )
 };
@@ -59,6 +85,8 @@ export const Color: Story = {
   render: () => (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
       <Divider orientation='horizontal' color='bg-primary' />
+      <Divider orientation='horizontal' color='bg-blue' />
+      <Divider orientation='horizontal' color='bg-indigo' />
     </div>
   )
 };

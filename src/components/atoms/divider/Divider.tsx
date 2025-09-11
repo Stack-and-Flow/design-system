@@ -5,11 +5,7 @@ import { useDivider } from './useDivider';
 
 const Divider: FC<DividerProps> = ({ ...props }) => {
   const { dividerClass, color } = useDivider(props);
-  return (
-    <div role='separator' className={cn(dividerClass, color)}>
-      {' '}
-    </div>
-  );
+  return <div role='separator' className={cn(dividerClass, color)}></div>;
 };
 
 export default Divider;

@@ -3,20 +3,24 @@ import { type DividerProps, dividerVariants } from './types';
 export const useDivider = ({
   orientation = 'horizontal',
   color = 'bg-accent',
-  sizeWidth = 'sm',
-  sizeHeight = 'lg',
+  lengthX = 'md',
+  thicknessX = 'thin',
+  lengthY = 'md',
+  thicknessY = 'thin',
   hover = 'none'
 }: DividerProps) => {
   // Additional logic can be added here if needed
 
-  const dividerClass = dividerVariants({ orientation, sizeWidth, sizeHeight, hover });
+  const dividerClass = dividerVariants({ orientation, lengthX, thicknessX, lengthY, thicknessY, hover });
 
   return {
     orientation,
     color,
     dividerClass,
-    sizeWidth,
-    sizeHeight,
+    lengthX,
+    thicknessX,
+    lengthY,
+    thicknessY,
     hover
   };
 };
