@@ -5,7 +5,7 @@ import React, { useId } from 'react';
 import Link from '../../atoms/link';
 import Text from '../../atoms/text';
 import './breadcrumb.css';
-import { type BreadcrumbItem, type BreadcrumbProps, breadcrumbVariants } from './types';
+import { type BreadcrumbItem, type BreadcrumbProps, breadcrumbBase } from './types';
 import { useBreadcrumb } from './useBreadcrumb';
 
 const Breadcrumb: FC<BreadcrumbProps> = (props) => {
@@ -14,8 +14,10 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
     itemsBeforeCollapse = 1,
     itemsAfterCollapse = 1,
     separatorClassName,
-    itemClassName,
+    linkClassName,
+    textClassName,
     containerClassName,
+    state,
     ...restProps
   } = props;
 
@@ -26,7 +28,6 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
     processedItems,
     renderSeparator,
     isBreadcrumbItem,
-    className,
     endContent,
     hideSeparator,
     rounded,
@@ -35,8 +36,9 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
     iconSizes,
     startContent,
     variant,
-    bgColor,
-    getAccessibleTextColors
+    isHovered,
+    handleMouseEnter,
+    handleMouseLeave
   } = useBreadcrumb({
     ...restProps,
     maxItem,
@@ -44,78 +46,53 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
     itemsAfterCollapse
   });
 
-  const accessibleColors = getAccessibleTextColors();
+  const getCurrentState = () => {
+    if (isHovered) {
+      return 'hovered';
+    }
+    return 'default';
+  };
 
   const renderBreadcrumbItem = (item: BreadcrumbItem | React.ReactNode, isLast: boolean) => {
     if (!isBreadcrumbItem(item)) {
-      return (
-        <span className={accessibleColors.text} title='Breadcrumb navigation item'>
-          {item}
-        </span>
-      );
+      return <span title='Breadcrumb navigation item'>{item}</span>;
     }
-
-    const itemContent = (
+    return (
       <>
-        {renderStartIcon()}
-        {renderItemText(item, isLast)}
-        {renderEndIcon()}
+        {renderStarOrEndIcon(startContent)}
+        {renderTextOrLinkItem(item, isLast)}
+        {renderStarOrEndIcon(endContent)}
       </>
     );
-
-    return itemContent;
   };
 
-  const renderStartIcon = () => {
-    if (!startContent) {
+  const renderStarOrEndIcon = (iconItem: React.ReactNode) => {
+    if (!iconItem) {
       return null;
     }
 
     return (
       <span className='mx-1'>
-        <DynamicIcon
-          name={startContent as IconName}
-          className={cn('breadcrumb-link', accessibleColors.text)}
-          size={iconSizes}
-          aria-hidden='true'
-        />
+        <DynamicIcon name={iconItem as IconName} className={cn(linkClassName)} size={iconSizes} aria-hidden='true' />
       </span>
     );
   };
 
-  const renderEndIcon = () => {
-    if (!endContent) {
-      return null;
-    }
-
-    return (
-      <span className='mx-1'>
-        <DynamicIcon
-          name={endContent as IconName}
-          className={cn('breadcrumb-link', accessibleColors.text)}
-          size={iconSizes}
-          aria-hidden='true'
-        />
-      </span>
-    );
-  };
-
-  const renderItemText = (item: BreadcrumbItem, isLast: boolean) => {
+  const renderTextOrLinkItem = (item: BreadcrumbItem, isLast: boolean) => {
     if (isLast) {
       return (
-        <Text tag='span' className={cn(accessibleColors.text, 'cursor-default font-medium')} aria-current='page'>
+        <Text tag='span' className={cn(linkClassName, textClassName)} aria-current='page'>
           {item.title}
         </Text>
       );
     }
-
     return (
       <Link
         title={`Navigate to ${item.title}`}
         href={item.href}
         target={item.target}
-        size={['md', 'sm', 'lg'].includes(size as string) ? (size as 'md' | 'sm' | 'lg') : 'md'} //TODO change for link variable
-        className={cn(accessibleColors.text)}
+        size={['md', 'sm', 'lg'].includes(size as string) ? (size as 'md' | 'sm' | 'lg') : 'md'}
+        className={cn(linkClassName)}
         aria-label={`Navigate to ${item.title}`}
       >
         {item.title}
@@ -131,7 +108,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
     return (
       <li aria-hidden='true'>
         <span
-          className={cn(accessibleColors.separator, separatorClassName)}
+          className={cn(linkClassName, separatorClassName)}
           aria-hidden='true'
           role='separator'
           title='Path separator'
@@ -143,11 +120,22 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
   };
 
   return (
-    <nav aria-label={ariaLabel} role='navigation'>
-      <ol className={cn(breadcrumbVariants({ variant, bgColor, size, rounded }), className)}>
+    <nav aria-label={ariaLabel} role='navigation' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <ol
+        className={cn(
+          breadcrumbBase({
+            variant,
+            size,
+            rounded,
+            state: getCurrentState(),
+            hovered: isHovered
+          }),
+          containerClassName
+        )}
+      >
         {processedItems.map(({ item, isLast }, index) => (
           <React.Fragment key={`breadcrumb-${index}`}>
-            <li className={cn('flex items-center', itemClassName)}>{renderBreadcrumbItem(item, isLast)}</li>
+            <li className={cn('flex items-center')}>{renderBreadcrumbItem(item, isLast)}</li>
             {renderSeparatorElement(isLast)}
           </React.Fragment>
         ))}
