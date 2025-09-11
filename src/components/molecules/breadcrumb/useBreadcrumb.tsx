@@ -1,18 +1,16 @@
+import type { VariantProps } from 'class-variance-authority';
 import { DynamicIcon, type IconName } from 'lucide-react/dynamic';
-import type { ReactNode } from 'react';
-import type { BreadcrumbItem, BreadcrumbProps, ProcessedBreadcrumbItem } from './types';
-import { ACCESSIBLE_BORDER_COLORS, ACCESSIBLE_TEXT_COLORS, BREADCRUMB_TEXT_COLORS, SEPARATOR_PATTERNS } from './types';
+import { type ComponentProps, type MouseEvent, type ReactNode, useState } from 'react';
+import type { BreadcrumbItem, BreadcrumbProps, ProcessedBreadcrumbItem, breadcrumbBase } from './types';
 
 type BreadcrumbItemCollapsed = BreadcrumbItem | ReactNode;
 
 export const useBreadcrumb = ({
   items,
   variant = 'regular',
-  bgColor = 'default',
   size = 'md',
   iconSizes = 18,
   rounded = 'md',
-  className = '',
   startContent,
   endContent,
   hideSeparator = false,
@@ -22,73 +20,35 @@ export const useBreadcrumb = ({
   itemsAfterCollapse = 1,
   iconCollapse = 'more-horizontal',
   collapsedElement,
-  textColor,
-  colorSeparator,
   onCollapsedClick,
-  showTooltip = false,
-  truncateLength,
-  showHomeIcon = false,
-  homeIcon = 'home'
-}: BreadcrumbProps) => {
-  const getAccessibleTextColors = () => {
-    if (textColor) {
-      const predefinedColor = BREADCRUMB_TEXT_COLORS[textColor as keyof typeof BREADCRUMB_TEXT_COLORS];
-      if (predefinedColor) {
-        return {
-          text: predefinedColor,
-          separator: colorSeparator || predefinedColor
-        };
-      }
+  onMouseEnter,
+  onMouseLeave,
+  showTooltip = false
+}: Omit<VariantProps<typeof breadcrumbBase>, 'state' | 'focused'> & BreadcrumbProps & ComponentProps<'nav'>) => {
+  const [isHovered, setIsHovered] = useState(false);
 
-      const hasUtilities = textColor.includes('dark:') || textColor.includes('hover:');
-      const finaltextColor = hasUtilities
-        ? textColor
-        : `${textColor} dark:${textColor.replace('text-', 'dark:text-')} hover:opacity-80`;
-
-      return {
-        text: finaltextColor,
-        separator: colorSeparator || finaltextColor
-      };
-    }
-
-    const colors = ACCESSIBLE_TEXT_COLORS[bgColor] || ACCESSIBLE_TEXT_COLORS.default;
-    return {
-      text: `${colors.light} ${colors.dark} ${colors.hover}`,
-      separator: colorSeparator || `${colors.separator}`
-    };
+  const handleMouseEnter = (e: MouseEvent<HTMLElement>) => {
+    setIsHovered(true);
+    onMouseEnter?.(e);
   };
 
-  const getBorderColorClass = (): string => {
-    return ACCESSIBLE_BORDER_COLORS[bgColor] || '';
+  const handleMouseLeave = (e: MouseEvent<HTMLElement>) => {
+    setIsHovered(false);
+    onMouseLeave?.(e);
   };
 
+  const controlString = /[->/|](?![a-zA-Z0-9])/;
   const renderSeparator = (separator: ReactNode): ReactNode => {
     if (typeof separator === 'string') {
-      return SEPARATOR_PATTERNS.controlString.test(separator) ? (
-        <span
-          className={`text-[${iconSizes}px] ${getAccessibleTextColors().separator}`}
-          aria-hidden='true'
-          title='Breadcrumb separator'
-        >
+      return controlString.test(separator) ? (
+        <span aria-hidden='true' title='Breadcrumb separator'>
           {separator}
         </span>
       ) : (
-        <DynamicIcon
-          name={separator as IconName}
-          size={iconSizes}
-          className={getAccessibleTextColors().separator}
-          aria-hidden='true'
-        />
+        <DynamicIcon name={separator as IconName} size={iconSizes} aria-hidden='true' />
       );
     }
     return separator;
-  };
-
-  const truncateText = (text: string, length?: number): string => {
-    if (!length || text.length <= length) {
-      return text;
-    }
-    return `${text.slice(0, length)}...`;
   };
 
   const getHiddenItems = (): BreadcrumbItem[] => {
@@ -115,7 +75,7 @@ export const useBreadcrumb = ({
     const collapsedElementJsx: ReactNode = collapsedElement ?? (
       <span
         key='collapsed-icon'
-        className={`hover:cursor-pointer ${getAccessibleTextColors().text} transition-colors inline-flex items-center`}
+        className={`hover:cursor-pointer transition-colors inline-flex items-center`}
         title={
           showTooltip
             ? `${hiddenItems.length} hidden items: ${hiddenItemsText}`
@@ -152,11 +112,9 @@ export const useBreadcrumb = ({
   return {
     items,
     variant,
-    bgColor,
     size,
     iconSizes,
     rounded,
-    className,
     startContent,
     endContent,
     hideSeparator,
@@ -165,13 +123,11 @@ export const useBreadcrumb = ({
     iconCollapse,
     renderSeparator,
     isBreadcrumbItem,
-    getAccessibleTextColors,
-    getBorderColorClass,
     getHiddenItems,
-    truncateText,
+    handleMouseEnter,
+    handleMouseLeave,
     showTooltip,
-    truncateLength,
-    showHomeIcon,
-    homeIcon
+    isHovered,
+    setIsHovered
   };
 };

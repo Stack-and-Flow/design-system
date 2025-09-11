@@ -1,3 +1,4 @@
+import Badge from '@/components/atoms/badge';
 import Dropdown from '@/components/atoms/dropdown';
 import Icon from '@/components/atoms/icon';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -52,8 +53,7 @@ const items: BreadcrumbItem[] = [
 export const Default: Story = {
   args: {
     items,
-    variant: 'bordered',
-    bgColor: 'default',
+    variant: 'regular',
     rounded: 'md',
     size: 'md',
     separator: '/',
@@ -64,19 +64,45 @@ export const Default: Story = {
     maxItem: 0,
     itemsBeforeCollapse: 1,
     itemsAfterCollapse: 1,
-    className: ''
+    containerClassName: '',
+    linkClassName: 'dark:text-white dark:hover:text-white'
   }
 };
 
+const textHoverStyleInDarkMode = 'dark:text-white dark:hover:text-white';
 /**
  * - **Sizes**: Different size variants for the breadcrumb component (xs,sm, md, lg, xl).
  */
 export const Sizes: Story = {
   render: () => (
     <div className='flex flex-col gap-2 w-fit'>
-      <Breadcrumb items={items} size='sm' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
-      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
-      <Breadcrumb items={items} size='lg' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
+      <Breadcrumb
+        items={items}
+        size='sm'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        linkClassName={textHoverStyleInDarkMode}
+      />
+      <Breadcrumb
+        items={items}
+        size='md'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        linkClassName={textHoverStyleInDarkMode}
+      />
+      <Breadcrumb
+        items={items}
+        size='lg'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        linkClassName={textHoverStyleInDarkMode}
+      />
     </div>
   )
 };
@@ -86,21 +112,19 @@ export const Sizes: Story = {
   - The format for applying color to text is with tailwind.
   - The last element of the breadcrumb is a text-type atom component and will be disabled.
  */
+
 export const Colors: Story = {
   render: () => (
-    <div className='flex flex-col gap-2 p-4'>
+    <div className='flex flex-col gap-2 w-fit'>
       <Breadcrumb
         items={items}
-        size='md'
+        size='sm'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        variant='underlined'
-        textColor='red'
-        aria-label='Red colored breadcrumb navigation'
+        linkClassName={`text-blue-800 hover:text-blue-600 ${textHoverStyleInDarkMode}`}
       />
-
       <Breadcrumb
         items={items}
         size='md'
@@ -108,62 +132,69 @@ export const Colors: Story = {
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        variant='underlined'
-        textColor='blue'
-        aria-label='Blue colored breadcrumb navigation'
+        linkClassName={`text-red-800 hover:text-red-600 dark:text-white ${textHoverStyleInDarkMode}`}
       />
-
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        variant='underlined'
-        textColor='indigo'
-        aria-label='Indigo colored breadcrumb navigation'
+        linkClassName={`text-purple-800 hover:text-purple-600 ${textHoverStyleInDarkMode}`}
       />
     </div>
   )
 };
+
 /**
  * Different visual styles including regular, underlined, bordered, line variants.
  * - ⚠️ Some variants use a transparent background by default. To ensure proper visibility, place it inside a container with a solid or plain background using the bgColor property.
  *
  */
+const newStylesLinkClassName = `hover:text-gray-700 ${textHoverStyleInDarkMode}`;
 export const Variants: Story = {
   render: () => (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2 w-fit'>
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
         variant='regular'
+        linkClassName={newStylesLinkClassName}
       />
-
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
         variant='underlined'
+        linkClassName={newStylesLinkClassName}
       />
-
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
         variant='bordered'
-        bgColor='transparent'
+        linkClassName={newStylesLinkClassName}
+      />
+      <Breadcrumb
+        items={items}
+        size='lg'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='/'
+        variant='line'
+        linkClassName={newStylesLinkClassName}
       />
     </div>
   )
@@ -172,58 +203,53 @@ export const Variants: Story = {
 /**
  * - **Border Radius**: Allows you to apply different border radius to the container: md, xs, sm, lg, xl, full, none.
  */
+
 export const Rounded: Story = {
   render: () => (
-    <div className='flex flex-col gap-0.5'>
+    <div className='flex flex-col gap-2 w-fit'>
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        rounded='none'
-        variant='bordered'
-      />
-      <Breadcrumb
-        items={items}
-        size='md'
-        maxItem={0}
-        itemsAfterCollapse={1}
-        itemsBeforeCollapse={1}
-        separator='/'
+        variant='regular'
+        linkClassName={newStylesLinkClassName}
         rounded={'xs'}
-        variant='bordered'
       />
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        rounded='sm'
-        variant='bordered'
+        variant='underlined'
+        linkClassName={newStylesLinkClassName}
+        rounded={'lg'}
       />
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        rounded='md'
         variant='bordered'
+        linkClassName={newStylesLinkClassName}
+        rounded={'xl'}
       />
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        rounded='full'
-        variant='bordered'
+        variant='underlined'
+        linkClassName={newStylesLinkClassName}
+        rounded={'full'}
       />
     </div>
   )
@@ -233,27 +259,42 @@ export const Rounded: Story = {
  * - Allows you to apply a separator between elements. You can use any Lucide React icon or the characters /, |, >.
   - Simply enter the name of the Lucide React icon or the characters mentioned above in the “separator” property.
  */
-export const Separators: Story = {
+
+export const Separatators: Story = {
   render: () => (
-    <div className='flex flex-col gap-0.5'>
-      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='/' />
-      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='|' />
-      <Breadcrumb items={items} size='md' maxItem={0} itemsAfterCollapse={1} itemsBeforeCollapse={1} separator='>' />
+    <div className='flex flex-col gap-2 w-fit'>
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='chevron-right'
+        variant='regular'
+        linkClassName={newStylesLinkClassName}
+        rounded={'xs'}
       />
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
-        separator='arrow-right'
+        separator='|'
+        variant='underlined'
+        linkClassName={newStylesLinkClassName}
+        rounded={'lg'}
+      />
+      <Breadcrumb
+        items={items}
+        size='lg'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='home'
+        variant='bordered'
+        linkClassName={newStylesLinkClassName}
+        rounded={'xl'}
       />
     </div>
   )
@@ -263,17 +304,23 @@ export const Separators: Story = {
  * - **Hidden Separators**: Toggle separator visibility with the hideSeparator prop.
  *   This is useful when you want to display breadcrumb items without visual separators between them.
  */
-export const HiddenSeparators: Story = {
+
+export const HiddenSeparator: Story = {
   render: () => (
-    <Breadcrumb
-      items={items}
-      size='md'
-      maxItem={0}
-      itemsAfterCollapse={1}
-      itemsBeforeCollapse={1}
-      separator='/'
-      hideSeparator={true}
-    />
+    <div className='flex flex-col gap-2 w-fit'>
+      <Breadcrumb
+        items={items}
+        size='lg'
+        maxItem={0}
+        itemsAfterCollapse={1}
+        itemsBeforeCollapse={1}
+        separator='chevron-right'
+        hideSeparator={true}
+        variant='regular'
+        linkClassName={newStylesLinkClassName}
+        rounded={'xs'}
+      />
+    </div>
   )
 };
 
@@ -281,39 +328,45 @@ export const HiddenSeparators: Story = {
  * - **Start and End Content**: Add icons or content at the beginning and end of the breadcrumb.
  * - Use the startContent and endContent props.
  */
-export const WithStartEndContent: Story = {
+export const BeforeAndAfterLinkIcon: Story = {
   render: () => (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2 w-fit'>
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
-        separator='/'
-        variant='underlined'
+        separator='chevron-right'
+        variant='regular'
         startContent='home'
+        endContent='accessibility'
+        linkClassName={newStylesLinkClassName}
+        rounded={'xs'}
       />
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
-        separator='/'
+        separator='|'
         variant='underlined'
-        endContent='external-link'
+        startContent='home'
+        linkClassName={newStylesLinkClassName}
+        rounded={'lg'}
       />
       <Breadcrumb
         items={items}
-        size='md'
+        size='lg'
         maxItem={0}
         itemsAfterCollapse={1}
         itemsBeforeCollapse={1}
         separator='/'
-        startContent='home'
-        variant='underlined'
-        endContent='external-link'
+        variant='bordered'
+        endContent='accessibility'
+        linkClassName={newStylesLinkClassName}
+        rounded={'xl'}
       />
     </div>
   )
@@ -327,6 +380,7 @@ export const WithStartEndContent: Story = {
   - In this example, I have 3 items and I want 2 to be displayed, so the remaining item is 1 and will be hidden. the items are not displayed, only the chosen icon.
   - The icon can be applied with the 
  */
+
 export const MaxItemsAndCollapse: Story = {
   render: () => (
     <Breadcrumb
@@ -335,6 +389,7 @@ export const MaxItemsAndCollapse: Story = {
       maxItem={2}
       itemsAfterCollapse={1}
       itemsBeforeCollapse={1}
+      linkClassName={newStylesLinkClassName}
       separator='/'
       variant='underlined'
       iconCollapse='ellipsis-vertical'
@@ -382,154 +437,35 @@ const itemsAfterCollapse = 1;
 export const WithJsxElmentCollapsed: Story = {
   render: () => {
     return (
-      <Breadcrumb
-        items={items}
-        size='md'
-        maxItem={maxItem}
-        itemsAfterCollapse={itemsAfterCollapse}
-        itemsBeforeCollapse={itemsBeforeCollapse}
-        variant='underlined'
-        collapsedElement={
-          <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
-            <DynamicIcon name='ellipsis-vertical' className='cursor-pointer' />
-          </Dropdown>
-        }
-      />
-    );
-  }
-};
-
-/**
- * - **Complete Examples**: Comprehensive demonstrations combining multiple props and features.
- *   These examples show real-world usage scenarios with various combinations of styling, icons, collapsing, and visual effects.
- */
-export const CompleteExample: Story = {
-  render: () => (
-    <div className='flex flex-col gap-0.5'>
-      <Breadcrumb
-        items={items}
-        size='lg'
-        maxItem={2}
-        itemsAfterCollapse={1}
-        itemsBeforeCollapse={1}
-        separator='chevron-right'
-        variant='underlined'
-        rounded={'sm'}
-        startContent='home'
-        endContent='external-link'
-        textColor='blue'
-        iconCollapse='more-horizontal'
-        collapsedElement={
-          <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
-            <DynamicIcon name='ellipsis-vertical' />
-          </Dropdown>
-        }
-      />
-    </div>
-  )
-};
-
-export const WithBadgeCollapse: Story = {
-  render: () => {
-    const longItems: BreadcrumbItem[] = [
-      { title: 'Home', href: '/' },
-      { title: 'Library', href: '/library' },
-      { title: 'Documents', href: '/library/documents' },
-      { title: 'Projects', href: '/library/documents/projects' },
-      { title: 'Annual Report', href: '/library/documents/projects/annual' }
-    ];
-
-    return (
-      <div className='flex flex-col gap-0.5'>
+      <div className='flex flex-col gap-2 w-fit'>
         <Breadcrumb
-          items={longItems}
+          items={items}
           size='md'
-          maxItem={3}
-          itemsBeforeCollapse={1}
-          itemsAfterCollapse={1}
-          separator='chevron-right'
+          maxItem={maxItem}
+          itemsAfterCollapse={itemsAfterCollapse}
+          itemsBeforeCollapse={itemsBeforeCollapse}
+          linkClassName={newStylesLinkClassName}
           variant='underlined'
-          rounded='sm'
-          startContent='home'
-          textColor='text-blue-600 dark:text-blue-400'
           collapsedElement={
-            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
-              <span className='inline-flex items-center justify-center h-5 min-w-[20px] px-1.5 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-full cursor-pointer'>
-                +{longItems.length - maxItem}
-              </span>
-            </Dropdown>
-          }
-        />
-      </div>
-    );
-  }
-};
-
-export const ModernDropdown: Story = {
-  render: () => {
-    const longItems: BreadcrumbItem[] = [
-      { title: 'Home', href: '/' },
-      { title: 'Library', href: '/library' },
-      { title: 'Documents', href: '/library/documents' },
-      { title: 'Projects', href: '/library/documents/projects' },
-      { title: 'Annual Report', href: '/library/documents/projects/annual' }
-    ];
-
-    return (
-      <div className='flex flex-col gap-4'>
-        <Breadcrumb
-          items={longItems}
-          size='md'
-          maxItem={3}
-          itemsBeforeCollapse={1}
-          itemsAfterCollapse={1}
-          separator='chevron-right'
-          variant='underlined'
-          textColor='text-slate-600 dark:text-slate-400'
-          collapsedElement={
-            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
-              <span className='inline-flex items-center justify-center h-6 px-2 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'>
-                {longItems.length - maxItem} more
-              </span>
+            <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
+              <DynamicIcon name='ellipsis-vertical' className='cursor-pointer' />
             </Dropdown>
           }
         />
 
         <Breadcrumb
-          items={longItems}
+          items={items}
           size='md'
-          maxItem={3}
-          itemsBeforeCollapse={1}
-          itemsAfterCollapse={1}
-          separator='chevron-right'
+          maxItem={maxItem}
+          itemsAfterCollapse={itemsAfterCollapse}
+          itemsBeforeCollapse={itemsBeforeCollapse}
+          linkClassName={newStylesLinkClassName}
           variant='underlined'
-          textColor='text-blue-600 dark:text-blue-400'
           collapsedElement={
-            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
-              <span className='inline-flex items-center justify-center h-7 min-w-[28px] px-2 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors'>
-                +{longItems.length - maxItem}
-              </span>
-            </Dropdown>
-          }
-        />
-
-        <Breadcrumb
-          items={longItems}
-          size='md'
-          maxItem={3}
-          itemsBeforeCollapse={1}
-          itemsAfterCollapse={1}
-          separator='/'
-          variant='underlined'
-          rounded='lg'
-          textColor='text-gray-700 dark:text-gray-300'
-          className='shadow-sm'
-          collapsedElement={
-            <Dropdown items={getDropdownForItems(longItems, 3, 1, 1)} width='200px'>
-              <button className='inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'>
-                <Icon name='more-horizontal' size={14} />
-                <span>{longItems.length - maxItem} more</span>
-              </button>
+            <Dropdown items={getDropdownForItems(items, 2, 1, 1)} width='200px'>
+              <div className='relative inline-flex items-center justify-center w-6 h-6 hover:cursor-pointer'>
+                <Badge content={items.length - maxItem} size='sm' className='absolute -top-1 -right-1' />
+              </div>
             </Dropdown>
           }
         />
