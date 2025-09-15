@@ -34,46 +34,33 @@ export const HorizontalSize: Story = {
       <Divider orientation='horizontal' lengthX='sm' />
       <Divider orientation='horizontal' lengthX='md' />
       <Divider orientation='horizontal' lengthX='lg' />
-      <Divider orientation='horizontal' lengthX='full' />
+      <Divider orientation='horizontal' lengthX='xl' />
     </div>
   )
 };
-
-/**
- * In both orientations, we have three thicknesses.
- */
-export const HorizontalThickness: Story = {
-  render: () => (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
-      <Divider orientation='horizontal' lengthX='xs' thicknessX='thin' />
-      <Divider orientation='horizontal' lengthX='sm' thicknessX='medium' />
-      <Divider orientation='horizontal' lengthX='md' thicknessX='thick' />
-    </div>
-  )
-};
-
 /**
  * Vertically, there are three measurements: SM, MD, and LG.
  */
 export const VerticalSize: Story = {
   render: () => (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+      <Divider orientation='vertical' lengthY='xs' />
       <Divider orientation='vertical' lengthY='sm' />
       <Divider orientation='vertical' lengthY='md' />
-      <Divider orientation='vertical' lengthY='lg' />
     </div>
   )
 };
 
 /**
- * In both orientations, we have three thicknesses.
+ * In both orientations, we have four thicknesses.
  */
-export const VerticalThickness: Story = {
+export const Thickness: Story = {
   render: () => (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-      <Divider orientation='vertical' lengthY='sm' thicknessY='thin' />
-      <Divider orientation='vertical' lengthY='md' thicknessY='medium' />
-      <Divider orientation='vertical' lengthY='lg' thicknessY='thick' />
+      <Divider orientation='vertical' thickness='xs' />
+      <Divider orientation='vertical' thickness='sm' />
+      <Divider orientation='vertical' thickness='md' />
+      <Divider orientation='vertical' thickness='lg' />
     </div>
   )
 };

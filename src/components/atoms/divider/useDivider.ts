@@ -1,26 +1,30 @@
 import { type DividerProps, dividerVariants } from './types';
 
 export const useDivider = ({
-  orientation = 'horizontal',
+  orientation = 'vertical',
   color = 'bg-accent',
-  lengthX = 'md',
-  thicknessX = 'thin',
-  lengthY = 'md',
-  thicknessY = 'thin',
+  lengthX = 'xs',
+  lengthY = 'xs',
+  thickness = 'xs',
   hover = 'none'
 }: DividerProps) => {
   // Additional logic can be added here if needed
 
-  const dividerClass = dividerVariants({ orientation, lengthX, thicknessX, lengthY, thicknessY, hover });
+  const dividerClass = dividerVariants({
+    orientation,
+    lengthX,
+    lengthY,
+    thickness,
+    hover
+  });
 
   return {
     orientation,
     color,
     dividerClass,
     lengthX,
-    thicknessX,
     lengthY,
-    thicknessY,
+    thickness,
     hover
   };
 };

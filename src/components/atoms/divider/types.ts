@@ -4,30 +4,26 @@ import { cva } from 'class-variance-authority';
 export const dividerVariants = cva('', {
   variants: {
     orientation: {
-      horizontal: 'border-none pt-px',
-      vertical: 'border-none pl-px'
-    },
-    thicknessY: {
-      thin: 'w-px',
-      medium: 'w-[2px]',
-      thick: 'w-[4px]'
+      horizontal: 'h-px w-[4px]',
+      vertical: 'w-px h-[4px]'
     },
     lengthX: {
-      xs: 'pl-8',
-      sm: 'pl-16',
-      md: 'pl-32',
-      lg: 'pl-64',
-      full: 'pl-96'
-    },
-    thicknessX: {
-      thin: 'h-px',
-      medium: 'h-[2px]',
-      thick: 'h-[4px]'
+      xs: 'w-8',
+      sm: 'w-16',
+      md: 'w-32',
+      lg: 'w-64',
+      xl: 'w-96'
     },
     lengthY: {
-      sm: 'pt-8',
-      md: 'pt-16',
-      lg: 'pt-32'
+      xs: 'h-8',
+      sm: 'h-16',
+      md: 'h-32'
+    },
+    thickness: {
+      xs: 'p-[0px]',
+      sm: 'p-[2px]',
+      md: 'p-[3px]',
+      lg: 'p-[5px]'
     },
     hover: {
       none: '',
@@ -38,26 +34,22 @@ export const dividerVariants = cva('', {
   compoundVariants: [
     {
       orientation: 'horizontal',
-      class: 'pt-px'
+      class: 'h-px'
     },
     {
       orientation: 'vertical',
-      class: 'pl-px'
+      class: 'w-px'
     }
   ],
   defaultVariants: {
-    orientation: 'horizontal',
-    lengthX: 'md',
-    lengthY: 'md',
-    thicknessY: 'thin'
+    orientation: 'horizontal'
   }
 });
 
 type DividerOrientation = 'horizontal' | 'vertical';
-type DividerWidth = 'xs' | 'sm' | 'md' | 'lg' | 'full';
-type ThicknessX = 'thin' | 'medium' | 'thick';
-type DividerHeight = 'sm' | 'md' | 'lg';
-type ThicknessY = 'thin' | 'medium' | 'thick';
+type DividerWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+type DividerHeight = 'xs' | 'sm' | 'md';
+type DividerThickness = 'xs' | 'sm' | 'md' | 'lg';
 type DividerHover = 'none' | 'bright' | 'zoom';
 
 export type DividerProps = {
@@ -65,7 +57,7 @@ export type DividerProps = {
 
   /**
    * @control select
-   * @default vertical
+   * @default horizontal
    */
   orientation?: DividerOrientation;
 
@@ -77,27 +69,21 @@ export type DividerProps = {
 
   /**
    * @control select
-   * @default lg
+   * @default xs
    */
   lengthX?: DividerWidth;
 
   /**
    * @control select
-   * @default thin
-   */
-  thicknessX?: ThicknessX;
-
-  /**
-   * @control select
-   * @default md
+   * @default xs
    */
   lengthY?: DividerHeight;
 
   /**
    * @control select
-   * @default thin
+   * @default xs
    */
-  thicknessY?: ThicknessY;
+  thickness?: DividerThickness;
 
   /**
    * @control select
