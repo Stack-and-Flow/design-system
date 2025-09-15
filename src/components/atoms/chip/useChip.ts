@@ -47,7 +47,7 @@ export function useChip(props: ChipProps) {
   const startKind = startContent == null ? 'default' : isText(startContent) ? 'text' : 'icon';
   const endKind = endContent == null ? 'default' : isText(endContent) ? 'text' : 'icon';
 
-  const interactive = !!onClick || !!selectable; // define interactividad
+  const interactive = !!onClick || !!selectable;
   const Tag: 'div' | 'button' = as ?? (interactive ? 'button' : 'div');
 
   const baseClasses = chipVariants({
@@ -78,15 +78,15 @@ export function useChip(props: ChipProps) {
         : '[&_svg]:h-4 [&_svg]:w-4';
 
   const closeBtnBoxBySize =
-    size === 'sm' ? 'h-[18px] w-[18px]' : size === 'lg' ? 'h-[20px] w-[20px]' : 'h-[18px] w-[18px]';
+    size === 'sm' ? 'h-[10px] w-[10px]' : size === 'lg' ? 'h-[15px] w-[15px]' : 'h-[13px] w-[13px]';
 
-  const closeGlyphSizeBySize = size === 'sm' ? 'text-[16px]' : size === 'lg' ? 'text-[20px]' : 'text-[18px]';
+  const closeGlyphSizeBySize = size === 'sm' ? 'text-[16px]' : size === 'lg' ? 'text-[15px]' : 'text-[13px]';
 
   const slots = {
     base: cn(
       baseClasses,
       'min-w-0',
-      pieceCount > 1 && (closable ? 'gap-1' : 'gap-2'),
+      pieceCount > 1 && 'gap-1',
       className,
       classNames?.base,
       interactive ? 'cursor-pointer' : 'cursor-auto',
@@ -95,7 +95,7 @@ export function useChip(props: ChipProps) {
     ),
     content: cn('truncate', classNames?.content),
     dot: cn('inline-block w-2 h-2 rounded-full shrink-0 bg-[var(--chip-dot)]', classNames?.dot),
-    avatar: cn('shrink-0 ltr:mr-2 rtl:ml-2', classNames?.avatar),
+    avatar: cn('shrink-0 ltr:mr-0.3 rtl:ml-0.3', classNames?.avatar),
 
     closeButton: cn(
       'relative inline-flex items-center justify-center overflow-visible',

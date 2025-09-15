@@ -144,8 +144,14 @@ export const StartEndContent: Story = {
     color: 'primary',
     startContent: <Trash2 />,
     endContent: (
-      <IconButton aria-label='Close' className='p-0'>
-        <Icon className='h-4 w-4' aria-hidden={true} name='bold' />
+      <IconButton
+        aria-label='Close'
+        className='grid h-6 w-6 place-items-center
+             bg-[var(--color-accent)]/1
+             border border-transparent
+             dark:bg-[var(--color-accent)]/18'
+      >
+        <Icon name='bold' size={10} className='' />
       </IconButton>
     )
   }
@@ -214,10 +220,22 @@ export const SelectableControlled: Story = {
 export const WithAvatar: Story = {
   render: () => (
     <div className='flex items-center gap-4'>
+      {/* Forzamos el slot avatar a 16px y recortamos */}
       <Chip avatar={<Avatar src='/images/logo-dark-background.png' alt='EG' size='sm' />}>EGDEV</Chip>
+
+      <Chip
+        classNames={{
+          avatar: 'h-4 w-4 overflow-hidden rounded-full grid place-items-center'
+        }}
+        avatar={<Icon name='user' size={16} className='text-[var(--color-accent)] dark:text-[var(--color-white)]' />}
+      >
+        User
+      </Chip>
+
       <Chip
         color='primary'
-        avatar={<div className='h-6 w-6 rounded-full bg-accent text-white grid place-items-center text-[10px]'>AP</div>}
+        classNames={{ avatar: 'h-4 w-4 overflow-hidden rounded-full' }}
+        avatar={<div className='h-4 w-4 rounded-full bg-accent text-white grid place-items-center text-[10px]'>A</div>}
       >
         Andrés
       </Chip>
