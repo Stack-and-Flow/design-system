@@ -1,159 +1,18 @@
-import type React from 'react';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import type { CompleteTableProps, TableColumn } from './types';
-import { useTable } from './useTable';
+import { useKeyboardNavigation, useTable, useTableEvents } from './useTable';
 import { useVirtualization } from './useVirtualization';
 
-// Utility functions for keyboard navigation
-const useKeyboardNavigation = (rowCount: number, columnCount: number, disabled: boolean = false) => {
-  const [focusedCell, setFocusedCell] = useState<{ row: number; col: number } | null>(null);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (disabled || !focusedCell) {
-        return;
-      }
-
-      const { row, col } = focusedCell;
-      let newRow = row;
-      let newCol = col;
-      let preventDefault = true;
-
-      switch (e.key) {
-        case 'ArrowUp':
-          newRow = Math.max(0, row - 1);
-          break;
-        case 'ArrowDown':
-          newRow = Math.min(rowCount - 1, row + 1);
-          break;
-        case 'ArrowLeft':
-          newCol = Math.max(0, col - 1);
-          break;
-        case 'ArrowRight':
-          newCol = Math.min(columnCount - 1, col + 1);
-          break;
-        case 'Home':
-          if (e.ctrlKey) {
-            newRow = 0;
-            newCol = 0;
-          } else {
-            newCol = 0;
-          }
-          break;
-        case 'End':
-          if (e.ctrlKey) {
-            newRow = rowCount - 1;
-            newCol = columnCount - 1;
-          } else {
-            newCol = columnCount - 1;
-          }
-          break;
-        case 'PageUp':
-          newRow = Math.max(0, row - 10);
-          break;
-        case 'PageDown':
-          newRow = Math.min(rowCount - 1, row + 10);
-          break;
-        default:
-          preventDefault = false;
-      }
-
-      if (preventDefault) {
-        e.preventDefault();
-        setFocusedCell({ row: newRow, col: newCol });
-      }
-    },
-    [focusedCell, rowCount, columnCount, disabled]
-  );
-
-  return { focusedCell, setFocusedCell, handleKeyDown };
-};
-
-/**
- * A comprehensive, accessible Table component.
- * Supports advanced features like row selection, sorting, virtualization, pagination, and keyboard navigation.
- *
- * @template T - The type of data object for each row
- * @param props - Table configuration props
- * @returns JSX.Element - Rendered table component
- *
- * @example
- * ```tsx
- * // Basic usage
- * interface User {
- *   id: string;
- *   name: string;
- *   email: string;
- *   role: string;
- * }
- *
- * const columns = [
- *   { key: 'name', header: 'Name', allowsSorting: true },
- *   { key: 'email', header: 'Email' },
- *   { key: 'role', header: 'Role' }
- * ];
- *
- * const users: User[] = [
- *   { id: '1', name: 'John Doe', email: 'john@example.com', role: 'Admin' },
- *   { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'User' }
- * ];
- *
- * <Table<User>
- *   items={users}
- *   columns={columns}
- *   selectionMode="multiple"
- *   onSelectionChange={(keys) => setSelectedKeys(keys)}
- *   sortDescriptor={{ column: 'name', direction: 'ascending' }}
- *   onSortChange={(descriptor) => handleSort(descriptor)}
- *   isVirtualized={false}
- *   className="custom-table"
- * />
- * ```
- *
- * @example
- * ```tsx
- * // Advanced usage with virtualization
- * <Table<User>
- *   items={largeUserList}
- *   columns={columns}
- *   selectionMode="single"
- *   isVirtualized={true}
- *   maxTableHeight={400}
- *   rowHeight={56}
- *   showSelectionCheckboxes={true}
- *   disallowEmptySelection={false}
- *   pagination={true}
- *   pageSize={50}
- *   topContent={<div>Custom header content</div>}
- *   bottomContent={<div>Custom footer content</div>}
- * />
- * ```
- *
- * @features
- * - ✅ Row selection (single/multiple) with keyboard support
- * - ✅ Column sorting with custom sort indicators
- * - ✅ Row virtualization for large datasets (10k+ rows)
- * - ✅ Pagination with configurable page sizes
- * - ✅ Keyboard navigation (Arrow keys, Enter, Space)
- * - ✅ Accessibility (ARIA attributes, screen reader support)
- * - ✅ Custom cell renderers and row actions
- * - ✅ Loading states and empty states
- * - ✅ Responsive design with mobile support
- * - ✅ Dark mode support
- */
 function Table<T = any>(props: CompleteTableProps<T>) {
   const {
-    // Data
     data = [],
     items = [],
     columns = [],
 
-    // Visual styling
     color = 'default',
     layout = 'auto',
     shadow = 'sm',
 
-    // Layout options
     hideHeader = false,
     isStriped = false,
     isCompact = false,
@@ -161,13 +20,11 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     fullWidth = true,
     removeWrapper = false,
 
-    // Content areas
     topContent,
     bottomContent,
     topContentPlacement = 'inside',
     bottomContentPlacement = 'inside',
 
-    // Selection
     selectionMode = 'none',
     selectedKeys,
     defaultSelectedKeys,
@@ -175,26 +32,20 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     disallowEmptySelection = false,
     showSelectionCheckboxes,
 
-    // Sorting
     sortDescriptor,
 
-    // Accessibility
     isKeyboardNavigationDisabled = false,
 
-    // Virtualization
     isVirtualized = false,
     maxTableHeight = 400,
 
-    // Events
     onRowAction,
     onCellAction,
     onSelectionChange,
     onSortChange,
 
-    // Styling
     classNames = {},
 
-    // Legacy props
     loading = false,
     emptyContent,
     variant = 'default',
@@ -209,7 +60,6 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     onSelectRows,
     onRowClick,
 
-    // Props for interface compatibility (unused but required)
     radius: _radius = 'lg',
     selectionBehavior: _selectionBehavior = 'toggle',
     rowKey: _rowKey
@@ -219,14 +69,12 @@ function Table<T = any>(props: CompleteTableProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const tableId = useRef(`table-${Math.random().toString(36).substr(2, 9)}`);
 
-  // Virtualization configuration
   const defaultRowHeight = size === 'sm' ? 32 : size === 'lg' ? 56 : 44;
   const containerHeight = maxTableHeight || 400;
 
-  // Use the enhanced table hook
   const tableState = useTable({
-    data: data.length > 0 ? data : Array.from(items || []),
-    items,
+    data: Array.from(items?.length > 0 ? items : data || []),
+    items: items?.length > 0 ? items : data || [],
     columns,
     propLoading: loading,
     pagination,
@@ -244,7 +92,6 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     onSortChange
   });
 
-  // Virtualization hook
   const { virtualItems, totalHeight, offsetY, handleScroll } = useVirtualization({
     items: tableState.filteredData,
     containerHeight,
@@ -253,14 +100,20 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     overscan: 5
   });
 
-  // Keyboard navigation
   const { focusedCell, setFocusedCell, handleKeyDown } = useKeyboardNavigation(
     tableState.filteredData.length,
     columns.length,
     isKeyboardNavigationDisabled
   );
 
-  // Get CSS classes
+  const { handleCellClick, handleRowClick } = useTableEvents(
+    tableState.getRowKey,
+    setFocusedCell,
+    onRowAction,
+    onCellAction,
+    onRowClick
+  );
+
   const getBaseClasses = useCallback(() => {
     let classes = 'relative';
     if (fullWidth) {
@@ -275,7 +128,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
   const getWrapperClasses = useCallback(() => {
     let classes = 'flex flex-col relative';
     if (!removeWrapper) {
-      classes += ' border border-[#636579] rounded-lg bg-[#1a1a1a]';
+      classes += ' border border-gray-dark-600 rounded-lg bg-background-dark';
       if (shadow !== 'none') {
         const shadowMap = {
           sm: 'shadow-sm',
@@ -292,30 +145,26 @@ function Table<T = any>(props: CompleteTableProps<T>) {
   }, [removeWrapper, shadow, classNames.wrapper]);
 
   const getTableClasses = useCallback(() => {
-    let classes = `table-${layout} w-full bg-[#1a1a1a]`;
+    let classes = `table-${layout} w-full bg-background-dark`;
 
-    // Color theming using design system color classes
     const colorMap = {
-      default: 'text-text-dark dark:text-text-dark',
-      primary: 'text-primary',
-      secondary: 'text-secondary',
-      success: 'text-green-500',
-      warning: 'text-yellow-500',
-      danger: 'text-red-500'
+      default: 'text-text-dark',
+      primary: 'border-l-4 border-primary bg-primary/5 text-text-dark',
+      secondary: 'border-l-4 border-secondary bg-red-600/5 text-text-dark',
+      success: 'border-l-4 border-[var(--color-success)] bg-[var(--color-success)]/10 text-text-dark',
+      warning: 'border-l-4 border-[var(--color-warning)] bg-[var(--color-warning)]/10 text-text-dark',
+      danger: 'border-l-4 border-[var(--color-danger)] bg-[var(--color-danger)]/10 text-text-dark'
     };
     classes += ` ${colorMap[color] || colorMap.default}`;
 
-    // Striped rows with design system colors
     if (isStriped || variant === 'striped') {
-      classes += ' [&>tbody>tr:nth-child(odd)]:bg-[#2a2a2a]';
+      classes += ' [&>tbody>tr:nth-child(odd)]:bg-gray-dark-800';
     }
 
-    // Compact mode
     if (isCompact) {
       classes += ' [&>thead>tr>th]:py-1 [&>tbody>tr>td]:py-1';
     }
 
-    // Size classes
     const sizeMap = {
       sm: 'text-sm',
       md: 'text-base',
@@ -330,7 +179,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
   }, [layout, color, isStriped, variant, isCompact, size, classNames.table]);
 
   const getHeaderClasses = useCallback(() => {
-    let classes = 'bg-[#830213] border-b border-[#636579]';
+    let classes = 'bg-primary border-b border-gray-dark-600';
     if (isHeaderSticky) {
       classes += ' sticky top-0 z-10';
     }
@@ -344,7 +193,6 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     (column: TableColumn<T>, columnIndex: number) => {
       let classes = 'px-4 py-3 text-left font-semibold text-white';
 
-      // Alignment
       if (column.align) {
         const alignMap = {
           start: 'text-left',
@@ -354,14 +202,12 @@ function Table<T = any>(props: CompleteTableProps<T>) {
         classes = classes.replace('text-left', alignMap[column.align] || 'text-left');
       }
 
-      // Sortable cursor
       if (column.allowsSorting || column.sortable) {
-        classes += ' cursor-pointer hover:bg-[#b41520] transition-colors';
+        classes += ' cursor-pointer hover:bg-secondary transition-colors';
       }
 
-      // Focus styles
       if (focusedCell && focusedCell.row === -1 && focusedCell.col === columnIndex) {
-        classes += ' ring-2 ring-[#d61e2b] ring-inset';
+        classes += ' ring-2 ring-accent ring-inset';
       }
 
       if (classNames.th) {
@@ -374,11 +220,10 @@ function Table<T = any>(props: CompleteTableProps<T>) {
 
   const getCellClasses = useCallback(
     (rowIndex: number, columnIndex: number) => {
-      let classes = 'px-4 py-3 text-white border-b border-[#636579]';
+      let classes = 'px-4 py-3 text-white border-b border-gray-dark-600';
 
-      // Focus styles
       if (focusedCell && focusedCell.row === rowIndex && focusedCell.col === columnIndex) {
-        classes += ' ring-2 ring-[#d61e2b] ring-inset';
+        classes += ' ring-2 ring-accent ring-inset';
       }
 
       if (classNames.td) {
@@ -389,14 +234,12 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     [focusedCell, classNames.td]
   );
 
-  // Sort icon renderer
   const renderSortIcon = useCallback(
     (column: TableColumn<T>) => {
       if (column.sortIcon) {
         return column.sortIcon;
       }
 
-      // Default sort icons
       const isCurrentlySorted = tableState.sortDescriptor?.column === column.key;
       const direction = isCurrentlySorted ? tableState.sortDescriptor?.direction : null;
 
@@ -429,39 +272,12 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     [tableState.sortDescriptor, classNames.sortIcon]
   );
 
-  // Handle cell click
-  const handleCellClick = useCallback(
-    (rowIndex: number, columnIndex: number, row: T) => {
-      setFocusedCell({ row: rowIndex, col: columnIndex });
-
-      if (onCellAction) {
-        const key = tableState.getRowKey(row, rowIndex);
-        onCellAction(key);
-      }
-    },
-    [tableState.getRowKey, onCellAction, setFocusedCell]
-  );
-
-  // Handle row click
-  const handleRowClick = useCallback(
-    (rowIndex: number, row: T) => {
-      const key = tableState.getRowKey(row, rowIndex);
-
-      if (onRowAction) {
-        onRowAction(key);
-      }
-
-      if (onRowClick) {
-        onRowClick(row);
-      }
-    },
-    [tableState.getRowKey, onRowAction, onRowClick]
-  );
-
-  // Render loading state
   const renderLoadingState = useCallback(
     () => (
       <div className={`${getWrapperClasses()} ${className || ''}`}>
+        <div aria-live='polite' aria-atomic='true' className='sr-only'>
+          Cargando datos de la tabla...
+        </div>
         <table className={getTableClasses()} role='grid' aria-label='Loading table data' aria-busy='true'>
           {!hideHeader && (
             <thead className={getHeaderClasses()}>
@@ -527,7 +343,6 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     ]
   );
 
-  // Render empty state
   const renderEmptyState = useCallback(
     () => (
       <div className={`${getWrapperClasses()} ${className || ''}`}>
@@ -541,12 +356,16 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                     role='columnheader'
                     aria-label='Selection'
                   >
-                    <input
-                      type='checkbox'
-                      disabled={true}
-                      aria-label='Select all rows'
-                      className='opacity-50 cursor-not-allowed'
-                    />
+                    {selectionMode === 'multiple' ? (
+                      <input
+                        type='checkbox'
+                        disabled={true}
+                        aria-label='Select all rows'
+                        className='opacity-50 cursor-not-allowed'
+                      />
+                    ) : (
+                      <span aria-hidden='true'></span>
+                    )}
                   </th>
                 )}
                 {columns.map((column, index) => (
@@ -566,6 +385,23 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                     <div className='flex items-center justify-between'>
                       <span>{column.header}</span>
                       {(column.allowsSorting || column.sortable) && renderSortIcon(column)}
+                      {column.filterable && (
+                        <>
+                          <div id={`filter-help-${column.key}`} className='sr-only'>
+                            Ingrese texto para filtrar la columna {column.header}
+                          </div>
+                          <input
+                            type='text'
+                            placeholder='Filtrar...'
+                            value={tableState.filterValues[String(column.key)] || ''}
+                            onChange={(e) => tableState.setFilter(String(column.key), e.target.value)}
+                            className='ml-2 p-1 border rounded-md text-sm bg-background-dark border-gray-dark-600 text-text-dark placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
+                            aria-label={`Filter by ${column.header}`}
+                            aria-describedby={`filter-help-${column.key}`}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </>
+                      )}
                     </div>
                   </th>
                 ))}
@@ -576,7 +412,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
             <tr role='row'>
               <td
                 colSpan={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
-                className='px-4 py-8 text-center text-[#636579]'
+                className='px-4 py-8 text-center text-gray-dark-300'
                 role='gridcell'
               >
                 {emptyContent || 'No hay datos para mostrar.'}
@@ -603,17 +439,21 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     ]
   );
 
-  // Loading state
   if (tableState.isLoading) {
     return renderLoadingState();
   }
 
-  // Empty state
-  if (!tableState.filteredData || tableState.filteredData.length === 0) {
+  // Check if there are original data items but they're all filtered out
+  const actualDataSource = items?.length > 0 ? items : data || [];
+  const hasOriginalData = actualDataSource && actualDataSource.length > 0;
+  const hasActiveFilters = Object.values(tableState.filterValues).some((value) => value && value.trim() !== '');
+  const hasFilteredResults = tableState.filteredData && tableState.filteredData.length > 0;
+
+  // Only show empty state if there's truly no data OR no filtered results AND no active filters
+  if (!hasOriginalData) {
     return renderEmptyState();
   }
 
-  // Main table render
   const tableContent = (
     <div className={`${getBaseClasses()} ${className || ''}`}>
       {topContent && topContentPlacement === 'outside' && <div className='mb-4'>{topContent}</div>}
@@ -629,11 +469,17 @@ function Table<T = any>(props: CompleteTableProps<T>) {
           style={isVirtualized ? { maxHeight: `${containerHeight}px` } : undefined}
           onScroll={isVirtualized ? handleScroll : undefined}
         >
+          <div id={`${tableId.current}-description`} className='sr-only'>
+            Tabla con {tableState.filteredData.length} filas de datos
+            {selectionMode !== 'none' || showSelectionCheckboxes ? ' con selección habilitada' : ''}
+            {tableState.sortDescriptor && ' ordenada por ' + tableState.sortDescriptor.column}
+          </div>
           <table
             ref={tableRef}
             className={getTableClasses()}
             role='grid'
             aria-label='Data table'
+            aria-describedby={`${tableId.current}-description`}
             aria-rowcount={tableState.filteredData.length + (hideHeader ? 0 : 1)}
             aria-colcount={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
             onKeyDown={handleKeyDown}
@@ -650,16 +496,21 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                       aria-label='Selection'
                       aria-colindex={1}
                     >
-                      <input
-                        type='checkbox'
-                        checked={
-                          tableState.selectedRows.length === tableState.filteredData.length &&
-                          tableState.filteredData.length > 0
-                        }
-                        onChange={tableState.toggleAllRowsSelection}
-                        aria-label='Select all rows'
-                        disabled={disallowEmptySelection && tableState.selectedRows.length === 1}
-                      />
+                      {selectionMode === 'multiple' ? (
+                        <input
+                          type='checkbox'
+                          checked={
+                            tableState.selectedRows.length === tableState.filteredData.length &&
+                            tableState.filteredData.length > 0
+                          }
+                          onChange={tableState.toggleAllRowsSelection}
+                          aria-label='Select all rows'
+                          disabled={disallowEmptySelection && tableState.selectedRows.length === 1}
+                        />
+                      ) : (
+                        // En single mode, mostramos texto visible para accesibilidad
+                        <span className='sr-only'>Select</span>
+                      )}
                     </th>
                   )}
                   {columns.map((column, index) => (
@@ -667,6 +518,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                       key={String(column.key)}
                       className={getHeaderCellClasses(column, index)}
                       role='columnheader'
+                      scope='col'
                       aria-label={String(column.header)}
                       aria-colindex={index + (selectionMode !== 'none' || showSelectionCheckboxes ? 2 : 1)}
                       aria-sort={
@@ -677,6 +529,13 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                           : column.allowsSorting || column.sortable
                             ? 'none'
                             : undefined
+                      }
+                      aria-expanded={
+                        column.allowsSorting || column.sortable
+                          ? tableState.sortDescriptor?.column === column.key
+                            ? 'true'
+                            : 'false'
+                          : undefined
                       }
                       tabIndex={column.allowsSorting || column.sortable ? 0 : -1}
                       onClick={() => {
@@ -695,15 +554,21 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                         <span>{column.header}</span>
                         {(column.allowsSorting || column.sortable) && renderSortIcon(column)}
                         {column.filterable && (
-                          <input
-                            type='text'
-                            placeholder='Filtrar...'
-                            value={tableState.filterValues[String(column.key)] || ''}
-                            onChange={(e) => tableState.setFilter(String(column.key), e.target.value)}
-                            className='ml-2 p-1 border rounded-md text-sm bg-[#2a2a2a] border-[#636579] text-white placeholder-[#636579] focus:ring-[#d61e2b] focus:border-[#d61e2b] w-20'
-                            aria-label={`Filter by ${column.header}`}
-                            onClick={(e) => e.stopPropagation()}
-                          />
+                          <>
+                            <div id={`filter-help-${column.key}`} className='sr-only'>
+                              Ingrese texto para filtrar la columna {column.header}
+                            </div>
+                            <input
+                              type='text'
+                              placeholder='Filtrar...'
+                              value={tableState.filterValues[String(column.key)] || ''}
+                              onChange={(e) => tableState.setFilter(String(column.key), e.target.value)}
+                              className='ml-2 p-1 border rounded-md text-sm bg-background-dark border-gray-dark-600 text-text-dark placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
+                              aria-label={`Filter by ${column.header}`}
+                              aria-describedby={`filter-help-${column.key}`}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </>
                         )}
                       </div>
                     </th>
@@ -717,113 +582,136 @@ function Table<T = any>(props: CompleteTableProps<T>) {
               style={
                 isVirtualized
                   ? {
-                      height: `${totalHeight}px`,
-                      position: 'relative'
+                      height: `${totalHeight}px`
                     }
                   : undefined
               }
             >
-              {isVirtualized && (
-                <tr
-                  style={{
-                    height: `${offsetY}px`,
-                    pointerEvents: 'none',
-                    border: 'none'
-                  }}
-                />
+              {isVirtualized && offsetY > 0 && (
+                <tr>
+                  <td
+                    colSpan={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
+                    style={{
+                      height: `${offsetY}px`,
+                      padding: 0,
+                      border: 'none'
+                    }}
+                  />
+                </tr>
               )}
-              {(isVirtualized
-                ? virtualItems
-                : tableState.filteredData.map((item: T, index: number) => ({ item, index }))
-              ).map(({ item: row, index: rowIndex }) => {
-                const actualRowIndex = rowIndex;
-                const rowKeyValue = tableState.getRowKey(row, actualRowIndex);
-                const isSelected =
-                  tableState.selectedKeys === 'all' ||
-                  (typeof tableState.selectedKeys !== 'string' && tableState.selectedKeys.has(String(rowKeyValue)));
+              {/* Show "no results" message when filtering returns empty results */}
+              {hasActiveFilters && !hasFilteredResults ? (
+                <tr role='row'>
+                  <td
+                    colSpan={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
+                    className='px-4 py-8 text-center text-gray-dark-300'
+                    role='gridcell'
+                  >
+                    No se encontraron resultados para los filtros aplicados. Intente modificar los criterios de
+                    búsqueda.
+                  </td>
+                </tr>
+              ) : hasFilteredResults ? (
+                (isVirtualized
+                  ? virtualItems
+                  : tableState.filteredData.map((item: T, index: number) => ({ item, index }))
+                ).map(({ item: row, index: rowIndex }) => {
+                  const actualRowIndex = rowIndex;
+                  const rowKeyValue = tableState.getRowKey(row, actualRowIndex);
+                  const isSelected =
+                    tableState.selectedKeys === 'all' ||
+                    (typeof tableState.selectedKeys !== 'string' && tableState.selectedKeys.has(String(rowKeyValue)));
 
-                const isDisabled =
-                  disabledKeys &&
-                  (disabledKeys === 'all' || (typeof disabledKeys !== 'string' && disabledKeys.has(rowKeyValue)));
+                  const isDisabled =
+                    disabledKeys &&
+                    (disabledKeys === 'all' || (typeof disabledKeys !== 'string' && disabledKeys.has(rowKeyValue)));
 
-                return (
-                  <tr
-                    key={rowKeyValue}
-                    role='row'
-                    aria-rowindex={actualRowIndex + (hideHeader ? 1 : 2)}
-                    aria-selected={selectionMode !== 'none' ? isSelected : undefined}
-                    data-selected={isSelected}
-                    data-disabled={isDisabled}
-                    data-first={actualRowIndex === 0}
-                    data-last={actualRowIndex === tableState.filteredData.length - 1}
-                    data-odd={actualRowIndex % 2 === 1}
-                    className={`
+                  return (
+                    <tr
+                      key={rowKeyValue}
+                      role='row'
+                      aria-rowindex={actualRowIndex + (hideHeader ? 1 : 2)}
+                      aria-selected={selectionMode !== 'none' ? isSelected : undefined}
+                      data-selected={isSelected}
+                      data-disabled={isDisabled}
+                      data-first={actualRowIndex === 0}
+                      data-last={actualRowIndex === tableState.filteredData.length - 1}
+                      data-odd={actualRowIndex % 2 === 1}
+                      className={`
                     border-b border-[#636579] hover:bg-[#2a2a2a] transition-colors
                     ${isSelected ? 'bg-[#830213]/20' : ''}
                     ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                     ${classNames.tr || ''}
                   `}
-                    style={
-                      isVirtualized
-                        ? {
-                            position: 'absolute',
-                            top: `${actualRowIndex * defaultRowHeight + offsetY}px`,
-                            left: 0,
-                            right: 0,
-                            height: `${defaultRowHeight}px`,
-                            width: '100%'
-                          }
-                        : undefined
-                    }
-                    onClick={() => !isDisabled && handleRowClick(actualRowIndex, row)}
-                    onKeyDown={(e) => {
-                      if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) {
-                        e.preventDefault();
-                        handleRowClick(actualRowIndex, row);
-                      }
-                    }}
-                    tabIndex={isDisabled ? -1 : 0}
-                  >
-                    {(selectionMode !== 'none' || showSelectionCheckboxes) && (
-                      <td
-                        className={getCellClasses(actualRowIndex, -1)}
-                        role='gridcell'
-                        aria-colindex={1}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <input
-                          type={selectionMode === 'single' ? 'radio' : 'checkbox'}
-                          name={selectionMode === 'single' ? `table-${tableId.current}-selection` : undefined}
-                          checked={isSelected}
-                          onChange={() => {
-                            if (!isDisabled) {
-                              tableState.toggleRowSelection(row);
+                      style={
+                        isVirtualized
+                          ? {
+                              height: `${defaultRowHeight}px`
                             }
+                          : undefined
+                      }
+                      onClick={() => !isDisabled && handleRowClick(actualRowIndex, row)}
+                      onKeyDown={(e) => {
+                        if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) {
+                          e.preventDefault();
+                          handleRowClick(actualRowIndex, row);
+                        }
+                      }}
+                      tabIndex={isDisabled ? -1 : 0}
+                    >
+                      {(selectionMode !== 'none' || showSelectionCheckboxes) && (
+                        <td
+                          className={getCellClasses(actualRowIndex, -1)}
+                          role='gridcell'
+                          aria-colindex={1}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <input
+                            type='checkbox'
+                            checked={isSelected}
+                            onChange={() => {
+                              if (!isDisabled) {
+                                tableState.toggleRowSelection(row);
+                              }
+                            }}
+                            aria-label={`${selectionMode === 'single' ? 'Select row' : 'Select row'} ${actualRowIndex + 1}`}
+                            disabled={
+                              isDisabled ||
+                              (disallowEmptySelection && isSelected && tableState.selectedRows.length === 1)
+                            }
+                          />
+                        </td>
+                      )}
+                      {columns.map((column, colIndex) => (
+                        <td
+                          key={String(column.key)}
+                          className={getCellClasses(actualRowIndex, colIndex)}
+                          role={column.isRowHeader ? 'rowheader' : 'gridcell'}
+                          aria-colindex={colIndex + (selectionMode !== 'none' || showSelectionCheckboxes ? 2 : 1)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCellClick(actualRowIndex, colIndex, row);
                           }}
-                          aria-label={`Select row ${actualRowIndex + 1}`}
-                          disabled={
-                            isDisabled || (disallowEmptySelection && isSelected && tableState.selectedRows.length === 1)
-                          }
-                        />
-                      </td>
-                    )}
-                    {columns.map((column, colIndex) => (
-                      <td
-                        key={String(column.key)}
-                        className={getCellClasses(actualRowIndex, colIndex)}
-                        role={column.isRowHeader ? 'rowheader' : 'gridcell'}
-                        aria-colindex={colIndex + (selectionMode !== 'none' || showSelectionCheckboxes ? 2 : 1)}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCellClick(actualRowIndex, colIndex, row);
-                        }}
-                      >
-                        {column.cell ? column.cell(row) : String((row as any)[String(column.key)] || '')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
+                        >
+                          {column.cell ? column.cell(row) : String((row as any)[String(column.key)] || '')}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
+              ) : null}
+              {isVirtualized && (
+                <tr>
+                  <td
+                    colSpan={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
+                    style={{
+                      height: `${Math.max(0, totalHeight - offsetY - virtualItems.length * defaultRowHeight)}px`,
+                      padding: 0,
+                      border: 'none'
+                    }}
+                  />
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

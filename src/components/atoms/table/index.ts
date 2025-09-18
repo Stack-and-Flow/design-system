@@ -12,6 +12,5 @@ export type {
 export { useTable } from './useTable';
 export { useVirtualization } from './useVirtualization';
 
-// Default export for backward compatibility
 import Table from './Table';
 export default Table;

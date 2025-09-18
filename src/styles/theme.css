@@ -79,6 +79,16 @@
   --color-pink: #ec4899;
   --color-pink-light: #fda4cf;
   --color-pink-dark: #be185d;
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-success-light: #5ee78b;
+  --color-success-dark: #0f5132;
+  --color-warning: #eab308;
+  --color-warning-light: #fde047;
+  --color-warning-dark: #8b5602;
+  --color-danger: #ef4444;
+  --color-danger-light: #fb7185;
+  --color-danger-dark: #b91c1c;
   /* Spacing */
   --spacing-xxs: 0.25rem;
   --spacing-xs: 0.5rem;
