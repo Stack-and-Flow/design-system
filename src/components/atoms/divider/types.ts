@@ -7,28 +7,15 @@ export const dividerVariants = cva('', {
       horizontal: 'h-px w-[4px]',
       vertical: 'w-px h-[4px]'
     },
-    lengthX: {
-      xs: 'w-8',
-      sm: 'w-16',
-      md: 'w-32',
-      lg: 'w-64',
-      xl: 'w-96'
-    },
-    lengthY: {
-      xs: 'h-8',
-      sm: 'h-16',
-      md: 'h-32'
+    corner: {
+      rounded: 'rounded-[4px]',
+      none: 'rounded-none'
     },
     thickness: {
       xs: 'p-[0px]',
       sm: 'p-[2px]',
       md: 'p-[3px]',
       lg: 'p-[5px]'
-    },
-    hover: {
-      none: '',
-      bright: 'transition-[filter] duration-200 ease-in hover:brightness-150',
-      zoom: 'transition-[scale] duration-200 ease-in hover:scale-105'
     }
   },
   compoundVariants: [
@@ -47,11 +34,8 @@ export const dividerVariants = cva('', {
 });
 
 type DividerOrientation = 'horizontal' | 'vertical';
-type DividerWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type DividerHeight = 'xs' | 'sm' | 'md';
 type DividerThickness = 'xs' | 'sm' | 'md' | 'lg';
-type DividerHover = 'none' | 'bright' | 'zoom';
-
+type DividerCorner = 'rounded' | 'none';
 export type DividerProps = {
   /** Props for the Divider component */
 
@@ -71,23 +55,17 @@ export type DividerProps = {
    * @control select
    * @default xs
    */
-  lengthX?: DividerWidth;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
   /**
    * @control select
    * @default xs
    */
-  lengthY?: DividerHeight;
+  corner?: DividerCorner;
 
   /**
    * @control select
    * @default xs
    */
   thickness?: DividerThickness;
-
-  /**
-   * @control select
-   * @default none
-   */
-  hover?: DividerHover;
 };

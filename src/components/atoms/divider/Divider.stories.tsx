@@ -26,23 +26,25 @@ export const Default: Story = {
 export const HorizontalSize: Story = {
   render: () => (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
-      <Divider orientation='horizontal' lengthX='xs' />
-      <Divider orientation='horizontal' lengthX='sm' />
-      <Divider orientation='horizontal' lengthX='md' />
-      <Divider orientation='horizontal' lengthX='lg' />
-      <Divider orientation='horizontal' lengthX='xl' />
+      <Divider orientation='horizontal' size='xs' />
+      <Divider orientation='horizontal' size='sm' />
+      <Divider orientation='horizontal' size='md' />
+      <Divider orientation='horizontal' size='lg' />
+      <Divider orientation='horizontal' size='xl' />
     </div>
   )
 };
 /**
- * Vertically, there are three measurements: SM, MD, and LG.
+ * We also offer five sizes in vertical: XS, SM, MD, LG, and full.
  */
 export const VerticalSize: Story = {
   render: () => (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-      <Divider orientation='vertical' lengthY='xs' />
-      <Divider orientation='vertical' lengthY='sm' />
-      <Divider orientation='vertical' lengthY='md' />
+      <Divider orientation='vertical' size='xs' />
+      <Divider orientation='vertical' size='sm' />
+      <Divider orientation='vertical' size='md' />
+      <Divider orientation='vertical' size='lg' />
+      <Divider orientation='vertical' size='xl' />
     </div>
   )
 };
@@ -75,13 +77,19 @@ export const Color: Story = {
 };
 
 /**
- * There are two hover effects: ‘bright’ and ‘zoom’.
+ * We can give it more stylish corners
  */
 export const Hover: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem' }}>
-      <Divider orientation='horizontal' hover='bright' />
-      <Divider orientation='horizontal' hover='zoom' />
+    <div
+      style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '1rem' }}
+    >
+      <Divider orientation='horizontal' size='lg' thickness='lg' corner='none' />
+      <Divider orientation='horizontal' size='lg' thickness='lg' corner='rounded' />
+      <div style={{ display: 'flex', gap: '1rem' }}>
+        <Divider orientation='vertical' size='lg' thickness='lg' corner='none' />
+        <Divider orientation='vertical' size='lg' thickness='lg' corner='rounded' />
+      </div>
     </div>
   )
 };
