@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
+import * as React from 'react';
 import Table from './Table';
 import type { CompleteTableProps, TableColumn } from './types';
 
@@ -140,115 +140,9 @@ const generateUsers = (count: number): UserData[] => {
 };
 
 /**
- * Generates large datasets asynchronously to prevent UI blocking.
- * Uses chunked processing to maintain responsive user interface.
- */
-const generateUsersAsync = async (count: number, chunkSize: number = 1000): Promise<UserData[]> => {
-  const roles = ['Admin', 'User', 'Editor', 'Manager'];
-  const statuses = ['Active', 'Inactive', 'Pending'];
-  const teams = ['Engineering', 'Design', 'Marketing', 'Sales'];
-
-  const users: UserData[] = [];
-
-  for (let i = 0; i < count; i += chunkSize) {
-    const chunk = Math.min(chunkSize, count - i);
-    const chunkData = Array.from({ length: chunk }, (_, j) => {
-      const index = i + j;
-      const nameIndex = index % SAMPLE_NAMES.length;
-      const userName = SAMPLE_NAMES[nameIndex];
-      const firstName = userName.split(' ')[0].toLowerCase();
-      const lastName = userName.split(' ')[1]?.toLowerCase() || 'user';
-
-      return {
-        id: index + 1,
-        name: userName,
-        email: `${firstName}.${lastName}@${SAMPLE_COMPANIES[index % SAMPLE_COMPANIES.length].toLowerCase().replace(/\s+/g, '')}.com`,
-        role: roles[index % roles.length],
-        status: statuses[index % statuses.length],
-        team: teams[index % teams.length],
-        avatar: getAvatarForUser(userName, index)
-      };
-    });
-
-    users.push(...chunkData);
-
-    // Yield control back to browser to prevent blocking
-    if (i + chunkSize < count) {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-  }
-
-  return users;
-};
-
-/**
  * Pre-generated sample datasets for consistent story demonstrations
  */
 const sampleData: UserData[] = generateUsers(12);
-const mediumData: UserData[] = generateUsers(500); // For virtualization testing
-interface ProductData {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
-  brand: string;
-  rating: number;
-  lastUpdated: string;
-}
-
-const PRODUCT_CATEGORIES = ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Toys'];
-const PRODUCT_BRANDS = ['Samsung', 'Apple', 'Nike', 'Adidas', 'Sony', 'LG', 'Canon', 'HP'];
-const PRODUCT_NAMES = [
-  'Smartphone Pro Max',
-  'Wireless Headphones',
-  'Gaming Laptop',
-  'Smart Watch',
-  'Tablet Ultra',
-  'Bluetooth Speaker',
-  'Digital Camera',
-  'Fitness Tracker',
-  'Power Bank',
-  'USB-C Cable',
-  'Wireless Charger',
-  'Gaming Mouse',
-  'Mechanical Keyboard',
-  'Monitor 4K',
-  'External SSD'
-];
-
-/**
- * Generates realistic product data for e-commerce demonstrations
- */
-const generateProducts = (count: number): ProductData[] => {
-  return Array.from({ length: count }, (_, i) => {
-    const stock = Math.floor(Math.random() * 200);
-    const getStatus = (stock: number): ProductData['status'] => {
-      if (stock === 0) {
-        return 'Out of Stock';
-      }
-      if (stock < 20) {
-        return 'Low Stock';
-      }
-      return 'In Stock';
-    };
-
-    return {
-      id: i + 1,
-      name: `${PRODUCT_BRANDS[i % PRODUCT_BRANDS.length]} ${PRODUCT_NAMES[i % PRODUCT_NAMES.length]}`,
-      category: PRODUCT_CATEGORIES[i % PRODUCT_CATEGORIES.length],
-      price: Math.floor(Math.random() * 2000) + 50,
-      stock: stock,
-      status: getStatus(stock),
-      brand: PRODUCT_BRANDS[i % PRODUCT_BRANDS.length],
-      rating: Number((Math.random() * 2 + 3).toFixed(1)), // Rating between 3.0 and 5.0
-      lastUpdated: new Date(Date.now() - Math.floor(Math.random() * 90) * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split('T')[0]
-    };
-  });
-};
 
 /**
  * Column definitions for different table configurations
@@ -290,204 +184,20 @@ const sortableColumns: TableColumn<UserData>[] = basicColumns.map((col) => ({
   allowsSorting: true
 }));
 
-// Filterable columns
-const filterableColumns: TableColumn<UserData>[] = [
-  { key: 'id', header: 'ID', cell: (row: UserData) => row.id },
-  { key: 'name', header: 'Name', cell: (row: UserData) => row.name, filterable: true },
-  { key: 'email', header: 'Email', cell: (row: UserData) => row.email, filterable: true },
-  { key: 'role', header: 'Role', cell: (row: UserData) => row.role, filterable: true },
-  { key: 'status', header: 'Status', cell: (row: UserData) => row.status, filterable: true }
-];
-
-// Custom cell columns with avatar and extended user info
-const customCellColumns: TableColumn<UserData>[] = [
-  {
-    key: 'user',
-    header: 'User',
-    cell: (row: UserData) => (
-      <div className='flex items-center gap-3'>
-        <img src={row.avatar} alt={row.name} className='w-8 h-8 rounded-full' />
-        <div>
-          <div className='font-medium text-text-dark'>{row.name}</div>
-          <div className='text-sm text-gray-dark-300'>{row.email}</div>
-        </div>
-      </div>
-    ),
-    allowsSorting: true,
-    sortValue: (row: UserData) => row.name
-  },
-  {
-    key: 'team',
-    header: 'Team',
-    cell: (row: UserData) => <span className='px-2 py-1 bg-blue-900 text-blue-200 rounded text-xs'>{row.team}</span>,
-    allowsSorting: true
-  },
-  {
-    key: 'role',
-    header: 'Role',
-    cell: (row: UserData) => row.role,
-    allowsSorting: true
-  },
-  {
-    key: 'location',
-    header: 'Location',
-    cell: (row: UserData) => row.location || 'N/A',
-    allowsSorting: true
-  },
-  {
-    key: 'joinDate',
-    header: 'Join Date',
-    cell: (row: UserData) => (row.joinDate ? new Date(row.joinDate).toLocaleDateString() : 'N/A'),
-    allowsSorting: true,
-    sortValue: (row: UserData) => row.joinDate || ''
-  },
-  {
-    key: 'salary',
-    header: 'Salary',
-    cell: (row: UserData) => (row.salary ? `€${row.salary.toLocaleString()}` : 'N/A'),
-    allowsSorting: true,
-    sortValue: (row: UserData) => row.salary || 0
-  },
-  {
-    key: 'status',
-    header: 'Status',
-    cell: (row: UserData) => <StatusBadge status={row.status} />,
-    sortValue: (row: UserData) => row.status,
-    allowsSorting: true
-  },
-  {
-    key: 'actions',
-    header: 'Actions',
-    cell: (_row: UserData) => (
-      <div className='flex gap-2' role='group' aria-label='Row actions'>
-        <button
-          className='text-gray-dark-200 hover:text-gray-dark-100 font-medium transition-colors'
-          aria-label={`Edit user ${_row.name}`}
-        >
-          Edit
-        </button>
-        <button
-          className='text-red-300 hover:text-red-200 font-medium transition-colors'
-          aria-label={`Delete user ${_row.name}`}
-        >
-          Delete
-        </button>
-      </div>
-    )
-  }
-];
-
-/**
- * ProductStatusBadge component optimized for WCAG 2.1 AA accessibility compliance.
- * Provides distinct visual indicators for different stock status levels with high contrast colors.
- */
-const ProductStatusBadge = ({ status }: { status: ProductData['status'] }) => (
-  <span
-    className={`px-2 py-1 rounded-full text-xs font-medium inline-flex items-center justify-center min-w-[70px] ${
-      status === 'In Stock'
-        ? 'bg-green-900 text-green-50 border border-green-800 dark:bg-green-950 dark:text-green-50 dark:border-green-900'
-        : status === 'Low Stock'
-          ? 'bg-yellow-900 text-white border border-yellow-800 dark:bg-yellow-950 dark:text-white dark:border-yellow-900'
-          : 'bg-red-900 text-red-50 border border-red-800 dark:bg-red-950 dark:text-red-50 dark:border-red-900'
-    }`}
-    role='status'
-    aria-label={`Stock status: ${status}`}
-  >
-    {status}
-  </span>
-);
-
-const productColumns: TableColumn<ProductData>[] = [
-  {
-    key: 'name',
-    header: 'Product Name',
-    cell: (row: ProductData) => (
-      <div>
-        <div className='font-medium text-text-dark'>{row.name}</div>
-        <div className='text-sm text-gray-dark-300'>{row.brand}</div>
-      </div>
-    ),
-    allowsSorting: true,
-    sortValue: (row: ProductData) => row.name,
-    filterable: true
-  },
-  {
-    key: 'category',
-    header: 'Category',
-    cell: (row: ProductData) => (
-      <span className='px-2 py-1 bg-purple-900 text-purple-200 rounded text-xs'>{row.category}</span>
-    ),
-    allowsSorting: true,
-    filterable: true
-  },
-  {
-    key: 'price',
-    header: 'Price',
-    cell: (row: ProductData) => `€${row.price.toLocaleString()}`,
-    allowsSorting: true,
-    sortValue: (row: ProductData) => row.price
-  },
-  {
-    key: 'stock',
-    header: 'Stock',
-    cell: (row: ProductData) => (
-      <div className='text-center'>
-        <div className='font-medium'>{row.stock}</div>
-        <div className='text-xs text-gray-dark-300'>units</div>
-      </div>
-    ),
-    allowsSorting: true,
-    sortValue: (row: ProductData) => row.stock
-  },
-  {
-    key: 'status',
-    header: 'Status',
-    cell: (row: ProductData) => <ProductStatusBadge status={row.status} />,
-    sortValue: (row: ProductData) => row.status,
-    allowsSorting: true,
-    filterable: true
-  },
-  {
-    key: 'rating',
-    header: 'Rating',
-    cell: (row: ProductData) => (
-      <div className='flex items-center gap-1'>
-        <span className='font-medium'>{row.rating}</span>
-        <span className='text-xs text-gray-dark-300'>/ 5 stars</span>
-      </div>
-    ),
-    allowsSorting: true,
-    sortValue: (row: ProductData) => row.rating
-  },
-  {
-    key: 'lastUpdated',
-    header: 'Last Updated',
-    cell: (row: ProductData) => new Date(row.lastUpdated).toLocaleDateString(),
-    allowsSorting: true,
-    sortValue: (row: ProductData) => row.lastUpdated
-  }
-];
-
 /**
  * ## DESCRIPTION
- * A comprehensive, accessible Table component that supports advanced features like row selection,
- * sorting, virtualization, pagination, and keyboard navigation. Designed for handling both small
- * and large datasets with optimal performance and full accessibility compliance.
+ * The Table component is a flexible and accessible data presentation element that displays structured information in rows and columns.
+ * It supports various interactive features including row selection, column sorting, and custom cell rendering.
+ * The component is designed to handle both small datasets and provides hooks for integration with external data sources.
+ * It includes comprehensive accessibility features with proper ARIA labels and keyboard navigation support.
+ * The Table component can be customized with different visual styles, selection modes, and layout options to fit various use cases.
+ * It supports API-driven interactions through callback functions for sorting, selection changes, and pagination events.
+ * The component is optimized for performance and provides a consistent user experience across different screen sizes.
  *
  * ## DEPENDENCIES
- * - React Aria: For accessibility features and keyboard navigation
- * - Tailwind CSS: For styling and theming
- * - React Virtualized: For handling large datasets efficiently
- *
- * ## FEATURES
- * - ✅ **Row Selection**: Single and multiple selection modes with visual feedback
- * - ✅ **Column Sorting**: Sortable columns with custom indicators and keyboard support
- * - ✅ **Virtualization**: Handle large datasets (10k+ rows) with smooth scrolling
- * - ✅ **Pagination**: Built-in pagination with configurable page sizes
- * - ✅ **Accessibility**: Full ARIA support and keyboard navigation
- * - ✅ **Customization**: Custom cell renderers, styling, and theming
- * - ✅ **Responsive**: Mobile-friendly design with dark mode support
- * - ✅ **Performance**: Optimized rendering and state management
+ * - React: Core functionality and hooks for state management
+ * - Tailwind CSS: For styling and responsive design
+ * - Custom hooks: useTable, useKeyboardNavigation, useTableEvents for enhanced functionality
  */
 
 const meta: Meta<typeof Table<UserData>> = {
@@ -501,36 +211,85 @@ const meta: Meta<typeof Table<UserData>> = {
   },
   tags: ['autodocs'],
   argTypes: {
+    items: {
+      description: 'Array of data objects to display in the table',
+      control: false
+    },
+    columns: {
+      description: 'Array of column definitions with headers and cell renderers',
+      control: false
+    },
     selectionMode: {
       control: 'select',
       options: ['none', 'single', 'multiple'],
-      description: 'Enable row selection behavior'
+      description: 'Controls how users can select table rows'
     },
     selectionBehavior: {
       control: 'select',
       options: ['toggle', 'replace'],
-      description: 'How selection should behave when clicking rows'
+      description: 'Defines selection behavior when clicking rows'
     },
-    color: {
-      control: 'select',
-      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
-      description: 'Color theme for the table'
+    selectedKeys: {
+      description: 'Set of currently selected row keys (controlled)',
+      control: false
+    },
+    disabledKeys: {
+      description: 'Set of disabled row keys that cannot be selected',
+      control: false
+    },
+    disallowEmptySelection: {
+      control: 'boolean',
+      description: 'Prevents clearing all selections when enabled'
     },
     isStriped: {
       control: 'boolean',
-      description: 'Add alternating row background colors'
+      description: 'Adds alternating row background colors for better readability'
     },
     isCompact: {
       control: 'boolean',
-      description: 'Reduce padding for denser layout'
+      description: 'Reduces row padding for denser data presentation'
     },
     hideHeader: {
       control: 'boolean',
-      description: 'Hide the table header row'
+      description: 'Hides the table header row when enabled'
     },
     removeWrapper: {
       control: 'boolean',
-      description: 'Remove the default table wrapper container'
+      description: 'Removes the default container wrapper for custom styling'
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Shows loading state with skeleton placeholders'
+    },
+    emptyContent: {
+      description: 'Content to display when the table has no data',
+      control: 'text'
+    },
+    variant: {
+      control: 'select',
+      options: ['default', 'striped', 'surface'],
+      description: 'Visual style variant of the table'
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size preset that affects padding and typography'
+    },
+    onSelectionChange: {
+      description: 'Callback fired when row selection changes',
+      action: 'selectionChanged'
+    },
+    onSortChange: {
+      description: 'Callback fired when column sorting is requested',
+      action: 'sortChanged'
+    },
+    onRowAction: {
+      description: 'Callback fired when a row is clicked or activated',
+      action: 'rowAction'
+    },
+    onPageChange: {
+      description: 'Callback fired when pagination page changes',
+      action: 'pageChanged'
     }
   }
 };
@@ -539,8 +298,9 @@ export default meta;
 type Story = StoryObj<CompleteTableProps<UserData>>;
 
 /**
- * Default table implementation with realistic Spanish user data.
- * Includes essential columns and clean presentation.
+ * - **Default Implementation**: Basic table with essential columns displaying realistic Spanish user data.
+ * - **Clean Presentation**: Minimal styling with standard row height and spacing.
+ * - **Foundation Example**: Serves as the base implementation for other variants.
  */
 export const Default: Story = {
   render: (args) => {
@@ -607,19 +367,9 @@ export const Default: Story = {
 };
 
 /**
- * A table populated with dynamic data using the `items` prop.
- * This is the recommended pattern for most use cases.
- */
-export const Dynamic: Story = {
-  render: (args) => {
-    const dynamicData = generateUsers(12);
-    return <Table {...args} items={dynamicData} columns={basicColumns} />;
-  }
-};
-
-/**
- * Table with no data showing custom empty state content.
- * Demonstrates how to provide meaningful feedback when there are no items to display.
+ * - **Empty State**: Custom content displayed when no data is available.
+ * - **User Guidance**: Provides clear messaging and actionable next steps.
+ * - **Visual Feedback**: Includes icons and call-to-action buttons for better UX.
  */
 export const EmptyState: Story = {
   args: {
@@ -648,8 +398,9 @@ export const EmptyState: Story = {
 };
 
 /**
- * Table without header row for simplified layouts.
- * Useful when the column context is clear from surrounding UI elements.
+ * - **Headerless Design**: Table without column headers for cleaner presentation.
+ * - **Context-Dependent**: Useful when column meanings are clear from surrounding UI.
+ * - **Simplified Layout**: Focuses attention entirely on the data content.
  */
 export const WithoutHeader: Story = {
   args: {
@@ -660,31 +411,9 @@ export const WithoutHeader: Story = {
 };
 
 /**
- * Table without the default wrapper container.
- * Provides more control over the table's container styling and layout.
- */
-export const WithoutWrapper: Story = {
-  args: {
-    items: sampleData.slice(0, 5),
-    columns: basicColumns,
-    removeWrapper: true
-  }
-};
-
-/**
- * Table with custom cell renderers including avatars, badges, formatted data, and action buttons.
- * Demonstrates how to create rich, interactive table content with complex cell layouts.
- */
-export const CustomCells: Story = {
-  args: {
-    items: sampleData.slice(0, 8),
-    columns: customCellColumns
-  }
-};
-
-/**
- * Table with alternating row colors for improved readability.
- * The striped pattern helps users visually track data across rows.
+ * - **Alternating Colors**: Zebra-striped rows improve data readability and visual tracking.
+ * - **Enhanced Scanning**: Makes it easier to follow data across columns in long tables.
+ * - **Professional Appearance**: Provides a polished look for data-heavy interfaces.
  */
 export const StripedRows: Story = {
   args: {
@@ -695,8 +424,9 @@ export const StripedRows: Story = {
 };
 
 /**
- * Table with reduced padding and spacing for dense data presentation.
- * Ideal for displaying more information in limited screen space.
+ * - **Dense Layout**: Reduced padding and spacing for maximum data density.
+ * - **Space Efficient**: Ideal for dashboards and limited screen real estate.
+ * - **Information Rich**: Allows more rows to be visible simultaneously.
  */
 export const Compact: Story = {
   args: {
@@ -707,62 +437,43 @@ export const Compact: Story = {
 };
 
 /**
- * Table with single row selection enabled. Users can select one row at a time using radio buttons.
- * Check the browser console to see selection events.
+ * - **Single Selection**: Allows selecting only one row at a time with radio button behavior.
+ * - **Exclusive Choice**: Automatically deselects previous selection when new row is chosen.
+ * - **Console Logging**: Selection events are logged to browser console for development.
  */
 export const SingleRowSelection: Story = {
-  args: {
-    items: sampleData.slice(0, 8),
-    columns: basicColumns,
-    selectionMode: 'single',
-    showSelectionCheckboxes: true,
-    onSelectionChange: (_keys) => {
+  render: (args) => {
+    const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
+
+    const handleSelectionChange = (keys: any) => {
+      setSelectedKeys(keys);
+      console.log('Single selection changed:', Array.from(keys));
       // Handle single selection change
       // In production, you would update your application state here
       // Example: setSelectedUser(Array.from(keys)[0])
-    }
+    };
+
+    return (
+      <Table
+        {...args}
+        items={sampleData.slice(0, 8)}
+        columns={basicColumns}
+        selectionMode='single'
+        selectedKeys={selectedKeys}
+        onSelectionChange={handleSelectionChange}
+      />
+    );
   }
 };
 
 /**
- * Table with multiple row selection enabled. Users can select multiple rows using checkboxes.
- * The header checkbox allows selecting/deselecting all rows. Check the browser console to see selection events.
+ * - **Multiple Selection**: Users can select multiple rows using checkboxes.
+ * - **Select All**: Header checkbox provides convenient select/deselect all functionality.
+ * - **Batch Operations**: Enables bulk actions on multiple selected items.
  */
 export const MultipleRowSelection: Story = {
-  args: {
-    items: sampleData.slice(0, 8),
-    columns: basicColumns,
-    selectionMode: 'multiple',
-    showSelectionCheckboxes: true,
-    onSelectionChange: (_keys) => {
-      // Handle multiple selection change
-      // In production, you would update your application state here
-      // Example: setSelectedUsers(Array.from(keys))
-    }
-  }
-};
-
-/**
- * Table that requires at least one row to always be selected.
- * Useful for scenarios where a selection is mandatory for the interface to function properly.
- */
-export const DisallowEmptySelection: Story = {
-  args: {
-    items: sampleData.slice(0, 5),
-    columns: basicColumns,
-    selectionMode: 'single',
-    disallowEmptySelection: true,
-    defaultSelectedKeys: new Set(['1'])
-  }
-};
-
-/**
- * Table with externally controlled selection state.
- * Demonstrates how to manage selection state in the parent component and provide selection controls.
- */
-export const ControlledSelection: Story = {
   render: (args) => {
-    const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set(['1', '3']));
+    const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
 
     const handleSelectionChange = (keys: any) => {
       if (keys === 'all') {
@@ -770,82 +481,116 @@ export const ControlledSelection: Story = {
       } else {
         setSelectedKeys(keys);
       }
+      console.log('Multiple selection changed:', Array.from(keys));
+      // Handle multiple selection change
+      // In production, you would update your application state here
+      // Example: setSelectedUsers(Array.from(keys))
     };
 
     return (
-      <div>
-        <div className='mb-4 p-4 bg-background-dark rounded'>
-          <p className='text-text-dark'>Selected IDs: {Array.from(selectedKeys).join(', ')}</p>
-          <button
-            onClick={() => setSelectedKeys(new Set())}
-            className='mt-2 px-4 py-2 bg-gray-dark-600 text-text-dark rounded hover:bg-gray-dark-500 transition-colors'
-          >
-            Clear Selection
-          </button>
-        </div>
-        <Table {...args} selectedKeys={selectedKeys} onSelectionChange={handleSelectionChange} />
-      </div>
+      <Table
+        {...args}
+        items={sampleData.slice(0, 8)}
+        columns={basicColumns}
+        selectionMode='multiple'
+        selectedKeys={selectedKeys}
+        onSelectionChange={handleSelectionChange}
+      />
     );
-  },
-  args: {
-    items: sampleData.slice(0, 8),
-    columns: basicColumns,
-    selectionMode: 'multiple'
   }
 };
 
 /**
- * Table with specific rows disabled from selection and interaction.
- * Disabled rows are visually distinct and cannot be selected by users.
+ * - **Mandatory Selection**: Prevents users from clearing all selections.
+ * - **Always Active**: Ensures at least one item remains selected at all times.
+ * - **Form Requirements**: Useful for interfaces that require a selection to function.
+ */
+export const DisallowEmptySelection: Story = {
+  render: (args) => {
+    const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set(['1']));
+
+    const handleSelectionChange = (keys: any) => {
+      // Prevent empty selection
+      if (keys.size === 0) {
+        console.log('Empty selection prevented - keeping current selection');
+        return;
+      }
+      setSelectedKeys(keys);
+      console.log('Selection changed (disallow empty):', Array.from(keys));
+    };
+
+    return (
+      <Table
+        {...args}
+        items={sampleData.slice(0, 5)}
+        columns={basicColumns}
+        selectionMode='single'
+        selectedKeys={selectedKeys}
+        onSelectionChange={handleSelectionChange}
+        disallowEmptySelection={true}
+      />
+    );
+  }
+};
+
+/**
+ * - **Conditional Availability**: Some rows are disabled and cannot be selected.
+ * - **Visual Distinction**: Disabled rows have different styling to indicate their state.
+ * - **Selective Interaction**: Only enabled rows respond to user selection actions.
  */
 export const DisabledRows: Story = {
-  args: {
-    items: sampleData.slice(0, 8),
-    columns: basicColumns,
-    selectionMode: 'multiple',
-    disabledKeys: new Set(['2', '4', '6'])
+  render: (args) => {
+    const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
+
+    const handleSelectionChange = (keys: any) => {
+      if (keys === 'all') {
+        // Filter out disabled keys when selecting all
+        const enabledIds = sampleData
+          .slice(0, 8)
+          .filter((item) => !['2', '4', '6'].includes(item.id.toString()))
+          .map((item) => item.id.toString());
+        setSelectedKeys(new Set(enabledIds));
+      } else {
+        setSelectedKeys(keys);
+      }
+      console.log('Selection changed (with disabled rows):', Array.from(keys));
+    };
+
+    return (
+      <Table
+        {...args}
+        items={sampleData.slice(0, 8)}
+        columns={basicColumns}
+        selectionMode='multiple'
+        selectedKeys={selectedKeys}
+        onSelectionChange={handleSelectionChange}
+        disabledKeys={new Set(['2', '4', '6'])}
+      />
+    );
   }
 };
 
 /**
- * Table with clickable rows that trigger custom actions.
- * Demonstrates how to handle row click events for navigation or other interactions.
+ * - **Column Sorting**: Click headers to sort data in ascending or descending order.
+ * - **API Integration**: Uses onSortChange callback for server-side sorting implementation.
+ * - **Visual Indicators**: Sort direction is clearly indicated in column headers.
  */
-export const RowActions: Story = {
+export const SortingRows: Story = {
   args: {
-    items: sampleData.slice(0, 5),
-    columns: basicColumns,
-    onRowAction: (key) => {
-      alert(`Row action triggered for key: ${key}`);
+    items: sampleData,
+    columns: sortableColumns,
+    onSortChange: (sortDescriptor) => {
+      console.log('Sort change requested:', sortDescriptor);
+      // In production, you would send this to your API
+      // Example: fetchSortedData(sortDescriptor.column, sortDescriptor.direction)
     }
   }
 };
 
 /**
- * Table with sortable columns. Click column headers to sort data in ascending or descending order.
- * Supports custom sort indicators and keyboard navigation.
- */
-export const SortingRows: Story = {
-  args: {
-    items: sampleData,
-    columns: sortableColumns
-  }
-};
-
-/**
- * Table with column filtering capabilities.
- * Users can filter data by typing in the filter inputs for enabled columns.
- */
-export const WithFiltering: Story = {
-  args: {
-    items: sampleData,
-    columns: filterableColumns
-  }
-};
-
-/**
- * Table displaying loading state with skeleton placeholders.
- * Provides visual feedback while data is being fetched from an API or processed.
+ * - **Loading Feedback**: Shows skeleton placeholders during data fetch operations.
+ * - **User Experience**: Maintains table structure while indicating loading state.
+ * - **Performance Perception**: Provides immediate visual feedback for better perceived performance.
  */
 export const LoadingState: Story = {
   args: {
@@ -857,240 +602,75 @@ export const LoadingState: Story = {
 
 /**
  * Table with built-in pagination controls.
- * Splits large datasets into manageable pages with navigation controls.
+ * Uses API-driven approach - pagination events are delegated via onPageChange callback for backend processing.
  */
 export const PaginatedTable: Story = {
   args: {
     items: sampleData,
     columns: basicColumns,
     pagination: true,
-    pageSize: 5
-  }
-};
-
-/**
- * Table with custom header and footer content areas.
- * Useful for adding titles, action buttons, summary information, or other contextual elements.
- */
-export const WithTopBottomContent: Story = {
-  args: {
-    items: sampleData.slice(0, 8),
-    columns: basicColumns,
-    topContent: (
-      <div className='flex justify-between items-center p-4 bg-gray-light-200 dark:bg-gray-dark-600'>
-        <h3 className='text-lg font-semibold text-gray-dark-900 dark:text-gray-light-100'>Users Management</h3>
-        <div className='flex gap-2'>
-          <button className='px-3 py-1 text-sm bg-red-700 text-white border border-red-700 hover:bg-red-800 transition-colors rounded'>
-            Add User
-          </button>
-          <button className='px-3 py-1 text-sm bg-gray-dark-600 text-gray-light-100 rounded hover:bg-gray-dark-500 transition-colors'>
-            Export
-          </button>
-        </div>
-      </div>
-    ),
-    bottomContent: (
-      <div className='text-center text-sm text-gray-dark-700 dark:text-gray-light-300 p-4 bg-gray-light-200 dark:bg-gray-dark-600'>
-        Showing 8 of 12 users
-      </div>
-    )
-  }
-};
-
-/**
- * Table with a sticky header that remains visible while scrolling through data.
- * Essential for long tables where column context needs to remain visible.
- */
-export const StickyHeader: Story = {
-  args: {
-    items: sampleData.concat(sampleData).concat(sampleData), // Triple the data for scrolling
-    columns: basicColumns,
-    isHeaderSticky: true
-  },
-  decorators: [
-    (Story) => (
-      <div className='h-64 overflow-auto'>
-        <Story />
-      </div>
-    )
-  ]
-};
-
-/**
- * Table with virtualization enabled for handling medium to large datasets efficiently.
- * Only visible rows are rendered, providing smooth scrolling performance even with thousands of rows.
- */
-export const VirtualizedTable: Story = {
-  args: {
-    items: mediumData, // Usando mediumData para evitar bloqueos
-    columns: basicColumns,
-    isVirtualized: true,
-    maxTableHeight: 400
-  }
-};
-
-/**
- * Table demonstrating asynchronous data loading with progress indicators.
- * Shows how to handle large datasets with incremental loading and user feedback.
- */
-export const AsyncLargeDataTable: Story = {
-  render: (args) => {
-    const [data, setData] = React.useState<UserData[]>([]);
-    const [loading, setLoading] = React.useState(true);
-    const [loadingProgress, setLoadingProgress] = React.useState(0);
-
-    React.useEffect(() => {
-      const loadData = async () => {
-        setLoading(true);
-        setLoadingProgress(0);
-
-        try {
-          const totalItems = 2000; // Cantidad configurable
-          const chunkSize = 100;
-          const users: UserData[] = [];
-
-          for (let i = 0; i < totalItems; i += chunkSize) {
-            const chunk = generateUsers(Math.min(chunkSize, totalItems - i));
-            users.push(...chunk);
-            setData([...users]); // Update progressively
-            setLoadingProgress((users.length / totalItems) * 100);
-
-            // Yield control to prevent blocking
-            await new Promise((resolve) => setTimeout(resolve, 50));
-          }
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      loadData();
-    }, []);
-
-    if (loading && data.length === 0) {
-      return (
-        <div className='p-8 text-center bg-background-dark text-text-dark'>
-          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
-          <p className='text-text-dark'>Generando datos de ejemplo...</p>
-          <div className='w-full bg-gray-dark-600 rounded-full h-2 mt-2'>
-            <div
-              className='bg-primary h-2 rounded-full transition-all duration-300'
-              style={{ width: `${loadingProgress}%` }}
-            />
-          </div>
-          <p className='text-sm text-gray-dark-300 mt-2'>{Math.round(loadingProgress)}% completado</p>
-        </div>
-      );
+    pageSize: 5,
+    onPageChange: (page) => {
+      console.log('Page change requested:', page);
+      // In production, you would send this to your API
+      // Example: fetchPageData(page, pageSize)
     }
-
-    return (
-      <div>
-        {loading && (
-          <div className='mb-4 p-3 bg-gray-dark-800 border border-gray-dark-600 rounded text-text-dark'>
-            <div className='flex items-center gap-2'>
-              <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-primary'></div>
-              <span className='text-sm text-gray-dark-200'>Cargando datos... {data.length} elementos cargados</span>
-            </div>
-          </div>
-        )}
-        <Table
-          {...args}
-          items={data}
-          columns={basicColumns}
-          isVirtualized={true}
-          maxTableHeight={500}
-          topContent={
-            <div className='flex justify-between items-center'>
-              <h3 className='text-lg font-semibold text-text-dark'>Tabla con Carga Asíncrona</h3>
-              <span className='text-sm text-gray-dark-300'>
-                {data.length} elementos {loading ? '(cargando...)' : '(completo)'}
-              </span>
-            </div>
-          }
-        />
-      </div>
-    );
   }
 };
 
 /**
- * Interactive performance testing table with configurable dataset sizes.
- * Allows testing table performance with different amounts of data and virtualization settings.
+ * - **Dynamic Data**: Generates user data on-the-fly with realistic Spanish names and information.
+ * - **Interactive Rows**: Clickable rows trigger custom actions and callbacks.
+ * - **Unified Functionality**: Combines dynamic data generation with row action handling.
+ * - **API Callbacks**: Demonstrates integration patterns for sorting and selection events.
  */
-export const ConfigurableSize: Story = {
-  render: (args) => {
-    const [itemCount, setItemCount] = React.useState(100);
-    const [data, setData] = React.useState<UserData[]>(generateUsers(100));
-    const [isGenerating, setIsGenerating] = React.useState(false);
-
-    const handleSizeChange = async (newSize: number) => {
-      if (newSize > 1000) {
-        setIsGenerating(true);
-        const newData = await generateUsersAsync(newSize, 200);
-        setData(newData);
-        setIsGenerating(false);
-      } else {
-        setData(generateUsers(newSize));
-      }
-      setItemCount(newSize);
-    };
-
-    return (
-      <div>
-        <div className='mb-6 p-4 bg-background-dark rounded-lg'>
-          <h3 className='text-lg font-semibold mb-3 text-text-dark'>Control de Tamaño de Tabla</h3>
-          <div className='flex flex-wrap gap-2 mb-4'>
-            {[50, 100, 200, 500, 1000, 2000].map((size) => (
-              <button
-                key={size}
-                onClick={() => handleSizeChange(size)}
-                disabled={isGenerating}
-                className={`px-3 py-1 rounded text-sm transition-colors ${
-                  itemCount === size
-                    ? 'bg-primary text-white'
-                    : 'bg-background-dark border border-gray-dark-600 hover:bg-gray-dark-800 text-text-dark'
-                } ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                {size} elementos
-              </button>
-            ))}
-          </div>
-          {isGenerating && (
-            <div className='flex items-center gap-2 text-sm text-gray-dark-300'>
-              <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-primary'></div>
-              <span>Generando {itemCount} elementos...</span>
-            </div>
-          )}
-        </div>
-        <Table
-          {...args}
-          items={data}
-          columns={basicColumns}
-          isVirtualized={itemCount > 100}
-          maxTableHeight={400}
-          topContent={
-            <div className='flex justify-between items-center'>
-              <h3 className='text-lg font-semibold text-text-dark'>Tabla Configurable</h3>
-              <span className='text-sm text-gray-dark-300'>
-                {data.length} elementos {itemCount > 100 ? '(virtualizada)' : ''}
-              </span>
-            </div>
-          }
-        />
-      </div>
-    );
-  }
-};
-
-/**
- * Complete table showcase with realistic Spanish employee data, controlled selection and sorting.
- * Features rich cell formatting including avatars, badges, tenure calculations, and salary information.
- * This is the most comprehensive example demonstrating all table capabilities in a real-world context.
- */
-export const RichUserData: Story = {
+export const DynamicInteractions: Story = {
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
     const [sortDescriptor, setSortDescriptor] = React.useState<any>(null);
-    const richData = generateUsers(25);
+    const dynamicData = generateUsers(15);
+
+    const handleSelectionChange = (keys: any) => {
+      if (keys === 'all') {
+        setSelectedKeys(new Set(dynamicData.map((item) => item.id.toString())));
+      } else {
+        setSelectedKeys(keys);
+      }
+    };
+
+    return (
+      <Table
+        {...args}
+        items={dynamicData}
+        columns={sortableColumns}
+        selectedKeys={selectedKeys}
+        onSelectionChange={handleSelectionChange}
+        sortDescriptor={sortDescriptor}
+        onSortChange={(descriptor) => {
+          setSortDescriptor(descriptor);
+          console.log('Sort requested:', descriptor);
+        }}
+        onRowAction={(key) => {
+          const user = dynamicData.find((u) => u.id.toString() === key);
+          alert(`Row action triggered for: ${user?.name} (ID: ${key})`);
+        }}
+        selectionMode='multiple'
+      />
+    );
+  }
+};
+
+/**
+ * - **Rich Cell Rendering**: Complex cells with avatars, badges, and formatted data presentation.
+ * - **Employee Management**: Demonstrates HR/employee data table with comprehensive information.
+ * - **Custom Formatting**: Shows salary formatting, tenure calculations, and status indicators.
+ * - **Professional Layout**: Real-world example of enterprise data table implementation.
+ */
+export const RichCustomCells: Story = {
+  render: (args) => {
+    const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
+    const [sortDescriptor, setSortDescriptor] = React.useState<any>(null);
+    const richData = generateUsers(20);
 
     const handleSelectionChange = (keys: any) => {
       if (keys === 'all') {
@@ -1100,8 +680,8 @@ export const RichUserData: Story = {
       }
     };
 
-    // Enhanced columns with rich formatting like RealWorldSimulation had
-    const enhancedColumns = [
+    // Enhanced columns with rich formatting including avatars and complex layouts
+    const richColumns: TableColumn<UserData>[] = [
       {
         key: 'employee',
         header: 'Employee',
@@ -1116,8 +696,7 @@ export const RichUserData: Story = {
           </div>
         ),
         allowsSorting: true,
-        sortValue: (row: UserData) => row.name,
-        filterable: true
+        sortValue: (row: UserData) => row.name
       },
       {
         key: 'department',
@@ -1142,16 +721,15 @@ export const RichUserData: Story = {
             <div className='text-xs text-gray-dark-300 mt-1'>{row.role}</div>
           </div>
         ),
-        allowsSorting: true,
-        filterable: true
+        allowsSorting: true
       },
       {
         key: 'compensation',
         header: 'Compensation',
         cell: (row: UserData) => (
-          <div>
-            <div className='font-medium text-text-dark'>€{row.salary?.toLocaleString()}</div>
-            <div className='text-xs text-gray-dark-300'>Annual</div>
+          <div className='text-right'>
+            <div className='font-medium text-green-300'>{row.salary ? `€${row.salary.toLocaleString()}` : 'N/A'}</div>
+            <div className='text-xs text-gray-dark-400'>Annual</div>
           </div>
         ),
         allowsSorting: true,
@@ -1186,8 +764,35 @@ export const RichUserData: Story = {
         header: 'Status',
         cell: (row: UserData) => <StatusBadge status={row.status} />,
         sortValue: (row: UserData) => row.status,
-        allowsSorting: true,
-        filterable: true
+        allowsSorting: true
+      },
+      {
+        key: 'actions',
+        header: 'Actions',
+        cell: (row: UserData) => (
+          <div className='flex gap-2' role='group' aria-label='Row actions'>
+            <button
+              className='text-gray-dark-200 hover:text-gray-dark-100 font-medium transition-colors'
+              aria-label={`Edit user ${row.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                alert(`Edit user: ${row.name}`);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className='text-red-300 hover:text-red-200 font-medium transition-colors'
+              aria-label={`Delete user ${row.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                alert(`Delete user: ${row.name}`);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        )
       }
     ];
 
@@ -1195,80 +800,14 @@ export const RichUserData: Story = {
       <Table
         {...args}
         items={richData}
-        columns={enhancedColumns}
+        columns={richColumns}
         selectedKeys={selectedKeys}
         onSelectionChange={handleSelectionChange}
         sortDescriptor={sortDescriptor}
         onSortChange={setSortDescriptor}
         selectionMode='multiple'
         isStriped={true}
-        color='primary'
-        topContent={
-          <div className='flex justify-between items-center'>
-            <h3 className='text-lg font-semibold text-text-dark'>Employee Management System</h3>
-            <div className='text-sm text-gray-dark-300'>
-              {selectedKeys.size} of {richData.length} selected
-            </div>
-          </div>
-        }
       />
     );
   }
-};
-
-/**
- * Product catalog table demonstrating e-commerce data with pricing, stock levels, ratings, and status indicators.
- * Perfect for inventory management systems and product browsing interfaces.
- */
-type ProductStory = StoryObj<CompleteTableProps<ProductData>>;
-export const ProductCatalog: ProductStory = {
-  render: (args) => {
-    const products = generateProducts(15);
-    return <Table {...args} items={products} columns={productColumns} selectionMode='multiple' isStriped={true} />;
-  }
-};
-
-/**
- * Showcase of all available color themes for the table.
- * Each color variant affects the text color and visual styling throughout the table content.
- */
-export const ColorVariants: Story = {
-  render: () => (
-    <div className='space-y-8' style={{ backgroundColor: 'var(--color-background-dark)' }}>
-      <div className='p-4 rounded-lg' style={{ backgroundColor: 'var(--color-background-dark)' }}>
-        <h3 className='text-lg font-semibold mb-2 text-text-dark'>Default Color</h3>
-        <Table items={sampleData.slice(0, 3)} columns={basicColumns} color='default' />
-      </div>
-      <div className='p-4 rounded-lg' style={{ backgroundColor: 'var(--color-background-dark)' }}>
-        <h3 className='text-lg font-semibold mb-2' style={{ color: 'var(--color-red-200)' }}>
-          Primary Color
-        </h3>
-        <Table items={sampleData.slice(0, 3)} columns={basicColumns} color='primary' />
-      </div>
-      <div className='p-4 rounded-lg' style={{ backgroundColor: 'var(--color-background-dark)' }}>
-        <h3 className='text-lg font-semibold mb-2' style={{ color: 'var(--color-red-300)' }}>
-          Secondary Color
-        </h3>
-        <Table items={sampleData.slice(0, 3)} columns={basicColumns} color='secondary' />
-      </div>
-      <div className='p-4 rounded-lg' style={{ backgroundColor: 'var(--color-background-dark)' }}>
-        <h3 className='text-lg font-semibold mb-2' style={{ color: '#4ade80' }}>
-          Success Color
-        </h3>
-        <Table items={sampleData.slice(0, 3)} columns={basicColumns} color='success' />
-      </div>
-      <div className='p-4 rounded-lg' style={{ backgroundColor: 'var(--color-background-dark)' }}>
-        <h3 className='text-lg font-semibold mb-2' style={{ color: '#fbbf24' }}>
-          Warning Color
-        </h3>
-        <Table items={sampleData.slice(0, 3)} columns={basicColumns} color='warning' />
-      </div>
-      <div className='p-4 rounded-lg' style={{ backgroundColor: 'var(--color-background-dark)' }}>
-        <h3 className='text-lg font-semibold mb-2' style={{ color: '#f87171' }}>
-          Danger Color
-        </h3>
-        <Table items={sampleData.slice(0, 3)} columns={basicColumns} color='danger' />
-      </div>
-    </div>
-  )
 };

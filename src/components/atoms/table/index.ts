@@ -10,7 +10,6 @@ export type {
   SelectionBehavior
 } from './types';
 export { useTable } from './useTable';
-export { useVirtualization } from './useVirtualization';
 
 import Table from './Table';
 export default Table;

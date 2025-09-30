@@ -21,12 +21,13 @@ interface UseTableProps<T> {
   onSelectionChange?: (keys: Selection) => void;
   sortDescriptor?: SortDescriptor;
   onSortChange?: (descriptor: SortDescriptor) => void;
+  onFilterChange?: (filters: Record<string, string>) => void;
 }
 
 export function useTable<T>({
   data = [],
   items = [],
-  columns,
+
   propLoading = false,
   pagination = false,
   pageSize = 10,
@@ -40,7 +41,8 @@ export function useTable<T>({
   defaultSelectedKeys,
   onSelectionChange,
   sortDescriptor: controlledSortDescriptor,
-  onSortChange
+  onSortChange,
+  onFilterChange
 }: UseTableProps<T>) {
   const actualData = items && items.length > 0 ? Array.from(items) : data || [];
 
@@ -92,117 +94,25 @@ export function useTable<T>({
     }
   }, [selectedRows, selectedKeys]);
 
-  const setFilter = useCallback((columnKey: string, value: string) => {
-    setFilterValues((prev) => ({
-      ...prev,
-      [columnKey]: value
-    }));
-    setCurrentPage(1);
-  }, []);
+  const setFilter = useCallback(
+    (columnKey: string, value: string) => {
+      const newFilters = {
+        ...filterValues,
+        [columnKey]: value
+      };
+      setFilterValues(newFilters);
+      setCurrentPage(1);
 
+      // Notify backend of filter changes for API-driven approach
+      onFilterChange?.(newFilters);
+    },
+    [filterValues, onFilterChange]
+  );
+
+  // API-driven approach: data comes already filtered and sorted from backend
   const filteredAndSortedData = useMemo(() => {
-    if (!actualData) {
-      return [];
-    }
-
-    let processedData = [...actualData];
-
-    const activeFilters = Object.entries(filterValues).filter(([, value]) => value.trim() !== '');
-
-    if (activeFilters.length > 0) {
-      processedData = processedData.filter((row) => {
-        return activeFilters.every(([columnKey, filterValue]) => {
-          const column = columns.find((col) => String(col.key) === columnKey);
-          if (!column) {
-            return true;
-          }
-
-          const cellContent = column.cell ? String(column.cell(row)) : '';
-          const filterValueLower = filterValue.toLowerCase();
-          const cellContentLower = cellContent.toLowerCase();
-
-          // If filter value has spaces or special chars, try exact match first
-          if (filterValue.includes(' ') || filterValue.includes('-') || filterValue.includes('_')) {
-            // Try exact match first
-            if (cellContentLower === filterValueLower) {
-              return true;
-            }
-            // Fall back to word-by-word matching
-            const filterWords = filterValueLower.split(/\s+/).filter((word) => word.length > 0);
-            return filterWords.every((word) => cellContentLower.includes(word));
-          }
-
-          // Default behavior for single words
-          return cellContentLower.includes(filterValueLower);
-        });
-      });
-    }
-    if (currentSortDescriptor) {
-      const { column: sortColumn, direction } = currentSortDescriptor;
-      processedData.sort((a, b) => {
-        const columnDef = columns.find((col) => col.key === sortColumn);
-        if (!columnDef) {
-          return 0;
-        }
-
-        // Use custom sorting function if provided, otherwise use the raw data value
-        const aValue: any = columnDef.sortValue ? columnDef.sortValue(a) : (a as any)[String(sortColumn)];
-        const bValue: any = columnDef.sortValue ? columnDef.sortValue(b) : (b as any)[String(sortColumn)];
-
-        if (aValue == null && bValue == null) {
-          return 0;
-        }
-        if (aValue == null) {
-          return direction === 'ascending' ? 1 : -1;
-        }
-        if (bValue == null) {
-          return direction === 'ascending' ? -1 : 1;
-        }
-
-        const aStr = String(aValue);
-        const bStr = String(bValue);
-
-        const aNum = parseFloat(aStr);
-        const bNum = parseFloat(bStr);
-
-        if (!isNaN(aNum) && !isNaN(bNum)) {
-          return direction === 'ascending' ? aNum - bNum : bNum - aNum;
-        }
-
-        const aDate = new Date(aStr);
-        const bDate = new Date(bStr);
-
-        if (
-          !isNaN(aDate.getTime()) &&
-          !isNaN(bDate.getTime()) &&
-          (aStr.includes('-') || aStr.includes('/') || aStr.includes('T'))
-        ) {
-          const diff = aDate.getTime() - bDate.getTime();
-          return direction === 'ascending' ? diff : -diff;
-        }
-
-        if (typeof aValue === 'boolean' && typeof bValue === 'boolean') {
-          return direction === 'ascending'
-            ? aValue === bValue
-              ? 0
-              : aValue
-                ? 1
-                : -1
-            : aValue === bValue
-              ? 0
-              : bValue
-                ? 1
-                : -1;
-        }
-
-        return direction === 'ascending'
-          ? aStr.localeCompare(bStr, undefined, { numeric: true, sensitivity: 'base' })
-          : bStr.localeCompare(aStr, undefined, { numeric: true, sensitivity: 'base' });
-      });
-    }
-
-    return processedData;
-  }, [actualData, filterValues, columns, currentSortDescriptor]);
+    return actualData || [];
+  }, [actualData]);
 
   const paginatedData = useMemo(() => {
     if (!pagination) {

@@ -15,15 +15,11 @@ export type SelectionBehavior = 'toggle' | 'replace';
 
 export type DisabledBehavior = 'selection' | 'all';
 
-export type TableColor = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-
 export type TableRadius = 'none' | 'sm' | 'md' | 'lg';
 
 export type TableShadow = 'none' | 'sm' | 'md' | 'lg';
 
 export type TableLayout = 'auto' | 'fixed';
-
-export type ContentPlacement = 'inside' | 'outside';
 
 export type ColumnAlign = 'start' | 'center' | 'end';
 
@@ -50,7 +46,6 @@ export interface TableProps<T = any> {
   items?: T[];
   columns?: TableColumn<T>[];
 
-  color?: TableColor;
   layout?: TableLayout;
   radius?: TableRadius;
   shadow?: TableShadow;
@@ -65,11 +60,6 @@ export interface TableProps<T = any> {
   isHeaderSticky?: boolean;
   fullWidth?: boolean;
   removeWrapper?: boolean;
-
-  topContent?: React.ReactNode;
-  bottomContent?: React.ReactNode;
-  topContentPlacement?: ContentPlacement;
-  bottomContentPlacement?: ContentPlacement;
 
   showSelectionCheckboxes?: boolean;
   sortDescriptor?: SortDescriptor;

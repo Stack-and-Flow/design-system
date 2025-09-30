@@ -1,76 +1,52 @@
 import { useCallback, useRef } from 'react';
 import type { CompleteTableProps, TableColumn } from './types';
 import { useKeyboardNavigation, useTable, useTableEvents } from './useTable';
-import { useVirtualization } from './useVirtualization';
 
 function Table<T = any>(props: CompleteTableProps<T>) {
   const {
-    data = [],
     items = [],
     columns = [],
-
-    color = 'default',
-    layout = 'auto',
-    shadow = 'sm',
-
+    variant = 'default',
+    size = 'md',
     hideHeader = false,
+    className,
+    selectionMode = 'none',
+    selectedKeys = new Set(),
+    disabledKeys = new Set(),
+    disallowEmptySelection = false,
+
+    loading = false,
+    emptyContent = 'No data available',
+    onRowClick,
+    data = [],
+    pagination = false,
+    pageSize = 10,
+    totalRows = 0,
+    onPageChange,
+    rowSelection,
+    selectedRows = [],
+    onSelectRows,
+    fullWidth = true,
+    removeWrapper = false,
+    shadow = 'sm',
+    classNames = {},
+    isKeyboardNavigationDisabled = false,
+    onRowAction,
+    onCellAction,
+    defaultSelectedKeys,
+    onSelectionChange,
+    sortDescriptor,
+    onSortChange,
+    layout = 'auto',
     isStriped = false,
     isCompact = false,
     isHeaderSticky = false,
-    fullWidth = true,
-    removeWrapper = false,
-
-    topContent,
-    bottomContent,
-    topContentPlacement = 'inside',
-    bottomContentPlacement = 'inside',
-
-    selectionMode = 'none',
-    selectedKeys,
-    defaultSelectedKeys,
-    disabledKeys,
-    disallowEmptySelection = false,
-    showSelectionCheckboxes,
-
-    sortDescriptor,
-
-    isKeyboardNavigationDisabled = false,
-
-    isVirtualized = false,
-    maxTableHeight = 400,
-
-    onRowAction,
-    onCellAction,
-    onSelectionChange,
-    onSortChange,
-
-    classNames = {},
-
-    loading = false,
-    emptyContent,
-    variant = 'default',
-    size = 'md',
-    className,
-    pagination = false,
-    pageSize = 10,
-    totalRows,
-    onPageChange,
-    rowSelection = false,
-    selectedRows = [],
-    onSelectRows,
-    onRowClick,
-
-    radius: _radius = 'lg',
-    selectionBehavior: _selectionBehavior = 'toggle',
-    rowKey: _rowKey
+    showSelectionCheckboxes = false
   } = props;
 
   const tableRef = useRef<HTMLTableElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const tableId = useRef(`table-${Math.random().toString(36).substr(2, 9)}`);
-
-  const defaultRowHeight = size === 'sm' ? 32 : size === 'lg' ? 56 : 44;
-  const containerHeight = maxTableHeight || 400;
 
   const tableState = useTable({
     data: Array.from(items?.length > 0 ? items : data || []),
@@ -90,14 +66,6 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     onSelectionChange,
     sortDescriptor,
     onSortChange
-  });
-
-  const { virtualItems, totalHeight, offsetY, handleScroll } = useVirtualization({
-    items: tableState.filteredData,
-    containerHeight,
-    itemHeight: defaultRowHeight,
-    isVirtualized,
-    overscan: 5
   });
 
   const { focusedCell, setFocusedCell, handleKeyDown } = useKeyboardNavigation(
@@ -145,17 +113,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
   }, [removeWrapper, shadow, classNames.wrapper]);
 
   const getTableClasses = useCallback(() => {
-    let classes = `table-${layout} w-full bg-background-dark`;
-
-    const colorMap = {
-      default: 'text-text-dark',
-      primary: 'border-l-4 border-primary bg-primary/5 text-text-dark',
-      secondary: 'border-l-4 border-secondary bg-red-600/5 text-text-dark',
-      success: 'border-l-4 border-[var(--color-success)] bg-[var(--color-success)]/10 text-text-dark',
-      warning: 'border-l-4 border-[var(--color-warning)] bg-[var(--color-warning)]/10 text-text-dark',
-      danger: 'border-l-4 border-[var(--color-danger)] bg-[var(--color-danger)]/10 text-text-dark'
-    };
-    classes += ` ${colorMap[color] || colorMap.default}`;
+    let classes = `table-${layout} w-full bg-background-dark text-text-dark`;
 
     if (isStriped || variant === 'striped') {
       classes += ' [&>tbody>tr:nth-child(odd)]:bg-gray-dark-800';
@@ -176,7 +134,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
       classes += ` ${classNames.table}`;
     }
     return classes;
-  }, [layout, color, isStriped, variant, isCompact, size, classNames.table]);
+  }, [layout, isStriped, variant, isCompact, size, classNames.table]);
 
   const getHeaderClasses = useCallback(() => {
     let classes = 'bg-primary border-b border-gray-dark-600';
@@ -456,19 +414,8 @@ function Table<T = any>(props: CompleteTableProps<T>) {
 
   const tableContent = (
     <div className={`${getBaseClasses()} ${className || ''}`}>
-      {topContent && topContentPlacement === 'outside' && <div className='mb-4'>{topContent}</div>}
-
       <div className={getWrapperClasses()}>
-        {topContent && topContentPlacement === 'inside' && (
-          <div className='p-4 border-b border-[#636579]'>{topContent}</div>
-        )}
-
-        <div
-          ref={containerRef}
-          className={isVirtualized ? 'overflow-auto' : ''}
-          style={isVirtualized ? { maxHeight: `${containerHeight}px` } : undefined}
-          onScroll={isVirtualized ? handleScroll : undefined}
-        >
+        <div ref={containerRef}>
           <div id={`${tableId.current}-description`} className='sr-only'>
             Tabla con {tableState.filteredData.length} filas de datos
             {selectionMode !== 'none' || showSelectionCheckboxes ? ' con selección habilitada' : ''}
@@ -577,28 +524,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
               </thead>
             )}
 
-            <tbody
-              className={classNames.tbody}
-              style={
-                isVirtualized
-                  ? {
-                      height: `${totalHeight}px`
-                    }
-                  : undefined
-              }
-            >
-              {isVirtualized && offsetY > 0 && (
-                <tr>
-                  <td
-                    colSpan={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
-                    style={{
-                      height: `${offsetY}px`,
-                      padding: 0,
-                      border: 'none'
-                    }}
-                  />
-                </tr>
-              )}
+            <tbody className={classNames.tbody}>
               {/* Show "no results" message when filtering returns empty results */}
               {hasActiveFilters && !hasFilteredResults ? (
                 <tr role='row'>
@@ -612,10 +538,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                   </td>
                 </tr>
               ) : hasFilteredResults ? (
-                (isVirtualized
-                  ? virtualItems
-                  : tableState.filteredData.map((item: T, index: number) => ({ item, index }))
-                ).map(({ item: row, index: rowIndex }) => {
+                tableState.filteredData.map((row: T, rowIndex: number) => {
                   const actualRowIndex = rowIndex;
                   const rowKeyValue = tableState.getRowKey(row, actualRowIndex);
                   const isSelected =
@@ -643,13 +566,6 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                     ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                     ${classNames.tr || ''}
                   `}
-                      style={
-                        isVirtualized
-                          ? {
-                              height: `${defaultRowHeight}px`
-                            }
-                          : undefined
-                      }
                       onClick={() => !isDisabled && handleRowClick(actualRowIndex, row)}
                       onKeyDown={(e) => {
                         if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) {
@@ -700,28 +616,10 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                   );
                 })
               ) : null}
-              {isVirtualized && (
-                <tr>
-                  <td
-                    colSpan={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
-                    style={{
-                      height: `${Math.max(0, totalHeight - offsetY - virtualItems.length * defaultRowHeight)}px`,
-                      padding: 0,
-                      border: 'none'
-                    }}
-                  />
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
-
-        {bottomContent && bottomContentPlacement === 'inside' && (
-          <div className='p-4 border-t border-[#636579]'>{bottomContent}</div>
-        )}
       </div>
-
-      {bottomContent && bottomContentPlacement === 'outside' && <div className='mt-4'>{bottomContent}</div>}
 
       {pagination && (
         <div className='flex justify-between items-center py-4 px-4 border-t border-[#636579] bg-[#1a1a1a]'>
