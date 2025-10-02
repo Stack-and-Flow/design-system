@@ -25,7 +25,16 @@ export const Default: Story = {
 
 export const HorizontalSize: Story = {
   render: () => (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
       <Divider orientation='horizontal' size='xs' />
       <Divider orientation='horizontal' size='sm' />
       <Divider orientation='horizontal' size='md' />
@@ -39,7 +48,7 @@ export const HorizontalSize: Story = {
  */
 export const VerticalSize: Story = {
   render: () => (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem' }}>
       <Divider orientation='vertical' size='xs' />
       <Divider orientation='vertical' size='sm' />
       <Divider orientation='vertical' size='md' />
@@ -52,7 +61,21 @@ export const VerticalSize: Story = {
 /**
  * In both orientations, we have four thicknesses.
  */
-export const Thickness: Story = {
+export const ThicknessHorizontal: Story = {
+  render: () => (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem' }}>
+      <Divider orientation='horizontal' thickness='xs' />
+      <Divider orientation='horizontal' thickness='sm' />
+      <Divider orientation='horizontal' thickness='md' />
+      <Divider orientation='horizontal' thickness='lg' />
+    </div>
+  )
+};
+
+/**
+ * In both orientations, we have four thicknesses.
+ */
+export const ThicknessVertical: Story = {
   render: () => (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
       <Divider orientation='vertical' thickness='xs' />
@@ -69,9 +92,9 @@ export const Thickness: Story = {
 export const Color: Story = {
   render: () => (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
-      <Divider orientation='horizontal' color='bg-primary' />
-      <Divider orientation='horizontal' color='bg-blue' />
-      <Divider orientation='horizontal' color='bg-indigo' />
+      <Divider orientation='horizontal' size='md' color='bg-primary' />
+      <Divider orientation='horizontal' size='md' color='bg-blue' />
+      <Divider orientation='horizontal' size='md' color='bg-indigo' />
     </div>
   )
 };
@@ -79,13 +102,13 @@ export const Color: Story = {
 /**
  * We can give it more stylish corners
  */
-export const Hover: Story = {
+export const Corner: Story = {
   render: () => (
     <div
       style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '1rem' }}
     >
-      <Divider orientation='horizontal' size='lg' thickness='lg' corner='none' />
-      <Divider orientation='horizontal' size='lg' thickness='lg' corner='rounded' />
+      <Divider orientation='horizontal' size='lg' thickness='md' corner='none' />
+      <Divider orientation='horizontal' size='lg' thickness='md' corner='rounded' />
       <div style={{ display: 'flex', gap: '1rem' }}>
         <Divider orientation='vertical' size='lg' thickness='lg' corner='none' />
         <Divider orientation='vertical' size='lg' thickness='lg' corner='rounded' />
