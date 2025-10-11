@@ -441,3 +441,162 @@ export const useTableEvents = <T>(
 
   return { handleCellClick, handleRowClick };
 };
+
+export const useTableClasses = <T = any>({
+  fullWidth,
+  classNames,
+  removeWrapper,
+  shadow,
+  layout,
+  isStriped,
+  variant,
+  isCompact,
+  size,
+  isHeaderSticky,
+  focusedCell
+}: {
+  fullWidth?: boolean;
+  classNames?: Partial<{
+    base: string;
+    table: string;
+    thead: string;
+    tbody: string;
+    tfoot: string;
+    emptyWrapper: string;
+    loadingWrapper: string;
+    wrapper: string;
+    tr: string;
+    th: string;
+    td: string;
+    sortIcon: string;
+  }>;
+  removeWrapper?: boolean;
+  shadow?: 'none' | 'sm' | 'md' | 'lg';
+  layout?: 'auto' | 'fixed';
+  isStriped?: boolean;
+  variant?: 'default' | 'striped' | 'surface';
+  isCompact?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  isHeaderSticky?: boolean;
+  focusedCell?: { row: number; col: number } | null;
+}) => {
+  const getBaseClasses = useCallback(() => {
+    let classes = 'relative';
+    if (fullWidth) {
+      classes += ' w-full';
+    }
+    if (classNames?.base) {
+      classes += ` ${classNames.base}`;
+    }
+    return classes;
+  }, [fullWidth, classNames?.base]);
+
+  const getWrapperClasses = useCallback(() => {
+    let classes = 'flex flex-col relative';
+    if (!removeWrapper) {
+      classes += ' border border-gray-light-300 dark:border-gray-dark-600 rounded-lg bg-white dark:bg-gray-dark-900';
+      if (shadow && shadow !== 'none') {
+        const shadowMap = {
+          sm: 'shadow-sm',
+          md: 'shadow-md',
+          lg: 'shadow-lg'
+        };
+        classes += ` ${shadowMap[shadow]}`;
+      }
+    }
+    if (classNames?.wrapper) {
+      classes += ` ${classNames.wrapper}`;
+    }
+    return classes;
+  }, [removeWrapper, shadow, classNames?.wrapper]);
+
+  const getTableClasses = useCallback(() => {
+    let classes = `table-${layout} w-full bg-white dark:bg-gray-dark-900 text-text-light dark:text-text-dark`;
+
+    if (isStriped || variant === 'striped') {
+      classes += ' [&>tbody>tr:nth-child(odd)]:bg-gray-light-50 dark:[&>tbody>tr:nth-child(odd)]:bg-gray-dark-800';
+    }
+
+    if (isCompact) {
+      classes += ' [&>thead>tr>th]:py-1 [&>tbody>tr>td]:py-1';
+    }
+
+    const sizeMap = {
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg'
+    };
+    classes += ` ${sizeMap[size || 'md'] || sizeMap.md}`;
+
+    if (classNames?.table) {
+      classes += ` ${classNames.table}`;
+    }
+    return classes;
+  }, [layout, isStriped, variant, isCompact, size, classNames?.table]);
+
+  const getHeaderClasses = useCallback(() => {
+    let classes = 'bg-gray-light-100 dark:bg-primary border-b border-gray-light-300 dark:border-gray-dark-600';
+    if (isHeaderSticky) {
+      classes += ' sticky top-0 z-10';
+    }
+    if (classNames?.thead) {
+      classes += ` ${classNames.thead}`;
+    }
+    return classes;
+  }, [isHeaderSticky, classNames?.thead]);
+
+  const getHeaderCellClasses = useCallback(
+    (column: TableColumn<T>, columnIndex: number) => {
+      let classes = 'px-4 py-3 text-left font-semibold text-text-light dark:text-white';
+
+      if (column.align) {
+        const alignMap = {
+          start: 'text-left',
+          center: 'text-center',
+          end: 'text-right'
+        };
+        classes = classes.replace('text-left', alignMap[column.align] || 'text-left');
+      }
+
+      if (column.allowsSorting || column.sortable) {
+        classes += ' cursor-pointer hover:bg-gray-light-200 dark:hover:bg-secondary transition-colors';
+      }
+
+      if (focusedCell && focusedCell.row === -1 && focusedCell.col === columnIndex) {
+        classes += ' ring-2 ring-accent ring-inset';
+      }
+
+      if (classNames?.th) {
+        classes += ` ${classNames.th}`;
+      }
+      return classes;
+    },
+    [focusedCell, classNames?.th]
+  );
+
+  const getCellClasses = useCallback(
+    (rowIndex: number, columnIndex: number) => {
+      let classes =
+        'px-4 py-3 text-text-light dark:text-white border-b border-gray-light-300 dark:border-gray-dark-600';
+
+      if (focusedCell && focusedCell.row === rowIndex && focusedCell.col === columnIndex) {
+        classes += ' ring-2 ring-accent ring-inset';
+      }
+
+      if (classNames?.td) {
+        classes += ` ${classNames.td}`;
+      }
+      return classes;
+    },
+    [focusedCell, classNames?.td]
+  );
+
+  return {
+    getBaseClasses,
+    getWrapperClasses,
+    getTableClasses,
+    getHeaderClasses,
+    getHeaderCellClasses,
+    getCellClasses
+  };
+};

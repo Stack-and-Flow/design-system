@@ -24,10 +24,10 @@ const StatusBadge = ({ status }: { status: string }) => (
   <span
     className={`px-2 py-1 rounded-full text-xs font-medium inline-flex items-center justify-center min-w-[60px] ${
       status === 'Active'
-        ? 'bg-green-900 text-green-50 border border-green-800 dark:bg-green-950 dark:text-green-50 dark:border-green-900'
+        ? 'bg-green-950 text-green-50 border border-green-900 dark:bg-green-950 dark:text-green-50 dark:border-green-900'
         : status === 'Inactive'
-          ? 'bg-red-900 text-red-50 border border-red-800 dark:bg-red-950 dark:text-red-50 dark:border-red-900'
-          : 'bg-yellow-900 text-white border border-yellow-800 dark:bg-yellow-950 dark:text-white dark:border-yellow-900'
+          ? 'bg-red-950 text-red-50 border border-red-900 dark:bg-red-950 dark:text-red-50 dark:border-red-900'
+          : 'bg-yellow-950 text-white border border-yellow-900 dark:bg-yellow-950 dark:text-white dark:border-yellow-900'
     }`}
     role='status'
     aria-label={`Status: ${status}`}
@@ -376,8 +376,13 @@ export const EmptyState: Story = {
     items: [],
     columns: basicColumns,
     emptyContent: (
-      <div className='text-center py-6 bg-background-dark'>
-        <svg className='mx-auto h-12 w-12 text-gray-dark-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+      <div className='text-center py-6 bg-white dark:bg-gray-dark-900'>
+        <svg
+          className='mx-auto h-12 w-12 text-gray-light-400 dark:text-gray-dark-400'
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
+        >
           <path
             strokeLinecap='round'
             strokeLinejoin='round'
@@ -385,8 +390,8 @@ export const EmptyState: Story = {
             d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
           />
         </svg>
-        <h3 className='mt-2 text-sm font-medium text-text-dark'>No users found</h3>
-        <p className='mt-1 text-sm text-gray-dark-300'>Get started by creating a new user.</p>
+        <h3 className='mt-2 text-sm font-medium text-text-light dark:text-text-dark'>No users found</h3>
+        <p className='mt-1 text-sm text-gray-light-500 dark:text-gray-dark-300'>Get started by creating a new user.</p>
         <div className='mt-6'>
           <button className='inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-secondary'>
             Add User
@@ -689,9 +694,9 @@ export const RichCustomCells: Story = {
           <div className='flex items-center gap-3'>
             <img src={row.avatar} alt={row.name} className='w-10 h-10 rounded-full' />
             <div>
-              <div className='font-medium text-text-dark'>{row.name}</div>
-              <div className='text-sm text-gray-dark-300'>{row.email}</div>
-              <div className='text-xs text-gray-dark-400'>{row.location}</div>
+              <div className='font-medium text-text-light dark:text-text-dark'>{row.name}</div>
+              <div className='text-sm text-gray-light-700 dark:text-gray-dark-300'>{row.email}</div>
+              <div className='text-xs text-gray-light-600 dark:text-gray-dark-400'>{row.location}</div>
             </div>
           </div>
         ),
@@ -706,19 +711,19 @@ export const RichCustomCells: Story = {
             <div
               className={`px-2 py-1 rounded text-xs font-medium ${
                 row.team === 'Engineering'
-                  ? 'bg-blue-900 text-blue-200'
+                  ? 'bg-blue-900 text-blue-50 dark:bg-blue-900 dark:text-blue-50'
                   : row.team === 'Design'
-                    ? 'bg-purple-900 text-purple-200'
+                    ? 'bg-purple-900 text-purple-50 dark:bg-purple-900 dark:text-purple-50'
                     : row.team === 'Marketing'
-                      ? 'bg-green-900 text-green-200'
+                      ? 'bg-green-900 text-green-50 dark:bg-green-900 dark:text-green-50'
                       : row.team === 'Sales'
-                        ? 'bg-yellow-900 text-yellow-200'
-                        : 'bg-gray-900 text-gray-200'
+                        ? 'bg-yellow-900 text-yellow-50 dark:bg-yellow-900 dark:text-yellow-50'
+                        : 'bg-gray-900 text-gray-50 dark:bg-gray-900 dark:text-gray-50'
               }`}
             >
               {row.team}
             </div>
-            <div className='text-xs text-gray-dark-300 mt-1'>{row.role}</div>
+            <div className='text-xs text-gray-light-600 dark:text-gray-dark-300 mt-1'>{row.role}</div>
           </div>
         ),
         allowsSorting: true
@@ -728,8 +733,10 @@ export const RichCustomCells: Story = {
         header: 'Compensation',
         cell: (row: UserData) => (
           <div className='text-right'>
-            <div className='font-medium text-green-300'>{row.salary ? `€${row.salary.toLocaleString()}` : 'N/A'}</div>
-            <div className='text-xs text-gray-dark-400'>Annual</div>
+            <div className='font-medium text-green-700 dark:text-green-300'>
+              {row.salary ? `€${row.salary.toLocaleString()}` : 'N/A'}
+            </div>
+            <div className='text-xs text-gray-light-600 dark:text-gray-dark-400'>Annual</div>
           </div>
         ),
         allowsSorting: true,
@@ -751,8 +758,10 @@ export const RichCustomCells: Story = {
 
           return (
             <div>
-              <div className='font-medium text-text-dark'>{years > 0 ? `${years}y ${months}m` : `${months}m`}</div>
-              <div className='text-xs text-gray-dark-300'>{joinDate.toLocaleDateString()}</div>
+              <div className='font-medium text-text-light dark:text-text-dark'>
+                {years > 0 ? `${years}y ${months}m` : `${months}m`}
+              </div>
+              <div className='text-xs text-gray-light-600 dark:text-gray-dark-300'>{joinDate.toLocaleDateString()}</div>
             </div>
           );
         },
@@ -772,7 +781,7 @@ export const RichCustomCells: Story = {
         cell: (row: UserData) => (
           <div className='flex gap-2' role='group' aria-label='Row actions'>
             <button
-              className='text-gray-dark-200 hover:text-gray-dark-100 font-medium transition-colors'
+              className='text-gray-light-700 hover:text-gray-light-800 dark:text-gray-dark-200 dark:hover:text-gray-dark-100 font-medium transition-colors'
               aria-label={`Edit user ${row.name}`}
               onClick={(e) => {
                 e.stopPropagation();
@@ -782,7 +791,7 @@ export const RichCustomCells: Story = {
               Edit
             </button>
             <button
-              className='text-red-300 hover:text-red-200 font-medium transition-colors'
+              className='text-red-600 hover:text-red-700 dark:text-red-300 dark:hover:text-red-200 font-medium transition-colors'
               aria-label={`Delete user ${row.name}`}
               onClick={(e) => {
                 e.stopPropagation();

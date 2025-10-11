@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import type { CompleteTableProps, TableColumn } from './types';
-import { useKeyboardNavigation, useTable, useTableEvents } from './useTable';
+import { useKeyboardNavigation, useTable, useTableClasses, useTableEvents } from './useTable';
 
 function Table<T = any>(props: CompleteTableProps<T>) {
   const {
@@ -82,115 +82,20 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     onRowClick
   );
 
-  const getBaseClasses = useCallback(() => {
-    let classes = 'relative';
-    if (fullWidth) {
-      classes += ' w-full';
-    }
-    if (classNames.base) {
-      classes += ` ${classNames.base}`;
-    }
-    return classes;
-  }, [fullWidth, classNames.base]);
-
-  const getWrapperClasses = useCallback(() => {
-    let classes = 'flex flex-col relative';
-    if (!removeWrapper) {
-      classes += ' border border-gray-dark-600 rounded-lg bg-background-dark';
-      if (shadow !== 'none') {
-        const shadowMap = {
-          sm: 'shadow-sm',
-          md: 'shadow-md',
-          lg: 'shadow-lg'
-        };
-        classes += ` ${shadowMap[shadow] || 'shadow-sm'}`;
-      }
-    }
-    if (classNames.wrapper) {
-      classes += ` ${classNames.wrapper}`;
-    }
-    return classes;
-  }, [removeWrapper, shadow, classNames.wrapper]);
-
-  const getTableClasses = useCallback(() => {
-    let classes = `table-${layout} w-full bg-background-dark text-text-dark`;
-
-    if (isStriped || variant === 'striped') {
-      classes += ' [&>tbody>tr:nth-child(odd)]:bg-gray-dark-800';
-    }
-
-    if (isCompact) {
-      classes += ' [&>thead>tr>th]:py-1 [&>tbody>tr>td]:py-1';
-    }
-
-    const sizeMap = {
-      sm: 'text-sm',
-      md: 'text-base',
-      lg: 'text-lg'
-    };
-    classes += ` ${sizeMap[size] || sizeMap.md}`;
-
-    if (classNames.table) {
-      classes += ` ${classNames.table}`;
-    }
-    return classes;
-  }, [layout, isStriped, variant, isCompact, size, classNames.table]);
-
-  const getHeaderClasses = useCallback(() => {
-    let classes = 'bg-primary border-b border-gray-dark-600';
-    if (isHeaderSticky) {
-      classes += ' sticky top-0 z-10';
-    }
-    if (classNames.thead) {
-      classes += ` ${classNames.thead}`;
-    }
-    return classes;
-  }, [isHeaderSticky, classNames.thead]);
-
-  const getHeaderCellClasses = useCallback(
-    (column: TableColumn<T>, columnIndex: number) => {
-      let classes = 'px-4 py-3 text-left font-semibold text-white';
-
-      if (column.align) {
-        const alignMap = {
-          start: 'text-left',
-          center: 'text-center',
-          end: 'text-right'
-        };
-        classes = classes.replace('text-left', alignMap[column.align] || 'text-left');
-      }
-
-      if (column.allowsSorting || column.sortable) {
-        classes += ' cursor-pointer hover:bg-secondary transition-colors';
-      }
-
-      if (focusedCell && focusedCell.row === -1 && focusedCell.col === columnIndex) {
-        classes += ' ring-2 ring-accent ring-inset';
-      }
-
-      if (classNames.th) {
-        classes += ` ${classNames.th}`;
-      }
-      return classes;
-    },
-    [focusedCell, classNames.th]
-  );
-
-  const getCellClasses = useCallback(
-    (rowIndex: number, columnIndex: number) => {
-      let classes = 'px-4 py-3 text-white border-b border-gray-dark-600';
-
-      if (focusedCell && focusedCell.row === rowIndex && focusedCell.col === columnIndex) {
-        classes += ' ring-2 ring-accent ring-inset';
-      }
-
-      if (classNames.td) {
-        classes += ` ${classNames.td}`;
-      }
-      return classes;
-    },
-    [focusedCell, classNames.td]
-  );
+  const { getBaseClasses, getWrapperClasses, getTableClasses, getHeaderClasses, getHeaderCellClasses, getCellClasses } =
+    useTableClasses({
+      fullWidth,
+      classNames,
+      removeWrapper,
+      shadow,
+      layout,
+      isStriped,
+      variant,
+      isCompact,
+      size,
+      isHeaderSticky,
+      focusedCell
+    });
 
   const renderSortIcon = useCallback(
     (column: TableColumn<T>) => {
@@ -246,7 +151,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                     role='columnheader'
                     aria-label='Selection'
                   >
-                    <div className='w-4 h-4 bg-[#636579] rounded animate-pulse'></div>
+                    <div className='w-4 h-4 bg-gray-light-300 dark:bg-gray-dark-600 rounded animate-pulse'></div>
                   </th>
                 )}
                 {columns.map((column, index) => (
@@ -267,12 +172,12 @@ function Table<T = any>(props: CompleteTableProps<T>) {
               <tr key={rowIndex} role='row' aria-rowindex={rowIndex + 1}>
                 {(selectionMode !== 'none' || showSelectionCheckboxes) && (
                   <td className={getCellClasses(rowIndex, -1)} role='gridcell'>
-                    <div className='w-4 h-4 bg-[#636579] rounded animate-pulse'></div>
+                    <div className='w-4 h-4 bg-gray-light-300 dark:bg-gray-dark-600 rounded animate-pulse'></div>
                   </td>
                 )}
                 {columns.map((column, colIndex) => (
                   <td key={String(column.key)} className={getCellClasses(rowIndex, colIndex)} role='gridcell'>
-                    <div className='h-4 bg-[#636579] rounded animate-pulse'></div>
+                    <div className='h-4 bg-gray-light-300 dark:bg-gray-dark-600 rounded animate-pulse'></div>
                   </td>
                 ))}
               </tr>
@@ -280,8 +185,8 @@ function Table<T = any>(props: CompleteTableProps<T>) {
           </tbody>
         </table>
         <div className='flex justify-center items-center py-4'>
-          <div className='animate-spin h-5 w-5 border-2 border-[#830213] border-t-transparent rounded-full mr-3'></div>
-          <span className='text-white'>Cargando datos...</span>
+          <div className='animate-spin h-5 w-5 border-2 border-secondary border-t-transparent rounded-full mr-3'></div>
+          <span className='text-text-light dark:text-text-dark'>Cargando datos...</span>
         </div>
       </div>
     ),
@@ -353,7 +258,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                             placeholder='Filtrar...'
                             value={tableState.filterValues[String(column.key)] || ''}
                             onChange={(e) => tableState.setFilter(String(column.key), e.target.value)}
-                            className='ml-2 p-1 border rounded-md text-sm bg-background-dark border-gray-dark-600 text-text-dark placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
+                            className='ml-2 p-1 border rounded-md text-sm bg-white dark:bg-gray-dark-800 border-gray-light-300 dark:border-gray-dark-600 text-text-light dark:text-text-dark placeholder-gray-light-400 dark:placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
                             aria-label={`Filter by ${column.header}`}
                             aria-describedby={`filter-help-${column.key}`}
                             onClick={(e) => e.stopPropagation()}
@@ -370,7 +275,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
             <tr role='row'>
               <td
                 colSpan={columns.length + (selectionMode !== 'none' || showSelectionCheckboxes ? 1 : 0)}
-                className='px-4 py-8 text-center text-gray-dark-300'
+                className='px-4 py-8 text-center text-gray-light-400 dark:text-gray-dark-300'
                 role='gridcell'
               >
                 {emptyContent || 'No hay datos para mostrar.'}
@@ -510,7 +415,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                               placeholder='Filtrar...'
                               value={tableState.filterValues[String(column.key)] || ''}
                               onChange={(e) => tableState.setFilter(String(column.key), e.target.value)}
-                              className='ml-2 p-1 border rounded-md text-sm bg-background-dark border-gray-dark-600 text-text-dark placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
+                              className='ml-2 p-1 border rounded-md text-sm bg-white dark:bg-gray-dark-800 border-gray-light-300 dark:border-gray-dark-600 text-text-light dark:text-text-dark placeholder-gray-light-400 dark:placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
                               aria-label={`Filter by ${column.header}`}
                               aria-describedby={`filter-help-${column.key}`}
                               onClick={(e) => e.stopPropagation()}
@@ -622,22 +527,22 @@ function Table<T = any>(props: CompleteTableProps<T>) {
       </div>
 
       {pagination && (
-        <div className='flex justify-between items-center py-4 px-4 border-t border-[#636579] bg-[#1a1a1a]'>
+        <div className='flex justify-between items-center py-4 px-4 border-t border-gray-light-300 dark:border-gray-dark-600 bg-gray-light-50 dark:bg-gray-dark-900'>
           <button
             onClick={() => tableState.handlePageChange(tableState.currentPage - 1)}
             disabled={tableState.currentPage === 1}
-            className='px-3 py-1 border rounded-md bg-[#830213] border-[#636579] text-white hover:bg-[#b41520] disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+            className='px-3 py-1 border rounded-md bg-secondary border-gray-light-300 dark:border-gray-dark-600 text-white hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
             aria-label='Go to previous page'
           >
             Anterior
           </button>
-          <span aria-live='polite' className='text-white'>
+          <span aria-live='polite' className='text-text-light dark:text-text-dark'>
             Página {tableState.currentPage} de {tableState.totalPages}
           </span>
           <button
             onClick={() => tableState.handlePageChange(tableState.currentPage + 1)}
             disabled={tableState.currentPage === tableState.totalPages}
-            className='px-3 py-1 border rounded-md bg-[#830213] border-[#636579] text-white hover:bg-[#b41520] disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+            className='px-3 py-1 border rounded-md bg-secondary border-gray-light-300 dark:border-gray-dark-600 text-white hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
             aria-label='Go to next page'
           >
             Siguiente
