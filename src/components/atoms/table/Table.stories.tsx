@@ -186,18 +186,81 @@ const sortableColumns: TableColumn<UserData>[] = basicColumns.map((col) => ({
 
 /**
  * ## DESCRIPTION
- * The Table component is a flexible and accessible data presentation element that displays structured information in rows and columns.
- * It supports various interactive features including row selection, column sorting, and custom cell rendering.
- * The component is designed to handle both small datasets and provides hooks for integration with external data sources.
- * It includes comprehensive accessibility features with proper ARIA labels and keyboard navigation support.
- * The Table component can be customized with different visual styles, selection modes, and layout options to fit various use cases.
- * It supports API-driven interactions through callback functions for sorting, selection changes, and pagination events.
- * The component is optimized for performance and provides a consistent user experience across different screen sizes.
+ * The Table component is a powerful and accessible data presentation element for displaying structured information in rows and columns.
+ * It supports sorting, filtering, pagination, row selection, and custom cell rendering.
+ * Designed for both simple datasets and complex API-driven applications with comprehensive accessibility features.
+ *
+ * ## FEATURES
+ * - **Interactive Sorting**: Click column headers to sort data in ascending or descending order
+ * - **Row Selection**: Single or multiple selection modes with keyboard support and visual feedback
+ * - **Pagination**: Built-in or API-driven pagination controls with customizable page sizes
+ * - **Custom Cells**: Render any React component in table cells for rich data presentation
+ * - **Loading States**: Skeleton UI placeholders during data fetch operations
+ * - **Keyboard Navigation**: Full arrow key navigation (↑↓←→) and accessibility shortcuts (Home, End, Page Up/Down)
+ * - **Disabled Rows**: Mark specific rows as non-selectable with visual indicators
+ * - **Striped Rows**: Alternating row backgrounds for improved readability
+ * - **Empty States**: Customizable messages when no data is available
+ * - **Filtering**: Column-based filtering with debounced input for performance
+ * - **API Integration**: Designed for backend-driven sorting, filtering, and pagination
+ * - **Responsive Design**: Adapts to different screen sizes with horizontal scrolling when needed
+ * - **Dark Mode**: Full theme support with consistent colors across light and dark themes
+ * - **WCAG Compliance**: Meets WCAG 2.1 AA accessibility standards for color contrast and interaction
+ *
+ * ## USAGE PATTERNS
+ *
+ * ### Column Definition
+ * Columns define how data is displayed and can include custom renderers, sorting logic, and alignment:
+ * ```tsx
+ * const columns: TableColumn<UserData>[] = [
+ *   {
+ *     key: 'name',
+ *     header: 'Name',
+ *     cell: (row) => <span className="font-medium">{row.name}</span>,
+ *     allowsSorting: true,
+ *     sortValue: (row) => row.name,
+ *     align: 'start'
+ *   },
+ *   {
+ *     key: 'status',
+ *     header: 'Status',
+ *     cell: (row) => <StatusBadge status={row.status} />,
+ *     sortValue: (row) => row.status,
+ *     allowsSorting: true
+ *   }
+ * ];
+ * ```
+ *
+ * ### Selection Modes
+ * Control how users can select rows:
+ * - **none**: No selection (read-only table for data display only)
+ * - **single**: Only one row can be selected at a time (radio-like behavior)
+ * - **multiple**: Multiple rows with checkboxes (checkbox behavior)
+ *
+ * ### Controlled vs Uncontrolled
+ * The table supports both controlled and uncontrolled patterns:
+ * - **Controlled**: Manage `selectedKeys` in parent component state
+ * - **Uncontrolled**: Use `defaultSelectedKeys` for initial selection, let table manage state
+ *
+ * ### API-Driven vs Client-Side
+ * The table supports two data management approaches:
+ * - **Client-side**: Pass all data via `items` prop, table handles sorting/filtering internally
+ * - **API-driven**: Use callbacks (`onSortChange`, `onPageChange`, `onFilterChange`) to fetch data from backend
+ *
+ * ## ACCESSIBILITY
+ * - **Keyboard Navigation**: Arrow keys (↑↓←→), Home, End, Page Up/Down for cell navigation
+ * - **ARIA Roles**: Proper grid, row, gridcell, columnheader roles for screen readers
+ * - **Screen Reader Support**: Announcements for loading states, page changes, and row counts
+ * - **Focus Management**: Visible focus indicators with ring styles for keyboard users
+ * - **Sortable Columns**: Announced with aria-sort (ascending/descending/none)
+ * - **Selectable Rows**: Proper aria-selected state and aria-label for checkboxes
+ * - **Color Contrast**: WCAG 2.1 AA compliant colors in both light and dark themes
+ * - **Disabled States**: Clear visual indicators with aria-disabled attributes
  *
  * ## DEPENDENCIES
- * - React: Core functionality and hooks for state management
- * - Tailwind CSS: For styling and responsive design
- * - Custom hooks: useTable, useKeyboardNavigation, useTableEvents for enhanced functionality
+ * - React: Core functionality and hooks (useState, useCallback, useMemo, useRef, useEffect)
+ * - Tailwind CSS: Styling with dark mode support and responsive utilities
+ * - class-variance-authority (CVA): Type-safe variant management for component styling
+ * - Custom hooks: useTable, useKeyboardNavigation, useTableEvents, useTableClasses
  */
 
 const meta: Meta<typeof Table<UserData>> = {
@@ -296,6 +359,11 @@ const meta: Meta<typeof Table<UserData>> = {
 
 export default meta;
 type Story = StoryObj<CompleteTableProps<UserData>>;
+
+// ============================================================================
+// BASIC USAGE
+// ============================================================================
+// Stories demonstrating fundamental table configurations and empty states
 
 /**
  * - **Default Implementation**: Basic table with essential columns displaying realistic Spanish user data.
@@ -402,6 +470,11 @@ export const EmptyState: Story = {
   }
 };
 
+// ============================================================================
+// VISUAL CUSTOMIZATION
+// ============================================================================
+// Stories showcasing different visual styles and layout options
+
 /**
  * - **Headerless Design**: Table without column headers for cleaner presentation.
  * - **Context-Dependent**: Useful when column meanings are clear from surrounding UI.
@@ -441,12 +514,47 @@ export const Compact: Story = {
   }
 };
 
+// ============================================================================
+// SELECTION MODES
+// ============================================================================
+// Stories demonstrating single, multiple, and constrained selection patterns
+
 /**
  * - **Single Selection**: Allows selecting only one row at a time with radio button behavior.
  * - **Exclusive Choice**: Automatically deselects previous selection when new row is chosen.
  * - **Console Logging**: Selection events are logged to browser console for development.
  */
 export const SingleRowSelection: Story = {
+  parameters: {
+    docs: {
+      source: {
+        language: 'tsx',
+        code: `
+import { useState } from 'react';
+import Table from './Table';
+
+const SingleSelectionTable = () => {
+  const [selectedKeys, setSelectedKeys] = useState<Set<React.Key>>(new Set());
+
+  const handleSelectionChange = (keys: any) => {
+    setSelectedKeys(keys);
+    console.log('Selected row:', Array.from(keys)[0]);
+  };
+
+  return (
+    <Table
+      items={data}
+      columns={columns}
+      selectionMode="single"
+      selectedKeys={selectedKeys}
+      onSelectionChange={handleSelectionChange}
+    />
+  );
+};
+`
+      }
+    }
+  },
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
 
@@ -477,6 +585,40 @@ export const SingleRowSelection: Story = {
  * - **Batch Operations**: Enables bulk actions on multiple selected items.
  */
 export const MultipleRowSelection: Story = {
+  parameters: {
+    docs: {
+      source: {
+        language: 'tsx',
+        code: `
+import { useState } from 'react';
+import Table from './Table';
+
+const MultipleSelectionTable = () => {
+  const [selectedKeys, setSelectedKeys] = useState<Set<React.Key>>(new Set());
+
+  const handleSelectionChange = (keys: any) => {
+    if (keys === 'all') {
+      setSelectedKeys(new Set(data.map((item) => item.id.toString())));
+    } else {
+      setSelectedKeys(keys);
+    }
+    console.log('Selected rows:', Array.from(keys));
+  };
+
+  return (
+    <Table
+      items={data}
+      columns={columns}
+      selectionMode="multiple"
+      selectedKeys={selectedKeys}
+      onSelectionChange={handleSelectionChange}
+    />
+  );
+};
+`
+      }
+    }
+  },
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
 
@@ -575,12 +717,43 @@ export const DisabledRows: Story = {
   }
 };
 
+// ============================================================================
+// SORTING & FILTERING
+// ============================================================================
+// Stories showcasing data manipulation and organization features
+
 /**
  * - **Column Sorting**: Click headers to sort data in ascending or descending order.
  * - **API Integration**: Uses onSortChange callback for server-side sorting implementation.
  * - **Visual Indicators**: Sort direction is clearly indicated in column headers.
  */
 export const SortingRows: Story = {
+  parameters: {
+    docs: {
+      source: {
+        language: 'tsx',
+        code: `
+import Table from './Table';
+
+const SortableTable = () => {
+  const handleSortChange = (sortDescriptor) => {
+    console.log('Sort requested:', sortDescriptor);
+    // Send sort request to API
+    // Example: fetchSortedData(sortDescriptor.column, sortDescriptor.direction)
+  };
+
+  return (
+    <Table
+      items={data}
+      columns={sortableColumns}
+      onSortChange={handleSortChange}
+    />
+  );
+};
+`
+      }
+    }
+  },
   args: {
     items: sampleData,
     columns: sortableColumns,
@@ -591,6 +764,11 @@ export const SortingRows: Story = {
     }
   }
 };
+
+// ============================================================================
+// STATE MANAGEMENT
+// ============================================================================
+// Stories demonstrating loading states and pagination controls
 
 /**
  * - **Loading Feedback**: Shows skeleton placeholders during data fetch operations.
@@ -606,10 +784,40 @@ export const LoadingState: Story = {
 };
 
 /**
- * Table with built-in pagination controls.
- * Uses API-driven approach - pagination events are delegated via onPageChange callback for backend processing.
+ * - **Paginated Navigation**: Built-in pagination controls for large datasets.
+ * - **API-Driven Approach**: Uses onPageChange callback for server-side data fetching.
+ * - **Page Size Control**: Configurable number of rows per page.
+ * - **User Feedback**: Shows current page and total pages with Previous/Next buttons.
  */
 export const PaginatedTable: Story = {
+  parameters: {
+    docs: {
+      source: {
+        language: 'tsx',
+        code: `
+import Table from './Table';
+
+const PaginatedTableExample = () => {
+  const handlePageChange = (page: number) => {
+    console.log('Page requested:', page);
+    // Fetch data for the requested page from API
+    // Example: fetchPageData(page, pageSize)
+  };
+
+  return (
+    <Table
+      items={data}
+      columns={columns}
+      pagination={true}
+      pageSize={5}
+      onPageChange={handlePageChange}
+    />
+  );
+};
+`
+      }
+    }
+  },
   args: {
     items: sampleData,
     columns: basicColumns,
@@ -622,6 +830,11 @@ export const PaginatedTable: Story = {
     }
   }
 };
+
+// ============================================================================
+// ADVANCED EXAMPLES
+// ============================================================================
+// Stories showcasing complex real-world implementations and rich features
 
 /**
  * - **Dynamic Data**: Generates user data on-the-fly with realistic Spanish names and information.
@@ -672,6 +885,69 @@ export const DynamicInteractions: Story = {
  * - **Professional Layout**: Real-world example of enterprise data table implementation.
  */
 export const RichCustomCells: Story = {
+  parameters: {
+    docs: {
+      source: {
+        language: 'tsx',
+        code: `
+import Table from './Table';
+import type { TableColumn } from './types';
+
+interface UserData {
+  id: number;
+  name: string;
+  email: string;
+  avatar: string;
+  team: string;
+  role: string;
+  salary: number;
+  status: string;
+}
+
+const RichCellsExample = () => {
+  const richColumns: TableColumn<UserData>[] = [
+    {
+      key: 'employee',
+      header: 'Employee',
+      cell: (row) => (
+        <div className="flex items-center gap-3">
+          <img src={row.avatar} alt={row.name} className="w-10 h-10 rounded-full" />
+          <div>
+            <div className="font-medium">{row.name}</div>
+            <div className="text-sm text-gray-600">{row.email}</div>
+          </div>
+        </div>
+      ),
+      allowsSorting: true
+    },
+    {
+      key: 'compensation',
+      header: 'Compensation',
+      cell: (row) => (
+        <div className="text-right">
+          <div className="font-medium text-green-700">
+            €{row.salary.toLocaleString()}
+          </div>
+          <div className="text-xs text-gray-500">Annual</div>
+        </div>
+      ),
+      allowsSorting: true
+    }
+  ];
+
+  return (
+    <Table
+      items={data}
+      columns={richColumns}
+      selectionMode="multiple"
+      isStriped={true}
+    />
+  );
+};
+`
+      }
+    }
+  },
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
     const [sortDescriptor, setSortDescriptor] = React.useState<any>(null);

@@ -84,7 +84,7 @@ export function useTable<T>({
   }, [propLoading]);
 
   useEffect(() => {
-    // Solo actualizar internalSelectedRows si estamos en controlled mode (selectedKeys está definido)
+    // Only update internalSelectedRows if we're in controlled mode (selectedKeys is defined)
     if (
       selectedKeys !== undefined &&
       selectedRows &&
@@ -227,8 +227,8 @@ export function useTable<T>({
         }
       }
 
-      // En controlled mode, comparamos con el estado actual de selectedKeys
-      // En uncontrolled mode, comparamos con internalSelectedRows
+      // In controlled mode, we compare with the current state of selectedKeys
+      // In uncontrolled mode, we compare with internalSelectedRows
       const shouldUpdate =
         selectedKeys !== undefined
           ? !areSetsEqual(newKeys, currentSelectedKeys)

@@ -139,7 +139,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     () => (
       <div className={`${getWrapperClasses()} ${className || ''}`}>
         <div aria-live='polite' aria-atomic='true' className='sr-only'>
-          Cargando datos de la tabla...
+          Loading table data...
         </div>
         <table className={getTableClasses()} role='grid' aria-label='Loading table data' aria-busy='true'>
           {!hideHeader && (
@@ -186,7 +186,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
         </table>
         <div className='flex justify-center items-center py-4'>
           <div className='animate-spin h-5 w-5 border-2 border-secondary border-t-transparent rounded-full mr-3'></div>
-          <span className='text-text-light dark:text-text-dark'>Cargando datos...</span>
+          <span className='text-text-light dark:text-text-dark'>Loading data...</span>
         </div>
       </div>
     ),
@@ -251,11 +251,11 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                       {column.filterable && (
                         <>
                           <div id={`filter-help-${column.key}`} className='sr-only'>
-                            Ingrese texto para filtrar la columna {column.header}
+                            Enter text to filter the {column.header} column
                           </div>
                           <input
                             type='text'
-                            placeholder='Filtrar...'
+                            placeholder='Filter...'
                             value={tableState.filterValues[String(column.key)] || ''}
                             onChange={(e) => tableState.setFilter(String(column.key), e.target.value)}
                             className='ml-2 p-1 border rounded-md text-sm bg-white dark:bg-gray-dark-800 border-gray-light-300 dark:border-gray-dark-600 text-text-light dark:text-text-dark placeholder-gray-light-400 dark:placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
@@ -278,7 +278,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                 className='px-4 py-8 text-center text-gray-light-400 dark:text-gray-dark-300'
                 role='gridcell'
               >
-                {emptyContent || 'No hay datos para mostrar.'}
+                {emptyContent || 'No data to display.'}
               </td>
             </tr>
           </tbody>
@@ -306,13 +306,11 @@ function Table<T = any>(props: CompleteTableProps<T>) {
     return renderLoadingState();
   }
 
-  // Check if there are original data items but they're all filtered out
   const actualDataSource = items?.length > 0 ? items : data || [];
   const hasOriginalData = actualDataSource && actualDataSource.length > 0;
   const hasActiveFilters = Object.values(tableState.filterValues).some((value) => value && value.trim() !== '');
   const hasFilteredResults = tableState.filteredData && tableState.filteredData.length > 0;
 
-  // Only show empty state if there's truly no data OR no filtered results AND no active filters
   if (!hasOriginalData) {
     return renderEmptyState();
   }
@@ -322,9 +320,9 @@ function Table<T = any>(props: CompleteTableProps<T>) {
       <div className={getWrapperClasses()}>
         <div ref={containerRef}>
           <div id={`${tableId.current}-description`} className='sr-only'>
-            Tabla con {tableState.filteredData.length} filas de datos
-            {selectionMode !== 'none' || showSelectionCheckboxes ? ' con selección habilitada' : ''}
-            {tableState.sortDescriptor && ' ordenada por ' + tableState.sortDescriptor.column}
+            Table with {tableState.filteredData.length} data rows
+            {selectionMode !== 'none' || showSelectionCheckboxes ? ' with selection enabled' : ''}
+            {tableState.sortDescriptor && ' sorted by ' + tableState.sortDescriptor.column}
           </div>
           <table
             ref={tableRef}
@@ -360,7 +358,6 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                           disabled={disallowEmptySelection && tableState.selectedRows.length === 1}
                         />
                       ) : (
-                        // En single mode, mostramos texto visible para accesibilidad
                         <span className='sr-only'>Select</span>
                       )}
                     </th>
@@ -408,11 +405,11 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                         {column.filterable && (
                           <>
                             <div id={`filter-help-${column.key}`} className='sr-only'>
-                              Ingrese texto para filtrar la columna {column.header}
+                              Enter text to filter the {column.header} column
                             </div>
                             <input
                               type='text'
-                              placeholder='Filtrar...'
+                              placeholder='Filter...'
                               value={tableState.filterValues[String(column.key)] || ''}
                               onChange={(e) => tableState.setFilter(String(column.key), e.target.value)}
                               className='ml-2 p-1 border rounded-md text-sm bg-white dark:bg-gray-dark-800 border-gray-light-300 dark:border-gray-dark-600 text-text-light dark:text-text-dark placeholder-gray-light-400 dark:placeholder-gray-dark-400 focus:ring-primary focus:border-primary w-20'
@@ -438,8 +435,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
                     className='px-4 py-8 text-center text-gray-dark-300'
                     role='gridcell'
                   >
-                    No se encontraron resultados para los filtros aplicados. Intente modificar los criterios de
-                    búsqueda.
+                    No results found for the applied filters. Try modifying the search criteria.
                   </td>
                 </tr>
               ) : hasFilteredResults ? (
@@ -534,10 +530,10 @@ function Table<T = any>(props: CompleteTableProps<T>) {
             className='px-3 py-1 border rounded-md bg-secondary border-gray-light-300 dark:border-gray-dark-600 text-white hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
             aria-label='Go to previous page'
           >
-            Anterior
+            Previous
           </button>
           <span aria-live='polite' className='text-text-light dark:text-text-dark'>
-            Página {tableState.currentPage} de {tableState.totalPages}
+            Page {tableState.currentPage} of {tableState.totalPages}
           </span>
           <button
             onClick={() => tableState.handlePageChange(tableState.currentPage + 1)}
@@ -545,7 +541,7 @@ function Table<T = any>(props: CompleteTableProps<T>) {
             className='px-3 py-1 border rounded-md bg-secondary border-gray-light-300 dark:border-gray-dark-600 text-white hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
             aria-label='Go to next page'
           >
-            Siguiente
+            Next
           </button>
         </div>
       )}
