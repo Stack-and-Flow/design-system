@@ -1,27 +1,26 @@
 @font-face {
-    font-family: 'WildWolf';
-    src: url('../assets/fonts/WildWolfRegular.woff2') format('woff2'),
-        url('../assets/fonts/WildWolfRegular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: "WildWolf";
+  src: url("../assets/fonts/WildWolfRegular.woff2") format("woff2"), url("../assets/fonts/WildWolfRegular.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'UniviaBold';
-    src: url('../assets/fonts/UniviaPro-Bold.woff2') format('woff2'),
-        url('../assets/fonts/UniviaPro-Bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
+  font-family: "UniviaBold";
+  src: url("../assets/fonts/UniviaPro-Bold.woff2") format("woff2"), url("../assets/fonts/UniviaPro-Bold.woff")
+    format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Univia';
-    src: url('../assets/fonts/UniviaPro-Regular.woff2') format('woff2'),
-        url('../assets/fonts/UniviaPro-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Univia";
+  src: url("../assets/fonts/UniviaPro-Regular.woff2") format("woff2"), url("../assets/fonts/UniviaPro-Regular.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
-
