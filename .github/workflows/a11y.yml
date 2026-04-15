@@ -1,0 +1,53 @@
+name: Accessibility
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  a11y:
+    name: Accessibility audit (axe WCAG AA)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm playwright install --with-deps chromium
+
+      - name: Build Storybook
+        run: pnpm storybook-build
+
+      - name: Serve Storybook
+        run: pnpx serve storybook-static -l 6006 &
+        shell: bash
+
+      - name: Wait for Storybook
+        run: pnpx wait-on http://localhost:6006 --timeout 60000
+
+      - name: Run accessibility audit
+        run: pnpm test-storybook --ci --url http://localhost:6006
+
+      - name: Upload a11y report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: a11y-report/
+          retention-days: 7
