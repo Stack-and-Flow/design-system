@@ -19,6 +19,7 @@
     "test-storybook": "test-storybook"
   },
   "dependencies": {
+    "@fontsource-variable/space-grotesk": "^5.2.10",
     "@internationalized/date": "^3.8.2",
     "@radix-ui/react-avatar": "1.1.9",
     "@radix-ui/react-dialog": "1.1.14",

@@ -22,13 +22,13 @@ const preview: Preview = {
       dark: {
         class: 'dark',
         style: {
-          backgroundColor: '#0E0E0E'
+          backgroundColor: '#000000'
         }
       },
       light: {
         class: '',
         style: {
-          backgroundColor: '#dddddd'
+          backgroundColor: '#f4f5f7'
         }
       }
     },

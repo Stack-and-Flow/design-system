@@ -1,68 +1,61 @@
 @layer base {
   body {
     @apply text-[16px] leading-[18px];
+    font-family: var(--font-primary);
+    font-weight: 500;
   }
 
-  html{
-    @apply font-secondary;
+  html {
+    font-family: var(--font-primary);
   }
 
   #app {
-    @apply overflow-hidden min-h-dvh w-full
+    @apply overflow-hidden min-h-dvh w-full;
   }
 
-  a{
+  a {
     @apply text-accent hover:text-text-light dark:hover:text-text-dark transition-all duration-300 ease-in underline underline-offset-2;
   }
 
-  strong, b{
+  strong, b {
     @apply font-bold;
   }
 
-  /* Typography */
-  .fs-h1 { font-size: var(--text-h1); line-height: 1.2;}
-  .fs-h2 { font-size: var(--text-h2); line-height: 1.2;}
-  .fs-h3 { font-size: var(--text-h3); line-height: 1.2;}
-  .fs-h4 { font-size: var(--text-h4); line-height: 1.2;}
-  .fs-h5 { font-size: var(--text-h5); line-height: 1.2;}
-  .fs-h6 { font-size: var(--text-h6); line-height: 1.2;}
-  .fs-h1.font-primary { font-size: 4.5rem; line-height: 1.2;}
-  .fs-h2.font-primary { font-size: 4rem; line-height: 1.2;}
-  .fs-h3.font-primary { font-size: 3.5rem; line-height: 1.2;}
-  .fs-h4.font-primary { font-size: 3rem; line-height: 1.2;}
-  .fs-h5.font-primary { font-size: 2.5rem; line-height: 1.2;}
-  .fs-h6.font-primary { font-size: 2rem; line-height: 1.2;}
-  .fs-base { font-size: var(--text-base); line-height: 1.2;}
-  .fs-small { font-size: var(--text-small); line-height: 1.2;}
+  /* ── Typography scale ──────────────────────────────────────────── */
+  .fs-h1 { font-size: var(--text-h1); line-height: 1.2; font-weight: 800; }
+  .fs-h2 { font-size: var(--text-h2); line-height: 1.2; font-weight: 700; }
+  .fs-h3 { font-size: var(--text-h3); line-height: 1.2; font-weight: 700; }
+  .fs-h4 { font-size: var(--text-h4); line-height: 1.2; font-weight: 600; }
+  .fs-h5 { font-size: var(--text-h5); line-height: 1.2; font-weight: 600; }
+  .fs-h6 { font-size: var(--text-h6); line-height: 1.2; font-weight: 600; }
+  .fs-base { font-size: var(--text-base); line-height: 1.5; }
+  .fs-small { font-size: var(--text-small); line-height: 1.4; }
+
+  /* Single font — no secondary/bold variants needed */
   .font-primary { font-family: var(--font-primary); }
-  .font-secondary { font-family: var(--font-secondary); }
-  .font-secondary-bold {
-    font-family: var(--font-secondary-bold);
-    font-weight: var(--font-weight-bold);
-  }
 
   @media (max-width: theme('screens.md')) {
-    .fs-h1 { font-size: var(--text-h1-tablet); line-height: 1.2;}
-    .fs-h2 { font-size: var(--text-h2-tablet); line-height: 1.2;}
-    .fs-h3 { font-size: var(--text-h3-tablet); line-height: 1.2;}
-    .fs-h4 { font-size: var(--text-h4-tablet); line-height: 1.2;}
-    .fs-h5 { font-size: var(--text-h5-tablet); line-height: 1.2;}
-    .fs-h6 { font-size: var(--text-h6-tablet); line-height: 1.2;}
-    .fs-base { font-size: var(--text-base-tablet); line-height: 1.2;}
-    .fs-small { font-size: var(--text-small-tablet); line-height: 1.2;}
+    .fs-h1 { font-size: var(--text-h1-tablet); }
+    .fs-h2 { font-size: var(--text-h2-tablet); }
+    .fs-h3 { font-size: var(--text-h3-tablet); }
+    .fs-h4 { font-size: var(--text-h4-tablet); }
+    .fs-h5 { font-size: var(--text-h5-tablet); }
+    .fs-h6 { font-size: var(--text-h6-tablet); }
+    .fs-base { font-size: var(--text-base-tablet); }
+    .fs-small { font-size: var(--text-small-tablet); }
   }
 
-  /* Storybook dark mode */
-  .sidebar-container{
+  /* ── Storybook dark mode ───────────────────────────────────────── */
+  .sidebar-container {
     @apply !bg-background-dark;
   }
 
-  .dark .docs-story, .sb-show-main.dark{
-    @apply !bg-[image:var(--gradient-background-dark)]
+  .dark .docs-story, .sb-show-main.dark {
+    @apply !bg-[image:var(--gradient-background-dark)];
   }
-  
-  .light .docs-story, .sb-show-main.light{
-    @apply !bg-[image:var(--gradient-background-light)]
+
+  .light .docs-story, .sb-show-main.light {
+    @apply !bg-[image:var(--gradient-background-light)];
   }
 
   .sbdocs-content > .sbdocs-title {
@@ -73,23 +66,24 @@
     @apply !pb-4;
   }
 
-  .sbdocs-content table{
+  .sbdocs-content table {
     @apply border-separate rounded-lg overflow-hidden p-0.5;
   }
 
-  .sbdocs-content table thead > tr > th{
+  .sbdocs-content table thead > tr > th {
     @apply !border-t-1 !border-gray-dark-700 bg-gray-dark-800;
   }
 
-  .sbdocs-content table thead > tr:first-of-type > th:first-of-type{
+  .sbdocs-content table thead > tr:first-of-type > th:first-of-type {
     @apply !border-l-1 rounded-tl-md overflow-hidden;
   }
-  .sbdocs-content table thead > tr:first-of-type > th:last-of-type{
+
+  .sbdocs-content table thead > tr:first-of-type > th:last-of-type {
     @apply !border-r-1 rounded-tr-md overflow-hidden;
   }
 
   .sbdocs-content table tbody > tr:first-of-type > td:first-of-type,
-  .sbdocs-content table tbody > tr:first-of-type > td:last-of-type{
+  .sbdocs-content table tbody > tr:first-of-type > td:last-of-type {
     @apply !rounded-none;
   }
 }

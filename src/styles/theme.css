@@ -1,60 +1,72 @@
 @theme {
-  /* Global styles */
-  --color-primary: #830213; /* rgba(131, 2, 19, 1); */
-  --color-secondary: #b41520; /* rgba(180, 21, 32, 1); */
-  --color-accent: #d61e2b; /* rgba(214, 30, 43, 1); */
-  --color-red-100: #fce9ea; /* rgba(252, 233, 234, 1); */
-  --color-red-200: #f6bcc0; /* rgba(246, 188, 192, 1); */
-  --color-red-300: #ef8f96; /* rgba(239, 143, 150, 1); */
-  --color-red-400: #e64c57; /* rgba(230, 76, 87, 1); */
-  --color-red-500: #d61e2b; /* rgba(214, 30, 43, 1); */
-  --color-red-600: #9d161f; /* rgba(157, 22, 31, 1); */
-  --color-red-700: #701016; /* rgba(112, 16, 22, 1); */
-  --color-red-800: #510b10; /* rgba(81, 11, 16, 1); */
-  --color-red-900: #2d0609; /* rgba(45, 6, 9, 1); */
-  /* Dark mode */
-  --color-background-dark: #0e0e10; /* rgba(14, 14, 16, 1); */
-  --color-text-dark: #ffffff; /* rgba(255, 255, 255, 1); */
-  --color-secondary-dark: #9fa3ad; /* rgba(159, 163, 173, 1); */
+  /* ── Brand — Crimson/Vivid Red (Stack-and-Flow identity) ─────── */
+  --color-primary: #db143c;
+  --color-primary-dark: #ff0036;
+  --color-secondary: #c41136;
+  --color-accent: #e63358;
+
+  /* Red scale */
+  --color-red-100: #fce9ea;
+  --color-red-200: #f6bcc0;
+  --color-red-300: #ef8f96;
+  --color-red-400: #ff4d72;
+  --color-red-500: #ff0036;
+  --color-red-600: #db143c;
+  --color-red-700: #b41520;
+  --color-red-800: #8c0b26;
+  --color-red-900: #4d0012;
+
+  /* ── Dark theme ──────────────────────────────────────────────── */
+  --color-background-dark: #000000;
+  --color-surface-dark: #0a0a0a;
+  --color-text-dark: #ffffff;
+  --color-secondary-dark: #cccccc;
+  --color-muted-dark: #888888;
   --gradient-background-dark: linear-gradient(
     130deg,
-    rgba(14, 14, 16, 1) 0%,
-    rgba(21, 22, 27, 1) 50%,
-    rgba(14, 14, 16, 1) 100%
+    rgba(0, 0, 0, 1) 0%,
+    rgba(10, 10, 10, 1) 50%,
+    rgba(0, 0, 0, 1) 100%
   );
-  --color-gray-dark-100: #e5e7eb; /* rgba(229, 231, 235, 1); */
-  --color-gray-dark-200: #c2c5cc; /* rgba(194, 197, 204, 1); */
-  --color-gray-dark-300: #9fa3ad; /* rgba(159, 163, 173, 1); */
-  --color-gray-dark-400: #7c818f; /* rgba(124, 129, 143, 1); */
-  --color-gray-dark-500: #595f70; /* rgba(89, 95, 112, 1); */
-  --color-gray-dark-600: #3b3f4e; /* rgba(59, 63, 78, 1); */
-  --color-gray-dark-700: #24252f; /* rgba(36, 37, 47, 1); */
-  --color-gray-dark-800: #15161b; /* rgba(21, 22, 27, 1); */
-  --color-gray-dark-900: #0e0e10; /* rgba(14, 14, 16, 1); */
-  /* Light theme */
-  --color-background-light: #f4f5f7; /* rgba(244, 245, 247, 1); */
-  --color-text-light: #18191e; /* rgba(24, 25, 30, 1); */
-  --color-secondary-light: #7c818f; /* rgba(124, 129, 143, 1); */
+  --color-gray-dark-100: #e5e7eb;
+  --color-gray-dark-200: #c2c5cc;
+  --color-gray-dark-300: #9fa3ad;
+  --color-gray-dark-400: #7c818f;
+  --color-gray-dark-500: #595f70;
+  --color-gray-dark-600: #3b3f4e;
+  --color-gray-dark-700: #262626;
+  --color-gray-dark-800: #1a1a1a;
+  --color-gray-dark-900: #111111;
+
+  /* ── Light theme ─────────────────────────────────────────────── */
+  --color-background-light: #f4f5f7;
+  --color-surface-light: #ffffff;
+  --color-text-light: #18191e;
+  --color-secondary-light: #7c818f;
   --gradient-background-light: linear-gradient(
     130deg,
     rgba(212, 214, 220, 1) 0%,
     rgba(229, 231, 235, 1) 50%,
     rgba(212, 214, 220, 1) 100%
   );
-  --color-gray-light-100: #f9fafa; /* rgba(249, 250, 250, 1); */
-  --color-gray-light-200: #f1f3f5; /* rgba(241, 243, 245, 1); */
-  --color-gray-light-300: #e5e7eb; /* rgba(229, 231, 235, 1); */
-  --color-gray-light-400: #d4d6dc; /* rgba(212, 214, 220, 1); */
-  --color-gray-light-500: #bfc2ca; /* rgba(191, 194, 202, 1); */
-  --color-gray-light-600: #a3a6af; /* rgba(163, 166, 175, 1); */
-  --color-gray-light-700: #878a94; /* rgba(135, 138, 148, 1); */
-  --color-gray-light-800: #6b6e78; /* rgba(107, 110, 120, 1); */
-  --color-gray-light-900: #4f525c; /* rgba(79, 82, 92, 1); */
-  /* Shadow */
-  --shadow-custom-sm: 0px 0px 16px -1px rgba(180, 21, 32, 1);
-  --shadow-custom-md: 0px 0px 16px 4px rgba(180, 21, 32, 1);
-  --shadow-custom-lg: 0px 0px 30px 10px rgba(180, 21, 32, 1);
-  /* Colors */
+  --color-gray-light-100: #f9fafa;
+  --color-gray-light-200: #f1f3f5;
+  --color-gray-light-300: #e5e7eb;
+  --color-gray-light-400: #d4d6dc;
+  --color-gray-light-500: #bfc2ca;
+  --color-gray-light-600: #a3a6af;
+  --color-gray-light-700: #878a94;
+  --color-gray-light-800: #6b6e78;
+  --color-gray-light-900: #4f525c;
+
+  /* ── Glow / Shadow ───────────────────────────────────────────── */
+  --shadow-custom-sm: 0 0 8px 2px rgba(255, 0, 54, 0.25);
+  --shadow-custom-md: 0 0 16px 4px rgba(255, 0, 54, 0.35);
+  --shadow-custom-lg: 0 0 30px 10px rgba(255, 0, 54, 0.3);
+  --glow-base: 0 4px 20px rgba(255, 0, 54, 0.15);
+  --glow-active: 0 8px 30px rgba(255, 0, 54, 0.3);
+
+  /* ── Semantic colors ─────────────────────────────────────────── */
   --color-orange: #f97316;
   --color-orange-light: #fda65c;
   --color-orange-dark: #d94e08;
@@ -79,17 +91,17 @@
   --color-pink: #ec4899;
   --color-pink-light: #fda4cf;
   --color-pink-dark: #be185d;
-  /* Spacing */
+
+  /* ── Spacing ─────────────────────────────────────────────────── */
   --spacing-xxs: 0.25rem;
   --spacing-xs: 0.5rem;
   --spacing-sm: 0.75rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
-  /* Tipografía */
-  --font-primary: "WildWolf";
-  --font-secondary: "Univia";
-  --font-secondary-bold: "UniviaBold";
+
+  /* ── Typography — Space Grotesk Variable only ────────────────── */
+  --font-primary: 'Space Grotesk Variable', 'Space Grotesk', system-ui, -apple-system, sans-serif;
   --text-h1: 3rem;
   --text-h2: 2.5rem;
   --text-h3: 2rem;
@@ -106,7 +118,8 @@
   --text-h6-tablet: 1rem;
   --text-base-tablet: 0.875rem;
   --text-small-tablet: 0.7rem;
-  /* Animations */
+
+  /* ── Animations ──────────────────────────────────────────────── */
   --animate-fadeIn: fadeIn 400ms ease-in-out;
   --animate-fadeOut: fadeOut 400ms ease-in-out;
   --animate-rotation-360-reverse: rotation-360 1s linear infinite reverse;
