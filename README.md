@@ -186,7 +186,7 @@ Special thanks you to everyone who has contributed to making this project possib
 [license-url]: https://github.com/Stack-and-Flow/design-system/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/egdev6
-[demo-url]: https://egdev6-design-system.netlify.app/
+[demo-url]: https://sf-design-system.netlify.app/
 [demo-shield]: https://img.shields.io/badge/-Demo-black.svg?style=for-the-badge&colorB=555
 [wiki-url]: https://deepwiki.com/Stack-and-Flow/design-system
 [wiki-shield]: https://img.shields.io/badge/-Wiki-black.svg?style=for-the-badge&colorB=555
