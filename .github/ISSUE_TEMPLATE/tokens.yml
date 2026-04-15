@@ -1,4 +1,4 @@
-name: "🎨 Design Tokens"
+﻿name: "ðŸŽ¨ Design Tokens"
 description: Add, update or review design tokens (colors, spacing, typography, shadows, etc.)
 title: "[TOKENS] Short description"
 labels: ["tokens", "design"]
@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 🎨 Design Tokens Task
+        ## ðŸŽ¨ Design Tokens Task
         Use this for changes to CSS custom properties, Tailwind theme config, or color/typography systems.
 
   - type: dropdown
@@ -51,28 +51,28 @@ body:
       options:
         - label: "Keep existing tokens and add new ones (no breaking change)"
         - label: "Deprecate existing tokens (mark as deprecated in Storybook)"
-        - label: "Remove existing tokens (breaking — requires component migration)"
+        - label: "Remove existing tokens (breaking â€” requires component migration)"
 
   - type: checkboxes
     id: phases
     attributes:
-      label: "✅ Implementation phases"
+      label: "âœ… Implementation phases"
       options:
-        - label: "1. **Research** — audit current token usage, contrast ratios, brand constraints."
-        - label: "2. **Specification** — define new token names, values and rationale. Document in this issue."
-        - label: "3. **Implementation** — update `theme.css` / Tailwind config."
-        - label: "4. **Storybook** — update color/token pages, mark deprecated tokens."
-        - label: "5. **Code review** — visual + accessibility review."
-        - label: "6. **Merge to main** — egdev6 merges the PR."
+        - label: "1. **Research** â€” audit current token usage, contrast ratios, brand constraints."
+        - label: "2. **Specification** â€” define new token names, values and rationale. Document in this issue."
+        - label: "3. **Implementation** â€” update `theme.css` / Tailwind config."
+        - label: "4. **Storybook** â€” update color/token pages, mark deprecated tokens."
+        - label: "5. **Code review** â€” visual + accessibility review."
+        - label: "6. **Merge to main** â€” project lead merges the PR."
 
   - type: textarea
     id: notes
     attributes:
-      label: "📎 Additional notes"
-      placeholder: Figma references, contrast tool links, accessibility requirements. Tag @egdev6 for questions.
+      label: "ðŸ“Ž Additional notes"
+      placeholder: Figma references, contrast tool links, accessibility requirements. Tag @Stack-and-Flow/maintainers for questions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "🔗 Related resources"
+      label: "ðŸ”— Related resources"
       placeholder: Figma, Coolors, accessibility checker, related issues.

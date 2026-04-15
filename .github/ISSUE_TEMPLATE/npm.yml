@@ -1,12 +1,12 @@
-name: "📦 NPM / Dependencies"
+﻿name: "ðŸ“¦ NPM / Dependencies"
 description: Update, add or remove npm packages
-title: "[NPM] Package name — short description"
+title: "[NPM] Package name â€” short description"
 labels: ["dependencies"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## 📦 NPM / Dependencies Task
+        ## ðŸ“¦ NPM / Dependencies Task
         Use this for dependency updates, security fixes, or adding/removing packages.
 
   - type: dropdown
@@ -15,7 +15,7 @@ body:
       label: Type of change
       options:
         - Update existing dependency (minor/patch)
-        - Update existing dependency (major — breaking)
+        - Update existing dependency (major â€” breaking)
         - Add new dependency
         - Remove dependency
         - Security fix
@@ -27,8 +27,8 @@ body:
     attributes:
       label: Package(s) affected
       placeholder: |
-        - `vitest`: 1.6.0 → 2.1.0
-        - `@testing-library/react`: 14.x → 16.x
+        - `vitest`: 1.6.0 â†’ 2.1.0
+        - `@testing-library/react`: 14.x â†’ 16.x
     validations:
       required: true
 
@@ -48,29 +48,29 @@ body:
     attributes:
       label: Known breaking changes / migration notes
       placeholder: |
-        vitest 2.x removes the `globals` option in tsconfig — must use `/// <reference types="vitest" />` instead.
+        vitest 2.x removes the `globals` option in tsconfig â€” must use `/// <reference types="vitest" />` instead.
         Reference: https://vitest.dev/guide/migration.html
 
   - type: checkboxes
     id: phases
     attributes:
-      label: "✅ Implementation phases"
+      label: "âœ… Implementation phases"
       options:
-        - label: "1. **Research** — read changelogs, identify breaking changes, check peer dependency conflicts."
-        - label: "2. **Update** — run `pnpm update` and resolve any conflicts."
-        - label: "3. **Verify** — run `pnpm test`, `pnpm build`, `pnpm storybook` to confirm nothing is broken."
-        - label: "4. **Document** — note any config changes needed in PR description."
-        - label: "5. **Code review** — review by egdev6."
-        - label: "6. **Merge to main** — egdev6 merges the PR."
+        - label: "1. **Research** â€” read changelogs, identify breaking changes, check peer dependency conflicts."
+        - label: "2. **Update** â€” run `pnpm update` and resolve any conflicts."
+        - label: "3. **Verify** â€” run `pnpm test`, `pnpm build`, `pnpm storybook` to confirm nothing is broken."
+        - label: "4. **Document** â€” note any config changes needed in PR description."
+        - label: "5. **Code review** â€” review by egdev6."
+        - label: "6. **Merge to main** â€” project lead merges the PR."
 
   - type: textarea
     id: notes
     attributes:
-      label: "📎 Additional notes"
-      placeholder: Any edge cases or special considerations. Tag @egdev6 for questions.
+      label: "ðŸ“Ž Additional notes"
+      placeholder: Any edge cases or special considerations. Tag @Stack-and-Flow/maintainers for questions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "🔗 Related resources"
+      label: "ðŸ”— Related resources"
       placeholder: Changelog URLs, migration guides, related security advisories.

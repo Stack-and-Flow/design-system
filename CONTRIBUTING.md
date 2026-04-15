@@ -29,8 +29,8 @@ You MUST have the following installed:
    pnpm run storybook
    ```
 
-### Proprietary Fonts Note
-The design system uses **WildWolf** and **Univia** fonts. Since these are proprietary, they are **not included** in the open-source repository. The system is configured to gracefully fallback to standard sans-serif fonts in your local environment without breaking the layout.
+### Fonts Note
+The design system uses **Space Grotesk Variable**, loaded via `@fontsource-variable/space-grotesk`. It is included as a regular npm dependency and will be available automatically after `pnpm install`.
 
 ---
 

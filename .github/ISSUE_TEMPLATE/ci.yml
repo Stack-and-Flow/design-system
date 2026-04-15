@@ -1,4 +1,4 @@
-name: "⚙️ CI / Tooling"
+﻿name: "âš™ï¸ CI / Tooling"
 description: Add or improve GitHub Actions workflows, build tooling, or dev infrastructure
 title: "[CI] Short description"
 labels: ["ci", "tooling"]
@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## ⚙️ CI / Tooling Task
+        ## âš™ï¸ CI / Tooling Task
         Use this for GitHub Actions, Vite config, Biome, Lefthook, Storybook build, or other dev tooling.
 
   - type: dropdown
@@ -52,23 +52,23 @@ body:
   - type: checkboxes
     id: phases
     attributes:
-      label: "✅ Implementation phases"
+      label: "âœ… Implementation phases"
       options:
-        - label: "1. **Research** — investigate the right approach, existing examples, constraints."
-        - label: "2. **Specification** — define the exact configuration. Document in this issue."
-        - label: "3. **Implementation** — write the workflow / config."
-        - label: "4. **Verify** — test locally or on a draft PR."
-        - label: "5. **Code review** — review by egdev6."
-        - label: "6. **Merge to main** — egdev6 merges the PR."
+        - label: "1. **Research** â€” investigate the right approach, existing examples, constraints."
+        - label: "2. **Specification** â€” define the exact configuration. Document in this issue."
+        - label: "3. **Implementation** â€” write the workflow / config."
+        - label: "4. **Verify** â€” test locally or on a draft PR."
+        - label: "5. **Code review** â€” review by egdev6."
+        - label: "6. **Merge to main** â€” project lead merges the PR."
 
   - type: textarea
     id: notes
     attributes:
-      label: "📎 Additional notes"
-      placeholder: Any constraints, secrets needed, or related issues. Tag @egdev6 for questions.
+      label: "ðŸ“Ž Additional notes"
+      placeholder: Any constraints, secrets needed, or related issues. Tag @Stack-and-Flow/maintainers for questions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "🔗 Related resources"
+      label: "ðŸ”— Related resources"
       placeholder: GitHub Actions docs, existing workflow references, related issues.

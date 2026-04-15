@@ -1,4 +1,4 @@
-name: "🐛 Bug Fix"
+﻿name: "ðŸ› Bug Fix"
 description: Report and fix a bug in an existing component or utility
 title: "[FIX] Short description of the bug"
 labels: ["bug"]
@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 🐛 Bug Fix Task
+        ## ðŸ› Bug Fix Task
         Describe the bug clearly so the fix can be implemented without ambiguity.
 
   - type: input
@@ -43,22 +43,22 @@ body:
     id: context
     attributes:
       label: Context / root cause (if known)
-      placeholder: Optional — share any investigation or hypothesis about why this happens.
+      placeholder: Optional â€” share any investigation or hypothesis about why this happens.
 
   - type: checkboxes
     id: phases
     attributes:
-      label: "✅ Fix phases"
+      label: "âœ… Fix phases"
       options:
-        - label: "1. **Reproduce** — confirm the bug locally with a test case."
-        - label: "2. **Root cause** — identify why it happens. Document in this issue."
-        - label: "3. **Fix** — implement the correction following project conventions."
-        - label: "4. **Test** — add or update tests that cover this case."
-        - label: "5. **Code review** — functional + visual review."
-        - label: "6. **Merge to main** — egdev6 merges the PR."
+        - label: "1. **Reproduce** â€” confirm the bug locally with a test case."
+        - label: "2. **Root cause** â€” identify why it happens. Document in this issue."
+        - label: "3. **Fix** â€” implement the correction following project conventions."
+        - label: "4. **Test** â€” add or update tests that cover this case."
+        - label: "5. **Code review** â€” functional + visual review."
+        - label: "6. **Merge to main** â€” project lead merges the PR."
 
   - type: textarea
     id: notes
     attributes:
-      label: "📎 Additional notes"
-      placeholder: Any edge cases, related issues, or decisions. Tag @egdev6 for questions.
+      label: "ðŸ“Ž Additional notes"
+      placeholder: Any edge cases, related issues, or decisions. Tag @Stack-and-Flow/maintainers for questions.

@@ -1,4 +1,4 @@
-name: "🔄 Update / Refactor"
+﻿name: "ðŸ”„ Update / Refactor"
 description: Improve, refactor or extend an existing component or feature
 title: "[UPDATE] Short description of the change"
 labels: ["enhancement"]
@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 🔄 Update / Refactor Task
+        ## ðŸ”„ Update / Refactor Task
         Use this for improvements, refactors, or extensions to existing functionality.
 
   - type: input
@@ -35,36 +35,36 @@ body:
       description: What exactly needs to change? Be specific about props, API, behavior.
       placeholder: |
         Add `open` and `onOpenChange` props following the controlled/uncontrolled pattern.
-        Keep backward compatibility — if `open` is not provided, it stays uncontrolled.
+        Keep backward compatibility â€” if `open` is not provided, it stays uncontrolled.
 
   - type: checkboxes
     id: phases
     attributes:
-      label: "✅ Implementation phases"
+      label: "âœ… Implementation phases"
       options:
-        - label: "1. **Research** — review current implementation and identify impact surface."
-        - label: "2. **Specification** — define the new API / behavior. Document in this issue."
-        - label: "3. **Implementation** — apply the change following project conventions."
-        - label: "4. **Storybook** — update or add stories to reflect the new behavior."
-        - label: "5. **Code review** — functional + visual review + migration notes if breaking."
-        - label: "6. **Merge to main** — egdev6 merges the PR."
+        - label: "1. **Research** â€” review current implementation and identify impact surface."
+        - label: "2. **Specification** â€” define the new API / behavior. Document in this issue."
+        - label: "3. **Implementation** â€” apply the change following project conventions."
+        - label: "4. **Storybook** â€” update or add stories to reflect the new behavior."
+        - label: "5. **Code review** â€” functional + visual review + migration notes if breaking."
+        - label: "6. **Merge to main** â€” project lead merges the PR."
 
   - type: checkboxes
     id: breaking
     attributes:
       label: Breaking change?
       options:
-        - label: "Yes — this change breaks existing consumers (describe migration in notes)"
-        - label: "No — fully backward compatible"
+        - label: "Yes â€” this change breaks existing consumers (describe migration in notes)"
+        - label: "No â€” fully backward compatible"
 
   - type: textarea
     id: notes
     attributes:
-      label: "📎 Additional notes"
-      placeholder: Migration guide, deprecation notices, related issues. Tag @egdev6 for questions.
+      label: "ðŸ“Ž Additional notes"
+      placeholder: Migration guide, deprecation notices, related issues. Tag @Stack-and-Flow/maintainers for questions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "🔗 Related resources"
+      label: "ðŸ”— Related resources"
       placeholder: Issues, PRs, documentation links.
