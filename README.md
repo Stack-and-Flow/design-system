@@ -41,7 +41,7 @@
 
 ## 🚧 Kanban Board
 
-https://github.com/orgs/Stack-and-Flow/projects
+https://github.com/orgs/Stack-and-Flow/projects/1
 
 ## 🔧 Installation
 
