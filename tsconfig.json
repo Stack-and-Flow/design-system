@@ -6,7 +6,7 @@
     "skipLibCheck": true,
     "incremental": true,
     "outDir": "./dist",
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
