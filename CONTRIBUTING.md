@@ -98,6 +98,71 @@ Before requesting a review, verify:
 
 ---
 
+## Working with AI Agents
+
+### Is AI allowed?
+
+Yes. Contributors are free to use AI-assisted tools (GitHub Copilot, opencode/gentle-ai, Cursor, etc.) when working on this project.
+
+However, two rules are non-negotiable:
+
+1. **The output MUST meet all project standards** — regardless of how it was generated. If the AI produced code that breaks GUIDELINES.md, fix it before opening a PR.
+2. **You are responsible** for every line in your PR, AI-generated or not. "The AI wrote it" is not a valid reason to bypass the PR checklist.
+
+---
+
+### Using gentle-ai (opencode)
+
+If you use [opencode](https://opencode.ai/), this project includes `.atl/AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
+
+The agents will already know:
+- The 5-file architecture and where each piece of logic belongs
+- Which design tokens to use (and which hardcoded values to avoid)
+- The Storybook rules and required story structure
+- The full list of anti-patterns that cause PR rejection
+
+**To activate**: simply open the project directory in opencode. No manual setup required — context loads automatically.
+
+---
+
+### AI Workflow for Components
+
+When using AI to create a component, follow this adapted workflow:
+
+1. **Research** — Ask the AI to scan `src/components/` and confirm the component doesn't already exist. Identify the correct atomic tier.
+2. **Scaffold** — Run `compilot-cli` to generate the 5-file structure, or ask the AI to replicate it exactly.
+3. **Spec first** — Define `types.ts` first: props, CVA variants, and JSDoc controls. Let the AI help, but review every type.
+4. **Implement** — Ask the AI to implement the hook and component strictly following GUIDELINES.md. Reference the file explicitly.
+5. **Review** — Manually open each generated file and verify it against the PR checklist below. Do not skip this step.
+6. **Document** — Verify the `.stories.tsx` file has `Default`, `Disabled`, and variant-specific stories with proper `args`, controls, and an English description.
+
+---
+
+### What AI should NOT do
+
+If you are using an AI tool, do not allow it to:
+
+- Modify `src/styles/theme.css` tokens without your explicit approval
+- Add new `npm` or `pnpm` dependencies without discussion
+- Skip the 5-file structure in favor of a "simpler" single-file approach
+- Write Storybook stories in Spanish or without proper controls and descriptions
+- Use `interface` instead of `type`, or introduce `any` types
+
+If the AI proposes any of these, reject it and redirect it to the correct pattern.
+
+---
+
+### PR Review for AI-generated code
+
+AI-generated code goes through the **exact same review process** as human-written code. There are no exceptions.
+
+Before requesting a review on an AI-assisted PR:
+- Run through the PR checklist below as you would for any contribution
+- Fix every violation before requesting review — reviewers will not flag AI-generated issues as "acceptable"
+- If a guideline was broken, the PR will be rejected regardless of the author
+
+---
+
 ## Reporting Bugs & Proposing Features
 
 - **Bugs**: Open an issue using the bug report template. Include reproduction steps, expected behavior, and screenshots if applicable.
