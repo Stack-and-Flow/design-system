@@ -1,17 +1,19 @@
-# Quick Start Guide
+# Guía de Inicio Rápido
 
-Get from zero to your first contribution in under 10 minutes.
+De cero a tu primera contribución en menos de 10 minutos.
 
-## Prerequisites
+> 🇬🇧 [English version](./QUICK_START.en.md)
 
-| Tool | Version | Install |
-|------|---------|---------|
-| Node.js | see `.nvmrc` | [nodejs.org](https://nodejs.org/) |
-| pnpm | latest | `npm i -g pnpm` |
-| nvm | any | [UNIX](https://github.com/nvm-sh/nvm) / [Windows](https://github.com/coreybutler/nvm-windows) |
-| git | any | [git-scm.com](https://git-scm.com/) |
+## Requisitos previos
 
-## 1. Clone and install
+| Herramienta | Versión | Instalación |
+|-------------|---------|-------------|
+| Node.js | ver `.nvmrc` | [nodejs.org](https://nodejs.org/) |
+| pnpm | última | `npm i -g pnpm` |
+| nvm | cualquiera | [UNIX](https://github.com/nvm-sh/nvm) / [Windows](https://github.com/coreybutler/nvm-windows) |
+| git | cualquiera | [git-scm.com](https://git-scm.com/) |
+
+## 1. Clonar e instalar
 
 ```bash
 git clone https://github.com/Stack-and-Flow/design-system.git
@@ -20,87 +22,87 @@ nvm use
 pnpm install
 ```
 
-## 2. Start Storybook
+## 2. Iniciar Storybook
 
 ```bash
 pnpm run storybook
 ```
 
-Storybook opens at `http://localhost:6006`. This is your development environment — every component lives here.
+Storybook se abre en `http://localhost:6006`. Este es tu entorno de desarrollo — cada componente vive aquí.
 
-## 3. Find something to work on
+## 3. Encontrar algo en qué trabajar
 
-Go to the [GitHub Project board](https://github.com/orgs/Stack-and-Flow/projects/1) and pick an open issue from the **Todo** column.
+Ve al [tablero del proyecto en GitHub](https://github.com/orgs/Stack-and-Flow/projects/1) y elige un issue abierto de la columna **Todo**.
 
-> **First time?** Look for issues tagged `layer: atom` with `category: component` — these are self-contained and well-defined.
+> **¿Primera vez?** Busca issues etiquetados como `layer: atom` con `category: component` — son autocontenidos y bien definidos.
 
-Comment on the issue to let others know you're working on it.
+Comenta en el issue para que otros sepan que estás trabajando en él.
 
-## 4. Create your branch
+## 4. Crear tu rama
 
 ```bash
-git checkout -b feat/your-component-name
-# or
-git checkout -b fix/short-description
+git checkout -b feat/nombre-de-tu-componente
+# o
+git checkout -b fix/descripcion-corta
 ```
 
-Branch naming follows [Conventional Commits](https://www.conventionalcommits.org/):
-- `feat/` — new component or feature
-- `fix/` — bug fix
-- `a11y/` — accessibility improvement
-- `tokens/` — design token change
-- `docs/` — documentation only
+El nombre de las ramas sigue [Conventional Commits](https://www.conventionalcommits.org/):
+- `feat/` — nuevo componente o funcionalidad
+- `fix/` — corrección de bug
+- `a11y/` — mejora de accesibilidad
+- `tokens/` — cambio de token de diseño
+- `docs/` — solo documentación
 
-## 5. Build your component
+## 5. Construir tu componente
 
-Every component follows the **5-file pattern**. Use the scaffolding CLI to generate it automatically:
+Cada componente sigue el **patrón de 5 archivos**. Usa el CLI de scaffolding para generarlo automáticamente:
 
 ```bash
 npx compilot-cli
 ```
 
-Or create it manually under the correct atomic layer:
+O créalo manualmente en la capa atómica correcta:
 
 ```
-src/components/atoms/your-component/
-├── YourComponent.tsx        # Presentational layer — JSX only, no logic
-├── useYourComponent.ts      # Container layer — logic, state, CVA
-├── types.ts                 # TypeScript types + CVA variant definitions
-├── index.ts                 # Public exports
-└── YourComponent.stories.tsx  # Storybook documentation
+src/components/atoms/tu-componente/
+├── TuComponente.tsx        # Capa Presentacional — solo JSX, sin lógica
+├── useTuComponente.ts      # Capa Container — lógica, estado, CVA
+├── types.ts                # Tipos TypeScript + definiciones de variantes CVA
+├── index.ts                # Exportaciones públicas
+└── TuComponente.stories.tsx  # Documentación de Storybook
 ```
 
-Read [GUIDELINES.md](../GUIDELINES.md) for the full architecture rules before writing any code.
+Lee [GUIDELINES.md](../GUIDELINES.md) para las reglas completas de arquitectura antes de escribir cualquier código.
 
-## 6. Run tests
+## 6. Ejecutar tests
 
 ```bash
 pnpm test
 ```
 
-All tests must pass before opening a PR. If you're adding a new component, add tests too.
+Todos los tests deben pasar antes de abrir un PR. Si estás añadiendo un nuevo componente, añade también sus tests.
 
-## 7. Open a Pull Request
+## 7. Abrir un Pull Request
 
-Push your branch and open a PR against `main`:
+Sube tu rama y abre un PR contra `main`:
 
 ```bash
-git push origin feat/your-component-name
+git push origin feat/nombre-de-tu-componente
 ```
 
-Then go to GitHub → your branch → **Compare & pull request**.
+Luego ve a GitHub → tu rama → **Compare & pull request**.
 
-- Use the PR template — fill in every section
-- Link the issue in the summary (`Closes #123`)
-- Add screenshots if there are visual changes
+- Usa la plantilla de PR — completa cada sección
+- Vincula el issue en el resumen (`Closes #123`)
+- Añade capturas de pantalla si hay cambios visuales
 
-> The project lead reviews and merges. You don't need to worry about the merge itself.
+> El project lead revisa y fusiona. No tienes que preocuparte por el merge en sí.
 
 ---
 
-## Commit message format
+## Formato de mensajes de commit
 
-We use [Conventional Commits](https://www.conventionalcommits.org/). Git hooks will reject commits that don't follow this format.
+Usamos [Conventional Commits](https://www.conventionalcommits.org/). Los hooks de git rechazarán commits que no sigan este formato.
 
 ```
 feat(button): add loading state variant
@@ -109,26 +111,26 @@ docs(modal): add usage examples to Storybook
 a11y(input): improve focus ring visibility
 ```
 
-Format: `type(scope): description`
+Formato: `type(scope): description`
 
-Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `a11y`, `tokens`
+Tipos comunes: `feat`, `fix`, `docs`, `refactor`, `test`, `a11y`, `tokens`
 
 ---
 
-## Using AI agents (optional)
+## Uso de agentes IA (opcional)
 
-This project supports [opencode](https://opencode.ai/) with pre-configured context. If you use it:
+Este proyecto soporta [opencode](https://opencode.ai/) con contexto preconfigurado. Si lo usas:
 
 ```bash
 opencode
 ```
 
-The agent automatically loads the project rules from `.atl/AGENTS.md` — no manual setup needed. Read [CONTRIBUTING.md](../CONTRIBUTING.md#working-with-ai-agents) for the full AI workflow.
+El agente carga automáticamente las reglas del proyecto desde `.atl/AGENTS.md` — no necesitas configuración manual. Lee [CONTRIBUTING.md](../CONTRIBUTING.md#trabajar-con-agentes-ia) para el flujo completo de trabajo con IA.
 
 ---
 
-## Need help?
+## ¿Necesitas ayuda?
 
-- 💬 [GitHub Discussions](https://github.com/orgs/Stack-and-Flow/discussions) — for questions and ideas
-- 🐛 [Open an issue](https://github.com/Stack-and-Flow/design-system/issues/new/choose) — for bugs or proposals
-- 📋 [Project board](https://github.com/orgs/Stack-and-Flow/projects/1) — for task tracking
+- 💬 [GitHub Discussions](https://github.com/orgs/Stack-and-Flow/discussions) — para preguntas e ideas
+- 🐛 [Abrir un issue](https://github.com/Stack-and-Flow/design-system/issues/new/choose) — para bugs o propuestas
+- 📋 [Tablero del proyecto](https://github.com/orgs/Stack-and-Flow/projects/1) — para seguimiento de tareas

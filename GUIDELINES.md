@@ -1,38 +1,40 @@
-# Technical Guidelines
+# Guías Técnicas
 
-Welcome to the Stack-and-Flow Design System codebase. We strictly adhere to **Atomic Design** combined with the **Container/Presentational pattern**. Following these guidelines is **MANDATORY** for any PR.
+Bienvenido al código fuente del Design System Stack-and-Flow. Seguimos estrictamente **Atomic Design** combinado con el patrón **Container/Presentational**. Respetar estas guías es **OBLIGATORIO** para cualquier PR.
 
----
-
-## Architecture: Atomic Design
-
-Our UI is broken down into three main levels of complexity:
-
-- **Atoms**: The basic building blocks (e.g., `Button`, `Badge`, `Input`). They do not depend on other components in the system, except utility functions.
-- **Molecules**: Groups of atoms bonded together to form a functional unit (e.g., `Modal` typically uses buttons, typography, etc.).
-- **Organisms**: Complex UI components forming distinct sections of an interface (e.g., a `Header` comprising a logo, search molecule, and navigation atoms).
+> 🇬🇧 [English version](./GUIDELINES.en.md)
 
 ---
 
-## Pattern: Container & Presentational
+## Arquitectura: Atomic Design
 
-Every single component MUST be split into logic (Container) and rendering (Presentational). We achieve this through custom hooks and `.tsx` files.
+La UI se divide en tres niveles de complejidad:
 
-### 5-File Structure
+- **Atoms**: Los bloques básicos de construcción (ej: `Button`, `Badge`, `Input`). No dependen de otros componentes del sistema, salvo funciones utilitarias.
+- **Molecules**: Grupos de átomos combinados para formar una unidad funcional (ej: `Modal` generalmente usa botones, tipografía, etc.).
+- **Organisms**: Componentes de UI complejos que forman secciones diferenciadas de una interfaz (ej: un `Header` compuesto por logo, molécula de búsqueda y átomos de navegación).
 
-Every component MUST live inside a kebab-case directory (`src/components/atoms/button/`) and contain EXACTLY these five files:
+---
 
-| File | Purpose | Rule |
-| ---- | ------- | ---- |
-| `Button.tsx` | Presentational Component | ONLY JSX and rendering logic. Consumes the hook. |
-| `useButton.ts` | Container Hook | Contains ALL logic, state, and `cva` class generation. |
-| `types.ts` | Types & Variants | Defines component props using `type`, and exports `cva` variants. |
-| `index.ts` | Public API | Re-exports the component and types. |
-| `Button.stories.tsx` | Documentation | Contains Storybook definition, `args`, and `parameters.docs`. |
+## Patrón: Container & Presentational
 
-### 1. Types & Variants (`types.ts`)
-ALL `cva` variants go here, never in the hook or component.
-Use JSDoc comments to automatically generate Storybook controls.
+Cada componente DEBE separarse en lógica (Container) y renderizado (Presentational). Lo logramos mediante custom hooks y archivos `.tsx`.
+
+### Estructura de 5 archivos
+
+Cada componente DEBE vivir dentro de un directorio en kebab-case (`src/components/atoms/button/`) y contener EXACTAMENTE estos cinco archivos:
+
+| Archivo | Propósito | Regla |
+| ------- | --------- | ----- |
+| `Button.tsx` | Componente Presentacional | SOLO JSX y lógica de renderizado. Consume el hook. |
+| `useButton.ts` | Hook Container | Contiene TODA la lógica, estado y generación de clases `cva`. |
+| `types.ts` | Tipos y Variantes | Define las props del componente usando `type` y exporta variantes `cva`. |
+| `index.ts` | API Pública | Re-exporta el componente y los tipos. |
+| `Button.stories.tsx` | Documentación | Contiene la definición de Storybook, `args` y `parameters.docs`. |
+
+### 1. Tipos y Variantes (`types.ts`)
+Todas las variantes `cva` van aquí, nunca en el hook ni en el componente.
+Usa comentarios JSDoc para generar automáticamente los controles de Storybook.
 
 ```typescript
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -63,8 +65,8 @@ export type ButtonProps = {
 };
 ```
 
-### 2. Container Hook (`useButton.ts`)
-The hook returns everything the element needs: CSS classes, event handlers, mapped props, and `aria` attributes.
+### 2. Hook Container (`useButton.ts`)
+El hook retorna todo lo que el elemento necesita: clases CSS, manejadores de eventos, props mapeadas y atributos `aria`.
 
 ```typescript
 import { buttonVariants, type ButtonProps } from './types';
@@ -86,8 +88,8 @@ export const useButton = ({
 };
 ```
 
-### 3. Presentational Component (`Button.tsx`)
-It only destructures what it needs from the hook and renders it.
+### 3. Componente Presentacional (`Button.tsx`)
+Solo desestructura lo que necesita del hook y lo renderiza.
 
 ```tsx
 import type { FC, ComponentProps } from 'react';
@@ -107,7 +109,7 @@ const Button: FC<ButtonProps & ComponentProps<'button'>> = ({ ...props }) => {
 export default Button;
 ```
 
-### 4. Public API (`index.ts`)
+### 4. API Pública (`index.ts`)
 ```typescript
 import Button from './Button';
 export * from './types';
@@ -116,20 +118,20 @@ export default Button;
 
 ---
 
-## TypeScript Rules
+## Reglas de TypeScript
 
-- **`type` over `interface`**: ALWAYS use `export type ComponentProps = {}`. Do NOT use `interface`.
-- **No `any`**: Explicit `any` is strictly prohibited. If you don't know the type, use `unknown` or narrow it down properly.
-- **Explicit Props**: Never implicitly type props. Everything MUST be explicitly defined in `types.ts`.
-- **Component definition**: Use `FC<ComponentProps>` and `export default Component`.
+- **`type` sobre `interface`**: USA SIEMPRE `export type ComponentProps = {}`. NO uses `interface`.
+- **Sin `any`**: El uso explícito de `any` está estrictamente prohibido. Si no conoces el tipo, usa `unknown` o reduce el tipo correctamente.
+- **Props explícitas**: Nunca tipifiques props implícitamente. Todo DEBE estar definido explícitamente en `types.ts`.
+- **Definición de componente**: Usa `FC<ComponentProps>` y `export default Component`.
 
 ---
 
-## Storybook Rules
+## Reglas de Storybook
 
-- **English only**: All stories must be written in English.
-- **Mandatory Controls**: Use JSDoc comments (`/** @control text */`) in `types.ts` to power the controls.
-- **Mandatory Description**: Every component story MUST include a docs description:
+- **Solo en inglés**: Todas las stories deben escribirse en inglés.
+- **Controles obligatorios**: Usa comentarios JSDoc (`/** @control text */`) en `types.ts` para activar los controles.
+- **Descripción obligatoria**: Cada story de componente DEBE incluir una descripción en docs:
   ```typescript
   parameters: {
     docs: {
@@ -139,50 +141,163 @@ export default Button;
     }
   }
   ```
-- **Args**: Define default `args` for the base story.
+- **Args**: Define `args` por defecto para la story base.
 
 ---
 
-## System Tokens & Styling
+## Tokens del Sistema y Estilos
 
-We use Tailwind v4 with `@theme` configurations defined in `src/styles/theme.css`.
+Usamos Tailwind v4 con configuraciones `@theme` definidas en `src/styles/theme.css`.
 
-- **MANDATORY**: You MUST use the design system's CSS custom properties (tokens) via Tailwind classes.
-- **NO HARDCODING**: Never hardcode colors (e.g., `#FF0000`), spacing (`16px`, `1rem`), or fonts in inline styles or arbitrary Tailwind classes (e.g., `text-[#fce9ea]`).
-- Use the predefined classes: `text-text-dark`, `bg-secondary`, `gap-sm`, `fs-h1`, etc.
-
----
-
-## Accessibility (a11y)
-
-Accessibility is a core feature, not an afterthought.
-
-- **ARIA Attributes**: Interactive elements MUST have appropriate ARIA attributes (`aria-expanded`, `aria-pressed`, `aria-hidden`, etc.).
-- **Dynamic `aria-label`**: Do not hardcode `aria-label`. Expose it as a prop so consumers can customize it for translation/context.
-- **Roles**: Explicitly define `role` when semantics require it (e.g., `role="status"` on Badge, `role="switch"` on toggleable buttons).
-- **Keyboard Navigation**: Ensure elements are focusable and visually outline focus (`focus-visible`). Our global styles handle focus rings natively.
+- **OBLIGATORIO**: DEBES usar las propiedades CSS personalizadas del design system (tokens) mediante clases de Tailwind.
+- **SIN HARDCODING**: Nunca escribas colores en duro (ej: `#FF0000`), espaciados (`16px`, `1rem`) ni fuentes en estilos inline o clases Tailwind arbitrarias (ej: `text-[#fce9ea]`).
+- Usa las clases predefinidas: `text-text-dark`, `bg-secondary`, `gap-sm`, `fs-h1`, etc.
 
 ---
 
-## Naming Conventions
+## Accesibilidad (a11y)
 
-- **Directories**: `kebab-case` (e.g., `src/components/atoms/date-picker/`).
-- **Components & Files**: `PascalCase` (e.g., `DatePicker.tsx`, `DatePicker.stories.tsx`).
-- **Hooks**: `camelCase` with a `use` prefix (e.g., `useDatePicker.ts`).
-- **Types**: `PascalCase` (e.g., `DatePickerProps`).
-- **CVA Variants**: `camelCase` with a `Variants` suffix (e.g., `datePickerVariants`).
+La accesibilidad es una funcionalidad principal, no un agregado posterior.
+
+- **Atributos ARIA**: Los elementos interactivos DEBEN tener los atributos ARIA apropiados (`aria-expanded`, `aria-pressed`, `aria-hidden`, etc.).
+- **`aria-label` dinámico**: No escribas `aria-label` en duro. Exponlo como prop para que los consumidores puedan personalizarlo para traducciones o contexto.
+- **Roles**: Define `role` explícitamente cuando la semántica lo requiera (ej: `role="status"` en Badge, `role="switch"` en botones con toggle).
+- **Navegación por teclado**: Asegúrate de que los elementos sean enfocables y muestren el foco visualmente (`focus-visible`). Nuestros estilos globales gestionan los anillos de foco de forma nativa.
 
 ---
 
-## Strict Anti-Patterns (What is NOT Allowed)
+## Convenciones de Nomenclatura
 
-The following practices will result in PR rejection:
+- **Directorios**: `kebab-case` (ej: `src/components/atoms/date-picker/`).
+- **Componentes y archivos**: `PascalCase` (ej: `DatePicker.tsx`, `DatePicker.stories.tsx`).
+- **Hooks**: `camelCase` con prefijo `use` (ej: `useDatePicker.ts`).
+- **Tipos**: `PascalCase` (ej: `DatePickerProps`).
+- **Variantes CVA**: `camelCase` con sufijo `Variants` (ej: `datePickerVariants`).
 
-1. **NO** combining Presentational and Container logic in the same `.tsx` file.
-2. **NO** putting `cva` inside the `.tsx` or `useHook.ts` file (it belongs in `types.ts`).
-3. **NO** `export interface` in TypeScript.
-4. **NO** arbitrary values in Tailwind (`p-[14px]`, `text-[#000]`).
-5. **NO** Spanish code or documentation (variables, comments, stories must be in English).
-6. **NO** `any` types.
-7. **NO** skipped accessibility (`aria-*` or missing keyboard focus).
-8. **NO** multiple components exported from a single file. One component = one directory.
+---
+
+## Testing
+
+Cada componente del design system DEBE tener un archivo de test correspondiente que siga estas convenciones.
+
+### Estrategia
+
+Seguimos la separación Container/Presentational también en los tests:
+
+| Capa | Herramienta | Qué testear |
+|------|-------------|-------------|
+| `useComponentName.ts` (Hook) | `renderHook` | Lógica pura: valores por defecto, props computadas, manejadores de eventos, forma del retorno |
+| `ComponentName.tsx` (Componente) | `render` + `screen` + `userEvent` | Comportamiento observable: accesibilidad, estado deshabilitado, loading, manejo de clicks |
+
+**Nunca testees detalles de implementación**: NO hagas assertions sobre cadenas de clases CSS, valores internos de refs, ni qué string de variante se aplica al DOM. Testea lo que un usuario real (o un lector de pantalla) observaría.
+
+### Ubicación y Nomenclatura del Archivo
+
+Coloca el archivo de test junto al componente — no en un directorio `__tests__` separado:
+
+```
+src/components/atoms/button/
+  Button.tsx
+  useButton.ts
+  types.ts
+  index.ts
+  Button.stories.tsx
+  Button.test.tsx   ← aquí
+```
+
+### Cobertura Mínima Requerida
+
+Cada archivo de test de componente DEBE cubrir:
+
+1. **Estado por defecto** — el componente renderiza sin props requeridas
+2. **Prop `disabled`** — el elemento está deshabilitado cuando `disabled={true}`
+3. **Prop `isLoading`** — el elemento está deshabilitado cuando `isLoading={true}` (aunque `disabled={false}`)
+4. **Manejador `onClick`** — se llama cuando es interactivo y no está cargando; NO se llama cuando está cargando
+5. **`aria-label`** — el nombre accesible se aplica correctamente
+6. **Valores por defecto del hook** — `disabled: false` e `isLoading: false` son retornados por defecto
+
+### Mocks Requeridos
+
+Siempre mockea estos dos paquetes — importan animaciones CSS o módulos dinámicos que rompen jsdom:
+
+```typescript
+vi.mock('lucide-react/dynamic', () => ({
+  DynamicIcon: () => null
+}));
+
+vi.mock('spinners-react', () => ({
+  SpinnerCircular: () => null
+}));
+```
+
+También mockea cualquier archivo CSS importado directamente desde el componente:
+
+```typescript
+vi.mock('@/components/utils/styles/index.css', () => ({}));
+```
+
+### Ejemplos de Referencia
+
+**Test de hook** — usa `renderHook`:
+```typescript
+import { renderHook } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { useButton } from './useButton';
+
+describe('useButton — logic', () => {
+  it('returns disabled: false by default', () => {
+    const { result } = renderHook(() => useButton({}));
+    expect(result.current.disabled).toBe(false);
+  });
+
+  it('returns the correct variant when variant: ghost is passed', () => {
+    const { result } = renderHook(() => useButton({ variant: 'ghost' }));
+    expect(result.current.variant).toBe('ghost');
+  });
+});
+```
+
+**Test de componente** — usa `render` + `screen` + `userEvent`:
+```typescript
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import Button from './Button';
+
+describe('Button — component behavior', () => {
+  it('is disabled when isLoading is true', () => {
+    render(<Button text="Loading" isLoading disabled={false} />);
+    expect(screen.getByRole('button', { name: 'Loading' })).toBeDisabled();
+  });
+
+  it('does NOT call onClick when isLoading is true', async () => {
+    const handleClick = vi.fn();
+    render(<Button text="Saving" isLoading onClick={handleClick} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Saving' }));
+    expect(handleClick).not.toHaveBeenCalled();
+  });
+});
+```
+
+### Ejecutar Tests
+
+```bash
+pnpm run test            # ejecución única
+pnpm run test:watch      # modo watch
+pnpm run test:coverage   # con reporte de cobertura
+```
+
+---
+
+## Anti-Patrones Estrictos (Lo que NO está Permitido)
+
+Las siguientes prácticas resultan en rechazo del PR:
+
+1. **NO** combinar lógica Presentacional y Container en el mismo archivo `.tsx`.
+2. **NO** poner `cva` dentro del archivo `.tsx` o `useHook.ts` (pertenece a `types.ts`).
+3. **NO** usar `export interface` en TypeScript.
+4. **NO** valores arbitrarios en Tailwind (`p-[14px]`, `text-[#000]`).
+5. **NO** código en español (variables, comentarios y stories deben estar en inglés).
+6. **NO** tipos `any`.
+7. **NO** omitir accesibilidad (`aria-*` o foco por teclado ausente).
+8. **NO** exportar múltiples componentes desde un único archivo. Un componente = un directorio.

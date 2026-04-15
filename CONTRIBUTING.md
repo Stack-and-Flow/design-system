@@ -1,176 +1,177 @@
-# Contributing to Stack-and-Flow Design System
+# Contribuir al Design System Stack-and-Flow
 
-Thank you for your interest in contributing! This document provides the steps and workflow to contribute to our design system. 
+¡Gracias por tu interés en contribuir! Este documento explica los pasos y el flujo de trabajo para contribuir a nuestro design system.
 
-## Prerequisites
+## Requisitos previos
 
-You MUST have the following installed:
-- [Node.js](https://nodejs.org/) (Use the version specified in `.nvmrc`)
-- [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows) to manage Node versions.
-- [pnpm](https://pnpm.io/installation) package manager.
+Es **obligatorio** tener instalado:
+- [Node.js](https://nodejs.org/) (usa la versión especificada en `.nvmrc`)
+- [nvm](https://github.com/nvm-sh/nvm) o [nvm-windows](https://github.com/coreybutler/nvm-windows) para gestionar versiones de Node.
+- [pnpm](https://pnpm.io/installation) como gestor de paquetes.
 
-## Local Setup
+## Configuración local
 
-1. **Clone the repository**:
+1. **Clona el repositorio**:
    ```bash
    git clone https://github.com/Stack-and-Flow/design-system.git
    cd design-system
    ```
-2. **Set the correct Node version**:
+2. **Establece la versión correcta de Node**:
    ```bash
    nvm use
    ```
-3. **Install dependencies**:
+3. **Instala las dependencias**:
    ```bash
    pnpm install
    ```
-4. **Start Storybook**:
+4. **Inicia Storybook**:
    ```bash
    pnpm run storybook
    ```
 
-### Fonts Note
-The design system uses **Space Grotesk Variable**, loaded via `@fontsource-variable/space-grotesk`. It is included as a regular npm dependency and will be available automatically after `pnpm install`.
+### Nota sobre fuentes
+El design system usa **Space Grotesk Variable**, cargada vía `@fontsource-variable/space-grotesk`. Se incluye como dependencia npm normal y estará disponible automáticamente después de `pnpm install`.
 
 ---
 
-## How to Create a New Component
+## Cómo crear un nuevo componente
 
-Every component MUST strictly follow the Atomic Design + Container/Presentational architecture (Detailed in [`GUIDELINES.md`](./GUIDELINES.md)).
+Todo componente DEBE seguir estrictamente la arquitectura Atomic Design + Container/Presentational (detallada en [`GUIDELINES.md`](./GUIDELINES.md)).
 
-1. **Locate the right tier**: Decide if it's an `atom`, `molecule`, or `organism`.
-2. **Create the structure**: If you create a `Button` atom, the structure MUST be exactly:
+1. **Determina el nivel correcto**: Decide si es un `atom`, `molecule` u `organism`.
+2. **Crea la estructura**: Si creas un átomo `Button`, la estructura DEBE ser exactamente:
    ```text
    src/components/atoms/button/
-   ├── Button.tsx           # Presentational layer
-   ├── useButton.ts         # Container layer (Logic & CVA)
-   ├── types.ts             # Types and CVA variants
-   ├── index.ts             # Re-exports
-   └── Button.stories.tsx   # Storybook documentation
+   ├── Button.tsx           # Capa Presentacional
+   ├── useButton.ts         # Capa Container (lógica y CVA)
+   ├── types.ts             # Tipos y variantes CVA
+   ├── index.ts             # Re-exportaciones
+   └── Button.stories.tsx   # Documentación Storybook
    ```
-3. **Implement**: 
-   - Write variants in `types.ts`.
-   - Write logic in `useButton.ts`.
-   - Consume logic in `Button.tsx`.
-4. **Export**: Re-export correctly in `index.ts`.
+3. **Implementa**:
+   - Escribe las variantes en `types.ts`.
+   - Escribe la lógica en `useButton.ts`.
+   - Consume la lógica en `Button.tsx`.
+4. **Exporta**: Re-exporta correctamente en `index.ts`.
 
 ---
 
-## Storybook Documentation Rules
+## Reglas de documentación en Storybook
 
-Storybook is our single source of truth. Every component MUST be fully documented.
+Storybook es nuestra única fuente de verdad. Todo componente DEBE estar completamente documentado.
 
-- **English Only**: All stories, descriptions, and comments MUST be written in English.
-- **Controls & Args**: You MUST define `controls` via JSDoc in your `types.ts` and set default `args` in the `.stories.tsx` file.
-- **Docs Description**: You MUST include a `parameters.docs.description.component` describing what the component does and when to use it.
+- **Solo en inglés**: Todas las stories, descripciones y comentarios DEBEN estar escritos en inglés.
+- **Controls y Args**: DEBES definir `controls` mediante JSDoc en `types.ts` y establecer `args` por defecto en el archivo `.stories.tsx`.
+- **Descripción en Docs**: DEBES incluir un `parameters.docs.description.component` que describa qué hace el componente y cuándo usarlo.
 
 ---
 
-## Git Workflow
+## Flujo de trabajo con Git
 
-### Branching Strategy
-- `main` is the base branch. All PRs target `main`.
-- Branch naming convention: `feat/component-name`, `fix/bug-name`, `chore/task-name`.
+### Estrategia de ramas
+- `main` es la rama base. Todos los PRs apuntan a `main`.
+- Nomenclatura de ramas: `feat/nombre-componente`, `fix/nombre-bug`, `chore/nombre-tarea`.
 
 ### Commits
-We strictly follow **Conventional Commits**:
-- `feat:` for new features or components.
-- `fix:` for bug fixes.
-- `chore:` for tooling, dependencies, etc.
-- `docs:` for documentation updates.
-- `refactor:` for code changes that neither fix a bug nor add a feature.
-- `style:` for formatting, missing semi-colons, etc.
-- `test:` for adding or fixing tests.
+Seguimos estrictamente **Conventional Commits**:
+- `feat:` para nuevas funcionalidades o componentes.
+- `fix:` para corrección de bugs.
+- `chore:` para herramientas, dependencias, etc.
+- `docs:` para actualizaciones de documentación.
+- `refactor:` para cambios de código que no corrigen un bug ni añaden funcionalidad.
+- `style:` para formato, punto y coma omitidos, etc.
+- `test:` para añadir o corregir tests.
 
-### Pull Request Process
-1. Push your branch and open a PR against `main`.
-2. The PR MUST pass all CI checks (Biome formatting/linting, TypeScript strict checks).
-3. The PR MUST be reviewed by at least one core maintainer before merging.
+### Proceso de Pull Request
+1. Sube tu rama y abre un PR contra `main`.
+2. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
+3. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
 
-### PR Checklist
-Before requesting a review, verify:
-- [ ] Component follows the 5-file architecture perfectly.
-- [ ] No `interface` used (only `type`). No `any`.
-- [ ] Storybook contains `args`, `controls`, and `description`.
-- [ ] Tokens from `theme.css` are used (no hardcoded colors or spacing).
-- [ ] ARIA attributes are implemented for interactable elements.
-- [ ] Conventional Commits are used.
-
----
-
-## Working with AI Agents
-
-### Is AI allowed?
-
-Yes. Contributors are free to use AI-assisted tools (GitHub Copilot, opencode/gentle-ai, Cursor, etc.) when working on this project.
-
-However, two rules are non-negotiable:
-
-1. **The output MUST meet all project standards** — regardless of how it was generated. If the AI produced code that breaks GUIDELINES.md, fix it before opening a PR.
-2. **You are responsible** for every line in your PR, AI-generated or not. "The AI wrote it" is not a valid reason to bypass the PR checklist.
+### Checklist del PR
+Antes de pedir revisión, verifica:
+- [ ] El componente sigue la arquitectura de 5 archivos perfectamente.
+- [ ] No se usa `interface` (solo `type`). Sin `any`.
+- [ ] Storybook contiene `args`, `controls` y `description`.
+- [ ] Se usan tokens de `theme.css` (sin colores ni espaciados hardcodeados).
+- [ ] Se implementan atributos ARIA en elementos interactivos.
+- [ ] Se usan Conventional Commits.
 
 ---
 
-### Using gentle-ai (opencode)
+## Trabajar con agentes IA
 
-If you use [opencode](https://opencode.ai/), this project includes `.atl/AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
+### ¿Está permitida la IA?
 
-The agents will already know:
-- The 5-file architecture and where each piece of logic belongs
-- Which design tokens to use (and which hardcoded values to avoid)
-- The Storybook rules and required story structure
-- The full list of anti-patterns that cause PR rejection
+Sí. Los contributors pueden usar herramientas asistidas por IA (GitHub Copilot, opencode/gentle-ai, Cursor, etc.) en este proyecto.
 
-**To activate**: simply open the project directory in opencode. No manual setup required — context loads automatically.
+Sin embargo, dos reglas son innegociables:
 
----
-
-### AI Workflow for Components
-
-When using AI to create a component, follow this adapted workflow:
-
-1. **Research** — Ask the AI to scan `src/components/` and confirm the component doesn't already exist. Identify the correct atomic tier.
-2. **Scaffold** — Run `compilot-cli` to generate the 5-file structure, or ask the AI to replicate it exactly.
-3. **Spec first** — Define `types.ts` first: props, CVA variants, and JSDoc controls. Let the AI help, but review every type.
-4. **Implement** — Ask the AI to implement the hook and component strictly following GUIDELINES.md. Reference the file explicitly.
-5. **Review** — Manually open each generated file and verify it against the PR checklist below. Do not skip this step.
-6. **Document** — Verify the `.stories.tsx` file has `Default`, `Disabled`, and variant-specific stories with proper `args`, controls, and an English description.
+1. **El resultado DEBE cumplir todos los estándares del proyecto** — independientemente de cómo se haya generado. Si la IA produjo código que incumple GUIDELINES.md, corrígelo antes de abrir un PR.
+2. **Eres responsable** de cada línea en tu PR, generada por IA o no. "Lo escribió la IA" no es una razón válida para saltarse el checklist del PR.
 
 ---
 
-### What AI should NOT do
+### Usar gentle-ai (opencode)
 
-If you are using an AI tool, do not allow it to:
+Si usas [opencode](https://opencode.ai/), este proyecto incluye `.atl/AGENTS.md` — un archivo de contexto que se inyecta automáticamente en todos los agentes al abrir el proyecto.
 
-- Modify `src/styles/theme.css` tokens without your explicit approval
-- Add new `npm` or `pnpm` dependencies without discussion
-- Skip the 5-file structure in favor of a "simpler" single-file approach
-- Write Storybook stories in Spanish or without proper controls and descriptions
-- Use `interface` instead of `type`, or introduce `any` types
+Los agentes ya conocerán:
+- La arquitectura de 5 archivos y dónde corresponde cada pieza de lógica
+- Qué tokens de diseño usar (y qué valores hardcodeados evitar)
+- Las reglas de Storybook y la estructura requerida de stories
+- La lista completa de anti-patrones que provocan rechazo de PR
 
-If the AI proposes any of these, reject it and redirect it to the correct pattern.
-
----
-
-### PR Review for AI-generated code
-
-AI-generated code goes through the **exact same review process** as human-written code. There are no exceptions.
-
-Before requesting a review on an AI-assisted PR:
-- Run through the PR checklist below as you would for any contribution
-- Fix every violation before requesting review — reviewers will not flag AI-generated issues as "acceptable"
-- If a guideline was broken, the PR will be rejected regardless of the author
+**Para activarlo**: simplemente abre el directorio del proyecto en opencode. No se requiere configuración manual — el contexto se carga automáticamente.
 
 ---
 
-## Reporting Bugs & Proposing Features
+### Flujo IA para componentes
 
-- **Bugs**: Open an issue using the bug report template. Include reproduction steps, expected behavior, and screenshots if applicable.
-- **Proposing Components**: Before writing code, propose the component in the [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1) under the "In Review" tab, or open a Feature Request issue to discuss API and requirements with the Project Lead.
+Al usar IA para crear un componente, sigue este flujo adaptado:
+
+1. **Research** — Pide a la IA que revise `src/components/` y confirme que el componente no existe. Identifica el nivel atómico correcto.
+2. **Scaffold** — Ejecuta `compilot-cli` para generar la estructura de 5 archivos, o pide a la IA que la replique exactamente.
+3. **Spec primero** — Define `types.ts` primero: props, variantes CVA y controles JSDoc. Deja que la IA ayude, pero revisa cada tipo.
+4. **Implementa** — Pide a la IA que implemente el hook y el componente siguiendo estrictamente GUIDELINES.md. Referencia el archivo explícitamente.
+5. **Revisa** — Abre manualmente cada archivo generado y verifícalo contra el checklist del PR. No omitas este paso.
+6. **Documenta** — Verifica que el archivo `.stories.tsx` tenga stories `Default`, `Disabled` y específicas de variantes con `args`, controls y descripción en inglés.
 
 ---
 
-## Useful Links
-- **Storybook Demo**: [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)
+### Lo que la IA NO debe hacer
+
+Si usas una herramienta de IA, no le permitas:
+
+- Modificar los tokens de `src/styles/theme.css` sin tu aprobación explícita
+- Añadir nuevas dependencias `npm` o `pnpm` sin discutirlo
+- Saltarse la estructura de 5 archivos en favor de un enfoque de un solo archivo "más simple"
+- Escribir stories de Storybook en español o sin controls y descripciones adecuados
+- Usar `interface` en lugar de `type`, o introducir tipos `any`
+
+Si la IA propone alguna de estas cosas, recházala y redirigela al patrón correcto.
+
+---
+
+### Revisión de código generado por IA
+
+El código generado por IA pasa por el **mismo proceso de revisión exacto** que el código escrito por humanos. Sin excepciones.
+
+Antes de pedir revisión en un PR asistido por IA:
+- Repasa el checklist del PR como lo harías con cualquier contribución
+- Corrige toda violación antes de pedir revisión — los revisores no aceptarán problemas generados por IA como "aceptables"
+- Si se incumple una guía, el PR será rechazado independientemente del autor
+
+---
+
+## Reportar bugs y proponer funcionalidades
+
+- **Bugs**: Abre un issue usando la plantilla de reporte de bugs. Incluye pasos para reproducir, comportamiento esperado y capturas si aplica.
+- **Proponer componentes**: Antes de escribir código, propón el componente en el [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1) o abre un issue de Feature Request para discutir la API y los requisitos con el Project Lead.
+
+---
+
+## Links útiles
+- **Demo de Storybook**: [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)
 - **GitHub Projects (Kanban)**: [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1)
 - **Guidelines**: [GUIDELINES.md](./GUIDELINES.md)
+- **Quick Start**: [docs/QUICK_START.md](./docs/QUICK_START.md)
