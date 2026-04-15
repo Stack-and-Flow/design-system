@@ -41,7 +41,7 @@
 
 ## 🚧 Kanban Board
 
-https://github.com/users/egdev6/projects/1/views/1
+https://github.com/orgs/Stack-and-Flow/projects
 
 ## 🔧 Installation
 
@@ -119,7 +119,7 @@ We aim for clean, maintainable and scalable code. These requirements help ensure
 
 ## 🎨 References
 
-https://github.com/egdev6/ui-libraries
+https://github.com/Stack-and-Flow/ui-libraries
 
 ## 🛠️ Tools
 
@@ -127,7 +127,7 @@ https://github.com/egdev6/ui-libraries
 
 <div>
 
-More informations here -> https://github.com/egdev6/compilot-cli/
+More informations here -> https://github.com/Stack-and-Flow/compilot-cli/
 
 ```
 npx compilot-cli
@@ -139,7 +139,7 @@ npx compilot-cli
 
 <div>
 
-More information here -> https://github.com/egdev6/storybook-watch
+More information here -> https://github.com/Stack-and-Flow/storybook-watch
 
 ```
 npx storybook-watch
@@ -158,8 +158,8 @@ This repository is intended for **educational purposes** and is fully open to **
 
 Special thanks you to everyone who has contributed to making this project possible.
 
-<a href="https://github.com/egdev6/design-system/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=egdev6/design-system&nocache=1" />
+<a href="https://github.com/Stack-and-Flow/design-system/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Stack-and-Flow/design-system&nocache=1" />
 </a>
 
 ## 📫 Contact
@@ -178,15 +178,15 @@ Special thanks you to everyone who has contributed to making this project possib
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[stars-shield]: https://img.shields.io/github/stars/egdev6/design-system.svg?style=for-the-badge&cacheBust=1
-[stars-url]: https://github.com/egdev6/design-system/stargazers
-[issues-shield]: https://img.shields.io/github/issues/egdev6/design-system.svg?style=for-the-badge
-[issues-url]: https://github.com/egdev6/design-system/issues
-[license-shield]: https://img.shields.io/github/license/egdev6/design-system.svg?style=for-the-badge
-[license-url]: https://github.com/egdev6/design-system/blob/master/LICENSE.txt
+[stars-shield]: https://img.shields.io/github/stars/Stack-and-Flow/design-system.svg?style=for-the-badge&cacheBust=1
+[stars-url]: https://github.com/Stack-and-Flow/design-system/stargazers
+[issues-shield]: https://img.shields.io/github/issues/Stack-and-Flow/design-system.svg?style=for-the-badge
+[issues-url]: https://github.com/Stack-and-Flow/design-system/issues
+[license-shield]: https://img.shields.io/github/license/Stack-and-Flow/design-system.svg?style=for-the-badge
+[license-url]: https://github.com/Stack-and-Flow/design-system/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/egdev6
 [demo-url]: https://egdev6-design-system.netlify.app/
 [demo-shield]: https://img.shields.io/badge/-Demo-black.svg?style=for-the-badge&colorB=555
-[wiki-url]: https://deepwiki.com/egdev6/design-system
+[wiki-url]: https://deepwiki.com/Stack-and-Flow/design-system
 [wiki-shield]: https://img.shields.io/badge/-Wiki-black.svg?style=for-the-badge&colorB=555
