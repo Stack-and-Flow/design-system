@@ -734,32 +734,37 @@ export const Sizes: Story = {
   }
 };
 
-const selectStyle = document.createElement('style');
-selectStyle.innerHTML = `
-  .calendar-radius-bg select:focus option:checked,
-  .calendar-radius-bg select option:checked {
-    color: #e00;
-    background: #fff;
-  }
-`;
-document.head.appendChild(selectStyle);
-// Add theme-aware background for WithRadius story
-const style = document.createElement('style');
-style.innerHTML = `
-  .calendar-radius-bg {
-    background: white;
-    color: black;
-  }
-  @media (prefers-color-scheme: dark) {
-    .calendar-radius-bg {
-      background: black;
-      color: white;
-    }
-  }
-`;
-document.head.appendChild(style);
-
 export const WithRadius: Story = {
+  decorators: [
+    (Story) => {
+      const selectStyle = document.createElement('style');
+      selectStyle.innerHTML = `
+        .calendar-radius-bg select:focus option:checked,
+        .calendar-radius-bg select option:checked {
+          color: #e00;
+          background: #fff;
+        }
+      `;
+      document.head.appendChild(selectStyle);
+
+      const themeStyle = document.createElement('style');
+      themeStyle.innerHTML = `
+        .calendar-radius-bg {
+          background: white;
+          color: black;
+        }
+        @media (prefers-color-scheme: dark) {
+          .calendar-radius-bg {
+            background: black;
+            color: white;
+          }
+        }
+      `;
+      document.head.appendChild(themeStyle);
+
+      return <Story />;
+    }
+  ],
   render: () => {
     const [radius, setRadius] = useState<CalendarRadius>('md');
     const [isDark, setIsDark] = useState(() => {

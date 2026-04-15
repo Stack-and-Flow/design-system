@@ -37,7 +37,7 @@ const Switch: FC<SwitchProps> = ({ ...props }) => {
           className={switchHiddenInput}
           aria-checked={ariaChecked}
           role='switch'
-          aria-label='switch'
+          aria-label={ariaLabel ?? label ?? 'switch'}
         />
 
         <span className={switchTrack}>
@@ -49,7 +49,7 @@ const Switch: FC<SwitchProps> = ({ ...props }) => {
         </span>
       </label>
       {label && (
-        <span className={switchLabel} aria-label={ariaLabel}>
+        <span className={switchLabel}>
           {label}
         </span>
       )}

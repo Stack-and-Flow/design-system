@@ -6,7 +6,7 @@ export const linkVariants = cva(
     'link w-auto relative overflow-hidden cursor-pointer',
     'transition-all duration-200 ease-in-out',
     'flex gap-1 items-center justify-start',
-    'font-secondary whitespace-nowrapline-clamp-1 leading-[1.2]',
+    'font-secondary whitespace-nowrap line-clamp-1 leading-[1.2]',
     'focus-visible:outline-2 focus-visible:outline-offset-2',
     'dark:focus-visible:outline-white focus-visible:outline-accent'
   ],

@@ -12,25 +12,25 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-primary-500); /* Replace with your primary color */
+  background-color: var(--color-primary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primary-600); /* Darker shade for hover */
+  background-color: var(--color-secondary);
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--color-gray-200); /* Replace with your track color */
+  background-color: var(--color-gray-dark-800);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-corner {
-  background-color: var(--color-gray-100); /* Corner color */
+  background-color: var(--color-gray-dark-900);
 }
 
 /* For Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-primary-500) var(--color-gray-200);
+  scrollbar-color: var(--color-primary) var(--color-gray-dark-800);
 }
