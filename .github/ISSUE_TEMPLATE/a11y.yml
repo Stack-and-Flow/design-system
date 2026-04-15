@@ -1,0 +1,74 @@
+name: "♿ Accessibility"
+description: Fix or improve accessibility in a component or the design system overall
+title: "[A11Y] ComponentName — short description"
+labels: ["accessibility", "a11y"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ♿ Accessibility Task
+        Use this for WCAG compliance, ARIA improvements, keyboard navigation, or screen reader support.
+
+  - type: input
+    id: affected-component
+    attributes:
+      label: Affected component / area
+      placeholder: e.g. Switch, Modal, Color tokens — contrast ratios
+    validations:
+      required: true
+
+  - type: dropdown
+    id: wcag-level
+    attributes:
+      label: WCAG level targeted
+      options:
+        - A (minimum)
+        - AA (standard — our baseline)
+        - AAA (enhanced)
+        - Not WCAG-specific
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Accessibility issue
+      description: What is the current problem? How was it detected?
+      placeholder: |
+        The Switch component uses `aria-label` on the wrapper `<div>` instead of the `<input>`.
+        Screen readers announce the label but don't associate it correctly with the control.
+        Detected via: axe DevTools / manual VoiceOver testing / automated audit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-fix
+    attributes:
+      label: Proposed fix
+      placeholder: |
+        Move `aria-label` to the `<input type="checkbox">` element.
+        Add `aria-describedby` linking to the helper text if present.
+
+  - type: checkboxes
+    id: phases
+    attributes:
+      label: "✅ Implementation phases"
+      options:
+        - label: "1. **Audit** — reproduce the issue with a screen reader or axe tool. Document findings."
+        - label: "2. **Specification** — define the correct ARIA pattern and keyboard behavior."
+        - label: "3. **Implementation** — apply the fix following WCAG guidelines."
+        - label: "4. **Test** — verify with axe-core, keyboard navigation, and screen reader (VoiceOver / NVDA)."
+        - label: "5. **Storybook** — add or update a11y notes in docs."
+        - label: "6. **Merge to main** — egdev6 merges the PR."
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "📎 Additional notes"
+      placeholder: Screen reader tested, tools used, WCAG criterion reference. Tag @egdev6 for questions.
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: "🔗 Related resources"
+      placeholder: WCAG docs, ARIA authoring practices, axe report, related issues.

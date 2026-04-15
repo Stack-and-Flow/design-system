@@ -1,0 +1,74 @@
+name: "⚙️ CI / Tooling"
+description: Add or improve GitHub Actions workflows, build tooling, or dev infrastructure
+title: "[CI] Short description"
+labels: ["ci", "tooling"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚙️ CI / Tooling Task
+        Use this for GitHub Actions, Vite config, Biome, Lefthook, Storybook build, or other dev tooling.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - GitHub Actions (CI/CD)
+        - Vite / build config
+        - Biome (linting / formatting)
+        - Lefthook (git hooks)
+        - Storybook build / deployment
+        - Testing infrastructure (Vitest)
+        - Release / versioning
+        - Other tooling
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem does this solve or what capability does it add?
+      placeholder: |
+        Currently there is no automated test run on PRs. Contributors can merge code
+        that breaks existing tests without noticing until after merge.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed change
+      description: What exactly needs to be added or changed?
+      placeholder: |
+        Add a GitHub Actions workflow `.github/workflows/ci.yml` that:
+        - Runs on every PR targeting `main`
+        - Executes `pnpm test` and reports results
+        - Blocks merge if tests fail
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: phases
+    attributes:
+      label: "✅ Implementation phases"
+      options:
+        - label: "1. **Research** — investigate the right approach, existing examples, constraints."
+        - label: "2. **Specification** — define the exact configuration. Document in this issue."
+        - label: "3. **Implementation** — write the workflow / config."
+        - label: "4. **Verify** — test locally or on a draft PR."
+        - label: "5. **Code review** — review by egdev6."
+        - label: "6. **Merge to main** — egdev6 merges the PR."
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "📎 Additional notes"
+      placeholder: Any constraints, secrets needed, or related issues. Tag @egdev6 for questions.
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: "🔗 Related resources"
+      placeholder: GitHub Actions docs, existing workflow references, related issues.

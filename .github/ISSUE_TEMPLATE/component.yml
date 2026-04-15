@@ -1,0 +1,90 @@
+name: "🧩 New Component"
+description: Create a new component for the design system (atom, molecule or organism)
+title: "[ATOMS] ComponentName"
+labels: ["component"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧩 New Component Task
+        Follow all 6 phases in order. The contributor does phases 1–5, egdev6 handles the merge (phase 6).
+
+  - type: input
+    id: component-name
+    attributes:
+      label: Component name
+      placeholder: e.g. Autocomplete, DatePicker, Modal
+    validations:
+      required: true
+
+  - type: dropdown
+    id: atomic-level
+    attributes:
+      label: Atomic level
+      description: Where does this component live in the atomic design hierarchy?
+      options:
+        - Atom
+        - Molecule
+        - Organism
+    validations:
+      required: true
+
+  - type: input
+    id: reference
+    attributes:
+      label: Reference URL
+      description: Link to a reference implementation (e.g. HeroUI, Radix, shadcn)
+      placeholder: https://www.heroui.com/docs/components/...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / motivation
+      description: Why does this component need to exist? What problem does it solve?
+      placeholder: Brief description of the use case and why it belongs in the design system.
+
+  - type: checkboxes
+    id: phases
+    attributes:
+      label: "✅ Development phases"
+      options:
+        - label: "1. **Research** — investigate similar solutions, existing patterns, real use cases. Add screenshots, links or benchmarks."
+        - label: "2. **Specification** — define props, states, interaction, accessibility, variants. Document in this issue."
+        - label: "3. **Implementation** — build the component based on the spec. Follow the 5-file pattern (types, hook, component, stories, index)."
+        - label: "4. **Storybook** — document with controls, usage examples, and MDX/JSDoc if applicable."
+        - label: "5. **Code review** — functional review + visual review (alignment with design system) + fix suggestions."
+        - label: "6. **Merge to main** — once approved, egdev6 merges the PR."
+
+  - type: textarea
+    id: spec
+    attributes:
+      label: "📋 Specification (fill after phase 2)"
+      description: Props, variants, states, interactions, a11y requirements. This is what the AI agent will use to implement.
+      placeholder: |
+        ### Props
+        - `variant`: 'default' | 'outlined' | 'ghost'
+        - `size`: 'sm' | 'md' | 'lg'
+        - `disabled`: boolean
+
+        ### States
+        - default, hover, focus, disabled, loading
+
+        ### Accessibility
+        - aria-label required when no visible label
+        - keyboard navigable (Tab, Enter, Escape)
+
+        ### Notes
+        - Uses Radix UI primitive under the hood
+        - CVA for variant management
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "📎 Additional notes"
+      placeholder: Any comments, decisions made, or special considerations. Tag @egdev6 for questions.
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: "🔗 Related resources"
+      placeholder: External links, Figma files, prior art, etc.

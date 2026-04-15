@@ -1,0 +1,78 @@
+name: "🎨 Design Tokens"
+description: Add, update or review design tokens (colors, spacing, typography, shadows, etc.)
+title: "[TOKENS] Short description"
+labels: ["tokens", "design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎨 Design Tokens Task
+        Use this for changes to CSS custom properties, Tailwind theme config, or color/typography systems.
+
+  - type: dropdown
+    id: token-type
+    attributes:
+      label: Token category
+      options:
+        - Colors
+        - Typography (fonts, sizes, weights, line-heights)
+        - Spacing / sizing
+        - Shadows / elevation
+        - Border radius
+        - Animation / transitions
+        - Multiple categories
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why do these tokens need to change or be added?
+      placeholder: |
+        Current red tokens fail WCAG AA contrast on light backgrounds.
+        We need accessible red variants that still align with brand identity.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-tokens
+    attributes:
+      label: Proposed tokens / values
+      description: List the new or updated token names and values (or describe the intent if values are TBD).
+      placeholder: |
+        --color-primary-accessible: #c0392b  (replaces --color-primary in text contexts)
+        --color-primary-subtle: #f5b7b1      (backgrounds, low-emphasis uses)
+
+  - type: checkboxes
+    id: backward-compat
+    attributes:
+      label: Backward compatibility
+      options:
+        - label: "Keep existing tokens and add new ones (no breaking change)"
+        - label: "Deprecate existing tokens (mark as deprecated in Storybook)"
+        - label: "Remove existing tokens (breaking — requires component migration)"
+
+  - type: checkboxes
+    id: phases
+    attributes:
+      label: "✅ Implementation phases"
+      options:
+        - label: "1. **Research** — audit current token usage, contrast ratios, brand constraints."
+        - label: "2. **Specification** — define new token names, values and rationale. Document in this issue."
+        - label: "3. **Implementation** — update `theme.css` / Tailwind config."
+        - label: "4. **Storybook** — update color/token pages, mark deprecated tokens."
+        - label: "5. **Code review** — visual + accessibility review."
+        - label: "6. **Merge to main** — egdev6 merges the PR."
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "📎 Additional notes"
+      placeholder: Figma references, contrast tool links, accessibility requirements. Tag @egdev6 for questions.
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: "🔗 Related resources"
+      placeholder: Figma, Coolors, accessibility checker, related issues.

@@ -1,0 +1,64 @@
+name: "🐛 Bug Fix"
+description: Report and fix a bug in an existing component or utility
+title: "[FIX] Short description of the bug"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Bug Fix Task
+        Describe the bug clearly so the fix can be implemented without ambiguity.
+
+  - type: input
+    id: affected-component
+    attributes:
+      label: Affected component / file
+      placeholder: e.g. Button, Switch, src/components/atoms/switch/Switch.tsx
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: What is happening? What should be happening instead?
+      placeholder: |
+        **Current behavior:** ...
+        **Expected behavior:** ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Render `<Switch label="test" />`
+        2. Inspect the DOM
+        3. Notice `aria-label` is missing on the `<input>` element
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / root cause (if known)
+      placeholder: Optional — share any investigation or hypothesis about why this happens.
+
+  - type: checkboxes
+    id: phases
+    attributes:
+      label: "✅ Fix phases"
+      options:
+        - label: "1. **Reproduce** — confirm the bug locally with a test case."
+        - label: "2. **Root cause** — identify why it happens. Document in this issue."
+        - label: "3. **Fix** — implement the correction following project conventions."
+        - label: "4. **Test** — add or update tests that cover this case."
+        - label: "5. **Code review** — functional + visual review."
+        - label: "6. **Merge to main** — egdev6 merges the PR."
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "📎 Additional notes"
+      placeholder: Any edge cases, related issues, or decisions. Tag @egdev6 for questions.

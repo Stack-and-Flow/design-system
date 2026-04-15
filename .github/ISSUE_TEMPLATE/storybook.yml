@@ -1,0 +1,61 @@
+name: "📖 Storybook"
+description: Add or improve stories, MDX documentation, or Storybook configuration
+title: "[STORYBOOK] ComponentName — short description"
+labels: ["documentation", "storybook"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📖 Storybook Task
+        Use this for stories, MDX docs, argTypes, controls, or Storybook config improvements.
+
+  - type: input
+    id: component
+    attributes:
+      label: Component / section
+      placeholder: e.g. Button, Typography, Design Tokens — Colors
+    validations:
+      required: true
+
+  - type: dropdown
+    id: task-type
+    attributes:
+      label: Type of Storybook work
+      options:
+        - Add missing stories
+        - Improve existing stories (controls, args, decorators)
+        - Write MDX documentation
+        - Add usage guidelines / design notes
+        - Fix broken stories
+        - Storybook configuration
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What needs to be done
+      description: Be specific — which stories are missing, what controls are broken, what docs are incomplete.
+      placeholder: |
+        The Button component is missing stories for the `ghost` and `link` variants.
+        The `size` control is not connected to argTypes, so it doesn't appear in the Controls panel.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: phases
+    attributes:
+      label: "✅ Implementation phases"
+      options:
+        - label: "1. **Research** — review current stories and identify gaps or issues."
+        - label: "2. **Specification** — list all stories / docs to add or fix."
+        - label: "3. **Implementation** — write stories and/or MDX following project conventions."
+        - label: "4. **Visual review** — verify stories render correctly in Storybook locally."
+        - label: "5. **Code review** — review by egdev6 or another contributor."
+        - label: "6. **Merge to main** — egdev6 merges the PR."
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "📎 Additional notes"
+      placeholder: Any context, Figma references, or design guidelines. Tag @egdev6 for questions.
