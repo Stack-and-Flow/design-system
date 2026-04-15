@@ -84,8 +84,9 @@ We strictly follow **Conventional Commits**:
 
 ### Pull Request Process
 1. Push your branch and open a PR against `main`.
-2. The PR MUST pass all CI checks (Biome formatting/linting, TypeScript strict checks).
-3. The PR MUST be reviewed by at least one core maintainer before merging.
+2. You can call automatic review to copilot since it is prepared to human review.
+3. The PR MUST pass all CI checks (Biome formatting/linting, TypeScript strict checks).
+4. The PR MUST be reviewed by at least one core maintainer before merging.
 
 ### PR Checklist
 Before requesting a review, verify:
@@ -175,3 +176,4 @@ Before requesting a review on an AI-assisted PR:
 - **GitHub Projects (Kanban)**: [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1)
 - **Guidelines**: [GUIDELINES.en.md](./GUIDELINES.en.md)
 - **Quick Start**: [docs/QUICK_START.en.md](./docs/QUICK_START.en.md)
+- **Governance**: [GOVERNANCE.en.md](./GOVERNANCE.en.md)

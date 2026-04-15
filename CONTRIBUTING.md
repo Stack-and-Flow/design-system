@@ -84,8 +84,9 @@ Seguimos estrictamente **Conventional Commits**:
 
 ### Proceso de Pull Request
 1. Sube tu rama y abre un PR contra `main`.
-2. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
-3. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
+2. Puedes pedir revisión automática a copilot hasta que esté listo para revisión humana.
+3. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
+4. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
 
 ### Checklist del PR
 Antes de pedir revisión, verifica:
@@ -175,3 +176,4 @@ Antes de pedir revisión en un PR asistido por IA:
 - **GitHub Projects (Kanban)**: [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1)
 - **Guidelines**: [GUIDELINES.md](./GUIDELINES.md)
 - **Quick Start**: [docs/QUICK_START.md](./docs/QUICK_START.md)
+- **Gobernanza**: [GOVERNANCE.md](./GOVERNANCE.md)

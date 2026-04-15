@@ -148,6 +148,7 @@ npx storybook-watch
 
 ## 📚 Recursos de Aprendizaje
 
+- **HeroUI**: [UI library reference](https://heroui.com/docs/react/components)
 - **📖 Wiki Deepwiki**: [deepwiki.com/Stack-and-Flow/design-system](https://deepwiki.com/Stack-and-Flow/design-system)
 - **🎨 Referencias UI**: [UI Libraries repo](https://github.com/Stack-and-Flow/ui-libraries)
 - **📋 Kanban Board**: [GitHub Projects](https://github.com/orgs/Stack-and-Flow/projects/1)
