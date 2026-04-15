@@ -72,7 +72,7 @@ src/components/atoms/tu-componente/
 └── TuComponente.stories.tsx  # Documentación de Storybook
 ```
 
-Lee [GUIDELINES.md](../GUIDELINES.md) para las reglas completas de arquitectura antes de escribir cualquier código.
+Lee [GUIDELINES.md](./GUIDELINES.md) para las reglas completas de arquitectura antes de escribir cualquier código.
 
 ## 6. Ejecutar tests
 
@@ -125,7 +125,7 @@ Este proyecto soporta [opencode](https://opencode.ai/) con contexto preconfigura
 opencode
 ```
 
-El agente carga automáticamente las reglas del proyecto desde `.atl/AGENTS.md` — no necesitas configuración manual. Lee [CONTRIBUTING.md](../CONTRIBUTING.md#trabajar-con-agentes-ia) para el flujo completo de trabajo con IA.
+El agente carga automáticamente las reglas del proyecto desde `.atl/AGENTS.md` — no necesitas configuración manual. Lee [CONTRIBUTING.md](./CONTRIBUTING.md#trabajar-con-agentes-ia) para el flujo completo de trabajo con IA.
 
 ---
 

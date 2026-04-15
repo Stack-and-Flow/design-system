@@ -108,7 +108,7 @@ Este es un **proyecto educativo y abierto a colaboración**. Nos encantaría que
 
 🚀 **¿Primera vez?** Sigue la [Quick Start Guide](./docs/QUICK_START.md) y haz tu primera contribución en menos de 10 minutos.
 
-📚 **Documentación completa**: Lee [CONTRIBUTING.md](./CONTRIBUTING.md) y [GUIDELINES.md](./GUIDELINES.md) antes de empezar.
+📚 **Documentación completa**: Lee [CONTRIBUTING.md](./docs/CONTRIBUTING.md) y [GUIDELINES.md](./docs/GUIDELINES.md) antes de empezar.
 
 ### Reglas de Oro
 

@@ -14,8 +14,8 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 | Package | `@stack-and-flow/design-system` |
 | Repo | https://github.com/Stack-and-Flow/design-system |
 | Storybook | https://sf-design-system.netlify.app/ |
-| Guidelines | [`GUIDELINES.md`](../GUIDELINES.md) |
-| Contributing | [`CONTRIBUTING.md`](../CONTRIBUTING.md) |
+| Guidelines | [`docs/GUIDELINES.md`](../docs/GUIDELINES.md) |
+| Contributing | [`docs/CONTRIBUTING.md`](../docs/CONTRIBUTING.md) |
 
 **Stack**: React 19 · TypeScript strict · Tailwind v4 `@theme` · Radix UI · CVA · Storybook 8 · Biome · Lefthook · Vite · pnpm
 

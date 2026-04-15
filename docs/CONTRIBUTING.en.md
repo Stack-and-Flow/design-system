@@ -175,5 +175,5 @@ Before requesting a review on an AI-assisted PR:
 - **Storybook Demo**: [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)
 - **GitHub Projects (Kanban)**: [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1)
 - **Guidelines**: [GUIDELINES.en.md](./GUIDELINES.en.md)
-- **Quick Start**: [docs/QUICK_START.en.md](./docs/QUICK_START.en.md)
+- **Quick Start**: [QUICK_START.en.md](./QUICK_START.en.md)
 - **Governance**: [GOVERNANCE.en.md](./GOVERNANCE.en.md)

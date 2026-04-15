@@ -108,7 +108,7 @@ This is an **educational and open collaboration project**. We'd love for you to 
 4. **Document** in Storybook with controls and examples
 5. **Open a PR** following [Conventional Commits](https://www.conventionalcommits.org/)
 
-📚 **Complete documentation**: Read [CONTRIBUTING.en.md](./CONTRIBUTING.en.md) and [GUIDELINES.en.md](./GUIDELINES.en.md) before starting.
+📚 **Complete documentation**: Read [CONTRIBUTING.en.md](./docs/CONTRIBUTING.en.md) and [GUIDELINES.en.md](./docs/GUIDELINES.en.md) before starting.
 
 ### Golden Rules
 

@@ -175,5 +175,5 @@ Antes de pedir revisión en un PR asistido por IA:
 - **Demo de Storybook**: [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)
 - **GitHub Projects (Kanban)**: [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1)
 - **Guidelines**: [GUIDELINES.md](./GUIDELINES.md)
-- **Quick Start**: [docs/QUICK_START.md](./docs/QUICK_START.md)
+- **Quick Start**: [QUICK_START.md](./QUICK_START.md)
 - **Gobernanza**: [GOVERNANCE.md](./GOVERNANCE.md)
