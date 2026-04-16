@@ -3,22 +3,24 @@ import { cva } from 'class-variance-authority';
 
 export const linkVariants = cva(
   [
-    'link w-auto relative overflow-hidden cursor-pointer',
-    'transition-all duration-200 ease-in-out',
+    'link w-auto relative cursor-pointer',
     'flex gap-1 items-center justify-start',
     'font-[var(--font-weight-medium)] whitespace-nowrap line-clamp-1 leading-[1.2]',
-    'focus-visible:outline-2 focus-visible:outline-offset-2',
-    'focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)]'
+    'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
   ],
   {
     variants: {
       variant: {
         regular: [
-          'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
-          'hover:text-[var(--color-brand-light)] dark:hover:text-[var(--color-brand-dark)]',
-          'underline-offset-2 underline'
+          'font-[var(--font-weight-bold)] transition-[color,border-color] duration-200 ease-[ease]',
+          'text-[#ff4d6d] dark:text-[#ff4d6d]',
+          'hover:text-[#ff8099] dark:hover:text-[#ff8099]',
+          'border-b border-[rgba(255,77,109,0.4)] hover:border-[rgba(255,128,153,0.7)]',
+          'no-underline'
         ],
         button: [
+          'min-h-[44px]',
+          'transition-[box-shadow,background,border-color] duration-[250ms] ease-[ease]',
           'px-4 py-2',
           'rounded-[var(--radius-md)]',
           'border',
@@ -30,6 +32,8 @@ export const linkVariants = cva(
           'hover:shadow-[var(--glow-btn-primary-hover)]'
         ],
         outlined: [
+          'min-h-[44px]',
+          'transition-[box-shadow,background,border-color] duration-[250ms] ease-[ease]',
           'px-4 py-2',
           'rounded-[var(--radius-md)]',
           'border',

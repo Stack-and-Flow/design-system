@@ -3,13 +3,14 @@ import { type VariantProps, cva } from 'class-variance-authority';
 
 export const buttonVariants = cva(
   [
-    'button relative overflow-hidden border cursor-pointer max-w-full',
-    'transition-all duration-200 ease-in-out',
+    'button relative border cursor-pointer max-w-full',
+    'active:scale-[0.98]',
     'flex items-center justify-center',
-    'font-[var(--font-weight-semibold)] whitespace-nowrap line-clamp-1 leading-[1.2]',
-    'disabled:pointer-events-none disabled:opacity-60',
-    'focus-visible:outline-offset-2 focus-visible:outline-2',
-    'focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)]'
+    'font-[var(--font-weight-semibold)] whitespace-nowrap line-clamp-1 leading-[1.6] tracking-[0.01em]',
+    'disabled:pointer-events-none disabled:opacity-40',
+    'focus-visible:outline-none',
+    'focus-visible:shadow-[var(--glow-focus-dark)]',
+    'dark:focus-visible:shadow-[var(--glow-focus-dark)]'
   ],
   {
     variants: {
@@ -20,14 +21,17 @@ export const buttonVariants = cva(
           'bg-[image:var(--gradient-btn-primary)]',
           'border-transparent',
           'shadow-[var(--glow-btn-primary)]',
+          'transition-[box-shadow,background] duration-[250ms] ease-[ease]',
           'hover:bg-[image:var(--gradient-btn-primary-hover)]',
-          'hover:shadow-[var(--glow-btn-primary-hover)]'
+          'hover:shadow-[var(--glow-btn-primary-hover)]',
+          'active:shadow-[var(--glow-btn-primary)]'
         ],
         ghost: [
           // Transparente con hover en superficie sutil
           'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
           'bg-transparent dark:bg-transparent',
           'border-transparent',
+          'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
           'hover:bg-[var(--color-white-tint-faint)]',
           'hover:border-transparent',
           'dark:hover:bg-[var(--color-white-tint-faint)]'
@@ -37,24 +41,32 @@ export const buttonVariants = cva(
           'text-[var(--color-brand-light)] dark:text-[var(--color-brand-dark)]',
           'border-transparent',
           'bg-transparent',
+          'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
           'hover:text-[var(--color-brand-light-dark)]',
           'dark:hover:text-[var(--color-brand-dark-light)]',
           'hover:bg-[var(--color-red-tint-subtle)]'
         ],
         secondary: [
-          // Superficie neutra con tint rojo sutil en hover
+          // Fondo con tint rojo sutil + borde degradado via ::before pseudo-element
           'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
-          'bg-[var(--color-surface-light)] dark:bg-[var(--color-surface-dark)]',
-          'border-[var(--color-border-light)] dark:border-[var(--color-border-dark)]',
-          'hover:bg-[var(--color-red-tint-subtle)] dark:hover:bg-[var(--color-red-tint-subtle)]',
-          'hover:border-[var(--color-border-strong-light)] dark:hover:border-[var(--color-border-strong-dark)]',
-          'hover:shadow-[var(--glow-btn-secondary)] dark:hover:shadow-[var(--glow-btn-secondary)]'
+          'bg-[var(--color-red-tint-subtle)]',
+          'border border-transparent',
+          'overflow-visible isolate',
+          'before:absolute before:inset-[-1.5px] before:rounded-[inherit] before:z-[-1]',
+          'before:bg-[linear-gradient(135deg,rgba(255,255,255,0.18)_0%,rgba(255,0,54,0.55)_40%,rgba(255,0,54,0.15)_100%)]',
+          'transition-[box-shadow,background] duration-[250ms] ease-[ease]',
+          // Always-on base glow — identity of secondary button
+          'shadow-[var(--glow-btn-secondary)]',
+          'hover:bg-[var(--color-red-tint-low)]',
+          'hover:shadow-[var(--glow-btn-secondary-hover)] dark:hover:shadow-[var(--glow-btn-secondary-hover)]',
+          'active:bg-[rgba(255,0,54,0.16)]'
         ],
         outlined: [
           // Borde de marca, relleno transparente, hover va a rojo
           'text-[var(--color-brand-light)] dark:text-[var(--color-brand-dark)]',
           'border-[var(--color-brand-light)] dark:border-[var(--color-brand-dark)]',
           'bg-transparent',
+          'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
           'hover:text-white dark:hover:text-white',
           'hover:bg-[image:var(--gradient-btn-primary)]',
           'hover:border-transparent',
@@ -74,15 +86,17 @@ export const buttonVariants = cva(
         false: ''
       },
       size: {
-        md: 'px-md h-10 fs-base tablet:fs-base-tablet',
+        // 44px minimum touch target per WCAG (Rule 10)
+        md: 'px-md h-11 fs-base tablet:fs-base-tablet',
         lg: 'px-lg h-12 fs-h6 tablet:fs-h6-tablet',
-        sm: 'px-sm h-8 fs-small tablet:fs-small-tablet'
+        // sm is intentionally compact — slightly below 44px minimum; use md for touch-critical UIs
+        sm: 'px-sm h-9 fs-small tablet:fs-small-tablet'
       }
     },
     defaultVariants: {
       variant: 'primary',
       size: 'md',
-      rounded: false,
+      rounded: true,
       shadow: true
     }
   }

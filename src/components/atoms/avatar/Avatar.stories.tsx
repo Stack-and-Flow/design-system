@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import Avatar from './Avatar';
 
@@ -58,12 +59,12 @@ export const WithoutImage: Story = {
 export const WithImage: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='sm' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='md' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='lg' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='xl' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='2xl' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='3xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='sm' />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='md' />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='lg' />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='2xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='3xl' />
     </div>
   )
 };
@@ -81,6 +82,23 @@ export const Rounded: Story = {
       <Avatar src='' alt='EG' size='md' rounded='md' />
       <Avatar src='' alt='EG' size='md' rounded='full' />
       <Avatar src='' alt='EG' size='md' rounded='none' />
+    </div>
+  )
+};
+
+/**
+ * - When the avatar is clickable (e.g. profile link, account dropdown trigger), pass `onClick`.
+ * - Hover/active scale effect and `cursor-pointer` are enabled automatically.
+ */
+export const Interactive: Story = {
+  render: () => (
+    <div className='flex gap-4 items-center'>
+      <Avatar src='' alt='EG' size='sm' onClick={action('clicked')} />
+      <Avatar src='' alt='EG' size='md' onClick={action('clicked')} />
+      <Avatar src='' alt='EG' size='lg' onClick={action('clicked')} />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='xl' onClick={action('clicked')} />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='2xl' onClick={action('clicked')} />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='3xl' onClick={action('clicked')} />
     </div>
   )
 };

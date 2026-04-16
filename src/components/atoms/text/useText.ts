@@ -18,7 +18,7 @@ export const useText = ({
   const sanitizedHtml = isHtml ? sanitizeHtml(children as string) : undefined;
 
   const props = {
-    className: cn(textVariants({ tag, prominent, srOnly }), className),
+    className: cn(textVariants({ font, tag, prominent, srOnly }), className),
     'aria-live': ariaLive || undefined,
     role: role || undefined,
     id: id || undefined,

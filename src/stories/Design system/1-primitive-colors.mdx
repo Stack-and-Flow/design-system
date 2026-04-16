@@ -1,293 +1,168 @@
-import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { Meta } from '@storybook/blocks';
 
 <Meta title="Design System/Primitive Colors" />
 
-<h1 style={{ color: '#d61e2b' }}>Primitive Colors</h1>
-<p>
-  All colors used at <strong>Egdev Design system</strong> digital products are listed below.
-  This is the initial palette used to create our Semantic colors.
-  <strong>Primitive collection is not usable inside the design files.</strong>
+export const Swatch = ({ name, value, border }) => (
+  <div style={{ flex: '1', minWidth: '80px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ height: '60px', borderRadius: '8px', background: value, border: border || 'none' }}></div>
+    <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+    <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>{value}</div>
+  </div>
+);
+
+export const SwatchRow = ({ children }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+    {children}
+  </div>
+);
+
+export const H2 = ({ children }) => (
+  <h2 style={{ color: '#ff0036', fontSize: '1.125rem', fontWeight: 700, paddingBottom: '12px', marginTop: '2rem', marginBottom: '1rem', borderBottom: '1px solid #172230' }}>
+    {children}
+  </h2>
+);
+
+# Primitive Colors
+
+<p style={{ color: '#cccccc', marginBottom: '2rem' }}>
+  Raw color values defined in <code>src/styles/theme.css</code> under <code>@theme</code>. These are the foundation of the Stack-and-Flow token system. <strong>Use semantic aliases in components — not these directly.</strong>
 </p>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Primary Scale</h2>
-<div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '1.5rem',
-  marginBottom: '3rem'
-}}>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#830213' }}></div>
-    <div style={{ color: 'white' }}><strong>primary</strong></div>
-    <div style={{ color: '#636579' }}>#830213</div>
-  </div>
- <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#b41520' }}></div>
-    <div style={{ color: 'white' }}><strong>secondary</strong></div>
-    <div style={{ color: '#636579' }}>#b41520</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#d61e2b' }}></div>
-    <div style={{ color: 'white' }}><strong>accent</strong></div>
-    <div style={{ color: '#636579' }}>#d61e2b</div>
-  </div>
+<H2>Brand — Crimson Red (Light mode)</H2>
+<SwatchRow>
+  <Swatch name="brand-light" value="#db143c" />
+  <Swatch name="brand-light-dark" value="#c41136" />
+  <Swatch name="brand-light-darker" value="#b60f32" />
+  <Swatch name="brand-light-darkest" value="#8c0b26" />
+  <Swatch name="brand-light-light" value="#e63358" />
+  <Swatch name="brand-light-lighter" value="#ea4566" />
+  <Swatch name="brand-light-lightest" value="#f07a92" />
+</SwatchRow>
+
+<H2>Brand — Crimson Red (Dark mode)</H2>
+<SwatchRow>
+  <Swatch name="brand-dark" value="#ff0036" />
+  <Swatch name="brand-dark-dark" value="#e60030" />
+  <Swatch name="brand-dark-darker" value="#cc002b" />
+  <Swatch name="brand-dark-darkest" value="#990020" />
+  <Swatch name="brand-dark-light" value="#ff335e" />
+  <Swatch name="brand-dark-lighter" value="#ff4d72" />
+  <Swatch name="brand-dark-lightest" value="#ff809b" />
+</SwatchRow>
+
+<H2>Red Utility Scale</H2>
+<SwatchRow>
+  <Swatch name="red-100" value="#fce9ea" />
+  <Swatch name="red-200" value="#f6bcc0" />
+  <Swatch name="red-300" value="#ef8f96" />
+  <Swatch name="red-400" value="#ff4d72" />
+  <Swatch name="red-500" value="#ff0036" />
+  <Swatch name="red-600" value="#db143c" />
+  <Swatch name="red-700" value="#b41520" />
+  <Swatch name="red-800" value="#8c0b26" />
+  <Swatch name="red-900" value="#4d0012" />
+</SwatchRow>
+
+
+<H2>Neutral Scale — Dark text</H2>
+
+<p style={{ color: '#888888', fontSize: '13px', marginBottom: '1rem' }}>
+  Stack-and-Flow does not use a generic <code>gray-*</code> scale. Neutrals are named by their semantic role. Use these tokens — not raw hex values — in components.
+</p>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'text-dark',          value: '#ffffff', role: 'Primary — 21:1 ✅',        border: '1px solid #172230' },
+    { name: 'text-secondary-dark',value: '#cccccc', role: 'Secondary body — ~7.5:1 ✅' },
+    { name: 'text-muted-dark',    value: '#adadad', role: 'Sidebar links — ~6.1:1 ✅'  },
+    { name: 'text-tertiary-dark', value: '#888888', role: 'Labels, nav — ~5.1:1 ✅'    },
+    { name: 'text-disabled-dark', value: '#6a6b6c', role: 'Disabled — WCAG exempt'     },
+  ].map(({ name, value, role, border }) => (
+    <div key={name} style={{ flex: '1', minWidth: '120px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: border || 'none' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{role}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Red Scale</h2>
-<div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '1.5rem',
-  marginBottom: '3rem'
-}}>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#fce9ea' }}></div>
-    <div style={{ color: 'white' }}><strong>red-100</strong></div>
-    <div style={{ color: '#636579' }}>#fce9ea</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#f6bcc0' }}></div>
-    <div style={{ color: 'white' }}><strong>red-200</strong></div>
-    <div style={{ color: '#636579' }}>#f6bcc0</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#ef8f96' }}></div>
-    <div style={{ color: 'white' }}><strong>red-300</strong></div>
-    <div style={{ color: '#636579' }}>#ef8f96</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#e64c57' }}></div>
-    <div style={{ color: 'white' }}><strong>red-400</strong></div>
-    <div style={{ color: '#636579' }}>#e64c57</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#d61e2b' }}></div>
-    <div style={{ color: 'white' }}><strong>red-500</strong></div>
-    <div style={{ color: '#636579' }}>#d61e2b</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#9d161f' }}></div>
-    <div style={{ color: 'white' }}><strong>red-600</strong></div>
-    <div style={{ color: '#636579' }}>#9d161f</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#701016' }}></div>
-    <div style={{ color: 'white' }}><strong>red-700</strong></div>
-    <div style={{ color: '#636579' }}>#701016</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#510b10' }}></div>
-    <div style={{ color: 'white' }}><strong>red-800</strong></div>
-    <div style={{ color: '#636579' }}>#510b10</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#2d0609' }}></div>
-    <div style={{ color: 'white' }}><strong>red-900</strong></div>
-    <div style={{ color: '#636579' }}>#2d0609</div>
-  </div>
+<H2>Neutral Scale — Light text</H2>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'text-light',          value: '#0a0a0a', role: 'Primary — max contrast'    },
+    { name: 'text-secondary-light',value: '#3b3f4e', role: 'Secondary body'             },
+    { name: 'text-tertiary-light', value: '#6b6e78', role: 'Tertiary / captions'        },
+    { name: 'text-muted-light',    value: '#878a94', role: 'Muted / placeholders'       },
+    { name: 'text-disabled-light', value: '#bfc2ca', role: 'Disabled — WCAG exempt'     },
+  ].map(({ name, value, role }) => (
+    <div key={name} style={{ flex: '1', minWidth: '120px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #e5e7eb' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{role}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Dark Gray Scale</h2>
-<div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '1.5rem',
-  marginBottom: '3rem'
-}}>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#0e0e10', border: '1px solid #24252f'}}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-900</strong></div>
-    <div style={{ color: '#636579' }}>#0e0e10</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#15161b' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-800</strong></div>
-    <div style={{ color: '#636579' }}>#15161b</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#24252f' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-700</strong></div>
-    <div style={{ color: '#636579' }}>#24252f</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#3b3f4e' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-600</strong></div>
-    <div style={{ color: '#636579' }}>#3b3f4e</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#595f70' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-500</strong></div>
-    <div style={{ color: '#636579' }}>#595f70</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#7c818f' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-400</strong></div>
-    <div style={{ color: '#636579' }}>#7c818f</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#9fa3ad' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-300</strong></div>
-    <div style={{ color: '#636579' }}>#9fa3ad</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#c2c5cc' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-200</strong></div>
-    <div style={{ color: '#636579' }}>#c2c5cc</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#e5e7eb' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-dark-100</strong></div>
-    <div style={{ color: '#636579' }}>#e5e7eb</div>
-  </div>
+<H2>Neutral Scale — Surfaces (Dark)</H2>
+
+<p style={{ color: '#888888', fontSize: '13px', marginBottom: '1rem' }}>
+  Surface tokens replace a <code>gray-dark-*</code> scale. Each step has a specific purpose — they are not interchangeable.
+</p>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'background-dark',     value: '#060C13', role: 'Canvas base — page bg'               },
+    { name: 'surface-dark',        value: '#0B131E', role: 'Cards, code blocks, dropdowns'        },
+    { name: 'surface-raised-dark', value: '#0F1824', role: 'Table headers, subtle emphasis'       },
+    { name: 'border-dark',         value: '#172230', role: 'Standard borders & separators'        },
+    { name: 'border-strong-dark',  value: '#202C3C', role: 'Interactive borders (inputs, focus)'  },
+  ].map(({ name, value, role }) => (
+    <div key={name} style={{ flex: '1', minWidth: '120px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #202C3C' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{role}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Light Gray Scale</h2>
-<div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '1.5rem',
-  marginBottom: '3rem'
-}}>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#4f525c' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-900</strong></div>
-    <div style={{ color: '#636579' }}>#4f525c</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#6b6e78' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-800</strong></div>
-    <div style={{ color: '#636579' }}>#6b6e78</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#878a94' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-700</strong></div>
-    <div style={{ color: '#636579' }}>#878a94</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#a3a6af' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-600</strong></div>
-    <div style={{ color: '#636579' }}>#a3a6af</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#bfc2ca' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-500</strong></div>
-    <div style={{ color: '#636579' }}>#bfc2ca</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#d4d6dc' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-400</strong></div>
-    <div style={{ color: '#636579' }}>#d4d6dc</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#e5e7eb' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-300</strong></div>
-    <div style={{ color: '#636579' }}>#e5e7eb</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#f1f3f5' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-200</strong></div>
-    <div style={{ color: '#636579' }}>#f1f3f5</div>
-  </div>
-    <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#f9fafa' }}></div>
-    <div style={{ color: 'white' }}><strong>gray-light-100</strong></div>
-    <div style={{ color: '#636579' }}>#f9fafa</div>
-  </div>
+<H2>Neutral Scale — Surfaces (Light)</H2>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'background-light',     value: '#ffffff',  role: 'Canvas base — page bg'              },
+    { name: 'surface-light',        value: '#f4f5f7',  role: 'Cards and elevated containers'      },
+    { name: 'surface-raised-light', value: '#eaecf0',  role: 'Higher elevation surfaces'          },
+    { name: 'border-light',         value: 'rgba(0,0,0,0.10)', role: 'Standard border'            },
+    { name: 'border-strong-light',  value: 'rgba(0,0,0,0.18)', role: 'Interactive border'         },
+  ].map(({ name, value, role }) => (
+    <div key={name} style={{ flex: '1', minWidth: '120px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #e5e7eb' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{role}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Mode Colors</h2>
-<div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '1.5rem',
-  marginBottom: '3rem'
-}}>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#0e0e10', border: '1px solid #24252f' }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>background-dark</strong>
-    </div>
-    <div style={{ color: '#636579' }}>#0e0e10</div>
+<H2>Gradients</H2>
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>
+  <div style={{ minWidth: '240px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ height: '60px', borderRadius: '8px', background: 'linear-gradient(135deg, #ff1a4b 0%, #cc0030 100%)' }}></div>
+    <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>gradient-btn-primary</div>
+    <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>linear-gradient(135deg, #ff1a4b → #cc0030)</div>
   </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#ffffff', border: '1px solid #ddd' }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>text-dark</strong>
-    </div>
-    <div style={{ color: '#636579' }}>#ffffff</div>
+  <div style={{ minWidth: '240px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ height: '60px', borderRadius: '8px', background: 'linear-gradient(130deg, #060C13 0%, #0a0a0a 50%, #060C13 100%)' }}></div>
+    <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>gradient-background-dark</div>
+    <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>130deg · #060C13 → #0a0a0a → #060C13</div>
   </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#9fa3ad' }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>secondary-dark</strong>
-    </div>
-    <div style={{ color: '#636579' }}>#9fa3ad</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#f4f5f7' }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>background-light</strong>
-    </div>
-    <div style={{ color: '#636579' }}>#f4f5f7</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#18191e' }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>text-light</strong>
-    </div>
-    <div style={{ color: '#636579' }}>#18191e</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#7c818f' }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>secondary-light</strong>
-    </div>
-    <div style={{ color: '#636579' }}>#7c818f</div>
-  </div>
-</div>
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Gradients</h2>
-<div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '1.5rem',
-  marginBottom: '3rem'
-}}>
-  <div style={{
-    width: '240px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px'
-  }}>
-    <div style={{
-      height: '60px',
-      borderRadius: '8px',
-      background: 'linear-gradient(130deg,rgba(14, 14, 16, 1) 0%, rgba(21, 22, 27, 1) 50%, rgba(14, 14, 16, 1) 100%)'
-    }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>gradient-background-dark</strong>
-    </div>
-    <div style={{ color: '#636579', fontSize: '12px' }}>
-      linear-gradient(130deg,rgba(14, 14, 16, 1) 0%, rgba(21, 22, 27, 1) 50%, rgba(14, 14, 16, 1) 100%)
-    </div>
-  </div>
-
-  <div style={{
-    width: '240px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px'
-  }}>
-    <div style={{
-      height: '60px',
-      borderRadius: '8px',
-      background: 'linear-gradient(130deg,rgba(212, 214, 220, 1) 0%, rgba(229, 231, 235, 1) 50%, rgba(212, 214, 220, 1) 100%)',
-      border: '1px solid #ccc'
-    }}></div>
-    <div style={{ color: 'white' }}>
-      <strong>gradient-background-light</strong>
-    </div>
-    <div style={{ color: '#636579', fontSize: '12px' }}>
-      linear-gradient(130deg,rgba(212, 214, 220, 1) 0%, rgba(229, 231, 235, 1) 50%, rgba(212, 214, 220, 1) 100%);
-    </div>
+  <div style={{ minWidth: '240px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ height: '60px', borderRadius: '8px', background: 'linear-gradient(130deg, #f4f5f7 0%, #ffffff 50%, #f4f5f7 100%)', border: '1px solid #e5e7eb' }}></div>
+    <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>gradient-background-light</div>
+    <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>130deg · #f4f5f7 → #ffffff → #f4f5f7</div>
   </div>
 </div>

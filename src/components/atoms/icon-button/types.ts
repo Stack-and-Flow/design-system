@@ -3,13 +3,14 @@ import { type VariantProps, cva } from 'class-variance-authority';
 
 export const iconButtonVariants = cva(
   [
-    'link relative overflow-hidden border cursor-pointer px-1 py-1 max-w-full',
-    'transition-all duration-200 ease-in-out',
+    'link relative border cursor-pointer px-1 py-1 max-w-full',
+    'active:scale-[0.98]',
+    'transition-[box-shadow,background,border-color] duration-200 ease-[ease]',
     'flex items-center justify-start',
     'whitespace-nowrap line-clamp-1 ',
-    'focus-visible:outline-2 focus-visible:outline-offset-2',
-    'disabled:pointer-events-none disabled:opacity-60',
-    'focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)]'
+    'min-w-[44px] min-h-[44px]',
+    'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]',
+    'disabled:pointer-events-none disabled:opacity-40',
   ],
   {
     variants: {

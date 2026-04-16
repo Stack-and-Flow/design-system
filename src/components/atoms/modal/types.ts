@@ -2,19 +2,19 @@ import { type VariantProps, cva } from 'class-variance-authority';
 import type { JSX, ReactNode } from 'react';
 
 export const modalVariants = cva(
-  ['w-full z-50 p-6 shadow-md', 'bg-[var(--color-surface-light)] dark:bg-[var(--color-surface-dark)]', 'flex flex-col'],
+  ['w-full z-[var(--z-modal)] p-6 shadow-[var(--shadow-dropdown)]', 'bg-[var(--color-surface-light)] dark:bg-[var(--color-surface-dark)]', 'border border-[var(--color-border-light)] dark:border-[var(--color-border-dark)]', 'flex flex-col'],
   {
     variants: {
       size: {
-        xs: 'max-w-[20rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        sm: 'max-w-[24rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        md: 'max-w-full sm:max-w-[28rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        lg: 'max-w-full sm:max-w-[32rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        xl: 'max-w-full sm:max-w-[36rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        '2xl': 'max-w-full sm:max-w-[42rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        '3xl': 'max-w-full sm:max-w-[48rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        '4xl': 'max-w-full sm:max-w-[56rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        '5xl': 'max-w-full sm:max-w-[64rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
+        xs: 'max-w-[20rem] m-0 sm:m-1 rounded-[var(--radius-md)] max-h-[80dvh]',
+        sm: 'max-w-[24rem] m-0 sm:m-1 rounded-[var(--radius-md)] max-h-[80dvh]',
+        md: 'max-w-full sm:max-w-[28rem] m-0 sm:m-1 rounded-[var(--radius-md)] max-h-[80dvh]',
+        lg: 'max-w-full sm:max-w-[32rem] m-0 sm:m-1 rounded-[var(--radius-md)] max-h-[80dvh]',
+        xl: 'max-w-full sm:max-w-[36rem] m-0 sm:m-1 rounded-[var(--radius-md)] max-h-[80dvh]',
+        '2xl': 'max-w-full sm:max-w-[42rem] m-0 sm:m-1 rounded-[var(--radius-md)] max-h-[80dvh]',
+        '3xl': 'max-w-full sm:max-w-[48rem] m-0 sm:m-1 rounded-[var(--radius-md)] max-h-[80dvh]',
+        '4xl': 'max-w-full sm:max-w-[56rem] m-0 sm:m-1 rounded-[var(--radius-lg)] max-h-[80dvh]',
+        '5xl': 'max-w-full sm:max-w-[64rem] m-0 sm:m-1 rounded-[var(--radius-lg)] max-h-[80dvh]',
         full: 'max-w-full m-0 rounded-none h-dvh'
       },
       position: {

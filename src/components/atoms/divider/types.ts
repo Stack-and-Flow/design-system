@@ -1,4 +1,4 @@
-import type { BgThemeColors } from '@/components/utils/types';
+
 import { cva } from 'class-variance-authority';
 
 export const dividerVariants = cva('', {
@@ -49,7 +49,7 @@ export type DividerProps = {
    * @control select
    * @default bg-color-primary
    */
-  color?: BgThemeColors;
+  color?: string;
 
   /**
    * @control select

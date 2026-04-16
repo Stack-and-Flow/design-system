@@ -2,95 +2,139 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Design System/Typography" />
 
-<h1 style={{ color: '#d61e2b' }}>Typography Tokens</h1>
-<p>
-  This typography system is part of the <strong>Egdev Design system</strong> design language. These values define font families and responsive text scales for consistent UI styling.
+export const H2 = ({ children }) => (
+  <h2 style={{ color: '#ff0036', fontSize: '1.125rem', fontWeight: 700, paddingBottom: '12px', marginTop: '2rem', marginBottom: '1rem', borderBottom: '1px solid #172230' }}>
+    {children}
+  </h2>
+);
+
+# Typography Tokens
+
+<p style={{ color: '#cccccc', marginBottom: '2rem' }}>
+  Typography system for the <strong style={{ color: '#ffffff' }}>Stack-and-Flow Design System</strong>. Defined in <code>src/styles/theme.css</code>.
 </p>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Font Families</h2>
+<H2>Font Families</H2>
+
 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontFamily: "'WildWolf', sans-serif", fontSize: '1.5rem', color: '#FFFFFF' }}>WildWolf – Primary</div>
-    <div style={{ color: '#636579' }}>--font-primary</div>
+  <div style={{ background: '#0B131E', border: '1px solid #172230', borderRadius: '8px', padding: '1.25rem 1.5rem' }}>
+    <div style={{ fontFamily: "'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif", fontSize: '1.5rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
+      Space Grotesk Variable — Primary
+    </div>
+    <div style={{ color: '#888888', fontSize: '13px', fontFamily: 'monospace' }}>--font-primary · weights 400–700 · variable font</div>
+    <div style={{ color: '#888888', fontSize: '12px', marginTop: '4px' }}>Headings, body, buttons, labels, nav — used everywhere except code blocks</div>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontFamily: "'Univia', sans-serif", fontSize: '1.5rem', color: '#FFFFFF' }}>Univia – Secondary</div>
-    <div style={{ color: '#636579' }}>--font-secondary</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontFamily: "'UniviaBold', sans-serif", fontSize: '1.5rem', fontWeight: 'bold', color: '#FFFFFF' }}>UniviaBold – Secondary Bold</div>
-    <div style={{ color: '#636579' }}>--font-secondary-bold</div>
-  </div>
-</div>
-
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Font Sizes – Desktop</h2>
-<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '3rem', color: '#FFFFFF' }}>Heading 1 – 3rem</div>
-    <div style={{ color: '#636579' }}>--text-h1</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '2.5rem', color: '#FFFFFF' }}>Heading 2 – 2.5rem</div>
-    <div style={{ color: '#636579' }}>--text-h2</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '2rem', color: '#FFFFFF' }}>Heading 3 – 2rem</div>
-    <div style={{ color: '#636579' }}>--text-h3</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1.6rem', color: '#FFFFFF' }}>Heading 4 – 1.6rem</div>
-    <div style={{ color: '#636579' }}>--text-h4</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1.3rem', color: '#FFFFFF' }}>Heading 5 – 1.3rem</div>
-    <div style={{ color: '#636579' }}>--text-h5</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1.2rem', color: '#FFFFFF' }}>Heading 6 – 1.2rem</div>
-    <div style={{ color: '#636579' }}>--text-h6</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1rem', color: '#FFFFFF' }}>Base – 1rem</div>
-    <div style={{ color: '#636579' }}>--text-base</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '0.8rem', color: '#FFFFFF' }}>Small – 0.8rem</div>
-    <div style={{ color: '#636579' }}>--text-small</div>
+  <div style={{ background: '#0B131E', border: '1px solid #172230', borderRadius: '8px', padding: '1.25rem 1.5rem' }}>
+    <div style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, monospace', fontSize: '1.25rem', fontWeight: 500, color: '#ffffff', marginBottom: '4px' }}>
+      ui-monospace — Monospace
+    </div>
+    <div style={{ color: '#888888', fontSize: '13px', fontFamily: 'monospace' }}>--font-mono · system stack</div>
+    <div style={{ color: '#888888', fontSize: '12px', marginTop: '4px' }}>Code blocks, inline code, technical snippets</div>
   </div>
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Font Sizes – Mobile</h2>
-<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '2.4rem', color: '#FFFFFF' }}>Heading 1 – 2.4rem</div>
-    <div style={{ color: '#636579' }}>--text-h1-tablet</div>
+<H2>Font Weights</H2>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { weight: 400, label: 'Regular', use: 'Secondary text, captions, fine print' },
+    { weight: 500, label: 'Medium', use: 'Body baseline — the working weight' },
+    { weight: 600, label: 'Semibold', use: 'Buttons, badges, labels, bold captions' },
+    { weight: 700, label: 'Bold', use: 'Headings h1–h6 only — never body' },
+  ].map(({ weight, label, use }) => (
+    <div key={weight} style={{ flex: '1', minWidth: '180px', background: '#0B131E', border: '1px solid #172230', borderRadius: '8px', padding: '1rem 1.25rem' }}>
+      <div style={{ fontFamily: "'Space Grotesk Variable', system-ui, sans-serif", fontSize: '1.5rem', fontWeight: weight, color: '#ffffff', marginBottom: '4px' }}>
+        Ag — {weight}
+      </div>
+      <div style={{ color: '#ff335e', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>{label}</div>
+      <div style={{ color: '#888888', fontSize: '12px' }}>{use}</div>
+    </div>
+  ))}
+</div>
+
+<H2>Type Scale — Desktop</H2>
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '3rem' }}>
+  {[
+    { token: '--text-display', size: '3.5rem',   px: '56px', weight: 700, label: 'Display Hero' },
+    { token: '--text-h1',      size: '3rem',     px: '48px', weight: 700, label: 'Heading 1' },
+    { token: '--text-h2',      size: '2.5rem',   px: '40px', weight: 700, label: 'Heading 2' },
+    { token: '--text-h3',      size: '2rem',     px: '32px', weight: 700, label: 'Heading 3' },
+    { token: '--text-h4',      size: '1.5rem',   px: '24px', weight: 600, label: 'Heading 4' },
+    { token: '--text-h5',      size: '1.25rem',  px: '20px', weight: 600, label: 'Heading 5' },
+    { token: '--text-h6',      size: '1.125rem', px: '18px', weight: 600, label: 'Heading 6' },
+    { token: '--text-body-lg', size: '1.125rem', px: '18px', weight: 500, label: 'Body Large' },
+    { token: '--text-body',    size: '1rem',     px: '16px', weight: 500, label: 'Body' },
+    { token: '--text-body-sm', size: '0.9375rem',px: '15px', weight: 500, label: 'Body Small' },
+    { token: '--text-small',   size: '0.875rem', px: '14px', weight: 500, label: 'Small / Caption' },
+    { token: '--text-xs',      size: '0.75rem',  px: '12px', weight: 600, label: 'XS / Badge' },
+  ].map(({ token, size, px, weight, label }) => (
+    <div key={token} style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', padding: '0.5rem 0', borderBottom: '1px solid #172230' }}>
+      <div style={{ fontFamily: "'Space Grotesk Variable', system-ui, sans-serif", fontSize: size, fontWeight: weight, color: '#ffffff', minWidth: '280px', lineHeight: 1.2 }}>
+        {label}
+      </div>
+      <code style={{ color: '#888888', fontSize: '12px', flexShrink: 0 }}>{token}</code>
+      <span style={{ color: '#888888', fontSize: '12px' }}>{size} · {px} · w{weight}</span>
+    </div>
+  ))}
+</div>
+
+<H2>Type Scale — Tablet</H2>
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '3rem' }}>
+  {[
+    { token: '--text-h1-tablet', size: '2.4rem',    px: '38px', label: 'Heading 1' },
+    { token: '--text-h2-tablet', size: '2rem',      px: '32px', label: 'Heading 2' },
+    { token: '--text-h3-tablet', size: '1.75rem',   px: '28px', label: 'Heading 3' },
+    { token: '--text-h4-tablet', size: '1.375rem',  px: '22px', label: 'Heading 4' },
+    { token: '--text-h5-tablet', size: '1.125rem',  px: '18px', label: 'Heading 5' },
+    { token: '--text-h6-tablet', size: '1rem',      px: '16px', label: 'Heading 6' },
+    { token: '--text-body-tablet', size: '0.9375rem', px: '15px', label: 'Body' },
+    { token: '--text-small-tablet', size: '0.8125rem', px: '13px', label: 'Small' },
+  ].map(({ token, size, px, label }) => (
+    <div key={token} style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', padding: '0.5rem 0', borderBottom: '1px solid #172230' }}>
+      <div style={{ fontFamily: "'Space Grotesk Variable', system-ui, sans-serif", fontSize: size, fontWeight: 700, color: '#ffffff', minWidth: '200px', lineHeight: 1.2 }}>
+        {label}
+      </div>
+      <code style={{ color: '#888888', fontSize: '12px' }}>{token}</code>
+      <span style={{ color: '#888888', fontSize: '12px' }}>{size} · {px}</span>
+    </div>
+  ))}
+</div>
+
+<H2>Line Heights & Letter Spacing</H2>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
+  <div>
+    <div style={{ color: '#ff335e', fontSize: '13px', fontWeight: 600, marginBottom: '0.75rem' }}>Line Heights</div>
+    {[
+      { token: '--leading-tight',   value: '1.10', use: 'Display, large headings' },
+      { token: '--leading-snug',    value: '1.15', use: 'Section headings' },
+      { token: '--leading-normal',  value: '1.40', use: 'UI labels, nav' },
+      { token: '--leading-relaxed', value: '1.60', use: 'Body text, paragraphs' },
+    ].map(({ token, value, use }) => (
+      <div key={token} style={{ display: 'flex', gap: '1rem', padding: '4px 0', fontSize: '13px' }}>
+        <code style={{ color: '#cccccc', width: '180px' }}>{token}</code>
+        <span style={{ color: '#ff0036', width: '40px' }}>{value}</span>
+        <span style={{ color: '#888888' }}>{use}</span>
+      </div>
+    ))}
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '2rem', color: '#FFFFFF' }}>Heading 2 – 2rem</div>
-    <div style={{ color: '#636579' }}>--text-h2-tablet</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1.8rem', color: '#FFFFFF' }}>Heading 3 – 1.8rem</div>
-    <div style={{ color: '#636579' }}>--text-h3-tablet</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1.4rem', color: '#FFFFFF' }}>Heading 4 – 1.4rem</div>
-    <div style={{ color: '#636579' }}>--text-h4-tablet</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1.2rem', color: '#FFFFFF' }}>Heading 5 – 1.2rem</div>
-    <div style={{ color: '#636579' }}>--text-h5-tablet</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '1rem', color: '#FFFFFF' }}>Heading 6 – 1rem</div>
-    <div style={{ color: '#636579' }}>--text-h6-tablet</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '0.875rem', color: '#FFFFFF' }}>Base – 0.875rem</div>
-    <div style={{ color: '#636579' }}>--text-base-tablet</div>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-    <div style={{ fontSize: '0.7rem', color: '#FFFFFF' }}>Small – 0.7rem</div>
-    <div style={{ color: '#636579' }}>--text-small-tablet</div>
+  <div>
+    <div style={{ color: '#ff335e', fontSize: '13px', fontWeight: 600, marginBottom: '0.75rem' }}>Letter Spacing</div>
+    {[
+      { token: '--tracking-tight',  value: '0px',    use: 'Display, h1–h2' },
+      { token: '--tracking-normal', value: '0.1px',  use: 'Body default' },
+      { token: '--tracking-wide',   value: '0.2px',  use: 'Body large' },
+      { token: '--tracking-wider',  value: '0.3px',  use: 'Code UI' },
+      { token: '--tracking-ui',     value: '0.01em', use: 'Buttons, nav links' },
+      { token: '--tracking-badge',  value: '0.02em', use: 'Badges, micro labels' },
+    ].map(({ token, value, use }) => (
+      <div key={token} style={{ display: 'flex', gap: '1rem', padding: '4px 0', fontSize: '13px' }}>
+        <code style={{ color: '#cccccc', width: '180px' }}>{token}</code>
+        <span style={{ color: '#ff0036', width: '55px' }}>{value}</span>
+        <span style={{ color: '#888888' }}>{use}</span>
+      </div>
+    ))}
   </div>
 </div>

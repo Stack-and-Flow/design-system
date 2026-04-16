@@ -70,7 +70,7 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
   const labels = buttonLabels[locale as keyof typeof buttonLabels] || buttonLabels['en'];
 
   return (
-    <div className='absolute inset-0 z-10 flex flex-col bg-white dark:bg-gray-900 rounded-lg animate-fadeIn w-full h-full'>
+    <div className='absolute inset-0 z-10 flex flex-col bg-[var(--color-background-light)] dark:bg-[var(--color-surface-dark)] rounded-[var(--radius-md)] animate-fadeIn w-full h-full'>
       <div className='flex-1 flex flex-col justify-center items-center w-full h-full p-0'>
         <div className='flex w-full h-[200px] gap-2 px-4 py-6 overflow-x-auto overflow-y-auto'>
           {/* Months */}
@@ -86,7 +86,7 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
               <button
                 key={month}
                 ref={idx === selectedMonth ? selectedMonthRef : undefined}
-                className={`w-full py-1.5 px-3 rounded-md font-semibold text-base text-left transition-colors duration-150 ${idx === selectedMonth ? 'bg-red-600 text-white dark:bg-red-600 dark:text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'} ${isMonthDisabled(selectedYear, idx) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`w-full py-1.5 px-3 rounded-[var(--radius-md)] font-semibold text-base text-left transition-colors duration-150 ${idx === selectedMonth ? 'bg-[var(--color-primary)] text-[var(--color-text-dark)] dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)]' : 'hover:bg-[var(--color-surface-raised-light)] dark:hover:bg-[var(--color-white-tint-faint)] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]'} ${isMonthDisabled(selectedYear, idx) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 style={{ letterSpacing: '0.01em', fontSize: '0.95rem' }}
                 onClick={() => {
                   if (isMonthDisabled(selectedYear, idx)) {
@@ -115,7 +115,7 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
               <button
                 key={year}
                 ref={year === selectedYear ? selectedYearRef : undefined}
-                className={`w-full py-1.5 px-3 rounded-md font-semibold text-base text-left transition-colors duration-150 ${year === selectedYear ? 'bg-red-600 text-white dark:bg-red-600 dark:text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'}`}
+                className={`w-full py-1.5 px-3 rounded-[var(--radius-md)] font-semibold text-base text-left transition-colors duration-150 ${year === selectedYear ? 'bg-[var(--color-primary)] text-[var(--color-text-dark)] dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)]' : 'hover:bg-[var(--color-surface-raised-light)] dark:hover:bg-[var(--color-white-tint-faint)] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]'}`}
                 style={{ letterSpacing: '0.01em', fontSize: '0.95rem' }}
                 onClick={() => setSelectedYear(year)}
                 aria-current={year === selectedYear ? 'true' : undefined}
@@ -128,13 +128,13 @@ export const MonthYearPickerDropdown: React.FC<MonthYearPickerDropdownProps> = (
         </div>
         <div className='flex justify-end p-2 gap-2'>
           <button
-            className='px-2 py-1 rounded bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-sm transition-colors duration-150'
+            className='px-2 py-1 rounded-[var(--radius-md)] bg-[var(--color-surface-raised-light)] text-[var(--color-text-light)] hover:bg-[var(--color-surface-raised-dark)] dark:bg-[var(--color-surface-raised-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] text-sm transition-colors duration-150'
             onClick={onCancel}
           >
             {labels.cancel}
           </button>
           <button
-            className='px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 text-sm transition-colors duration-150'
+            className='px-2 py-1 rounded-[var(--radius-md)] bg-[var(--color-primary)] text-[var(--color-text-dark)] hover:bg-[var(--color-primary-hover)] dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-hover)] text-sm transition-colors duration-150'
             onClick={handleSelect}
           >
             {labels.select}

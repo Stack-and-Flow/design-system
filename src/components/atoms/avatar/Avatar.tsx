@@ -8,7 +8,7 @@ function AvatarContainer({ className, ...props }: ComponentProps<typeof AvatarPr
   return (
     <AvatarPrimitive.Root
       data-slot='avatar'
-      className={cn('relative flex size-8 shrink-0 overflow-hidden rounded-full', className)}
+      className={cn('relative flex size-8 shrink-0 overflow-hidden', className)}
       {...props}
     />
   );
@@ -24,30 +24,42 @@ function AvatarFallback({ className, ...props }: ComponentProps<typeof AvatarPri
   return (
     <AvatarPrimitive.Fallback
       data-slot='avatar-fallback'
-      className={cn('bg-muted flex size-full items-center justify-center rounded-full', className)}
+      className={cn('flex size-full items-center justify-center', className)}
       {...props}
     />
   );
 }
 
 const Avatar: FC<AvatarProps> = ({ ...props }) => {
-  const { src, alt, sizeClass, className, textClass, roundedClass } = useAvatar({ ...props });
+  const { src, alt, initials, sizeClass, className, textClass, roundedClass, onClick } = useAvatar({ ...props });
+  const interactive = !!onClick;
 
   return (
     <AvatarContainer
       className={cn(
-        'bg-[var(--color-surface-dark)] flex items-center justify-center shadow-sm shadow-[var(--color-border-strong-light)] dark:shadow-[var(--color-border-dark)]',
+        'bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-raised-dark)]',
+        'shadow-[inset_0_0_0_1px_var(--color-border-strong-light)] dark:shadow-[inset_0_0_0_1px_var(--color-border-strong-dark)]',
+        'flex items-center justify-center',
+        interactive && 'cursor-pointer transition-transform duration-200 ease-out hover:scale-110 active:scale-100',
         roundedClass,
         className
       )}
       style={{ width: sizeClass, height: sizeClass }}
       role='img'
       aria-label={alt}
+      onClick={onClick}
     >
       <AvatarImage src={src} style={{ width: sizeClass, height: sizeClass }} alt={alt} />
       <AvatarFallback
-        className={cn('text-text-light dark:text-text-dark leading-[1.2] pt-[0.2em]', textClass)}
-      ></AvatarFallback>
+        className={cn(
+          'bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-raised-dark)]',
+          'shadow-[inset_0_0_0_1px_var(--color-border-strong-light)] dark:shadow-[inset_0_0_0_1px_var(--color-border-strong-dark)]',
+          'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
+          'font-[var(--font-weight-semibold)] leading-[1.2] pt-[0.2em]',
+          roundedClass,
+          textClass
+        )}
+      >{initials}</AvatarFallback>
     </AvatarContainer>
   );
 };

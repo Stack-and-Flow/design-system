@@ -4,10 +4,10 @@ import type { ReactNode } from 'react';
 export const switchBase = cva(
   [
     'relative inline-flex items-center cursor-pointer',
-    'transition-colors duration-200 ease-in-out',
-    'focus:outline-none focus:ring-2 focus:ring-offset-2',
+    'transition-[background-color,color] duration-200 ease-in-out',
+    'focus:outline-none focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]',
     'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
-    'disabled:cursor-not-allowed disabled:opacity-30'
+    'disabled:cursor-not-allowed disabled:opacity-40'
   ],
   {
     variants: {
@@ -27,7 +27,7 @@ export const switchBase = cva(
 export const switchWrapper = cva(
   [
     'flex-shrink-0 relative inline-flex cursor-pointer',
-    'bg-gray-400 dark:bg-gray-800 flex items-center justify-center gap-6'
+    'bg-[var(--color-border-strong-light)] dark:bg-[var(--color-surface-raised-dark)] flex items-center justify-center gap-6'
   ],
   {
     variants: {
@@ -40,9 +40,6 @@ export const switchWrapper = cva(
         true: 'rounded-full',
         false: 'rounded-lg'
       },
-      disabled: {
-        true: 'opacity-30 cursor-not-allowed'
-      }
     },
     defaultVariants: {
       size: 'md',
@@ -51,7 +48,7 @@ export const switchWrapper = cva(
   }
 );
 
-export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center transition-colors duration-300'], {
+export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center transition-[background-color] duration-300'], {
   variants: {
     size: {
       sm: 'w-8 h-2 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-4',
@@ -73,7 +70,7 @@ export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center 
       default: '',
       bordered: 'border',
       glass:
-        'bg-white/30 backdrop-blur-md border border-white/30 shadow-md peer-checked:bg-[var(--color-brand-light)]/70 border-[var(--color-brand-light)]/50 dark:peer-checked:bg-[var(--color-brand-dark)]/60',
+        'bg-[var(--color-white-tint-mid)] border border-[var(--color-border-dark)] shadow-md peer-checked:bg-[var(--color-brand-light)]/70 border-[var(--color-brand-light)]/50 dark:peer-checked:bg-[var(--color-brand-dark)]/60',
       shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-[var(--color-brand-dark)]/90'
     },
     rounded: {
@@ -115,7 +112,7 @@ export const switchLabel = cva(['select-none'], {
       lg: 'text-lg'
     },
     disabled: {
-      true: 'opacity-30 cursor-not-allowed'
+      true: 'opacity-40 cursor-not-allowed'
     }
   },
   defaultVariants: {

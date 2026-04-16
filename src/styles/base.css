@@ -2,7 +2,7 @@
   body {
     @apply text-[16px] leading-[18px];
     font-family: var(--font-primary);
-    font-weight: 500;
+    font-weight: 300;
   }
 
   html {
@@ -14,7 +14,7 @@
   }
 
   a {
-    @apply text-accent hover:text-text-light dark:hover:text-text-dark transition-all duration-300 ease-in underline underline-offset-2;
+    @apply text-primary hover:text-text-light dark:hover:text-text-dark transition-all duration-300 ease-in underline underline-offset-2;
   }
 
   strong, b {
@@ -50,16 +50,8 @@
     @apply !bg-background-dark;
   }
 
-  .dark .docs-story, .sb-show-main.dark {
-    @apply !bg-[image:var(--gradient-background-dark)];
-  }
-
-  .light .docs-story, .sb-show-main.light {
-    @apply !bg-[image:var(--gradient-background-light)];
-  }
-
   .sbdocs-content > .sbdocs-title {
-    @apply !text-secondary;
+    @apply !text-text-secondary-dark;
   }
 
   .sbdocs-content h2 {
@@ -71,15 +63,15 @@
   }
 
   .sbdocs-content table thead > tr > th {
-    @apply !border-t-1 !border-gray-dark-700 bg-gray-dark-800;
+    @apply !border-t !border-border-dark bg-surface-raised-dark;
   }
 
   .sbdocs-content table thead > tr:first-of-type > th:first-of-type {
-    @apply !border-l-1 rounded-tl-md overflow-hidden;
+    @apply !border-l rounded-tl-md overflow-hidden;
   }
 
   .sbdocs-content table thead > tr:first-of-type > th:last-of-type {
-    @apply !border-r-1 rounded-tr-md overflow-hidden;
+    @apply !border-r rounded-tr-md overflow-hidden;
   }
 
   .sbdocs-content table tbody > tr:first-of-type > td:first-of-type,

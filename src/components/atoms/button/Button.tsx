@@ -44,7 +44,7 @@ const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & ComponentPr
       disabled={disabled || isLoading}
       onClick={(e) => !isLoading && onClick?.(e)}
     >
-      <span className={cn('flex items-center justify-center z-0', size === 'lg' ? 'gap-4' : 'gap-2', className)}>
+      <span className={cn('flex items-center justify-center z-0', size === 'lg' ? 'gap-4' : 'gap-2')}>
         {icon && <DynamicIcon className={iconSize()} name={icon} />}
         {text && <span className={size !== 'sm' ? 'pt-[0.2rem]' : 'pt-[0.1rem]'}>{text}</span>}
         {isLoading && (

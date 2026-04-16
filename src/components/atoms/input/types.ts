@@ -2,7 +2,7 @@ import { type VariantProps, cva } from 'class-variance-authority';
 import type { ChangeEvent, ReactNode } from 'react';
 
 export const inputVariants = cva(
-  ['relative overflow-hidden flex py-2 justify-between max-w-full', 'border-2 transition-all duration-200'],
+  ['relative overflow-hidden flex py-2 justify-between max-w-full', 'border transition-[border-color,box-shadow] duration-200 ease-[ease]'],
   {
     variants: {
       variant: {
@@ -40,8 +40,8 @@ export const inputVariants = cva(
       state: {
         default: '',
         focused: [
-          'outline-offset-2 outline-2',
-          'outline-[var(--color-brand-light)] dark:outline-[var(--color-brand-dark)]'
+          'outline-none',
+          'shadow-[var(--glow-focus-light)] dark:shadow-[var(--glow-focus-dark)]'
         ],
         focusedRegular: [
           'hover:bg-[var(--color-surface-raised-light)] hover:border-[var(--color-border-strong-light)]',
@@ -62,8 +62,8 @@ export const inputVariants = cva(
       },
       focused: {
         true: [
-          'outline-offset-2 outline-2',
-          'outline-[var(--color-brand-light)] dark:outline-[var(--color-brand-dark)]'
+          'outline-none',
+          'shadow-[var(--glow-focus-light)] dark:shadow-[var(--glow-focus-dark)]'
         ],
         false: ''
       }
@@ -78,7 +78,7 @@ export const inputVariants = cva(
 );
 
 export const labelVariants = cva(
-  ['absolute w-auto line-clamp-1 transition-all duration-200 text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] pt-[2px]'],
+  ['absolute w-auto line-clamp-1 transition-[top,font-size,color] duration-200 ease-[ease] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] pt-[2px]'],
   {
     variants: {
       size: {

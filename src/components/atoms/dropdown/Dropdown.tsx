@@ -15,10 +15,10 @@ const renderDropdownItem = (element: DropdownElement, index: number) => {
         data-variant={element.variant}
         aria-disabled={element.disabled || undefined}
         className={cn(
-          'relative flex cursor-default justify-between items-center gap-2 rounded-sm px-2 py-1.5 text-sm',
-          'transition-opacity duration-300 ease-in-out',
-          'hover:outline-offset-1 hover:outline-[var(--color-brand-light)] dark:hover:outline-[var(--color-brand-dark)] hover:outline-1',
-          'focus-visible:outline-offset-1 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1',
+          'relative flex cursor-default justify-between items-center gap-2 rounded-[var(--radius-sm)] px-2 py-1.5 text-sm',
+          'transition-[background,color] duration-150 ease-[ease]',
+          'hover:bg-[var(--color-white-tint-mid)] hover:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-white-tint-mid)]',
+          'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]',
           element.variant === 'destructive' && 'bg-[var(--color-error-light)] dark:bg-[var(--color-error)] text-white hover:bg-[var(--color-brand-light-dark)]'
         )}
         onClick={element.onClick}
@@ -42,9 +42,9 @@ const renderDropdownSubmenu = (element: DropdownElement, index: number) => {
           aria-expanded={false}
           className={cn(
             'flex items-center rounded-md justify-between px-2 py-1.5 text-sm',
-            'transition-opacity duration-300 ease-in-out',
-          'hover:outline-offset-1 hover:outline-[var(--color-brand-light)] dark:hover:outline-[var(--color-brand-dark)] hover:outline-1',
-          'focus-visible:outline-offset-1 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
+            'transition-[background,color] duration-150 ease-[ease]',
+          'hover:bg-[var(--color-white-tint-mid)] hover:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-white-tint-mid)]',
+          'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
           )}
         >
           {element.startContent && <span className='flex items-center'>{element.startContent}</span>}
@@ -59,9 +59,8 @@ const renderDropdownSubmenu = (element: DropdownElement, index: number) => {
           id={submenuId}
           className={cn(
             'min-w-[8rem] ml-2 rounded-[var(--radius-md)] border p-1 shadow-lg',
-            'transition-opacity duration-300 ease-in-out',
-            'focus-visible:outline-offset-1 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1',
-            'hover:outline-offset-1 hover:outline-[var(--color-brand-light)] dark:hover:outline-[var(--color-brand-dark)] hover:outline-1',
+            'transition-[background,color] duration-150 ease-[ease]',
+            'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]',
             'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
             'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]'
           )}
@@ -122,7 +121,7 @@ const Dropdown: FC<DropdownProps> = ({ ...props }) => {
           role='menu'
           aria-labelledby={accessibleLabelId}
           className={cn(
-            'min-w-[8rem] rounded-md border p-1 shadow-md',
+            'min-w-[8rem] rounded-[var(--radius-md)] border p-1 shadow-[var(--shadow-dropdown)]',
             'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
             'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
             'dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]',

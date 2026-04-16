@@ -146,6 +146,46 @@ npx storybook-watch
 
 📖 [More information](https://github.com/Stack-and-Flow/storybook-watch)
 
+### Playwright MCP (AI Visual Audit)
+
+A tool that lets the AI agent open a browser, navigate Storybook, and take screenshots during visual audits. It is agent infrastructure — **not part of the project** and not installed via `pnpm install`.
+
+> **Note:** Only needed if you use an AI agent (such as opencode) to run visual audits on components.
+
+#### Prerequisites
+
+- [opencode](https://opencode.ai) or another MCP-compatible AI client
+- Node.js available globally
+
+#### Setup
+
+Add the following block to your agent's configuration file (e.g. `~/.config/opencode/opencode.json`):
+
+```json
+"playwright": {
+  "type": "local",
+  "command": [
+    "npx",
+    "@playwright/mcp@latest",
+    "--output-dir",
+    "/absolute/path/to/your/project/screenshots"
+  ]
+}
+```
+
+Replace `/absolute/path/to/your/project/screenshots` with the actual path on your machine.
+
+#### Screenshots folder
+
+Screenshots are saved to the `screenshots/` folder at the project root. This folder is listed in `.gitignore` — it is never committed to the repository.
+
+```bash
+# The folder already exists in the repo (empty, ignored by git)
+screenshots/
+```
+
+---
+
 ## 📚 Learning Resources
 
 - **HeroUI**: [UI library reference](https://heroui.com/docs/react/components)

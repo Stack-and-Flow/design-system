@@ -1,13 +1,13 @@
 import { cva } from 'class-variance-authority';
 
 export const calendarCva = cva(
-  'font-inter transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn min-h-[300px]',
+  'transition-all duration-300 ease-in-out opacity-100 scale-100 animate-fadeIn min-h-[300px]',
   {
     variants: {
       variant: {
-        filled: 'bg-white text-gray-900 shadow-lg dark:bg-gray-900 dark:text-gray-100 dark:shadow-black',
-        outlined: 'border border-gray-500 dark:border-gray-600',
-        soft: 'bg-red-100 dark:bg-red-900',
+        filled: 'bg-[var(--color-background-light)] text-[var(--color-text-light)] shadow-lg dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-text-dark)] dark:shadow-black',
+        outlined: 'border border-[var(--color-border-light)] dark:border-[var(--color-border-dark)]',
+        soft: 'bg-[var(--color-red-tint-low)] dark:bg-[var(--color-red-tint-mid)]',
         ghost: 'bg-transparent'
       },
       size: {
@@ -18,7 +18,7 @@ export const calendarCva = cva(
       radius: {
         none: 'rounded-none',
         sm: 'rounded',
-        md: 'rounded-lg',
+        md: 'rounded-[var(--radius-md)]',
         lg: 'rounded-2xl'
       },
       theme: {

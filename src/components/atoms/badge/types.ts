@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 
 export const badgeVariants = cva(
   [
-    'inline-flex items-center font-medium rounded-full',
-    'transition-colors duration-200 ease-in-out',
+    'inline-flex items-center font-semibold rounded-[3px]',
+    'transition-[background-color,color] duration-200 ease-in-out',
     'whitespace-nowrap'
   ],
   {
@@ -19,7 +19,7 @@ export const badgeVariants = cva(
           'dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-text-dark)]'
         ],
         success: 'bg-[var(--color-success-light)] text-white dark:bg-[var(--color-success)] dark:text-white',
-        warning: 'bg-[var(--color-warning-light)] text-white dark:bg-[var(--color-warning)] dark:text-white',
+        warning: 'bg-[var(--color-warning-light)] text-[#1a0a00] dark:bg-[var(--color-warning)] dark:text-black',
         danger: 'bg-[var(--color-error-light)] text-white dark:bg-[var(--color-error)] dark:text-white'
       },
       size: {
@@ -34,7 +34,7 @@ export const badgeVariants = cva(
       variant: {
         solid: '',
         flat: 'opacity-60 border border-[var(--color-border-strong-light)] dark:border-[var(--color-border-strong-dark)]',
-        shadow: 'shadow-md shadow-[var(--color-brand-light)]/30 dark:shadow-[var(--color-brand-dark)]/30'
+        shadow: 'hover:shadow-[0_4px_20px_rgba(255,0,54,0.15)]'
       },
       placement: {
         'top-right': 'absolute top-0 right-0 translate-x-1/2 -translate-y-1/2',

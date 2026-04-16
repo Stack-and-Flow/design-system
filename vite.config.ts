@@ -2,6 +2,7 @@ import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
+import { defineConfig as defineVitestConfig } from 'vitest/config';
 
 export default defineConfig({
   base: './',
@@ -35,11 +36,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['src/components/**/*.ts', 'src/components/**/*.tsx'],
-      exclude: [
-        'src/components/**/*.stories.tsx',
-        'src/components/**/*.test.*',
-        'src/components/**/index.ts'
-      ]
+      exclude: ['src/components/**/*.stories.tsx', 'src/components/**/*.test.*', 'src/components/**/index.ts']
     }
   }
 });

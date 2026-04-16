@@ -221,8 +221,8 @@
   --font-mono: ui-monospace, 'SFMono-Regular', 'Roboto Mono', Menlo, Monaco, monospace;
 
   /* Pesos */
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;    /* baseline de body */
+  --font-weight-regular: 300;
+  --font-weight-medium: 400;    /* baseline de body */
   --font-weight-semibold: 600;  /* botones, badges, labels */
   --font-weight-bold: 700;      /* headings h1–h6 */
 

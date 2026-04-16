@@ -67,7 +67,7 @@ const Input: FC<
       <button
         role='button'
         aria-label='Increase value'
-        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-t-sm px-1 cursor-pointer outline-offset-0 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
+        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-t-sm px-1 cursor-pointer focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
         onClick={() => {
           if (ref.current) {
             const currentValue = parseFloat(ref.current.value !== '' ? ref.current.value : '0');
@@ -81,7 +81,7 @@ const Input: FC<
       <button
         role='button'
         aria-label='Decrease value'
-        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-b-sm px-1 cursor-pointer outline-offset-0 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
+        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-b-sm px-1 cursor-pointer focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
         onClick={() => {
           if (ref.current) {
             const currentValue = parseFloat(ref.current.value !== '' ? ref.current.value : '0');
@@ -103,7 +103,7 @@ const Input: FC<
       <button
         role='button'
         aria-label={!showPassword ? 'Show password' : 'Hide password'}
-        className='cursor-pointer outline-offset-0 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
+        className='cursor-pointer focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
         onClick={() => setShowPassword(!showPassword)}
       >
         <Icon
@@ -140,10 +140,10 @@ const Input: FC<
           }),
           isFullWidth ? 'w-full' : 'w-auto',
           label ? 'items-end' : 'items-center',
-          hint?.type === 'error' && '!border-red-500 dark:!border-red-500',
-          hint?.type === 'warning' && '!border-yellow dark:!border-yellow',
-          hint?.type === 'success' && '!border-green dark:!border-green',
-          disabled && 'pointer-events-none opacity-60',
+          hint?.type === 'error' && '!border-[var(--color-error-light)] dark:!border-[var(--color-error)] shadow-[0_0_0_3px_rgba(219,20,60,0.12)] dark:shadow-[0_0_0_3px_rgba(255,0,54,0.15)]',
+          hint?.type === 'warning' && '!border-[var(--color-warning-light)] dark:!border-[var(--color-warning)] shadow-[0_0_0_3px_rgba(251,191,36,0.15)]',
+          hint?.type === 'success' && '!border-[var(--color-success-light)] dark:!border-[var(--color-success)] shadow-[0_0_0_3px_rgba(34,197,94,0.15)]',
+          disabled && 'pointer-events-none opacity-40',
           className
         )}
         onClick={() =>
@@ -196,7 +196,7 @@ const Input: FC<
             aria-describedby={formatAriaIds(ariaDescribedBy || (hint?.message ? `${id}-hint` : undefined))}
             aria-labelledby={formatAriaIds(ariaLabelledBy || (label ? `${id}-label` : undefined))}
             className={cn(
-              'flex-1 outline-none text-text-light dark:text-text-dark placeholder:text-secondary-light dark:placeholder:text-secondary-dark border-none',
+              'flex-1 outline-none font-[var(--font-weight-medium)] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] placeholder:text-[var(--color-text-muted-light)] dark:placeholder:text-[var(--color-text-muted-dark)] border-none',
               (type === 'number' || type === 'password') && 'pr-6'
             )}
             onFocus={handleFocus}
@@ -223,14 +223,14 @@ const Input: FC<
           <span
             className={cn(
               'fs-small tablet:fs-small-tablet',
-              hint?.type === 'info'
+                hint?.type === 'info'
                 ? 'text-color-text-secondary-light dark:text-color-text-secondary-dark'
                 : hint?.type === 'warning'
-                  ? 'text-yellow dark:text-yellow-400'
+                  ? 'text-[var(--color-warning-light)] dark:text-[var(--color-warning)]'
                   : hint?.type === 'error'
-                    ? 'text-red-500 dark:text-red-500'
+                    ? 'text-[var(--color-error-light)] dark:text-[var(--color-error)]'
                     : hint?.type === 'success'
-                      ? 'text-green dark:text-green-400'
+                      ? 'text-[var(--color-success-light)] dark:text-[var(--color-success)]'
                       : 'text-color-text-secondary-light dark:text-color-text-secondary-dark'
             )}
           >

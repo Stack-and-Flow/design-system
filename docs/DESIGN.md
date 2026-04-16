@@ -230,7 +230,7 @@ background: linear-gradient(135deg, #ff1a4b 0%, #cc0030 100%);
 border: none;
 border-radius: 9999px; /* pill */
 color: #ffffff;
-font-weight: 600;
+font-weight: 500;
 letter-spacing: 0.01em;
 box-shadow:
   0 0 0 1.5px rgba(255, 60, 90, 0.5),
@@ -335,6 +335,67 @@ letter-spacing: 0.01em;
 ```
 Links: `#ff4d6d` → `#ff8099` hover, con `border-bottom: 1px solid rgba` para subrayado sutil.
 
+### Gradient Borders
+
+Algunos componentes usan bordes con intensidad variable — no un borde plano sino un **gradient border** con destello. El efecto simula iluminación direccional sobre el borde del componente.
+
+**Técnica (pseudo-elemento):**
+```css
+/* El elemento necesita position: relative, background sólido y border: 1px solid transparent */
+.gradient-border {
+  position: relative;
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 0, 54, 0.55) 40%,
+    rgba(255, 0, 54, 0.15) 100%
+  );
+  z-index: -1;
+}
+```
+
+**Variante secundaria (botón ghost con destello):**
+```css
+.gradient-border::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 0, 54, 0.45) 45%,
+    rgba(255, 0, 54, 0.08) 100%
+  );
+}
+```
+
+**Regla de uso:** solo en elementos interactivos que necesiten énfasis visual de borde — botones secondary, inputs en focus, cards activas. Nunca en bordes estructurales (separadores, tablas).
+
+### Footer
+
+Tres columnas de links sobre fondo base (`#060C13`). Sin cards, sin bordes — el contenido flota directo sobre el canvas.
+
+```css
+footer {
+  background: #060C13;
+  border-top: 1px solid #172230;
+  padding: 48px 0 24px;
+}
+```
+
+**Estructura:**
+- Columnas: Documentation / Community / More (o las que el producto defina)
+- Títulos de columna: 14px Space Grotesk 600, `#ffffff`
+- Links: 14px Space Grotesk 500, `#888888` → `#cccccc` hover
+- Copyright: 12px Space Grotesk 400, `#6a6b6c`, centrado
+- Gap entre columnas: `32px–48px`
+- Sin `backdrop-filter`, sin cards, sin sombras — opaco y limpio
+
 ---
 
 ## 6. Decoración de Fondo
@@ -388,6 +449,134 @@ background:
 ```
 
 Curva `cubic-bezier(.2,.8,.2,1)` — ease-out suave con ligero overshoot inicial.
+
+---
+
+## 6b. Background Primitives
+
+Stack-and-Flow provee dos primitivos de fondo animado como componentes independientes. **No son un solo componente con prop `theme`** — son motores distintos con responsabilidades distintas.
+
+### CanvasEngine
+
+Motor de partículas físicas 2D. Gestiona posición, velocidad, aceleración y pulso de partículas via `requestAnimationFrame`.
+
+**Lo que varía por tema (configuración declarativa):**
+```ts
+type CanvasTheme = {
+  orbs: {
+    count: { mobile: number; desktop: number }
+    color: string          // e.g. '255, 0, 54'
+    minRadius: number
+    maxRadius: number
+  }
+  sparks: {
+    count: { mobile: number; desktop: number }
+    color: string
+  }
+  foci: Array<{
+    baseX: number          // posición relativa 0–1
+    baseY: number
+    color: string
+    speed: number
+    range: number
+  }>
+  ambient: {
+    color: string
+    opacity: number
+  }
+  fps: { mobile: number; desktop: number }
+}
+```
+
+**Lo que NO varía** (lógica interna del motor): física de partículas, wrap horizontal, resize handler, frame throttling.
+
+**Temas incluidos:**
+- `bokeh` — orbs rojos difusos + sparks con halo, foci dinámicos. Inspirado en bokeh de lente fotográfica.
+
+**Uso:**
+```tsx
+<CanvasEngine theme="bokeh" className="absolute inset-0" aria-hidden />
+```
+
+**Escalabilidad:** un tema nuevo = un archivo `themes/aurora.ts` con la configuración. Si el nuevo efecto necesita física diferente (e.g. partículas que siguen el cursor), es un motor nuevo — no una prop adicional.
+
+---
+
+### SvgAnimation
+
+Componente para SVGs animados con interpolación declarativa (opacity, transform, path morph). Motor completamente distinto a `CanvasEngine` — no comparten código.
+
+```tsx
+<SvgAnimation src={LogoSvg} animation="fade-pulse" />
+```
+
+**Animations disponibles:**
+- `fade-pulse` — opacity cíclica suave (0.4 → 1.0 → 0.4)
+- `float` — translateY suave (-6px → 0 → -6px)
+- `spin-slow` — rotación completa en 8s
+
+---
+
+### BackgroundSlot
+
+Wrapper de layout que posiciona cualquier primitivo de fondo. Los productos lo usan como contenedor — el DS no dicta qué va dentro.
+
+```tsx
+// Solo canvas
+<BackgroundSlot>
+  <CanvasEngine theme="bokeh" />
+</BackgroundSlot>
+
+// Solo SVG
+<BackgroundSlot>
+  <SvgAnimation src={LogoSvg} animation="fade-pulse" />
+</BackgroundSlot>
+
+// Composición libre
+<BackgroundSlot>
+  <CanvasEngine theme="bokeh" />
+  <SvgAnimation src={LogoSvg} animation="fade-pulse" />
+</BackgroundSlot>
+```
+
+**CSS:**
+```css
+.background-slot {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+```
+
+---
+
+### Hero — patrón de composición (no componente)
+
+El Hero NO es un componente del DS — cada producto define su propia narrativa visual. El DS provee los primitivos para construirlo.
+
+**Patrón recomendado:**
+```tsx
+<section className="relative overflow-hidden">
+  {/* Capa 0 — fondo animado */}
+  <BackgroundSlot>
+    <CanvasEngine theme="bokeh" />
+  </BackgroundSlot>
+
+  {/* Capa 1 — contenido */}
+  <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 py-20 md:py-32">
+    <h1>…</h1>
+    <p>…</p>
+    <div className="flex gap-4">
+      <Button variant="primary" rounded>Get Started</Button>
+      <Button variant="secondary" rounded>View on GitHub</Button>
+    </div>
+  </div>
+</section>
+```
+
+**Regla:** el grid de fondo (`section 6`) y `CanvasEngine` coexisten — el grid es CSS, el canvas es encima con `mix-blend-mode: screen` opcional para que los glows interactúen con el grid.
 
 ---
 
@@ -533,7 +722,7 @@ Navbar bg (dark):           rgba(6, 12, 19, 0.75) + blur(16px)
 > "Construye una navbar sticky con `background: rgba(6,12,19,0.75)`, `backdrop-filter: blur(16px)`, `border-bottom: 1px solid #172230`, links en `#888888` → `#ffffff` on hover, y un botón CTA pill con gradiente rojo a la derecha"
 
 **Estado activo en sidebar:**
-> "Aplica estado activo con `background: rgba(255,0,54,0.10)`, `color: #ff0036`, `font-weight: 600`, `border-radius: 8px` — sin borde adicional"
+> "Aplica estado activo con `background: rgba(255,0,54,0.10)`, `color: #ff0036`, `font-weight: 500`, `border-radius: 8px` — sin borde adicional"
 
 **Badge "New":**
 > "Badge con `background: #22c55e` (dark) / `#16a34a` (light), `color: #000` (dark) / `#fff` (light), `border-radius: 3px`, `padding: 1px 6px`, 10px Space Grotesk 700, `letter-spacing: 0.02em`"

@@ -270,11 +270,11 @@ Full visual reference: `docs/DESIGN.md` — read it before building any componen
 ### Colors — Dark mode surfaces
 | Token | Use for |
 |-------|---------|
-| `color-background-dark` (`#000000`) | Page canvas — absolute black |
-| `color-surface-dark` (`#0a0a0a`) | Cards, code blocks, dropdowns — opaque |
-| `color-surface-raised-dark` (`#111111`) | Table headers, elevated panels |
-| `color-border-dark` (`#1a1a1a`) | Standard borders |
-| `color-border-strong-dark` (`#262626`) | Interactive / focus borders |
+| `color-background-dark` (`#060C13`) | Page canvas — deep blue-slate, NOT pure black |
+| `color-surface-dark` (`#0B131E`) | Cards, code blocks, dropdowns — opaque |
+| `color-surface-raised-dark` (`#0F1824`) | Table headers, elevated panels |
+| `color-border-dark` (`#172230`) | Standard borders |
+| `color-border-strong-dark` (`#202C3C`) | Interactive / focus borders |
 | `color-text-dark` | Primary text (white, 21:1 contrast) |
 | `color-text-secondary-dark` | Secondary text |
 | `color-text-tertiary-dark` | Tertiary / muted text |
@@ -344,8 +344,8 @@ Full visual reference: `docs/DESIGN.md` — read it before building any componen
 | Token | Use for |
 |-------|---------|
 | `font-primary` | All text — only one font in this system |
-| `font-weight-medium` (500) | Body text baseline |
-| `font-weight-semibold` (600) | Buttons, badges, labels |
+| `font-weight-medium` (300) | Body text baseline |
+| `font-weight-semibold` (500) | Buttons, badges, labels |
 | `font-weight-bold` (700) | Headings h1–h6 |
 | `text-display` (56px) | Hero landing titles |
 | `text-h1` → `text-h6` | Section headings |
@@ -397,6 +397,65 @@ Full visual reference: `docs/DESIGN.md` — read it before building any componen
 | DOM APIs in module scope of stories | Breaks Storybook SSR |
 | `aria-label` hardcoded as string literal | Must be a prop so consumers can translate |
 | Skipping the explanation after each file | Learning is mandatory, not optional |
+
+---
+
+## Visual States — Mandatory Rules
+
+Every interactive component MUST implement all states that apply. No exceptions.
+
+### Focus
+```
+focus-visible:outline-none
+focus-visible:shadow-[var(--glow-focus-dark)]
+dark:focus-visible:shadow-[var(--glow-focus-dark)]
+```
+- NEVER `outline` for focus rings — always `box-shadow`
+- Use token `--glow-focus-dark` / `--glow-focus-light`
+
+### Disabled
+```
+disabled:pointer-events-none disabled:opacity-40
+```
+- NEVER change color to indicate disabled — only opacity
+- NEVER `opacity-50` or other values — always `opacity-40`
+
+### Hover
+- Always transition specific properties — NEVER `transition-all`
+- Enumerate: `transition-[background,color,box-shadow] duration-200 ease-[ease]`
+- Hover MUST change at least one visible property (bg, border, shadow, or color)
+
+### Active / Pressed
+```
+active:scale-[0.98]
+```
+- Buttons always have subtle press feedback via scale
+- Active shadow should be less than hover shadow (press = contained energy)
+
+### Loading
+- Use `disabled` + spinner — never change button shape or size
+- `pointer-events-none` while loading
+
+### Transitions
+| Property | Duration | Easing |
+|----------|----------|--------|
+| `box-shadow` | 250ms | `ease` |
+| `background` | 250ms | `ease` |
+| `color`, `border-color` | 200ms | `ease` |
+| `opacity` | 200ms | `ease` |
+| `transform` | 150ms | `ease` |
+
+### Backdrop blur — restricted use
+`backdrop-filter: blur()` ONLY on floating elements: navbar, modals, sidebars, tooltips.
+NEVER on cards, inputs, buttons, or static content.
+
+### Gradient borders
+Use `::before` pseudo-element — NEVER `border-image`:
+```
+before:absolute before:inset-[-1.5px] before:rounded-[inherit] before:z-[-1]
+before:bg-[linear-gradient(135deg,...)]
+```
+The parent needs: `relative overflow-visible isolate border border-transparent`
 
 ---
 

@@ -1,216 +1,189 @@
-import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { Meta } from '@storybook/blocks';
 
 <Meta title="Design System/Semantic Colors" />
 
-<h1 style={{ color: '#d61e2b' }}>Semantic Colors</h1>
-<p>
-  This is the extended color palette for <strong>Egdev Design system</strong>, used to define UI elements such as alerts, buttons, badges, and more. These are available for both light and dark themes.
+export const Swatch = ({ name, value, border, role }) => (
+  <div style={{ flex: '1', minWidth: '100px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+    <div style={{ height: '60px', borderRadius: '8px', background: value, border: border || 'none' }}></div>
+    <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+    <div style={{ color: '#888888', fontSize: '12px', fontFamily: 'monospace' }}>{value}</div>
+    {role && <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{role}</div>}
+  </div>
+);
+
+export const SwatchRow = ({ children }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+    {children}
+  </div>
+);
+
+export const H2 = ({ children }) => (
+  <h2 style={{ color: '#ff0036', fontSize: '1.125rem', fontWeight: 700, paddingBottom: '12px', marginTop: '2rem', marginBottom: '1rem', borderBottom: '1px solid #172230' }}>
+    {children}
+  </h2>
+);
+
+export const Note = ({ children }) => (
+  <p style={{ color: '#888888', fontSize: '13px', marginBottom: '1rem', borderLeft: '2px solid #172230', paddingLeft: '0.75rem' }}>
+    {children}
+  </p>
+);
+
+# Semantic Colors
+
+<p style={{ color: '#cccccc', marginBottom: '2rem' }}>
+  Functional color tokens for UI states, feedback, and interactive surfaces. Defined in <code>src/styles/theme.css</code>. Use these in components — not raw hex values.
 </p>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Orange Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#f97316' }}></div>
-    <div style={{ color: 'white' }}><strong>orange</strong></div>
-    <div style={{ color: '#636579' }}>#f97316</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#fda65c' }}></div>
-    <div style={{ color: 'white' }}><strong>orange-light</strong></div>
-    <div style={{ color: '#636579' }}>#fda65c</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#d94e08' }}></div>
-    <div style={{ color: 'white' }}><strong>orange-dark</strong></div>
-    <div style={{ color: '#636579' }}>#d94e08</div>
-  </div>
+---
+
+<H2>Status — Base colors</H2>
+
+<Note>Two values per state: dark mode (vibrant, over #060C13) and light mode (subdued, over #ffffff). Never swap them between modes.</Note>
+
+<SwatchRow>
+  <Swatch name="error-dark" value="#ff0036" role="Error / Danger — dark" />
+  <Swatch name="error-light" value="#db143c" role="Error / Danger — light" />
+  <Swatch name="success-dark" value="#22c55e" role="Success — dark" />
+  <Swatch name="success-light" value="#16a34a" role="Success — light" />
+  <Swatch name="warning-dark" value="#fbbf24" role="Warning — dark" />
+  <Swatch name="warning-light" value="#d97706" role="Warning — light" />
+  <Swatch name="info-dark" value="#3b82f6" role="Info — dark" />
+  <Swatch name="info-light" value="#1d4ed8" role="Info — light" />
+</SwatchRow>
+
+<H2>Status — Tints</H2>
+
+<Note>Background tints for alert banners, badge fills, and state containers. Always pair with the corresponding base color for text/icon.</Note>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'error-tint',   value: 'rgba(255,0,54,0.12)',   label: 'Error bg — alerts, badges'   },
+    { name: 'success-tint', value: 'rgba(34,197,94,0.12)',  label: 'Success bg — alerts, badges' },
+    { name: 'warning-tint', value: 'rgba(251,191,36,0.12)', label: 'Warning bg — alerts, badges' },
+    { name: 'info-tint',    value: 'rgba(59,130,246,0.12)', label: 'Info bg — alerts, badges'    },
+  ].map(({ name, value, label }) => (
+    <div key={name} style={{ flex: '1', minWidth: '140px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #172230' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '11px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{label}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Yellow Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#eab308' }}></div>
-    <div style={{ color: 'white' }}><strong>yellow</strong></div>
-    <div style={{ color: '#636579' }}>#eab308</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#fde047' }}></div>
-    <div style={{ color: 'white' }}><strong>yellow-light</strong></div>
-    <div style={{ color: '#636579' }}>#fde047</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#b58903' }}></div>
-    <div style={{ color: 'white' }}><strong>yellow-dark</strong></div>
-    <div style={{ color: '#636579' }}>#b58903</div>
-  </div>
+<H2>Functional Tints — Red (brand)</H2>
+
+<Note>Used for interactive states: secondary button backgrounds, active menu items, hover overlays, and glow effects. The backbone of the red accent system.</Note>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'red-tint-subtle', value: 'rgba(255,0,54,0.06)', label: 'Secondary btn bg'          },
+    { name: 'red-tint-low',    value: 'rgba(255,0,54,0.08)', label: 'Menu item active'           },
+    { name: 'red-tint-mid',    value: 'rgba(255,0,54,0.10)', label: 'Menu item active — strong'  },
+    { name: 'red-tint-high',   value: 'rgba(255,0,54,0.15)', label: 'Glow base / code highlight' },
+    { name: 'red-tint-strong', value: 'rgba(255,0,54,0.30)', label: 'Glow active'                },
+  ].map(({ name, value, label }) => (
+    <div key={name} style={{ flex: '1', minWidth: '130px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #172230' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '11px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{label}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Green Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#22c55e' }}></div>
-    <div style={{ color: 'white' }}><strong>green</strong></div>
-    <div style={{ color: '#636579' }}>#22c55e</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#5ee78b' }}></div>
-    <div style={{ color: 'white' }}><strong>green-light</strong></div>
-    <div style={{ color: '#636579' }}>#5ee78b</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#138a3d' }}></div>
-    <div style={{ color: 'white' }}><strong>green-dark</strong></div>
-    <div style={{ color: '#636579' }}>#138a3d</div>
-  </div>
+<H2>Functional Tints — Surface (white)</H2>
+
+<Note>Semi-transparent white overlays for hover states, card borders, and inset highlights on dark surfaces. Never use solid white for these — transparency is intentional.</Note>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'white-tint-faint',  value: 'rgba(255,255,255,0.05)', label: 'Hover bg — subtle'          },
+    { name: 'white-tint-low',    value: 'rgba(255,255,255,0.06)', label: 'Card border faint'           },
+    { name: 'white-tint-mid',    value: 'rgba(255,255,255,0.07)', label: 'Hover bg — medium'           },
+    { name: 'white-tint-high',   value: 'rgba(255,255,255,0.10)', label: 'Interactive border'          },
+    { name: 'white-tint-strong', value: 'rgba(255,255,255,0.15)', label: 'Inset highlight — button'    },
+    { name: 'white-tint-heavy',  value: 'rgba(255,255,255,0.25)', label: 'Inset highlight — strong'    },
+  ].map(({ name, value, label }) => (
+    <div key={name} style={{ flex: '1', minWidth: '130px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #172230' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '11px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{label}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Teal Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#14b8a6' }}></div>
-    <div style={{ color: 'white' }}><strong>teal</strong></div>
-    <div style={{ color: '#636579' }}>#14b8a6</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#40dfcb' }}></div>
-    <div style={{ color: 'white' }}><strong>teal-light</strong></div>
-    <div style={{ color: '#636579' }}>#40dfcb</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#0a7f74' }}></div>
-    <div style={{ color: 'white' }}><strong>teal-dark</strong></div>
-    <div style={{ color: '#636579' }}>#0a7f74</div>
-  </div>
+<H2>Functional Tints — Overlay (black)</H2>
+
+<Note>Dark overlays for modal backdrops and lightbox effects. Always apply on top of the full page — not inside cards.</Note>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'black-tint-mid',   value: 'rgba(0,0,0,0.40)', label: 'Light overlay'         },
+    { name: 'black-tint-heavy', value: 'rgba(0,0,0,0.60)', label: 'Modal backdrop / blur'  },
+  ].map(({ name, value, label }) => (
+    <div key={name} style={{ flex: '1', minWidth: '130px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #172230' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '11px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{label}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Blue Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#3b82f6' }}></div>
-    <div style={{ color: 'white' }}><strong>blue</strong></div>
-    <div style={{ color: '#636579' }}>#3b82f6</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#7bb0fa' }}></div>
-    <div style={{ color: 'white' }}><strong>blue-light</strong></div>
-    <div style={{ color: '#636579' }}>#7bb0fa</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#1e4ed8' }}></div>
-    <div style={{ color: 'white' }}><strong>blue-dark</strong></div>
-    <div style={{ color: '#636579' }}>#1e4ed8</div>
-  </div>
+<H2>Functional Tints — Amber (stars / metrics)</H2>
+
+<Note>Used exclusively for the GitHub stars badge and numeric metric highlights. Not a general-purpose warning color — use <code>warning-*</code> for that.</Note>
+
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+  {[
+    { name: 'amber-tint-low',  value: 'rgba(255,185,0,0.07)', label: 'Badge section bg'      },
+    { name: 'amber-tint-mid',  value: 'rgba(255,185,0,0.12)', label: 'Badge hover bg'         },
+    { name: 'amber-tint-high', value: 'rgba(255,185,0,0.14)', label: 'Badge active bg'         },
+    { name: 'amber',           value: '#fbbf24',               label: 'Star count text color'  },
+    { name: 'amber-hover',     value: '#ffd700',               label: 'Star icon hover'         },
+  ].map(({ name, value, label }) => (
+    <div key={name} style={{ flex: '1', minWidth: '120px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ height: '60px', borderRadius: '8px', background: value, border: '1px solid #172230' }}></div>
+      <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600 }}>{name}</div>
+      <div style={{ color: '#888888', fontSize: '11px', fontFamily: 'monospace' }}>{value}</div>
+      <div style={{ color: '#6a6b6c', fontSize: '11px' }}>{label}</div>
+    </div>
+  ))}
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Indigo Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#6366f1' }}></div>
-    <div style={{ color: 'white' }}><strong>indigo</strong></div>
-    <div style={{ color: '#636579' }}>#6366f1</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#9ca3fa' }}></div>
-    <div style={{ color: 'white' }}><strong>indigo-light</strong></div>
-    <div style={{ color: '#636579' }}>#9ca3fa</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#4338ca' }}></div>
-    <div style={{ color: 'white' }}><strong>indigo-dark</strong></div>
-    <div style={{ color: '#636579' }}>#4338ca</div>
-  </div>
-</div>
+---
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Purple Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#8b5cf6' }}></div>
-    <div style={{ color: 'white' }}><strong>purple</strong></div>
-    <div style={{ color: '#636579' }}>#8b5cf6</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#c4b5fd' }}></div>
-    <div style={{ color: 'white' }}><strong>purple-light</strong></div>
-    <div style={{ color: '#636579' }}>#c4b5fd</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#6d28d9' }}></div>
-    <div style={{ color: 'white' }}><strong>purple-dark</strong></div>
-    <div style={{ color: '#636579' }}>#6d28d9</div>
-  </div>
-</div>
+<H2>Utility Palette</H2>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Pink Scale</h2>
-<div
-  style={{
-    display: 'flex',
-    gap: '1.5rem',
-    flexWrap: 'wrap',
-    marginBottom: '2rem',
-  }}
->
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#ec4899' }}></div>
-    <div style={{ color: 'white' }}><strong>pink</strong></div>
-    <div style={{ color: '#636579' }}>#ec4899</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#fda4cf' }}></div>
-    <div style={{ color: 'white' }}><strong>pink-light</strong></div>
-    <div style={{ color: '#636579' }}>#fda4cf</div>
-  </div>
-  <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div style={{ height: '60px', borderRadius: '8px', background: '#be185d' }}></div>
-    <div style={{ color: 'white' }}><strong>pink-dark</strong></div>
-    <div style={{ color: '#636579' }}>#be185d</div>
-  </div>
+<p style={{ color: '#888888', fontSize: '13px', marginBottom: '1.5rem', borderLeft: '2px solid #172230', paddingLeft: '0.75rem' }}>
+  Extended color palette available as tokens. These have no assigned semantic role in the system — they exist for data visualization, custom illustrations, or future component needs. <strong style={{ color: '#cccccc' }}>Do not use these in place of status colors.</strong>
+</p>
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
+  {[
+    { label: 'Orange',  tokens: [{ name: 'orange', value: '#f97316' }, { name: 'orange-light', value: '#fda65c' }, { name: 'orange-dark', value: '#d94e08' }] },
+    { label: 'Yellow',  tokens: [{ name: 'yellow', value: '#eab308' }, { name: 'yellow-light', value: '#fde047' }, { name: 'yellow-dark', value: '#b58903' }] },
+    { label: 'Green',   tokens: [{ name: 'green', value: '#22c55e' }, { name: 'green-light', value: '#5ee78b' }, { name: 'green-dark', value: '#138a3d' }] },
+    { label: 'Teal',    tokens: [{ name: 'teal', value: '#14b8a6' }, { name: 'teal-light', value: '#40dfcb' }, { name: 'teal-dark', value: '#0a7f74' }] },
+    { label: 'Blue',    tokens: [{ name: 'blue', value: '#3b82f6' }, { name: 'blue-light', value: '#7bb0fa' }, { name: 'blue-dark', value: '#1e4ed8' }] },
+    { label: 'Indigo',  tokens: [{ name: 'indigo', value: '#6366f1' }, { name: 'indigo-light', value: '#9ca3fa' }, { name: 'indigo-dark', value: '#4338ca' }] },
+    { label: 'Purple',  tokens: [{ name: 'purple', value: '#8b5cf6' }, { name: 'purple-light', value: '#c4b5fd' }, { name: 'purple-dark', value: '#6d28d9' }] },
+    { label: 'Pink',    tokens: [{ name: 'pink', value: '#ec4899' }, { name: 'pink-light', value: '#fda4cf' }, { name: 'pink-dark', value: '#be185d' }] },
+  ].map(({ label, tokens }) => (
+    <div key={label}>
+      <div style={{ color: '#888888', fontSize: '12px', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+        {tokens.map(({ name, value }) => (
+          <div key={name} style={{ flex: '1', minWidth: '80px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ height: '40px', borderRadius: '6px', background: value }}></div>
+            <div style={{ color: '#cccccc', fontSize: '12px', fontWeight: 500 }}>{name}</div>
+            <div style={{ color: '#888888', fontSize: '11px', fontFamily: 'monospace' }}>{value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
 </div>

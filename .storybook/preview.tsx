@@ -3,13 +3,14 @@ import { Description, Primary, Stories, Subtitle, Title } from '@storybook/block
 import type { Preview } from '@storybook/react';
 import React from 'react';
 import '../src/styles/global.css';
-import withA11y from '@storybook/addon-a11y';
 import theme from './theme';
 import { withDarkMode } from './withDarkMode';
 
 const preview: Preview = {
+  initialGlobals: {
+    darkMode: true
+  },
   parameters: {
-    layout: 'centered',
     actions: { argTypesRegex: '^on.*' },
     options: {
       theme: theme,
@@ -22,7 +23,7 @@ const preview: Preview = {
       dark: {
         class: 'dark',
         style: {
-          backgroundColor: '#000000'
+          backgroundColor: '#060C13'
         }
       },
       light: {
@@ -88,10 +89,9 @@ const preview: Preview = {
       ),
       disableInjectedStyles: true
     },
-    tags: ['autodocs'],
-    viewMode: 'docs',
-    decorators: [withDarkMode, withA11y]
   }
 };
+
+preview.decorators = [withDarkMode];
 
 export default preview;

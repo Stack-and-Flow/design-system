@@ -29,9 +29,6 @@ type Story = StoryObj<typeof Button>;
 export const Default: Story = {
   args: {
     variant: 'primary',
-    rounded: false,
-    shadow: true,
-    uppercase: true,
     size: 'md',
     text: 'Lorem ipsum',
     type: 'button',
@@ -241,9 +238,6 @@ export const Disabled: Story = {
 export const CustomStyles: Story = {
   args: {
     variant: 'primary',
-    rounded: false,
-    shadow: true,
-    uppercase: true,
     size: 'md',
     text: 'Lorem ipsum',
     type: 'button',

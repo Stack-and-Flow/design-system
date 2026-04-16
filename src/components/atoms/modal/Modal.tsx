@@ -36,7 +36,7 @@ const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
         <ModalPrimitive.Overlay className={currentBackdrop} />
         <div
           className={cn(
-            'fixed w-full inset-0 z-50 flex p-0 tablet:p-4',
+            'fixed w-full inset-0 z-[var(--z-modal)] flex p-0 tablet:p-4',
             position === 'center' && 'items-center justify-center',
             position === 'top' && 'items-start justify-center',
             position === 'bottom' && 'items-end justify-center'
@@ -55,7 +55,7 @@ const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
             <div className='relative pb-4'>
               <div className='w-full flex items-start justify-start pr-8'>
                 {header ?? (
-                  <Header tag='h5' id={titleId} className='text-text-light dark:text-text-dark text-lg font-semibold'>
+                  <Header tag='h5' id={titleId} className='text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] text-lg font-semibold'>
                     {title}
                   </Header>
                 )}
@@ -72,7 +72,7 @@ const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
             </div>
             <div id={descriptionId} className='py-4 flex-1 overflow-y-auto max-h-[80dvh]'>
               {content || (
-                <Text tag='p' className='text-sm text-secondary-light dark:text-secondary-dark'>
+                <Text tag='p' className='text-sm text-[var(--color-text-secondary-light)] dark:text-[var(--color-text-secondary-dark)]'>
                   {textContent}
                 </Text>
               )}

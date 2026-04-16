@@ -111,7 +111,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   const dynamicStyles = `
     .${dynamicHoverClass}:hover {
       background-color: ${hoverColor} !important;
-      color: #fff !important;
+      color: var(--color-text-dark) !important;
     }
   `;
   return (
@@ -121,7 +121,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         className={`${calendarCva({ variant, size, radius: radiusCva, theme, show, disabled, readOnly })} ${visibleMonths > 1 ? 'w-auto' : ''}`}
         role='application'
         style={{
-          animation: 'fadeIn 0.3s',
+          animation: 'var(--animate-fadeIn)',
           ...(readOnly ? { pointerEvents: 'none' } : {}),
           ...(disabled ? { pointerEvents: 'none' } : {})
         }}
@@ -130,7 +130,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         <div className='flex justify-between items-center mb-4 gap-2'>
           <button
             onClick={disabled || readOnly ? undefined : goToPrevMonth}
-            className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 transition-colors duration-200 ${variant === 'outlined' ? 'text-gray-900 dark:text-white' : ''}`}
+            className={`p-2 rounded-full hover:bg-[var(--color-surface-raised-light)] dark:hover:bg-[var(--color-white-tint-faint)] focus:outline-none focus:ring-2 transition-colors duration-200 ${variant === 'outlined' ? 'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]' : ''}`}
             aria-label='Previous month'
             disabled={disabled || readOnly}
           >
@@ -146,7 +146,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           </button>
           <button
             type='button'
-            className='bg-transparent outline-none font-semibold text-gray-900 dark:text-gray-100 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'
+            className='bg-transparent outline-none font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] px-2 py-1 rounded hover:bg-[var(--color-surface-raised-light)] dark:hover:bg-[var(--color-white-tint-faint)] transition-colors duration-150'
             aria-label='Choose month and year'
             onClick={disabled || readOnly ? undefined : () => setPickerMode('month')}
             disabled={disabled || readOnly}
@@ -155,7 +155,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           </button>
           <button
             onClick={disabled || readOnly ? undefined : goToNextMonth}
-            className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 transition-colors duration-200 ${variant === 'outlined' ? 'text-gray-900 dark:text-white' : ''}`}
+            className={`p-2 rounded-full hover:bg-[var(--color-surface-raised-light)] dark:hover:bg-[var(--color-white-tint-faint)] focus:outline-none focus:ring-2 transition-colors duration-200 ${variant === 'outlined' ? 'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]' : ''}`}
             aria-label='Next month'
             disabled={disabled || readOnly}
           >
@@ -197,7 +197,7 @@ export const Calendar: React.FC<CalendarProps> = ({
               <div key={index} className='flex-1' role='grid'>
                 {/* Weekday headers */}
                 <div
-                  className='grid grid-cols-7 gap-1 mb-2 text-center text-sm font-semibold text-gray-500 dark:text-gray-200'
+                  className='grid grid-cols-7 gap-1 mb-2 text-center text-sm font-semibold text-[var(--color-text-tertiary-light)] dark:text-[var(--color-text-secondary-dark)]'
                   role='row'
                 >
                   <div className='contents'>

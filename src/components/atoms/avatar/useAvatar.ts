@@ -1,6 +1,6 @@
 import type { AvatarProps } from './types';
 
-export const useAvatar = ({ src, alt = 'EG', className, size = 'md', rounded = 'md' }: AvatarProps) => {
+export const useAvatar = ({ src, alt = 'EG', className, size = 'md', rounded = 'md', onClick }: AvatarProps) => {
   const sizeClasses = {
     sm: '30px',
     md: '40px',
@@ -22,12 +22,22 @@ export const useAvatar = ({ src, alt = 'EG', className, size = 'md', rounded = '
   const sizeClass = sizeClasses[size];
   const textClass = textClasses[size];
 
+  const initials = alt
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+
   return {
     src,
     alt,
+    initials,
     className,
     sizeClass,
     textClass,
-    roundedClass
+    roundedClass,
+    onClick
   };
 };

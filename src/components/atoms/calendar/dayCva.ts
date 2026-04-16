@@ -6,19 +6,19 @@ const filledRangeVariants = [
     isRangeStart: false,
     isRangeEnd: false,
     variant: 'filled' as const,
-    class: 'bg-red-600 text-white rounded-none dark:bg-red-600 dark:text-white'
+    class: 'bg-[var(--color-primary)] text-[var(--color-text-dark)] rounded-none dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)]'
   },
   {
     isInRange: true,
     isRangeStart: true,
     variant: 'filled' as const,
-    class: 'bg-red-600 text-white rounded-l-full dark:bg-red-600 dark:text-white'
+    class: 'bg-[var(--color-primary)] text-[var(--color-text-dark)] rounded-l-full dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)]'
   },
   {
     isInRange: true,
     isRangeEnd: true,
     variant: 'filled' as const,
-    class: 'bg-red-600 text-white rounded-r-full dark:bg-red-600 dark:text-white'
+    class: 'bg-[var(--color-primary)] text-[var(--color-text-dark)] rounded-r-full dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)]'
   }
 ];
 
@@ -28,7 +28,7 @@ const filledDisabledRangeVariants = [
     isDisabled: true,
     variant: 'filled' as const,
     class:
-      'bg-red-600 text-gray-900 dark:bg-red-600 dark:text-gray-100 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-[var(--color-primary)] text-[var(--color-text-light)] dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)] rounded-none opacity-40 cursor-not-allowed pointer-events-none'
   },
   {
     isInRange: true,
@@ -36,7 +36,7 @@ const filledDisabledRangeVariants = [
     isDisabled: true,
     variant: 'filled' as const,
     class:
-      'bg-red-600 text-gray-900 dark:bg-red-600 dark:text-gray-100 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-[var(--color-primary)] text-[var(--color-text-light)] dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)] rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
   },
   {
     isInRange: true,
@@ -44,7 +44,7 @@ const filledDisabledRangeVariants = [
     isDisabled: true,
     variant: 'filled' as const,
     class:
-      'bg-red-600 text-gray-900 dark:bg-red-600 dark:text-gray-100 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-[var(--color-primary)] text-[var(--color-text-light)] dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)] rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
   }
 ];
 
@@ -54,19 +54,19 @@ const outlinedRangeVariants = [
     isRangeStart: false,
     isRangeEnd: false,
     variant: 'outlined' as const,
-    class: 'bg-red-900 text-red-100 border border-red-400 rounded-none'
+    class: 'bg-[var(--color-red-tint-mid)] text-[var(--color-text-light)] border border-[var(--color-border-light)] rounded-none dark:text-[var(--color-text-dark)] dark:border-[var(--color-border-dark)]'
   },
   {
     isInRange: true,
     isRangeStart: true,
     variant: 'outlined' as const,
-    class: 'bg-red-900 text-red-100 border-2 border-red-400 rounded-l-full'
+    class: 'bg-[var(--color-red-tint-mid)] text-[var(--color-text-light)] border-2 border-[var(--color-border-light)] rounded-l-full dark:text-[var(--color-text-dark)] dark:border-[var(--color-border-dark)]'
   },
   {
     isInRange: true,
     isRangeEnd: true,
     variant: 'outlined' as const,
-    class: 'bg-red-900 text-red-100 border-2 border-red-400 rounded-r-full'
+    class: 'bg-[var(--color-red-tint-mid)] text-[var(--color-text-light)] border-2 border-[var(--color-border-light)] rounded-r-full dark:text-[var(--color-text-dark)] dark:border-[var(--color-border-dark)]'
   }
 ];
 
@@ -76,7 +76,7 @@ const outlinedDisabledRangeVariants = [
     isDisabled: true,
     variant: 'outlined' as const,
     class:
-      'bg-red-900 text-red-100 border border-red-400 rounded-none opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-[var(--color-red-tint-mid)] text-[var(--color-text-light)] border border-[var(--color-border-light)] rounded-none opacity-40 cursor-not-allowed pointer-events-none dark:text-[var(--color-text-dark)] dark:border-[var(--color-border-dark)]'
   },
   {
     isInRange: true,
@@ -84,7 +84,7 @@ const outlinedDisabledRangeVariants = [
     isDisabled: true,
     variant: 'outlined' as const,
     class:
-      'bg-red-900 text-red-100 border-2 border-red-400 rounded-l-full opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-[var(--color-red-tint-mid)] text-[var(--color-text-light)] border-2 border-[var(--color-border-light)] rounded-l-full opacity-40 cursor-not-allowed pointer-events-none dark:text-[var(--color-text-dark)] dark:border-[var(--color-border-dark)]'
   },
   {
     isInRange: true,
@@ -92,7 +92,7 @@ const outlinedDisabledRangeVariants = [
     isDisabled: true,
     variant: 'outlined' as const,
     class:
-      'bg-red-900 text-red-100 border-2 border-red-400 rounded-r-full opacity-40 cursor-not-allowed pointer-events-none'
+      'bg-[var(--color-red-tint-mid)] text-[var(--color-text-light)] border-2 border-[var(--color-border-light)] rounded-r-full opacity-40 cursor-not-allowed pointer-events-none dark:text-[var(--color-text-dark)] dark:border-[var(--color-border-dark)]'
   }
 ];
 
@@ -110,8 +110,8 @@ export const dayCva = cva(
         lg: 'w-12 h-12 text-base'
       },
       isCurrentMonth: {
-        true: 'text-gray-900 dark:text-gray-100',
-        false: 'text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 dark:bg-transparent'
+        true: 'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
+        false: 'text-[var(--color-text-tertiary-light)] bg-transparent cursor-default pointer-events-none dark:text-[var(--color-text-tertiary-dark)] dark:bg-transparent'
       },
       isSelected: {
         true: '',
@@ -128,7 +128,7 @@ export const dayCva = cva(
         false: ''
       },
       isDisabled: {
-        true: 'text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 dark:bg-transparent',
+        true: 'text-[var(--color-text-tertiary-light)] bg-transparent cursor-default pointer-events-none dark:text-[var(--color-text-tertiary-dark)] dark:bg-transparent',
         false: 'cursor-pointer'
       },
       isInRange: {
@@ -154,7 +154,7 @@ export const dayCva = cva(
         isCurrentMonth: true,
         isDisabled: true,
         class:
-          'text-gray-400 !text-gray-400 bg-transparent cursor-default pointer-events-none dark:text-gray-500 !dark:text-gray-500 dark:bg-transparent'
+          'text-[var(--color-text-tertiary-light)] !text-[var(--color-text-tertiary-light)] bg-transparent cursor-default pointer-events-none dark:text-[var(--color-text-tertiary-dark)] !dark:text-[var(--color-text-tertiary-dark)] dark:bg-transparent'
       },
       ...filledRangeVariants,
       ...filledDisabledRangeVariants,
@@ -164,28 +164,28 @@ export const dayCva = cva(
       {
         isSelected: true,
         variant: 'outlined' as const,
-        class: 'border-2 border-red-400 bg-transparent rounded-full'
+        class: 'border-2 border-[var(--color-primary)] bg-transparent rounded-full'
       },
       {
         isSelected: true,
         variant: 'soft' as const,
-        class: 'bg-red-100 text-red-700 rounded-full dark:bg-red-700 dark:text-white'
+        class: 'bg-[var(--color-red-tint-low)] text-[var(--color-primary)] rounded-full dark:bg-[var(--color-red-tint-mid)] dark:text-[var(--color-text-dark)]'
       },
       {
         isSelected: true,
         variant: 'ghost' as const,
-        class: 'text-red-300 font-bold underline rounded-full'
+        class: 'text-[var(--color-primary)] font-bold underline rounded-full'
       },
       {
         isSelected: true,
         variant: 'filled' as const,
-        class: 'bg-red-600 text-white rounded-full dark:bg-red-600 dark:text-white'
+        class: 'bg-[var(--color-primary)] text-[var(--color-text-dark)] rounded-full dark:bg-[var(--color-primary)] dark:text-[var(--color-text-dark)]'
       },
       // Today variant
       {
         isToday: true,
         isSelected: false,
-        class: 'border-2 border-red-400 text-gray-900 dark:text-gray-100'
+        class: 'border-2 border-[var(--color-primary)] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]'
       },
       // Override rounded for range start and end when selected - to fix overriding of rounded-full
       {
@@ -222,7 +222,7 @@ export const dayCva = cva(
         isInRange: false,
         isDisabled: false,
         theme: 'light',
-        class: 'hover:bg-gray-300 hover:text-gray-900'
+        class: 'hover:bg-[var(--color-surface-raised-light)] hover:text-[var(--color-text-light)]'
       },
       // Hover effect for non-selected current-month days in dark theme
       {
@@ -231,7 +231,7 @@ export const dayCva = cva(
         isInRange: false,
         isDisabled: false,
         theme: 'dark',
-        class: 'hover:!bg-gray-100 hover:!text-gray-900'
+        class: 'hover:!bg-[var(--color-surface-raised-light)] hover:!text-[var(--color-text-light)]'
       }
     ],
     defaultVariants: {

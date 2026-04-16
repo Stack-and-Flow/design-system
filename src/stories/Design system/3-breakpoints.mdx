@@ -2,199 +2,97 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Design System/Breakpoints" />
 
-<h1 style={{ color: '#FF0F34' }}>Breakpoints and Spacing</h1>
+export const H2 = ({ children }) => (
+  <h2 style={{ color: '#ff0036', fontSize: '1.125rem', fontWeight: 700, paddingBottom: '12px', marginTop: '2rem', marginBottom: '1rem', borderBottom: '1px solid #172230' }}>
+    {children}
+  </h2>
+);
 
-<p>
-  Custom responsive breakpoints used in the <strong>Egdev Design System</strong>. These are used to define layout behaviors for different screen sizes.
+# Breakpoints & Spacing
+
+<p style={{ color: '#cccccc', marginBottom: '2rem' }}>
+  Responsive breakpoints and spacing scale for the <strong style={{ color: '#ffffff' }}>Stack-and-Flow Design System</strong>.
 </p>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Custom breakpoints</h2>
-<div style={{
-  marginTop: '2rem',
-  paddingTop: '1rem'
-}}>
-  <div style={{
-    position: 'relative',
-    height: '48px',
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '14px',
-    color: '#fff'
-  }}>
-    <span style={{ width: '50px' }}>0</span>
-    <div style={{ width: '100%', flex: 1, position: 'relative', height: '4px', background: '#333', borderRadius: '2px' }}>
-      <div style={{
-        position: 'absolute',
-        left: '0',
-        width: '40%',
-        height: '4px',
-        zIndex: '3',
-        background: '#FF0F34'
-      }}></div>
-      <div style={{
-        position: 'absolute',
-        left: '0',
-        width: '80%',
-        height: '4px',
-        zIndex: '2',
-        background: '#740015'
-      }}></div>
-      <div style={{
-        width: '100%',
-        position: 'absolute',
-        left: '0',
-        right: '0',
-        height: '4px',
-        zIndex: '1',
-        background: '#300008'
-      }}></div>
+<H2>Custom Breakpoints</H2>
+
+<div style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+  <div style={{ position: 'relative', height: '48px', display: 'flex', alignItems: 'center', fontSize: '14px', color: '#fff' }}>
+    <span style={{ width: '50px', color: '#888888' }}>0</span>
+    <div style={{ width: '100%', flex: 1, position: 'relative', height: '4px', background: '#172230', borderRadius: '2px' }}>
+      <div style={{ position: 'absolute', left: '0', width: '40%', height: '4px', zIndex: 2, background: '#ff0036', borderRadius: '2px' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '100%', height: '4px', zIndex: 1, background: '#172230', borderRadius: '2px' }}></div>
     </div>
-    <span style={{ width: '50px', textAlign: 'right' }}>∞</span>
+    <span style={{ width: '50px', textAlign: 'right', color: '#888888' }}>∞</span>
   </div>
-
-  <div style={{
-    display: 'flex',
-    justifyContent: 'space-between',
-    color: '#ccc',
-    fontSize: '12px',
-    paddingTop: '8px',
-    paddingLeft: '50px',
-    paddingRight: '20%'
-  }}>
-    <span>mobile<br /><code>0–899px</code></span>
-    <span>tablet<br /><code>≥ 900px</code></span>
-    <span>desktop<br /><code>≥ 1440px</code></span>
+  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#888888', fontSize: '12px', paddingTop: '8px', paddingLeft: '50px', paddingRight: '20%' }}>
+    <span>mobile<br /><code style={{ color: '#cccccc' }}>0 – 899px</code></span>
+    <span>tablet<br /><code style={{ color: '#cccccc' }}>≥ 900px</code></span>
+    <span>desktop<br /><code style={{ color: '#cccccc' }}>≥ 1440px</code></span>
   </div>
 </div>
 
-<div style={{ marginTop: '2rem', color: '#aaa', fontSize: '14px', marginBottom: '3rem' }}>
-  <p><strong>Defined in CSS tokens:</strong></p>
-  <ul>
-    <li><code>--breakpoint-tablet</code>: <code>900px</code></li>
-    <li><code>--breakpoint-desktop</code>: <code>1440px</code></li>
+<div style={{ marginTop: '1.5rem', color: '#888888', fontSize: '14px', marginBottom: '3rem' }}>
+  <ul style={{ paddingLeft: '1.25rem', lineHeight: 2 }}>
+    <li><code style={{ color: '#cccccc' }}>--breakpoint-tablet</code>: <code style={{ color: '#ff335e' }}>900px</code></li>
+    <li><code style={{ color: '#cccccc' }}>--breakpoint-desktop</code>: <code style={{ color: '#ff335e' }}>1440px</code></li>
   </ul>
-
-  <p>
-    These breakpoints are used to trigger layout or visual changes across devices.
-    They can be referenced in your CSS or JS via <code>var(--breakpoint-tablet)</code>.
-  </p>
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Tailwind CSS Breakpoints</h2>
-<div style={{
-  marginTop: '1rem',
-  paddingTop: '1rem'
-}}>
-  <div style={{
-    position: 'relative',
-    height: '48px',
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '14px',
-    color: '#fff'
-  }}>
-   <span style={{ width: '50px' }}>0</span>
+<H2>Tailwind CSS Breakpoints</H2>
+
+<div style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+  <div style={{ position: 'relative', height: '48px', display: 'flex', alignItems: 'center', fontSize: '14px', color: '#fff' }}>
+    <span style={{ width: '50px', color: '#888888' }}>0</span>
     <div style={{ flex: 1, position: 'relative', height: '4px' }}>
-      <div style={{
-  position: 'absolute',
-  left: '0',
-  width: '20%',
-  height: '4px',
-  zIndex: 5,
-  background: '#FF6A7D' // más claro
-}}></div>
-<div style={{
-  position: 'absolute',
-  left: '0',
-  width: '40%',
-  height: '4px',
-  zIndex: 4,
-  background: '#FF0F34'
-}}></div>
-<div style={{
-  position: 'absolute',
-  left: '0',
-  width: '60%',
-  height: '4px',
-  zIndex: 3,
-  background: '#B41724'
-}}></div>
-<div style={{
-  position: 'absolute',
-  left: '0',
-  width: '80%',
-  height: '4px',
-  zIndex: 2,
-  background: '#740015'
-}}></div>
-<div style={{
-  position: 'absolute',
-  left: '0',
-  width: '100%',
-  height: '4px',
-  zIndex: 1,
-  background: '#300008' // más oscuro
-}}></div>
+      <div style={{ position: 'absolute', left: '0', width: '20%', height: '4px', zIndex: 5, background: '#ff809b', borderRadius: '2px' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '40%', height: '4px', zIndex: 4, background: '#ff335e' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '60%', height: '4px', zIndex: 3, background: '#ff0036' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '80%', height: '4px', zIndex: 2, background: '#cc002b' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '100%', height: '4px', zIndex: 1, background: '#8c0b26', borderRadius: '2px' }}></div>
     </div>
-    <span style={{ width: '50px', textAlign: 'right' }}>∞</span>
+    <span style={{ width: '50px', textAlign: 'right', color: '#888888' }}>∞</span>
   </div>
-
-  <div style={{
-    display: 'flex',
-    justifyContent: 'space-between',
-    color: '#ccc',
-    fontSize: '12px',
-    paddingTop: '8px',
-    paddingLeft: '50px',
-    paddingRight: '20%'
-  }}>
-    <span>sm<br /><code>≥ 640px</code></span>
-    <span>md<br /><code>≥ 768px</code></span>
-    <span>lg<br /><code>≥ 1024px</code></span>
-    <span>xl<br /><code>≥ 1280px</code></span>
-    <span>2xl<br /><code>≥ 1536px</code></span>
+  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#888888', fontSize: '12px', paddingTop: '8px', paddingLeft: '50px', paddingRight: '20%' }}>
+    <span>sm<br /><code style={{ color: '#cccccc' }}>≥ 640px</code></span>
+    <span>md<br /><code style={{ color: '#cccccc' }}>≥ 768px</code></span>
+    <span>lg<br /><code style={{ color: '#cccccc' }}>≥ 1024px</code></span>
+    <span>xl<br /><code style={{ color: '#cccccc' }}>≥ 1280px</code></span>
+    <span>2xl<br /><code style={{ color: '#cccccc' }}>≥ 1536px</code></span>
   </div>
 </div>
 
-<div style={{ marginTop: '1rem', color: '#aaa', fontSize: '14px', marginBottom: '3rem' }}>
-  <ul>
-    <li><code>sm</code>: <code>@media (min-width: 640px)</code></li>
-    <li><code>md</code>: <code>@media (min-width: 768px)</code></li>
-    <li><code>lg</code>: <code>@media (min-width: 1024px)</code></li>
-    <li><code>xl</code>: <code>@media (min-width: 1280px)</code></li>
-    <li><code>2xl</code>: <code>@media (min-width: 1536px)</code></li>
+<div style={{ marginTop: '1.5rem', color: '#888888', fontSize: '14px', marginBottom: '3rem' }}>
+  <ul style={{ paddingLeft: '1.25rem', lineHeight: 2 }}>
+    <li><code style={{ color: '#cccccc' }}>sm</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 640px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>md</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 768px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>lg</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 1024px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>xl</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 1280px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>2xl</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 1536px)</code></li>
   </ul>
 </div>
 
-<h2 style={{ paddingBottom: '24px', marginTop: '24px', marginBottom: '24px', color: '#d61e2b' }}>Spacing Scale</h2>
+<H2>Spacing Scale</H2>
 
-<p style={{ color: '#ccc', marginBottom: '1rem' }}>
-  This is the spacing scale defined in the <strong>Egdev Design System</strong>. All values are in <code>rem</code> and can be used as CSS variables.
+<p style={{ color: '#888888', marginBottom: '1.5rem', fontSize: '14px' }}>
+  Base unit: <strong style={{ color: '#ffffff' }}>8px</strong>. All values are multiples of 4 or 8. Use semantic aliases in components.
 </p>
 
-<div style={{
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  marginBottom: '2rem'
-}}>
+<div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '3rem' }}>
   {[
-    { label: 'spacing-xxs', value: '0.25rem' },
-    { label: 'spacing-xs', value: '0.5rem' },
-    { label: 'spacing-sm', value: '0.75rem' },
-    { label: 'spacing-md', value: '1rem' },
-    { label: 'spacing-lg', value: '1.5rem' },
-    { label: 'spacing-xl', value: '2rem' }
-  ].map(({ label, value }) => (
+    { label: 'spacing-xxs', value: '0.25rem', px: '4px' },
+    { label: 'spacing-xs',  value: '0.5rem',  px: '8px' },
+    { label: 'spacing-sm',  value: '0.75rem', px: '12px' },
+    { label: 'spacing-md',  value: '1rem',    px: '16px' },
+    { label: 'spacing-lg',  value: '1.5rem',  px: '24px' },
+    { label: 'spacing-xl',  value: '2rem',    px: '32px' },
+    { label: 'spacing-2xl', value: '3rem',    px: '48px' },
+    { label: 'spacing-3xl', value: '5rem',    px: '80px' },
+  ].map(({ label, value, px }) => (
     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-      <div style={{
-        width: value,
-        height: '16px',
-        backgroundColor: '#FF0F34',
-        borderRadius: '4px'
-      }}></div>
-      <div style={{ color: '#fff', width: '120px' }}><code>--{label}</code></div>
-      <div style={{ color: '#888' }}>{value}</div>
+      <div style={{ width: value, minWidth: '4px', height: '16px', backgroundColor: '#ff0036', borderRadius: '3px', flexShrink: 0 }}></div>
+      <code style={{ color: '#cccccc', width: '130px', fontSize: '13px' }}>--{label}</code>
+      <span style={{ color: '#888888', fontSize: '13px' }}>{value} — {px}</span>
     </div>
   ))}
 </div>

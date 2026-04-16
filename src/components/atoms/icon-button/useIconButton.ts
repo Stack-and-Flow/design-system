@@ -10,7 +10,7 @@ export const useIconButton = ({
   className,
   onClick,
   title,
-  rounded = false,
+  rounded = true,
   shadow = false,
   disabled = false,
   'aria-pressed': ariaPressed,

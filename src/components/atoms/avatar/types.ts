@@ -11,4 +11,6 @@ export type AvatarProps = {
   className?: string;
   /** @control select */
   rounded?: ThemeRounded;
+  /** Passing onClick enables hover/active scale effect and cursor-pointer automatically */
+  onClick?: () => void;
 };
