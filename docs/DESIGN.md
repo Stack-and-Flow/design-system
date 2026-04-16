@@ -6,16 +6,16 @@ Este documento define la identidad visual del Design System Stack-and-Flow. Est�
 
 ## 1. Atmósfera y Filosofía Visual
 
-Stack-and-Flow se siente como el interior de un instrumento de precisión. El fondo no es simplemente oscuro — es un negro puro (`#000000`) que actúa como void absoluto sobre el que todo el contenido emerge con claridad.
+Stack-and-Flow se siente como el interior de un instrumento de precisión. El fondo no es simplemente oscuro — es un **negro azulado profundo** (`#060C13`) que actúa como void con tinte frío perceptible, sobre el que todo el contenido emerge con claridad y temperatura visual coherente.
 
 La firma visual es la **combinación de superficies opacas y transparencias con blur** — algunos cards son sólidos y elevados, otros son semitransparentes con `backdrop-filter: blur()`, creando capas de profundidad sin recurrir a sombras dramáticas. El acento rojo carmesí (`#db143c` en light, `#ff0036` en dark) no domina — puntúa. Aparece en gradientes de botón, glows sutiles y estados activos.
 
 El elemento diferenciador es el **grid de fondo sutil** — líneas translúcidas de 40×40px que dan al canvas una textura de hoja técnica sin interferir con el contenido. Combinado con el `backdrop-filter` de la navbar, crea la ilusión de estar trabajando dentro de una herramienta nativa, no de navegar una web de marketing.
 
 **Características clave:**
-- Negro puro (`#000000`) como fondo base — sin tintes, sin tonos de gris medio
+- Negro azulado profundo (`#060C13`) como fondo base — Paleta A, H215 S50, tinte frío perceptible sin romper oscuridad
 - Grid de fondo sutil (líneas `rgba` a baja opacidad) sobre el canvas principal
-- Navbar flotante con `backdrop-filter: blur(16px)` y `background: rgba(27,27,29,0.6)` — efecto cristal
+- Navbar flotante con `backdrop-filter: blur(16px)` y `background: rgba(6,12,19,0.75)` — efecto cristal con tinte frío
 - Rojo carmesí como acento de punctuación, nunca como relleno general
 - Botones primarios con glow neon multi-capa — gradiente rojo + halo exterior
 - Botones secundarios con borde semitransparente y glow contenido
@@ -57,37 +57,40 @@ El color de marca. Dos valores según el modo:
 | `primary-lighter` | `#ff4d72` | Hover elevated |
 | `primary-lightest` | `#ff809b` | Tints, highlighted text |
 
-> **Por qué dos valores**: en dark mode el rojo necesita mayor vibración para mantener contraste y "salir" sobre el negro absoluto. `#ff0036` tiene más presencia que `#db143c` sobre `#000000`.
+> **Por qué dos valores**: en dark mode el rojo necesita mayor vibración para mantener contraste y "salir" sobre el fondo azul-slate. `#ff0036` tiene más presencia que `#db143c` y mantiene ratio AA (4.96:1) sobre el canvas `#060C13`.
 
 ---
 
 ### Fondos y Superficies
 
+> **Paleta A — Azul-slate**: H215 S50, tinte frío perceptible. Verificado accesible con `#FF0036` en canvas (4.96:1) y surface (4.71:1).
+
 | Token | Dark | Light | Uso |
 |-------|------|-------|-----|
-| `background` | `#000000` | Docusaurus default (white) | Canvas principal |
-| `background-surface` | `#0a0a0a` | — | Cards sólidas, code blocks |
-| `navbar-bg` | `rgba(27,27,29,0.6)` | `rgba(255,255,255,0.7)` | Navbar con backdrop-blur |
-| `sidebar-mobile-bg` | `rgba(27,27,29,1.0)` | `#ffffff` | Sidebar mobile |
-| `dropdown-bg` | `#0a0a0a` | `#ffffff` | Menus desplegables |
+| `background` | `#060C13` | Docusaurus default (white) | Canvas principal |
+| `background-surface` | `#0B131E` | — | Cards sólidas, code blocks |
+| `background-surface-raised` | `#0F1824` | — | Headers de tabla, énfasis sutil |
+| `navbar-bg` | `rgba(6,12,19,0.75)` | `rgba(255,255,255,0.7)` | Navbar con backdrop-blur |
+| `sidebar-mobile-bg` | `rgba(6,12,19,1.0)` | `#ffffff` | Sidebar mobile |
+| `dropdown-bg` | `#0B131E` | `#ffffff` | Menus desplegables |
 
 ### Escala de énfasis (bordes y separadores)
 
 | Token | Dark | Uso |
 |-------|------|-----|
-| `emphasis-100` | `#111111` | Headers de tabla, fondos sutiles |
-| `emphasis-200` | `#1a1a1a` | Bordes estándar, separadores |
-| `emphasis-300` | `#262626` | Bordes de componentes interactivos |
+| `surface-raised` | `#0F1824` | Headers de tabla, fondos sutiles |
+| `border` | `#172230` | Bordes estándar, separadores |
+| `border-strong` | `#202C3C` | Bordes de componentes interactivos |
 
 ### Texto
 
 | Rol | Dark | Light | Contraste aprox. |
 |-----|------|-------|-----------------|
 | Primario (headings) | `#ffffff` | `#000000` | 21:1 ✅ |
-| Secundario (body) | `#cccccc` | sistema | ~7:1 ✅ |
-| Terciario (labels, nav) | `#888888` | sistema | ~5:1 ✅ |
-| Sidebar activo | `#adadad` | — | ~6:1 ✅ |
-| Disabled / muted | `#6a6b6c` | — | ~4.5:1 ✅ |
+| Secundario (body) | `#cccccc` | sistema | ~7:1 sobre `#060C13` ✅ |
+| Terciario (labels, nav) | `#888888` | sistema | ~5:1 sobre `#060C13` ✅ |
+| Sidebar activo | `#adadad` | — | ~6:1 sobre `#060C13` ✅ |
+| Disabled / muted | `#6a6b6c` | — | ~4.5:1 — disabled, WCAG exime ✅ |
 
 ### Colores funcionales / semánticos
 
@@ -179,9 +182,9 @@ A diferencia de un sistema de elevación con sombras, Stack-and-Flow usa un **si
 
 | Nivel | Tipo | Tratamiento | Uso |
 |-------|------|-------------|-----|
-| **Base** | Opaco | `background: #000000` + grid sutil | Canvas de página |
-| **Raised** | Opaco | `background: #0a0a0a` + `border: 1px solid #1a1a1a` | Cards sólidas, code blocks, dropdowns |
-| **Frosted** | Semitransparente | `background: rgba(27,27,29,0.6)` + `backdrop-filter: blur(16px)` | Navbar, overlays flotantes |
+| **Base** | Opaco | `background: #060C13` + grid sutil | Canvas de página |
+| **Raised** | Opaco | `background: #0B131E` + `border: 1px solid #172230` | Cards sólidas, code blocks, dropdowns |
+| **Frosted** | Semitransparente | `background: rgba(6,12,19,0.75)` + `backdrop-filter: blur(16px)` | Navbar, overlays flotantes |
 | **Frosted Light** | Semitransparente | `background: rgba(255,255,255,0.7)` + `backdrop-filter: blur(16px)` | Navbar en light mode |
 | **Tinted** | Semitransparente colored | `background: rgba(255,0,54,0.06–0.15)` | Botones secondary, hover states, menús activos |
 | **Overlay** | Semitransparente oscuro | `background: rgba(0,0,0,0.6)` + `backdrop-filter: blur(4px)` | Fondos de modal, sidebar backdrop |
@@ -190,14 +193,14 @@ A diferencia de un sistema de elevación con sombras, Stack-and-Flow usa un **si
 
 **Card opaca** — usa para contenido estructural, tablas, code snippets:
 ```css
-background: #0a0a0a;
-border: 1px solid #1a1a1a;
+background: #0B131E;
+border: 1px solid #172230;
 border-radius: 8px;
 ```
 
 **Card frosted** — usa para elementos que flotan sobre contenido (navbar, tooltips, popovers):
 ```css
-background: rgba(27, 27, 29, 0.6);
+background: rgba(6, 12, 19, 0.75);
 backdrop-filter: blur(16px);
 -webkit-backdrop-filter: blur(16px);
 border: 1px solid rgba(255, 255, 255, 0.06);
@@ -257,9 +260,9 @@ Light mode: `color: #cc0030`, borde opaco.
 ### Navbar
 
 ```css
-background: rgba(27, 27, 29, 0.6);
+background: rgba(6, 12, 19, 0.75);
 backdrop-filter: blur(16px);
-border-bottom: 1px solid #1a1a1a;
+border-bottom: 1px solid #172230;
 ```
 
 - Links: `color: #9c9c9d` → `#ffffff` en hover, `text-decoration: underline` opcional
@@ -271,7 +274,7 @@ border-bottom: 1px solid #1a1a1a;
 
 Tres variantes que coexisten:
 
-1. **Opaco** (`#0a0a0a` + borde `#1a1a1a`) — contenido, docs, features
+1. **Opaco** (`#0B131E` + borde `#172230`) — contenido, docs, features
 2. **Frosted** (rgba + blur) — elementos flotantes
 3. **Tinted red** (`rgba(255,0,54,0.06–0.10)` + borde red semitransparente) — estados activos, highlights de acento
 
@@ -296,8 +299,8 @@ letter-spacing: 0.02em;
 ### Inputs y formularios
 
 ```css
-background: #0a0a0a;
-border: 1px solid #262626;
+background: #0B131E;
+border: 1px solid #202C3C;
 border-radius: 8px;
 color: #f9f9f9;
 ```
@@ -307,8 +310,8 @@ Placeholder: `#6a6b6c`.
 ### Code blocks
 
 ```css
-background: #0a0a0a;
-border: 1px solid #1a1a1a;
+background: #0B131E;
+border: 1px solid #172230;
 border-radius: 8px;
 font-size: 93%; /* --ifm-code-font-size */
 ```
@@ -343,7 +346,7 @@ El canvas principal usa un **grid de doble línea** como textura técnica:
 background:
   linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
   linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
-  #000000;
+  #060C13;
 ```
 
 **Light:**
@@ -430,17 +433,21 @@ Todos los valores de texto sobre sus respectivos fondos cumplen WCAG AA (4.5:1) 
 
 | Combinación | Contraste | Nivel |
 |------------|-----------|-------|
-| `#ffffff` sobre `#000000` | 21:1 | AAA ✅ |
-| `#cccccc` sobre `#000000` | ~7:1 | AAA ✅ |
-| `#888888` sobre `#000000` | ~5.3:1 | AA ✅ |
-| `#adadad` sobre `#000000` | ~6.3:1 | AA ✅ |
-| `#ff0036` sobre `#000000` | ~4.6:1 | AA ✅ |
+| `#ffffff` sobre `#060C13` | ~21:1 | AAA ✅ |
+| `#cccccc` sobre `#060C13` | ~7.5:1 | AAA ✅ |
+| `#888888` sobre `#060C13` | ~5.1:1 | AA ✅ |
+| `#adadad` sobre `#060C13` | ~6.1:1 | AA ✅ |
+| `#ff0036` sobre `#060C13` | ~4.96:1 | AA ✅ |
+| `#ff0036` sobre `#0B131E` | ~4.71:1 | AA ✅ |
+| `#ff0036` sobre `#0F1824` | ~4.51:1 | AA ✅ |
+| `#ff335e` sobre `#0F1824` | ~5.00:1 | AA ✅ (usar para links/iconos sobre raised) |
 | `#db143c` sobre `#ffffff` | ~4.7:1 | AA ✅ |
 | `#cc0030` sobre `#ffffff` | ~5.4:1 | AA ✅ |
-| `#22c55e` sobre `#000000` | ~6.8:1 | AA ✅ |
+| `#22c55e` sobre `#060C13` | ~6.8:1 | AA ✅ |
 | `#000000` sobre `#22c55e` | ~6.8:1 | AA ✅ (badge dark) |
 
 > ⚠️ **Nunca usar** `#ff0036` como color de texto sobre `#ffffff` en light mode — contraste insuficiente. Siempre usar `#cc0030` o más oscuro en light.
+> ⚠️ `#6a6b6c` (disabled/muted) no cumple AA sobre los fondos dark — es correcto: WCAG exime explícitamente los estados `disabled` del requisito de contraste.
 
 ### Targets táctiles
 - Botones pill: altura mínima `44px`, padding `10px 20px`
@@ -468,21 +475,22 @@ Todos los valores de texto sobre sus respectivos fondos cumplen WCAG AA (4.5:1) 
 ## 9. Do's y Don'ts
 
 ### Do ✅
-- Usar `#000000` puro como fondo dark — sin tintes de color
-- Aplicar el grid de fondo (opacidad 0.025–0.035) en el canvas principal
-- Diferenciar `backdrop-filter: blur` (elementos flotantes) de `background: #0a0a0a` (contenido)
+- Usar `#060C13` como fondo dark base — azul-slate profundo con tinte frío H215 S50
+- Aplicar el grid de fondo (opacidad 0.025–0.035) en el canvas principal con `#060C13` como color base
+- Diferenciar `backdrop-filter: blur` (elementos flotantes) de `background: #0B131E` (contenido)
 - Usar el rojo más vibrante en dark (`#ff0036`) y el más sobrio en light (`#db143c`)
+- Para links/iconos sobre `surface-raised` (`#0F1824`) usar `#ff335e` — mantiene 5:1 exacto
 - Construir botones primarios con gradiente + glow multi-capa — el neon es signature
-- Mantener texto secundario en `#cccccc` (dark) para ~7:1 de contraste
+- Mantener texto secundario en `#cccccc` (dark) para ~7.5:1 de contraste
 - Usar `border-radius: 9999px` exclusivamente en botones CTA principales
 - Aplicar `transition: box-shadow 0.25s ease, background 0.25s ease` en todos los elementos interactivos
 - Usar `font-weight: 700` solo en headings (`h1`–`h6`), nunca en body
 - Añadir `will-change: opacity, transform` a animaciones de entrada para evitar jank
 
 ### Don't ❌
-- No usar el rojo como color de texto sobre blanco en light mode (`#ff0036` falla contraste)
+- No usar negro puro `#000000` como fondo dark — la paleta aprobada es azul-slate `#060C13`
 - No aplicar `backdrop-filter: blur` a cards de contenido — solo a elementos flotantes
-- No usar weights menores a 500 para body text en dark mode — el 400 se percibe demasiado fino sobre negro
+- No usar weights menores a 500 para body text en dark mode — el 400 se percibe demasiado fino
 - No crear sombras decorativas sin propósito — la profundidad viene del contraste de superficie, no de box-shadows
 - No mezclar pill buttons con botones rectangulares en la misma sección
 - No omitir el `border: 1px solid` en cards dark — sin borde, las cards se funden con el fondo
@@ -497,30 +505,32 @@ Todos los valores de texto sobre sus respectivos fondos cumplen WCAG AA (4.5:1) 
 ### Referencia rápida de colores
 
 ```
-Dark background:       #000000
-Dark surface:          #0a0a0a
-Dark border:           #1a1a1a (emphasis-200)
-Dark border strong:    #262626 (emphasis-300)
-Brand red (dark):      #ff0036
-Brand red (light):     #db143c
-Primary text (dark):   #ffffff
-Secondary text (dark): #cccccc
-Tertiary text (dark):  #888888
-Success (dark):        #22c55e
-Warning (dark):        #fbbf24
-Navbar bg (dark):      rgba(27, 27, 29, 0.6) + blur(16px)
+Dark background:            #060C13
+Dark surface:               #0B131E
+Dark surface-raised:        #0F1824
+Dark border:                #172230
+Dark border-strong:         #202C3C
+Brand red (dark):           #ff0036
+Brand red-light (dark):     #ff335e  ← usar sobre surface-raised
+Brand red (light):          #db143c
+Primary text (dark):        #ffffff
+Secondary text (dark):      #cccccc
+Tertiary text (dark):       #888888
+Success (dark):             #22c55e
+Warning (dark):             #fbbf24
+Navbar bg (dark):           rgba(6, 12, 19, 0.75) + blur(16px)
 ```
 
 ### Prompts de ejemplo
 
 **Hero section:**
-> "Crea una hero section con fondo `#000000`, grid de líneas `rgba(255,255,255,0.025)` cada 40px, heading 64px Space Grotesk 700 en `#ffffff`, descripción 18px peso 500 en `#cccccc`, y dos botones pill: primary con gradiente `#ff1a4b → #cc0030` y glow neon multi-capa, secondary con borde `rgba(255,0,54,0.5)` y fondo `rgba(255,0,54,0.06)`"
+> "Crea una hero section con fondo `#060C13`, grid de líneas `rgba(255,255,255,0.025)` cada 40px, heading 64px Space Grotesk 700 en `#ffffff`, descripción 18px peso 500 en `#cccccc`, y dos botones pill: primary con gradiente `#ff1a4b → #cc0030` y glow neon multi-capa, secondary con borde `rgba(255,0,54,0.5)` y fondo `rgba(255,0,54,0.06)`"
 
 **Feature card:**
-> "Diseña un feature card con fondo `#0a0a0a`, borde `1px solid #1a1a1a`, `border-radius: 8px`, heading 22px Space Grotesk 700, body text 16px peso 500 en `#cccccc`, y un icono en `#ff0036` en la esquina superior izquierda"
+> "Diseña un feature card con fondo `#0B131E`, borde `1px solid #172230`, `border-radius: 8px`, heading 22px Space Grotesk 700, body text 16px peso 500 en `#cccccc`, y un icono en `#ff0036` en la esquina superior izquierda"
 
 **Navbar:**
-> "Construye una navbar sticky con `background: rgba(27,27,29,0.6)`, `backdrop-filter: blur(16px)`, `border-bottom: 1px solid #1a1a1a`, links en `#888888` → `#ffffff` on hover, y un botón CTA pill con gradiente rojo a la derecha"
+> "Construye una navbar sticky con `background: rgba(6,12,19,0.75)`, `backdrop-filter: blur(16px)`, `border-bottom: 1px solid #172230`, links en `#888888` → `#ffffff` on hover, y un botón CTA pill con gradiente rojo a la derecha"
 
 **Estado activo en sidebar:**
 > "Aplica estado activo con `background: rgba(255,0,54,0.10)`, `color: #ff0036`, `font-weight: 600`, `border-radius: 8px` — sin borde adicional"
@@ -530,8 +540,8 @@ Navbar bg (dark):      rgba(27, 27, 29, 0.6) + blur(16px)
 
 ### Checklist de revisión para agentes
 
-1. ¿El fondo es `#000000` — no gris oscuro, no con tinte?
-2. ¿Las cards tienen borde `1px solid #1a1a1a` — sin borde se funden con el fondo?
+1. ¿El fondo es `#060C13` (azul-slate) — no negro puro `#000000`, no gris oscuro?
+2. ¿Las cards tienen borde `1px solid #172230` — sin borde se funden con el fondo?
 3. ¿El `backdrop-filter: blur` solo está en elementos flotantes (navbar, modals)?
 4. ¿El texto secundario es `#cccccc` — no `#999999` ni menor contraste?
 5. ¿Los botones primarios tienen gradiente + glow, no color flat?

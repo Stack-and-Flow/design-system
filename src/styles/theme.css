@@ -40,15 +40,16 @@
   --color-red-900: #4d0012;
 
   /* ── Fondos y Superficies — Dark ────────────────────────────── */
-  --color-background-dark: #000000;         /* Canvas base — negro absoluto */
-  --color-surface-dark: #0a0a0a;            /* Cards sólidas, code blocks, dropdowns */
-  --color-surface-raised-dark: #111111;     /* emphasis-100 — headers de tabla */
-  --color-border-dark: #1a1a1a;             /* emphasis-200 — borde estándar */
-  --color-border-strong-dark: #262626;      /* emphasis-300 — borde interactivo */
+  /* Paleta azul-slate: H215 S50 — tinte frío perceptible, accesible con #FF0036  */
+  --color-background-dark: #060C13;         /* Canvas base — azul-slate profundo   */
+  --color-surface-dark: #0B131E;            /* Cards sólidas, code blocks, dropdowns */
+  --color-surface-raised-dark: #0F1824;     /* Headers de tabla, énfasis sutil     */
+  --color-border-dark: #172230;             /* Borde estándar                      */
+  --color-border-strong-dark: #202C3C;      /* Borde interactivo                   */
 
   /* Fondos especiales con transparencia — dark */
-  --color-navbar-dark: rgba(27, 27, 29, 0.6);
-  --color-sidebar-mobile-dark: rgba(27, 27, 29, 1);
+  --color-navbar-dark: rgba(6, 12, 19, 0.75);
+  --color-sidebar-mobile-dark: rgba(6, 12, 19, 1);
   --color-overlay-dark: rgba(0, 0, 0, 0.6);
 
   /* ── Fondos y Superficies — Light ───────────────────────────── */
