@@ -255,68 +255,114 @@ This is the learning layer — the contributor must understand every decision, n
 ## Design System Tokens
 
 Always use tokens from `src/styles/theme.css`. Never hardcode values.
+Full visual reference: `docs/DESIGN.md` — read it before building any component.
 
-### Colors — Brand
+### Colors — Brand (Crimson Red)
 | Token | Value | Use for |
 |-------|-------|---------|
-| `primary` | `#830213` | Main brand actions, primary buttons |
-| `secondary` | `#b41520` | Secondary brand, hover states |
-| `accent` | `#d61e2b` | Highlights, focus rings |
-| `red-100` → `red-900` | Light → Dark reds | State colors, error backgrounds |
+| `color-brand-light` | `#db143c` | Primary brand — light mode |
+| `color-brand-dark` | `#ff0036` | Primary brand — dark mode (more vibrant on black) |
+| `color-primary` | `#db143c` | Semantic alias — use this in components |
+| `color-primary-hover` | `#b60f32` | Hover state |
+| `color-primary-active` | `#8c0b26` | Active/pressed state |
+| `color-red-100` → `color-red-900` | Light → Dark scale | State backgrounds, error tints |
 
 ### Colors — Dark mode surfaces
 | Token | Use for |
 |-------|---------|
-| `background-dark` | Page/app background |
-| `gray-dark-700` | Card/panel background |
-| `gray-dark-600` | Elevated surfaces, borders |
-| `gray-dark-400` | Disabled text, placeholders |
-| `text-dark` | Primary text (white) |
-| `secondary-dark` | Secondary text, icons |
+| `color-background-dark` (`#000000`) | Page canvas — absolute black |
+| `color-surface-dark` (`#0a0a0a`) | Cards, code blocks, dropdowns — opaque |
+| `color-surface-raised-dark` (`#111111`) | Table headers, elevated panels |
+| `color-border-dark` (`#1a1a1a`) | Standard borders |
+| `color-border-strong-dark` (`#262626`) | Interactive / focus borders |
+| `color-text-dark` | Primary text (white, 21:1 contrast) |
+| `color-text-secondary-dark` | Secondary text |
+| `color-text-tertiary-dark` | Tertiary / muted text |
+| `color-text-disabled-dark` | Disabled states |
 
 ### Colors — Light mode surfaces
 | Token | Use for |
 |-------|---------|
-| `background-light` | Page/app background |
-| `gray-light-200` | Card/panel background |
-| `gray-light-400` | Borders, dividers |
-| `text-light` | Primary text (near-black) |
-| `secondary-light` | Secondary text |
+| `color-background-light` (`#ffffff`) | Page canvas |
+| `color-surface-light` (`#f4f5f7`) | Cards, containers |
+| `color-surface-raised-light` (`#eaecf0`) | Elevated surfaces |
+| `color-border-light` | Standard borders (rgba) |
+| `color-border-strong-light` | Interactive borders (rgba) |
+| `color-text-light` | Primary text |
+| `color-text-secondary-light` | Secondary text |
+| `color-text-disabled-light` | Disabled states |
+
+### Colors — Transparencies (tint system)
+| Token | Use for |
+|-------|---------|
+| `color-red-tint-subtle` | Secondary button background |
+| `color-red-tint-low` | Active menu item |
+| `color-red-tint-high` | Glow base, code highlight |
+| `color-white-tint-faint` | Subtle hover background |
+| `color-white-tint-high` | Interactive border |
+| `color-black-tint-heavy` | Modal overlay backdrop |
 
 ### Colors — Semantic (status)
 | Token | Use for |
 |-------|---------|
-| `green` / `green-light` / `green-dark` | Success states |
-| `yellow` / `yellow-light` / `yellow-dark` | Warning states |
-| `blue` / `blue-light` / `blue-dark` | Info states |
-| `orange` / `orange-light` / `orange-dark` | Caution states |
+| `color-success` / `color-success-light` | Success states (dark/light mode) |
+| `color-warning` / `color-warning-light` | Warning states |
+| `color-error` / `color-error-light` | Error states (`#ff0036` / `#db143c`) |
+| `color-info` / `color-info-light` | Info states |
 
-### Spacing
+### Glows & Shadows
+| Token | Use for |
+|-------|---------|
+| `glow-btn-primary` | Primary button neon glow (multi-layer) |
+| `glow-btn-primary-hover` | Primary button hover glow |
+| `glow-btn-secondary` | Secondary button subtle glow |
+| `glow-focus-dark` / `glow-focus-light` | Focus ring (WCAG AA) |
+| `shadow-dropdown` | Dropdown menus |
+| `shadow-dropdown-light` | Dropdown menus — light mode |
+
+### Gradients
+| Token | Use for |
+|-------|---------|
+| `gradient-btn-primary` | Primary button background |
+| `gradient-btn-primary-hover` | Primary button hover |
+| `gradient-background-dark` | Page background — dark |
+| `grid-bg-dark` / `grid-bg-light` | Technical grid canvas (40×40px) |
+
+### Spacing (8px base scale)
 | Token | Value | Use for |
 |-------|-------|---------|
-| `xxs` | 0.25rem | Micro gaps (icon + label) |
-| `xs` | 0.5rem | Tight padding |
-| `sm` | 0.75rem | Standard padding small |
-| `md` | 1rem | Default padding/gap |
-| `lg` | 1.5rem | Section spacing |
-| `xl` | 2rem | Large section spacing |
+| `spacing-xxs` / `spacing-1` | 4px | Micro gaps (icon + label) |
+| `spacing-xs` / `spacing-2` | 8px | Tight padding |
+| `spacing-sm` / `spacing-3` | 12px | Standard padding small |
+| `spacing-md` / `spacing-4` | 16px | Default padding/gap |
+| `spacing-lg` / `spacing-6` | 24px | Section spacing |
+| `spacing-xl` / `spacing-8` | 32px | Large section spacing |
+| `spacing-2xl` / `spacing-12` | 48px | XL section spacing |
+| `spacing-3xl` / `spacing-20` | 80px | Hero/page-level spacing |
 
-### Typography
+### Typography (Space Grotesk Variable only)
 | Token | Use for |
 |-------|---------|
-| `font-primary` ("WildWolf") | Headings, brand text |
-| `font-secondary` ("Univia") | Body text, UI labels |
-| `font-secondary-bold` ("UniviaBold") | Emphasis, CTA labels |
-| `text-h1` → `text-h6` | Heading sizes |
-| `text-base` | Body text |
-| `text-small` | Captions, helper text |
+| `font-primary` | All text — only one font in this system |
+| `font-weight-medium` (500) | Body text baseline |
+| `font-weight-semibold` (600) | Buttons, badges, labels |
+| `font-weight-bold` (700) | Headings h1–h6 |
+| `text-display` (56px) | Hero landing titles |
+| `text-h1` → `text-h6` | Section headings |
+| `text-body` (16px) | Default body text |
+| `text-small` (14px) | Captions, labels |
+| `text-xs` (12px) | Badges, micro tags |
+| `leading-tight` / `leading-relaxed` | Line height control |
+| `tracking-ui` | Buttons, nav links |
 
-### Shadows
-| Token | Use for |
-|-------|---------|
-| `shadow-custom-sm` | Subtle elevation (cards on hover) |
-| `shadow-custom-md` | Medium elevation (dropdowns, popovers) |
-| `shadow-custom-lg` | High elevation (modals, toasts) |
+### Border radius
+| Token | Value | Use for |
+|-------|-------|---------|
+| `radius-xs` | 3px | Micro badges, "New" labels |
+| `radius-sm` | 6px | Dropdown items, menu links |
+| `radius-md` | 8px | Cards, inputs, secondary buttons |
+| `radius-lg` | 12px | Large cards, pagination |
+| `radius-pill` | 9999px | Primary CTA buttons |
 
 ### Animations
 | Token | Use for |
@@ -328,9 +374,11 @@ Always use tokens from `src/styles/theme.css`. Never hardcode values.
 ### Dark mode pattern
 ```typescript
 // Always pair dark/light tokens using the dark variant
-'bg-background-light dark:bg-background-dark'
-'text-text-light dark:text-text-dark'
-'border-gray-light-400 dark:border-gray-dark-600'
+'bg-color-background-light dark:bg-color-background-dark'
+'text-color-text-light dark:text-color-text-dark'
+'border-color-border-light dark:border-color-border-dark'
+// For interactive borders:
+'border-color-border-strong-light dark:border-color-border-strong-dark'
 ```
 
 ---

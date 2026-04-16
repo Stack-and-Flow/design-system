@@ -16,6 +16,7 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 | Storybook | https://sf-design-system.netlify.app/ |
 | Guidelines | [`docs/GUIDELINES.md`](../docs/GUIDELINES.md) |
 | Contributing | [`docs/CONTRIBUTING.md`](../docs/CONTRIBUTING.md) |
+| Visual Design | [`docs/DESIGN.md`](../docs/DESIGN.md) |
 
 **Stack**: React 19 · TypeScript strict · Tailwind v4 `@theme` · Radix UI · CVA · Storybook 8 · Biome · Lefthook · Vite · pnpm
 
@@ -46,6 +47,7 @@ Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` wi
 - `type` always — never `interface`
 - Never `any` — use `unknown` or narrow properly
 - Never hardcode colors, spacing or fonts — use tokens from `src/styles/theme.css`
+- Token reference: `docs/DESIGN.md` — read it before building any component
 - Never modify `theme.css` without explicit user confirmation
 - Never add dependencies without explicit user confirmation
 - English only — code, comments, stories
