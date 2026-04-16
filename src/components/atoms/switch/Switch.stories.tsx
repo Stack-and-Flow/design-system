@@ -140,7 +140,7 @@ export const WithThumbIcon: Story = {
           label='With Thumb Icon'
           size='lg'
           color='default'
-          thumbIcon={<Icon name='moon' colorDark='dark:text-primary' color='text-accent-dark' size={16} />}
+          thumbIcon={<Icon name='moon' colorDark='dark:text-color-brand-dark' color='text-color-brand-light' size={16} />}
           defaultChecked={true}
         />
       </div>
@@ -166,8 +166,8 @@ export const WithIcon: Story = {
       <div>
         <Switch
           size='lg'
-          endContent={<Icon name='sun' size={20} colorDark='dark:text-gray-light-100' />}
-          startContent={<Icon name='moon' size={20} colorDark='dark:text-gray-light-100' />}
+          endContent={<Icon name='sun' size={20} colorDark='dark:text-color-text-dark' />}
+          startContent={<Icon name='moon' size={20} colorDark='dark:text-color-text-dark' />}
           label='With Icons'
           defaultChecked={true}
         />

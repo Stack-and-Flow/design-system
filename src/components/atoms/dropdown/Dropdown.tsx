@@ -17,9 +17,9 @@ const renderDropdownItem = (element: DropdownElement, index: number) => {
         className={cn(
           'relative flex cursor-default justify-between items-center gap-2 rounded-sm px-2 py-1.5 text-sm',
           'transition-opacity duration-300 ease-in-out',
-          'hover:outline-offset-1 dark:hover:outline-white hover:outline-secondary hover:outline-1',
-          'focus-visible:outline-offset-1 dark:focus-visible:outline-white focus-visible:outline-secondary focus-visible:outline-1',
-          element.variant === 'destructive' && 'bg-secondary text-text-dark hover:bg-red-secondary-hover'
+          'hover:outline-offset-1 hover:outline-[var(--color-brand-light)] dark:hover:outline-[var(--color-brand-dark)] hover:outline-1',
+          'focus-visible:outline-offset-1 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1',
+          element.variant === 'destructive' && 'bg-[var(--color-error-light)] dark:bg-[var(--color-error)] text-white hover:bg-[var(--color-brand-light-dark)]'
         )}
         onClick={element.onClick}
       >
@@ -43,8 +43,8 @@ const renderDropdownSubmenu = (element: DropdownElement, index: number) => {
           className={cn(
             'flex items-center rounded-md justify-between px-2 py-1.5 text-sm',
             'transition-opacity duration-300 ease-in-out',
-            'hover:outline-offset-1 dark:hover:outline-white hover:outline-secondary hover:outline-1',
-            'focus-visible:outline-offset-1 dark:focus-visible:outline-white focus-visible:outline-secondary focus-visible:outline-1'
+          'hover:outline-offset-1 hover:outline-[var(--color-brand-light)] dark:hover:outline-[var(--color-brand-dark)] hover:outline-1',
+          'focus-visible:outline-offset-1 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
           )}
         >
           {element.startContent && <span className='flex items-center'>{element.startContent}</span>}
@@ -58,12 +58,12 @@ const renderDropdownSubmenu = (element: DropdownElement, index: number) => {
         <DropdownMenuPrimitive.SubContent
           id={submenuId}
           className={cn(
-            'min-w-[8rem] ml-2 rounded-md border p-1 shadow-lg',
+            'min-w-[8rem] ml-2 rounded-[var(--radius-md)] border p-1 shadow-lg',
             'transition-opacity duration-300 ease-in-out',
-            'focus-visible:outline-offset-1 dark:focus-visible:outline-white focus-visible:outline-secondary focus-visible:outline-1',
-            'hover:outline-offset-1 dark:hover:outline-white hover:outline-secondary hover:outline-1',
-            'bg-gray-light-200 border-gray-light-200',
-            'text-text-light dark:text-text-dark dark:bg-gray-dark-700 dark:border-gray-dark-700'
+            'focus-visible:outline-offset-1 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1',
+            'hover:outline-offset-1 hover:outline-[var(--color-brand-light)] dark:hover:outline-[var(--color-brand-dark)] hover:outline-1',
+            'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
+            'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]'
           )}
         >
           {element.items.map((subElement, subIndex) => renderDropdownElement(subElement, subIndex))}
@@ -81,7 +81,7 @@ const renderDropdownElement = (element: DropdownElement, index: number) => {
       return renderDropdownSubmenu(element, index);
     case 'separator':
       return (
-        <DropdownMenuPrimitive.Separator key={index} className='my-1 h-px bg-gray-light-900 dark:bg-gray-dark-700' />
+        <DropdownMenuPrimitive.Separator key={index} className='my-1 h-px bg-[var(--color-border-light)] dark:bg-[var(--color-border-dark)]' />
       );
     case 'label': {
       const labelId = `dropdown-label-${index}`;
@@ -123,9 +123,9 @@ const Dropdown: FC<DropdownProps> = ({ ...props }) => {
           aria-labelledby={accessibleLabelId}
           className={cn(
             'min-w-[8rem] rounded-md border p-1 shadow-md',
-            'text-text-light dark:text-text-dark',
-            'bg-gray-light-200 border-gray-light-200',
-            'dark:bg-gray-dark-700 dark:border-gray-dark-700',
+            'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
+            'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
+            'dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]',
             'data-[state=closed]:animate-out data-[state=open]:animate-in',
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',

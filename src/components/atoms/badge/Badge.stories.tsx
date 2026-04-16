@@ -186,7 +186,7 @@ export const ContentExamples: Story = {
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e295262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
       <Badge
-        content={<Icon name='check' size={10} colorDark='dark:text-gray-dark-900' />}
+        content={<Icon name='check' size={10} colorDark='dark:text-color-text-light' />}
         color={'success'}
         size={'sm'}
         placement={'bottom-right'}
@@ -194,7 +194,7 @@ export const ContentExamples: Story = {
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e296262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
       <Badge
-        content={<Icon name='bell-ring' size={14} color='text-gray-dark-900' colorDark='dark:text-gray-light-100' />}
+        content={<Icon name='bell-ring' size={14} color='text-color-text-light' colorDark='dark:text-color-text-dark' />}
         color={'danger'}
         size={'md'}
       >
@@ -258,7 +258,7 @@ export const Animation: Story = {
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e296262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
       <Badge
-        content={<Icon name='bell-dot' size={14} colorDark='dark:text-gray-light-900' />}
+        content={<Icon name='bell-dot' size={14} colorDark='dark:text-color-text-dark' />}
         color={'success'}
         animation={'bounce'}
       >
@@ -288,7 +288,7 @@ export const Accessibility: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
       <Badge content={'+99'} color={'danger'} ariaLabel='more than 99 notifications' role='status' ariaLive='assertive'>
-        <Icon name='bell-ring' size={34} colorDark='dark:text-text-dark' />
+        <Icon name='bell-ring' size={34} colorDark='dark:text-color-text-dark' />
       </Badge>
     </div>
   )

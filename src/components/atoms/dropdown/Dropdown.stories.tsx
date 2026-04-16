@@ -198,7 +198,7 @@ export const CustomTrigger: Story = {
         </Link>
       </Dropdown>
       <Dropdown items={schema} width='250px'>
-        <Icon color='text-accent' colorDark='dark:text-accent' name='image-plus' size={24} />
+        <Icon color='text-color-brand-light' colorDark='dark:text-color-brand-dark' name='image-plus' size={24} />
       </Dropdown>
     </div>
   )

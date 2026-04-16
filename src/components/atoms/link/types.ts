@@ -6,50 +6,40 @@ export const linkVariants = cva(
     'link w-auto relative overflow-hidden cursor-pointer',
     'transition-all duration-200 ease-in-out',
     'flex gap-1 items-center justify-start',
-    'font-secondary whitespace-nowrap line-clamp-1 leading-[1.2]',
+    'font-[var(--font-weight-medium)] whitespace-nowrap line-clamp-1 leading-[1.2]',
     'focus-visible:outline-2 focus-visible:outline-offset-2',
-    'dark:focus-visible:outline-white focus-visible:outline-accent'
+    'focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)]'
   ],
   {
     variants: {
       variant: {
         regular: [
-          'hover:text-secondary',
-          'text-text-light',
-          'dark:text-text-dark',
-          'dark:hover:text-accent',
+          'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
+          'hover:text-[var(--color-brand-light)] dark:hover:text-[var(--color-brand-dark)]',
           'underline-offset-2 underline'
         ],
         button: [
           'px-4 py-2',
-          'rounded-md',
-          'border-2',
-          'text-text-dark',
-          'bg-secondary',
-          'border-secondary',
-          'hover:border-accent',
-          'hover:bg-accent',
-          'hover:shadow-secondary',
-          'dark:hover:bg-accent',
-          'dark:hover:shadow-secondary',
-          'hover:shadow-custom-md'
+          'rounded-[var(--radius-md)]',
+          'border',
+          'text-white',
+          'bg-[image:var(--gradient-btn-primary)]',
+          'border-transparent',
+          'shadow-[var(--glow-btn-primary)]',
+          'hover:bg-[image:var(--gradient-btn-primary-hover)]',
+          'hover:shadow-[var(--glow-btn-primary-hover)]'
         ],
         outlined: [
           'px-4 py-2',
-          'rounded-md',
-          'border-2',
-          'text-secondary',
-          'border-secondary',
-          'hover:text-text-dark',
+          'rounded-[var(--radius-md)]',
+          'border',
+          'text-[var(--color-brand-light)] dark:text-[var(--color-brand-dark)]',
+          'border-[var(--color-brand-light)] dark:border-[var(--color-brand-dark)]',
           'bg-transparent',
-          'hover:border-accent',
-          'hover:bg-accent',
-          'hover:shadow-secondary',
-          'dark:hover:bg-accent',
-          'dark:transparent',
-          'dark:text-text-dark',
-          'dark:hover:shadow-secondary',
-          'hover:shadow-custom-sm'
+          'hover:text-white dark:hover:text-white',
+          'hover:bg-[image:var(--gradient-btn-primary)]',
+          'hover:border-transparent',
+          'hover:shadow-[var(--glow-btn-primary)]'
         ]
       },
       size: {

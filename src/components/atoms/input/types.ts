@@ -6,22 +6,31 @@ export const inputVariants = cva(
   {
     variants: {
       variant: {
-        regular: ['bg-gray-light-500', 'border-gray-light-500', 'dark:bg-gray-dark-600', 'dark:border-gray-dark-600'],
-        underlined: ['bg-transparent', 'border-gray-light-500', 'dark:bg-transparent', 'dark:border-gray-dark-600'],
+        regular: [
+          'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
+          'dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]'
+        ],
+        underlined: [
+          'bg-transparent border-[var(--color-border-light)]',
+          'dark:bg-transparent dark:border-[var(--color-border-dark)]'
+        ],
         line: [
           'bg-transparent',
           'border-t-transparent',
           'border-l-transparent',
           'border-r-transparent',
           '!rounded-none',
-          'border-b-gray-light-500',
-          'dark:border-b-gray-dark-600'
+          'border-b-[var(--color-border-light)]',
+          'dark:border-b-[var(--color-border-dark)]'
         ],
-        bordered: ['bg-gray-light-500', 'border-gray-light-600', 'dark:bg-gray-dark-600', 'dark:border-gray-dark-500']
+        bordered: [
+          'bg-[var(--color-surface-light)] border-[var(--color-border-strong-light)]',
+          'dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-strong-dark)]'
+        ]
       },
       rounded: {
         true: 'rounded-full',
-        false: 'rounded-md'
+        false: 'rounded-[var(--radius-md)]'
       },
       size: {
         sm: 'h-12 px-2 fs-small tablet:fs-small-tablet',
@@ -30,15 +39,32 @@ export const inputVariants = cva(
       },
       state: {
         default: '',
-        focused: 'outline-offset-2 dark:outline-white outline-secondary outline-2',
-        focusedRegular:
-          'hover:bg-gray-light-600 hover:border-gray-light-600 dark:hover:bg-gray-dark-500 dark:hover:border-gray-dark-500',
-        focusedUnderlined: 'hover:border-gray-light-600 dark:hover:border-gray-dark-500',
-        focusedLine: 'hover:border-b-gray-light-600 dark:hover:border-b-gray-dark-500',
-        focusedBordered: 'hover:bg-gray-light-600 dark:hover:bg-gray-dark-500'
+        focused: [
+          'outline-offset-2 outline-2',
+          'outline-[var(--color-brand-light)] dark:outline-[var(--color-brand-dark)]'
+        ],
+        focusedRegular: [
+          'hover:bg-[var(--color-surface-raised-light)] hover:border-[var(--color-border-strong-light)]',
+          'dark:hover:bg-[var(--color-surface-raised-dark)] dark:hover:border-[var(--color-border-strong-dark)]'
+        ],
+        focusedUnderlined: [
+          'hover:border-[var(--color-border-strong-light)]',
+          'dark:hover:border-[var(--color-border-strong-dark)]'
+        ],
+        focusedLine: [
+          'hover:border-b-[var(--color-border-strong-light)]',
+          'dark:hover:border-b-[var(--color-border-strong-dark)]'
+        ],
+        focusedBordered: [
+          'hover:bg-[var(--color-surface-raised-light)]',
+          'dark:hover:bg-[var(--color-surface-raised-dark)]'
+        ]
       },
       focused: {
-        true: 'outline-offset-2 dark:outline-white outline-secondary outline-2',
+        true: [
+          'outline-offset-2 outline-2',
+          'outline-[var(--color-brand-light)] dark:outline-[var(--color-brand-dark)]'
+        ],
         false: ''
       }
     },
@@ -52,7 +78,7 @@ export const inputVariants = cva(
 );
 
 export const labelVariants = cva(
-  ['absolute w-auto line-clamp-1 transition-all duration-200 text-text-light dark:text-text-dark pt-[2px]'],
+  ['absolute w-auto line-clamp-1 transition-all duration-200 text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] pt-[2px]'],
   {
     variants: {
       size: {
@@ -62,12 +88,12 @@ export const labelVariants = cva(
       },
       state: {
         default: 'top-[50%] translate-y-[-50%]',
-        focusedSm: 'top-1 fs-small font-secondary-bold',
-        focusedMd: 'top-1.5 fs-small font-secondary-bold',
-        focusedLg: 'top-2 fs-small font-secondary-bold',
-        hasValueSm: 'top-1 fs-small font-secondary-bold',
-        hasValueMd: 'top-1.5 fs-small font-secondary-bold',
-        hasValueLg: 'top-2 fs-small font-secondary-bold'
+        focusedSm: 'top-1 fs-small font-[var(--font-weight-semibold)]',
+        focusedMd: 'top-1.5 fs-small font-[var(--font-weight-semibold)]',
+        focusedLg: 'top-2 fs-small font-[var(--font-weight-semibold)]',
+        hasValueSm: 'top-1 fs-small font-[var(--font-weight-semibold)]',
+        hasValueMd: 'top-1.5 fs-small font-[var(--font-weight-semibold)]',
+        hasValueLg: 'top-2 fs-small font-[var(--font-weight-semibold)]'
       }
     },
     defaultVariants: {

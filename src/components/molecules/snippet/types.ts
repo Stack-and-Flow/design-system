@@ -43,17 +43,17 @@ export const snippetBase = cva(
       {
         variant: ['solid', 'shadow'],
         color: 'default',
-        class: 'bg-gray-light-500 dark:bg-gray-dark-700'
+        class: 'bg-color-surface-light dark:bg-color-surface-dark'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'primary',
-        class: ' bg-secondary dark:bg-primary'
+        class: 'bg-color-surface-raised-light dark:bg-color-brand-dark'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'secondary',
-        class: 'bg-gray-dark-400 dark:bg-gray-dark-400'
+        class: 'bg-color-surface-raised-dark dark:bg-color-surface-raised-dark'
       },
       {
         variant: ['solid', 'shadow'],
@@ -79,17 +79,17 @@ export const snippetBase = cva(
       {
         variant: 'outline',
         color: 'default',
-        class: 'border-gray-light-500 dark:border-gray-dark-700'
+        class: 'border-color-border-light dark:border-color-border-dark'
       },
       {
         variant: 'outline',
         color: 'primary',
-        class: 'border-secondary dark:border-primary'
+        class: 'border-color-brand-light dark:border-color-brand-dark'
       },
       {
         variant: 'outline',
         color: 'secondary',
-        class: 'border-gray-dark-400 dark:border-gray-dark-400 '
+        class: 'border-color-surface-raised-dark dark:border-color-surface-raised-dark'
       },
       {
         variant: 'outline',
@@ -112,12 +112,12 @@ export const snippetBase = cva(
         class: 'border-blue-400 dark:border-blue-700'
       },
 
-      { variant: 'shadow', color: 'default', class: 'shadow-gray-dark-600/50' },
+      { variant: 'shadow', color: 'default', class: 'shadow-color-text-muted-light/50' },
       { variant: 'shadow', color: 'primary', class: 'shadow-red-600/50' },
       {
         variant: 'shadow',
         color: 'secondary',
-        class: 'shadow-gray-dark-400/50'
+        class: 'shadow-color-text-muted-light/50'
       },
       { variant: 'shadow', color: 'success', class: 'shadow-green-600/50' },
       { variant: 'shadow', color: 'warning', class: 'shadow-yellow-600/50' },

@@ -2,8 +2,8 @@ import type { IconProps } from './types';
 
 export const useIcon = ({
   name,
-  color = 'text-accent',
-  colorDark = 'dark:text-accent',
+  color = 'text-color-brand-light',
+  colorDark = 'dark:text-color-brand-dark',
   size = 24,
   className
 }: IconProps) => {

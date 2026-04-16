@@ -10,11 +10,17 @@ export const badgeVariants = cva(
   {
     variants: {
       color: {
-        primary: 'bg-primary text-text-dark dark:bg-accent dark:text-white',
-        secondary: 'bg-gray-light-500 text-text-light',
-        success: 'bg-green-500 text-text-light',
-        warning: 'bg-yellow-500 text-text-light',
-        danger: 'bg-red-500 text-text-dark'
+        primary: [
+          'bg-[var(--color-brand-light)] text-white',
+          'dark:bg-[var(--color-brand-dark)] dark:text-white'
+        ],
+        secondary: [
+          'bg-[var(--color-surface-light)] text-[var(--color-text-light)]',
+          'dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-text-dark)]'
+        ],
+        success: 'bg-[var(--color-success-light)] text-white dark:bg-[var(--color-success)] dark:text-white',
+        warning: 'bg-[var(--color-warning-light)] text-white dark:bg-[var(--color-warning)] dark:text-white',
+        danger: 'bg-[var(--color-error-light)] text-white dark:bg-[var(--color-error)] dark:text-white'
       },
       size: {
         sm: 'text-[10px] min-w-[18px] h-[18px] px-[6px] py-[2px] mr-[5px] mt-[2px]',
@@ -23,12 +29,12 @@ export const badgeVariants = cva(
       },
       rounded: {
         true: 'rounded-full',
-        false: 'rounded-md'
+        false: 'rounded-[var(--radius-sm)]'
       },
       variant: {
         solid: '',
-        flat: 'opacity-60 border border-grey-500',
-        shadow: 'shadow-md shadow-gray-dark-600'
+        flat: 'opacity-60 border border-[var(--color-border-strong-light)] dark:border-[var(--color-border-strong-dark)]',
+        shadow: 'shadow-md shadow-[var(--color-brand-light)]/30 dark:shadow-[var(--color-brand-dark)]/30'
       },
       placement: {
         'top-right': 'absolute top-0 right-0 translate-x-1/2 -translate-y-1/2',

@@ -1,11 +1,12 @@
 import { type VariantProps, cva } from 'class-variance-authority';
 
-export const headerVariants = cva(['font-normal leading-[1.2] text-text-light dark:text-text-dark'], {
+export const headerVariants = cva(['font-normal leading-[1.2] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]'], {
   variants: {
     font: {
-      primary: 'font-primary',
-      secondary: 'font-secondary',
-      secondaryBold: 'font-secondary-bold'
+      // Sistema de una sola fuente — todas las variantes usan Space Grotesk Variable
+      primary: 'font-[var(--font-primary)]',
+      secondary: 'font-[var(--font-primary)]',
+      secondaryBold: 'font-[var(--font-primary)] font-[var(--font-weight-bold)]'
     },
     tag: {
       h1: 'fs-h1 tablet:fs-tablet-h1',

@@ -6,7 +6,7 @@ export const switchBase = cva(
     'relative inline-flex items-center cursor-pointer',
     'transition-colors duration-200 ease-in-out',
     'focus:outline-none focus:ring-2 focus:ring-offset-2',
-    'text-gray-dark-900 dark:text-gray-light-300',
+    'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
     'disabled:cursor-not-allowed disabled:opacity-30'
   ],
   {
@@ -59,16 +59,22 @@ export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center 
       lg: 'w-12 h-4 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-8'
     },
     color: {
-      default: 'bg-transparent-300 peer-checked:bg-primary dark:peer-checked:bg-accent',
-      disabled: 'bg-transparent-300 peer-checked:bg-primary opacity-50',
-      transparent: 'bg-transparent border border-gray-400 peer-checked:border-red-500'
+      default: [
+        'bg-[var(--color-border-dark)]',
+        'peer-checked:bg-[var(--color-brand-light)] dark:peer-checked:bg-[var(--color-brand-dark)]'
+      ],
+      disabled: [
+        'bg-[var(--color-border-dark)] opacity-50',
+        'peer-checked:bg-[var(--color-brand-light)]'
+      ],
+      transparent: 'bg-transparent border border-[var(--color-border-dark)] peer-checked:border-[var(--color-brand-dark)]'
     },
     variant: {
       default: '',
       bordered: 'border',
       glass:
-        'bg-white/30 backdrop-blur-md border border-white/30 shadow-md peer-checked:bg-primary/70 border-primary/50 dark:peer-checked:bg-accent/60 backdrop-blur-md ',
-      shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-primary/90'
+        'bg-white/30 backdrop-blur-md border border-white/30 shadow-md peer-checked:bg-[var(--color-brand-light)]/70 border-[var(--color-brand-light)]/50 dark:peer-checked:bg-[var(--color-brand-dark)]/60',
+      shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-[var(--color-brand-dark)]/90'
     },
     rounded: {
       true: 'rounded-full',

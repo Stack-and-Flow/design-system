@@ -50,13 +50,13 @@ const Input: FC<
   const getIconByHintType = (type: string) => {
     switch (type) {
       case 'error':
-        return <Icon name='circle-alert' color='text-red-500' colorDark='dark:text-red-500' size={16} />;
+        return <Icon name='circle-alert' color='text-color-error-light' colorDark='dark:text-color-error' size={16} />;
       case 'warning':
-        return <Icon name='triangle-alert' color='text-yellow' colorDark='dark:text-yellow' size={16} />;
+        return <Icon name='triangle-alert' color='text-color-warning-light' colorDark='dark:text-color-warning' size={16} />;
       case 'success':
-        return <Icon name='circle-check' color='text-green' colorDark='dark:text-green' size={16} />;
+        return <Icon name='circle-check' color='text-color-success-light' colorDark='dark:text-color-success' size={16} />;
       default:
-        return <Icon name='info' color='text-gray-light-700' colorDark='dark:text-gray-dark-300' size={16} />;
+        return <Icon name='info' color='text-color-text-tertiary-light' colorDark='dark:text-color-text-tertiary-dark' size={16} />;
     }
   };
   const IncrementDecrementButtons = ({
@@ -67,7 +67,7 @@ const Input: FC<
       <button
         role='button'
         aria-label='Increase value'
-        className='bg-gray-light-500 hover:bg-gray-light-700 dark:bg-gray-dark-600 dark:hover:bg-gray-dark-400 rounded-t-sm px-1 cursor-pointer outline-offset-0 dark:focus-visible:outline-white focus-visible:outline-secondary focus-visible:outline-1'
+        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-t-sm px-1 cursor-pointer outline-offset-0 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
         onClick={() => {
           if (ref.current) {
             const currentValue = parseFloat(ref.current.value !== '' ? ref.current.value : '0');
@@ -76,12 +76,12 @@ const Input: FC<
           }
         }}
       >
-        <Icon name='chevron-up' color='text-text-light' colorDark='dark:text-text-dark' size={16} />
+        <Icon name='chevron-up' color='text-color-text-light' colorDark='dark:text-color-text-dark' size={16} />
       </button>
       <button
         role='button'
         aria-label='Decrease value'
-        className='bg-gray-light-500 hover:bg-gray-light-700 dark:bg-gray-dark-600 dark:hover:bg-gray-dark-400 rounded-b-sm px-1 cursor-pointer outline-offset-0 dark:focus-visible:outline-white focus-visible:outline-secondary focus-visible:outline-1'
+        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-b-sm px-1 cursor-pointer outline-offset-0 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
         onClick={() => {
           if (ref.current) {
             const currentValue = parseFloat(ref.current.value !== '' ? ref.current.value : '0');
@@ -90,7 +90,7 @@ const Input: FC<
           }
         }}
       >
-        <Icon name='chevron-down' color='text-text-light' colorDark='dark:text-text-dark' size={16} />
+        <Icon name='chevron-down' color='text-color-text-light' colorDark='dark:text-color-text-dark' size={16} />
       </button>
     </div>
   );
@@ -103,13 +103,13 @@ const Input: FC<
       <button
         role='button'
         aria-label={!showPassword ? 'Show password' : 'Hide password'}
-        className='cursor-pointer outline-offset-0 dark:focus-visible:outline-white focus-visible:outline-secondary focus-visible:outline-1'
+        className='cursor-pointer outline-offset-0 focus-visible:outline-[var(--color-brand-light)] dark:focus-visible:outline-[var(--color-brand-dark)] focus-visible:outline-1'
         onClick={() => setShowPassword(!showPassword)}
       >
         <Icon
           name={!showPassword ? 'eye' : 'eye-off'}
-          color='text-text-light'
-          colorDark='dark:text-text-dark'
+          color='text-color-text-light'
+          colorDark='dark:text-color-text-dark'
           className='hover:opacity-70'
           size={20}
         />
@@ -177,7 +177,7 @@ const Input: FC<
         >
           {label}{' '}
           {isRequired && (
-            <span className='text-accent' aria-hidden={true}>
+            <span className='text-color-brand-light' aria-hidden={true}>
               *
             </span>
           )}
@@ -224,14 +224,14 @@ const Input: FC<
             className={cn(
               'fs-small tablet:fs-small-tablet',
               hint?.type === 'info'
-                ? 'text-gray-light-700 dark:text-gray-dark-300'
+                ? 'text-color-text-secondary-light dark:text-color-text-secondary-dark'
                 : hint?.type === 'warning'
                   ? 'text-yellow dark:text-yellow-400'
                   : hint?.type === 'error'
                     ? 'text-red-500 dark:text-red-500'
                     : hint?.type === 'success'
                       ? 'text-green dark:text-green-400'
-                      : 'text-gray-light-700 dark:text-gray-dark-300'
+                      : 'text-color-text-secondary-light dark:text-color-text-secondary-dark'
             )}
           >
             {hint.message}

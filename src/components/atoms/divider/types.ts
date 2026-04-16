@@ -47,7 +47,7 @@ export type DividerProps = {
 
   /**
    * @control select
-   * @default bg-primary
+   * @default bg-color-primary
    */
   color?: BgThemeColors;
 

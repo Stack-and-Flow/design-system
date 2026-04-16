@@ -92,9 +92,9 @@ export const ThicknessVertical: Story = {
 export const Color: Story = {
   render: () => (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
-      <Divider orientation='horizontal' size='md' color='bg-primary' />
-      <Divider orientation='horizontal' size='md' color='bg-blue' />
-      <Divider orientation='horizontal' size='md' color='bg-indigo' />
+      <Divider orientation='horizontal' size='md' color='bg-color-primary' />
+      <Divider orientation='horizontal' size='md' color='bg-color-blue' />
+      <Divider orientation='horizontal' size='md' color='bg-color-indigo' />
     </div>
   )
 };

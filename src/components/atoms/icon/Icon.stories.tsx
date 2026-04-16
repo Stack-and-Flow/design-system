@@ -28,8 +28,8 @@ type Story = StoryObj<typeof Icon>;
 export const Default: Story = {
   args: {
     name: 'image-plus',
-    color: 'text-accent',
-    colorDark: 'dark:text-accent',
+    color: 'text-color-brand-light',
+    colorDark: 'dark:text-color-brand-dark',
     size: 24
   }
 };
@@ -57,12 +57,12 @@ export const Sizes: Story = {
 export const Colors: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Icon name='image' size={12} color='text-orange' colorDark='dark:text-pink' />
-      <Icon name='image' size={16} color='text-orange' colorDark='dark:text-pink' />
-      <Icon name='image' size={22} color='text-orange' colorDark='dark:text-pink' />
-      <Icon name='image' size={28} color='text-orange' colorDark='dark:text-pink' />
-      <Icon name='image' size={34} color='text-orange' colorDark='dark:text-pink' />
-      <Icon name='image' size={40} color='text-orange' colorDark='dark:text-pink' />
+      <Icon name='image' size={12} color='text-color-orange' colorDark='dark:text-color-pink' />
+      <Icon name='image' size={16} color='text-color-orange' colorDark='dark:text-color-pink' />
+      <Icon name='image' size={22} color='text-color-orange' colorDark='dark:text-color-pink' />
+      <Icon name='image' size={28} color='text-color-orange' colorDark='dark:text-color-pink' />
+      <Icon name='image' size={34} color='text-color-orange' colorDark='dark:text-color-pink' />
+      <Icon name='image' size={40} color='text-color-orange' colorDark='dark:text-color-pink' />
     </div>
   )
 };

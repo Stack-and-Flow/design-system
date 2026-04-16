@@ -7,12 +7,12 @@ export type IconProps = {
   name: DynamicIconName;
   /**
    * @control select
-   * @default text-accent
+   * @default text-color-brand-light
    * */
   color?: TextThemeColors;
   /**
    * @control select
-   * @default dark:text-accent
+   * @default dark:text-color-brand-dark
    */
   colorDark?: TextDarkThemeColors;
   /**
