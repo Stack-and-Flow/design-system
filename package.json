@@ -11,7 +11,7 @@
     "storybook": "storybook dev -p 6006",
     "storybook-build": "storybook build && node scripts/inject-preview-head.js",
     "storybook-clean-cache": "node -e \"require('fs').rmSync('node_modules/.cache/storybook',{recursive:true,force:true})\"",
-    "pre-commit": "pnpm run biome-staged && tsc && git add -A",
+    "pre-commit": "pnpm run biome-staged && tsc",
     "postinstall": "lefthook install",
     "test": "vitest run",
     "test:watch": "vitest",

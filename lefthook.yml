@@ -1,5 +1,8 @@
 pre-commit:
-  parallel: true
+  parallel: false
   commands:
-    pre-commit-script:
-      run: "pnpm run pre-commit"
+    biome:
+      glob: "**/*.{ts,tsx,js,jsx,css}"
+      run: "biome check --write --staged {staged_files}"
+    typecheck:
+      run: "pnpm exec tsc --noEmit"

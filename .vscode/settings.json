@@ -6,4 +6,5 @@
     "strings": "on"
   },
   "editor.fontFamily": "RobotoMono Nerd Font",
+  "biome.lsp.bin": "../node_modules/.pnpm/@biomejs+cli-win32-x64@2.4.12/node_modules/@biomejs/cli-win32-x64/biome.exe"
 }
