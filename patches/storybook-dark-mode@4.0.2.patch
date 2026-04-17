@@ -1,0 +1,26 @@
+diff --git a/dist/cjs/Tool.js b/dist/cjs/Tool.js
+index 53e12660b7265c5bf15591028d227f061e6b44d7..b8a9b20c16c9d7f549ef4d1bd998bbf886869c64 100644
+--- a/dist/cjs/Tool.js
++++ b/dist/cjs/Tool.js
+@@ -83,6 +83,8 @@ var arrayify = function arrayify(classes) {
+   var arr = [];
+   return arr.concat(classes).map(function (item) {
+     return item;
++  }).filter(function (item) {
++    return item && item.trim() !== '';
+   });
+ };
+ 
+diff --git a/dist/esm/Tool.js b/dist/esm/Tool.js
+index 12b99ffbcc3002b3a9081d02db230ea6eb9990d7..50216b30d87b0e50b47e1c6e120879913bcec573 100644
+--- a/dist/esm/Tool.js
++++ b/dist/esm/Tool.js
+@@ -71,6 +71,8 @@ var arrayify = function arrayify(classes) {
+   var arr = [];
+   return arr.concat(classes).map(function (item) {
+     return item;
++  }).filter(function (item) {
++    return item && item.trim() !== '';
+   });
+ };
+ 

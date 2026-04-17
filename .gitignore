@@ -31,8 +31,8 @@ package-lock.json
 *storybook.log
 storybook-static
 
-# Visual audit screenshots
-/screenshots/
-
-# Playwright MCP runtime output (logs + page snapshots)
+# Playwright MCP runtime output (logs, snapshots, screenshots, network requests, console logs)
 /.playwright-mcp/
+page-*.png
+page-*.jpeg
+*.md.playwright-output

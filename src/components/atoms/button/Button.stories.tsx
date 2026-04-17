@@ -1,4 +1,4 @@
-import { action } from '@storybook/addon-actions';
+import { fn } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from './Button';
 
@@ -36,7 +36,7 @@ export const Default: Story = {
     isFullWidth: false,
     isLoading: false,
     ariaLabel: '',
-    onClick: action('Clicked')
+    onClick: fn()
   }
 };
 
@@ -47,9 +47,9 @@ export const Default: Story = {
 export const Primary: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='sm' onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' onClick={fn()} />
+      <Button text='Lorem ipsum' size='lg' onClick={fn()} />
     </div>
   )
 };
@@ -62,9 +62,9 @@ export const Primary: Story = {
 export const Secondary: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='secondary' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='secondary' onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='sm' variant='secondary' onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='secondary' onClick={fn()} />
+      <Button text='Lorem ipsum' size='lg' variant='secondary' onClick={fn()} />
     </div>
   )
 };
@@ -78,9 +78,9 @@ export const Secondary: Story = {
 export const Outlined: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='outlined' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='outlined' onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='sm' variant='outlined' onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='outlined' onClick={fn()} />
+      <Button text='Lorem ipsum' size='lg' variant='outlined' onClick={fn()} />
     </div>
   )
 };
@@ -94,9 +94,9 @@ export const Outlined: Story = {
 export const Ghost: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='ghost' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='ghost' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='ghost' onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='sm' variant='ghost' onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='ghost' onClick={fn()} />
+      <Button text='Lorem ipsum' size='lg' variant='ghost' onClick={fn()} />
     </div>
   )
 };
@@ -110,9 +110,9 @@ export const Ghost: Story = {
 export const Light: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='light' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='light' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='light' onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='sm' variant='light' onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='light' onClick={fn()} />
+      <Button text='Lorem ipsum' size='lg' variant='light' onClick={fn()} />
     </div>
   )
 };
@@ -125,9 +125,9 @@ export const Light: Story = {
 export const Loading: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='md' variant='primary' isLoading={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' isLoading={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' isLoading={true} onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='md' variant='primary' isLoading={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='secondary' isLoading={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='outlined' isLoading={true} onClick={fn()} />
     </div>
   )
 };
@@ -141,13 +141,13 @@ export const WithIcon: Story = {
   render: () => (
     <>
       <div className='flex gap-4 items-center justify-center'>
-        <Button text='Lorem ipsum' size='md' variant='primary' icon='image' onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='outlined' icon='image' onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='light' icon='image' onClick={action('clicked')} />
+        <Button text='Lorem ipsum' size='md' variant='primary' icon='image' onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='outlined' icon='image' onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='light' icon='image' onClick={fn()} />
       </div>
       <div className='flex gap-4 items-center justify-center pt-4'>
-        <Button text='Lorem ipsum' size='md' variant='secondary' icon='image' onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='ghost' icon='image' onClick={action('clicked')} />
+        <Button text='Lorem ipsum' size='md' variant='secondary' icon='image' onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='ghost' icon='image' onClick={fn()} />
       </div>
     </>
   )
@@ -162,13 +162,13 @@ export const Rounded: Story = {
   render: () => (
     <>
       <div className='flex gap-4 items-center justify-center'>
-        <Button text='Lorem ipsum' size='md' variant='primary' rounded={true} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='outlined' rounded={true} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='light' rounded={true} onClick={action('clicked')} />
+        <Button text='Lorem ipsum' size='md' variant='primary' rounded={true} onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='outlined' rounded={true} onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='light' rounded={true} onClick={fn()} />
       </div>
       <div className='flex gap-4 items-center justify-center pt-4'>
-        <Button text='Lorem ipsum' size='md' variant='secondary' rounded={true} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='ghost' rounded={true} onClick={action('clicked')} />
+        <Button text='Lorem ipsum' size='md' variant='secondary' rounded={true} onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='ghost' rounded={true} onClick={fn()} />
       </div>
     </>
   )
@@ -184,13 +184,13 @@ export const Lowercase: Story = {
   render: () => (
     <>
       <div className='flex gap-4 items-center justify-center'>
-        <Button text='Lorem ipsum' size='md' variant='primary' uppercase={false} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='outlined' uppercase={false} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='light' uppercase={false} onClick={action('clicked')} />
+        <Button text='Lorem ipsum' size='md' variant='primary' uppercase={false} onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='outlined' uppercase={false} onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='light' uppercase={false} onClick={fn()} />
       </div>
       <div className='flex gap-4 items-center justify-center pt-4'>
-        <Button text='Lorem ipsum' size='md' variant='secondary' uppercase={false} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='ghost' uppercase={false} onClick={action('clicked')} />
+        <Button text='Lorem ipsum' size='md' variant='secondary' uppercase={false} onClick={fn()} />
+        <Button text='Lorem ipsum' size='md' variant='ghost' uppercase={false} onClick={fn()} />
       </div>
     </>
   )
@@ -204,11 +204,11 @@ export const Lowercase: Story = {
 export const FullWidth: Story = {
   render: () => (
     <div className='flex flex-col gap-4 items-center justify-center'>
-      <Button text='Lorem ipsum' size='md' variant='primary' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='light' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='ghost' isFullWidth={true} onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='md' variant='primary' isFullWidth={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='outlined' isFullWidth={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='light' isFullWidth={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='secondary' isFullWidth={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='ghost' isFullWidth={true} onClick={fn()} />
     </div>
   )
 };
@@ -221,11 +221,11 @@ export const FullWidth: Story = {
 export const Disabled: Story = {
   render: () => (
     <div className='flex gap-4 items-center justify-center'>
-      <Button text='Lorem ipsum' size='md' variant='primary' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='light' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='ghost' disabled={true} onClick={action('clicked')} />
+      <Button text='Lorem ipsum' size='md' variant='primary' disabled={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='outlined' disabled={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='light' disabled={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='secondary' disabled={true} onClick={fn()} />
+      <Button text='Lorem ipsum' size='md' variant='ghost' disabled={true} onClick={fn()} />
     </div>
   )
 };

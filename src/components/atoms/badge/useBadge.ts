@@ -16,9 +16,29 @@ export const useBadge = ({
   ariaLive = 'off',
   role = 'status'
 }: BadgeProps) => {
-  const badgeClass = badgeVariants({ color, rounded, size, variant, placement, animation });
-  const showRenderBadge =
-    visibility && (typeof content === 'string' || typeof content === 'number' || React.isValidElement(content));
+  const hasChildren = children !== null && children !== undefined;
+
+  // Icon content or empty string → needs square shape (no horizontal padding)
+  const isIconContent = React.isValidElement(content);
+  const isDot = content === '' || content === null || content === undefined;
+  const isSquare = isIconContent || isDot;
+
+  // Only apply placement when there are children (positioned badge)
+  // Otherwise, placement is ignored (standalone badge)
+  const badgeClass = badgeVariants({
+    color,
+    rounded,
+    size,
+    variant,
+    placement: hasChildren ? placement : undefined,
+    animation
+  });
+
+  // Render the badge element as long as there is valid content — visibility controls animation only.
+  // We keep the span in the DOM so badgeOut can animate before disappearing.
+  const hasValidContent =
+    isDot || typeof content === 'string' || typeof content === 'number' || React.isValidElement(content);
+  const showRenderBadge = hasValidContent;
 
   return {
     content,
@@ -35,6 +55,9 @@ export const useBadge = ({
     badgeClass,
     showRenderBadge,
     ariaLive,
-    role
+    role,
+    hasChildren,
+    isDot,
+    isSquare
   };
 };

@@ -168,7 +168,7 @@ Add the following block to your agent's configuration file (e.g. `~/.config/open
     "npx",
     "@playwright/mcp@latest",
     "--output-dir",
-    "/absolute/path/to/your/project/screenshots"
+    ".playwright-mcp"
   ]
 }
 ```

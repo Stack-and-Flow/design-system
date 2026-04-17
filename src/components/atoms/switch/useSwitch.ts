@@ -57,7 +57,7 @@ export const useSwitch = ({
     checked,
     onChange: handleChange,
     switchBase: switchBase({ labelPlacement }),
-    switchWrapper: switchWrapper({ size, disabled, rounded }),
+    switchWrapper: switchWrapper({ size, rounded }),
     switchStartContent: switchStartContent({}),
     switchHiddenInput: switchHiddenInput({}),
     switchTrack: switchTrack({ size, color, variant, rounded }),

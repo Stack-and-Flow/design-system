@@ -1,4 +1,4 @@
-import { action } from '@storybook/addon-actions';
+import { fn } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import Avatar from './Avatar';
 
@@ -93,12 +93,12 @@ export const Rounded: Story = {
 export const Interactive: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Avatar src='' alt='EG' size='sm' onClick={action('clicked')} />
-      <Avatar src='' alt='EG' size='md' onClick={action('clicked')} />
-      <Avatar src='' alt='EG' size='lg' onClick={action('clicked')} />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='xl' onClick={action('clicked')} />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='2xl' onClick={action('clicked')} />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='3xl' onClick={action('clicked')} />
+      <Avatar src='' alt='EG' size='sm' onClick={fn()} />
+      <Avatar src='' alt='EG' size='md' onClick={fn()} />
+      <Avatar src='' alt='EG' size='lg' onClick={fn()} />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='xl' onClick={fn()} />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='2xl' onClick={fn()} />
+      <Avatar src='/images/logo-only.svg' alt='EG' size='3xl' onClick={fn()} />
     </div>
   )
 };

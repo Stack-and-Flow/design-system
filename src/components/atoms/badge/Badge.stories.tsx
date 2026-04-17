@@ -111,12 +111,11 @@ export const Color: Story = {
  * The `variant` prop defines visual style modifications for the badge.
  *
  * Available options:
- * - `solid` → Default appearance with full background.
- * - `flat` → Reduced background opacity, text remains solid.
- * - `shadow` → Adds a soft shadow based on the color.
- * - `faded` → Uses a neutral gray background but keeps the text color from the selected color.
+ * - `solid` → Maximum prominence with full background color.
+ * - `flat` → Medium prominence with opaque tinted background and border.
+ * - `subtle` → Minimum prominence with very soft background, no border.
  *
- * Use variants to match the tone or prominence of your UI element.
+ * Use variants to establish a clear visual hierarchy based on importance.
  */
 export const Variant: Story = {
   render: () => (
@@ -127,7 +126,7 @@ export const Variant: Story = {
       <Badge content={'5'} variant={'flat'}>
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e290267700' alt='Avatar' rounded='full' size='lg' />
       </Badge>
-      <Badge content={'5'} variant={'shadow'}>
+      <Badge content={'5'} variant={'subtle'}>
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e290267800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
     </div>
@@ -135,7 +134,10 @@ export const Variant: Story = {
 };
 
 /**
- * The `placement` prop determines the position of the badge relative to its parent.
+ * The `placement` prop determines the position of the badge relative to its child element.
+ *
+ * **Important:** `placement` only works when the Badge has `children` (e.g., an Avatar or Icon).
+ * For standalone badges, the prop is ignored and the badge renders as an inline element.
  *
  * Available options:
  * - `top-right` (default)
@@ -143,7 +145,7 @@ export const Variant: Story = {
  * - `top-left`
  * - `bottom-left`
  *
- * Useful for adapting the badge position to different components like avatars, buttons or icons.
+ * Use this to position notification badges over avatars, icons, or buttons.
  */
 export const Placement: Story = {
   render: () => (
@@ -163,42 +165,57 @@ export const Placement: Story = {
     </div>
   )
 };
+
 /**
- * The `content` prop accepts a string, number, icon, or even custom JSX.
+ * When used without `children`, the badge renders as a standalone inline element.
+ * The `placement` prop is ignored in this mode.
  *
- * Examples:
- * - Number (`3`) → for unread messages
- * - Text (`new`) → for labels
- * - Icon → for status indicators
+ * Use standalone badges for labels, tags, and status indicators.
+ */
+export const Standalone: Story = {
+  render: () => (
+    <div className='flex gap-2 flex-wrap'>
+      <Badge content={'New'} color={'primary'} variant={'subtle'} size={'sm'} rounded={false} />
+      <Badge content={'Pro'} color={'warning'} variant={'flat'} size={'sm'} rounded={false} />
+      <Badge content={'Beta'} color={'secondary'} variant={'flat'} size={'sm'} rounded={false} />
+      <Badge content={'5'} color={'primary'} variant={'solid'} size={'sm'} />
+      <Badge content={'React'} color={'success'} variant={'subtle'} size={'sm'} rounded={false} />
+      <Badge content={'TypeScript'} color={'secondary'} variant={'subtle'} size={'sm'} rounded={false} />
+    </div>
+  )
+};
+
+/**
+ * The `content` prop accepts four types of values:
  *
- * You can customize its appearance using other props like `color`, `size`, and `variant`.
+ * - **Number** → for unread counts or notifications
+ * - **Text** → for short labels like "New" or "Beta"
+ * - **Icon** → for status indicators
+ * - **Empty string** → renders as a dot, useful for presence or activity indicators
  */
 export const ContentExamples: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Badge content={'3'}>
+      {/* Number */}
+      <Badge content={3} color={'primary'}>
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e291262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
-      <Badge content={''} color={'success'} placement={'bottom-right'} size={'sm'} variant={'flat'}>
-        <Avatar src='https://i.pravatar.cc/300?u=a042581f4e293262800' alt='Avatar' rounded='full' size='lg' />
-      </Badge>
-      <Badge content={'new'} size={'md'} color={'secondary'}>
+      {/* Text */}
+      <Badge content={'New'} color={'primary'}>
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e295262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
+      {/* Icon */}
       <Badge
-        content={<Icon name='check' size={10} colorDark='dark:text-color-text-light' />}
+        content={<Icon name='check' size={10} color='text-white' />}
         color={'success'}
         size={'sm'}
         placement={'bottom-right'}
       >
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e296262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
-      <Badge
-        content={<Icon name='bell-ring' size={14} color='text-color-text-light' colorDark='dark:text-color-text-dark' />}
-        color={'danger'}
-        size={'md'}
-      >
-        <Avatar src='https://i.pravatar.cc/300?u=a042581f4e297262800' alt='Avatar' rounded='full' size='lg' />
+      {/* Empty → dot */}
+      <Badge content={''} color={'success'} size={'sm'} placement={'bottom-right'}>
+        <Avatar src='https://i.pravatar.cc/300?u=a042581f4e293262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
     </div>
   )
@@ -212,26 +229,20 @@ export const ContentExamples: Story = {
  */
 export const BadgeVisibility: Story = {
   render: () => {
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState(true);
 
-    const toggleVisibility = () => {
-      setVisible((prev) => !prev);
-    };
     return (
-      <div className='flex gap-4 items-center'>
-        <Badge content='5' color={'secondary'} visibility={visible}>
-          <Icon name='bell-ring' size={34} />
-        </Badge>
-        <Badge content='5' color={'secondary'} visibility={visible}>
-          <Icon name='shopping-cart' size={34} />
+      <div className='flex gap-6 items-center'>
+        <Badge content='5' color={'danger'} visibility={visible}>
+          <Icon name='bell-ring' size={28} colorDark='dark:text-white' />
         </Badge>
         <Button
-          onClick={toggleVisibility}
+          onClick={() => setVisible((prev) => !prev)}
           variant={'outlined'}
-          text={visible ? 'Hide Badge' : 'Show Badge'}
+          text={visible ? 'Hide' : 'Show'}
           size='sm'
-          className='min-w-30'
-        ></Button>
+          className='w-20'
+        />
       </div>
     );
   }
@@ -240,31 +251,47 @@ export const BadgeVisibility: Story = {
  * The `animation` prop allows you to apply movement or visual feedback to the badge.
  *
  * Available options:
- * - `pulse` → Smooth fading effect (default if enabled)
- * - `bounce` → Subtle bounce animation
- * - `ping` → Expanding ripple animation
- * - `rotation` → Continuous rotation
  * - `default` → No animation
+ * - `pulse` → Smooth fading in and out
+ * - `bounce` → Subtle bounce
+ * - `ping` → Expanding ripple effect
+ * - `rotation` → Continuous rotation
  *
  * Use animations to draw attention to updates or notifications.
  */
 export const Animation: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <Badge content={'1'} color={'primary'}>
+    <div className='flex gap-6 items-center'>
+      <Badge
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color={'primary'}
+        size={'sm'}
+        animation={'default'}
+      >
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e196262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
-      <Badge content={''} color={'success'} placement={'bottom-right'} size={'sm'} animation={'pulse'}>
+      <Badge
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color={'primary'}
+        size={'sm'}
+        animation={'pulse'}
+      >
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e296262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
       <Badge
-        content={<Icon name='bell-dot' size={14} colorDark='dark:text-color-text-dark' />}
-        color={'success'}
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color={'primary'}
+        size={'sm'}
         animation={'bounce'}
       >
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e396262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
-      <Badge content={'?'} color={'warning'} animation={'ping'}>
+      <Badge
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color={'primary'}
+        size={'sm'}
+        animation={'ping'}
+      >
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e496262800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
     </div>
@@ -288,7 +315,7 @@ export const Accessibility: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
       <Badge content={'+99'} color={'danger'} ariaLabel='more than 99 notifications' role='status' ariaLive='assertive'>
-        <Icon name='bell-ring' size={34} colorDark='dark:text-color-text-dark' />
+        <Icon name='bell-ring' size={34} colorDark='dark:text-white' />
       </Badge>
     </div>
   )

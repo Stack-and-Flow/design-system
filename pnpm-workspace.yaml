@@ -1,0 +1,2 @@
+patchedDependencies:
+  storybook-dark-mode@4.0.2: patches/storybook-dark-mode@4.0.2.patch

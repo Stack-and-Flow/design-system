@@ -307,7 +307,7 @@ export const StartAndEnd: Story = {
         id='input36'
         type='email'
         placeholder='Placeholder'
-        startContent={<Icon name='mail' color='text-text-light' colorDark='dark:text-text-dark' />}
+        startContent={<Icon name='mail' color='text-color-text-light' colorDark='dark:text-color-text-dark' />}
         endContent={
           <Text tag='p' className='pt-[2px]'>
             @gmail.com

@@ -5,4 +5,5 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
+  "editor.fontFamily": "RobotoMono Nerd Font",
 }

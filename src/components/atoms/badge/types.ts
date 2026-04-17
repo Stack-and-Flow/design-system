@@ -3,17 +3,14 @@ import type { ReactNode } from 'react';
 
 export const badgeVariants = cva(
   [
-    'inline-flex items-center font-semibold rounded-[3px]',
+    'inline-flex items-center justify-center font-semibold rounded-xs',
     'transition-[background-color,color] duration-200 ease-in-out',
     'whitespace-nowrap'
   ],
   {
     variants: {
       color: {
-        primary: [
-          'bg-[var(--color-brand-light)] text-white',
-          'dark:bg-[var(--color-brand-dark)] dark:text-white'
-        ],
+        primary: ['bg-[var(--color-brand-light)] text-white', 'dark:bg-[var(--color-brand-dark)] dark:text-white'],
         secondary: [
           'bg-[var(--color-surface-light)] text-[var(--color-text-light)]',
           'dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-text-dark)]'
@@ -33,8 +30,8 @@ export const badgeVariants = cva(
       },
       variant: {
         solid: '',
-        flat: 'opacity-60 border border-[var(--color-border-strong-light)] dark:border-[var(--color-border-strong-dark)]',
-        shadow: 'hover:shadow-[0_4px_20px_rgba(255,0,54,0.15)]'
+        flat: 'border',
+        subtle: ''
       },
       placement: {
         'top-right': 'absolute top-0 right-0 translate-x-1/2 -translate-y-1/2',
@@ -49,6 +46,65 @@ export const badgeVariants = cva(
         ping: 'animate-badgePing'
       }
     },
+    compoundVariants: [
+      // flat: opaque background + colored border + colored text
+      {
+        variant: 'flat',
+        color: 'primary',
+        class:
+          '!bg-[#ffe5eb]   border-[var(--color-brand-dark)]              text-[var(--color-brand-dark)]   dark:!bg-[#330011]'
+      },
+      {
+        variant: 'flat',
+        color: 'secondary',
+        class:
+          '!bg-[#f5f5f5] border-[var(--color-border-strong-dark)]        text-[var(--color-text-dark)]    dark:!bg-[#1a1a1a]'
+      },
+      {
+        variant: 'flat',
+        color: 'success',
+        class:
+          '!bg-[#dcfce7]  border-[var(--color-success)]                  text-[var(--color-success)]      dark:!bg-[#0a3d1f]'
+      },
+      {
+        variant: 'flat',
+        color: 'warning',
+        class:
+          '!bg-[#fef9c3]  border-[var(--color-warning)]                  text-[var(--color-warning)]      dark:!bg-[#3d3510]'
+      },
+      {
+        variant: 'flat',
+        color: 'danger',
+        class:
+          '!bg-[#fee2e2]  border-[var(--color-error)]                    text-[var(--color-error)]        dark:!bg-[#3d0f0f]'
+      },
+      // subtle: very soft background + no border + colored text
+      {
+        variant: 'subtle',
+        color: 'primary',
+        class: '!bg-[#fff0f3] text-[var(--color-brand-dark)]   dark:!bg-[#1a0008] dark:text-[var(--color-brand-light)]'
+      },
+      {
+        variant: 'subtle',
+        color: 'secondary',
+        class: '!bg-[#fafafa] text-[var(--color-text-dark)]    dark:!bg-[#0a0a0a] dark:text-[var(--color-text-dark)]'
+      },
+      {
+        variant: 'subtle',
+        color: 'success',
+        class: '!bg-[#f0fdf4] text-[var(--color-success)]      dark:!bg-[#051f0d] dark:text-[var(--color-success)]'
+      },
+      {
+        variant: 'subtle',
+        color: 'warning',
+        class: '!bg-[#fefce8] text-[var(--color-warning)]      dark:!bg-[#1f1a08] dark:text-[var(--color-warning)]'
+      },
+      {
+        variant: 'subtle',
+        color: 'danger',
+        class: '!bg-[#fef2f2] text-[var(--color-error)]        dark:!bg-[#1f0505] dark:text-[var(--color-error)]'
+      }
+    ],
     defaultVariants: {
       color: 'primary',
       size: 'md',
@@ -63,7 +119,7 @@ type BadgeSize = 'sm' | 'md' | 'lg';
 type BadgeRounded = true | false;
 type BadgePlacement = 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
 type BadgeAnimation = 'default' | 'pulse' | 'bounce' | 'ping';
-type BadgeVariants = 'solid' | 'flat' | 'shadow';
+type BadgeVariants = 'solid' | 'flat' | 'subtle';
 
 export type BadgeProps = {
   className?: string;

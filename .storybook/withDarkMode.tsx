@@ -1,19 +1,17 @@
 import type { Decorator } from '@storybook/react';
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
-import { useTheme } from '../src/infrastructure/hooks/use-theme';
 
 export const withDarkMode: Decorator = (Story) => {
   const isDark = useDarkMode();
-  const { setTheme } = useTheme();
 
-  useEffect(() => {
-    setTheme(isDark ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark', isDark);
+  // Use useLayoutEffect to apply changes BEFORE paint (prevents flicker)
+  useLayoutEffect(() => {
+    // Set background colors (the addon handles the 'dark' class automatically)
     const bg = isDark ? '#060C13' : '#f4f5f7';
     document.documentElement.style.background = bg;
     document.body.style.background = bg;
-  }, [isDark, setTheme]);
+  }, [isDark]);
 
   return (
     <div

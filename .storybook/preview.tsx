@@ -11,26 +11,20 @@ const preview: Preview = {
     darkMode: true
   },
   parameters: {
+    darkMode: {
+      dark: { ...theme },
+      light: { ...theme },
+      // Now we can safely use empty string for light mode (patch applied)
+      darkClass: 'dark',
+      lightClass: '',
+      classTarget: 'html',
+      stylePreview: true
+    },
     actions: { argTypesRegex: '^on.*' },
     options: {
       theme: theme,
       storySort: {
         order: ['Controls', 'Docs', 'Stories']
-      }
-    },
-    darkMode: {
-      stylePreview: true,
-      dark: {
-        class: 'dark',
-        style: {
-          backgroundColor: '#060C13'
-        }
-      },
-      light: {
-        class: '',
-        style: {
-          backgroundColor: '#f4f5f7'
-        }
       }
     },
     controls: {
