@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from '../button';
+import { Button } from '../button';
 import IconButton from '../icon-button';
 import Link from '../link';
 import Modal from './Modal';

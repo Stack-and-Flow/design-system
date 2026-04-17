@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import type { ComponentProps, FC } from 'react';
+import { cn } from '@/lib/utils';
 import type { AvatarProps } from './types';
 import { useAvatar } from './useAvatar';
 
@@ -30,14 +30,14 @@ function AvatarFallback({ className, ...props }: ComponentProps<typeof AvatarPri
   );
 }
 
-const Avatar: FC<AvatarProps> = ({ ...props }) => {
+export const Avatar: FC<AvatarProps> = ({ ...props }) => {
   const { src, alt, initials, sizeClass, className, textClass, roundedClass, onClick } = useAvatar({ ...props });
   const interactive = !!onClick;
 
   return (
     <AvatarContainer
       className={cn(
-        'bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-raised-dark)]',
+        'bg-surface-raised-light dark:bg-surface-raised-dark',
         'shadow-[inset_0_0_0_1px_var(--color-border-strong-light)] dark:shadow-[inset_0_0_0_1px_var(--color-border-strong-dark)]',
         'flex items-center justify-center',
         interactive && 'cursor-pointer transition-transform duration-200 ease-out hover:scale-110 active:scale-100',
@@ -52,16 +52,16 @@ const Avatar: FC<AvatarProps> = ({ ...props }) => {
       <AvatarImage src={src} style={{ width: sizeClass, height: sizeClass }} alt={alt} />
       <AvatarFallback
         className={cn(
-          'bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-raised-dark)]',
+          'bg-surface-raised-light dark:bg-surface-raised-dark',
           'shadow-[inset_0_0_0_1px_var(--color-border-strong-light)] dark:shadow-[inset_0_0_0_1px_var(--color-border-strong-dark)]',
-          'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
-          'font-[var(--font-weight-semibold)] leading-[1.2] pt-[0.2em]',
+          'text-text-light dark:text-(--color-text-dark)',
+          'font-semibold leading-[1.2] pt-[0.2em]',
           roundedClass,
           textClass
         )}
-      >{initials}</AvatarFallback>
+      >
+        {initials}
+      </AvatarFallback>
     </AvatarContainer>
   );
 };
-
-export default Avatar;

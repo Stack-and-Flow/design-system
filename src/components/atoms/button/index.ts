@@ -1,3 +1,2 @@
-import Button from './Button';
-export * from './types'
-export default Button;
+export { Button } from './Button';
+export * from './types';

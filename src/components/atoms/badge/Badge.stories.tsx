@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import Avatar from '../avatar/Avatar';
-import Button from '../button';
+import { Avatar } from '../avatar/Avatar';
+import { Button } from '../button';
 import Icon from '../icon/Icon';
-import Badge from './Badge';
+import { Badge } from './Badge';
 
 /**
  * ## DESCRIPTION

@@ -1,13 +1,15 @@
-import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import type { ComponentProps, FC } from 'react';
 import { SpinnerCircular } from 'spinners-react';
+import { cn } from '@/lib/utils';
 import { type ButtonProps, buttonVariants } from './types';
 import { useButton } from './useButton';
 import '@/components/utils/styles/index.css';
 
-const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & ComponentProps<'button'>> = ({ ...props }) => {
+export const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & ComponentProps<'button'>> = ({
+  ...props
+}) => {
   const {
     buttonRef,
     type,
@@ -25,14 +27,15 @@ const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & ComponentPr
     isLoading,
     onClick,
     iconSize,
-    icon
+    icon,
+    ...restProps
   } = useButton(props);
   return (
     <button
-      {...props}
+      {...restProps}
       ref={buttonRef}
       type={type}
-      role={ariaPressed !== undefined ? 'switch' : 'button'}
+      role='button'
       className={cn(
         isFullWidth ? 'w-full' : 'w-auto',
         buttonVariants({ variant, size, rounded, shadow, uppercase }),
@@ -51,7 +54,7 @@ const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & ComponentPr
           <div>
             <SpinnerCircular
               color={'currentColor'}
-              secondaryColor={'rgba(45, 6, 9, 0.2)'}
+              secondaryColor={'var(--color-spinner-track)'}
               thickness={200}
               size={size !== 'sm' ? '1.5em' : '1.2em'}
             />
@@ -61,5 +64,3 @@ const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & ComponentPr
     </button>
   );
 };
-
-export default Button;

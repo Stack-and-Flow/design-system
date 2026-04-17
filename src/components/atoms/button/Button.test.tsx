@@ -15,18 +15,19 @@
  *   but the import itself still resolves, so we mock the module to avoid CSS parse errors
  */
 
-import { render, screen } from '@testing-library/react';
+import { render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 // --- Mocks (declared before component import) ---
 
 vi.mock('lucide-react/dynamic', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
   DynamicIcon: () => null
 }));
 
 vi.mock('spinners-react', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
   SpinnerCircular: () => null
 }));
 
@@ -35,7 +36,7 @@ vi.mock('@/components/utils/styles/index.css', () => ({}));
 
 // --- Imports after mocks ---
 
-import Button from './Button';
+import { Button } from './Button';
 import { useButton } from './useButton';
 
 // ─────────────────────────────────────────────
@@ -95,33 +96,33 @@ describe('Button — component behavior', () => {
   });
 
   it('displays the text prop as content', () => {
-    render(<Button text="Click me" />);
+    render(<Button text='Click me' />);
     expect(screen.getByText('Click me')).toBeInTheDocument();
   });
 
   it('applies aria-label when the prop is provided', () => {
-    render(<Button ariaLabel="Submit form" />);
+    render(<Button ariaLabel='Submit form' />);
     expect(screen.getByRole('button', { name: 'Submit form' })).toBeInTheDocument();
   });
 
   it('uses text as aria-label when ariaLabel prop is not provided', () => {
-    render(<Button text="Save" />);
+    render(<Button text='Save' />);
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   it('is disabled when disabled prop is true', () => {
-    render(<Button text="Disabled" disabled />);
+    render(<Button text='Disabled' disabled={true} />);
     expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
   });
 
   it('is disabled when isLoading is true (even if disabled is false)', () => {
-    render(<Button text="Loading" isLoading disabled={false} />);
+    render(<Button text='Loading' isLoading={true} disabled={false} />);
     expect(screen.getByRole('button', { name: 'Loading' })).toBeDisabled();
   });
 
   it('calls onClick when the button is clicked and not loading', async () => {
     const handleClick = vi.fn();
-    render(<Button text="Submit" onClick={handleClick} />);
+    render(<Button text='Submit' onClick={handleClick} />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
@@ -130,7 +131,7 @@ describe('Button — component behavior', () => {
 
   it('does NOT call onClick when isLoading is true', async () => {
     const handleClick = vi.fn();
-    render(<Button text="Saving" isLoading onClick={handleClick} />);
+    render(<Button text='Saving' isLoading={true} onClick={handleClick} />);
 
     // The button is disabled when loading — userEvent click on disabled button
     // does not fire the event handler, which is the correct behavior
@@ -140,18 +141,18 @@ describe('Button — component behavior', () => {
   });
 
   it('applies aria-pressed when the prop is provided', () => {
-    render(<Button text="Toggle" aria-pressed={false} />);
+    render(<Button text='Toggle' aria-pressed={false} />);
     const btn = screen.getByRole('switch', { name: 'Toggle' });
     expect(btn).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('sets role="switch" when aria-pressed prop is provided', () => {
-    render(<Button text="Toggle" aria-pressed={true} />);
+    render(<Button text='Toggle' aria-pressed={true} />);
     expect(screen.getByRole('switch', { name: 'Toggle' })).toBeInTheDocument();
   });
 
   it('sets role="button" when aria-pressed prop is NOT provided', () => {
-    render(<Button text="Action" />);
+    render(<Button text='Action' />);
     expect(screen.getByRole('button', { name: 'Action' })).toBeInTheDocument();
   });
 });

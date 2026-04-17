@@ -1,6 +1,6 @@
 import Icon from '@atoms/icon';
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from '../button';
+import { Button } from '../button';
 import Link from '../link';
 import Dropdown from './Dropdown';
 import type { DropdownSchema } from './types';

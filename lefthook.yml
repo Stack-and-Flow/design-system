@@ -3,6 +3,6 @@ pre-commit:
   commands:
     biome:
       glob: "**/*.{ts,tsx,js,jsx,css}"
-      run: "biome check --write --staged {staged_files}"
+      run: "pnpm exec biome check --write --staged {staged_files}"
     typecheck:
       run: "pnpm exec tsc --noEmit"

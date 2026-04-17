@@ -84,6 +84,7 @@
   --color-red-tint-mid: rgba(255, 0, 54, 0.10);      /* Menu item activo fuerte */
   --color-red-tint-high: rgba(255, 0, 54, 0.15);     /* Glow base / code highlight */
   --color-red-tint-strong: rgba(255, 0, 54, 0.30);   /* Glow activo */
+  --color-spinner-track: rgba(45, 6, 9, 0.2);        /* Spinner secondary track */
 
   /* Tints de superficie — blancos y negros semitransparentes */
   --color-white-tint-faint: rgba(255, 255, 255, 0.05);   /* Hover bg sutil */
