@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, within } from '@storybook/test';
 import { useState } from 'react';
 import { Avatar } from '../avatar/Avatar';
 import { Button } from '../button';
@@ -44,6 +45,16 @@ export const Default: Story = {
     ariaLive: 'off',
     role: 'status',
     children: <Avatar src='https://i.pravatar.cc/300?u=a042581f4e29026709d' alt='Avatar' rounded='full' size='lg' />
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify badge renders with correct role
+    const badge = canvas.getByRole('status');
+    await expect(badge).toBeInTheDocument();
+
+    // Verify badge content is correct
+    await expect(badge).toHaveTextContent('1');
   }
 };
 
@@ -70,7 +81,19 @@ export const Size: Story = {
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e290267012' alt='Avatar' rounded='full' size='lg' />
       </Badge>
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all three badge sizes render
+    const badges = canvas.getAllByRole('status');
+    await expect(badges).toHaveLength(3);
+
+    // Verify each badge has the correct content
+    for (const badge of badges) {
+      await expect(badge).toHaveTextContent('1');
+    }
+  }
 };
 
 /**
@@ -104,7 +127,21 @@ export const Color: Story = {
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e290267500' alt='Avatar' rounded='full' size='lg' />
       </Badge>
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all five color variants render
+    const badges = canvas.getAllByRole('status');
+    await expect(badges).toHaveLength(5);
+
+    // Verify each badge has the correct content
+    await expect(badges[0]).toHaveTextContent('1');
+    await expect(badges[1]).toHaveTextContent('2');
+    await expect(badges[2]).toHaveTextContent('3');
+    await expect(badges[3]).toHaveTextContent('4');
+    await expect(badges[4]).toHaveTextContent('5');
+  }
 };
 
 /**
@@ -130,7 +167,19 @@ export const Variant: Story = {
         <Avatar src='https://i.pravatar.cc/300?u=a042581f4e290267800' alt='Avatar' rounded='full' size='lg' />
       </Badge>
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all three variants render
+    const badges = canvas.getAllByRole('status');
+    await expect(badges).toHaveLength(3);
+
+    // Verify all have same content
+    for (const badge of badges) {
+      await expect(badge).toHaveTextContent('5');
+    }
+  }
 };
 
 /**
@@ -182,7 +231,21 @@ export const Standalone: Story = {
       <Badge content={'React'} color={'success'} variant={'subtle'} size={'sm'} rounded={false} />
       <Badge content={'TypeScript'} color={'secondary'} variant={'subtle'} size={'sm'} rounded={false} />
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all standalone badges render
+    const badges = canvas.getAllByRole('status');
+    await expect(badges).toHaveLength(6);
+
+    // Verify specific badge content
+    await expect(canvas.getByText('New')).toBeInTheDocument();
+    await expect(canvas.getByText('Pro')).toBeInTheDocument();
+    await expect(canvas.getByText('Beta')).toBeInTheDocument();
+    await expect(canvas.getByText('React')).toBeInTheDocument();
+    await expect(canvas.getByText('TypeScript')).toBeInTheDocument();
+  }
 };
 
 /**
@@ -318,5 +381,21 @@ export const Accessibility: Story = {
         <Icon name='bell-ring' size={34} colorDark='dark:text-white' />
       </Badge>
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify badge renders with correct accessibility attributes
+    const badge = canvas.getByRole('status');
+    await expect(badge).toBeInTheDocument();
+
+    // Verify aria-label is present
+    await expect(badge).toHaveAttribute('aria-label', 'more than 99 notifications');
+
+    // Verify aria-live is assertive
+    await expect(badge).toHaveAttribute('aria-live', 'assertive');
+
+    // Verify badge content
+    await expect(badge).toHaveTextContent('+99');
+  }
 };

@@ -9,7 +9,7 @@ const Skeleton: FC<SkeletonProps & ComponentProps<'div'>> = ({ ...props }) => {
     <div
       {...rest}
       data-slot='skeleton'
-      className={cn('bg-[rgba(255,255,255,0.08)] animate-pulse', `rounded-${rounded}`, className)}
+      className={cn('bg-white-tint-mid animate-pulse', `rounded-${rounded}`, className)}
       style={{ width: `${width}`, height: `${height}` }}
     />
   );

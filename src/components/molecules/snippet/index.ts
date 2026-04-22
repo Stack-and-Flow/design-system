@@ -1,3 +1,2 @@
-import Snippet from './Snippet';
-export * from './types'
-export default Snippet;
+export { default as Snippet } from './Snippet';
+export * from './types';

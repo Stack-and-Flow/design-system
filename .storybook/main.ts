@@ -3,7 +3,12 @@ import { mergeConfig } from 'vite';
 import _ from '../src/components/utils/types/safelist';
 
 const config: StorybookConfig = {
-  stories: ['./*.mdx', '../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: [
+    './*.mdx',
+    '../stories/**/*.mdx',
+    '../src/**/*.mdx',
+    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'
+  ],
   staticDirs: ['../src/assets'],
   addons: [
     '@storybook/addon-controls',
@@ -45,11 +50,11 @@ const config: StorybookConfig = {
         rollupOptions: {
           treeshake: false,
           output: {
-            assetFileNames: (assetInfo) => {
-              if (assetInfo.name.includes('preview') && assetInfo.name.endsWith('.css')) {
+            assetFileNames: (assetInfo: { name?: string }) => {
+              if (assetInfo.name?.includes('preview') && assetInfo.name?.endsWith('.css')) {
                 return 'assets/preview.css';
               }
-              return `assets/${assetInfo.name}` || 'assets/[name].[hash][extname]';
+              return assetInfo.name ? `assets/${assetInfo.name}` : 'assets/[name].[hash][extname]';
             }
           }
         }

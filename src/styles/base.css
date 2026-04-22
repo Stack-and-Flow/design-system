@@ -1,6 +1,6 @@
 @layer base {
   body {
-    @apply text-[16px] leading-[18px];
+    @apply text-body leading-normal;
     font-family: var(--font-primary);
     font-weight: 300;
   }
@@ -28,7 +28,7 @@
   .fs-h4 { font-size: var(--text-h4); line-height: 1.2; font-weight: 600; }
   .fs-h5 { font-size: var(--text-h5); line-height: 1.2; font-weight: 600; }
   .fs-h6 { font-size: var(--text-h6); line-height: 1.2; font-weight: 600; }
-  .fs-base { font-size: var(--text-base); line-height: 1.5; }
+  .fs-base { font-size: var(--text-body); line-height: 1.5; }
   .fs-small { font-size: var(--text-small); line-height: 1.4; }
 
   /* Single font — no secondary/bold variants needed */
@@ -41,21 +41,21 @@
     .fs-h4 { font-size: var(--text-h4-tablet); }
     .fs-h5 { font-size: var(--text-h5-tablet); }
     .fs-h6 { font-size: var(--text-h6-tablet); }
-    .fs-base { font-size: var(--text-base-tablet); }
+    .fs-base { font-size: var(--text-body-tablet); }
     .fs-small { font-size: var(--text-small-tablet); }
   }
 
   /* ── Storybook dark mode ───────────────────────────────────────── */
   .sidebar-container {
-    @apply !bg-background-dark;
+    @apply bg-background-dark!;
   }
 
   .sbdocs-content > .sbdocs-title {
-    @apply !text-text-secondary-dark;
+    @apply text-text-secondary-dark!;
   }
 
   .sbdocs-content h2 {
-    @apply !pb-4;
+    @apply pb-4!;
   }
 
   .sbdocs-content table {
@@ -63,19 +63,46 @@
   }
 
   .sbdocs-content table thead > tr > th {
-    @apply !border-t !border-border-dark bg-surface-raised-dark;
+    @apply border-t! border-border-dark! bg-surface-raised-dark;
   }
 
   .sbdocs-content table thead > tr:first-of-type > th:first-of-type {
-    @apply !border-l rounded-tl-md overflow-hidden;
+    @apply border-l! rounded-tl-md overflow-hidden;
   }
 
   .sbdocs-content table thead > tr:first-of-type > th:last-of-type {
-    @apply !border-r rounded-tr-md overflow-hidden;
+    @apply border-r! rounded-tr-md overflow-hidden;
   }
 
   .sbdocs-content table tbody > tr:first-of-type > td:first-of-type,
   .sbdocs-content table tbody > tr:first-of-type > td:last-of-type {
-    @apply !rounded-none;
+    @apply rounded-none!;
+  }
+
+  span.ripple {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    position: absolute;
+    transform: scale(0);
+    animation: ripple 0.5s linear forwards;
+    z-index: 1;
+  }
+
+  @keyframes ripple {
+    to {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 }
+

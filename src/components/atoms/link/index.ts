@@ -1,3 +1,2 @@
-import Link from './Link';
-export * from './types'
-export default Link;
+export { default as Link } from './Link';
+export * from './types';

@@ -1,4 +1,4 @@
-import IconButton from '@/components/atoms/icon-button';
+import { IconButton } from '@/components/atoms/icon-button';
 import type { FC } from 'react';
 import type { SnippetProps } from './types';
 import { useSnippet } from './useSnippet';
@@ -29,7 +29,7 @@ const Snippet: FC<SnippetProps> = ({ ...props }) => {
           <IconButton
             className={slots.copyButtonAnimations}
             icon={copied ? 'check' : 'copy'}
-            size={slots.sizeButton[size]}
+            size={slots.sizeButton[size ?? 'md']}
             title='copy to clipboard'
             variant='ghost'
             onClick={handleCopy}

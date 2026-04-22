@@ -1,4 +1,4 @@
-type ThemeRounded = 'md' | 'full' | 'none';
+import type { ThemeRounded } from '@/types';
 
 export type AvatarProps = {
   /** @control src */

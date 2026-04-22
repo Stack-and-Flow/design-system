@@ -1,4 +1,3 @@
-import { useRipple } from '@/components/utils/hooks/useRipple';
 import type { VariantProps } from 'class-variance-authority';
 import {
   type ChangeEvent,
@@ -9,6 +8,7 @@ import {
   useRef,
   useState
 } from 'react';
+import { useRipple } from '@/hooks/useRipple';
 import type { InputProps, inputVariants } from './types';
 
 export const useInput = ({

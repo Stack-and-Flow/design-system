@@ -1,4 +1,4 @@
-import { sanitizeHtml } from '@/components/utils/functions';
+import { sanitizeHtml } from '@utils/sanitizeHtml';
 import { cn } from '@/lib/utils';
 import { type TextProps, textVariants } from './types';
 

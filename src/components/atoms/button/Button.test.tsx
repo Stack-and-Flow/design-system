@@ -11,7 +11,6 @@
  * MOCKS:
  * - lucide-react/dynamic → DynamicIcon causes dynamic import issues in jsdom
  * - spinners-react → SpinnerCircular uses CSS animations not available in jsdom
- * - @/components/utils/styles/index.css → already ignored via css: false in vite.config.ts test block,
  *   but the import itself still resolves, so we mock the module to avoid CSS parse errors
  */
 

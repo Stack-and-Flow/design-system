@@ -66,6 +66,72 @@ Storybook is our single source of truth. Every component MUST be fully documente
 
 ---
 
+## Interaction Tests in Storybook
+
+Every interactive component (buttons, inputs, selects, etc.) MUST include interaction tests using `play` functions in their stories.
+
+### How to Write Tests?
+
+Use `@storybook/test` directly in your `.stories.tsx` files:
+
+```tsx
+import { expect, userEvent, within } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+
+const meta: Meta<typeof Button> = {
+  title: 'Atoms/Button',
+  component: Button
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+export const Interactive: Story = {
+  args: {
+    children: 'Click me'
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button', { name: /click me/i });
+    
+    // Verify button renders
+    await expect(button).toBeInTheDocument();
+    
+    // Simulate a click
+    await userEvent.click(button);
+    
+    // Verify expected result
+    await expect(button).toHaveClass('your-expected-class');
+  }
+};
+```
+
+### Interactions Panel in Storybook
+
+The `@storybook/addon-interactions` addon is enabled. When you run `pnpm storybook`, you'll see an **"Interactions" panel** at the bottom for any story with a `play` function. This panel shows you step-by-step each assertion and action in the test.
+
+### Running Tests from Terminal
+
+```bash
+# Run all Storybook tests
+pnpm test-storybook
+
+# Run tests in watch mode
+pnpm test-storybook --watch
+```
+
+Tests use Playwright under the hood and execute `play` functions in a real browser.
+
+### Test Checklist
+
+Before opening a PR, verify:
+- [ ] Interactive components have `play` functions with basic tests
+- [ ] Tests verify rendering, interactions (click, hover, type), and accessibility
+- [ ] `pnpm test-storybook` passes without errors (or document known failures)
+
+---
+
 ## Git Workflow
 
 ### Branching Strategy
@@ -93,6 +159,8 @@ Before requesting a review, verify:
 - [ ] Component follows the 5-file architecture perfectly.
 - [ ] No `interface` used (only `type`). No `any`.
 - [ ] Storybook contains `args`, `controls`, and `description`.
+- [ ] Interactive components have interaction tests with `play` functions.
+- [ ] `pnpm test-storybook` passes without critical errors.
 - [ ] Tokens from `theme.css` are used (no hardcoded colors or spacing).
 - [ ] ARIA attributes are implemented for interactable elements.
 - [ ] Conventional Commits are used.

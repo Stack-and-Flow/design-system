@@ -36,3 +36,6 @@ storybook-static
 page-*.png
 page-*.jpeg
 *.md.playwright-output
+
+# Build artifacts
+tsconfig.build.tsbuildinfo

@@ -1,10 +1,9 @@
-import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
 import type { ComponentProps, FC, RefObject } from 'react';
-import Icon from '../icon';
+import { cn } from '@/lib/utils';
+import { Icon } from '../icon';
 import { type InputProps, inputVariants, labelVariants } from './types';
 import { useInput } from './useInput';
-import '@/components/utils/styles/index.css';
 
 const Input: FC<
   Omit<VariantProps<typeof inputVariants>, 'state' | 'focused'> &
@@ -52,22 +51,36 @@ const Input: FC<
       case 'error':
         return <Icon name='circle-alert' color='text-color-error-light' colorDark='dark:text-color-error' size={16} />;
       case 'warning':
-        return <Icon name='triangle-alert' color='text-color-warning-light' colorDark='dark:text-color-warning' size={16} />;
+        return (
+          <Icon name='triangle-alert' color='text-color-warning-light' colorDark='dark:text-color-warning' size={16} />
+        );
       case 'success':
-        return <Icon name='circle-check' color='text-color-success-light' colorDark='dark:text-color-success' size={16} />;
+        return (
+          <Icon name='circle-check' color='text-color-success-light' colorDark='dark:text-color-success' size={16} />
+        );
       default:
-        return <Icon name='info' color='text-color-text-tertiary-light' colorDark='dark:text-color-text-tertiary-dark' size={16} />;
+        return (
+          <Icon
+            name='info'
+            color='text-color-text-tertiary-light'
+            colorDark='dark:text-color-text-tertiary-dark'
+            size={16}
+          />
+        );
     }
   };
   const IncrementDecrementButtons = ({
     ref,
     setHasValue
-  }: { ref: RefObject<HTMLInputElement>; setHasValue: (value: boolean) => void }) => (
+  }: {
+    ref: RefObject<HTMLInputElement>;
+    setHasValue: (value: boolean) => void;
+  }) => (
     <div className='absolute right-2 top-0 bottom-0 flex flex-col justify-center items-center gap-[2px] z-10'>
       <button
         role='button'
         aria-label='Increase value'
-        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-t-sm px-1 cursor-pointer focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
+        className='bg-surface-light hover:bg-surface-raised-light dark:bg-surface-dark dark:hover:bg-surface-raised-dark rounded-t-sm px-1 cursor-pointer focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
         onClick={() => {
           if (ref.current) {
             const currentValue = parseFloat(ref.current.value !== '' ? ref.current.value : '0');
@@ -81,7 +94,7 @@ const Input: FC<
       <button
         role='button'
         aria-label='Decrease value'
-        className='bg-[var(--color-surface-light)] hover:bg-[var(--color-surface-raised-light)] dark:bg-[var(--color-surface-dark)] dark:hover:bg-[var(--color-surface-raised-dark)] rounded-b-sm px-1 cursor-pointer focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
+        className='bg-surface-light hover:bg-surface-raised-light dark:bg-surface-dark dark:hover:bg-surface-raised-dark rounded-b-sm px-1 cursor-pointer focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
         onClick={() => {
           if (ref.current) {
             const currentValue = parseFloat(ref.current.value !== '' ? ref.current.value : '0');
@@ -98,12 +111,15 @@ const Input: FC<
   const PasswordToggleButton = ({
     showPassword,
     setShowPassword
-  }: { showPassword: boolean; setShowPassword: (value: boolean) => void }) => (
+  }: {
+    showPassword: boolean;
+    setShowPassword: (value: boolean) => void;
+  }) => (
     <div className='absolute right-2 top-0 bottom-0 flex flex-col justify-center items-center gap-[2px] z-10'>
       <button
         role='button'
         aria-label={!showPassword ? 'Show password' : 'Hide password'}
-        className='cursor-pointer focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
+        className='cursor-pointer focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
         onClick={() => setShowPassword(!showPassword)}
       >
         <Icon
@@ -140,9 +156,12 @@ const Input: FC<
           }),
           isFullWidth ? 'w-full' : 'w-auto',
           label ? 'items-end' : 'items-center',
-          hint?.type === 'error' && '!border-[var(--color-error-light)] dark:!border-[var(--color-error)] shadow-[0_0_0_3px_rgba(219,20,60,0.12)] dark:shadow-[0_0_0_3px_rgba(255,0,54,0.15)]',
-          hint?.type === 'warning' && '!border-[var(--color-warning-light)] dark:!border-[var(--color-warning)] shadow-[0_0_0_3px_rgba(251,191,36,0.15)]',
-          hint?.type === 'success' && '!border-[var(--color-success-light)] dark:!border-[var(--color-success)] shadow-[0_0_0_3px_rgba(34,197,94,0.15)]',
+          hint?.type === 'error' &&
+            '!border-error-light dark:!border-error shadow-[0_0_0_3px_rgba(219,20,60,0.12)] dark:shadow-[0_0_0_3px_rgba(255,0,54,0.15)]',
+          hint?.type === 'warning' &&
+            '!border-warning-light dark:!border-warning shadow-[0_0_0_3px_rgba(251,191,36,0.15)]',
+          hint?.type === 'success' &&
+            '!border-success-light dark:!border-success shadow-[0_0_0_3px_rgba(34,197,94,0.15)]',
           disabled && 'pointer-events-none opacity-40',
           className
         )}
@@ -196,7 +215,7 @@ const Input: FC<
             aria-describedby={formatAriaIds(ariaDescribedBy || (hint?.message ? `${id}-hint` : undefined))}
             aria-labelledby={formatAriaIds(ariaLabelledBy || (label ? `${id}-label` : undefined))}
             className={cn(
-              'flex-1 outline-none font-[var(--font-weight-medium)] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] placeholder:text-[var(--color-text-muted-light)] dark:placeholder:text-[var(--color-text-muted-dark)] border-none',
+              'flex-1 outline-none font-medium text-text-light dark:text-text-dark placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark border-none',
               (type === 'number' || type === 'password') && 'pr-6'
             )}
             onFocus={handleFocus}
@@ -223,14 +242,14 @@ const Input: FC<
           <span
             className={cn(
               'fs-small tablet:fs-small-tablet',
-                hint?.type === 'info'
+              hint?.type === 'info'
                 ? 'text-color-text-secondary-light dark:text-color-text-secondary-dark'
                 : hint?.type === 'warning'
-                  ? 'text-[var(--color-warning-light)] dark:text-[var(--color-warning)]'
+                  ? 'text-warning-light dark:text-warning'
                   : hint?.type === 'error'
-                    ? 'text-[var(--color-error-light)] dark:text-[var(--color-error)]'
+                    ? 'text-error-light dark:text-error'
                     : hint?.type === 'success'
-                      ? 'text-[var(--color-success-light)] dark:text-[var(--color-success)]'
+                      ? 'text-success-light dark:text-success'
                       : 'text-color-text-secondary-light dark:text-color-text-secondary-dark'
             )}
           >

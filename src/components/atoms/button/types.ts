@@ -1,85 +1,72 @@
-import type { DynamicIconName } from '@/components/utils/types';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { DynamicIconName } from '@/types';
 
 export const buttonVariants = cva(
   [
     'button relative border cursor-pointer max-w-full',
     'active:scale-[0.98]',
     'flex items-center justify-center',
-    'font-[var(--font-weight-semibold)] whitespace-nowrap line-clamp-1 leading-[1.6] tracking-[0.01em]',
+    'font-semibold whitespace-nowrap line-clamp-1 leading-[1.6] tracking-[0.01em]',
     'disabled:pointer-events-none disabled:opacity-40',
     'focus-visible:outline-none',
-    'focus-visible:shadow-[var(--glow-focus-dark)]',
-    'dark:focus-visible:shadow-[var(--glow-focus-dark)]'
+    'focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
   ],
   {
     variants: {
       variant: {
         primary: [
-          // Gradiente rojo + glow neon — identidad visual Stack-and-Flow
           'text-white',
-          'bg-[image:var(--gradient-btn-primary)]',
-          'border-transparent',
-          'shadow-[var(--glow-btn-primary)]',
-          'transition-[box-shadow,background] duration-[250ms] ease-[ease]',
-          'hover:bg-[image:var(--gradient-btn-primary-hover)]',
-          'hover:shadow-[var(--glow-btn-primary-hover)]',
-          'active:shadow-[var(--glow-btn-primary)]'
-        ],
-        ghost: [
-          // Transparente con hover en superficie sutil
-          'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
-          'bg-transparent dark:bg-transparent',
-          'border-transparent',
-          'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-          'hover:bg-[var(--color-white-tint-faint)]',
-          'hover:border-transparent',
-          'dark:hover:bg-[var(--color-white-tint-faint)]'
-        ],
-        light: [
-          // Solo texto de color de marca, sin fondo ni borde
-          'text-[var(--color-brand-light)] dark:text-[var(--color-brand-dark)]',
-          'border-transparent',
-          'bg-transparent',
-          'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-          'hover:text-[var(--color-brand-light-dark)]',
-          'dark:hover:text-[var(--color-brand-dark-light)]',
-          'hover:bg-[var(--color-red-tint-subtle)]'
+          'bg-[image:var(--background-image-btn-primary)]',
+          'border-brand-light dark:border-brand-dark',
+          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
+          'transition-all duration-250',
+          'hover:bg-[image:var(--background-image-btn-primary-hover)]',
+          'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
         ],
         secondary: [
-          // Fondo con tint rojo sutil + borde degradado via ::before pseudo-element
-          'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
-          'bg-[var(--color-red-tint-subtle)]',
+          'text-brand-light dark:text-text-dark',
+          'bg-red-tint-subtle',
           'border border-transparent',
-          'overflow-visible isolate',
-          'before:absolute before:inset-[-1.5px] before:rounded-[inherit] before:z-[-1]',
-          'before:bg-[linear-gradient(135deg,rgba(255,255,255,0.18)_0%,rgba(255,0,54,0.55)_40%,rgba(255,0,54,0.15)_100%)]',
-          'transition-[box-shadow,background] duration-[250ms] ease-[ease]',
-          // Always-on base glow — identity of secondary button
-          'shadow-[var(--glow-btn-secondary)]',
-          'hover:bg-[var(--color-red-tint-low)]',
-          'hover:shadow-[var(--glow-btn-secondary-hover)] dark:hover:shadow-[var(--glow-btn-secondary-hover)]',
-          'active:bg-[rgba(255,0,54,0.16)]'
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
+          'btn-secondary-hover',
+          'active:bg-[rgba(255,0,54,0.16)]',
+          'transition-all duration-250',
+          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover',
+          'hover:bg-[rgba(255,0,54,0.24)]'
         ],
         outlined: [
-          // Borde de marca, relleno transparente, hover va a rojo
-          'text-[var(--color-brand-light)] dark:text-[var(--color-brand-dark)]',
-          'border-[var(--color-brand-light)] dark:border-[var(--color-brand-dark)]',
-          'bg-transparent',
-          'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-          'hover:text-white dark:hover:text-white',
-          'hover:bg-[image:var(--gradient-btn-primary)]',
+          'text-brand-light dark:text-text-dark',
+          'bg-transpartent',
+          'border border-transparent',
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
+          'transition-all duration-250',
+          'dark:hover:bg-brand-dark',
+          'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+        ],
+        ghost: [
+          'text-text-light dark:text-text-dark',
+          'bg-transparent dark:bg-transparent',
+          'border-transparent',
+          'hover:bg-white-tint-faint',
           'hover:border-transparent',
-          'hover:shadow-[var(--glow-btn-primary)]'
+          'dark:hover:bg-white-tint-faint'
+        ],
+        light: [
+          'text-brand-light dark:text-brand-dark',
+          'border-transparent',
+          'bg-transparent',
+          'hover:text-brand-light-dark',
+          'dark:hover:text-brand-dark-light',
+          'hover:bg-red-tint-subtle'
         ]
       },
       rounded: {
-        true: 'rounded-[var(--radius-pill)]',
-        false: 'rounded-[var(--radius-md)]'
+        true: 'rounded-pill',
+        false: 'rounded-md'
       },
       shadow: {
-        true: 'hover:shadow-[var(--glow-btn-secondary)]',
-        false: ''
+        true: '',
+        false: 'shadow-none hover:shadow-none'
       },
       uppercase: {
         true: 'uppercase',

@@ -5,8 +5,8 @@ export const switchBase = cva(
   [
     'relative inline-flex items-center cursor-pointer',
     'transition-[background-color,color] duration-200 ease-in-out',
-    'focus:outline-none focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]',
-    'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
+    'focus:outline-none focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'text-text-light dark:text-text-dark',
     'disabled:cursor-not-allowed disabled:opacity-40'
   ],
   {
@@ -27,7 +27,7 @@ export const switchBase = cva(
 export const switchWrapper = cva(
   [
     'flex-shrink-0 relative inline-flex cursor-pointer',
-    'bg-[var(--color-border-strong-light)] dark:bg-[var(--color-surface-raised-dark)] flex items-center justify-center gap-6'
+    'bg-border-strong-light dark:bg-surface-raised-dark flex items-center justify-center gap-6'
   ],
   {
     variants: {
@@ -57,21 +57,21 @@ export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center 
     },
     color: {
       default: [
-        'bg-[var(--color-border-dark)]',
-        'peer-checked:bg-[var(--color-brand-light)] dark:peer-checked:bg-[var(--color-brand-dark)]'
+        'bg-border-dark',
+        'peer-checked:bg-brand-light dark:peer-checked:bg-brand-dark'
       ],
       disabled: [
-        'bg-[var(--color-border-dark)] opacity-50',
-        'peer-checked:bg-[var(--color-brand-light)]'
+        'bg-border-dark opacity-50',
+        'peer-checked:bg-brand-light'
       ],
-      transparent: 'bg-transparent border border-[var(--color-border-dark)] peer-checked:border-[var(--color-brand-dark)]'
+      transparent: 'bg-transparent border border-border-dark peer-checked:border-brand-dark'
     },
     variant: {
       default: '',
       bordered: 'border',
-      glass:
-        'bg-[var(--color-white-tint-mid)] border border-[var(--color-border-dark)] shadow-md peer-checked:bg-[var(--color-brand-light)]/70 border-[var(--color-brand-light)]/50 dark:peer-checked:bg-[var(--color-brand-dark)]/60',
-      shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-[var(--color-brand-dark)]/90'
+        glass:
+        'bg-white-tint-mid border border-border-dark shadow-md peer-checked:bg-brand-light/70 border-brand-light/50 dark:peer-checked:bg-brand-dark/60',
+      shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-brand-dark/90'
     },
     rounded: {
       true: 'rounded-full',

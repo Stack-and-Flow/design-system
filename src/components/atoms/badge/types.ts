@@ -10,14 +10,14 @@ export const badgeVariants = cva(
   {
     variants: {
       color: {
-        primary: ['bg-[var(--color-brand-light)] text-white', 'dark:bg-[var(--color-brand-dark)] dark:text-white'],
+        primary: ['bg-brand-light text-white', 'dark:bg-brand-dark dark:text-white'],
         secondary: [
-          'bg-[var(--color-surface-light)] text-[var(--color-text-light)]',
-          'dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-text-dark)]'
+          'bg-surface-light text-text-light',
+          'dark:bg-surface-dark dark:text-text-dark'
         ],
-        success: 'bg-[var(--color-success-light)] text-white dark:bg-[var(--color-success)] dark:text-white',
-        warning: 'bg-[var(--color-warning-light)] text-[#1a0a00] dark:bg-[var(--color-warning)] dark:text-black',
-        danger: 'bg-[var(--color-error-light)] text-white dark:bg-[var(--color-error)] dark:text-white'
+        success: 'bg-success-light text-white dark:bg-success dark:text-white',
+        warning: 'bg-warning-light text-[#1a0a00] dark:bg-warning dark:text-black',
+        danger: 'bg-error-light text-white dark:bg-error dark:text-white'
       },
       size: {
         sm: 'text-[10px] min-w-[18px] h-[18px] px-[6px] py-[2px] mr-[5px] mt-[2px]',
@@ -26,7 +26,7 @@ export const badgeVariants = cva(
       },
       rounded: {
         true: 'rounded-full',
-        false: 'rounded-[var(--radius-sm)]'
+        false: 'rounded-sm'
       },
       variant: {
         solid: '',
@@ -52,57 +52,57 @@ export const badgeVariants = cva(
         variant: 'flat',
         color: 'primary',
         class:
-          '!bg-[#ffe5eb]   border-[var(--color-brand-dark)]              text-[var(--color-brand-dark)]   dark:!bg-[#330011]'
+          '!bg-[#ffe5eb]   border-brand-dark              text-brand-dark   dark:!bg-[#330011]'
       },
       {
         variant: 'flat',
         color: 'secondary',
         class:
-          '!bg-[#f5f5f5] border-[var(--color-border-strong-dark)]        text-[var(--color-text-dark)]    dark:!bg-[#1a1a1a]'
+          '!bg-[#f5f5f5] border-border-strong-dark        text-text-dark    dark:!bg-[#1a1a1a]'
       },
       {
         variant: 'flat',
         color: 'success',
         class:
-          '!bg-[#dcfce7]  border-[var(--color-success)]                  text-[var(--color-success)]      dark:!bg-[#0a3d1f]'
+          '!bg-[#dcfce7]  border-success                  text-success      dark:!bg-[#0a3d1f]'
       },
       {
         variant: 'flat',
         color: 'warning',
         class:
-          '!bg-[#fef9c3]  border-[var(--color-warning)]                  text-[var(--color-warning)]      dark:!bg-[#3d3510]'
+          '!bg-[#fef9c3]  border-warning                  text-warning      dark:!bg-[#3d3510]'
       },
       {
         variant: 'flat',
         color: 'danger',
         class:
-          '!bg-[#fee2e2]  border-[var(--color-error)]                    text-[var(--color-error)]        dark:!bg-[#3d0f0f]'
+          '!bg-[#fee2e2]  border-error                    text-error        dark:!bg-[#3d0f0f]'
       },
       // subtle: very soft background + no border + colored text
       {
         variant: 'subtle',
         color: 'primary',
-        class: '!bg-[#fff0f3] text-[var(--color-brand-dark)]   dark:!bg-[#1a0008] dark:text-[var(--color-brand-light)]'
+        class: '!bg-[#fff0f3] text-brand-dark   dark:!bg-[#1a0008] dark:text-brand-light'
       },
       {
         variant: 'subtle',
         color: 'secondary',
-        class: '!bg-[#fafafa] text-[var(--color-text-dark)]    dark:!bg-[#0a0a0a] dark:text-[var(--color-text-dark)]'
+        class: '!bg-[#fafafa] text-text-dark    dark:!bg-[#0a0a0a] dark:text-text-dark'
       },
       {
         variant: 'subtle',
         color: 'success',
-        class: '!bg-[#f0fdf4] text-[var(--color-success)]      dark:!bg-[#051f0d] dark:text-[var(--color-success)]'
+        class: '!bg-[#f0fdf4] text-success      dark:!bg-[#051f0d] dark:text-success'
       },
       {
         variant: 'subtle',
         color: 'warning',
-        class: '!bg-[#fefce8] text-[var(--color-warning)]      dark:!bg-[#1f1a08] dark:text-[var(--color-warning)]'
+        class: '!bg-[#fefce8] text-warning      dark:!bg-[#1f1a08] dark:text-warning'
       },
       {
         variant: 'subtle',
         color: 'danger',
-        class: '!bg-[#fef2f2] text-[var(--color-error)]        dark:!bg-[#1f0505] dark:text-[var(--color-error)]'
+        class: '!bg-[#fef2f2] text-error        dark:!bg-[#1f0505] dark:text-error'
       }
     ],
     defaultVariants: {

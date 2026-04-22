@@ -8,7 +8,7 @@ export const dividerVariants = cva('', {
       vertical: 'w-px h-[4px]'
     },
     corner: {
-      rounded: 'rounded-[4px]',
+      rounded: 'rounded-xs',
       none: 'rounded-none'
     },
     thickness: {

@@ -1,6 +1,6 @@
-import type { IconSizes } from '@/components/atoms/icon-button';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import type { ReactNode } from 'react';
+import type { IconSizes } from '@/types';
 
 /**
  * CVA configuration for the Snippet component.
@@ -147,26 +147,19 @@ export type SizeButton = Record<Size, IconSizes>;
 
 /**
  * Props for the Snippet component.
+ * Variants (size, rounded, color, variant) come from SnippetVariants (CVA).
  * @property {ReactNode} children - Content to display inside the snippet.
- * @property {'sm'|'md'|'lg'} [size] - Size of the snippet.
- * @property {'xs'|'sm'|'md'|'lg'|'xl'|'full'|'none'} [rounded] - Border radius.
  * @property {string} [className] - Additional class names.
- * @property {'default'|'primary'|'secondary'|'success'|'warning'|'danger'|'info'} [color] - Color variant.
- * @property {'solid'|'outline'|'shadow'} [variant] - Visual style variant.
  * @property {boolean} [disableCopy] - Disables the copy button.
  * @property {() => void} [onCopy] - Callback after copying.
  * @property {string} ['aria-controls'] - ARIA controls attribute.
  * @property {string} ['aria-label'] - ARIA label attribute.
  */
-export interface SnippetProps extends SnippetVariants {
+export type SnippetProps = SnippetVariants & {
   children: ReactNode;
-  size?: Size;
-  rounded?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'none';
   className?: string;
-  color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
-  variant?: 'solid' | 'outline' | 'shadow';
   disableCopy?: boolean;
   onCopy?: () => void;
   'aria-controls'?: string;
   'aria-label'?: string;
-}
+};

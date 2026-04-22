@@ -1,4 +1,4 @@
-type ThemeRounded = 'sm' | 'md' | 'lg' | 'full' | 'none';
+import type { ThemeRounded } from '@/types';
 
 export type SkeletonProps = {
   /**

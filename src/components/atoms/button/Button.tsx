@@ -5,7 +5,6 @@ import { SpinnerCircular } from 'spinners-react';
 import { cn } from '@/lib/utils';
 import { type ButtonProps, buttonVariants } from './types';
 import { useButton } from './useButton';
-import '@/components/utils/styles/index.css';
 
 export const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & ComponentProps<'button'>> = ({
   ...props
@@ -49,7 +48,7 @@ export const Button: FC<VariantProps<typeof buttonVariants> & ButtonProps & Comp
     >
       <span className={cn('flex items-center justify-center z-0', size === 'lg' ? 'gap-4' : 'gap-2')}>
         {icon && <DynamicIcon className={iconSize()} name={icon} />}
-        {text && <span className={size !== 'sm' ? 'pt-[0.2rem]' : 'pt-[0.1rem]'}>{text}</span>}
+        {text && <span>{text}</span>}
         {isLoading && (
           <div>
             <SpinnerCircular

@@ -24,7 +24,7 @@
   --color-brand-dark-lightest: #ff809b;
 
   /* Aliases semánticos (usar estos en los componentes)            */
-  --color-primary: #db143c;       /* light default */
+  --color-primary: #db143c; /* light default */
   --color-primary-hover: #b60f32;
   --color-primary-active: #8c0b26;
 
@@ -41,11 +41,11 @@
 
   /* ── Fondos y Superficies — Dark ────────────────────────────── */
   /* Paleta azul-slate: H215 S50 — tinte frío perceptible, accesible con #FF0036  */
-  --color-background-dark: #060C13;         /* Canvas base — azul-slate profundo   */
-  --color-surface-dark: #0B131E;            /* Cards sólidas, code blocks, dropdowns */
-  --color-surface-raised-dark: #0F1824;     /* Headers de tabla, énfasis sutil     */
-  --color-border-dark: #172230;             /* Borde estándar                      */
-  --color-border-strong-dark: #202C3C;      /* Borde interactivo                   */
+  --color-background-dark: #060c13; /* Canvas base — azul-slate profundo   */
+  --color-surface-dark: #0b131e; /* Cards sólidas, code blocks, dropdowns */
+  --color-surface-raised-dark: #0f1824; /* Headers de tabla, énfasis sutil     */
+  --color-border-dark: #172230; /* Borde estándar                      */
+  --color-border-strong-dark: #202c3c; /* Borde interactivo                   */
 
   /* Fondos especiales con transparencia — dark */
   --color-navbar-dark: rgba(6, 12, 19, 0.75);
@@ -53,10 +53,10 @@
   --color-overlay-dark: rgba(0, 0, 0, 0.6);
 
   /* ── Fondos y Superficies — Light ───────────────────────────── */
-  --color-background-light: #ffffff;        /* Canvas base — blanco puro */
-  --color-surface-light: #f4f5f7;           /* Cards y contenedores elevados */
-  --color-surface-raised-light: #eaecf0;    /* Superficies más elevadas */
-  --color-border-light: rgba(0, 0, 0, 0.10); /* Borde estándar */
+  --color-background-light: #ffffff; /* Canvas base — blanco puro */
+  --color-surface-light: #f4f5f7; /* Cards y contenedores elevados */
+  --color-surface-raised-light: #eaecf0; /* Superficies más elevadas */
+  --color-border-light: rgba(0, 0, 0, 0.1); /* Borde estándar */
   --color-border-strong-light: rgba(0, 0, 0, 0.18); /* Borde interactivo */
 
   /* Fondos especiales con transparencia — light */
@@ -64,38 +64,40 @@
   --color-sidebar-mobile-light: #ffffff;
 
   /* ── Texto — Dark ────────────────────────────────────────────── */
-  --color-text-dark: #ffffff;               /* Primario — 21:1 sobre #000 */
-  --color-text-secondary-dark: #cccccc;     /* Secundario — ~7:1 */
-  --color-text-tertiary-dark: #888888;      /* Terciario — ~5.3:1 */
-  --color-text-muted-dark: #adadad;         /* Sidebar links — ~6.3:1 */
-  --color-text-disabled-dark: #6a6b6c;      /* Disabled — ~4.5:1 */
+  --color-text-dark: #ffffff; /* Primario — 21:1 sobre #000 */
+  --color-text-secondary-dark: #cccccc; /* Secundario — ~7:1 */
+  --color-text-tertiary-dark: #888888; /* Terciario — ~5.3:1 */
+  --color-text-muted-dark: #adadad; /* Sidebar links — ~6.3:1 */
+  --color-text-disabled-dark: #6a6b6c; /* Disabled — ~4.5:1 */
 
   /* ── Texto — Light ───────────────────────────────────────────── */
-  --color-text-light: #0a0a0a;              /* Primario — máximo contraste */
-  --color-text-secondary-light: #3b3f4e;    /* Secundario */
-  --color-text-tertiary-light: #6b6e78;     /* Terciario */
-  --color-text-muted-light: #878a94;        /* Muted / placeholders */
-  --color-text-disabled-light: #bfc2ca;     /* Disabled */
+  --color-text-light: #0a0a0a; /* Primario — máximo contraste */
+  --color-text-secondary-light: #3b3f4e; /* Secundario */
+  --color-text-tertiary-light: #6b6e78; /* Terciario */
+  --color-text-muted-light: #878a94; /* Muted / placeholders */
+  --color-text-disabled-light: #bfc2ca; /* Disabled */
 
   /* ── Transparencias funcionales ──────────────────────────────── */
   /* Tints de acento — usados en estados activos, hovers, overlays */
-  --color-red-tint-subtle: rgba(255, 0, 54, 0.06);   /* Fondo botón secondary */
-  --color-red-tint-low: rgba(255, 0, 54, 0.08);      /* Menu item activo */
-  --color-red-tint-mid: rgba(255, 0, 54, 0.10);      /* Menu item activo fuerte */
-  --color-red-tint-high: rgba(255, 0, 54, 0.15);     /* Glow base / code highlight */
-  --color-red-tint-strong: rgba(255, 0, 54, 0.30);   /* Glow activo */
-  --color-spinner-track: rgba(45, 6, 9, 0.2);        /* Spinner secondary track */
+  --color-red-tint-subtle: rgba(255, 0, 54, 0.06); /* Fondo botón secondary */
+  --color-red-tint-low: rgba(255, 0, 54, 0.08); /* Menu item activo */
+  --color-red-tint-mid: rgba(255, 0, 54, 0.1); /* Menu item activo fuerte */
+  --color-red-tint-active: rgba(255, 0, 54, 0.16); /* Active state botón secondary */
+  --color-red-tint-high: rgba(255, 0, 54, 0.15); /* Glow base / code highlight */
+  --color-red-tint-strong: rgba(255, 0, 54, 0.3); /* Glow activo */
+  --color-red-tint-border: rgba(255, 0, 54, 0.5); /* Borde neon botón secondary (light) */
+  --color-spinner-track: rgba(45, 6, 9, 0.2); /* Spinner secondary track */
 
   /* Tints de superficie — blancos y negros semitransparentes */
-  --color-white-tint-faint: rgba(255, 255, 255, 0.05);   /* Hover bg sutil */
-  --color-white-tint-low: rgba(255, 255, 255, 0.06);     /* Borde card faint */
-  --color-white-tint-mid: rgba(255, 255, 255, 0.07);     /* Hover bg medium */
-  --color-white-tint-high: rgba(255, 255, 255, 0.10);    /* Borde interactivo */
-  --color-white-tint-strong: rgba(255, 255, 255, 0.15);  /* Inset highlight button */
-  --color-white-tint-heavy: rgba(255, 255, 255, 0.25);   /* Inset highlight strong */
+  --color-white-tint-faint: rgba(255, 255, 255, 0.05); /* Hover bg sutil */
+  --color-white-tint-low: rgba(255, 255, 255, 0.06); /* Borde card faint */
+  --color-white-tint-mid: rgba(255, 255, 255, 0.07); /* Hover bg medium */
+  --color-white-tint-high: rgba(255, 255, 255, 0.1); /* Borde interactivo */
+  --color-white-tint-strong: rgba(255, 255, 255, 0.15); /* Inset highlight button */
+  --color-white-tint-heavy: rgba(255, 255, 255, 0.25); /* Inset highlight strong */
 
-  --color-black-tint-mid: rgba(0, 0, 0, 0.40);           /* Overlay ligero */
-  --color-black-tint-heavy: rgba(0, 0, 0, 0.60);         /* Overlay backdrop */
+  --color-black-tint-mid: rgba(0, 0, 0, 0.4); /* Overlay ligero */
+  --color-black-tint-heavy: rgba(0, 0, 0, 0.6); /* Overlay backdrop */
 
   /* Tint ámbar — GitHub stars badge */
   --color-amber-tint-low: rgba(255, 185, 0, 0.07);
@@ -103,18 +105,18 @@
   --color-amber-tint-high: rgba(255, 185, 0, 0.14);
 
   /* ── Colores semánticos ──────────────────────────────────────── */
-  --color-success: #22c55e;           /* Dark */
-  --color-success-light: #16a34a;     /* Light */
+  --color-success: #22c55e; /* Dark */
+  --color-success-light: #16a34a; /* Light */
   --color-success-dark: #138a3d;
   --color-success-tint: rgba(34, 197, 94, 0.12);
 
-  --color-warning: #fbbf24;           /* Dark */
-  --color-warning-light: #d97706;     /* Light */
+  --color-warning: #fbbf24; /* Dark */
+  --color-warning-light: #d97706; /* Light */
   --color-warning-dark: #b58903;
   --color-warning-tint: rgba(251, 191, 36, 0.12);
 
-  --color-error: #ff0036;             /* Dark — igual que brand en dark */
-  --color-error-light: #db143c;       /* Light */
+  --color-error: #ff0036; /* Dark — igual que brand en dark */
+  --color-error-light: #db143c; /* Light */
   --color-error-tint: rgba(255, 0, 54, 0.12);
 
   --color-info: #3b82f6;
@@ -152,95 +154,105 @@
   --color-amber-hover: #ffd700;
 
   /* ── Glow / Shadow ───────────────────────────────────────────── */
-  --glow-base: 0 4px 20px rgba(219, 20, 60, 0.15);          /* Light */
-  --glow-active: 0 8px 30px rgba(219, 20, 60, 0.30);        /* Light */
-  --glow-base-dark: 0 4px 20px rgba(255, 0, 54, 0.15);      /* Dark */
-  --glow-active-dark: 0 8px 30px rgba(255, 0, 54, 0.30);    /* Dark */
+  --glow-base: 0 4px 20px rgba(219, 20, 60, 0.15); /* Light */
+  --glow-active: 0 8px 30px rgba(219, 20, 60, 0.3); /* Light */
+  --glow-base-dark: 0 4px 20px rgba(255, 0, 54, 0.15); /* Dark */
+  --glow-active-dark: 0 8px 30px rgba(255, 0, 54, 0.3); /* Dark */
 
-  /* Glow de botón primary (neon multi-capa) */
+  /* Glow de botón primary — Dark: neon multi-capa */
   --glow-btn-primary:
-    0 0 0 1.5px rgba(255, 60, 90, 0.5),
-    0 0 16px 4px rgba(255, 0, 54, 0.45),
-    0 0 40px 6px rgba(255, 0, 54, 0.18),
+    0 0 0 1.5px rgba(255, 60, 90, 0.5), 0 0 16px 4px rgba(255, 0, 54, 0.45), 0 0 40px 6px rgba(255, 0, 54, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   --glow-btn-primary-hover:
-    0 0 0 1.5px rgba(255, 80, 110, 0.7),
-    0 0 22px 4px rgba(255, 0, 54, 0.65),
-    0 0 55px 8px rgba(255, 0, 54, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    0 0 0 1.5px rgba(255, 80, 110, 0.7), 0 0 22px 4px rgba(255, 0, 54, 0.65), 0 0 55px 8px rgba(255, 0, 54, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
-  /* Glow de botón secondary */
+  /* Glow de botón primary — Light: sombra suave, sin neon */
+  --glow-btn-primary-light:
+    0 2px 8px rgba(219, 20, 60, 0.22), 0 1px 3px rgba(219, 20, 60, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --glow-btn-primary-hover-light:
+    0 4px 14px rgba(219, 20, 60, 0.32), 0 2px 6px rgba(219, 20, 60, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  /* Glow de botón secondary — Dark: border neon ring + glow exterior + glow interior */
   --glow-btn-secondary:
-    0 0 8px 2px rgba(255, 0, 54, 0.15),
-    0 0 24px 4px rgba(255, 0, 54, 0.07),
-    inset 0 0 10px rgba(255, 0, 54, 0.04);
+    0 0 0 1px rgba(255, 0, 54, 0.7), 0 0 8px 2px rgba(255, 0, 54, 0.35), 0 0 20px 4px rgba(255, 0, 54, 0.12),
+    inset 0 0 18px 2px rgba(255, 0, 54, 0.12);
   --glow-btn-secondary-hover:
-    0 0 14px 4px rgba(255, 0, 54, 0.30),
-    0 0 38px 8px rgba(255, 0, 54, 0.12),
-    inset 0 0 14px rgba(255, 0, 54, 0.07);
+    0 0 0 1.5px rgba(255, 40, 80, 0.9), 0 0 14px 4px rgba(255, 0, 54, 0.6), 0 0 32px 8px rgba(255, 0, 54, 0.22),
+    inset 0 0 24px 4px rgba(255, 0, 54, 0.2);
+
+  /* Glow de botón secondary — Light: borde sutil + sombra suave */
+  --glow-btn-secondary-light:
+    0 0 0 1px rgba(219, 20, 60, 0.35), 0 2px 8px rgba(219, 20, 60, 0.12);
+  --glow-btn-secondary-hover-light:
+    0 0 0 1px rgba(219, 20, 60, 0.55), 0 4px 12px rgba(219, 20, 60, 0.18);
 
   /* Glow de focus ring */
-  --glow-focus-dark: 0 0 0 3px rgba(255, 0, 54, 0.40);
+  --glow-focus-dark: 0 0 0 3px rgba(255, 0, 54, 0.4);
   --glow-focus-light: 0 0 0 3px rgba(219, 20, 60, 0.35);
 
   /* Glow ámbar — GitHub stars */
   --glow-amber: 0 0 0 3px rgba(255, 185, 0, 0.12);
 
   /* Sombra dropdown */
-  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.60);
+  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-dropdown-light: 0 8px 24px rgba(0, 0, 0, 0.12);
 
   /* ── Gradientes ──────────────────────────────────────────────── */
-  /* Botón primary */
-  --gradient-btn-primary: linear-gradient(135deg, #ff1a4b 0%, #cc0030 100%);
-  --gradient-btn-primary-hover: linear-gradient(135deg, #ff3366 0%, #e0003a 100%);
+  /* Namespace --background-image-* → genera utilidades bg-* en Tailwind v4 */
 
-  /* Fondos de página */
-  --gradient-background-dark: linear-gradient(
+  /* Botón primary → bg-btn-primary / bg-btn-primary-hover */
+  --background-image-btn-primary: linear-gradient(135deg, #ff1a4b 0%, #cc0030 100%);
+  --background-image-btn-primary-hover: linear-gradient(135deg, #ff3366 0%, #e0003a 100%);
+
+  /* Fondos de página → bg-page-dark / bg-page-light */
+  --background-image-page-dark: linear-gradient(
     130deg,
     rgba(0, 0, 0, 1) 0%,
     rgba(10, 10, 10, 1) 50%,
     rgba(0, 0, 0, 1) 100%
   );
-  --gradient-background-light: linear-gradient(
+  --background-image-page-light: linear-gradient(
     130deg,
     rgba(244, 245, 247, 1) 0%,
     rgba(255, 255, 255, 1) 50%,
     rgba(244, 245, 247, 1) 100%
   );
 
-  /* Grid de fondo — canvas técnico */
-  --grid-bg-dark:
+  /* Grid de fondo — canvas técnico → bg-grid-dark / bg-grid-light */
+  --background-image-grid-dark:
     linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
     linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px;
-  --grid-bg-light:
+  --background-image-grid-light:
     linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
     linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px) 0 0 / 40px 40px;
 
   /* ── Tipografía ──────────────────────────────────────────────── */
-  --font-primary: 'Space Grotesk Variable', 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, 'SFMono-Regular', 'Roboto Mono', Menlo, Monaco, monospace;
+  --font-primary: "Space Grotesk Variable", "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Roboto Mono", Menlo, Monaco, monospace;
 
   /* Pesos */
   --font-weight-regular: 300;
-  --font-weight-medium: 400;    /* baseline de body */
-  --font-weight-semibold: 600;  /* botones, badges, labels */
-  --font-weight-bold: 700;      /* headings h1–h6 */
+  --font-weight-medium: 400; /* baseline de body */
+  --font-weight-semibold: 600; /* botones, badges, labels */
+  --font-weight-bold: 700; /* headings h1–h6 */
 
   /* Tamaños — escala fluida */
-  --text-display: 3.5rem;      /* 56px — Display Hero landing */
-  --text-h1: 3rem;             /* 48px */
-  --text-h2: 2.5rem;           /* 40px */
-  --text-h3: 2rem;             /* 32px */
-  --text-h4: 1.5rem;           /* 24px */
-  --text-h5: 1.25rem;          /* 20px */
-  --text-h6: 1.125rem;         /* 18px */
-  --text-body-lg: 1.125rem;    /* 18px — párrafos prominentes */
-  --text-body: 1rem;           /* 16px — texto principal */
-  --text-body-sm: 0.9375rem;   /* 15px */
-  --text-small: 0.875rem;      /* 14px — captions, labels */
-  --text-xs: 0.75rem;          /* 12px — badges, tags micro */
-  --text-code: 93%;            /* relativo — code blocks */
+  --text-display: 3.5rem; /* 56px — Display Hero landing */
+  --text-h1: 3rem; /* 48px */
+  --text-h2: 2.5rem; /* 40px */
+  --text-h3: 2rem; /* 32px */
+  --text-h4: 1.5rem; /* 24px */
+  --text-h5: 1.25rem; /* 20px */
+  --text-h6: 1.125rem; /* 18px */
+  --text-body-lg: 1.125rem; /* 18px — párrafos prominentes */
+  --text-body: 1rem; /* 16px — texto principal */
+  --text-body-sm: 0.9375rem; /* 15px */
+  --text-small: 0.875rem; /* 14px — captions, labels */
+  --text-xs: 0.75rem; /* 12px — badges, tags micro */
+  --text-code: 93%; /* relativo — code blocks */
 
   /* Tamaños tablet */
   --text-display-tablet: 2.75rem;
@@ -254,61 +266,61 @@
   --text-small-tablet: 0.8125rem;
 
   /* Line heights */
-  --leading-tight: 1.10;
+  --leading-tight: 1.1;
   --leading-snug: 1.15;
-  --leading-normal: 1.40;
-  --leading-relaxed: 1.60;
+  --leading-normal: 1.4;
+  --leading-relaxed: 1.6;
 
   /* Letter spacing */
   --tracking-tight: 0px;
   --tracking-normal: 0.1px;
   --tracking-wide: 0.2px;
   --tracking-wider: 0.3px;
-  --tracking-ui: 0.01em;       /* botones, nav links */
-  --tracking-badge: 0.02em;    /* badges, micro labels */
+  --tracking-ui: 0.01em; /* botones, nav links */
+  --tracking-badge: 0.02em; /* badges, micro labels */
 
   /* ── Border radius ───────────────────────────────────────────── */
-  --radius-xs: 3px;      /* Badges micro, "New" labels */
-  --radius-sm: 6px;      /* Dropdown items, menú links */
-  --radius-md: 8px;      /* Cards, inputs, code blocks, botones secondary */
-  --radius-lg: 12px;     /* Cards grandes, pagination */
+  --radius-xs: 4px; /* Badges micro, "New" labels */
+  --radius-sm: 6px; /* Dropdown items, menú links */
+  --radius-md: 8px; /* Cards, inputs, code blocks, botones secondary */
+  --radius-lg: 12px; /* Cards grandes, pagination */
   --radius-pill: 9999px; /* Botones CTA — pill shape */
 
   /* ── Espaciado ───────────────────────────────────────────────── */
   /* Escala base 8px */
   --spacing-px: 1px;
-  --spacing-0-5: 0.125rem;   /* 2px */
-  --spacing-1: 0.25rem;      /* 4px */
-  --spacing-1-5: 0.375rem;   /* 6px */
-  --spacing-2: 0.5rem;       /* 8px — unidad base */
-  --spacing-2-5: 0.625rem;   /* 10px */
-  --spacing-3: 0.75rem;      /* 12px */
-  --spacing-4: 1rem;         /* 16px */
-  --spacing-5: 1.25rem;      /* 20px */
-  --spacing-6: 1.5rem;       /* 24px */
-  --spacing-8: 2rem;         /* 32px */
-  --spacing-10: 2.5rem;      /* 40px */
-  --spacing-12: 3rem;        /* 48px */
-  --spacing-16: 4rem;        /* 64px */
-  --spacing-20: 5rem;        /* 80px */
-  --spacing-24: 6rem;        /* 96px */
-  --spacing-30: 7.5rem;      /* 120px — padding sección */
+  --spacing-0-5: 0.125rem; /* 2px */
+  --spacing-1: 0.25rem; /* 4px */
+  --spacing-1-5: 0.375rem; /* 6px */
+  --spacing-2: 0.5rem; /* 8px — unidad base */
+  --spacing-2-5: 0.625rem; /* 10px */
+  --spacing-3: 0.75rem; /* 12px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-5: 1.25rem; /* 20px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-8: 2rem; /* 32px */
+  --spacing-10: 2.5rem; /* 40px */
+  --spacing-12: 3rem; /* 48px */
+  --spacing-16: 4rem; /* 64px */
+  --spacing-20: 5rem; /* 80px */
+  --spacing-24: 6rem; /* 96px */
+  --spacing-30: 7.5rem; /* 120px — padding sección */
 
   /* Aliases semánticos de espaciado */
-  --spacing-xxs: 0.25rem;    /* 4px */
-  --spacing-xs: 0.5rem;      /* 8px */
-  --spacing-sm: 0.75rem;     /* 12px */
-  --spacing-md: 1rem;        /* 16px */
-  --spacing-lg: 1.5rem;      /* 24px */
-  --spacing-xl: 2rem;        /* 32px */
-  --spacing-2xl: 3rem;       /* 48px */
-  --spacing-3xl: 5rem;       /* 80px */
+  --spacing-xxs: 0.25rem; /* 4px */
+  --spacing-xs: 0.5rem; /* 8px */
+  --spacing-sm: 0.75rem; /* 12px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+  --spacing-3xl: 5rem; /* 80px */
 
   /* ── Transiciones ────────────────────────────────────────────── */
   --transition-fast: 150ms ease-in-out;
   --transition-base: 250ms ease;
   --transition-slow: 300ms ease-in-out;
-  --transition-enter: 560ms cubic-bezier(0.2, 0.8, 0.2, 1);  /* fade-in sections */
+  --transition-enter: 560ms cubic-bezier(0.2, 0.8, 0.2, 1); /* fade-in sections */
 
   /* Propiedades de transición comunes */
   --transition-btn: box-shadow 250ms ease, background 250ms ease;
@@ -325,8 +337,8 @@
   --animate-badgePing: badgePing 1.3s cubic-bezier(1, 0, 0.4, 1) infinite;
 
   /* ── Backdrop blur ───────────────────────────────────────────── */
-  --blur-navbar: blur(16px);    /* Navbar, sidebars flotantes */
-  --blur-overlay: blur(4px);    /* Backdrop de modal */
+  --blur-navbar: blur(16px); /* Navbar, sidebars flotantes */
+  --blur-overlay: blur(4px); /* Backdrop de modal */
 
   /* ── Z-index ─────────────────────────────────────────────────── */
   --z-base: 0;

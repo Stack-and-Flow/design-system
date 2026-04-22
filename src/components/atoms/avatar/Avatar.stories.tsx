@@ -1,6 +1,6 @@
-import { fn } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
-import Avatar from './Avatar';
+import { expect, fn, userEvent, within } from '@storybook/test';
+import { Avatar } from './Avatar';
 
 /**
  * ## DESCRIPTION
@@ -30,6 +30,13 @@ export const Default: Story = {
     size: 'md',
     alt: 'EG',
     className: ''
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify avatar is rendered with correct role
+    const avatar = canvas.getByRole('img', { name: /EG/i });
+    await expect(avatar).toBeInTheDocument();
   }
 };
 
@@ -48,7 +55,14 @@ export const WithoutImage: Story = {
       <Avatar src={''} size='2xl' alt='EG' />
       <Avatar src={''} size='3xl' alt='EG' />
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all avatars render
+    const avatars = canvas.getAllByRole('img');
+    await expect(avatars.length).toBeGreaterThan(0);
+  }
 };
 
 /**
@@ -59,14 +73,21 @@ export const WithoutImage: Story = {
 export const WithImage: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Avatar src='/images/logo-only.svg' alt='EG' size='sm' />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='md' />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='lg' />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='xl' />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='2xl' />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='3xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='sm' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='md' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='lg' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='2xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='3xl' />
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all avatars are rendered
+    const avatars = canvas.getAllByRole('img');
+    await expect(avatars.length).toBeGreaterThan(0);
+  }
 };
 
 /**
@@ -83,7 +104,14 @@ export const Rounded: Story = {
       <Avatar src='' alt='EG' size='md' rounded='full' />
       <Avatar src='' alt='EG' size='md' rounded='none' />
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all rounded variants are rendered
+    const avatars = canvas.getAllByRole('img');
+    await expect(avatars.length).toBe(3);
+  }
 };
 
 /**
@@ -91,14 +119,31 @@ export const Rounded: Story = {
  * - Hover/active scale effect and `cursor-pointer` are enabled automatically.
  */
 export const Interactive: Story = {
-  render: () => (
-    <div className='flex gap-4 items-center'>
-      <Avatar src='' alt='EG' size='sm' onClick={fn()} />
-      <Avatar src='' alt='EG' size='md' onClick={fn()} />
-      <Avatar src='' alt='EG' size='lg' onClick={fn()} />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='xl' onClick={fn()} />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='2xl' onClick={fn()} />
-      <Avatar src='/images/logo-only.svg' alt='EG' size='3xl' onClick={fn()} />
-    </div>
-  )
+  render: () => {
+    const handleClick = fn();
+    return (
+      <div className='flex gap-4 items-center'>
+        <Avatar src='' alt='User 1' size='sm' onClick={handleClick} />
+        <Avatar src='' alt='User 2' size='md' onClick={handleClick} />
+        <Avatar src='' alt='User 3' size='lg' onClick={handleClick} />
+        <Avatar src='/images/logo-only.svg' alt='User 4' size='xl' onClick={handleClick} />
+        <Avatar src='/images/logo-only.svg' alt='User 5' size='2xl' onClick={handleClick} />
+        <Avatar src='/images/logo-only.svg' alt='User 6' size='3xl' onClick={handleClick} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify all avatars are rendered
+    const avatars = canvas.getAllByRole('img');
+    await expect(avatars.length).toBeGreaterThan(0);
+
+    // Click on the first avatar
+    const firstAvatar = avatars[0];
+    await userEvent.click(firstAvatar);
+
+    // Verify cursor-pointer class is applied
+    await expect(firstAvatar).toHaveClass('cursor-pointer');
+  }
 };

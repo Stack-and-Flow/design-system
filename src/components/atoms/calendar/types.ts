@@ -3,7 +3,7 @@ export type CalendarVariant = 'filled' | 'outlined' | 'soft' | 'ghost';
 export type CalendarSize = 'sm' | 'md' | 'lg';
 export type CalendarRadius = 'none' | 'sm' | 'md' | 'lg';
 
-export interface CalendarProps {
+export type CalendarProps = {
   color?:
     | 'default'
     | 'orange'

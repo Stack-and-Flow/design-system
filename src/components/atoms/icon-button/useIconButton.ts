@@ -1,6 +1,6 @@
-import { useRipple } from '@/components/utils/hooks/useRipple';
 import type { VariantProps } from 'class-variance-authority';
 import { type ComponentProps, useRef } from 'react';
+import { useRipple } from '@/hooks/useRipple';
 import type { IconButtonProps, iconButtonVariants } from './types';
 
 export const useIconButton = ({

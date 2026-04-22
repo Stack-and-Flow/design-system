@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import Icon from '../icon';
-import Switch from './Switch';
+import { Icon } from '../icon';
+import { Switch } from './index';
 /**
  * ## DESCRIPTION
  * The Switch component is a customizable toggle input that allows users to switch between two states:

@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import type { BadgeProps } from './types';
 import { useBadge } from './useBadge';
 
-const Badge: FC<BadgeProps> = ({ ...props }) => {
+export const Badge: FC<BadgeProps> = ({ ...props }) => {
   const {
     content,
     className,
@@ -50,5 +50,3 @@ const Badge: FC<BadgeProps> = ({ ...props }) => {
     </div>
   );
 };
-
-export default Badge;

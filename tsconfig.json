@@ -26,27 +26,18 @@
     /* Paths */
     "paths": {
       "@/*": ["./src/*"],
-      "@app/*": ["./app/*"],
       "@assets/*": ["./src/assets/*"],
       "@atoms/*": ["./src/components/atoms/*"],
       "@molecules/*": ["./src/components/molecules/*"],
       "@organisms/*": ["./src/components/organisms/*"],
       "@templates/*": ["./src/components/templates/*"],
-      "@config/*": ["./src/config/*"],
-      "@api/*": ["./src/infrastructure/api/*"],
       "@hooks/*": ["./src/infrastructure/hooks/*"],
-      "@models/*": ["./src/infrastructure/models/*"],
-      "@store/*": ["./src/infrastructure/store/*"],
-      "@mocks/*": ["./src/mocks/*"],
-      "@pages/*": ["./src/pages/*"],
       "@styles/*": ["./src/styles/*"],
-      "@tests/*": ["./src/tests/*"],
-      "@constants/*": ["./src/utils/constants/*"],
-      "@helpers/*": ["./src/utils/helpers/*"],
-      "@functions/*": ["./src/utils/functions/*"]
+      "@tests/*": ["./tests/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "tests"],
   "exclude": ["src/mocks/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

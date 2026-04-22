@@ -54,7 +54,7 @@ export const Avatar: FC<AvatarProps> = ({ ...props }) => {
         className={cn(
           'bg-surface-raised-light dark:bg-surface-raised-dark',
           'shadow-[inset_0_0_0_1px_var(--color-border-strong-light)] dark:shadow-[inset_0_0_0_1px_var(--color-border-strong-dark)]',
-          'text-text-light dark:text-(--color-text-dark)',
+          'text-text-light dark:text-text-dark',
           'font-semibold leading-[1.2] pt-[0.2em]',
           roundedClass,
           textClass

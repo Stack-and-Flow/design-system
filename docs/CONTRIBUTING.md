@@ -66,6 +66,72 @@ Storybook es nuestra única fuente de verdad. Todo componente DEBE estar complet
 
 ---
 
+## Tests de interacción en Storybook
+
+Todo componente interactivo (buttons, inputs, selects, etc.) DEBE incluir tests de interacción usando `play` functions en sus stories.
+
+### ¿Cómo escribir tests?
+
+Usa `@storybook/test` directamente en tus `.stories.tsx`:
+
+```tsx
+import { expect, userEvent, within } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+
+const meta: Meta<typeof Button> = {
+  title: 'Atoms/Button',
+  component: Button
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+export const Interactive: Story = {
+  args: {
+    children: 'Click me'
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button', { name: /click me/i });
+    
+    // Verifica que el botón se renderiza
+    await expect(button).toBeInTheDocument();
+    
+    // Simula un click
+    await userEvent.click(button);
+    
+    // Verifica el resultado esperado
+    await expect(button).toHaveClass('your-expected-class');
+  }
+};
+```
+
+### Panel de Interactions en Storybook
+
+El addon `@storybook/addon-interactions` está habilitado. Cuando ejecutas `pnpm storybook`, verás un **panel "Interactions"** en la parte inferior para cualquier story con `play` function. Este panel te muestra paso a paso cada aserción y acción del test.
+
+### Ejecutar tests desde la terminal
+
+```bash
+# Ejecutar todos los tests de Storybook
+pnpm test-storybook
+
+# Ejecutar tests en modo watch
+pnpm test-storybook --watch
+```
+
+Los tests usan Playwright bajo el capó y ejecutan las `play` functions en un navegador real.
+
+### Checklist de tests
+
+Antes de abrir un PR, verifica:
+- [ ] Los componentes interactivos tienen `play` functions con tests básicos
+- [ ] Los tests verifican renderizado, interacciones (click, hover, type) y accesibilidad
+- [ ] `pnpm test-storybook` pasa sin errores (o documenta los fallos conocidos)
+
+---
+
 ## Flujo de trabajo con Git
 
 ### Estrategia de ramas
@@ -93,9 +159,16 @@ Antes de pedir revisión, verifica:
 - [ ] El componente sigue la arquitectura de 5 archivos perfectamente.
 - [ ] No se usa `interface` (solo `type`). Sin `any`.
 - [ ] Storybook contiene `args`, `controls` y `description`.
+- [ ] Los componentes interactivos tienen tests de interacción con `play` functions.
+- [ ] `pnpm test-storybook` pasa sin errores críticos.
 - [ ] Se usan tokens de `theme.css` (sin colores ni espaciados hardcodeados).
 - [ ] Se implementan atributos ARIA en elementos interactivos.
 - [ ] Se usan Conventional Commits.
+- [ ] Estados visuales implementados: hover, focus, active/pressed, disabled.
+- [ ] Focus ring via `box-shadow` — nunca `outline` sin alternativa visible.
+- [ ] Disabled via `opacity: 0.4` — sin sustitución de color.
+- [ ] Sin `transition: all` — propiedades específicas enumeradas.
+- [ ] Touch target mínimo `44×44px` en elementos interactivos.
 
 ---
 
@@ -128,14 +201,19 @@ Los agentes ya conocerán:
 
 ### Flujo IA para componentes
 
-Al usar IA para crear un componente, sigue este flujo adaptado:
+Al usar gentle-ai (opencode) para crear un componente, el agente sigue la skill `component-contributor` que cubre el flujo completo en 5 fases. Como contributor, tu trabajo es guiar cada checkpoint:
 
-1. **Research** — Pide a la IA que revise `src/components/` y confirme que el componente no existe. Identifica el nivel atómico correcto.
-2. **Scaffold** — Ejecuta `compilot-cli` para generar la estructura de 5 archivos, o pide a la IA que la replique exactamente.
-3. **Spec primero** — Define `types.ts` primero: props, variantes CVA y controles JSDoc. Deja que la IA ayude, pero revisa cada tipo.
-4. **Implementa** — Pide a la IA que implemente el hook y el componente siguiendo estrictamente GUIDELINES.md. Referencia el archivo explícitamente.
-5. **Revisa** — Abre manualmente cada archivo generado y verifícalo contra el checklist del PR. No omitas este paso.
-6. **Documenta** — Verifica que el archivo `.stories.tsx` tenga stories `Default`, `Disabled` y específicas de variantes con `args`, controls y descripción en inglés.
+1. **Research** — Antes de pedir implementación, investiga el componente: referencias (HeroUI, Radix, MDN), props necesarias, variantes, estados y requisitos de accesibilidad. Documenta todo en la issue usando la plantilla `component.yml`.
+
+2. **Spec** — Comparte la URL de la issue o pega su contenido en el agente. El agente leerá y extraerá la spec completa. Si algo es ambiguo, **te preguntará antes de continuar** — nunca inventa comportamiento.
+
+3. **Plan** — El agente presentará un plan detallado: archivos a crear, tokens a usar, variantes CVA, decisiones de Radix y accesibilidad. **Revisa el plan y confirma** antes de que empiece a escribir código. Este es tu mejor momento para corregir el rumbo.
+
+4. **Implementación** — El agente crea los 5 archivos en orden (`types.ts` → hook → componente → stories → `index.ts`) y explica cada decisión al terminar cada archivo. No saltes las explicaciones — son la capa de aprendizaje del flujo.
+
+5. **Revisión visual** — Una vez completados los 5 archivos, el agente ejecuta una revisión visual obligatoria: verifica estados (hover, focus, active, disabled), corrección del glow, transiciones, contraste y touch targets. Cualquier fallo CRITICAL o MAJOR debe resolverse antes de abrir el PR.
+
+> Para activar el flujo completo, simplemente comparte la URL de la issue y di "implementa este componente". La skill se carga automáticamente.
 
 ---
 

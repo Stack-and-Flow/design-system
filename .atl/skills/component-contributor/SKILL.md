@@ -2,12 +2,13 @@
 name: component-contributor
 description: >
   Guides an AI agent through implementing a design system component from a GitHub issue spec.
-  Covers the full contributor workflow: read spec → plan → implement (5-file pattern) → explain decisions.
+  Covers the full contributor workflow: onboarding → read spec → plan → implement (5-file pattern) → explain decisions → visual review.
   Trigger: When a contributor provides a GitHub issue URL or pastes a component spec and asks to implement it.
+  Also delegable from sdd-apply when implementing a component as part of a larger SDD change.
 license: Apache-2.0
 metadata:
   author: stack-and-flow
-  version: "1.0"
+  version: "2.1"
 ---
 
 ## When to Use
@@ -15,6 +16,53 @@ metadata:
 - A contributor shares a GitHub issue URL with a component spec
 - A contributor pastes the content of an issue and asks to implement it
 - Someone says "implement this component", "help me build this", or similar
+- Delegated from `sdd-apply` as part of a larger SDD change
+
+---
+
+## When Delegated by SDD Orchestrator
+
+You may receive this delegation from `sdd-apply`:
+
+- **Change name**: the SDD change being processed
+- **Tasks assigned**: which tasks from `tasks.md` to execute
+- **Artifact store mode**: `engram | openspec | hybrid | none`
+
+When delegated: **skip Phase 0** (the contributor already has context) and start directly from Phase 1.
+Return your result in the SDD return envelope format:
+
+```markdown
+## Implementation Progress
+
+**Change**: {change-name}
+**Tasks completed**: {list}
+**Files changed**: {table: file | action | what was done}
+**Deviations from design**: {list or "None"}
+**Issues found**: {list or "None"}
+**Remaining tasks**: {list or "None"}
+**Status**: {N}/{total} tasks complete. Ready for verify / Blocked by X
+```
+
+---
+
+## Phase 0 — Contributor Onboarding
+
+> Run this phase ONLY when working directly with a contributor (not when delegated from SDD).
+
+Before touching the spec, make sure the contributor understands the stack they are about to work with. Ask them to confirm they are familiar with:
+
+1. **React + TypeScript strict** — `type` always, never `interface`, never `any`
+2. **Tailwind v4 `@theme`** — token classes only (`text-brand-light`, `bg-surface-dark`); never raw hex, never `[var(--token)]` when the token exists in `@theme`
+3. **CVA (class-variance-authority)** — all variants live in `types.ts`, nowhere else
+4. **The 5-file pattern** — each component has exactly: `types.ts`, `useComponentName.ts`, `ComponentName.tsx`, `ComponentName.stories.tsx`, `index.ts`
+5. **Storybook 8** — stories are the living documentation AND the test suite
+
+If the contributor is unfamiliar with any of these, briefly explain the concept before moving on. Do NOT assume knowledge — a contributor who copies code without understanding it is a liability, not an asset.
+
+Point them to:
+- `docs/GUIDELINES.md` — full coding conventions
+- `docs/DESIGN.md` — visual token reference
+- `src/styles/theme.css` — the source of truth for every token
 
 ---
 
@@ -35,6 +83,66 @@ Do NOT invent props or behaviors that are not in the spec.
 
 ---
 
+## Phase 1.5 — Spec Review (critique before committing)
+
+> This phase runs AFTER reading the spec and BEFORE planning. Its purpose is to surface gaps, risks, and improvements **while there is still time to adjust** — not after the code is written.
+
+You are not a passive executor. You are a senior contributor reviewing the spec with a critical eye. Present your findings in this format:
+
+```
+## Spec Review — {ComponentName}
+
+### Gaps found
+- {Item}: {What is missing and why it matters}
+  Suggestion: {Concrete proposal}
+
+### Risks found
+- {Item}: {What could go wrong during implementation or in production}
+  Suggestion: {How to mitigate}
+
+### Improvements proposed
+- {Item}: {What could be better, even if technically correct as-is}
+  Suggestion: {Concrete proposal}
+
+### Ready to proceed
+{Yes / No — and why if No}
+```
+
+**What to look for:**
+
+#### Accessibility gaps
+- Interactive elements without keyboard behavior described (Enter, Space, Escape, Arrow keys)
+- Missing ARIA roles, `aria-label`, `aria-expanded`, `aria-controls`, `aria-live` for dynamic content
+- No mention of focus management (e.g. modals, dropdowns — where does focus go on open/close?)
+- No `prefers-reduced-motion` consideration when animations or transforms are involved
+- Touch target size not mentioned for interactive components
+
+#### Stories gaps
+- Missing stories for edge cases: empty state, loading, error, long text overflow, RTL
+- No story for each CVA variant axis (a variant without a story is invisible to consumers)
+- Missing story for the keyboard/focus interaction if the component has complex behavior
+- No story for dark mode if the component has dark-specific visuals
+
+#### Spec clarity issues
+- Ambiguous variant names (`large` vs `lg`, `primary` vs `default`)
+- Props without clear defaults specified
+- Behavior described in prose but not mapped to concrete props or states
+- Token references that do not exist in `theme.css` (check before assuming they exist)
+
+#### Architecture concerns
+- Component doing too much — multiple responsibilities that should be split into separate components
+- State that belongs in the parent being forced into the component
+- Composability: should this accept `children` or render its own content? Is the spec explicit?
+- Missing `ref` forwarding for elements consumers will need to control programmatically
+
+**Rules for this phase:**
+- Be direct. Flag problems clearly — don't soften every suggestion into a question.
+- Only flag things that have a real impact: a11y failures, missing stories for documented variants, broken composability. Do NOT nitpick style preferences.
+- If the spec is solid and nothing critical is missing, say so explicitly — "No blocking issues found."
+- Do NOT start implementing until the contributor has acknowledged your findings (or confirmed they want to proceed as-is).
+
+---
+
 ## Phase 2 — Plan (explain before coding)
 
 Before writing any file, present a clear plan to the contributor:
@@ -45,6 +153,11 @@ Before writing any file, present a clear plan to the contributor:
 **Component**: {ComponentName}
 **Tier**: atoms / molecules / organisms
 **Directory**: src/components/{tier}/{kebab-name}/
+
+### Token modules loaded
+- colors.md — [reason]
+- spacing-typography.md — [reason]
+- effects.md (partial: focus glow) — [reason]
 
 ### Files to create
 1. `types.ts` — {X} props, {Y} CVA variants ({list variants})
@@ -66,6 +179,49 @@ Before writing any file, present a clear plan to the contributor:
 
 Wait for the contributor to confirm or adjust the plan before proceeding.
 
+### Token modules — load by intent
+
+After reading the spec in Phase 1, declare which modules you need and read them before Phase 2 (Plan). Do not load modules that are not relevant to this component.
+
+| Module | Path | Load when |
+|--------|------|-----------|
+| `colors` | `tokens/colors.md` | Component uses color, backgrounds, borders, dark mode, or status states |
+| `spacing-typography` | `tokens/spacing-typography.md` | Component has layout, padding, text sizing, font weight, or border radius |
+| `effects` | `tokens/effects.md` | Component uses glows, shadows, gradients, animations, or backdrop blur |
+
+### Reference modules — load by intent
+
+Load these BEFORE writing the relevant file. They contain canonical patterns extracted from the actual codebase.
+
+| Module | Path | Load when |
+|--------|------|-----------|
+| `testing` | `references/testing.md` | Writing any test file — Vitest or Storybook play function |
+| `html-extension` | `references/html-extension.md` | Component wraps a native HTML element (button, input, select, a, textarea) |
+| `radix-patterns` | `references/radix-patterns.md` | Component uses any `@radix-ui/*` primitive |
+| `tailwind-merge` | `references/tailwind-merge.md` | Component combines CVA output with conditional or external `className` |
+| `biome-rules` | `references/biome-rules.md` | Before writing any TypeScript/TSX file — always load for code quality enforcement |
+| `git-workflow` | `references/git-workflow.md` | Before opening a PR or when explaining the contribution workflow to a contributor |
+
+**Mandatory loads (always):**
+- `biome-rules` — load before writing any `.ts` or `.tsx` file
+- `html-extension` — load for any component that renders a native element
+
+**Matching rules by component type:**
+
+| Component type | Colors | Spacing & Typography | Effects |
+|----------------|--------|----------------------|---------|
+| Button (primary) | ✅ | ✅ | ✅ |
+| Button (secondary / ghost) | ✅ | ✅ | ✅ |
+| Badge / Tag / Chip | ✅ | ✅ | — |
+| Input / Textarea / Select | ✅ | ✅ | partial (focus glow only) |
+| Card | ✅ | ✅ | ✅ |
+| Dropdown / Menu | ✅ | ✅ | partial (shadow only) |
+| Modal / Dialog | ✅ | ✅ | ✅ |
+| Avatar / Icon | ✅ | — | — |
+| Spinner / Loader | ✅ | — | partial (animation only) |
+| Typography / Heading | ✅ | ✅ | — |
+| Navbar / Sidebar | ✅ | ✅ | ✅ |
+
 ---
 
 ## Phase 3 — Implement (5-file pattern)
@@ -86,7 +242,6 @@ After each file, explain what was done and why (Phase 4 runs inline).
 import { cva, type VariantProps } from 'class-variance-authority'
 
 export const componentVariants = cva(
-  // base classes using tokens only
   'base-class token-class',
   {
     variants: {
@@ -133,7 +288,6 @@ type UseComponentReturn = {
   className: string
   ariaLabel: string
   ref: React.RefObject<HTMLElement>
-  // ... handlers
 }
 
 const useComponent = (props: ComponentProps): UseComponentReturn => {
@@ -157,7 +311,6 @@ export default useComponent
 **Rules:**
 - ONLY JSX — zero logic, zero state, zero CVA calls
 - Consumes the hook via `use{ComponentName}(props)`
-- Spreads hook return onto the element
 - `FC<ComponentProps>` typing always
 
 ```typescript
@@ -187,9 +340,9 @@ export default Component
 **Rules:**
 - English only — titles, descriptions, arg labels
 - Mandatory `parameters.docs.description.component`
-- Mandatory `args` on `Default` story
+- Mandatory `args` on `Default` story — must NOT hardcode props that override `defaultVariants`
 - Always include: `Default`, `Disabled`, one story per key variant
-- No DOM manipulation in module scope — use decorators if needed
+- Each story demonstrates ONE axis only — no mixed props across variants in the same story
 
 ```typescript
 import type { Meta, StoryObj } from '@storybook/react'
@@ -213,8 +366,6 @@ type Story = StoryObj<typeof Component>
 export const Default: Story = {
   args: {
     label: 'Example',
-    variant: 'default',
-    size: 'md',
   },
 }
 
@@ -243,230 +394,90 @@ After writing each file, add a short explanation:
 ```
 ### Why this file looks like this
 
-- **[Decision]**: [Reason]. Example: "CVA variants are in `types.ts`, not here, because..."
-- **[Token used]**: [Why this token and not another]. Example: "`bg-primary` for the main action because..."
-- **[Aria attribute]**: [What it communicates to screen readers]. Example: "`aria-disabled` instead of the HTML `disabled` attribute because..."
+- **[Decision]**: [Reason] — e.g. "CVA variants are in `types.ts`, not here, because the hook file owns logic, not appearance contracts"
+- **[Token used]**: [Why this token and not another] — e.g. "`bg-surface-dark` for the card background because it sits one level above the canvas"
+- **[Aria attribute]**: [What it communicates to screen readers]
 ```
 
 This is the learning layer — the contributor must understand every decision, not just copy it.
 
 ---
 
-## Design System Tokens
+## Phase 5 — Visual Review
 
-Always use tokens from `src/styles/theme.css`. Never hardcode values.
-Full visual reference: `docs/DESIGN.md` — read it before building any component.
+After all 5 files are written, run a visual quality check before calling the component done.
+This is not optional — a component that compiles without errors can still be visually broken.
 
-### Colors — Brand (Crimson Red)
-| Token | Value | Use for |
-|-------|-------|---------|
-| `color-brand-light` | `#db143c` | Primary brand — light mode |
-| `color-brand-dark` | `#ff0036` | Primary brand — dark mode (more vibrant on black) |
-| `color-primary` | `#db143c` | Semantic alias — use this in components |
-| `color-primary-hover` | `#b60f32` | Hover state |
-| `color-primary-active` | `#8c0b26` | Active/pressed state |
-| `color-red-100` → `color-red-900` | Light → Dark scale | State backgrounds, error tints |
+Load the `visual-review` skill for the full review protocol. At minimum, apply these checks:
 
-### Colors — Dark mode surfaces
-| Token | Use for |
-|-------|---------|
-| `color-background-dark` (`#060C13`) | Page canvas — deep blue-slate, NOT pure black |
-| `color-surface-dark` (`#0B131E`) | Cards, code blocks, dropdowns — opaque |
-| `color-surface-raised-dark` (`#0F1824`) | Table headers, elevated panels |
-| `color-border-dark` (`#172230`) | Standard borders |
-| `color-border-strong-dark` (`#202C3C`) | Interactive / focus borders |
-| `color-text-dark` | Primary text (white, 21:1 contrast) |
-| `color-text-secondary-dark` | Secondary text |
-| `color-text-tertiary-dark` | Tertiary / muted text |
-| `color-text-disabled-dark` | Disabled states |
+### 5.1 — State completeness
 
-### Colors — Light mode surfaces
-| Token | Use for |
-|-------|---------|
-| `color-background-light` (`#ffffff`) | Page canvas |
-| `color-surface-light` (`#f4f5f7`) | Cards, containers |
-| `color-surface-raised-light` (`#eaecf0`) | Elevated surfaces |
-| `color-border-light` | Standard borders (rgba) |
-| `color-border-strong-light` | Interactive borders (rgba) |
-| `color-text-light` | Primary text |
-| `color-text-secondary-light` | Secondary text |
-| `color-text-disabled-light` | Disabled states |
+Every interactive component must have all applicable states:
 
-### Colors — Transparencies (tint system)
-| Token | Use for |
-|-------|---------|
-| `color-red-tint-subtle` | Secondary button background |
-| `color-red-tint-low` | Active menu item |
-| `color-red-tint-high` | Glow base, code highlight |
-| `color-white-tint-faint` | Subtle hover background |
-| `color-white-tint-high` | Interactive border |
-| `color-black-tint-heavy` | Modal overlay backdrop |
+- [ ] **Base** — background, border, shadow/glow, text color all defined
+- [ ] **Hover** — tonal shift upward (lighter, more elevated); at least one visible property changes
+- [ ] **Focus** — `box-shadow` focus ring present; `outline: none` NEVER naked
+- [ ] **Active/pressed** — `transform: scale(0.98)` on buttons; shadow reduced
+- [ ] **Disabled** — `opacity: 0.4` + `pointer-events: none` + `cursor: not-allowed`; colors unchanged
 
-### Colors — Semantic (status)
-| Token | Use for |
-|-------|---------|
-| `color-success` / `color-success-light` | Success states (dark/light mode) |
-| `color-warning` / `color-warning-light` | Warning states |
-| `color-error` / `color-error-light` | Error states (`#ff0036` / `#db143c`) |
-| `color-info` / `color-info-light` | Info states |
+### 5.2 — Glow correctness
 
-### Glows & Shadows
-| Token | Use for |
-|-------|---------|
-| `glow-btn-primary` | Primary button neon glow (multi-layer) |
-| `glow-btn-primary-hover` | Primary button hover glow |
-| `glow-btn-secondary` | Secondary button subtle glow |
-| `glow-focus-dark` / `glow-focus-light` | Focus ring (WCAG AA) |
-| `shadow-dropdown` | Dropdown menus |
-| `shadow-dropdown-light` | Dropdown menus — light mode |
+- **Button Primary** — always-on 4-layer glow at base, amplified on hover, focus ring as outermost layer
+- **Button Secondary** — always-on 3-layer glow (no tight ring — has a real border), amplified on hover
+- **Cards / badges / nav** — glow appears only on hover/focus; no `box-shadow` at rest
 
-### Gradients
-| Token | Use for |
-|-------|---------|
-| `gradient-btn-primary` | Primary button background |
-| `gradient-btn-primary-hover` | Primary button hover |
-| `gradient-background-dark` | Page background — dark |
-| `grid-bg-dark` / `grid-bg-light` | Technical grid canvas (40×40px) |
+### 5.3 — Transition correctness
 
-### Spacing (8px base scale)
-| Token | Value | Use for |
-|-------|-------|---------|
-| `spacing-xxs` / `spacing-1` | 4px | Micro gaps (icon + label) |
-| `spacing-xs` / `spacing-2` | 8px | Tight padding |
-| `spacing-sm` / `spacing-3` | 12px | Standard padding small |
-| `spacing-md` / `spacing-4` | 16px | Default padding/gap |
-| `spacing-lg` / `spacing-6` | 24px | Section spacing |
-| `spacing-xl` / `spacing-8` | 32px | Large section spacing |
-| `spacing-2xl` / `spacing-12` | 48px | XL section spacing |
-| `spacing-3xl` / `spacing-20` | 80px | Hero/page-level spacing |
+- [ ] No `transition: all` — enumerate specific properties
+- [ ] No layout-forcing properties animated: `width`, `height`, `top`, `left`, `margin`, `padding`
 
-### Typography (Space Grotesk Variable only)
-| Token | Use for |
-|-------|---------|
-| `font-primary` | All text — only one font in this system |
-| `font-weight-medium` (300) | Body text baseline |
-| `font-weight-semibold` (500) | Buttons, badges, labels |
-| `font-weight-bold` (700) | Headings h1–h6 |
-| `text-display` (56px) | Hero landing titles |
-| `text-h1` → `text-h6` | Section headings |
-| `text-body` (16px) | Default body text |
-| `text-small` (14px) | Captions, labels |
-| `text-xs` (12px) | Badges, micro tags |
-| `leading-tight` / `leading-relaxed` | Line height control |
-| `tracking-ui` | Buttons, nav links |
+### 5.4 — Accessibility spot check
 
-### Border radius
-| Token | Value | Use for |
-|-------|-------|---------|
-| `radius-xs` | 3px | Micro badges, "New" labels |
-| `radius-sm` | 6px | Dropdown items, menu links |
-| `radius-md` | 8px | Cards, inputs, secondary buttons |
-| `radius-lg` | 12px | Large cards, pagination |
-| `radius-pill` | 9999px | Primary CTA buttons |
+- [ ] All interactive elements: minimum `44×44px` touch target
+- [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` (dark) / `rgba(219, 20, 60, 0.35)` (light)
+- [ ] Focus ring **merged** with existing `box-shadow` layers — never replaces them
+- [ ] Light mode text color: minimum `#cc0030` — NEVER `#ff0036` on white (fails WCAG AA)
+- [ ] `@media (prefers-reduced-motion: reduce)` disables transforms and scroll animations
 
-### Animations
-| Token | Use for |
-|-------|---------|
-| `animate-fadeIn` / `animate-fadeOut` | Mount/unmount transitions |
-| `animate-rotation-360` | Loading spinners |
-| `animate-badgeIn` / `animate-badgeOut` | Badge appear/disappear |
+### Reporting
 
-### Dark mode pattern
-```typescript
-// Always pair dark/light tokens using the dark variant
-'bg-color-background-light dark:bg-color-background-dark'
-'text-color-text-light dark:text-color-text-dark'
-'border-color-border-light dark:border-color-border-dark'
-// For interactive borders:
-'border-color-border-strong-light dark:border-color-border-strong-dark'
+```
+[SEVERITY] Component — State/Element
+Problem: [exact property and value that is wrong]
+Expected: [what the spec requires]
+Found: [what is in the code]
 ```
 
----
+Severity: **CRITICAL** (a11y failure) → **MAJOR** (compositional rule broken) → **MINOR** (spec inconsistency) → **SUGGESTION**
 
-## Anti-patterns — never generate these
-
-| Anti-pattern | Why |
-|---|---|
-| Logic or state in `ComponentName.tsx` | Violates Container/Presentational pattern |
-| `cva()` in `.tsx` or `useHook.ts` | CVA belongs exclusively in `types.ts` |
-| `export interface` | Project uses `type` exclusively |
-| `any` type | Type safety is non-negotiable |
-| `#hex`, `px`, `rem` hardcoded in classes | Breaks the token system |
-| Arbitrary values (`p-[14px]`, `text-[#fff]`) | Same |
-| Spanish text in code, comments, or stories | English only |
-| DOM APIs in module scope of stories | Breaks Storybook SSR |
-| `aria-label` hardcoded as string literal | Must be a prop so consumers can translate |
-| Skipping the explanation after each file | Learning is mandatory, not optional |
-
----
-
-## Visual States — Mandatory Rules
-
-Every interactive component MUST implement all states that apply. No exceptions.
-
-### Focus
-```
-focus-visible:outline-none
-focus-visible:shadow-[var(--glow-focus-dark)]
-dark:focus-visible:shadow-[var(--glow-focus-dark)]
-```
-- NEVER `outline` for focus rings — always `box-shadow`
-- Use token `--glow-focus-dark` / `--glow-focus-light`
-
-### Disabled
-```
-disabled:pointer-events-none disabled:opacity-40
-```
-- NEVER change color to indicate disabled — only opacity
-- NEVER `opacity-50` or other values — always `opacity-40`
-
-### Hover
-- Always transition specific properties — NEVER `transition-all`
-- Enumerate: `transition-[background,color,box-shadow] duration-200 ease-[ease]`
-- Hover MUST change at least one visible property (bg, border, shadow, or color)
-
-### Active / Pressed
-```
-active:scale-[0.98]
-```
-- Buttons always have subtle press feedback via scale
-- Active shadow should be less than hover shadow (press = contained energy)
-
-### Loading
-- Use `disabled` + spinner — never change button shape or size
-- `pointer-events-none` while loading
-
-### Transitions
-| Property | Duration | Easing |
-|----------|----------|--------|
-| `box-shadow` | 250ms | `ease` |
-| `background` | 250ms | `ease` |
-| `color`, `border-color` | 200ms | `ease` |
-| `opacity` | 200ms | `ease` |
-| `transform` | 150ms | `ease` |
-
-### Backdrop blur — restricted use
-`backdrop-filter: blur()` ONLY on floating elements: navbar, modals, sidebars, tooltips.
-NEVER on cards, inputs, buttons, or static content.
-
-### Gradient borders
-Use `::before` pseudo-element — NEVER `border-image`:
-```
-before:absolute before:inset-[-1.5px] before:rounded-[inherit] before:z-[-1]
-before:bg-[linear-gradient(135deg,...)]
-```
-The parent needs: `relative overflow-visible isolate border border-transparent`
+Fix all CRITICAL and MAJOR before marking the component complete.
 
 ---
 
 ## Checklist before finishing
 
+**Structure**
 - [ ] `types.ts` — all props typed, all CVA variants defined, JSDoc controls present
 - [ ] `useComponentName.ts` — all logic, no JSX, returns typed object
 - [ ] `ComponentName.tsx` — only JSX, consumes hook, no logic
-- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, English, description present
+- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, English, description present, no overriding defaultVariants in Default args
 - [ ] `index.ts` — re-exports correct
+
+**Tokens & theming**
 - [ ] All tokens from `theme.css` — no hardcoded values
-- [ ] Dark mode handled — paired `light/dark:` classes
+- [ ] Dark mode handled — paired `dark:` classes where applicable
+
+**Visual states**
+- [ ] Hover state implemented and tonally correct
+- [ ] Focus ring: `box-shadow` only, merged with existing shadows, never naked `outline`
+- [ ] Active/pressed: `scale(0.98)` on buttons
+- [ ] Disabled: `opacity: 0.4` + `pointer-events: none`, no color substitution
+- [ ] No `transition: all` — specific properties enumerated
+
+**Accessibility**
 - [ ] Aria attributes from spec implemented
-- [ ] Explained every decision to the contributor
+- [ ] Minimum touch target `44×44px` on interactive elements
+- [ ] `prefers-reduced-motion` handled if transforms are used
+
+**Learning**
+- [ ] Explained every decision to the contributor after each file

@@ -15,11 +15,11 @@ const renderDropdownItem = (element: DropdownElement, index: number) => {
         data-variant={element.variant}
         aria-disabled={element.disabled || undefined}
         className={cn(
-          'relative flex cursor-default justify-between items-center gap-2 rounded-[var(--radius-sm)] px-2 py-1.5 text-sm',
+          'relative flex cursor-default justify-between items-center gap-2 rounded-sm px-2 py-1.5 text-sm',
           'transition-[background,color] duration-150 ease-[ease]',
-          'hover:bg-[var(--color-white-tint-mid)] hover:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-white-tint-mid)]',
-          'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]',
-          element.variant === 'destructive' && 'bg-[var(--color-error-light)] dark:bg-[var(--color-error)] text-white hover:bg-[var(--color-brand-light-dark)]'
+          'hover:bg-white-tint-mid hover:text-text-dark dark:hover:bg-white-tint-mid',
+          'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+          element.variant === 'destructive' && 'bg-error-light dark:bg-error text-white hover:bg-brand-light-dark'
         )}
         onClick={element.onClick}
       >
@@ -41,10 +41,10 @@ const renderDropdownSubmenu = (element: DropdownElement, index: number) => {
           aria-controls={submenuId}
           aria-expanded={false}
           className={cn(
-            'flex items-center rounded-md justify-between px-2 py-1.5 text-sm',
-            'transition-[background,color] duration-150 ease-[ease]',
-          'hover:bg-[var(--color-white-tint-mid)] hover:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-white-tint-mid)]',
-          'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
+          'flex items-center rounded-md justify-between px-2 py-1.5 text-sm',
+          'transition-[background,color] duration-150 ease-[ease]',
+          'hover:bg-white-tint-mid hover:text-text-dark dark:hover:bg-white-tint-mid',
+          'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
           )}
         >
           {element.startContent && <span className='flex items-center'>{element.startContent}</span>}
@@ -58,11 +58,11 @@ const renderDropdownSubmenu = (element: DropdownElement, index: number) => {
         <DropdownMenuPrimitive.SubContent
           id={submenuId}
           className={cn(
-            'min-w-[8rem] ml-2 rounded-[var(--radius-md)] border p-1 shadow-lg',
+            'min-w-[8rem] ml-2 rounded-md border p-1 shadow-lg',
             'transition-[background,color] duration-150 ease-[ease]',
-            'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]',
-            'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
-            'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]'
+            'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+            'bg-surface-light border-border-light',
+            'text-text-light dark:text-text-dark dark:bg-surface-dark dark:border-border-dark'
           )}
         >
           {element.items.map((subElement, subIndex) => renderDropdownElement(subElement, subIndex))}
@@ -80,7 +80,7 @@ const renderDropdownElement = (element: DropdownElement, index: number) => {
       return renderDropdownSubmenu(element, index);
     case 'separator':
       return (
-        <DropdownMenuPrimitive.Separator key={index} className='my-1 h-px bg-[var(--color-border-light)] dark:bg-[var(--color-border-dark)]' />
+        <DropdownMenuPrimitive.Separator key={index} className='my-1 h-px bg-border-light dark:bg-border-dark' />
       );
     case 'label': {
       const labelId = `dropdown-label-${index}`;
@@ -121,10 +121,10 @@ const Dropdown: FC<DropdownProps> = ({ ...props }) => {
           role='menu'
           aria-labelledby={accessibleLabelId}
           className={cn(
-            'min-w-[8rem] rounded-[var(--radius-md)] border p-1 shadow-[var(--shadow-dropdown)]',
-            'text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]',
-            'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
-            'dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]',
+            'min-w-[8rem] rounded-md border p-1 shadow-shadow-dropdown-light dark:shadow-shadow-dropdown',
+            'text-text-light dark:text-text-dark',
+            'bg-surface-light border-border-light',
+            'dark:bg-surface-dark dark:border-border-dark',
             'data-[state=closed]:animate-out data-[state=open]:animate-in',
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',

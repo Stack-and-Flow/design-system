@@ -1,10 +1,9 @@
-import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import type { ComponentProps, FC } from 'react';
+import { cn } from '@/lib/utils';
 import { type IconButtonProps, iconButtonVariants } from './types';
 import { useIconButton } from './useIconButton';
-import '@/components/utils/styles/index.css';
 
 const IconButton: FC<IconButtonProps & VariantProps<typeof iconButtonVariants> & ComponentProps<'button'>> = ({
   ...props

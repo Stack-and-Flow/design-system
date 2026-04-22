@@ -1,13 +1,13 @@
 import { type VariantProps, cva } from 'class-variance-authority';
 import type { ReactNode } from 'react';
 
-export const textVariants = cva(['font-[var(--font-weight-regular)] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]'], {
+export const textVariants = cva(['font-weight-regular text-text-light dark:text-text-dark'], {
   variants: {
     font: {
       // Sistema de una sola fuente — todas las variantes usan Space Grotesk Variable
-      primary: 'font-[var(--font-primary)]',
-      secondary: 'font-[var(--font-primary)]',
-      secondaryBold: 'font-[var(--font-primary)] font-[var(--font-weight-bold)]'
+      primary: 'font-primary',
+      secondary: 'font-primary',
+      secondaryBold: 'font-primary font-weight-bold'
     },
     tag: {
       p: 'fs-base',

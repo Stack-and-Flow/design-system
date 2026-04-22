@@ -7,12 +7,12 @@ export const inputVariants = cva(
     variants: {
       variant: {
         regular: [
-          'bg-[var(--color-surface-light)] border-[var(--color-border-light)]',
-          'dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-dark)]'
+          'bg-surface-light border-border-light',
+          'dark:bg-surface-dark dark:border-border-dark'
         ],
         underlined: [
-          'bg-transparent border-[var(--color-border-light)]',
-          'dark:bg-transparent dark:border-[var(--color-border-dark)]'
+          'bg-transparent border-border-light',
+          'dark:bg-transparent dark:border-border-dark'
         ],
         line: [
           'bg-transparent',
@@ -20,17 +20,17 @@ export const inputVariants = cva(
           'border-l-transparent',
           'border-r-transparent',
           '!rounded-none',
-          'border-b-[var(--color-border-light)]',
-          'dark:border-b-[var(--color-border-dark)]'
+          'border-b-border-light',
+          'dark:border-b-border-dark'
         ],
         bordered: [
-          'bg-[var(--color-surface-light)] border-[var(--color-border-strong-light)]',
-          'dark:bg-[var(--color-surface-dark)] dark:border-[var(--color-border-strong-dark)]'
+          'bg-surface-light border-border-strong-light',
+          'dark:bg-surface-dark dark:border-border-strong-dark'
         ]
       },
       rounded: {
         true: 'rounded-full',
-        false: 'rounded-[var(--radius-md)]'
+        false: 'rounded-md'
       },
       size: {
         sm: 'h-12 px-2 fs-small tablet:fs-small-tablet',
@@ -41,29 +41,29 @@ export const inputVariants = cva(
         default: '',
         focused: [
           'outline-none',
-          'shadow-[var(--glow-focus-light)] dark:shadow-[var(--glow-focus-dark)]'
+          'shadow-glow-focus-light dark:shadow-glow-focus-dark'
         ],
         focusedRegular: [
-          'hover:bg-[var(--color-surface-raised-light)] hover:border-[var(--color-border-strong-light)]',
-          'dark:hover:bg-[var(--color-surface-raised-dark)] dark:hover:border-[var(--color-border-strong-dark)]'
+          'hover:bg-surface-raised-light hover:border-border-strong-light',
+          'dark:hover:bg-surface-raised-dark dark:hover:border-border-strong-dark'
         ],
         focusedUnderlined: [
-          'hover:border-[var(--color-border-strong-light)]',
-          'dark:hover:border-[var(--color-border-strong-dark)]'
+          'hover:border-border-strong-light',
+          'dark:hover:border-border-strong-dark'
         ],
         focusedLine: [
-          'hover:border-b-[var(--color-border-strong-light)]',
-          'dark:hover:border-b-[var(--color-border-strong-dark)]'
+          'hover:border-b-border-strong-light',
+          'dark:hover:border-b-border-strong-dark'
         ],
         focusedBordered: [
-          'hover:bg-[var(--color-surface-raised-light)]',
-          'dark:hover:bg-[var(--color-surface-raised-dark)]'
+          'hover:bg-surface-raised-light',
+          'dark:hover:bg-surface-raised-dark'
         ]
       },
       focused: {
         true: [
           'outline-none',
-          'shadow-[var(--glow-focus-light)] dark:shadow-[var(--glow-focus-dark)]'
+          'shadow-glow-focus-light dark:shadow-glow-focus-dark'
         ],
         false: ''
       }
@@ -78,7 +78,7 @@ export const inputVariants = cva(
 );
 
 export const labelVariants = cva(
-  ['absolute w-auto line-clamp-1 transition-[top,font-size,color] duration-200 ease-[ease] text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] pt-[2px]'],
+  ['absolute w-auto line-clamp-1 transition-[top,font-size,color] duration-200 ease-[ease] text-text-light dark:text-text-dark pt-[2px]'],
   {
     variants: {
       size: {
@@ -88,12 +88,12 @@ export const labelVariants = cva(
       },
       state: {
         default: 'top-[50%] translate-y-[-50%]',
-        focusedSm: 'top-1 fs-small font-[var(--font-weight-semibold)]',
-        focusedMd: 'top-1.5 fs-small font-[var(--font-weight-semibold)]',
-        focusedLg: 'top-2 fs-small font-[var(--font-weight-semibold)]',
-        hasValueSm: 'top-1 fs-small font-[var(--font-weight-semibold)]',
-        hasValueMd: 'top-1.5 fs-small font-[var(--font-weight-semibold)]',
-        hasValueLg: 'top-2 fs-small font-[var(--font-weight-semibold)]'
+        focusedSm: 'top-1 fs-small font-semibold',
+        focusedMd: 'top-1.5 fs-small font-semibold',
+        focusedLg: 'top-2 fs-small font-semibold',
+        hasValueSm: 'top-1 fs-small font-semibold',
+        hasValueMd: 'top-1.5 fs-small font-semibold',
+        hasValueLg: 'top-2 fs-small font-semibold'
       }
     },
     defaultVariants: {

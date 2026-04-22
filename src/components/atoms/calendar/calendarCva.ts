@@ -5,9 +5,9 @@ export const calendarCva = cva(
   {
     variants: {
       variant: {
-        filled: 'bg-[var(--color-background-light)] text-[var(--color-text-light)] shadow-lg dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-text-dark)] dark:shadow-black',
-        outlined: 'border border-[var(--color-border-light)] dark:border-[var(--color-border-dark)]',
-        soft: 'bg-[var(--color-red-tint-low)] dark:bg-[var(--color-red-tint-mid)]',
+        filled: 'bg-background-light text-text-light shadow-lg dark:bg-surface-dark dark:text-text-dark dark:shadow-black',
+        outlined: 'border border-border-light dark:border-border-dark',
+        soft: 'bg-red-tint-low dark:bg-red-tint-mid',
         ghost: 'bg-transparent'
       },
       size: {
@@ -18,7 +18,7 @@ export const calendarCva = cva(
       radius: {
         none: 'rounded-none',
         sm: 'rounded',
-        md: 'rounded-[var(--radius-md)]',
+        md: 'rounded-md',
         lg: 'rounded-2xl'
       },
       theme: {
