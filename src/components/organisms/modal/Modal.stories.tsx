@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@atoms/button';
 import { IconButton } from '@atoms/icon-button';
 import { Link } from '@atoms/link';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Modal } from './index';
 
 /**

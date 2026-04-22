@@ -3,12 +3,7 @@ import { mergeConfig } from 'vite';
 import _ from '../src/components/utils/types/safelist';
 
 const config: StorybookConfig = {
-  stories: [
-    './*.mdx',
-    '../stories/**/*.mdx',
-    '../src/**/*.mdx',
-    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'
-  ],
+  stories: ['./*.mdx', '../stories/**/*.mdx', '../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   staticDirs: ['../src/assets'],
   addons: [
     '@storybook/addon-controls',

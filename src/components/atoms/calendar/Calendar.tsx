@@ -1,7 +1,7 @@
 import React from 'react';
-import { MonthYearPickerDropdown } from './MonthYearPickerDropdown';
 import { calendarCva } from './calendarCva';
 import { dayCva } from './dayCva';
+import { MonthYearPickerDropdown } from './MonthYearPickerDropdown';
 import type { CalendarProps } from './types';
 import { calendarColorPalette, lightenColor, useCalendar } from './useCalendar';
 

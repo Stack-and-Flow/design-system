@@ -49,4 +49,4 @@ export type CalendarProps = {
   locale?: string;
   /** Number of visible months (1 for single, 2+ for multi-month view). */
   visibleMonths?: number;
-}
+};

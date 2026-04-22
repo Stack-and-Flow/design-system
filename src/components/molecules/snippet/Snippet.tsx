@@ -1,5 +1,5 @@
-import { IconButton } from '@/components/atoms/icon-button';
 import type { FC } from 'react';
+import { IconButton } from '@/components/atoms/icon-button';
 import type { SnippetProps } from './types';
 import { useSnippet } from './useSnippet';
 

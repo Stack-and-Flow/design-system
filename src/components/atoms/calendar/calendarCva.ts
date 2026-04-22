@@ -5,7 +5,8 @@ export const calendarCva = cva(
   {
     variants: {
       variant: {
-        filled: 'bg-background-light text-text-light shadow-lg dark:bg-surface-dark dark:text-text-dark dark:shadow-black',
+        filled:
+          'bg-background-light text-text-light shadow-lg dark:bg-surface-dark dark:text-text-dark dark:shadow-black',
         outlined: 'border border-border-light dark:border-border-dark',
         soft: 'bg-red-tint-low dark:bg-red-tint-mid',
         ghost: 'bg-transparent'

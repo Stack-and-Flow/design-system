@@ -1,8 +1,8 @@
-import { cn } from '@/lib/utils';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ChevronRightIcon } from 'lucide-react';
 import type { FC } from 'react';
 import { SpinnerCircular } from 'spinners-react';
+import { cn } from '@/lib/utils';
 import type { DropdownElement, DropdownProps } from './types';
 import { useDropdown } from './useDropdown';
 
@@ -41,10 +41,10 @@ const renderDropdownSubmenu = (element: DropdownElement, index: number) => {
           aria-controls={submenuId}
           aria-expanded={false}
           className={cn(
-          'flex items-center rounded-md justify-between px-2 py-1.5 text-sm',
-          'transition-[background,color] duration-150 ease-[ease]',
-          'hover:bg-white-tint-mid hover:text-text-dark dark:hover:bg-white-tint-mid',
-          'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+            'flex items-center rounded-md justify-between px-2 py-1.5 text-sm',
+            'transition-[background,color] duration-150 ease-[ease]',
+            'hover:bg-white-tint-mid hover:text-text-dark dark:hover:bg-white-tint-mid',
+            'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
           )}
         >
           {element.startContent && <span className='flex items-center'>{element.startContent}</span>}
@@ -79,9 +79,7 @@ const renderDropdownElement = (element: DropdownElement, index: number) => {
     case 'submenu':
       return renderDropdownSubmenu(element, index);
     case 'separator':
-      return (
-        <DropdownMenuPrimitive.Separator key={index} className='my-1 h-px bg-border-light dark:bg-border-dark' />
-      );
+      return <DropdownMenuPrimitive.Separator key={index} className='my-1 h-px bg-border-light dark:bg-border-dark' />;
     case 'label': {
       const labelId = `dropdown-label-${index}`;
       return (

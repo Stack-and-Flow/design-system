@@ -1,8 +1,13 @@
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import type { JSX, ReactNode } from 'react';
 
 export const modalVariants = cva(
-  ['w-full z-modal p-6 shadow-shadow-dropdown', 'bg-surface-light dark:bg-surface-dark', 'border border-border-light dark:border-border-dark', 'flex flex-col'],
+  [
+    'w-full z-modal p-6 shadow-shadow-dropdown',
+    'bg-surface-light dark:bg-surface-dark',
+    'border border-border-light dark:border-border-dark',
+    'flex flex-col'
+  ],
   {
     variants: {
       size: {

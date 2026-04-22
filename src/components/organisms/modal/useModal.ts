@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 import type { ModalProps } from './types';
 
 export const useModal = ({

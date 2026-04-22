@@ -39,7 +39,7 @@ export const switchWrapper = cva(
       rounded: {
         true: 'rounded-full',
         false: 'rounded-lg'
-      },
+      }
     },
     defaultVariants: {
       size: 'md',
@@ -48,42 +48,39 @@ export const switchWrapper = cva(
   }
 );
 
-export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center transition-[background-color] duration-300'], {
-  variants: {
-    size: {
-      sm: 'w-8 h-2 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-4',
-      md: 'w-10 h-3 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-5.5',
-      lg: 'w-12 h-4 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-8'
-    },
-    color: {
-      default: [
-        'bg-border-dark',
-        'peer-checked:bg-brand-light dark:peer-checked:bg-brand-dark'
-      ],
-      disabled: [
-        'bg-border-dark opacity-50',
-        'peer-checked:bg-brand-light'
-      ],
-      transparent: 'bg-transparent border border-border-dark peer-checked:border-brand-dark'
-    },
-    variant: {
-      default: '',
-      bordered: 'border',
+export const switchTrack = cva(
+  ['relative w-full h-full p-0.5 flex items-center transition-[background-color] duration-300'],
+  {
+    variants: {
+      size: {
+        sm: 'w-8 h-2 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-4',
+        md: 'w-10 h-3 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-5.5',
+        lg: 'w-12 h-4 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-8'
+      },
+      color: {
+        default: ['bg-border-dark', 'peer-checked:bg-brand-light dark:peer-checked:bg-brand-dark'],
+        disabled: ['bg-border-dark opacity-50', 'peer-checked:bg-brand-light'],
+        transparent: 'bg-transparent border border-border-dark peer-checked:border-brand-dark'
+      },
+      variant: {
+        default: '',
+        bordered: 'border',
         glass:
-        'bg-white-tint-mid border border-border-dark shadow-md peer-checked:bg-brand-light/70 border-brand-light/50 dark:peer-checked:bg-brand-dark/60',
-      shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-brand-dark/90'
+          'bg-white-tint-mid border border-border-dark shadow-md peer-checked:bg-brand-light/70 border-brand-light/50 dark:peer-checked:bg-brand-dark/60',
+        shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-brand-dark/90'
+      },
+      rounded: {
+        true: 'rounded-full',
+        false: 'rounded-md'
+      }
     },
-    rounded: {
-      true: 'rounded-full',
-      false: 'rounded-md'
+    defaultVariants: {
+      size: 'md',
+      color: 'default',
+      rounded: true
     }
-  },
-  defaultVariants: {
-    size: 'md',
-    color: 'default',
-    rounded: true
   }
-});
+);
 
 export const switchThumb = cva(['absolute rounded-full transition-transform duration-300 left-1 top-0.8 z-10'], {
   variants: {

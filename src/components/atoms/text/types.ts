@@ -1,4 +1,4 @@
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import type { ReactNode } from 'react';
 
 export const textVariants = cva(['font-weight-regular text-text-light dark:text-text-dark'], {

@@ -165,14 +165,19 @@ const Input: FC<
           disabled && 'pointer-events-none opacity-40',
           className
         )}
-        onClick={() =>
-          ref &&
-          'current' in ref &&
-          document.activeElement !== ref.current &&
-          type !== 'number' &&
-          type !== 'password' &&
-          ref.current?.focus()
-        }
+        onClick={() => {
+          if (
+            ref &&
+            typeof ref === 'object' &&
+            'current' in ref &&
+            ref.current &&
+            document.activeElement !== ref.current &&
+            type !== 'number' &&
+            type !== 'password'
+          ) {
+            ref.current.focus();
+          }
+        }}
       >
         <label
           id={`${id}-label`}

@@ -1,4 +1,4 @@
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const headerVariants = cva(['font-normal leading-[1.2] text-text-light dark:text-text-dark'], {
   variants: {

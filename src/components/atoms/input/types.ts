@@ -1,19 +1,16 @@
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import type { ChangeEvent, ReactNode } from 'react';
 
 export const inputVariants = cva(
-  ['relative overflow-hidden flex py-2 justify-between max-w-full', 'border transition-[border-color,box-shadow] duration-200 ease-[ease]'],
+  [
+    'relative overflow-hidden flex py-2 justify-between max-w-full',
+    'border transition-[border-color,box-shadow] duration-200 ease-[ease]'
+  ],
   {
     variants: {
       variant: {
-        regular: [
-          'bg-surface-light border-border-light',
-          'dark:bg-surface-dark dark:border-border-dark'
-        ],
-        underlined: [
-          'bg-transparent border-border-light',
-          'dark:bg-transparent dark:border-border-dark'
-        ],
+        regular: ['bg-surface-light border-border-light', 'dark:bg-surface-dark dark:border-border-dark'],
+        underlined: ['bg-transparent border-border-light', 'dark:bg-transparent dark:border-border-dark'],
         line: [
           'bg-transparent',
           'border-t-transparent',
@@ -23,10 +20,7 @@ export const inputVariants = cva(
           'border-b-border-light',
           'dark:border-b-border-dark'
         ],
-        bordered: [
-          'bg-surface-light border-border-strong-light',
-          'dark:bg-surface-dark dark:border-border-strong-dark'
-        ]
+        bordered: ['bg-surface-light border-border-strong-light', 'dark:bg-surface-dark dark:border-border-strong-dark']
       },
       rounded: {
         true: 'rounded-full',
@@ -39,32 +33,17 @@ export const inputVariants = cva(
       },
       state: {
         default: '',
-        focused: [
-          'outline-none',
-          'shadow-glow-focus-light dark:shadow-glow-focus-dark'
-        ],
+        focused: ['outline-none', 'shadow-glow-focus-light dark:shadow-glow-focus-dark'],
         focusedRegular: [
           'hover:bg-surface-raised-light hover:border-border-strong-light',
           'dark:hover:bg-surface-raised-dark dark:hover:border-border-strong-dark'
         ],
-        focusedUnderlined: [
-          'hover:border-border-strong-light',
-          'dark:hover:border-border-strong-dark'
-        ],
-        focusedLine: [
-          'hover:border-b-border-strong-light',
-          'dark:hover:border-b-border-strong-dark'
-        ],
-        focusedBordered: [
-          'hover:bg-surface-raised-light',
-          'dark:hover:bg-surface-raised-dark'
-        ]
+        focusedUnderlined: ['hover:border-border-strong-light', 'dark:hover:border-border-strong-dark'],
+        focusedLine: ['hover:border-b-border-strong-light', 'dark:hover:border-b-border-strong-dark'],
+        focusedBordered: ['hover:bg-surface-raised-light', 'dark:hover:bg-surface-raised-dark']
       },
       focused: {
-        true: [
-          'outline-none',
-          'shadow-glow-focus-light dark:shadow-glow-focus-dark'
-        ],
+        true: ['outline-none', 'shadow-glow-focus-light dark:shadow-glow-focus-dark'],
         false: ''
       }
     },
@@ -78,7 +57,9 @@ export const inputVariants = cva(
 );
 
 export const labelVariants = cva(
-  ['absolute w-auto line-clamp-1 transition-[top,font-size,color] duration-200 ease-[ease] text-text-light dark:text-text-dark pt-[2px]'],
+  [
+    'absolute w-auto line-clamp-1 transition-[top,font-size,color] duration-200 ease-[ease] text-text-light dark:text-text-dark pt-[2px]'
+  ],
   {
     variants: {
       size: {

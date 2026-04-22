@@ -169,11 +169,9 @@
 
   /* Glow de botón primary — Light: sombra suave, sin neon */
   --glow-btn-primary-light:
-    0 2px 8px rgba(219, 20, 60, 0.22), 0 1px 3px rgba(219, 20, 60, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 2px 8px rgba(219, 20, 60, 0.22), 0 1px 3px rgba(219, 20, 60, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   --glow-btn-primary-hover-light:
-    0 4px 14px rgba(219, 20, 60, 0.32), 0 2px 6px rgba(219, 20, 60, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 4px 14px rgba(219, 20, 60, 0.32), 0 2px 6px rgba(219, 20, 60, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 
   /* Glow de botón secondary — Dark: border neon ring + glow exterior + glow interior */
   --glow-btn-secondary:
@@ -184,10 +182,8 @@
     inset 0 0 24px 4px rgba(255, 0, 54, 0.2);
 
   /* Glow de botón secondary — Light: borde sutil + sombra suave */
-  --glow-btn-secondary-light:
-    0 0 0 1px rgba(219, 20, 60, 0.35), 0 2px 8px rgba(219, 20, 60, 0.12);
-  --glow-btn-secondary-hover-light:
-    0 0 0 1px rgba(219, 20, 60, 0.55), 0 4px 12px rgba(219, 20, 60, 0.18);
+  --glow-btn-secondary-light: 0 0 0 1px rgba(219, 20, 60, 0.35), 0 2px 8px rgba(219, 20, 60, 0.12);
+  --glow-btn-secondary-hover-light: 0 0 0 1px rgba(219, 20, 60, 0.55), 0 4px 12px rgba(219, 20, 60, 0.18);
 
   /* Glow de focus ring */
   --glow-focus-dark: 0 0 0 3px rgba(255, 0, 54, 0.4);

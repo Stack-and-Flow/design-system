@@ -17,32 +17,81 @@
     @apply text-primary hover:text-text-light dark:hover:text-text-dark transition-all duration-300 ease-in underline underline-offset-2;
   }
 
-  strong, b {
+  strong,
+  b {
     @apply font-bold;
   }
 
   /* ── Typography scale ──────────────────────────────────────────── */
-  .fs-h1 { font-size: var(--text-h1); line-height: 1.2; font-weight: 800; }
-  .fs-h2 { font-size: var(--text-h2); line-height: 1.2; font-weight: 700; }
-  .fs-h3 { font-size: var(--text-h3); line-height: 1.2; font-weight: 700; }
-  .fs-h4 { font-size: var(--text-h4); line-height: 1.2; font-weight: 600; }
-  .fs-h5 { font-size: var(--text-h5); line-height: 1.2; font-weight: 600; }
-  .fs-h6 { font-size: var(--text-h6); line-height: 1.2; font-weight: 600; }
-  .fs-base { font-size: var(--text-body); line-height: 1.5; }
-  .fs-small { font-size: var(--text-small); line-height: 1.4; }
+  .fs-h1 {
+    font-size: var(--text-h1);
+    line-height: 1.2;
+    font-weight: 800;
+  }
+  .fs-h2 {
+    font-size: var(--text-h2);
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  .fs-h3 {
+    font-size: var(--text-h3);
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  .fs-h4 {
+    font-size: var(--text-h4);
+    line-height: 1.2;
+    font-weight: 600;
+  }
+  .fs-h5 {
+    font-size: var(--text-h5);
+    line-height: 1.2;
+    font-weight: 600;
+  }
+  .fs-h6 {
+    font-size: var(--text-h6);
+    line-height: 1.2;
+    font-weight: 600;
+  }
+  .fs-base {
+    font-size: var(--text-body);
+    line-height: 1.5;
+  }
+  .fs-small {
+    font-size: var(--text-small);
+    line-height: 1.4;
+  }
 
   /* Single font — no secondary/bold variants needed */
-  .font-primary { font-family: var(--font-primary); }
+  .font-primary {
+    font-family: var(--font-primary);
+  }
 
-  @media (max-width: theme('screens.md')) {
-    .fs-h1 { font-size: var(--text-h1-tablet); }
-    .fs-h2 { font-size: var(--text-h2-tablet); }
-    .fs-h3 { font-size: var(--text-h3-tablet); }
-    .fs-h4 { font-size: var(--text-h4-tablet); }
-    .fs-h5 { font-size: var(--text-h5-tablet); }
-    .fs-h6 { font-size: var(--text-h6-tablet); }
-    .fs-base { font-size: var(--text-body-tablet); }
-    .fs-small { font-size: var(--text-small-tablet); }
+  @media (max-width: theme("screens.md")) {
+    .fs-h1 {
+      font-size: var(--text-h1-tablet);
+    }
+    .fs-h2 {
+      font-size: var(--text-h2-tablet);
+    }
+    .fs-h3 {
+      font-size: var(--text-h3-tablet);
+    }
+    .fs-h4 {
+      font-size: var(--text-h4-tablet);
+    }
+    .fs-h5 {
+      font-size: var(--text-h5-tablet);
+    }
+    .fs-h6 {
+      font-size: var(--text-h6-tablet);
+    }
+    .fs-base {
+      font-size: var(--text-body-tablet);
+    }
+    .fs-small {
+      font-size: var(--text-small-tablet);
+    }
   }
 
   /* ── Storybook dark mode ───────────────────────────────────────── */
@@ -105,4 +154,3 @@
     -moz-appearance: textfield;
   }
 }
-

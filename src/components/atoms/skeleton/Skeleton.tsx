@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import type { ComponentProps, FC } from 'react';
+import { cn } from '@/lib/utils';
 import type { SkeletonProps } from './types';
 import { useSkeleton } from './useSkeleton';
 

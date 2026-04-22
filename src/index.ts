@@ -22,6 +22,6 @@ export { Snippet } from './components/molecules/snippet';
 export { Footer } from './components/organisms/footer';
 export { NavigationHeader } from './components/organisms/header';
 export { Modal } from './components/organisms/modal';
+
 // ─── Hooks ───────────────────────────────────────────────────────────────────
-export { useTheme } from './hooks/use-theme/hook';
 export { useRipple } from './hooks/useRipple';

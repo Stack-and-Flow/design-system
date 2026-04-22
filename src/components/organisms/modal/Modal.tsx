@@ -1,10 +1,10 @@
-import * as ModalPrimitive from '@radix-ui/react-dialog';
-import type { FC } from 'react';
-import { cn } from '@/lib/utils';
 import { Button } from '@atoms/button';
 import { Header } from '@atoms/header';
 import { IconButton } from '@atoms/icon-button';
 import { Text } from '@atoms/text';
+import * as ModalPrimitive from '@radix-ui/react-dialog';
+import type { FC } from 'react';
+import { cn } from '@/lib/utils';
 import type { ModalProps } from './types';
 import { modalVariants } from './types';
 import { useModal } from './useModal';
@@ -55,11 +55,7 @@ const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
             <div className='relative pb-4'>
               <div className='w-full flex items-start justify-start pr-8'>
                 {header ?? (
-                  <Header
-                    tag='h5'
-                    id={titleId}
-                    className='text-text-light dark:text-text-dark text-lg font-semibold'
-                  >
+                  <Header tag='h5' id={titleId} className='text-text-light dark:text-text-dark text-lg font-semibold'>
                     {title}
                   </Header>
                 )}
@@ -76,10 +72,7 @@ const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
             </div>
             <div id={descriptionId} className='py-4 flex-1 overflow-y-auto max-h-[80dvh]'>
               {content || (
-                <Text
-                  tag='p'
-                  className='text-sm text-text-secondary-light dark:text-text-secondary-dark'
-                >
+                <Text tag='p' className='text-sm text-text-secondary-light dark:text-text-secondary-dark'>
                   {textContent}
                 </Text>
               )}

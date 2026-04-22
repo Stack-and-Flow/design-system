@@ -1,4 +1,5 @@
 import { cva } from 'class-variance-authority';
+
 // Helper arrays for compound variants
 const filledRangeVariants = [
   {
@@ -54,19 +55,22 @@ const outlinedRangeVariants = [
     isRangeStart: false,
     isRangeEnd: false,
     variant: 'outlined' as const,
-    class: 'bg-red-tint-mid text-text-light border border-border-light rounded-none dark:text-text-dark dark:border-border-dark'
+    class:
+      'bg-red-tint-mid text-text-light border border-border-light rounded-none dark:text-text-dark dark:border-border-dark'
   },
   {
     isInRange: true,
     isRangeStart: true,
     variant: 'outlined' as const,
-    class: 'bg-red-tint-mid text-text-light border-2 border-border-light rounded-l-full dark:text-text-dark dark:border-border-dark'
+    class:
+      'bg-red-tint-mid text-text-light border-2 border-border-light rounded-l-full dark:text-text-dark dark:border-border-dark'
   },
   {
     isInRange: true,
     isRangeEnd: true,
     variant: 'outlined' as const,
-    class: 'bg-red-tint-mid text-text-light border-2 border-border-light rounded-r-full dark:text-text-dark dark:border-border-dark'
+    class:
+      'bg-red-tint-mid text-text-light border-2 border-border-light rounded-r-full dark:text-text-dark dark:border-border-dark'
   }
 ];
 
@@ -111,7 +115,8 @@ export const dayCva = cva(
       },
       isCurrentMonth: {
         true: 'text-text-light dark:text-text-dark',
-        false: 'text-text-tertiary-light bg-transparent cursor-default pointer-events-none dark:text-text-tertiary-dark dark:bg-transparent'
+        false:
+          'text-text-tertiary-light bg-transparent cursor-default pointer-events-none dark:text-text-tertiary-dark dark:bg-transparent'
       },
       isSelected: {
         true: '',

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Icon } from '../icon';
 import { Switch } from './index';
+
 /**
  * ## DESCRIPTION
  * The Switch component is a customizable toggle input that allows users to switch between two states:
@@ -140,7 +141,9 @@ export const WithThumbIcon: Story = {
           label='With Thumb Icon'
           size='lg'
           color='default'
-          thumbIcon={<Icon name='moon' colorDark='dark:text-color-brand-dark' color='text-color-brand-light' size={16} />}
+          thumbIcon={
+            <Icon name='moon' colorDark='dark:text-color-brand-dark' color='text-color-brand-light' size={16} />
+          }
           defaultChecked={true}
         />
       </div>
