@@ -141,13 +141,13 @@ describe('Button — component behavior', () => {
 
   it('applies aria-pressed when the prop is provided', () => {
     render(<Button text='Toggle' aria-pressed={false} />);
-    const btn = screen.getByRole('switch', { name: 'Toggle' });
+    const btn = screen.getByRole('button', { name: 'Toggle' });
     expect(btn).toHaveAttribute('aria-pressed', 'false');
   });
 
-  it('sets role="switch" when aria-pressed prop is provided', () => {
+  it('keeps role="button" when aria-pressed prop is provided', () => {
     render(<Button text='Toggle' aria-pressed={true} />);
-    expect(screen.getByRole('switch', { name: 'Toggle' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Toggle' })).toBeInTheDocument();
   });
 
   it('sets role="button" when aria-pressed prop is NOT provided', () => {
