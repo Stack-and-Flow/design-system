@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Check, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
-import Avatar from '../avatar/Avatar';
-import IconButton from '../icon-button';
+import React from 'react';
+import { Avatar } from '../avatar';
 import Icon from '../icon/Icon';
 import { Chip } from './Chip';
 
@@ -14,8 +13,9 @@ import { Chip } from './Chip';
  *
  * - Customizable in color, size, variant, radius and animation.
  * - Supports `startContent` / `endContent` (icons or text), optional avatar, and `dot` indicator.
- * - Optional interactivity: clickable (`as="button"`), selectable (controlled or uncontrolled), and closable.
- * - Accessible via the `ariaLabel` prop when using `variant="dot"` without text.
+ * - Optional interactivity: clickable (`onClick`/`selectable`), selectable (controlled or uncontrolled), and closable.
+ * - `as` is a preference, not an absolute guarantee: when `closable` + interactive are combined, the chip uses a split-actions group with sibling buttons.
+ * - Accessible via `ariaLabel` for chips without readable text; close action uses contextual label (`Remove <label>`).
  */
 
 const meta: Meta<typeof Chip> = {
@@ -78,7 +78,7 @@ export const Default: Story = {
 export const Size: Story = {
   args: { variant: 'light' },
   render: () => (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-h-28 items-center gap-4 rounded-lg bg-background-light px-6 py-10 dark:bg-background-dark'>
       <Chip size='sm'>Small</Chip>
       <Chip size='md'>Medium</Chip>
       <Chip size='lg'>Large</Chip>
@@ -106,7 +106,7 @@ export const Color: Story = {
  */
 export const Variant: Story = {
   render: () => (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-h-28 items-center gap-4 rounded-lg bg-background-light px-6 py-10 dark:bg-background-dark'>
       <Chip variant='solid'>Solid</Chip>
       <Chip variant='flat'>Flat</Chip>
       <Chip variant='shadow'>Shadow</Chip>
@@ -143,48 +143,23 @@ export const StartEndContent: Story = {
     children: 'Status',
     color: 'primary',
     startContent: <Trash2 />,
-    endContent: (
-      <IconButton
-        aria-label='Close'
-        className='grid h-6 w-6 place-items-center
-             bg-[var(--color-accent)]/1
-             border border-transparent
-             dark:bg-[var(--color-accent)]/18'
-      >
-        <Icon name='bold' size={10} className='' />
-      </IconButton>
-    )
+    endContent: <Icon name='x' size={12} className='text-current dark:text-current' />
   }
 };
 
 /**
- * Make chips clickable by setting `as="button"` and providing `onClick`.
+ * Chips become interactive when they receive `onClick` or `selectable`.
+ * If `closable` is also enabled, the component switches to split-actions markup to keep a11y-valid controls.
  */
 export const Clickable: Story = {
   args: {
     children: 'Clickable',
-    as: 'button'
+    as: 'button',
+    onClick: () => undefined
   },
   argTypes: {
     onClick: { action: 'onClick' }
   }
-};
-
-/**
- * Closable chips can be removed from a list.
- */
-export const ClosableList = () => {
-  const [items, setItems] = useState(['React', 'NextJS', 'Tailwind']);
-
-  return (
-    <div className='flex gap-2 flex-wrap'>
-      {items.map((label, idx) => (
-        <Chip key={label} size='md' closable={true} onClose={() => setItems(items.filter((_, i) => i !== idx))}>
-          {label}
-        </Chip>
-      ))}
-    </div>
-  );
 };
 
 /**
@@ -227,7 +202,9 @@ export const WithAvatar: Story = {
         classNames={{
           avatar: 'h-4 w-4 overflow-hidden rounded-full grid place-items-center'
         }}
-        avatar={<Icon name='user' size={16} className='text-[var(--color-accent)] dark:text-[var(--color-white)]' />}
+        avatar={
+          <Icon name='user' size={16} className='text-[var(--color-accent)] dark:text-[var(--color-text-dark)]' />
+        }
       >
         User
       </Chip>
@@ -245,12 +222,17 @@ export const WithAvatar: Story = {
 
 /** With text → shows a circular indicator before the label. */
 export const DotWithText: Story = {
-  args: { variant: 'dot', color: 'primary', children: 'Pending' }
+  args: { variant: 'dot', color: 'primary', children: 'Pending' },
+  render: (args) => (
+    <div className='flex min-h-28 items-center rounded-lg bg-background-light px-6 py-10 dark:bg-background-dark'>
+      <Chip {...args} />
+    </div>
+  )
 };
 
 /** Dot only → provide `ariaLabel` for accessibility. */
 export const DotOnlyAccessible: Story = {
-  args: { variant: 'dot', color: 'primary', ariaLabel: 'Online' }
+  args: { variant: 'dot', color: 'primary', ariaLabel: 'Online status' }
 };
 
 /** You can override slot styles with `classNames`. */
@@ -278,14 +260,69 @@ export const WithClassNamesOverrides: Story = {
 /** Stress test for long labels */
 export const Stress: Story = {
   render: () => (
-    <div className='max-w-[260px] space-x-2'>
+    <div className='max-w-65 space-x-2'>
       <Chip
         closable={true}
         startContent={<Icon aria-hidden={true} name='activity' />}
-        endContent={<Icon aria-hidden={true} name='youtube' />}
+        endContent={<Icon aria-hidden={true} name='x' />}
       >
         Truncated: Very very very long label that should nicely
       </Chip>
     </div>
   )
+};
+
+export const ClosableAndClickable: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When `closable` and click behavior are combined, the chip uses a split-actions group (two sibling buttons). Primary action triggers `onClick`; close action triggers `onClose` only.'
+      }
+    }
+  },
+  args: {
+    children: 'Closable + click',
+    closable: true,
+    onClose: () => undefined,
+    onClick: () => undefined
+  },
+  argTypes: {
+    onClick: { action: 'onClick' },
+    onClose: { action: 'onClose' }
+  }
+};
+
+export const DisabledAndClosable: Story = {
+  args: {
+    children: 'Disabled + closable',
+    closable: true,
+    disabled: true,
+    onClose: () => undefined
+  },
+  argTypes: {
+    onClose: { action: 'onClose' }
+  }
+};
+
+export const ButtonAndClosable: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`as="button"` is treated as a preference. In `closable` + interactive mode the chip renders split-actions markup to avoid nested interactive controls.'
+      }
+    }
+  },
+  args: {
+    children: 'Button + closable',
+    as: 'button',
+    closable: true,
+    onClose: () => undefined,
+    onClick: () => undefined
+  },
+  argTypes: {
+    onClick: { action: 'onClick' },
+    onClose: { action: 'onClose' }
+  }
 };

@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
-import { chipVariants } from './types';
 import type { ChipProps } from './types';
+import { chipVariants } from './types';
 
 const cn = (...v: any[]) => twMerge(clsx(v));
 const isText = (n: React.ReactNode) => typeof n === 'string' || typeof n === 'number';
@@ -20,6 +20,7 @@ export function useChip(props: ChipProps) {
     avatar,
     className,
     classNames,
+    disabled,
     isDisabled,
     onClick,
     as,
@@ -32,6 +33,8 @@ export function useChip(props: ChipProps) {
     ariaLabel,
     ...rest
   } = props;
+
+  const isDisabledComputed = disabled ?? isDisabled ?? false;
 
   const isControlled = typeof selected === 'boolean';
   const [innerSelected, setInnerSelected] = React.useState<boolean>(!!defaultSelected);
@@ -47,8 +50,10 @@ export function useChip(props: ChipProps) {
   const startKind = startContent == null ? 'default' : isText(startContent) ? 'text' : 'icon';
   const endKind = endContent == null ? 'default' : isText(endContent) ? 'text' : 'icon';
 
-  const interactive = !!onClick || !!selectable;
-  const Tag: 'div' | 'button' = as ?? (interactive ? 'button' : 'div');
+  const interactive = (as === 'button' || !!onClick || !!selectable) && !isDisabledComputed;
+  const splitActions = !!closable && interactive;
+  const wantsButtonTag = as === 'button' || (as == null && interactive);
+  const componentTag: 'div' | 'button' = wantsButtonTag && !closable ? 'button' : 'div';
 
   const baseClasses = chipVariants({
     variant,
@@ -74,45 +79,53 @@ export function useChip(props: ChipProps) {
     size === 'sm'
       ? '[&_svg]:h-3.5 [&_svg]:w-3.5'
       : size === 'lg'
-        ? '[&_svg]:h-4.5 [&_svg]:w-4.5'
+        ? '[&_svg]:h-[18px] [&_svg]:w-[18px]'
         : '[&_svg]:h-4 [&_svg]:w-4';
 
-  const closeBtnBoxBySize =
-    size === 'sm' ? 'h-[10px] w-[10px]' : size === 'lg' ? 'h-[15px] w-[15px]' : 'h-[13px] w-[13px]';
+  const closeBtnBoxBySize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-[18px] w-[18px]' : 'h-4 w-4';
 
-  const closeGlyphSizeBySize = size === 'sm' ? 'text-[16px]' : size === 'lg' ? 'text-[15px]' : 'text-[13px]';
+  const closeIconSizeBySize: 10 | 12 | 14 = size === 'sm' ? 10 : size === 'lg' ? 14 : 12;
 
   const slots = {
     base: cn(
       baseClasses,
       'min-w-0',
-      pieceCount > 1 && 'gap-1',
+      pieceCount > 1 && 'gap-0.5',
       className,
       classNames?.base,
       interactive ? 'cursor-pointer' : 'cursor-auto',
+      splitActions &&
+        'focus-within:ring-2 focus-within:ring-[var(--color-accent)] dark:focus-within:ring-[var(--color-text-dark)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--surface-bg,white)]',
       isSelected && 'ring-2 ring-offset-0 ring-inset ring-accent',
       iconBySize
     ),
     content: cn('truncate', classNames?.content),
     dot: cn('inline-block w-2 h-2 rounded-full shrink-0 bg-[var(--chip-dot)]', classNames?.dot),
-    avatar: cn('shrink-0 ltr:mr-0.3 rtl:ml-0.3', classNames?.avatar),
+    avatar: cn('shrink-0 ltr:mr-px rtl:ml-px', classNames?.avatar),
+
+    actionButton: cn(
+      'inline-flex min-w-0 flex-1 items-center justify-center gap-0.5 rounded-inherit bg-transparent p-0 m-0 border-0 text-inherit',
+      'focus-visible:outline-none transition-transform duration-200 ease-in-out active:translate-y-[1px] active:scale-[0.985]',
+      'disabled:cursor-not-allowed disabled:opacity-100',
+      classNames?.actionButton
+    ),
 
     closeButton: cn(
-      'relative inline-flex items-center justify-center overflow-visible',
+      'inline-flex items-center justify-center overflow-visible rounded-full',
       'shrink-0 leading-none select-none pointer-events-auto cursor-pointer',
-      'p-0 m-0 ltr:-ml-0.5 rtl:-mr-0.5 rounded',
+      'p-0 m-0 ltr:-ml-0.5 rtl:-mr-0.5',
       closeBtnBoxBySize,
-      closeGlyphSizeBySize,
-      'text-white dark:text-white font-bold',
+      'text-current/80 hover:text-current',
       'hover:bg-transparent hover:ring-0',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
       'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,white)]',
+      'disabled:cursor-not-allowed disabled:pointer-events-none disabled:text-current/45 disabled:opacity-100',
       classNames?.closeButton
     )
   };
 
   const handleActivate = (e: React.MouseEvent<HTMLElement>) => {
-    if (isDisabled) {
+    if (isDisabledComputed) {
       return;
     }
     if (selectable) {
@@ -122,63 +135,100 @@ export function useChip(props: ChipProps) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (Tag === 'div' && interactive && (e.key === 'Enter' || e.key === ' ')) {
+    if (componentTag === 'div' && interactive && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
       const fake = new MouseEvent('click', { bubbles: true });
       (e.currentTarget as HTMLElement).dispatchEvent(fake);
     }
-    if (closable && (e.key === 'Delete' || e.key === 'Backspace')) {
+    if (!isDisabledComputed && closable && (e.key === 'Delete' || e.key === 'Backspace')) {
       e.preventDefault();
-      onClose?.();
+      onClose?.(e);
     }
   };
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    if (isDisabled) {
+    if (isDisabledComputed) {
       return;
     }
-    onClose?.();
+    onClose?.(e);
   };
 
-  // A11y: dot-only necesita role válido para usar aria-label en un div no interactivo
-  const isDotOnly = isDot && !hasChildren;
-  const computedAriaLabel = isDotOnly ? ariaLabel : undefined;
+  const childrenAsText =
+    typeof children === 'string' || typeof children === 'number'
+      ? String(children).trim()
+      : Array.isArray(children)
+        ? children
+            .map((child) => (typeof child === 'string' || typeof child === 'number' ? String(child).trim() : ''))
+            .filter(Boolean)
+            .join(' ')
+        : '';
 
-  const computedRole = Tag === 'button' ? undefined : interactive ? 'button' : isDotOnly ? 'img' : undefined;
+  const hasReadableText = childrenAsText.length > 0;
+
+  const computedAriaLabel =
+    ariaLabel ?? (hasReadableText ? undefined : closable ? 'Chip item (closable)' : interactive ? 'Chip item' : 'Chip');
+
+  const closeButtonAriaLabel = hasReadableText ? `Remove ${childrenAsText}` : 'Remove chip';
+
+  const isDotOnly = isDot && !hasChildren;
+
+  const computedRole = componentTag === 'button' ? undefined : interactive ? 'button' : isDotOnly ? 'img' : undefined;
 
   const a11yProps =
-    Tag === 'button'
+    splitActions
+      ? {
+          role: 'group' as const,
+          'aria-disabled': isDisabledComputed || undefined
+        }
+      : componentTag === 'button'
       ? {
           type: 'button' as const,
-          'aria-disabled': isDisabled || undefined,
-          disabled: isDisabled || undefined,
+          'aria-disabled': isDisabledComputed || undefined,
+          disabled: isDisabledComputed || undefined,
           'aria-pressed': selectable ? isSelected : undefined
         }
       : {
           role: computedRole,
           tabIndex: interactive ? 0 : undefined,
-          'aria-disabled': isDisabled || undefined,
+          'aria-disabled': isDisabledComputed || undefined,
           'aria-pressed': selectable ? isSelected : undefined,
           onKeyDown: handleKeyDown
         };
 
+  const primaryActionProps = splitActions
+    ? {
+        type: 'button' as const,
+        onClick: handleActivate as React.MouseEventHandler<HTMLButtonElement>,
+        disabled: isDisabledComputed || undefined,
+        'aria-disabled': isDisabledComputed || undefined,
+        'aria-pressed': selectable ? isSelected : undefined,
+        'aria-label': computedAriaLabel
+      }
+    : undefined;
+
   return {
-    Tag,
+    componentTag,
     slots,
     isDot,
     hasChildren,
     isSelected,
     interactive,
+    splitActions,
     propsBase: {
       ...rest,
       ...a11yProps,
-      'aria-label': computedAriaLabel,
+      'aria-label': splitActions ? undefined : computedAriaLabel,
       'data-interactive': interactive ? 'true' : 'false',
-      onClick: interactive ? handleActivate : onClick
+      'data-disabled': isDisabledComputed ? 'true' : 'false',
+      onClick: splitActions ? undefined : interactive ? handleActivate : isDisabledComputed ? undefined : onClick
     },
+    primaryActionProps,
     pieces: { avatar, startContent, endContent, children },
     closable,
-    handleClose
+    isDisabled: isDisabledComputed,
+    handleClose,
+    closeIconSize: closeIconSizeBySize,
+    closeButtonAriaLabel
   };
 }
