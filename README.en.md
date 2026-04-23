@@ -204,14 +204,6 @@ This repository is for **educational purposes** and is fully open to collaborati
 
 📩 **Contact me directly or open an issue!** You're more than welcome.
 
-## 🥇 Contributors
-
-Special thanks to everyone who has contributed to making this project possible.
-
-<a href="https://github.com/Stack-and-Flow/design-system/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Stack-and-Flow/design-system&nocache=1" />
-</a>
-
 ## 📫 Contact
 
 <div align="center">
