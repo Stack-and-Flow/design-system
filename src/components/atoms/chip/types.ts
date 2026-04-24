@@ -301,9 +301,6 @@ export const chipVariants = cva(
         class:
           'text-[var(--color-red-700)] border-[var(--color-red-300)] [--chip-dot:var(--color-red-600)] dark:text-[var(--color-red-300)] dark:border-[var(--color-red-400)]'
       }
-
-      /* ----------------- SUCCESS / WARNING / DANGER ... (igual que tenías) */
-      // ...
     ],
 
     defaultVariants: {

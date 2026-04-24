@@ -203,7 +203,7 @@ export const WithAvatar: Story = {
           avatar: 'h-4 w-4 overflow-hidden rounded-full grid place-items-center'
         }}
         avatar={
-          <Icon name='user' size={16} className='text-[var(--color-accent)] dark:text-[var(--color-text-dark)]' />
+          <Icon name='user' size={16} className='text-(--color-accent) dark:text-(--color-text-dark)' />
         }
       >
         User
@@ -263,8 +263,16 @@ export const Stress: Story = {
     <div className='max-w-65 space-x-2'>
       <Chip
         closable={true}
-        startContent={<Icon aria-hidden={true} name='activity' />}
-        endContent={<Icon aria-hidden={true} name='x' />}
+        startContent={
+          <span aria-hidden={true}>
+            <Icon name='activity' />
+          </span>
+        }
+        endContent={
+          <span aria-hidden={true}>
+            <Icon name='x' />
+          </span>
+        }
       >
         Truncated: Very very very long label that should nicely
       </Chip>

@@ -1,10 +1,8 @@
-import clsx from 'clsx';
 import * as React from 'react';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '@/lib/utils';
 import type { ChipProps } from './types';
 import { chipVariants } from './types';
 
-const cn = (...v: any[]) => twMerge(clsx(v));
 const isText = (n: React.ReactNode) => typeof n === 'string' || typeof n === 'number';
 
 export function useChip(props: ChipProps) {
@@ -69,11 +67,6 @@ export function useChip(props: ChipProps) {
 
   const isDot = variant === 'dot';
   const hasChildren = hasText(children);
-  const hasStart = !!startContent || !!avatar;
-  const hasEnd = !!endContent;
-
-  const pieceCount =
-    (hasStart ? 1 : 0) + (hasEnd ? 1 : 0) + (hasChildren ? 1 : 0) + (isDot ? 1 : 0) + (closable ? 1 : 0);
 
   const iconBySize =
     size === 'sm'
@@ -90,13 +83,12 @@ export function useChip(props: ChipProps) {
     base: cn(
       baseClasses,
       'min-w-0',
-      pieceCount > 1 && 'gap-0.5',
       className,
       classNames?.base,
       interactive ? 'cursor-pointer' : 'cursor-auto',
       splitActions &&
         'focus-within:ring-2 focus-within:ring-[var(--color-accent)] dark:focus-within:ring-[var(--color-text-dark)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--surface-bg,white)]',
-      isSelected && 'ring-2 ring-offset-0 ring-inset ring-accent',
+      isSelected && 'ring-2 ring-offset-0 ring-inset ring-[var(--color-accent)] dark:ring-[var(--color-text-dark)]',
       iconBySize
     ),
     content: cn('truncate', classNames?.content),
@@ -117,7 +109,7 @@ export function useChip(props: ChipProps) {
       closeBtnBoxBySize,
       'text-current/80 hover:text-current',
       'hover:bg-transparent hover:ring-0',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] dark:focus-visible:ring-[var(--color-text-dark)]',
       'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,white)]',
       'disabled:cursor-not-allowed disabled:pointer-events-none disabled:text-current/45 disabled:opacity-100',
       classNames?.closeButton
