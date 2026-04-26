@@ -7,3 +7,8 @@ pre-commit:
       stage_fixed: true
     typecheck:
       run: "pnpm exec tsc --noEmit"
+pre-push:
+  parallel: false
+  commands:
+    test:
+      run: "pnpm exec vitest run --run"
