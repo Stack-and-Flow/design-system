@@ -74,10 +74,10 @@ export const buttonVariants = cva(
       },
       size: {
         // 44px minimum touch target per WCAG (Rule 10)
-        md: 'px-md h-11 fs-base tablet:fs-base-tablet',
-        lg: 'px-lg h-12 fs-h6 tablet:fs-h6-tablet',
+        md: 'px-md h-11 fs-base',
+        lg: 'px-lg h-12 fs-h6',
         // sm is intentionally compact — slightly below 44px minimum; use md for touch-critical UIs
-        sm: 'px-sm h-9 fs-small tablet:fs-small-tablet'
+        sm: 'px-sm h-9 fs-small'
       }
     },
     defaultVariants: {

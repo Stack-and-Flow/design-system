@@ -2,17 +2,20 @@
 
 > Canonical source: `src/components/atoms/button/Button.test.tsx`
 > Testing stack: **Vitest** + **@testing-library/react** + **@testing-library/user-event**
+> Test file: `ComponentName.test.tsx` (complete test suite in one file)
 
 ---
 
-## Two-layer strategy
+## Single-file strategy
 
-Every component has TWO test layers. Both are mandatory.
+Every component has ONE test file: `ComponentName.test.tsx`
 
-| Layer | Tool | What it tests | File |
-|-------|------|---------------|------|
-| **Hook** | `renderHook` | Pure logic — no DOM | `useComponent.ts` |
-| **Component** | `render` + `screen` + `userEvent` | Observable DOM behavior | `Component.tsx` |
+This file contains TWO test suites:
+
+| Suite | Tool | What it tests |
+|-------|------|---------------|
+| **Hook** | `renderHook` | Pure logic — no DOM |
+| **Component** | `render` + `screen` + `userEvent` | Observable DOM behavior |
 
 ### What to test
 - State values returned by the hook (disabled, isLoading, variant, etc.)
@@ -148,30 +151,13 @@ expect(screen.getByRole('button', { name: 'Blocked' })).toHaveAttribute('aria-di
 
 ---
 
-## Storybook play functions (visual interaction tests)
+## Storybook stories
 
-For interactive components, ALSO add a `play` function in the `.stories.tsx` file.
-These run in a real browser via Playwright, unlike Vitest which runs in jsdom.
+Stories are for visual documentation and design exploration — NOT for testing.
 
-```tsx
-import { expect, userEvent, within } from '@storybook/test';
-import type { Meta, StoryObj } from '@storybook/react';
-import { MyComponent } from './MyComponent';
-
-export const Interactive: StoryObj<typeof MyComponent> = {
-  args: { text: 'Click me' },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = canvas.getByRole('button', { name: /click me/i });
-
-    await expect(button).toBeInTheDocument();
-    await userEvent.click(button);
-    // assert result
-  }
-};
-```
-
-Run Storybook tests: `pnpm test-storybook`
+- NO `play` functions in stories
+- NO interaction testing in Storybook
+- ALL tests go in `ComponentName.test.tsx`
 
 ---
 
@@ -180,9 +166,6 @@ Run Storybook tests: `pnpm test-storybook`
 ```bash
 # Vitest (unit + hook tests)
 pnpm test
-
-# Storybook interaction tests (requires Storybook running)
-pnpm test-storybook
 ```
 
 ---
@@ -192,5 +175,5 @@ pnpm test-storybook
 - [ ] Hook tested with `renderHook` — all returned values and computed functions covered
 - [ ] Component tested with `render/screen/userEvent` — rendering, ARIA, interaction, disabled states
 - [ ] All required mocks declared BEFORE component imports
-- [ ] Interactive component has a `play` function in its story
+- [ ] All tests in `ComponentName.test.tsx`
 - [ ] `pnpm test` passes with no failures

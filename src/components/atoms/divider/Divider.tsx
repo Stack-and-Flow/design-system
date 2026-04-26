@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import type { FC } from 'react';
+import { cn } from '@/lib/utils';
 import type { DividerProps } from './types';
 import { useDivider } from './useDivider';
 

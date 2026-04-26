@@ -11,35 +11,10 @@ export const H2 = ({ children }) => (
 # Breakpoints & Spacing
 
 <div style={{ color: '#cccccc', marginBottom: '2rem' }}>
-  Responsive breakpoints and spacing scale for the <strong style={{ color: '#ffffff' }}>Stack-and-Flow Design System</strong>.
+  Official responsive breakpoints and spacing scale for the <strong style={{ color: '#ffffff' }}>Stack-and-Flow Design System</strong>.
 </div>
 
-<H2>Custom Breakpoints</H2>
-
-<div style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-  <div style={{ position: 'relative', height: '48px', display: 'flex', alignItems: 'center', fontSize: '14px', color: '#fff' }}>
-    <span style={{ width: '50px', color: '#888888' }}>0</span>
-    <div style={{ width: '100%', flex: 1, position: 'relative', height: '4px', background: '#172230', borderRadius: '2px' }}>
-      <div style={{ position: 'absolute', left: '0', width: '40%', height: '4px', zIndex: 2, background: '#ff0036', borderRadius: '2px' }}></div>
-      <div style={{ position: 'absolute', left: '0', width: '100%', height: '4px', zIndex: 1, background: '#172230', borderRadius: '2px' }}></div>
-    </div>
-    <span style={{ width: '50px', textAlign: 'right', color: '#888888' }}>∞</span>
-  </div>
-  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#888888', fontSize: '12px', paddingTop: '8px', paddingLeft: '50px', paddingRight: '20%' }}>
-    <span>mobile<br /><code style={{ color: '#cccccc' }}>0 – 899px</code></span>
-    <span>tablet<br /><code style={{ color: '#cccccc' }}>≥ 900px</code></span>
-    <span>desktop<br /><code style={{ color: '#cccccc' }}>≥ 1440px</code></span>
-  </div>
-</div>
-
-<div style={{ marginTop: '1.5rem', color: '#888888', fontSize: '14px', marginBottom: '3rem' }}>
-  <ul style={{ paddingLeft: '1.25rem', lineHeight: 2 }}>
-    <li><code style={{ color: '#cccccc' }}>--breakpoint-tablet</code>: <code style={{ color: '#ff335e' }}>900px</code></li>
-    <li><code style={{ color: '#cccccc' }}>--breakpoint-desktop</code>: <code style={{ color: '#ff335e' }}>1440px</code></li>
-  </ul>
-</div>
-
-<H2>Tailwind CSS Breakpoints</H2>
+<H2>Tailwind CSS Native Breakpoints</H2>
 
 <div style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
   <div style={{ position: 'relative', height: '48px', display: 'flex', alignItems: 'center', fontSize: '14px', color: '#fff' }}>
@@ -63,6 +38,11 @@ export const H2 = ({ children }) => (
 </div>
 
 <div style={{ marginTop: '1.5rem', color: '#888888', fontSize: '14px', marginBottom: '3rem' }}>
+  <p style={{ marginTop: 0, marginBottom: '0.75rem' }}>
+    The design system uses Tailwind's native responsive prefixes only: <code style={{ color: '#cccccc' }}>sm</code>,{' '}
+    <code style={{ color: '#cccccc' }}>md</code>, <code style={{ color: '#cccccc' }}>lg</code>,{' '}
+    <code style={{ color: '#cccccc' }}>xl</code>, and <code style={{ color: '#cccccc' }}>2xl</code>.
+  </p>
   <ul style={{ paddingLeft: '1.25rem', lineHeight: 2 }}>
     <li><code style={{ color: '#cccccc' }}>sm</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 640px)</code></li>
     <li><code style={{ color: '#cccccc' }}>md</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 768px)</code></li>

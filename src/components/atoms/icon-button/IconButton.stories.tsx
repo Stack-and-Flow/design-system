@@ -1,5 +1,5 @@
-import { fn } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
 import IconButton from './IconButton';
 
 /**
@@ -139,60 +139,12 @@ export const Light: Story = {
 export const RoundedShadow: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <IconButton
-        icon='menu'
-        size={12}
-        title='link'
-        variant='outlined'
-        rounded={true}
-        shadow={true}
-        onClick={fn()}
-      />
-      <IconButton
-        icon='menu'
-        size={16}
-        title='link'
-        variant='outlined'
-        rounded={true}
-        shadow={true}
-        onClick={fn()}
-      />
-      <IconButton
-        icon='menu'
-        size={22}
-        title='link'
-        variant='outlined'
-        rounded={true}
-        shadow={true}
-        onClick={fn()}
-      />
-      <IconButton
-        icon='menu'
-        size={28}
-        title='link'
-        variant='outlined'
-        rounded={true}
-        shadow={true}
-        onClick={fn()}
-      />
-      <IconButton
-        icon='menu'
-        size={34}
-        title='link'
-        variant='outlined'
-        rounded={true}
-        shadow={true}
-        onClick={fn()}
-      />
-      <IconButton
-        icon='menu'
-        size={40}
-        title='link'
-        variant='outlined'
-        rounded={true}
-        shadow={true}
-        onClick={fn()}
-      />
+      <IconButton icon='menu' size={12} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
+      <IconButton icon='menu' size={16} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
+      <IconButton icon='menu' size={22} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
+      <IconButton icon='menu' size={28} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
+      <IconButton icon='menu' size={34} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
+      <IconButton icon='menu' size={40} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
     </div>
   )
 };

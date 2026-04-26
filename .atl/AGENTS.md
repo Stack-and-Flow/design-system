@@ -21,7 +21,7 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 **Stack**: React 19 · TypeScript strict · Tailwind v4 `@theme` · Radix UI · CVA · Storybook 8 · Biome · Lefthook · Vite · pnpm
 
 **Available tooling**:
-- `compilot-cli` — scaffolds the 5-file component structure
+- `compilot-cli` — scaffolds the 6-file component structure
 - `pnpm run storybook` — starts Storybook with hot reload
 - `pnpm run test` — runs Vitest unit tests
 - `pnpm run test:coverage` — runs tests with coverage report
@@ -30,15 +30,16 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 
 ## Structure
 
-Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` with exactly 5 files:
+Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` with exactly 6 files:
 
 | File | Role |
 |------|------|
 | `ComponentName.tsx` | Presentational — JSX only, consumes the hook |
 | `useComponentName.ts` | Logic — state, effects, handlers, CVA class calls |
 | `types.ts` | Types + CVA variants |
+| `ComponentName.test.tsx` | Complete test suite (hook + component tests) |
+| `ComponentName.stories.tsx` | Storybook stories (documentation only, no tests) |
 | `index.ts` | Public API re-exports |
-| `ComponentName.stories.tsx` | Storybook stories |
 
 ---
 
@@ -48,10 +49,10 @@ Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` wi
 - Never `any` — use `unknown` or narrow properly
 - Never hardcode colors, spacing or fonts — use tokens from `src/styles/theme.css`
 - Use Tailwind token classes directly — NEVER `[var(--token)]` when the token exists in `@theme` (e.g. `text-brand-light`, `rounded-pill`, `bg-red-tint-subtle`)
+- `var()` is FORBIDDEN in component source files (`src/components/**/*.ts`, `src/components/**/*.tsx`)
+- If a token or mixed visual treatment does not exist, define it centrally in `src/styles/theme.css` or `src/styles/base.css` as a reusable token-backed utility/class, then consume that class from the component
 - If a token does not exist for a value, CREATE it in `theme.css` first — never use raw `rgba()`, hex, or px values inline
-- Exceptions where `var()` is acceptable (Tailwind cannot express these as utilities):
-  - `bg-gradient-*` — multi-stop gradient values (`--gradient-*` tokens)
-  - `shadow-glow-*` — multi-layer box-shadow values (`--glow-*` tokens)
+- `var()` is only acceptable inside the style system (`src/styles/theme.css`, `src/styles/base.css`) to define reusable utilities such as `bg-gradient-*`, `shadow-glow-*`, or semantic component helper classes
 - Token reference: `docs/DESIGN.md` — read it before building any component
 - Never modify `theme.css` without explicit user confirmation
 - Never add dependencies without explicit user confirmation

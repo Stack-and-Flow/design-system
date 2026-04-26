@@ -2,7 +2,7 @@
 name: component-contributor
 description: >
   Guides an AI agent through implementing a design system component from a GitHub issue spec.
-  Covers the full contributor workflow: onboarding → read spec → plan → implement (5-file pattern) → explain decisions → visual review.
+  Covers the full contributor workflow: onboarding → read spec → plan → implement (6-file pattern) → explain decisions → visual review.
   Trigger: When a contributor provides a GitHub issue URL or pastes a component spec and asks to implement it.
   Also delegable from sdd-apply when implementing a component as part of a larger SDD change.
 license: Apache-2.0
@@ -52,10 +52,11 @@ Return your result in the SDD return envelope format:
 Before touching the spec, make sure the contributor understands the stack they are about to work with. Ask them to confirm they are familiar with:
 
 1. **React + TypeScript strict** — `type` always, never `interface`, never `any`
-2. **Tailwind v4 `@theme`** — token classes only (`text-brand-light`, `bg-surface-dark`); never raw hex, never `[var(--token)]` when the token exists in `@theme`
+2. **Tailwind v4 `@theme`** — token classes only (`text-brand-light`, `bg-surface-dark`); never raw hex, never `[var(--token)]` when the token exists in `@theme`, and never `var()` inside component source files
 3. **CVA (class-variance-authority)** — all variants live in `types.ts`, nowhere else
-4. **The 5-file pattern** — each component has exactly: `types.ts`, `useComponentName.ts`, `ComponentName.tsx`, `ComponentName.stories.tsx`, `index.ts`
-5. **Storybook 8** — stories are the living documentation AND the test suite
+4. **The 6-file pattern** — each component has exactly: `types.ts`, `useComponentName.ts`, `ComponentName.tsx`, `ComponentName.test.tsx`, `ComponentName.stories.tsx`, `index.ts`
+5. **Storybook 8** — stories are the living documentation (not the test suite — tests live in `.test.tsx`)
+6. **Project story conventions** — autodocs behavior, action helper, and controls must match the repo's canonical stories exactly
 
 If the contributor is unfamiliar with any of these, briefly explain the concept before moving on. Do NOT assume knowledge — a contributor who copies code without understanding it is a liability, not an asset.
 
@@ -163,8 +164,9 @@ Before writing any file, present a clear plan to the contributor:
 1. `types.ts` — {X} props, {Y} CVA variants ({list variants})
 2. `useComponentName.ts` — {describe logic: state, handlers, aria}
 3. `ComponentName.tsx` — presentational, consumes hook
-4. `ComponentName.stories.tsx` — {N} stories: Default, Disabled, {variants}
-5. `index.ts` — re-exports
+4. `ComponentName.test.tsx` — complete component test suite (hook tests + component tests)
+5. `ComponentName.stories.tsx` — {N} stories: Default, Disabled, {variants}
+6. `index.ts` — re-exports
 
 ### Design decisions
 - Tokens used: {list tokens from theme.css}
@@ -195,7 +197,8 @@ Load these BEFORE writing the relevant file. They contain canonical patterns ext
 
 | Module | Path | Load when |
 |--------|------|-----------|
-| `testing` | `references/testing.md` | Writing any test file — Vitest or Storybook play function |
+| `testing` | `references/testing.md` | Writing any test file — Vitest tests in `.test.tsx` |
+| `stories` | `references/stories.md` | Writing or reviewing any `*.stories.tsx` file; Storybook autodocs/actions/controls conventions |
 | `html-extension` | `references/html-extension.md` | Component wraps a native HTML element (button, input, select, a, textarea) |
 | `radix-patterns` | `references/radix-patterns.md` | Component uses any `@radix-ui/*` primitive |
 | `tailwind-merge` | `references/tailwind-merge.md` | Component combines CVA output with conditional or external `className` |
@@ -205,6 +208,11 @@ Load these BEFORE writing the relevant file. They contain canonical patterns ext
 **Mandatory loads (always):**
 - `biome-rules` — load before writing any `.ts` or `.tsx` file
 - `html-extension` — load for any component that renders a native element
+
+**Mandatory story convention check:**
+- Before writing `types.ts` or `ComponentName.stories.tsx`, read the project `stories` reference if it exists.
+- If no dedicated `stories` reference exists, inspect at least ONE mature atom story already accepted in the repo and mirror its conventions exactly.
+- Do NOT invent Storybook conventions from generic knowledge.
 
 **Matching rules by component type:**
 
@@ -224,9 +232,9 @@ Load these BEFORE writing the relevant file. They contain canonical patterns ext
 
 ---
 
-## Phase 3 — Implement (5-file pattern)
+## Phase 3 — Implement (6-file pattern)
 
-Implement files in this order: `types.ts` → `useComponentName.ts` → `ComponentName.tsx` → `ComponentName.stories.tsx` → `index.ts`
+Implement files in this order: `types.ts` → `useComponentName.ts` → `ComponentName.tsx` → `ComponentName.test.tsx` → `ComponentName.stories.tsx` → `index.ts`
 
 After each file, explain what was done and why (Phase 4 runs inline).
 
@@ -234,9 +242,37 @@ After each file, explain what was done and why (Phase 4 runs inline).
 
 **Rules:**
 - ALL `type` definitions here — never `interface`
+- Before declaring a new public/shared prop type in `component/types.ts`, check `src/types/index.ts` first; reusable design-system types must live in `src/types`
+- Only keep types in `component/types.ts` when they are truly component-specific and not reusable across multiple components
 - ALL CVA variants here — never in `.tsx` or `.ts` hook files
-- JSDoc `/** @control select */` on every prop that needs a Storybook control
+- Every PUBLIC prop exposed in stories MUST have `@control` and `@default` (if applicable) JSDoc annotations
+- JSDoc format for Storybook controls:
+  ```typescript
+  /**
+   * @control controlType
+   * @default defaultValue
+   */
+  propName?: Type
+  ```
+- Props without defaults (e.g. callbacks, optional content) may omit `@default`
 - Import CVA from `class-variance-authority`
+- Never use `[var(--token)]` when an equivalent Tailwind utility exists in `@theme`
+- Never use `var()` directly in component source files; if Tailwind cannot express a token-backed visual treatment, define a reusable class/token in `src/styles/theme.css` or `src/styles/base.css` first
+
+**Available control types:**
+- `@control text` — freeform text input
+- `@control boolean` — toggle switch
+- `@control number` — numeric input
+- `@control range` — slider (specify min/max in description if needed)
+- `@control select` — dropdown for single selection (requires `options` defined separately or inferred from type)
+- `@control radio` — radio buttons for single selection
+- `@control inline-radio` — inline radio buttons
+- `@control check` — checkboxes for multiple selection
+- `@control inline-check` — inline checkboxes
+- `@control color` — color picker
+- `@control date` — date picker
+- `@control file` — file upload
+- `@control object` — JSON editor for complex objects
 
 ```typescript
 import { cva, type VariantProps } from 'class-variance-authority'
@@ -263,11 +299,19 @@ export const componentVariants = cva(
 )
 
 export type ComponentProps = VariantProps<typeof componentVariants> & {
-  /** @control text */
+  /**
+   * @control text
+   * @default Example
+   */
   label?: string
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   disabled?: boolean
-  /** Accessibility label for screen readers */
+  /**
+   * @control text
+   */
   ariaLabel?: string
 }
 ```
@@ -335,7 +379,51 @@ const Component: FC<ComponentProps> = (props) => {
 export default Component
 ```
 
-### File 4: `ComponentName.stories.tsx`
+### File 4: `ComponentName.test.tsx`
+
+**Rules:**
+- ALL tests here — both hook tests and component behavior tests
+- Must test: hook logic with `renderHook`, component rendering with `render/screen`, ARIA attributes, user interactions with `userEvent`, disabled states
+- All mocks declared BEFORE component imports
+- Never test internal CSS class strings
+- Load `references/testing.md` before writing this file
+
+```typescript
+import { renderHook } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
+import Component from './Component'
+import useComponent from './useComponent'
+
+// Mocks first
+vi.mock('lucide-react/dynamic', () => ({
+  DynamicIcon: () => null
+}))
+
+describe('useComponent — hook logic', () => {
+  it('returns default variant', () => {
+    const { result } = renderHook(() => useComponent({}))
+    expect(result.current.variant).toBe('default')
+  })
+})
+
+describe('Component — behavior', () => {
+  it('renders correctly', () => {
+    render(<Component label="Test" />)
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
+
+  it('calls onClick when clicked', async () => {
+    const handleClick = vi.fn()
+    render(<Component label="Click" onClick={handleClick} />)
+    await userEvent.click(screen.getByRole('button'))
+    expect(handleClick).toHaveBeenCalledTimes(1)
+  })
+})
+```
+
+### File 5: `ComponentName.stories.tsx`
 
 **Rules:**
 - English only — titles, descriptions, arg labels
@@ -343,6 +431,12 @@ export default Component
 - Mandatory `args` on `Default` story — must NOT hardcode props that override `defaultVariants`
 - Always include: `Default`, `Disabled`, one story per key variant
 - Each story demonstrates ONE axis only — no mixed props across variants in the same story
+- If `autodocs` is enabled for the project, do NOT define manual `argTypes` in `meta` or individual stories unless the project reference explicitly allows an exception
+- Event handlers in stories must use `@storybook/addon-actions` (`action(...)`) — never invent a different helper
+- Never use inline no-op handlers such as `() => undefined` in story args
+- Token styling in stories must use Tailwind utility classes or reusable semantic classes from the style system; do not bypass them with `[var(--token)]` or inline `var()` in story/component source
+- Story conventions must match the canonical repo pattern for autodocs, controls, and actions
+- NO `play` functions — interaction testing belongs in `.test.tsx`
 
 ```typescript
 import type { Meta, StoryObj } from '@storybook/react'
@@ -377,12 +471,11 @@ export const Disabled: Story = {
 }
 ```
 
-### File 5: `index.ts`
+### File 6: `index.ts`
 
 ```typescript
-import ComponentName from './ComponentName'
+export { ComponentName } from './ComponentName'
 export * from './types'
-export default ComponentName
 ```
 
 ---
@@ -457,10 +550,11 @@ Fix all CRITICAL and MAJOR before marking the component complete.
 ## Checklist before finishing
 
 **Structure**
-- [ ] `types.ts` — all props typed, all CVA variants defined, JSDoc controls present
+- [ ] `types.ts` — all props typed, all CVA variants defined, full JSDoc present, JSDoc controls present where needed
 - [ ] `useComponentName.ts` — all logic, no JSX, returns typed object
 - [ ] `ComponentName.tsx` — only JSX, consumes hook, no logic
-- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, English, description present, no overriding defaultVariants in Default args
+- [ ] `ComponentName.test.tsx` — complete test suite (hook tests with renderHook + component tests with render/screen/userEvent)
+- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, English, description present, no overriding defaultVariants in Default args, canonical autodocs/actions conventions followed, NO play functions
 - [ ] `index.ts` — re-exports correct
 
 **Tokens & theming**

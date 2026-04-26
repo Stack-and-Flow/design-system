@@ -149,6 +149,12 @@ export default Button;
 
 Usamos Tailwind v4 con configuraciones `@theme` definidas en `src/styles/theme.css`.
 
+### Breakpoints responsivos (Tailwind only)
+
+- **Fuente de verdad**: usa únicamente prefijos nativos de Tailwind: `sm`, `md`, `lg`, `xl`, `2xl`.
+- **Prohibido** introducir o reutilizar aliases custom de breakpoints (por ejemplo `tablet`, `desktop`).
+- Si un ajuste responsive requiere un corte intermedio y no hay evidencia fuerte en contra, usa `md` como punto de partida conservador.
+
 - **OBLIGATORIO**: DEBES usar las propiedades CSS personalizadas del design system (tokens) mediante clases de Tailwind.
 - **SIN HARDCODING**: Nunca escribas colores en duro (ej: `#FF0000`), espaciados (`16px`, `1rem`) ni fuentes en estilos inline o clases Tailwind arbitrarias (ej: `text-[#fce9ea]`).
 - Usa las clases predefinidas: `text-text-dark`, `bg-secondary`, `gap-sm`, `fs-h1`, etc.

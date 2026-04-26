@@ -2,7 +2,13 @@ pre-commit:
   parallel: false
   commands:
     biome:
-      glob: "**/*.{ts,tsx,js,jsx,css}"
-      run: "pnpm exec biome check --write --staged {staged_files}"
+      glob: "*.{ts,tsx,js,jsx,json,css}"
+      run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
     typecheck:
       run: "pnpm exec tsc --noEmit"
+pre-push:
+  parallel: false
+  commands:
+    test:
+      run: "pnpm exec vitest run --run"

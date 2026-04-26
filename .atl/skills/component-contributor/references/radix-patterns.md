@@ -60,7 +60,7 @@ const Dropdown: FC<DropdownProps> = ({ ...props }) => {
           role='menu'
           aria-labelledby={accessibleLabelId}
           className={cn(
-            'min-w-[8rem] rounded-md border p-1',
+            'min-w-32 rounded-md border p-1',
             'bg-surface-light dark:bg-surface-dark',
             // Radix animation data attributes — use these, not custom state
             'data-[state=closed]:animate-out data-[state=open]:animate-in',
@@ -98,7 +98,7 @@ Key decisions:
     'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm',
     'transition-[background,color] duration-150 ease-[ease]',
     'hover:bg-white-tint-mid',
-    'focus-visible:outline-none focus-visible:shadow-[var(--glow-focus-dark)]'
+    'focus-visible:outline-none focus-visible:shadow-(--glow-focus-dark)'
   )}
   onClick={element.onClick}
 >
@@ -224,6 +224,6 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 - [ ] Radix imported as namespace alias (`* as XxxPrimitive`)
 - [ ] Floating content wrapped in `Portal`
 - [ ] Trigger uses `asChild={true}`
-- [ ] Focus ring uses `focus-visible:shadow-[var(--glow-focus-dark)]` — no outline
+- [ ] Focus ring uses reusable glow classes such as `focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark` — no outline
 - [ ] Animations use `data-[state=open/closed]` attributes
 - [ ] All open/close logic lives in the hook

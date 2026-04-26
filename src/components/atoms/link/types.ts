@@ -47,9 +47,9 @@ export const linkVariants = cva(
         ]
       },
       size: {
-        md: 'px-md fs-base tablet:fs-base-tablet',
-        lg: 'px-lg fs-h6 tablet:fs-h6-tablet',
-        sm: 'px-sm fs-small tablet:fs-small-tablet'
+        md: 'px-md fs-base',
+        lg: 'px-lg fs-h6',
+        sm: 'px-sm fs-small'
       }
     },
     defaultVariants: {

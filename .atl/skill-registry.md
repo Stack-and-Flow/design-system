@@ -46,17 +46,20 @@ Each skill has a "When Delegated by SDD Orchestrator" section that defines:
 ### component-contributor
 **Load when**: contributor shares a GitHub issue URL or spec and asks to implement a component.
 
-**Workflow**: Phase 0 (onboarding) → Phase 1 (read spec) → Phase 1.5 (spec review — critique before committing) → Phase 2 (plan + confirm) → Phase 3 (implement 5 files) → Phase 4 (explain inline) → Phase 5 (visual review)
+**Workflow**: Phase 0 (onboarding) → Phase 1 (read spec) → Phase 1.5 (spec review — critique before committing) → Phase 2 (plan + confirm) → Phase 3 (implement 6 files) → Phase 4 (explain inline) → Phase 5 (visual review)
 
 **When delegated from SDD**: skip Phase 0, start from Phase 1, return SDD envelope.
 
-**File order**: `types.ts` → `useComponentName.ts` → `ComponentName.tsx` → `ComponentName.stories.tsx` → `index.ts`
+**File order**: `types.ts` → `useComponentName.ts` → `ComponentName.tsx` → `ComponentName.test.tsx` → `ComponentName.stories.tsx` → `index.ts`
 
 **Non-negotiables**:
 - CVA variants ONLY in `types.ts`
 - Logic ONLY in `useComponentName.ts`
 - JSX ONLY in `ComponentName.tsx`
-- Tokens from `theme.css` only — no hardcoded values, no `[var(--token)]` when token exists in `@theme`
+- Complete tests in `ComponentName.test.tsx` — hook tests + component tests, NO play functions in stories
+- Stories in `ComponentName.stories.tsx` — documentation only, use `@storybook/addon-actions`, NO play functions
+- Tokens from the style system only (`theme.css` / `base.css`) — no hardcoded values, no `[var(--token)]` when token exists in `@theme`, and no direct `var()` in component source files
+- Reusable/systemic prop types belong in `src/types`; `component/types.ts` is only for component-specific types and CVA contracts
 - `type` always, never `interface`, never `any`
 - Explain every decision after each file
 - `Default` story args must NOT override `defaultVariants`
