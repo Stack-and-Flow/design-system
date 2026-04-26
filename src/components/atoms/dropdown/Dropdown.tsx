@@ -112,7 +112,7 @@ const Dropdown: FC<DropdownProps> = ({ ...props }) => {
   return (
     <DropdownMenuPrimitive.Root>
       <DropdownMenuPrimitive.Trigger asChild={true}>
-        <div>{props.children}</div>
+        <button type='button'>{props.children}</button>
       </DropdownMenuPrimitive.Trigger>
       <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content

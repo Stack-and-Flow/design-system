@@ -1,5 +1,4 @@
-import { CalendarDate } from '@internationalized/date';
-import { startOfWeek } from '@internationalized/date';
+import { CalendarDate, startOfWeek } from '@internationalized/date';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useEffect, useState } from 'react';
 import { Calendar } from './index';
@@ -368,6 +367,7 @@ export const Outlined: Story = {
 export const WithSelectedDate: Story = {
   args: {
     selectedDate: new Date(2025, 7, 19),
+    variant: 'outlined',
     size: 'md',
     show: true,
     disabled: false,
@@ -464,6 +464,7 @@ export const WithCalendarDate: Story = {
           onDateChange={() => {
             /* noop */
           }}
+          variant='outlined'
           size='md'
           show={true}
           locale={locale.startsWith('es') ? 'es' : 'en'}
@@ -508,18 +509,24 @@ export const VisibleMonths: Story = {
   render: () => {
     const [visibleMonths, setVisibleMonths] = useState<number>(2);
     const [isDark, setIsDark] = useState(() => {
-      if (typeof document !== 'undefined') {
-        return document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
+      if (typeof document !== 'undefined' && document.documentElement) {
+        return (
+          document.documentElement.classList.contains('dark') ||
+          document.documentElement.getAttribute('data-theme') === 'dark'
+        );
       }
       return false;
     });
     useEffect(() => {
       const handler = () => {
-        setIsDark(document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark');
+        setIsDark(
+          document.documentElement.classList.contains('dark') ||
+            document.documentElement.getAttribute('data-theme') === 'dark'
+        );
       };
       window.addEventListener('themechange', handler);
       const observer = new MutationObserver(handler);
-      observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
       return () => {
         window.removeEventListener('themechange', handler);
         observer.disconnect();
@@ -529,6 +536,7 @@ export const VisibleMonths: Story = {
     const textColor = isDark ? '#fff' : '#222';
     return (
       <div
+        className='calendar-no-motion'
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -541,6 +549,7 @@ export const VisibleMonths: Story = {
           boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
         }}
       >
+        <style>{'.calendar-no-motion [role="application"] { animation: none !important; }'}</style>
         <label htmlFor='visible-months-select' style={{ fontWeight: 'bold' }}>
           Select number of visible months:
         </label>
@@ -613,14 +622,9 @@ export const HighlightedDates: Story = {
   render: () => {
     function getContrastText(bgColor: string): string {
       if (!bgColor) {
-        return '#222';
+        return '#111827';
       }
-      const hex = bgColor.replace('#', '');
-      const r = parseInt(hex.substring(0, 2), 16);
-      const g = parseInt(hex.substring(2, 4), 16);
-      const b = parseInt(hex.substring(4, 6), 16);
-      const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-      return yiq >= 128 ? '#222' : '#fff';
+      return '#111827';
     }
 
     const today = new Date();
@@ -639,7 +643,12 @@ export const HighlightedDates: Story = {
       }
     ];
 
-    return <Calendar highlightedDates={highlightedDates} show={true} size='md' variant='filled' />;
+    return (
+      <div className='calendar-no-motion'>
+        <style>{'.calendar-no-motion [role="application"] { animation: none !important; }'}</style>
+        <Calendar highlightedDates={highlightedDates} show={true} size='md' variant='filled' />
+      </div>
+    );
   },
   parameters: {
     docs: {
@@ -654,19 +663,25 @@ export const Sizes: Story = {
   render: () => {
     const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
     const [isDark, setIsDark] = useState(() => {
-      if (typeof document !== 'undefined') {
-        return document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
+      if (typeof document !== 'undefined' && document.documentElement) {
+        return (
+          document.documentElement.classList.contains('dark') ||
+          document.documentElement.getAttribute('data-theme') === 'dark'
+        );
       }
       return false;
     });
     useEffect(() => {
       const handler = () => {
-        setIsDark(document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark');
+        setIsDark(
+          document.documentElement.classList.contains('dark') ||
+            document.documentElement.getAttribute('data-theme') === 'dark'
+        );
       };
       window.addEventListener('themechange', handler);
 
       const observer = new MutationObserver(handler);
-      observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
       return () => {
         window.removeEventListener('themechange', handler);
         observer.disconnect();
@@ -676,6 +691,7 @@ export const Sizes: Story = {
     const textColor = isDark ? '#fff' : '#222';
     return (
       <div
+        className='calendar-no-motion'
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -688,6 +704,7 @@ export const Sizes: Story = {
           boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
         }}
       >
+        <style>{'.calendar-no-motion [role="application"] { animation: none !important; }'}</style>
         <label htmlFor='size-select' style={{ fontWeight: 'bold' }}>
           Select calendar size:
         </label>
@@ -768,18 +785,24 @@ export const WithRadius: Story = {
   render: () => {
     const [radius, setRadius] = useState<CalendarRadius>('md');
     const [isDark, setIsDark] = useState(() => {
-      if (typeof document !== 'undefined') {
-        return document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark';
+      if (typeof document !== 'undefined' && document.documentElement) {
+        return (
+          document.documentElement.classList.contains('dark') ||
+          document.documentElement.getAttribute('data-theme') === 'dark'
+        );
       }
       return false;
     });
     useEffect(() => {
       const handler = () => {
-        setIsDark(document.body.classList.contains('dark') || document.body.getAttribute('data-theme') === 'dark');
+        setIsDark(
+          document.documentElement.classList.contains('dark') ||
+            document.documentElement.getAttribute('data-theme') === 'dark'
+        );
       };
       window.addEventListener('themechange', handler);
       const observer = new MutationObserver(handler);
-      observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
       return () => {
         window.removeEventListener('themechange', handler);
         observer.disconnect();
@@ -789,6 +812,7 @@ export const WithRadius: Story = {
     const textColor = isDark ? '#fff' : '#222';
     return (
       <div
+        className='calendar-no-motion'
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -801,6 +825,7 @@ export const WithRadius: Story = {
           boxShadow: isDark ? '0 2px 16px #0006' : '0 2px 16px #0001'
         }}
       >
+        <style>{'.calendar-no-motion [role="application"] { animation: none !important; }'}</style>
         <label htmlFor='radius-select' style={{ fontWeight: 'bold' }}>
           Select border radius:
         </label>
