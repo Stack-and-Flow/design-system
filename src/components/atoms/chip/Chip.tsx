@@ -25,22 +25,12 @@ export const Chip = React.forwardRef<ChipElement, ChipProps>((props, ref) => {
 
   const content = (
     <>
-      {avatar && (
-        <span
-          className={[
-            slots.avatar,
-            'relative shrink-0 overflow-hidden rounded-full grid place-items-center',
-            'h-[calc(var(--chip-h)-2px)] w-[calc(var(--chip-h)-2px)]',
-            '*:origin-center [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>svg]:h-full [&>svg]:w-full',
-            '*:scale-(--avatar-scale,1)'
-          ].join(' ')}
-        >
-          {avatar}
-        </span>
-      )}
+      {avatar && <span className={slots.avatar}>{avatar}</span>}
 
       {startContent && (
-        <span className='inline-flex items-center shrink-0 ltr:mr-0.5 rtl:ml-0.5 [&_svg]:align-middle'>{startContent}</span>
+        <span className='inline-flex items-center shrink-0 ltr:mr-0.5 rtl:ml-0.5 [&_svg]:align-middle'>
+          {startContent}
+        </span>
       )}
 
       {isDot && <span className={slots.dot} aria-hidden='true' />}
@@ -48,7 +38,9 @@ export const Chip = React.forwardRef<ChipElement, ChipProps>((props, ref) => {
       {hasChildren && <span className={slots.content}>{children}</span>}
 
       {endContent && (
-        <span className='inline-flex items-center shrink-0 ltr:ml-0.5 rtl:mr-0.5 [&_svg]:align-middle'>{endContent}</span>
+        <span className='inline-flex items-center shrink-0 ltr:ml-0.5 rtl:mr-0.5 [&_svg]:align-middle'>
+          {endContent}
+        </span>
       )}
     </>
   );
@@ -56,6 +48,8 @@ export const Chip = React.forwardRef<ChipElement, ChipProps>((props, ref) => {
   return (
     <>
       {componentTag === 'button' ? (
+        // The forwarded ref targets either a div or button depending on hook output.
+        // This narrowing is required because JSX ref props cannot express the runtime branch union directly.
         <button ref={ref as React.Ref<HTMLButtonElement>} className={slots.base} {...propsBase}>
           {content}
           {closable && (
@@ -71,6 +65,7 @@ export const Chip = React.forwardRef<ChipElement, ChipProps>((props, ref) => {
           )}
         </button>
       ) : (
+        // Same rationale as above: the forwarded ref is narrowed to the concrete rendered element for this branch.
         <div ref={ref as React.Ref<HTMLDivElement>} className={slots.base} {...propsBase}>
           {splitActions ? (
             <button className={slots.actionButton} {...primaryActionProps}>

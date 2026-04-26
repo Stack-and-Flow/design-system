@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Check, Trash2 } from 'lucide-react';
 import React from 'react';
@@ -22,26 +23,15 @@ const meta: Meta<typeof Chip> = {
   title: 'Atoms/Chip',
   component: Chip,
   parameters: {
-    docs: { autodocs: true }
+    docs: {
+      autodocs: true,
+      description: {
+        component:
+          'Chip is a compact element for statuses, filters, labels, and quick actions. It supports visual variants, optional media/icon slots, selectable state, and closable interactions with accessible split-actions markup when needed.'
+      }
+    }
   },
-  tags: ['autodocs'],
-  argTypes: {
-    color: { control: 'select', options: ['primary', 'secondary', 'success', 'warning', 'danger'] },
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    variant: { control: 'select', options: ['solid', 'bordered', 'light', 'flat', 'faded', 'shadow', 'dot'] },
-    radius: { control: 'select', options: ['none', 'sm', 'md', 'lg', 'full'] },
-    animation: { control: 'select', options: ['default', 'pulse', 'bounce', 'ping'] },
-    as: { control: 'select', options: ['div', 'button'] },
-    selectable: { control: 'boolean' },
-    selected: { control: 'boolean' },
-    defaultSelected: { control: 'boolean' },
-    closable: { control: 'boolean' },
-    onClose: { action: 'onClose' },
-    onSelectedChange: { action: 'onSelectedChange' }
-  },
-  args: {
-    onClick: undefined
-  }
+  tags: ['autodocs']
 };
 export default meta;
 
@@ -49,21 +39,7 @@ type Story = StoryObj<typeof Chip>;
 
 export const Default: Story = {
   args: {
-    children: 'Chip',
-    color: 'primary',
-    variant: 'solid',
-    size: 'md',
-    animation: 'default',
-    as: 'div',
-    selectable: false,
-    closable: false,
-    onClick: undefined
-  },
-  parameters: {
-    actions: { disable: true }
-  },
-  argTypes: {
-    onClick: { table: { disable: true }, control: false }
+    children: 'Chip'
   }
 };
 
@@ -143,7 +119,7 @@ export const StartEndContent: Story = {
     children: 'Status',
     color: 'primary',
     startContent: <Trash2 />,
-    endContent: <Icon name='x' size={12} className='text-current dark:text-current' />
+    endContent: <Icon name='x' className='h-3 w-3 text-current dark:text-current' />
   }
 };
 
@@ -155,10 +131,7 @@ export const Clickable: Story = {
   args: {
     children: 'Clickable',
     as: 'button',
-    onClick: () => undefined
-  },
-  argTypes: {
-    onClick: { action: 'onClick' }
+    onClick: action('chip.click')
   }
 };
 
@@ -170,7 +143,8 @@ export const SelectableUncontrolled: Story = {
   args: {
     children: 'Toggle me',
     selectable: true,
-    defaultSelected: false
+    defaultSelected: false,
+    onSelectedChange: action('chip.selected-change')
   }
 };
 
@@ -183,7 +157,7 @@ export const SelectableControlled: Story = {
         selectable={true}
         selected={sel}
         onSelectedChange={setSel}
-        startContent={sel ? <Check size={16} /> : null}
+        startContent={sel ? <Check className='h-4 w-4' /> : null}
       >
         {sel ? 'Selected' : 'Not selected'}
       </Chip>
@@ -191,20 +165,17 @@ export const SelectableControlled: Story = {
   }
 };
 
-/** Avatar al inicio (usa tu componente Avatar) */
+/** Avatar at the start using Avatar component. */
 export const WithAvatar: Story = {
   render: () => (
     <div className='flex items-center gap-4'>
-      {/* Forzamos el slot avatar a 16px y recortamos */}
-      <Chip avatar={<Avatar src='/images/logo-dark-background.png' alt='EG' size='sm' />}>EGDEV</Chip>
+      <Chip avatar={<Avatar src='/images/logo-only.svg' alt='EG' size='sm' />}>EGDEV</Chip>
 
       <Chip
         classNames={{
           avatar: 'h-4 w-4 overflow-hidden rounded-full grid place-items-center'
         }}
-        avatar={
-          <Icon name='user' size={16} className='text-(--color-accent) dark:text-(--color-text-dark)' />
-        }
+        avatar={<Icon name='user' className='h-4 w-4 text-primary dark:text-text-dark' />}
       >
         User
       </Chip>
@@ -212,9 +183,9 @@ export const WithAvatar: Story = {
       <Chip
         color='primary'
         classNames={{ avatar: 'h-4 w-4 overflow-hidden rounded-full' }}
-        avatar={<div className='h-4 w-4 rounded-full bg-accent text-white grid place-items-center text-[10px]'>A</div>}
+        avatar={<div className='grid h-4 w-4 place-items-center rounded-full bg-primary text-xs text-text-dark'>A</div>}
       >
-        Andrés
+        Andrew
       </Chip>
     </div>
   )
@@ -240,20 +211,13 @@ export const WithClassNamesOverrides: Story = {
   args: {
     children: 'Custom Slots',
     classNames: {
-      base: 'bg-blue-700 text-white hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-800',
+      base: 'bg-primary text-text-dark hover:bg-primary-hover focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
       content: 'tracking-wide',
-      closeButton: 'bg-white/10 hover:bg-white/20'
+      closeButton: 'bg-white-tint-high hover:bg-white-tint-strong'
     },
     closable: true,
     animation: 'bounce',
-    as: 'div',
-    onClick: undefined
-  },
-  parameters: {
-    actions: { disable: true }
-  },
-  argTypes: {
-    onClick: { table: { disable: true }, control: false }
+    as: 'div'
   }
 };
 
@@ -292,12 +256,8 @@ export const ClosableAndClickable: Story = {
   args: {
     children: 'Closable + click',
     closable: true,
-    onClose: () => undefined,
-    onClick: () => undefined
-  },
-  argTypes: {
-    onClick: { action: 'onClick' },
-    onClose: { action: 'onClose' }
+    onClose: action('chip.close'),
+    onClick: action('chip.click')
   }
 };
 
@@ -306,10 +266,7 @@ export const DisabledAndClosable: Story = {
     children: 'Disabled + closable',
     closable: true,
     disabled: true,
-    onClose: () => undefined
-  },
-  argTypes: {
-    onClose: { action: 'onClose' }
+    onClose: action('chip.close')
   }
 };
 
@@ -326,11 +283,7 @@ export const ButtonAndClosable: Story = {
     children: 'Button + closable',
     as: 'button',
     closable: true,
-    onClose: () => undefined,
-    onClick: () => undefined
-  },
-  argTypes: {
-    onClick: { action: 'onClick' },
-    onClose: { action: 'onClose' }
+    onClose: action('chip.close'),
+    onClick: action('chip.click')
   }
 };

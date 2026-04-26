@@ -22,15 +22,15 @@ export const chipVariants = cva(
       // ⬇️ Añadimos la custom prop --chip-h para poder usarla en el wrapper del avatar
       size: {
         sm: [
-          'h-5 px-1 gap-0.5 fs-small tablet:fs-small-tablet',
+          'h-5 px-1 gap-0.5 fs-small',
           '[--chip-h:theme(spacing.5)]' // 20px
         ].join(' '),
         md: [
-          'h-6 px-1.5 gap-0.5 fs-base tablet:fs-base-tablet',
+          'h-6 px-1.5 gap-0.5 fs-base',
           '[--chip-h:theme(spacing.6)]' // 24px
         ].join(' '),
         lg: [
-          'h-7 px-2 gap-1 fs-h6 tablet:fs-h6-tablet',
+          'h-7 px-2 gap-1 fs-h6',
           '[--chip-h:theme(spacing.7)]' // 28px
         ].join(' ')
       },

@@ -153,6 +153,11 @@
   --color-amber: #fbbf24;
   --color-amber-hover: #ffd700;
 
+  /* ── Chip sizing tokens ───────────────────────────────────────── */
+  --size-chip-avatar-sm: 18px;
+  --size-chip-avatar-md: 22px;
+  --size-chip-avatar-lg: 26px;
+
   /* ── Glow / Shadow ───────────────────────────────────────────── */
   --glow-base: 0 4px 20px rgba(219, 20, 60, 0.15); /* Light */
   --glow-active: 0 8px 30px rgba(219, 20, 60, 0.3); /* Light */
@@ -184,6 +189,39 @@
   /* Glow de botón secondary — Light: borde sutil + sombra suave */
   --glow-btn-secondary-light: 0 0 0 1px rgba(219, 20, 60, 0.35), 0 2px 8px rgba(219, 20, 60, 0.12);
   --glow-btn-secondary-hover-light: 0 0 0 1px rgba(219, 20, 60, 0.55), 0 4px 12px rgba(219, 20, 60, 0.18);
+
+  /* Glow de chip shadow variants */
+  --glow-chip-primary-light:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-primary) 26%, transparent);
+  --glow-chip-primary-hover-light:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-primary) 34%, transparent);
+  --glow-chip-primary:
+    0 1px 2px rgba(0, 0, 0, 0.28), 0 3px 9px color-mix(in srgb, var(--color-primary) 22%, transparent);
+  --glow-chip-primary-hover:
+    0 2px 4px rgba(0, 0, 0, 0.32), 0 5px 12px color-mix(in srgb, var(--color-primary) 30%, transparent);
+
+  --glow-chip-secondary-light:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-surface-raised-light) 24%, transparent);
+  --glow-chip-secondary-hover-light:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-surface-raised-light) 32%, transparent);
+  --glow-chip-secondary:
+    0 1px 2px rgba(0, 0, 0, 0.28), 0 3px 9px color-mix(in srgb, var(--color-surface-raised-dark) 28%, transparent);
+  --glow-chip-secondary-hover:
+    0 2px 4px rgba(0, 0, 0, 0.32), 0 5px 12px color-mix(in srgb, var(--color-surface-raised-dark) 36%, transparent);
+
+  --glow-chip-success: 0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-green) 24%, transparent);
+  --glow-chip-success-hover:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-green) 32%, transparent);
+
+  --glow-chip-warning:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-yellow) 24%, transparent);
+  --glow-chip-warning-hover:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-yellow) 32%, transparent);
+
+  --glow-chip-danger:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-red-600) 28%, transparent);
+  --glow-chip-danger-hover:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-red-600) 36%, transparent);
 
   /* Glow de focus ring */
   --glow-focus-dark: 0 0 0 3px rgba(255, 0, 54, 0.4);
@@ -250,16 +288,16 @@
   --text-xs: 0.75rem; /* 12px — badges, tags micro */
   --text-code: 93%; /* relativo — code blocks */
 
-  /* Tamaños tablet */
-  --text-display-tablet: 2.75rem;
-  --text-h1-tablet: 2.4rem;
-  --text-h2-tablet: 2rem;
-  --text-h3-tablet: 1.75rem;
-  --text-h4-tablet: 1.375rem;
-  --text-h5-tablet: 1.125rem;
-  --text-h6-tablet: 1rem;
-  --text-body-tablet: 0.9375rem;
-  --text-small-tablet: 0.8125rem;
+  /* Tamaños compactos (base < md) */
+  --text-display-compact: 2.75rem;
+  --text-h1-compact: 2.4rem;
+  --text-h2-compact: 2rem;
+  --text-h3-compact: 1.75rem;
+  --text-h4-compact: 1.375rem;
+  --text-h5-compact: 1.125rem;
+  --text-h6-compact: 1rem;
+  --text-body-compact: 0.9375rem;
+  --text-small-compact: 0.8125rem;
 
   /* Line heights */
   --leading-tight: 1.1;

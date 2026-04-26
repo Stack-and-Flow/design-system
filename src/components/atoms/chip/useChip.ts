@@ -72,10 +72,23 @@ export function useChip(props: ChipProps) {
     size === 'sm'
       ? '[&_svg]:h-3.5 [&_svg]:w-3.5'
       : size === 'lg'
-        ? '[&_svg]:h-[18px] [&_svg]:w-[18px]'
+        ? '[&_svg]:h-5 [&_svg]:w-5'
         : '[&_svg]:h-4 [&_svg]:w-4';
 
-  const closeBtnBoxBySize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-[18px] w-[18px]' : 'h-4 w-4';
+  const avatarSizeClass = size === 'sm' ? 'chip-avatar-sm' : size === 'lg' ? 'chip-avatar-lg' : 'chip-avatar-md';
+
+  const dotColorClass =
+    color === 'secondary'
+      ? 'chip-dot-secondary'
+      : color === 'success'
+        ? 'chip-dot-success'
+        : color === 'warning'
+          ? 'chip-dot-warning'
+          : color === 'danger'
+            ? 'chip-dot-danger'
+            : 'chip-dot-primary';
+
+  const closeBtnBoxBySize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
 
   const closeIconSizeBySize: 10 | 12 | 14 = size === 'sm' ? 10 : size === 'lg' ? 14 : 12;
 
@@ -85,33 +98,31 @@ export function useChip(props: ChipProps) {
       'min-w-0',
       className,
       classNames?.base,
-      interactive ? 'cursor-pointer' : 'cursor-auto',
-      splitActions &&
-        'focus-within:ring-2 focus-within:ring-[var(--color-accent)] dark:focus-within:ring-[var(--color-text-dark)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--surface-bg,white)]',
-      isSelected && 'ring-2 ring-offset-0 ring-inset ring-[var(--color-accent)] dark:ring-[var(--color-text-dark)]',
+      interactive ? 'cursor-pointer min-h-11 min-w-11' : 'cursor-auto',
+      splitActions && 'focus-within:shadow-glow-focus-light dark:focus-within:shadow-glow-focus-dark',
+      isSelected && 'ring-2 ring-offset-0 ring-inset ring-primary dark:ring-brand-dark',
       iconBySize
     ),
     content: cn('truncate', classNames?.content),
-    dot: cn('inline-block w-2 h-2 rounded-full shrink-0 bg-[var(--chip-dot)]', classNames?.dot),
-    avatar: cn('shrink-0 ltr:mr-px rtl:ml-px', classNames?.avatar),
+    dot: cn('inline-block w-2 h-2 rounded-full shrink-0', dotColorClass, classNames?.dot),
+    avatar: cn('chip-avatar-media shrink-0 ltr:mr-px rtl:ml-px', avatarSizeClass, classNames?.avatar),
 
     actionButton: cn(
-      'inline-flex min-w-0 flex-1 items-center justify-center gap-0.5 rounded-inherit bg-transparent p-0 m-0 border-0 text-inherit',
-      'focus-visible:outline-none transition-transform duration-200 ease-in-out active:translate-y-[1px] active:scale-[0.985]',
-      'disabled:cursor-not-allowed disabled:opacity-100',
+      'inline-flex min-w-0 min-h-11 min-w-11 flex-1 items-center justify-center gap-0.5 rounded-inherit bg-transparent p-0 m-0 border-0 text-inherit',
+      'focus-visible:outline-none transition-transform duration-200 ease-in-out active:translate-y-px active:scale-95',
+      'disabled:cursor-not-allowed disabled:opacity-40',
       classNames?.actionButton
     ),
 
     closeButton: cn(
-      'inline-flex items-center justify-center overflow-visible rounded-full',
+      'inline-flex min-h-11 min-w-11 items-center justify-center overflow-visible rounded-full',
       'shrink-0 leading-none select-none pointer-events-auto cursor-pointer',
       'p-0 m-0 ltr:-ml-0.5 rtl:-mr-0.5',
       closeBtnBoxBySize,
       'text-current/80 hover:text-current',
       'hover:bg-transparent hover:ring-0',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] dark:focus-visible:ring-[var(--color-text-dark)]',
-      'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-bg,white)]',
-      'disabled:cursor-not-allowed disabled:pointer-events-none disabled:text-current/45 disabled:opacity-100',
+      'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+      'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40',
       classNames?.closeButton
     )
   };
@@ -167,13 +178,12 @@ export function useChip(props: ChipProps) {
 
   const computedRole = componentTag === 'button' ? undefined : interactive ? 'button' : isDotOnly ? 'img' : undefined;
 
-  const a11yProps =
-    splitActions
-      ? {
-          role: 'group' as const,
-          'aria-disabled': isDisabledComputed || undefined
-        }
-      : componentTag === 'button'
+  const a11yProps = splitActions
+    ? {
+        role: 'group' as const,
+        'aria-disabled': isDisabledComputed || undefined
+      }
+    : componentTag === 'button'
       ? {
           type: 'button' as const,
           'aria-disabled': isDisabledComputed || undefined,
@@ -192,6 +202,7 @@ export function useChip(props: ChipProps) {
     ? {
         type: 'button' as const,
         onClick: handleActivate as React.MouseEventHandler<HTMLButtonElement>,
+        onKeyDown: handleKeyDown as React.KeyboardEventHandler<HTMLButtonElement>,
         disabled: isDisabledComputed || undefined,
         'aria-disabled': isDisabledComputed || undefined,
         'aria-pressed': selectable ? isSelected : undefined,

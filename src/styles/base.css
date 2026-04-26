@@ -24,41 +24,41 @@
 
   /* ── Typography scale ──────────────────────────────────────────── */
   .fs-h1 {
-    font-size: var(--text-h1);
+    font-size: var(--text-h1-compact);
     line-height: 1.2;
     font-weight: 800;
   }
   .fs-h2 {
-    font-size: var(--text-h2);
+    font-size: var(--text-h2-compact);
     line-height: 1.2;
     font-weight: 700;
   }
   .fs-h3 {
-    font-size: var(--text-h3);
+    font-size: var(--text-h3-compact);
     line-height: 1.2;
     font-weight: 700;
   }
   .fs-h4 {
-    font-size: var(--text-h4);
+    font-size: var(--text-h4-compact);
     line-height: 1.2;
     font-weight: 600;
   }
   .fs-h5 {
-    font-size: var(--text-h5);
+    font-size: var(--text-h5-compact);
     line-height: 1.2;
     font-weight: 600;
   }
   .fs-h6 {
-    font-size: var(--text-h6);
+    font-size: var(--text-h6-compact);
     line-height: 1.2;
     font-weight: 600;
   }
   .fs-base {
-    font-size: var(--text-body);
+    font-size: var(--text-body-compact);
     line-height: 1.5;
   }
   .fs-small {
-    font-size: var(--text-small);
+    font-size: var(--text-small-compact);
     line-height: 1.4;
   }
 
@@ -67,30 +67,30 @@
     font-family: var(--font-primary);
   }
 
-  @media (max-width: theme("screens.md")) {
+  @media (min-width: 48rem) {
     .fs-h1 {
-      font-size: var(--text-h1-tablet);
+      font-size: var(--text-h1);
     }
     .fs-h2 {
-      font-size: var(--text-h2-tablet);
+      font-size: var(--text-h2);
     }
     .fs-h3 {
-      font-size: var(--text-h3-tablet);
+      font-size: var(--text-h3);
     }
     .fs-h4 {
-      font-size: var(--text-h4-tablet);
+      font-size: var(--text-h4);
     }
     .fs-h5 {
-      font-size: var(--text-h5-tablet);
+      font-size: var(--text-h5);
     }
     .fs-h6 {
-      font-size: var(--text-h6-tablet);
+      font-size: var(--text-h6);
     }
     .fs-base {
-      font-size: var(--text-body-tablet);
+      font-size: var(--text-body);
     }
     .fs-small {
-      font-size: var(--text-small-tablet);
+      font-size: var(--text-small);
     }
   }
 

@@ -13,12 +13,13 @@
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { Chip } from './Chip';
-import { useChip } from './useChip';
 
 vi.mock('../icon/Icon', () => ({
   default: () => null
 }));
+
+import { Chip } from './Chip';
+import { useChip } from './useChip';
 
 describe('Chip — interactive and accessibility behavior', () => {
   it('renders as button when interactive and not closable', () => {
@@ -169,6 +170,38 @@ describe('Chip — interactive and accessibility behavior', () => {
     expect(onClose.mock.calls[0][0]?.type).toBe('keydown');
   });
 
+  it('calls onClose on Delete key in split-actions mode (closable + interactive)', () => {
+    const onClose = vi.fn();
+
+    render(
+      <Chip closable={true} onClick={() => undefined} onClose={onClose}>
+        React
+      </Chip>
+    );
+
+    const primaryAction = screen.getByRole('button', { name: 'React' });
+    fireEvent.keyDown(primaryAction, { key: 'Delete' });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0]?.type).toBe('keydown');
+  });
+
+  it('calls onClose on Backspace key in split-actions mode (closable + interactive)', () => {
+    const onClose = vi.fn();
+
+    render(
+      <Chip closable={true} onClick={() => undefined} onClose={onClose}>
+        React
+      </Chip>
+    );
+
+    const primaryAction = screen.getByRole('button', { name: 'React' });
+    fireEvent.keyDown(primaryAction, { key: 'Backspace' });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0]?.type).toBe('keydown');
+  });
+
   it('does not trigger onClick or onClose when disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
@@ -183,7 +216,9 @@ describe('Chip — interactive and accessibility behavior', () => {
     const root = screen.getByText('React').closest('div');
 
     expect(root).toBeInTheDocument();
-    if (!root) throw new Error('Chip root not found');
+    if (!root) {
+      throw new Error('Chip root not found');
+    }
     expect(root).toHaveAttribute('aria-disabled', 'true');
     expect(root).toHaveAttribute('data-disabled', 'true');
     expect(root).toHaveAttribute('data-interactive', 'false');
