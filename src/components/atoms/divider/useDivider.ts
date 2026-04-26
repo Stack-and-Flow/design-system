@@ -2,7 +2,7 @@ import { type DividerProps, dividerVariants } from './types';
 
 export const useDivider = ({
   orientation = 'horizontal',
-  color = 'bg-[var(--color-brand-light)]',
+  color = 'bg-primary',
   size = 'xs',
   corner = 'none',
   thickness = 'xs'

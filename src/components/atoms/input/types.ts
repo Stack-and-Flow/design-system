@@ -27,9 +27,9 @@ export const inputVariants = cva(
         false: 'rounded-md'
       },
       size: {
-        sm: 'h-12 px-2 fs-small tablet:fs-small-tablet',
-        md: 'h-14 px-4 fs-base tablet:fs-base-tablet',
-        lg: 'h-16 px-4 fs-h6 tablet:fs-h6-tablet'
+        sm: 'h-12 px-2 fs-small',
+        md: 'h-14 px-4 fs-base',
+        lg: 'h-16 px-4 fs-h6'
       },
       state: {
         default: '',
@@ -63,9 +63,9 @@ export const labelVariants = cva(
   {
     variants: {
       size: {
-        sm: 'left-2 fs-small tablet:fs-small-tablet',
-        md: 'left-4 fs-base tablet:fs-base-tablet',
-        lg: 'left-4 fs-h6 tablet:fs-h6-tablet'
+        sm: 'left-2 fs-small',
+        md: 'left-4 fs-base',
+        lg: 'left-4 fs-h6'
       },
       state: {
         default: 'top-[50%] translate-y-[-50%]',

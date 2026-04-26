@@ -66,6 +66,7 @@ Report the failing criterion and stop — do not continue with the detailed chec
 | Hardcoded Tailwind arbitrary values | Grep for `p-[`, `m-[`, `text-[#`, `bg-[#`, `border-[#` in component files |
 | Missing tests | No `.test.tsx` file in the component directory |
 | Missing Storybook story | No `.stories.tsx` file in the component directory |
+| Play functions in stories | Stories contain `play` functions — interaction tests belong in `.test.tsx` |
 
 ---
 
@@ -73,16 +74,19 @@ Report the failing criterion and stop — do not continue with the detailed chec
 
 Run these only AFTER the automatic rejection check passes.
 
+Before the Storybook review, read `.atl/skills/component-contributor/references/stories.md` if it exists. Treat it as the source of truth for autodocs/actions/controls conventions.
+
 ### 1 — File structure
 
-- [ ] Exactly 5 files: `types.ts`, `useComponentName.ts`, `ComponentName.tsx`, `ComponentName.stories.tsx`, `index.ts`
+- [ ] Exactly 6 files: `types.ts`, `useComponentName.ts`, `ComponentName.tsx`, `ComponentName.test.tsx`, `ComponentName.stories.tsx`, `index.ts`
 - [ ] Directory name is `kebab-case` matching the component name
 - [ ] Correct atomic tier: `atoms/` | `molecules/` | `organisms/`
-- [ ] `index.ts` re-exports the component default and all types
+- [ ] `index.ts` re-exports the named component and all types
 
 ### 2 — TypeScript
 
 - [ ] All imports of types use `import type`
+- [ ] Reusable design-system prop types come from `src/types` instead of being redefined locally in the component
 - [ ] All exports of types use `export type`
 - [ ] No `interface` — only `type`
 - [ ] No `any` — if present, must have documented justification
@@ -102,7 +106,7 @@ Run these only AFTER the automatic rejection check passes.
 
 ### 4 — Architecture
 
-- [ ] `types.ts` — all CVA variants defined here, all props typed, JSDoc controls present
+- [ ] `types.ts` — all CVA variants defined here, all props typed, complete public-prop JSDoc present (description + `@control` + `@default`), JSDoc controls follow canonical format
 - [ ] `useComponentName.ts` — all state, effects, handlers, CVA calls live here; no JSX
 - [ ] `ComponentName.tsx` — only JSX; consumes hook; zero `useState`, `useRef`, or CVA calls
 - [ ] `cn()` imported from `@/lib/utils` — not `clsx` or `twMerge` directly
@@ -126,11 +130,11 @@ Run these only AFTER the automatic rejection check passes.
 
 ### 7 — Tests
 
+- [ ] Complete test suite in `ComponentName.test.tsx`
 - [ ] Hook tested with `renderHook` — all returned values and computed functions covered
 - [ ] Component tested with `render/screen/userEvent` — rendering, ARIA, interaction, disabled states
 - [ ] All mocks declared BEFORE component imports (`lucide-react/dynamic`, `spinners-react`, CSS files)
 - [ ] No tests against internal CSS class strings
-- [ ] Interactive component has a `play` function in its story
 
 ### 8 — Storybook
 
@@ -139,6 +143,13 @@ Run these only AFTER the automatic rejection check passes.
 - [ ] `Default` story has `args` set; does NOT override `defaultVariants`
 - [ ] At least: `Default`, `Disabled`, one story per key variant
 - [ ] Each story demonstrates ONE axis — no mixed-variant stories
+- [ ] If project `autodocs` is enabled, no manual `argTypes` in `meta` or individual stories unless a documented project exception exists
+- [ ] Story event actions use `@storybook/addon-actions` (`action(...)`) only
+- [ ] No inline no-op handlers such as `() => undefined` in story args
+- [ ] No `[var(--token)]` in stories when equivalent Tailwind utilities exist in `@theme`
+- [ ] No direct `var()` in stories or component source; reusable token-backed classes must come from `src/styles/theme.css` / `src/styles/base.css`
+- [ ] Story conventions match the canonical project story reference/pattern
+- [ ] NO `play` functions — all interaction tests belong in `ComponentName.test.tsx`
 
 ### 9 — Visual states
 

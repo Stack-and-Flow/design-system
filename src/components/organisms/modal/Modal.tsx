@@ -36,7 +36,7 @@ const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
         <ModalPrimitive.Overlay className={currentBackdrop} />
         <div
           className={cn(
-            'fixed w-full inset-0 z-modal flex p-0 tablet:p-4',
+            'fixed w-full inset-0 z-modal flex p-0 md:p-4',
             position === 'center' && 'items-center justify-center',
             position === 'top' && 'items-start justify-center',
             position === 'bottom' && 'items-end justify-center'

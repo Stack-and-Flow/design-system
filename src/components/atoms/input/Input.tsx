@@ -246,7 +246,7 @@ const Input: FC<
           {getIconByHintType(hint?.type)}
           <span
             className={cn(
-              'fs-small tablet:fs-small-tablet',
+              'fs-small',
               hint?.type === 'info'
                 ? 'text-color-text-secondary-light dark:text-color-text-secondary-dark'
                 : hint?.type === 'warning'

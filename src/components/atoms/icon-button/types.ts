@@ -17,10 +17,10 @@ export const iconButtonVariants = cva(
       variant: {
         primary: [
           'text-white',
-          'bg-[image:var(--background-image-btn-primary)]',
+          'bg-btn-primary',
           'border-transparent',
           'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
-          'hover:bg-[image:var(--background-image-btn-primary-hover)]',
+          'hover:bg-btn-primary-hover',
           'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
         ],
         ghost: [
@@ -52,7 +52,7 @@ export const iconButtonVariants = cva(
           'border-brand-light dark:border-brand-dark',
           'bg-transparent',
           'hover:text-white dark:hover:text-white',
-          'hover:bg-[image:var(--background-image-btn-primary)]',
+          'hover:bg-btn-primary',
           'hover:border-transparent',
           'hover:shadow-glow-btn-primary-light dark:hover:shadow-glow-btn-primary'
         ]

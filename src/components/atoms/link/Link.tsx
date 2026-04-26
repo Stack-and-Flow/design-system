@@ -1,8 +1,7 @@
-import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
 import { DynamicIcon } from 'lucide-react/dynamic';
-import type { FC } from 'react';
-import type { ComponentProps } from 'react';
+import type { ComponentProps, FC } from 'react';
+import { cn } from '@/lib/utils';
 import { type LinkProps, linkVariants } from './types';
 import { useLink } from './useLink';
 

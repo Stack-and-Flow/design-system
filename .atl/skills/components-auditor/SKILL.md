@@ -2,7 +2,7 @@
 name: components-auditor
 description: >
   Reviews existing components against Stack-and-Flow standards — both code quality and visual correctness.
-  Covers: 5-file pattern compliance, TypeScript conventions, token usage, CVA structure, Storybook stories,
+  Covers: 6-file pattern compliance, TypeScript conventions, token usage, CVA structure, tests, Storybook stories,
   and full visual state audit (glow, transitions, focus rings, accessibility).
   Trigger: When reviewing an existing component — code quality, visual states, tokens, or accessibility.
   Also delegable from sdd-verify as the verification gate for a component change.
@@ -40,10 +40,11 @@ When delegated: run ALL audit phases and return in the SDD return envelope forma
 ### Compliance Matrix
 | Check | Status | Notes |
 |-------|--------|-------|
-| 5-file pattern | ✅ / ❌ | |
+| 6-file pattern | ✅ / ❌ | |
 | TypeScript conventions | ✅ / ❌ | |
 | Token usage | ✅ / ❌ | |
 | CVA structure | ✅ / ❌ | |
+| Test coverage | ✅ / ❌ | |
 | Stories coverage | ✅ / ❌ | |
 | Visual states | ✅ / ❌ | |
 | Accessibility | ✅ / ❌ | |
@@ -68,6 +69,7 @@ Always read in this order:
 2. `docs/DESIGN.md` — visual token reference and component specs
 3. `src/styles/theme.css` — source of truth for every token value
 4. `docs/COMPONENTS.md` — state-by-state spec for every component (if it exists)
+5. `.atl/skills/component-contributor/references/stories.md` — canonical Storybook autodocs/actions/controls conventions (if it exists)
 
 > **Never flag a token value as wrong without checking `theme.css` first.**
 
@@ -75,13 +77,14 @@ Always read in this order:
 
 ## Phase 1 — Code Audit
 
-### 1.1 — 5-File Pattern
+### 1.1 — 6-File Pattern
 
-Every component must have exactly these 5 files and nothing else:
+Every component must have exactly these 6 files and nothing else:
 
 - [ ] `types.ts` — exists
 - [ ] `useComponentName.ts` — exists
 - [ ] `ComponentName.tsx` — exists
+- [ ] `ComponentName.test.tsx` — exists
 - [ ] `ComponentName.stories.tsx` — exists
 - [ ] `index.ts` — exists
 - [ ] No extra files, no barrel re-exports outside `index.ts`
@@ -89,11 +92,20 @@ Every component must have exactly these 5 files and nothing else:
 ### 1.2 — `types.ts` compliance
 
 - [ ] Only `type` declarations — never `interface`
+- [ ] Shared/systemic prop types are imported from `src/types` when available; `component/types.ts` only defines component-specific types
 - [ ] ALL CVA variants defined here — none in `.tsx` or hook files
 - [ ] `cva` imported from `class-variance-authority`
 - [ ] `VariantProps<typeof componentVariants>` used to derive the props type
-- [ ] JSDoc `/** @control select|text|boolean */` present on props that need Storybook controls
-- [ ] No logic, no imports from React, no side effects
+- [ ] Every public prop exposed in Storybook has JSDoc annotations: `@control type` and `@default value` (if applicable)
+- [ ] JSDoc format: annotations only, no prose descriptions required
+  ```typescript
+  /**
+   * @control text
+   * @default Example
+   */
+  propName?: string
+  ```
+- [ ] No logic, no side effects, and no React value imports in `types.ts` (type-only React imports are acceptable when needed for public prop typing)
 
 ### 1.3 — `useComponentName.ts` compliance
 
@@ -112,17 +124,26 @@ Every component must have exactly these 5 files and nothing else:
 - [ ] No inline styles
 - [ ] No hardcoded class strings that belong in CVA
 
-### 1.5 — Token usage
+### 1.5 — `ComponentName.test.tsx` compliance
+
+- [ ] Contains both hook tests (with `renderHook`) and component tests (with `render/screen/userEvent`)
+- [ ] All required mocks declared BEFORE component imports
+- [ ] Tests cover: hook logic, DOM rendering, ARIA attributes, user interactions, disabled states
+- [ ] No tests against internal CSS class strings
+- [ ] No animation/ripple/spinner implementation tests
+
+### 1.6 — Token usage
 
 - [ ] No hardcoded hex values (`#ff0036`, `#060C13`, etc.) anywhere in the component files
 - [ ] No hardcoded spacing values (`px-4`, `mt-2` are fine as utilities; `mt-[13px]` is not)
 - [ ] No `[var(--token)]` when the token exists in `@theme` as a Tailwind utility class
   - Wrong: `bg-[var(--color-surface-dark)]`
   - Right: `bg-surface-dark`
-- [ ] `var()` is ONLY acceptable for: `bg-gradient-*` tokens and `shadow-glow-*` tokens (multi-layer values Tailwind cannot express)
+- [ ] No `var()` inside component source files (`src/components/**/*.ts`, `src/components/**/*.tsx`)
+- [ ] If a component needs token-backed `color-mix()`, gradients, or multi-layer shadows, those values are defined in `src/styles/theme.css` / `src/styles/base.css` and consumed through semantic classes/utilities
 - [ ] All tokens referenced actually exist in `src/styles/theme.css`
 
-### 1.6 — `ComponentName.stories.tsx` compliance
+### 1.7 — `ComponentName.stories.tsx` compliance
 
 - [ ] `parameters.docs.description.component` present and in English
 - [ ] `Default` story has `args` that do NOT override `defaultVariants`
@@ -130,14 +151,20 @@ Every component must have exactly these 5 files and nothing else:
 - [ ] One story per key variant axis (not one story mixing all variants)
 - [ ] No DOM manipulation in module scope (use `decorators` if needed)
 - [ ] English only — titles, descriptions, arg labels
+- [ ] If project `autodocs` is enabled, manual `argTypes` in `meta` or individual stories are forbidden unless a documented project exception exists
+- [ ] Story actions use `@storybook/addon-actions` (`action(...)`) only; no mixed conventions across stories
+- [ ] No inline no-op handlers such as `() => undefined` in story args
+- [ ] No `[var(--token)]` in stories when equivalent Tailwind utilities exist in `@theme`
+- [ ] Story conventions match the canonical project reference/component pattern
+- [ ] NO `play` functions — all interaction tests belong in `ComponentName.test.tsx`
 
-### 1.7 — `index.ts` compliance
+### 1.8 — `index.ts` compliance
 
-- [ ] Exports the component as default: `export { default } from './ComponentName'`
+- [ ] Re-exports the named component: `export { ComponentName } from './ComponentName'`
 - [ ] Re-exports types: `export * from './types'`
 - [ ] Nothing else
 
-### 1.8 — TypeScript global rules
+### 1.9 — TypeScript global rules
 
 - [ ] `strict: true` compliance — no implicit `any`, no loose types
 - [ ] No `as` type assertions unless absolutely unavoidable (comment why)
@@ -166,7 +193,7 @@ Classify every finding with severity:
 
 - **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, interactive element below 44px, `outline: none` without alternative, WCAG AA failure
 - **MAJOR** — Compositional rule violation: wrong file structure, CVA in wrong file, `[var(--token)]` bypass, `transition: all`, `border-image`, blur+gradient on same element, wrong glow layer count
-- **MINOR** — Spec inconsistency: wrong transition duration, missing transition property, hover tint value slightly off, missing JSDoc control annotation
+- **MINOR** — Spec inconsistency: wrong transition duration, missing transition property, hover tint value slightly off, missing JSDoc control annotation, incomplete prop JSDoc, non-canonical story actions/autodocs usage when it does not break behavior
 - **SUGGESTION** — Enhancement: `will-change` on entrance animations, extracting a repeated pattern to a token, improving story coverage
 
 ### Report format
@@ -188,10 +215,11 @@ After listing all issues, provide a summary:
 
 | Category | Status | Issues |
 |----------|--------|--------|
-| 5-file pattern | ✅ / ⚠️ / ❌ | {count} |
+| 6-file pattern | ✅ / ⚠️ / ❌ | {count} |
 | TypeScript conventions | ✅ / ⚠️ / ❌ | {count} |
 | Token usage | ✅ / ⚠️ / ❌ | {count} |
 | CVA structure | ✅ / ⚠️ / ❌ | {count} |
+| Test coverage | ✅ / ⚠️ / ❌ | {count} |
 | Stories coverage | ✅ / ⚠️ / ❌ | {count} |
 | Visual states | ✅ / ⚠️ / ❌ | {count} |
 | Accessibility | ✅ / ⚠️ / ❌ | {count} |

@@ -82,7 +82,7 @@ const preview: Preview = {
         </>
       ),
       disableInjectedStyles: true
-    },
+    }
   }
 };
 

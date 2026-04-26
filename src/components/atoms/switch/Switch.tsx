@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import type { FC } from 'react';
+import { cn } from '@/lib/utils';
 import type { SwitchProps } from './types';
 import { useSwitch } from './useSwitch';
 
@@ -48,11 +48,7 @@ const Switch: FC<SwitchProps> = ({ ...props }) => {
           {endContent && <span className={switchEndContent}>{endContent}</span>}
         </span>
       </label>
-      {label && (
-        <span className={switchLabel}>
-          {label}
-        </span>
-      )}
+      {label && <span className={switchLabel}>{label}</span>}
     </div>
   );
 };

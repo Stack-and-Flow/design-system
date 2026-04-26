@@ -38,7 +38,7 @@ export const Avatar: FC<AvatarProps> = ({ ...props }) => {
     <AvatarContainer
       className={cn(
         'bg-surface-raised-light dark:bg-surface-raised-dark',
-        'shadow-[inset_0_0_0_1px_var(--color-border-strong-light)] dark:shadow-[inset_0_0_0_1px_var(--color-border-strong-dark)]',
+        'avatar-inset-ring',
         'flex items-center justify-center',
         interactive && 'cursor-pointer transition-transform duration-200 ease-out hover:scale-110 active:scale-100',
         roundedClass,
@@ -53,7 +53,7 @@ export const Avatar: FC<AvatarProps> = ({ ...props }) => {
       <AvatarFallback
         className={cn(
           'bg-surface-raised-light dark:bg-surface-raised-dark',
-          'shadow-[inset_0_0_0_1px_var(--color-border-strong-light)] dark:shadow-[inset_0_0_0_1px_var(--color-border-strong-dark)]',
+          'avatar-inset-ring',
           'text-text-light dark:text-text-dark',
           'font-semibold leading-[1.2] pt-[0.2em]',
           roundedClass,

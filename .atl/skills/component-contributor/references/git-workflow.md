@@ -138,10 +138,10 @@ A PR will be rejected WITHOUT detailed feedback if:
 A PR is ready to merge when:
 
 - [ ] All CI checks pass (tests, build, a11y)
-- [ ] 5-file architecture followed exactly
+- [ ] 6-file architecture followed exactly
 - [ ] No `any`, no `interface`
-- [ ] Tests cover hook logic + component behavior
-- [ ] Story has args, controls, and description
+- [ ] Tests in `.test.tsx` cover hook logic + component behavior
+- [ ] Story has args, controls, and description (NO play functions)
 - [ ] No hardcoded values — only design tokens
 - [ ] ARIA attributes present and correct
 - [ ] PR template fully filled

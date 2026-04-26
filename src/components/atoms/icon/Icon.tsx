@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import type { FC } from 'react';
+import { cn } from '@/lib/utils';
 import type { IconProps } from './types';
 import { useIcon } from './useIcon';
 

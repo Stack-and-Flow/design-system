@@ -9,12 +9,12 @@ export const headerVariants = cva(['font-normal leading-[1.2] text-text-light da
       secondaryBold: 'font-primary font-weight-bold'
     },
     tag: {
-      h1: 'fs-h1 tablet:fs-tablet-h1',
-      h2: 'fs-h2 tablet:fs-tablet-h2',
-      h3: 'fs-h3 tablet:fs-tablet-h3',
-      h4: 'fs-h4 tablet:fs-tablet-h4',
-      h5: 'fs-h5 tablet:fs-tablet-h5',
-      h6: 'fs-h6 tablet:fs-tablet-h6'
+      h1: 'fs-h1',
+      h2: 'fs-h2',
+      h3: 'fs-h3',
+      h4: 'fs-h4',
+      h5: 'fs-h5',
+      h6: 'fs-h6'
     },
     prominent: {
       true: 'font-bold',
