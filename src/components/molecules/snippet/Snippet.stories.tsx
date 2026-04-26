@@ -257,6 +257,7 @@ export const CustomClassName: Story = {
  */
 export const WithAriaControls: Story = {
   args: {
+    id: 'custom-snippet',
     children: 'npm install @your/package',
     'aria-label': 'Copy install command',
     'aria-controls': 'custom-snippet'

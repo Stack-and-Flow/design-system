@@ -293,7 +293,8 @@ export const Calendar: React.FC<CalendarProps> = ({
                                 isDisabled: day.isDisabled,
                                 isInRange: day.isInRange || isDragInRange,
                                 isRangeStart: day.isRangeStart || isDragRangeStart,
-                                isRangeEnd: day.isRangeEnd || isDragRangeEnd
+                                isRangeEnd: day.isRangeEnd || isDragRangeEnd,
+                                theme
                               }),
                               highlightClass,
                               readOnly ? 'pointer-events-none select-none' : '',

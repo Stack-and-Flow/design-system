@@ -1,7 +1,5 @@
 import { Icon } from '@atoms/icon';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '../button';
-import { Link } from '../link';
 import { Dropdown } from './index';
 import type { DropdownSchema } from './types';
 
@@ -131,6 +129,12 @@ export default meta;
 
 type Story = StoryObj<typeof Dropdown>;
 
+const Trigger = ({ label }: { label: string }) => (
+  <span className='inline-flex min-h-[44px] items-center rounded-md border border-border-light px-3 py-2 text-sm font-medium text-text-light dark:border-border-dark dark:text-text-dark'>
+    {label}
+  </span>
+);
+
 const schema: DropdownSchema = [
   { type: 'label', label: 'My Account' },
   { type: 'separator' },
@@ -168,7 +172,7 @@ export const Default: Story = {
     loading: false,
     className: '',
     items: schema,
-    children: <Button text='Open Menu' />
+    children: <Trigger label='Open Menu' />
   }
 };
 /**
@@ -180,7 +184,7 @@ export const Loading: Story = {
   render: () => (
     <div className='flex gap-4 items-start min-h-[250px]'>
       <Dropdown items={schema} width='250px' loading={true}>
-        <Button text='Loading Menu' />
+        <Trigger label='Loading Menu' />
       </Dropdown>
     </div>
   )
@@ -193,12 +197,13 @@ export const CustomTrigger: Story = {
   render: () => (
     <div className='flex gap-4 items-start min-h-[250px]'>
       <Dropdown items={schema} width='250px'>
-        <Link size='md' variant='regular'>
-          Lorem ipsum
-        </Link>
+        <Trigger label='Lorem ipsum' />
       </Dropdown>
       <Dropdown items={schema} width='250px'>
-        <Icon color='text-color-brand-light' colorDark='dark:text-color-brand-dark' name='image-plus' size={24} />
+        <span className='inline-flex items-center'>
+          <Icon color='text-color-brand-light' colorDark='dark:text-color-brand-dark' name='image-plus' size={24} />
+          <span className='sr-only'>Open image menu</span>
+        </span>
       </Dropdown>
     </div>
   )
@@ -211,7 +216,7 @@ export const CustomWidth: Story = {
   render: () => (
     <div className='flex gap-4 items-start min-h-[250px]'>
       <Dropdown items={schema} width='500px'>
-        <Button text='Custom Width' />
+        <Trigger label='Custom Width' />
       </Dropdown>
     </div>
   )
@@ -224,7 +229,7 @@ export const CustomOffset: Story = {
   render: () => (
     <div className='flex gap-4 items-start min-h-[250px]'>
       <Dropdown items={schema} offset={20} width='250px'>
-        <Button text='Custom Offset' />
+        <Trigger label='Custom Offset' />
       </Dropdown>
     </div>
   )
@@ -237,16 +242,16 @@ export const Position: Story = {
   render: () => (
     <div className='flex gap-4 items-center min-h-[400px]'>
       <Dropdown items={schema} position='bottom' width='250px'>
-        <Button text='Bottom' />
+        <Trigger label='Bottom' />
       </Dropdown>
       <Dropdown items={schema} position='top' width='250px'>
-        <Button text='Top' />
+        <Trigger label='Top' />
       </Dropdown>
       <Dropdown items={schema} position='left' width='250px'>
-        <Button text='Left' />
+        <Trigger label='Left' />
       </Dropdown>
       <Dropdown items={schema} position='right' width='250px'>
-        <Button text='Right' />
+        <Trigger label='Right' />
       </Dropdown>
     </div>
   )
@@ -259,13 +264,13 @@ export const Alignment: Story = {
   render: () => (
     <div className='flex gap-4 items-start min-h-[250px]'>
       <Dropdown items={schema} align='start' position='bottom' width='250px'>
-        <Button text='Start' />
+        <Trigger label='Start' />
       </Dropdown>
       <Dropdown items={schema} align='center' position='bottom' width='250px'>
-        <Button text='Center' />
+        <Trigger label='Center' />
       </Dropdown>
       <Dropdown items={schema} align='end' position='bottom' width='250px'>
-        <Button text='End' />
+        <Trigger label='End' />
       </Dropdown>
     </div>
   )

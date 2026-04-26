@@ -1,5 +1,5 @@
-import { fn } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
 import Link from './Link';
 
 /**
@@ -172,7 +172,7 @@ export const CustomClass: Story = {
         size='md'
         variant='outlined'
         href='https://github.com/egdev6'
-        className='!border-blue !bg-blue hover:!bg-blue-dark hover:!border-blue-dark hover:!shadow-blue-dark'
+        className='!border-blue-dark !bg-blue-dark !text-white hover:!bg-blue hover:!border-blue hover:!shadow-blue-dark'
       >
         Custom Class Link
       </Link>

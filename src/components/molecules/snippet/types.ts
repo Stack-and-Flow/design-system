@@ -157,6 +157,7 @@ export type SizeButton = Record<Size, IconSizes>;
  */
 export type SnippetProps = SnippetVariants & {
   children: ReactNode;
+  id?: string;
   className?: string;
   disableCopy?: boolean;
   onCopy?: () => void;

@@ -16,7 +16,6 @@ const IconButton: FC<IconButtonProps & VariantProps<typeof iconButtonVariants> &
       {...props}
       ref={iconButtonRef}
       type='button'
-      role={ariaPressed !== undefined ? 'switch' : 'button'}
       className={cn('w-auto', iconButtonVariants({ variant, rounded, shadow }), className)}
       disabled={disabled}
       aria-disabled={disabled || undefined}
