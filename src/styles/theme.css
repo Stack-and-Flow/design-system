@@ -351,6 +351,7 @@
   --spacing-3xl: 5rem; /* 80px */
 
   /* ── Transiciones ────────────────────────────────────────────── */
+  --scale-button-press: 0.98;
   --transition-fast: 150ms ease-in-out;
   --transition-base: 250ms ease;
   --transition-slow: 300ms ease-in-out;

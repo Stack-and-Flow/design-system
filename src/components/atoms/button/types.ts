@@ -4,9 +4,10 @@ import type { DynamicIconName } from '@/types';
 export const buttonVariants = cva(
   [
     'button relative border cursor-pointer max-w-full',
-    'active:scale-[0.98]',
+    'button-press-feedback',
+    'button-transition',
     'flex items-center justify-center',
-    'font-semibold whitespace-nowrap line-clamp-1 leading-[1.6] tracking-[0.01em]',
+    'font-semibold whitespace-nowrap line-clamp-1 leading-relaxed tracking-ui',
     'disabled:pointer-events-none disabled:opacity-40',
     'focus-visible:outline-none',
     'focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
@@ -16,31 +17,27 @@ export const buttonVariants = cva(
       variant: {
         primary: [
           'text-white',
-          'bg-[image:var(--background-image-btn-primary)]',
-          'border-brand-light dark:border-brand-dark',
+          'bg-btn-primary',
+          'border-transparent',
           'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
-          'transition-all duration-250',
-          'hover:bg-[image:var(--background-image-btn-primary-hover)]',
+          'hover:bg-btn-primary-hover',
           'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
         ],
         secondary: [
           'text-brand-light dark:text-text-dark',
           'bg-red-tint-subtle',
-          'border border-transparent',
-          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'btn-secondary-hover',
-          'active:bg-[rgba(255,0,54,0.16)]',
-          'transition-all duration-250',
-          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover',
-          'hover:bg-[rgba(255,0,54,0.24)]'
+          'border-red-tint-border',
+          'active:bg-red-tint-active',
+          'hover:bg-red-tint-high',
+          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
         ],
         outlined: [
-          'text-brand-light dark:text-text-dark',
-          'bg-transpartent',
-          'border border-transparent',
-          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'transition-all duration-250',
-          'dark:hover:bg-brand-dark',
+          'text-brand-light dark:text-brand-dark',
+          'border-brand-light dark:border-brand-dark',
+          'bg-transparent',
+          'hover:text-white dark:hover:text-white',
+          'hover:bg-btn-primary',
+          'hover:border-transparent',
           'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
         ],
         ghost: [
@@ -93,7 +90,7 @@ type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
 type ButtonTypeVariants = 'button' | 'submit' | 'reset';
 type ButtonSizeVariants = 'md' | 'sm' | 'lg';
 
-export type ButtonProps = {
+type ButtonBaseProps = {
   /**
    * @control select
    * @default primary
@@ -144,8 +141,6 @@ export type ButtonProps = {
    */
   isLoading?: boolean;
   /** @control text */
-  ariaLabel?: string;
-  /** @control text */
   className?: string;
   /**
    * @control boolean
@@ -153,3 +148,31 @@ export type ButtonProps = {
    */
   'aria-pressed'?: boolean; // Nuevo prop para accesibilidad en botones de alternancia
 };
+
+type ButtonTextContentProps = {
+  /** @control text */
+  text: string;
+  /** @control text */
+  icon?: DynamicIconName;
+  /** @control text */
+  ariaLabel?: string;
+};
+
+type ButtonIconOnlyProps = {
+  /** @control text */
+  icon: DynamicIconName;
+  /** @control text */
+  ariaLabel: string;
+  text?: never;
+};
+
+type ButtonEmptyOrAriaOnlyProps = {
+  /** @control text */
+  text?: undefined;
+  /** @control text */
+  icon?: undefined;
+  /** @control text */
+  ariaLabel?: string;
+};
+
+export type ButtonProps = ButtonBaseProps & (ButtonTextContentProps | ButtonIconOnlyProps | ButtonEmptyOrAriaOnlyProps);

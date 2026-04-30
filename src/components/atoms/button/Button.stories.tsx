@@ -9,7 +9,7 @@ import { Button } from './Button';
  * - Supports five visual variants to establish hierarchy: `primary`, `secondary`, `outlined`, `ghost`, `light`.
  * - Handles loading state with a spinner and prevents double-clicks automatically.
  * - Supports icons, full-width layout, toggle state (`aria-pressed`), and custom styles.
- * - Accessible: uses `aria-label`, `aria-disabled`, and `aria-pressed` correctly.
+ * - Accessible: uses `aria-label`, `aria-disabled`, and `aria-pressed` correctly, and icon-only usage must provide a meaningful `ariaLabel`.
  */
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Button',
@@ -27,16 +27,7 @@ type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
   args: {
-    variant: 'primary',
-    size: 'md',
     text: 'Button',
-    type: 'button',
-    rounded: true,
-    disabled: false,
-    isFullWidth: false,
-    isLoading: false,
-    uppercase: false,
-    ariaLabel: '',
     onClick: fn()
   }
 };
@@ -95,6 +86,19 @@ export const WithIcon: Story = {
       <Button text='Outlined' variant='outlined' icon='pencil' onClick={fn()} />
       <Button text='Ghost' variant='ghost' icon='trash' onClick={fn()} />
       <Button text='Light' variant='light' icon='external-link' onClick={fn()} />
+    </div>
+  )
+};
+
+/**
+ * Icon-only buttons MUST provide a meaningful `ariaLabel`.
+ * The component does not generate generic fallback names for icon-only actions.
+ */
+export const IconOnly: Story = {
+  render: () => (
+    <div className='flex gap-4 items-center'>
+      <Button ariaLabel='Download file' icon='download' onClick={fn()} />
+      <Button ariaLabel='Open external link' icon='external-link' variant='outlined' onClick={fn()} />
     </div>
   )
 };

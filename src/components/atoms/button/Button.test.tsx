@@ -36,6 +36,8 @@ vi.mock('@/components/utils/styles/index.css', () => ({}));
 // --- Imports after mocks ---
 
 import { Button } from './Button';
+import type { ButtonProps } from './types';
+import { buttonVariants } from './types';
 import { useButton } from './useButton';
 
 // ─────────────────────────────────────────────
@@ -82,6 +84,37 @@ describe('useButton — logic', () => {
     const { result } = renderHook(() => useButton({ ariaLabel: 'Submit form' }));
     expect(result.current.ariaLabel).toBe('Submit form');
   });
+
+  it('requires ariaLabel for icon-only usage and does not invent a generic fallback', () => {
+    // @ts-expect-error icon-only buttons must provide a meaningful accessible name
+    const invalidProps: ButtonProps = { icon: 'download' };
+
+    const { result } = renderHook(() => useButton(invalidProps));
+
+    expect(result.current.ariaLabel).toBeUndefined();
+  });
+
+  it('uses the explicit ariaLabel for icon-only buttons', () => {
+    const { result } = renderHook(() => useButton({ icon: 'download', ariaLabel: 'Download file' }));
+    expect(result.current.ariaLabel).toBe('Download file');
+  });
+
+  it('uses token-backed typography utilities in the default variant output', () => {
+    const defaultClasses = buttonVariants();
+
+    expect(defaultClasses).toContain('leading-relaxed');
+    expect(defaultClasses).toContain('tracking-ui');
+    expect(defaultClasses).not.toMatch(/\[[^\]]+\]/);
+  });
+
+  it('uses semantic motion utilities instead of arbitrary values', () => {
+    const primaryClasses = buttonVariants({ variant: 'primary' });
+
+    expect(primaryClasses).toContain('button-transition');
+    expect(primaryClasses).toContain('button-press-feedback');
+    expect(primaryClasses).not.toContain('duration-[250ms]');
+    expect(primaryClasses).not.toContain('active:scale-[0.98]');
+  });
 });
 
 // ─────────────────────────────────────────────
@@ -89,9 +122,9 @@ describe('useButton — logic', () => {
 // ─────────────────────────────────────────────
 
 describe('Button — component behavior', () => {
-  it('renders a <button> element in the DOM', () => {
-    render(<Button />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
+  it('renders a button element with the default button type', () => {
+    render(<Button text='Action' />);
+    expect(screen.getByRole('button', { name: 'Action' })).toHaveAttribute('type', 'button');
   });
 
   it('displays the text prop as content', () => {
@@ -109,6 +142,20 @@ describe('Button — component behavior', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
+  it('uses the explicit accessible name for icon-only buttons', () => {
+    render(<Button icon='download' ariaLabel='Download file' />);
+    expect(screen.getByRole('button', { name: 'Download file' })).toBeInTheDocument();
+  });
+
+  it('does not fabricate a generic accessible name for invalid icon-only usage', () => {
+    render(<Button {...({ icon: 'download' } as unknown as ButtonProps)} />);
+
+    const button = screen.getByRole('button');
+
+    expect(button).not.toHaveAttribute('aria-label');
+    expect(screen.queryByRole('button', { name: 'download button' })).not.toBeInTheDocument();
+  });
+
   it('is disabled when disabled prop is true', () => {
     render(<Button text='Disabled' disabled={true} />);
     expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
@@ -117,6 +164,11 @@ describe('Button — component behavior', () => {
   it('is disabled when isLoading is true (even if disabled is false)', () => {
     render(<Button text='Loading' isLoading={true} disabled={false} />);
     expect(screen.getByRole('button', { name: 'Loading' })).toBeDisabled();
+  });
+
+  it('sets aria-busy when loading', () => {
+    render(<Button text='Loading' isLoading={true} />);
+    expect(screen.getByRole('button', { name: 'Loading' })).toHaveAttribute('aria-busy', 'true');
   });
 
   it('calls onClick when the button is clicked and not loading', async () => {
@@ -147,11 +199,11 @@ describe('Button — component behavior', () => {
 
   it('keeps role="button" when aria-pressed prop is provided', () => {
     render(<Button text='Toggle' aria-pressed={true} />);
-    expect(screen.getByRole('button', { name: 'Toggle' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Toggle' })).toHaveAttribute('aria-pressed', 'true');
   });
 
-  it('sets role="button" when aria-pressed prop is NOT provided', () => {
+  it('omits aria-pressed when the prop is not provided', () => {
     render(<Button text='Action' />);
-    expect(screen.getByRole('button', { name: 'Action' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Action' })).not.toHaveAttribute('aria-pressed');
   });
 });

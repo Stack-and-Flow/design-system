@@ -1,7 +1,43 @@
 import type { VariantProps } from 'class-variance-authority';
-import { type ComponentProps, useRef } from 'react';
+import { type ComponentProps, useEffect, useRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 import type { ButtonProps, buttonVariants } from './types';
+
+const getButtonIconSize = (size: ButtonProps['size']) => {
+  switch (size) {
+    case 'sm':
+      return 'h-md w-auto';
+    case 'lg':
+      return 'h-xl w-auto';
+    default:
+      return 'h-lg w-auto';
+  }
+};
+
+const getButtonSpinnerSize = (size: ButtonProps['size']) => {
+  switch (size) {
+    case 'sm':
+      return 'h-md w-md';
+    case 'lg':
+      return 'h-xl w-xl';
+    default:
+      return 'h-lg w-lg';
+  }
+};
+
+const getButtonAriaLabel = ({ ariaLabel, text }: Pick<ButtonProps, 'ariaLabel' | 'text'>) => {
+  const trimmedAriaLabel = ariaLabel?.trim();
+
+  if (trimmedAriaLabel) {
+    return trimmedAriaLabel;
+  }
+
+  const trimmedText = text?.trim();
+
+  if (trimmedText) {
+    return trimmedText;
+  }
+};
 
 export const useButton = ({
   className,
@@ -25,16 +61,18 @@ export const useButton = ({
 
   useRipple(buttonRef);
 
-  const iconSize = () => {
-    switch (size) {
-      case 'sm':
-        return 'h-md w-auto';
-      case 'lg':
-        return 'h-xl w-auto';
-      default:
-        return 'h-lg w-auto';
+  const resolvedAriaLabel = getButtonAriaLabel({ ariaLabel, text });
+
+  useEffect(() => {
+    if (!icon || text?.trim() || ariaLabel?.trim() || import.meta.env.MODE === 'test') {
+      return;
     }
-  };
+
+    console.warn('Button icon-only usage requires ariaLabel for an accessible name.');
+  }, [ariaLabel, icon, text]);
+
+  const iconSize = () => getButtonIconSize(size);
+  const spinnerSize = () => getButtonSpinnerSize(size);
 
   return {
     buttonRef,
@@ -42,6 +80,7 @@ export const useButton = ({
     ariaPressed,
     isFullWidth,
     iconSize,
+    spinnerSize,
     icon,
     rounded,
     text,
@@ -49,7 +88,7 @@ export const useButton = ({
     variant,
     size,
     uppercase,
-    ariaLabel,
+    ariaLabel: resolvedAriaLabel,
     shadow,
     className,
     disabled,

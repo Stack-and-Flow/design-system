@@ -67,6 +67,14 @@
     font-family: var(--font-primary);
   }
 
+  .button-transition {
+    transition: var(--transition-btn);
+  }
+
+  .button-press-feedback:active {
+    transform: scale(var(--scale-button-press));
+  }
+
   @media (min-width: 48rem) {
     .fs-h1 {
       font-size: var(--text-h1);
