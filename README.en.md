@@ -9,7 +9,8 @@
 
 </div>
 
-![storybook](https://github.com/user-attachments/assets/81874b4d-4a89-4b8f-8054-6bc4a4e4d0fd)
+<img width="5120" height="1440" alt="V2design-system" src="https://github.com/user-attachments/assets/c3243e48-373c-4d5d-8096-48c7a92d0fb3" />
+
 
 ## 🎯 What is this project?
 
