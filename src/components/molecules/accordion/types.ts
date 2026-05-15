@@ -52,7 +52,6 @@ export const accordionTriggerVariants = cva(
     'text-text-light dark:text-text-dark',
     'transition-[background-color,border-color,box-shadow,transform,color] duration-200 ease-out',
     'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
-    'active:scale-[0.98]',
     'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40'
   ],
   {
@@ -93,17 +92,20 @@ export const accordionIndicatorVariants = cva(
   'grid size-5 shrink-0 place-items-center text-brand-light dark:text-brand-dark'
 );
 
-export const accordionDefaultIconVariants = cva('leading-none transition-transform duration-300 ease-out', {
-  variants: {
-    expanded: {
-      true: 'rotate-90',
-      false: 'rotate-0'
+export const accordionDefaultIconVariants = cva(
+  'origin-center leading-none transition-transform duration-300 ease-out',
+  {
+    variants: {
+      expanded: {
+        true: 'rotate-90',
+        false: 'rotate-0'
+      }
+    },
+    defaultVariants: {
+      expanded: false
     }
-  },
-  defaultVariants: {
-    expanded: false
   }
-});
+);
 
 export type AccordionItem = {
   id: string;
