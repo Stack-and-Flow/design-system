@@ -25,9 +25,9 @@ Use this reference BEFORE writing or reviewing stories. Do not improvise Storybo
 ## Recommended structure
 
 ```tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { Component } from './Component';
+import type { Meta, StoryObj } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Component } from "./Component";
 
 /**
  * ## DESCRIPTION
@@ -41,17 +41,18 @@ import { Component } from './Component';
  * - Mention related atoms/molecules/primitives when relevant.
  */
 const meta: Meta<typeof Component> = {
-  title: 'Atoms/Component',
+  title: "Atoms/Component",
   component: Component,
   parameters: {
     docs: {
       autodocs: true,
       description: {
-        component: 'Concise English description of what this component does and when to use it.'
-      }
-    }
+        component:
+          "Concise English description of what this component does and when to use it.",
+      },
+    },
   },
-  tags: ['autodocs']
+  tags: ["autodocs"],
 };
 
 export default meta;
@@ -60,9 +61,9 @@ type Story = StoryObj<typeof Component>;
 
 export const Default: Story = {
   args: {
-    children: 'Example',
-    onClick: action('click')
-  }
+    children: "Example",
+    onClick: action("click"),
+  },
 };
 
 /**
@@ -74,11 +75,11 @@ export const Default: Story = {
  */
 export const Variant: Story = {
   render: () => (
-    <div className='flex flex-wrap items-center gap-4'>
-      <Component variant='default'>Default</Component>
-      <Component variant='secondary'>Secondary</Component>
+    <div className="flex flex-wrap items-center gap-4">
+      <Component variant="default">Default</Component>
+      <Component variant="secondary">Secondary</Component>
     </div>
-  )
+  ),
 };
 ```
 
