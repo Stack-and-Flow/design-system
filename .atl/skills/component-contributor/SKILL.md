@@ -470,32 +470,49 @@ describe('Component — behavior', () => {
 **Rules:**
 
 - English only — titles, descriptions, arg labels
+- Mandatory file-level JSDoc block before `meta` with `## DESCRIPTION`
+- The description must explain purpose, common use cases, key capabilities, and relevant accessibility behavior
+- Include `## DEPENDENCIES` in the file-level JSDoc when the component relies on other atoms/molecules/primitives/utilities
 - Mandatory `parameters.docs.description.component`
 - Mandatory `args` on `Default` story — must NOT hardcode props that override `defaultVariants`
 - Always include: `Default`, `Disabled`, one story per key variant
+- Each non-trivial story must have JSDoc explaining what prop, variant, state, behavior, or accessibility concern it demonstrates
 - Each story demonstrates ONE axis only — no mixed props across variants in the same story
 - If `autodocs` is enabled for the project, do NOT define manual `argTypes` in `meta` or individual stories unless the project reference explicitly allows an exception
 - Event handlers in stories must use `@storybook/addon-actions` (`action(...)`) — never invent a different helper
 - Never use inline no-op handlers such as `() => undefined` in story args
 - Token styling in stories must use Tailwind utility classes or reusable semantic classes from the style system; do not bypass them with `[var(--token)]` or inline `var()` in story/component source
-- Story conventions must match the canonical repo pattern for autodocs, controls, and actions
+- Story conventions must match the canonical repo pattern for autodocs, controls, actions, and documentation comments
 - NO `play` functions — interaction testing belongs in `.test.tsx`
 
 ```typescript
 import type { Meta, StoryObj } from "@storybook/react";
 import Component from "./Component";
 
+/**
+ * ## DESCRIPTION
+ * Component explains what problem this UI element solves and when consumers should use it.
+ *
+ * - Document primary use cases.
+ * - Document key variants, states, and composition slots.
+ * - Document relevant accessibility behavior.
+ *
+ * ## DEPENDENCIES
+ * - Mention related atoms, molecules, primitives, or utilities when relevant.
+ */
 const meta: Meta<typeof Component> = {
   title: "Atoms/Component",
   component: Component,
   parameters: {
     docs: {
+      autodocs: true,
       description: {
         component:
           "Concise English description of what this component does and when to use it.",
       },
     },
   },
+  tags: ["autodocs"],
 };
 
 export default meta;
@@ -507,6 +524,9 @@ export const Default: Story = {
   },
 };
 
+/**
+ * The `disabled` prop prevents interaction and communicates unavailable state.
+ */
 export const Disabled: Story = {
   args: {
     ...Default.args,
