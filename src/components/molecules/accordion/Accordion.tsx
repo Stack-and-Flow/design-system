@@ -1,3 +1,4 @@
+import { Icon } from '@atoms/icon';
 import type { FC } from 'react';
 import { cn } from '@/lib/utils';
 import type { AccordionProps } from './types';
@@ -24,7 +25,15 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
             <button {...getTriggerProps(item)} className={getTriggerClassName()}>
               <span>{item.title}</span>
               <span className={cn(getIndicatorClassName(), item.disabled && 'opacity-40')} aria-hidden='true'>
-                {item.indicator ?? <span className={getDefaultIconClassName(item.expanded)}>⌄</span>}
+                {item.indicator ?? (
+                  <Icon
+                    name='chevron-down'
+                    size={20}
+                    className={getDefaultIconClassName(item.expanded)}
+                    color='text-color-brand-light'
+                    colorDark='dark:text-color-brand-dark'
+                  />
+                )}
               </span>
             </button>
           </h3>

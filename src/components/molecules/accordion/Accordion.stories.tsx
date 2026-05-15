@@ -1,3 +1,4 @@
+import { Icon } from '@atoms/icon';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
@@ -52,6 +53,7 @@ const baseItems: AccordionItem[] = [
  *
  * ## DEPENDENCIES
  * - Native `button` elements for trigger semantics.
+ * - `Icon` atom for the default and custom indicators.
  * - CVA for visual variants and size styles.
  * - Token classes from `theme.css` for surfaces, borders, text, focus ring, spacing, and disabled states.
  */
@@ -217,7 +219,7 @@ export const CustomIndicator: Story = {
     ...Default.args,
     items: baseItems.map((item) => ({
       ...item,
-      indicator: <span className='font-bold text-brand-light dark:text-brand-dark'>+</span>
+      indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
     }))
   }
 };
