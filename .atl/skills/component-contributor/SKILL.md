@@ -61,6 +61,7 @@ Before touching the spec, make sure the contributor understands the stack they a
 If the contributor is unfamiliar with any of these, briefly explain the concept before moving on. Do NOT assume knowledge — a contributor who copies code without understanding it is a liability, not an asset.
 
 Point them to:
+
 - `docs/GUIDELINES.md` — full coding conventions
 - `docs/DESIGN.md` — visual token reference
 - `src/styles/theme.css` — the source of truth for every token
@@ -112,6 +113,7 @@ You are not a passive executor. You are a senior contributor reviewing the spec 
 **What to look for:**
 
 #### Accessibility gaps
+
 - Interactive elements without keyboard behavior described (Enter, Space, Escape, Arrow keys)
 - Missing ARIA roles, `aria-label`, `aria-expanded`, `aria-controls`, `aria-live` for dynamic content
 - No mention of focus management (e.g. modals, dropdowns — where does focus go on open/close?)
@@ -119,28 +121,53 @@ You are not a passive executor. You are a senior contributor reviewing the spec 
 - Touch target size not mentioned for interactive components
 
 #### Stories gaps
+
 - Missing stories for edge cases: empty state, loading, error, long text overflow, RTL
 - No story for each CVA variant axis (a variant without a story is invisible to consumers)
 - Missing story for the keyboard/focus interaction if the component has complex behavior
 - No story for dark mode if the component has dark-specific visuals
 
 #### Spec clarity issues
+
 - Ambiguous variant names (`large` vs `lg`, `primary` vs `default`)
 - Props without clear defaults specified
 - Behavior described in prose but not mapped to concrete props or states
 - Token references that do not exist in `theme.css` (check before assuming they exist)
 
 #### Architecture concerns
+
 - Component doing too much — multiple responsibilities that should be split into separate components
 - State that belongs in the parent being forced into the component
 - Composability: should this accept `children` or render its own content? Is the spec explicit?
 - Missing `ref` forwarding for elements consumers will need to control programmatically
 
 **Rules for this phase:**
+
 - Be direct. Flag problems clearly — don't soften every suggestion into a question.
 - Only flag things that have a real impact: a11y failures, missing stories for documented variants, broken composability. Do NOT nitpick style preferences.
 - If the spec is solid and nothing critical is missing, say so explicitly — "No blocking issues found."
 - Do NOT start implementing until the contributor has acknowledged your findings (or confirmed they want to proceed as-is).
+
+---
+
+## Phase 1.75 — Visual Design Alignment
+
+Before planning implementation, load and apply the project visual sources:
+
+1. `docs/DESIGN.md` — visual identity, surfaces, typography, color usage, and component direction
+2. `docs/COMPONENTS.md` — state-by-state visual rules, transitions, touch target, focus, disabled behavior
+3. `src/styles/theme.css` — source of truth for available Tailwind v4 token utilities
+
+Extract the relevant visual decisions for this component:
+
+- Surface pattern: opaque, raised, tinted, or floating/frosted — never guess
+- Text, background, border, radius, spacing, glow, and focus tokens
+- Base, hover, focus, active, disabled, empty/loading/error states that apply
+- Transition constraints: no `transition-all`, no layout-forcing animated properties
+- Accessibility visuals: `44px` touch target, `box-shadow` focus ring, disabled `opacity: 0.4` + `cursor-not-allowed` + `pointer-events-none`
+- Dark mode pairings and contrast requirements
+
+Do this before writing the Implementation Plan. The later visual review still runs, but development must start visually aligned.
 
 ---
 
@@ -174,6 +201,14 @@ Before writing any file, present a clear plan to the contributor:
 - Radix primitive: {yes/no — which one if yes}
 - Dark mode: {how it's handled}
 
+### Visual alignment
+- Surface pattern: {opaque / raised / tinted / floating — and why}
+- States planned: {base, hover, focus, active, disabled, loading/error/empty if applicable}
+- Focus ring: {token/class from theme.css}
+- Disabled treatment: opacity + cursor + pointer-events, with colors unchanged
+- Transitions: {enumerated properties only; no layout-forcing properties}
+- Touch target: {how 44px minimum is satisfied for interactive elements}
+
 ### Accessibility
 - {aria attributes and roles planned}
 - {keyboard behavior}
@@ -185,50 +220,55 @@ Wait for the contributor to confirm or adjust the plan before proceeding.
 
 After reading the spec in Phase 1, declare which modules you need and read them before Phase 2 (Plan). Do not load modules that are not relevant to this component.
 
-| Module | Path | Load when |
-|--------|------|-----------|
-| `colors` | `tokens/colors.md` | Component uses color, backgrounds, borders, dark mode, or status states |
+| Module               | Path                           | Load when                                                                 |
+| -------------------- | ------------------------------ | ------------------------------------------------------------------------- |
+| `colors`             | `tokens/colors.md`             | Component uses color, backgrounds, borders, dark mode, or status states   |
 | `spacing-typography` | `tokens/spacing-typography.md` | Component has layout, padding, text sizing, font weight, or border radius |
-| `effects` | `tokens/effects.md` | Component uses glows, shadows, gradients, animations, or backdrop blur |
+| `effects`            | `tokens/effects.md`            | Component uses glows, shadows, gradients, animations, or backdrop blur    |
 
 ### Reference modules — load by intent
 
 Load these BEFORE writing the relevant file. They contain canonical patterns extracted from the actual codebase.
 
-| Module | Path | Load when |
-|--------|------|-----------|
-| `testing` | `references/testing.md` | Writing any test file — Vitest tests in `.test.tsx` |
-| `stories` | `references/stories.md` | Writing or reviewing any `*.stories.tsx` file; Storybook autodocs/actions/controls conventions |
-| `html-extension` | `references/html-extension.md` | Component wraps a native HTML element (button, input, select, a, textarea) |
-| `radix-patterns` | `references/radix-patterns.md` | Component uses any `@radix-ui/*` primitive |
-| `tailwind-merge` | `references/tailwind-merge.md` | Component combines CVA output with conditional or external `className` |
-| `biome-rules` | `references/biome-rules.md` | Before writing any TypeScript/TSX file — always load for code quality enforcement |
-| `git-workflow` | `references/git-workflow.md` | Before opening a PR or when explaining the contribution workflow to a contributor |
+| Module           | Path                           | Load when                                                                                      |
+| ---------------- | ------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `testing`        | `references/testing.md`        | Writing any test file — Vitest tests in `.test.tsx`                                            |
+| `stories`        | `references/stories.md`        | Writing or reviewing any `*.stories.tsx` file; Storybook autodocs/actions/controls conventions |
+| `html-extension` | `references/html-extension.md` | Component wraps a native HTML element (button, input, select, a, textarea)                     |
+| `radix-patterns` | `references/radix-patterns.md` | Component uses any `@radix-ui/*` primitive                                                     |
+| `tailwind-merge` | `references/tailwind-merge.md` | Component combines CVA output with conditional or external `className`                         |
+| `biome-rules`    | `references/biome-rules.md`    | Before writing any TypeScript/TSX file — always load for code quality enforcement              |
+| `git-workflow`   | `references/git-workflow.md`   | Before opening a PR or when explaining the contribution workflow to a contributor              |
 
 **Mandatory loads (always):**
+
 - `biome-rules` — load before writing any `.ts` or `.tsx` file
+- `docs/DESIGN.md` — load before Phase 2 for every component
+- `src/styles/theme.css` — load before Phase 2 for every component
+- `docs/COMPONENTS.md` — load before Phase 2 for every interactive or visual component
 - `html-extension` — load for any component that renders a native element
 
 **Mandatory story convention check:**
+
 - Before writing `types.ts` or `ComponentName.stories.tsx`, read the project `stories` reference if it exists.
 - If no dedicated `stories` reference exists, inspect at least ONE mature atom story already accepted in the repo and mirror its conventions exactly.
 - Do NOT invent Storybook conventions from generic knowledge.
 
 **Matching rules by component type:**
 
-| Component type | Colors | Spacing & Typography | Effects |
-|----------------|--------|----------------------|---------|
-| Button (primary) | ✅ | ✅ | ✅ |
-| Button (secondary / ghost) | ✅ | ✅ | ✅ |
-| Badge / Tag / Chip | ✅ | ✅ | — |
-| Input / Textarea / Select | ✅ | ✅ | partial (focus glow only) |
-| Card | ✅ | ✅ | ✅ |
-| Dropdown / Menu | ✅ | ✅ | partial (shadow only) |
-| Modal / Dialog | ✅ | ✅ | ✅ |
-| Avatar / Icon | ✅ | — | — |
-| Spinner / Loader | ✅ | — | partial (animation only) |
-| Typography / Heading | ✅ | ✅ | — |
-| Navbar / Sidebar | ✅ | ✅ | ✅ |
+| Component type             | Colors | Spacing & Typography | Effects                   |
+| -------------------------- | ------ | -------------------- | ------------------------- |
+| Button (primary)           | ✅     | ✅                   | ✅                        |
+| Button (secondary / ghost) | ✅     | ✅                   | ✅                        |
+| Badge / Tag / Chip         | ✅     | ✅                   | —                         |
+| Input / Textarea / Select  | ✅     | ✅                   | partial (focus glow only) |
+| Card                       | ✅     | ✅                   | ✅                        |
+| Dropdown / Menu            | ✅     | ✅                   | partial (shadow only)     |
+| Modal / Dialog             | ✅     | ✅                   | ✅                        |
+| Avatar / Icon              | ✅     | —                    | —                         |
+| Spinner / Loader           | ✅     | —                    | partial (animation only)  |
+| Typography / Heading       | ✅     | ✅                   | —                         |
+| Navbar / Sidebar           | ✅     | ✅                   | ✅                        |
 
 ---
 
@@ -241,6 +281,7 @@ After each file, explain what was done and why (Phase 4 runs inline).
 ### File 1: `types.ts`
 
 **Rules:**
+
 - ALL `type` definitions here — never `interface`
 - Before declaring a new public/shared prop type in `component/types.ts`, check `src/types/index.ts` first; reusable design-system types must live in `src/types`
 - Only keep types in `component/types.ts` when they are truly component-specific and not reusable across multiple components
@@ -260,6 +301,7 @@ After each file, explain what was done and why (Phase 4 runs inline).
 - Never use `var()` directly in component source files; if Tailwind cannot express a token-backed visual treatment, define a reusable class/token in `src/styles/theme.css` or `src/styles/base.css` first
 
 **Available control types:**
+
 - `@control text` — freeform text input
 - `@control boolean` — toggle switch
 - `@control number` — numeric input
@@ -275,84 +317,83 @@ After each file, explain what was done and why (Phase 4 runs inline).
 - `@control object` — JSON editor for complex objects
 
 ```typescript
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva, type VariantProps } from "class-variance-authority";
 
-export const componentVariants = cva(
-  'base-class token-class',
-  {
-    variants: {
-      variant: {
-        default: 'token-based-classes',
-        outlined: 'token-based-classes',
-      },
-      size: {
-        sm: 'token-based-classes',
-        md: 'token-based-classes',
-        lg: 'token-based-classes',
-      },
+export const componentVariants = cva("base-class token-class", {
+  variants: {
+    variant: {
+      default: "token-based-classes",
+      outlined: "token-based-classes",
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
+    size: {
+      sm: "token-based-classes",
+      md: "token-based-classes",
+      lg: "token-based-classes",
     },
-  }
-)
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "md",
+  },
+});
 
 export type ComponentProps = VariantProps<typeof componentVariants> & {
   /**
    * @control text
    * @default Example
    */
-  label?: string
+  label?: string;
   /**
    * @control boolean
    * @default false
    */
-  disabled?: boolean
+  disabled?: boolean;
   /**
    * @control text
    */
-  ariaLabel?: string
-}
+  ariaLabel?: string;
+};
 ```
 
 ### File 2: `useComponentName.ts`
 
 **Rules:**
+
 - ALL logic here — state, refs, effects, event handlers
 - Calls `componentVariants(...)` and returns the className
 - Returns a typed object — never `any`
 - No JSX, no imports from React DOM
 
 ```typescript
-import { useRef } from 'react'
-import { type ComponentProps, componentVariants } from './types'
+import { useRef } from "react";
+import { type ComponentProps, componentVariants } from "./types";
 
 type UseComponentReturn = {
-  className: string
-  ariaLabel: string
-  ref: React.RefObject<HTMLElement>
-}
+  className: string;
+  ariaLabel: string;
+  ref: React.RefObject<HTMLElement>;
+};
 
 const useComponent = (props: ComponentProps): UseComponentReturn => {
-  const { variant, size, disabled, ariaLabel, label } = props
-  const ref = useRef<HTMLElement>(null)
+  const { variant, size, disabled, ariaLabel, label } = props;
+  const ref = useRef<HTMLElement>(null);
 
-  const className = componentVariants({ variant, size })
+  const className = componentVariants({ variant, size });
 
   return {
     className,
-    ariaLabel: ariaLabel ?? label ?? 'component',
+    ariaLabel: ariaLabel ?? label ?? "component",
     ref,
-  }
-}
+  };
+};
 
-export default useComponent
+export default useComponent;
 ```
 
 ### File 3: `ComponentName.tsx`
 
 **Rules:**
+
 - ONLY JSX — zero logic, zero state, zero CVA calls
 - Consumes the hook via `use{ComponentName}(props)`
 - `FC<ComponentProps>` typing always
@@ -382,6 +423,7 @@ export default Component
 ### File 4: `ComponentName.test.tsx`
 
 **Rules:**
+
 - ALL tests here — both hook tests and component behavior tests
 - Must test: hook logic with `renderHook`, component rendering with `render/screen`, ARIA attributes, user interactions with `userEvent`, disabled states
 - All mocks declared BEFORE component imports
@@ -426,6 +468,7 @@ describe('Component — behavior', () => {
 ### File 5: `ComponentName.stories.tsx`
 
 **Rules:**
+
 - English only — titles, descriptions, arg labels
 - Mandatory `parameters.docs.description.component`
 - Mandatory `args` on `Default` story — must NOT hardcode props that override `defaultVariants`
@@ -439,43 +482,44 @@ describe('Component — behavior', () => {
 - NO `play` functions — interaction testing belongs in `.test.tsx`
 
 ```typescript
-import type { Meta, StoryObj } from '@storybook/react'
-import Component from './Component'
+import type { Meta, StoryObj } from "@storybook/react";
+import Component from "./Component";
 
 const meta: Meta<typeof Component> = {
-  title: 'Atoms/Component',
+  title: "Atoms/Component",
   component: Component,
   parameters: {
     docs: {
       description: {
-        component: 'Concise English description of what this component does and when to use it.',
+        component:
+          "Concise English description of what this component does and when to use it.",
       },
     },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Component>
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 export const Default: Story = {
   args: {
-    label: 'Example',
+    label: "Example",
   },
-}
+};
 
 export const Disabled: Story = {
   args: {
     ...Default.args,
     disabled: true,
   },
-}
+};
 ```
 
 ### File 6: `index.ts`
 
 ```typescript
-export { ComponentName } from './ComponentName'
-export * from './types'
+export { ComponentName } from "./ComponentName";
+export * from "./types";
 ```
 
 ---
@@ -550,6 +594,7 @@ Fix all CRITICAL and MAJOR before marking the component complete.
 ## Checklist before finishing
 
 **Structure**
+
 - [ ] `types.ts` — all props typed, all CVA variants defined, full JSDoc present, JSDoc controls present where needed
 - [ ] `useComponentName.ts` — all logic, no JSX, returns typed object
 - [ ] `ComponentName.tsx` — only JSX, consumes hook, no logic
@@ -558,10 +603,12 @@ Fix all CRITICAL and MAJOR before marking the component complete.
 - [ ] `index.ts` — re-exports correct
 
 **Tokens & theming**
+
 - [ ] All tokens from `theme.css` — no hardcoded values
 - [ ] Dark mode handled — paired `dark:` classes where applicable
 
 **Visual states**
+
 - [ ] Hover state implemented and tonally correct
 - [ ] Focus ring: `box-shadow` only, merged with existing shadows, never naked `outline`
 - [ ] Active/pressed: `scale(0.98)` on buttons
@@ -569,9 +616,11 @@ Fix all CRITICAL and MAJOR before marking the component complete.
 - [ ] No `transition: all` — specific properties enumerated
 
 **Accessibility**
+
 - [ ] Aria attributes from spec implemented
 - [ ] Minimum touch target `44×44px` on interactive elements
 - [ ] `prefers-reduced-motion` handled if transforms are used
 
 **Learning**
+
 - [ ] Explained every decision to the contributor after each file
