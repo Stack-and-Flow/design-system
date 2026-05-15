@@ -25,16 +25,35 @@ const baseItems: AccordionItem[] = [
 
 /**
  * ## DESCRIPTION
- * Accordion organizes related content into collapsible sections so users can scan headings and expand only what they need.
+ * Accordion organizes related content into collapsible sections so users can scan headings first and expand only the panels they need.
+ * It is best for FAQs, settings groups, documentation sections, and dense explanatory content where showing everything at once would add noise.
  *
- * - Supports controlled and uncontrolled expansion patterns.
- * - Supports single-section and multiple-section expansion.
- * - Includes visual variants for default lists, raised surfaces, bordered groups, and minimal FAQ-style layouts.
- * - Accessible: trigger buttons expose `aria-expanded` / `aria-controls`, panels expose `aria-labelledby`, and keyboard users can navigate triggers with Arrow keys, Home, and End.
+ * ## BEHAVIOR
+ * - Renders a list of items with a trigger and an associated panel.
+ * - Supports uncontrolled usage with `defaultExpandedKeys`.
+ * - Supports controlled usage with `expandedKeys` and `onExpandedChange`.
+ * - Supports single-section expansion by default, or multiple open sections with `allowsMultipleExpanded`.
+ * - Allows closing the active section with `allowsToggle`.
+ * - Supports disabled state at both accordion and item level.
+ *
+ * ## VISUAL OPTIONS
+ * - `variant`: `default`, `surface`, `bordered`, `ghost`.
+ * - `size`: `sm`, `md`, `lg`.
+ * - `hideSeparator`: removes item dividers for softer grouped surfaces.
+ * - `indicator`: lets each item provide a custom decorative expand/collapse marker.
+ *
+ * ## ACCESSIBILITY
+ * - Each trigger is a native `button`.
+ * - Triggers expose `aria-expanded`, `aria-controls`, and stable ids.
+ * - Panels expose `aria-labelledby` and are hidden when collapsed.
+ * - Keyboard users can toggle with Enter or Space.
+ * - Arrow Up, Arrow Down, Home, and End move focus between enabled triggers.
+ * - Disabled items are skipped by keyboard navigation.
  *
  * ## DEPENDENCIES
- * - Native `button` elements for triggers.
+ * - Native `button` elements for trigger semantics.
  * - CVA for visual variants and size styles.
+ * - Token classes from `theme.css` for surfaces, borders, text, focus ring, spacing, and disabled states.
  */
 const meta: Meta<typeof Accordion> = {
   title: 'Molecules/Accordion',
