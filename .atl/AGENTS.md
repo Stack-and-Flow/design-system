@@ -9,18 +9,19 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 
 **Stack-and-Flow Design System** — open-source, educational React component library.
 
-| Key | Value |
-|-----|-------|
-| Package | `@stack-and-flow/design-system` |
-| Repo | https://github.com/Stack-and-Flow/design-system |
-| Storybook | https://sf-design-system.netlify.app/ |
-| Guidelines | [`docs/GUIDELINES.md`](../docs/GUIDELINES.md) |
-| Contributing | [`docs/CONTRIBUTING.md`](../docs/CONTRIBUTING.md) |
-| Visual Design | [`docs/DESIGN.md`](../docs/DESIGN.md) |
+| Key           | Value                                             |
+| ------------- | ------------------------------------------------- |
+| Package       | `@stack-and-flow/design-system`                   |
+| Repo          | https://github.com/Stack-and-Flow/design-system   |
+| Storybook     | https://sf-design-system.netlify.app/             |
+| Guidelines    | [`docs/GUIDELINES.md`](../docs/GUIDELINES.md)     |
+| Contributing  | [`docs/CONTRIBUTING.md`](../docs/CONTRIBUTING.md) |
+| Visual Design | [`docs/DESIGN.md`](../docs/DESIGN.md)             |
 
 **Stack**: React 19 · TypeScript strict · Tailwind v4 `@theme` · Radix UI · CVA · Storybook 8 · Biome · Lefthook · Vite · pnpm
 
 **Available tooling**:
+
 - `compilot-cli` — scaffolds the 6-file component structure
 - `pnpm run storybook` — starts Storybook with hot reload
 - `pnpm run test` — runs Vitest unit tests
@@ -32,14 +33,14 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 
 Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` with exactly 6 files:
 
-| File | Role |
-|------|------|
-| `ComponentName.tsx` | Presentational — JSX only, consumes the hook |
-| `useComponentName.ts` | Logic — state, effects, handlers, CVA class calls |
-| `types.ts` | Types + CVA variants |
-| `ComponentName.test.tsx` | Complete test suite (hook + component tests) |
-| `ComponentName.stories.tsx` | Storybook stories (documentation only, no tests) |
-| `index.ts` | Public API re-exports |
+| File                        | Role                                              |
+| --------------------------- | ------------------------------------------------- |
+| `ComponentName.tsx`         | Presentational — JSX only, consumes the hook      |
+| `useComponentName.ts`       | Logic — state, effects, handlers, CVA class calls |
+| `types.ts`                  | Types + CVA variants                              |
+| `ComponentName.test.tsx`    | Complete test suite (hook + component tests)      |
+| `ComponentName.stories.tsx` | Storybook stories (documentation only, no tests)  |
+| `index.ts`                  | Public API re-exports                             |
 
 ---
 
@@ -65,13 +66,14 @@ Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` wi
 
 Load the relevant skill for detailed workflows:
 
-| Trigger | Skill |
-|---------|-------|
-| Contributor shares a GitHub issue URL or component spec and asks to implement it | [`component-contributor`](skills/component-contributor/SKILL.md) |
-| Reviewing an existing component — code quality, visual states, tokens, accessibility | [`components-auditor`](skills/components-auditor/SKILL.md) |
-| Auditing the design system itself — token architecture, folder structure, npm distributable standards | [`auditor`](skills/auditor/SKILL.md) |
-| External project wants to use Stack-and-Flow as a base and customize its tokens | [`bootstrapping`](skills/bootstrapping/SKILL.md) |
-| Contributor asks if their PR is ready for review, or agent must validate implementation before handoff | [`pr-reviewer`](skills/pr-reviewer/SKILL.md) |
-| Creating or auditing GitHub Project board tasks — issues, fields, phases, team assignments | [`github-project-tasks`](skills/github-project-tasks/SKILL.md) |
-| Creating a release, bumping versions, generating changelogs, publishing to npm | [`release-changeset`](skills/release-changeset/SKILL.md) |
-| Preparing the package for npm distribution — exports map, vite lib mode, package.json hygiene, TypeScript declarations | [`npm-architect`](skills/npm-architect/SKILL.md) |
+| Trigger                                                                                                                | Skill                                                                |
+| ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Contributor shares a GitHub issue URL or component spec and asks to implement it                                       | [`component-contributor`](skills/component-contributor/SKILL.md)     |
+| User provides a HeroUI/reference component and wants an implementation-ready spec before coding                        | [`component-spec-proposer`](skills/component-spec-proposer/SKILL.md) |
+| Reviewing an existing component — code quality, visual states, tokens, accessibility                                   | [`components-auditor`](skills/components-auditor/SKILL.md)           |
+| Auditing the design system itself — token architecture, folder structure, npm distributable standards                  | [`auditor`](skills/auditor/SKILL.md)                                 |
+| External project wants to use Stack-and-Flow as a base and customize its tokens                                        | [`bootstrapping`](skills/bootstrapping/SKILL.md)                     |
+| Contributor asks if their PR is ready for review, or agent must validate implementation before handoff                 | [`pr-reviewer`](skills/pr-reviewer/SKILL.md)                         |
+| Creating or auditing GitHub Project board tasks — issues, fields, phases, team assignments                             | [`github-project-tasks`](skills/github-project-tasks/SKILL.md)       |
+| Creating a release, bumping versions, generating changelogs, publishing to npm                                         | [`release-changeset`](skills/release-changeset/SKILL.md)             |
+| Preparing the package for npm distribution — exports map, vite lib mode, package.json hygiene, TypeScript declarations | [`npm-architect`](skills/npm-architect/SKILL.md)                     |
