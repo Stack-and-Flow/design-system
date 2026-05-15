@@ -90,19 +90,20 @@ export const accordionPanelVariants = cva('overflow-hidden text-text-secondary-l
 });
 
 export const accordionIndicatorVariants = cva(
-  'grid size-5 shrink-0 place-items-center text-brand-light transition-transform duration-300 ease-out dark:text-brand-dark',
-  {
-    variants: {
-      expanded: {
-        true: 'rotate-90',
-        false: 'rotate-0'
-      }
-    },
-    defaultVariants: {
-      expanded: false
-    }
-  }
+  'grid size-5 shrink-0 place-items-center text-brand-light dark:text-brand-dark'
 );
+
+export const accordionDefaultIconVariants = cva('leading-none transition-transform duration-300 ease-out', {
+  variants: {
+    expanded: {
+      true: 'rotate-90',
+      false: 'rotate-0'
+    }
+  },
+  defaultVariants: {
+    expanded: false
+  }
+});
 
 export type AccordionItem = {
   id: string;

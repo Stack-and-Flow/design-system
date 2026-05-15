@@ -10,6 +10,7 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
     getItemClassName,
     getTriggerClassName,
     getPanelClassName,
+    getDefaultIconClassName,
     getIndicatorClassName,
     getTriggerProps,
     getPanelProps
@@ -22,11 +23,8 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
           <h3>
             <button {...getTriggerProps(item)} className={getTriggerClassName()}>
               <span>{item.title}</span>
-              <span
-                className={cn(getIndicatorClassName(item.expanded), item.disabled && 'opacity-40')}
-                aria-hidden='true'
-              >
-                {item.indicator ?? <span className='leading-none'>›</span>}
+              <span className={cn(getIndicatorClassName(), item.disabled && 'opacity-40')} aria-hidden='true'>
+                {item.indicator ?? <span className={getDefaultIconClassName(item.expanded)}>⌄</span>}
               </span>
             </button>
           </h3>

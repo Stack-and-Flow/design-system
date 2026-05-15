@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import {
   type AccordionItem,
   type AccordionProps,
+  accordionDefaultIconVariants,
   accordionIndicatorVariants,
   accordionItemVariants,
   accordionPanelVariants,
@@ -26,7 +27,8 @@ type UseAccordionReturn = {
   getItemClassName: () => string;
   getTriggerClassName: () => string;
   getPanelClassName: () => string;
-  getIndicatorClassName: (expanded: boolean) => string;
+  getDefaultIconClassName: (expanded: boolean) => string;
+  getIndicatorClassName: () => string;
   getTriggerProps: (item: UseAccordionItem) => ComponentProps<'button'>;
   getPanelProps: (item: UseAccordionItem) => ComponentProps<'div'>;
   isExpanded: (id: string) => boolean;
@@ -219,7 +221,9 @@ export const useAccordion = ({
 
   const getPanelClassName = () => accordionPanelVariants({ size });
 
-  const getIndicatorClassName = (expanded: boolean) => accordionIndicatorVariants({ expanded });
+  const getDefaultIconClassName = (expanded: boolean) => accordionDefaultIconVariants({ expanded });
+
+  const getIndicatorClassName = () => accordionIndicatorVariants();
 
   const getTriggerProps = (item: UseAccordionItem): ComponentProps<'button'> => ({
     ref: getTriggerRef(item.index),
@@ -247,6 +251,7 @@ export const useAccordion = ({
     getItemClassName,
     getTriggerClassName,
     getPanelClassName,
+    getDefaultIconClassName,
     getIndicatorClassName,
     getTriggerProps,
     getPanelProps,
