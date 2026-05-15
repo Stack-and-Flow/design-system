@@ -90,11 +90,11 @@ export const accordionPanelVariants = cva('overflow-hidden text-text-secondary-l
 });
 
 export const accordionIndicatorVariants = cva(
-  'shrink-0 text-brand-light transition-transform duration-200 ease-out dark:text-brand-dark',
+  'grid size-5 shrink-0 place-items-center text-brand-light transition-transform duration-300 ease-out dark:text-brand-dark',
   {
     variants: {
       expanded: {
-        true: 'rotate-180',
+        true: 'rotate-90',
         false: 'rotate-0'
       }
     },

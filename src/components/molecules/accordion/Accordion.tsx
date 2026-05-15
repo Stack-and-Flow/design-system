@@ -26,7 +26,7 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
                 className={cn(getIndicatorClassName(item.expanded), item.disabled && 'opacity-40')}
                 aria-hidden='true'
               >
-                {item.indicator ?? '⌄'}
+                {item.indicator ?? <span className='leading-none'>›</span>}
               </span>
             </button>
           </h3>
