@@ -39,3 +39,9 @@ page-*.jpeg
 
 # Build artifacts
 tsconfig.build.tsbuildinfo
+opencode.json
+
+# Local Pi runtime state
+.pi/
+.pi-lens/
+.atl/.skill-registry.cache.json
