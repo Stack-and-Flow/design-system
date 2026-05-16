@@ -5,6 +5,7 @@
 ## Requisitos previos
 
 Es **obligatorio** tener instalado:
+
 - [Node.js](https://nodejs.org/) (usa la versión especificada en `.nvmrc`)
 - [nvm](https://github.com/nvm-sh/nvm) o [nvm-windows](https://github.com/coreybutler/nvm-windows) para gestionar versiones de Node.
 - [pnpm](https://pnpm.io/installation) como gestor de paquetes.
@@ -30,6 +31,7 @@ Es **obligatorio** tener instalado:
    ```
 
 ### Nota sobre fuentes
+
 El design system usa **Space Grotesk Variable**, cargada vía `@fontsource-variable/space-grotesk`. Se incluye como dependencia npm normal y estará disponible automáticamente después de `pnpm install`.
 
 ---
@@ -87,11 +89,14 @@ Antes de abrir un PR, verifica:
 ## Flujo de trabajo con Git
 
 ### Estrategia de ramas
+
 - `main` es la rama base. Todos los PRs apuntan a `main`.
 - Nomenclatura de ramas: `feat/nombre-componente`, `fix/nombre-bug`, `chore/nombre-tarea`.
 
 ### Commits
+
 Seguimos estrictamente **Conventional Commits**:
+
 - `feat:` para nuevas funcionalidades o componentes.
 - `fix:` para corrección de bugs.
 - `chore:` para herramientas, dependencias, etc.
@@ -101,13 +106,16 @@ Seguimos estrictamente **Conventional Commits**:
 - `test:` para añadir o corregir tests.
 
 ### Proceso de Pull Request
+
 1. Sube tu rama y abre un PR contra `main`.
 2. Puedes pedir revisión automática a copilot hasta que esté listo para revisión humana.
 3. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
 4. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
 
 ### Checklist del PR
+
 Antes de pedir revisión, verifica:
+
 - [ ] El componente sigue la arquitectura de 6 archivos perfectamente.
 - [ ] No se usa `interface` (solo `type`). Sin `any`.
 - [ ] Storybook contiene `args`, `controls` y `parameters.docs.description.component`.
@@ -143,6 +151,7 @@ Sin embargo, dos reglas son innegociables:
 Si usas [opencode](https://opencode.ai/), este proyecto incluye `.atl/AGENTS.md` — un archivo de contexto que se inyecta automáticamente en todos los agentes al abrir el proyecto.
 
 Los agentes ya conocerán:
+
 - La arquitectura de 6 archivos y dónde corresponde cada pieza de lógica
 - Qué tokens de diseño usar (y qué valores hardcodeados evitar)
 - Las reglas de Storybook y la estructura requerida de stories
@@ -159,15 +168,16 @@ Al usar gentle-ai (opencode), el agente sigue `component-contributor`. El flujo 
 Resumen de fases:
 
 1. **Research** — investigas referencias, API, estados, accesibilidad y diseño.
-2. **Spec** — documentas la issue y el agente la lee sin inventar comportamiento.
-3. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
-4. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
-5. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
-6. **Implementación** — el agente crea los 6 archivos y explica decisiones.
-7. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
-8. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
+2. **Spec proposal** — usas `component-spec-proposer` para convertir la tarea y referencia en una spec validada en la issue.
+3. **Spec intake** — `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
+4. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
+5. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
+6. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
+7. **Implementación** — el agente crea los 6 archivos y explica decisiones.
+8. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
+9. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
 
-> Para activar el flujo completo, comparte la URL de la issue y di "implementa este componente".
+> Para activar el flujo completo, primero pedí la spec con `component-spec-proposer`; después de validarla, comparte la URL de la issue y di "implementa este componente".
 
 ---
 
@@ -190,6 +200,7 @@ Si la IA propone alguna de estas cosas, recházala y redirigela al patrón corre
 El código generado por IA pasa por el **mismo proceso de revisión exacto** que el código escrito por humanos. Sin excepciones.
 
 Antes de pedir revisión en un PR asistido por IA:
+
 - Repasa el checklist del PR como lo harías con cualquier contribución
 - Ejecuta la review pre-PR del componente y documenta la evidencia
 - Corrige todo issue CRITICAL o MAJOR antes de pedir revisión
@@ -205,6 +216,7 @@ Antes de pedir revisión en un PR asistido por IA:
 ---
 
 ## Links útiles
+
 - **Demo de Storybook**: [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)
 - **GitHub Projects (Kanban)**: [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1)
 - **Guidelines**: [GUIDELINES.md](./GUIDELINES.md)

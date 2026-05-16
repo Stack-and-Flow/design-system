@@ -5,6 +5,7 @@ Thank you for your interest in contributing! This document provides the steps an
 ## Prerequisites
 
 You MUST have the following installed:
+
 - [Node.js](https://nodejs.org/) (Use the version specified in `.nvmrc`)
 - [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows) to manage Node versions.
 - [pnpm](https://pnpm.io/installation) package manager.
@@ -30,6 +31,7 @@ You MUST have the following installed:
    ```
 
 ### Fonts Note
+
 The design system uses **Space Grotesk Variable**, loaded via `@fontsource-variable/space-grotesk`. It is included as a regular npm dependency and will be available automatically after `pnpm install`.
 
 ---
@@ -87,11 +89,14 @@ Before opening a PR, verify:
 ## Git Workflow
 
 ### Branching Strategy
+
 - `main` is the base branch. All PRs target `main`.
 - Branch naming convention: `feat/component-name`, `fix/bug-name`, `chore/task-name`.
 
 ### Commits
+
 We strictly follow **Conventional Commits**:
+
 - `feat:` for new features or components.
 - `fix:` for bug fixes.
 - `chore:` for tooling, dependencies, etc.
@@ -101,13 +106,16 @@ We strictly follow **Conventional Commits**:
 - `test:` for adding or fixing tests.
 
 ### Pull Request Process
+
 1. Push your branch and open a PR against `main`.
 2. You can call automatic review to copilot since it is prepared to human review.
 3. The PR MUST pass all CI checks (Biome formatting/linting, TypeScript strict checks).
 4. The PR MUST be reviewed by at least one core maintainer before merging.
 
 ### PR Checklist
+
 Before requesting a review, verify:
+
 - [ ] Component follows the 6-file architecture perfectly.
 - [ ] No `interface` used (only `type`). No `any`.
 - [ ] Storybook contains `args`, `controls`, and `parameters.docs.description.component`.
@@ -138,6 +146,7 @@ However, two rules are non-negotiable:
 If you use [opencode](https://opencode.ai/), this project includes `.atl/AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
 
 The agents will already know:
+
 - The 6-file architecture and where each piece of logic belongs
 - Which design tokens to use (and which hardcoded values to avoid)
 - The Storybook rules and required story structure
@@ -154,13 +163,16 @@ When using gentle-ai/opencode, the agent follows `component-contributor`. The fu
 Phase summary:
 
 1. **Research** — investigate references, API, states, accessibility, and design.
-2. **Spec** — document the issue; the agent reads it without inventing behavior.
-3. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
-4. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
-5. **Plan** — review and approve files, variants, tests, stories, and accessibility.
-6. **Implementation** — the agent creates the 6 files and explains decisions.
-7. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
-8. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
+2. **Spec proposal** — use `component-spec-proposer` to turn the task and reference into a validated issue spec.
+3. **Spec intake** — `component-contributor` reads the `## Validated component spec` section without inventing behavior.
+4. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
+5. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
+6. **Plan** — review and approve files, variants, tests, stories, and accessibility.
+7. **Implementation** — the agent creates the 6 files and explains decisions.
+8. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
+9. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
+
+> To activate the full flow, first prepare the spec with `component-spec-proposer`; after validation, share the issue URL and ask the agent to implement the component.
 
 ---
 
@@ -183,6 +195,7 @@ If the AI proposes any of these, reject it and redirect it to the correct patter
 AI-generated code goes through the **exact same review process** as human-written code. There are no exceptions.
 
 Before requesting a review on an AI-assisted PR:
+
 - Run through the PR checklist as you would for any contribution
 - Run the pre-PR component review and document the evidence
 - Fix every CRITICAL or MAJOR issue before requesting review
@@ -198,6 +211,7 @@ Before requesting a review on an AI-assisted PR:
 ---
 
 ## Useful Links
+
 - **Storybook Demo**: [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)
 - **GitHub Projects (Kanban)**: [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1)
 - **Guidelines**: [GUIDELINES.en.md](./GUIDELINES.en.md)

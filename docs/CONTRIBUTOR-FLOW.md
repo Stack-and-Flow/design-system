@@ -7,7 +7,7 @@ Este es el documento canónico para contribuir componentes al design system. `CO
 ## Resumen rápido
 
 ```text
-Project task → Research → Issue spec → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge
+Project task → Research → Spec proposal skill → Validated issue spec → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge
 ```
 
 La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana.
@@ -22,6 +22,7 @@ La regla central: **la IA ejecuta, el contributor decide**. La spec, los criteri
 | Arquitectura y reglas de código | [`GUIDELINES.md`](./GUIDELINES.md)                 |
 | Tokens y lenguaje visual        | [`DESIGN.md`](./DESIGN.md), `src/styles/theme.css` |
 | Estados visuales por componente | [`COMPONENTS.md`](./COMPONENTS.md)                 |
+| Toma y validación de specs      | `.atl/skills/component-spec-proposer/SKILL.md`     |
 | Flujo detallado con IA          | `.atl/skills/component-contributor/SKILL.md`       |
 | Auditoría pre-PR                | `.atl/skills/components-auditor/SKILL.md`          |
 
@@ -56,9 +57,44 @@ No hagas research a medias. Si la issue está incompleta, el componente sale inc
 
 ---
 
-## Paso 3 — Documentar la spec en la issue
+## Paso 3 — Tomar y validar la spec con `component-spec-proposer`
 
-Completá la issue con una spec verificable.
+Antes de implementar, usá la skill `component-spec-proposer` para convertir la tarea y su referencia en una spec validada.
+
+Cuándo usarla:
+
+- La issue tiene una referencia HeroUI, Radix, MDN, APG o similar.
+- La tarea todavía es vaga o tiene decisiones abiertas.
+- Necesitás preparar la issue antes de pasar a implementación.
+
+Prompt sugerido:
+
+```text
+Prepará la spec para este componente usando component-spec-proposer.
+
+Issue: {issue_url}
+Referencia: {reference_url}
+
+No implementes todavía. Primero proponé la spec, listá assumptions a validar y esperá mi aprobación antes de escribir en GitHub.
+```
+
+La skill debe:
+
+1. Leer la issue y la referencia.
+2. Proponer una spec usando la plantilla de `component-spec-proposer`.
+3. Listar assumptions a validar.
+4. Esperar aprobación humana.
+5. Recién después de la aprobación, escribir `## Validated component spec` en la issue.
+6. Actualizar el Project item a `In progress` cuando corresponda.
+7. Indicar el siguiente paso: arrancar `component-contributor`.
+
+No uses `component-contributor` para implementar hasta que la spec esté validada.
+
+---
+
+## Paso 4 — Documentar la spec en la issue
+
+La spec validada debe quedar en la issue como contrato verificable.
 
 | Campo              | Qué debe decir                                             |
 | ------------------ | ---------------------------------------------------------- |
@@ -76,7 +112,7 @@ Completá la issue con una spec verificable.
 
 ---
 
-## Paso 4 — Crear rama y preparar entorno
+## Paso 5 — Crear rama y preparar entorno
 
 ```bash
 git checkout main
@@ -90,23 +126,29 @@ Usá una rama por unidad de trabajo: `feat/`, `fix/`, `docs/`, `refactor/`, `cho
 
 ---
 
-## Paso 5 — Iniciar el flujo con IA
+## Paso 6 — Iniciar el flujo de implementación con IA
 
 En opencode/gentle-ai, compartí la URL de la issue:
 
+Prompt sugerido:
+
 ```text
-Implementa este componente: https://github.com/Stack-and-Flow/design-system/issues/XXX
+Implementá este componente usando component-contributor.
+
+Issue: {issue_url}
+
+Usá la sección `## Validated component spec` como contrato. No inventes props ni comportamiento fuera de la spec. Pausá en los checkpoints de spec review, visual preflight y plan antes de escribir código.
 ```
 
-El agente debe cargar `component-contributor` y seguir las fases de abajo. Si salta una fase, frenalo.
+El agente debe cargar `component-contributor` y consumir la spec validada por `component-spec-proposer`. Si salta una fase, frenalo.
 
 ---
 
-## Las 8 fases del componente
+## Las 8 fases de implementación del componente
 
-### Fase 1 — Lectura de spec
+### Fase 1 — Lectura de spec validada
 
-El agente extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
+El agente lee la sección `## Validated component spec` de la issue y extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
 
 Salida esperada:
 
@@ -114,7 +156,17 @@ Salida esperada:
 - preguntas si algo es ambiguo;
 - módulos de referencia/tokens que va a cargar.
 
-**Checkpoint humano:** no avances si el agente inventa props, estados o comportamiento.
+**Checkpoint humano:** no avances si el agente inventa props, estados o comportamiento que no estén en la spec validada. Si aparece una decisión nueva, volvé a spec proposal o actualizá la issue antes de implementar.
+
+Prompt sugerido si hay inconsistencias:
+
+```text
+Detené la implementación. Detecté una decisión que no está en `## Validated component spec`:
+
+- {decision_or_gap}
+
+Volvé a modo spec: proponé cómo actualizar la spec, listá assumptions y esperá mi aprobación antes de seguir.
+```
 
 ---
 
@@ -131,6 +183,14 @@ Debe reportar:
 - mejoras propuestas.
 
 **Checkpoint humano:** aceptá la spec, ajustala o pedí cambios. Este es el último momento barato para corregir alcance.
+
+Prompt sugerido:
+
+```text
+Revisá críticamente la spec validada antes de planificar.
+
+Buscá gaps de accesibilidad, stories faltantes, variantes ambiguas, riesgos de arquitectura y mejoras concretas. No escribas código. Devolvé: gaps, riesgos, mejoras y si está listo para avanzar.
+```
 
 ---
 
@@ -153,6 +213,14 @@ Debe definir:
 - touch target y reduced motion.
 
 **Checkpoint humano:** confirmá que el componente ya está alineado visualmente antes de escribir código.
+
+Prompt sugerido:
+
+```text
+Ejecutá la prefase visual antes del plan.
+
+Cargá `docs/DESIGN.md`, `docs/COMPONENTS.md` si aplica y `src/styles/theme.css`. Definí superficie, tokens, estados visuales, focus, disabled, dark mode, transiciones y reduced motion. No escribas código todavía.
+```
 
 ---
 
@@ -179,6 +247,14 @@ types.ts → useComponentName.ts → ComponentName.tsx → ComponentName.test.ts
 
 **Checkpoint humano:** aprobá el plan o pedí ajustes. No se implementa sin aprobación.
 
+Prompt sugerido:
+
+```text
+Presentá el implementation plan para {component_name} antes de escribir código.
+
+Incluí tier, directorio, 6 archivos, CVA variants, hook logic, stories, tests, decisiones visuales y accesibilidad. Esperá mi aprobación para implementar.
+```
+
 ---
 
 ### Fase 5 — Implementación + explicación
@@ -203,6 +279,16 @@ Reglas duras:
 - Sin valores hardcodeados si existe token.
 - Sin `play` functions: las interacciones se testean en `.test.tsx`.
 
+Prompt sugerido:
+
+```text
+Implementá el componente según el plan aprobado.
+
+Creá los archivos en este orden: `types.ts`, `use{ComponentName}.ts`, `{ComponentName}.tsx`, `{ComponentName}.test.tsx`, `{ComponentName}.stories.tsx`, `index.ts`.
+
+Después de cada archivo, explicá las decisiones importantes y no avances si aparece un bloqueo o una decisión no cubierta por la spec.
+```
+
 ---
 
 ### Fase 6 — Visual review
@@ -220,6 +306,14 @@ Debe verificar:
 - reduced motion si hay transforms o animaciones.
 
 CRITICAL y MAJOR bloquean. Se corrigen antes de continuar.
+
+Prompt sugerido:
+
+```text
+Ejecutá la visual review de {component_name}.
+
+Revisá base, hover, focus, active, disabled, glow/shadow, transiciones, contraste, touch target y reduced motion. Clasificá hallazgos como CRITICAL, MAJOR, MINOR o SUGGESTION y corregí CRITICAL/MAJOR antes de continuar.
+```
 
 ---
 
@@ -263,6 +357,17 @@ Formato esperado:
 
 No abras PR con issues CRITICAL o MAJOR.
 
+Prompt sugerido:
+
+```text
+Auditá este componente usando components-auditor antes de abrir PR.
+
+Componente: {component_name}
+Ruta: src/components/{tier}/{kebab_name}/
+
+Revisá arquitectura, responsabilidades por archivo, CVA, TypeScript, stories, tests, tokens, visual states y accesibilidad. Devolvé PASS / PASS WITH WARNINGS / BLOCKED con evidencia.
+```
+
 ---
 
 ### Fase 8 — PR
@@ -280,6 +385,14 @@ Checklist mínimo:
 - [ ] `## Descripción` presente.
 - [ ] `## Dependencies` solo si aplica.
 - [ ] `## Guía de uso` solo si aplica.
+
+Prompt sugerido:
+
+```text
+Prepará el PR para {component_name}.
+
+Linkeá `Closes #{issue_number}`. Incluí resumen, tabla de cambios, evidencia de tests/build, resultado de la pre-PR component review y notas visuales si aplica. No abras el PR si la review está BLOCKED.
+```
 
 ---
 
