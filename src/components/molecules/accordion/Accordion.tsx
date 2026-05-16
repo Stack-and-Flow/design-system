@@ -1,4 +1,6 @@
+import { Header } from '@atoms/header';
 import { Icon } from '@atoms/icon';
+import { Text } from '@atoms/text';
 import type { FC } from 'react';
 import { cn } from '@/lib/utils';
 import type { AccordionProps } from './types';
@@ -6,6 +8,7 @@ import { useAccordion } from './useAccordion';
 
 export const Accordion: FC<AccordionProps> = ({ ...props }) => {
   const {
+    headingLevel,
     items,
     containerProps,
     getItemClassName,
@@ -13,6 +16,7 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
     getPanelClassName,
     getDefaultIconClassName,
     getIndicatorClassName,
+    getTitleTextClassName,
     getTriggerProps,
     getPanelProps
   } = useAccordion(props);
@@ -21,9 +25,14 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
     <div {...containerProps}>
       {items.map((item) => (
         <div key={item.id} className={getItemClassName()}>
-          <h3>
+          <Header tag={headingLevel} className='contents'>
             <button {...getTriggerProps(item)} className={getTriggerClassName()}>
-              <span>{item.title}</span>
+              <Text
+                tag='span'
+                className={cn('font-semibold text-text-light dark:text-text-dark', getTitleTextClassName())}
+              >
+                {item.title}
+              </Text>
               <span className={cn(getIndicatorClassName(), item.disabled && 'opacity-40')} aria-hidden='true'>
                 {item.indicator ?? (
                   <Icon
@@ -36,9 +45,9 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
                 )}
               </span>
             </button>
-          </h3>
+          </Header>
           <div {...getPanelProps(item)} className={getPanelClassName()}>
-            {item.content}
+            {item.panelContent}
           </div>
         </div>
       ))}

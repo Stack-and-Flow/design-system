@@ -1,13 +1,16 @@
-import type { ComponentProps, KeyboardEvent, RefCallback } from 'react';
-import { useCallback, useId, useMemo, useRef, useState } from 'react';
+import { Text, type TextProps } from '@atoms/text';
+import type { ComponentProps, KeyboardEvent, ReactNode, RefCallback } from 'react';
+import { createElement, useCallback, useId, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import {
   type AccordionItem,
   type AccordionProps,
+  accordionContentTextVariants,
   accordionDefaultIconVariants,
   accordionIndicatorVariants,
   accordionItemVariants,
   accordionPanelVariants,
+  accordionTitleTextVariants,
   accordionTriggerVariants,
   accordionVariants
 } from './types';
@@ -18,9 +21,12 @@ type UseAccordionItem = AccordionItem & {
   triggerId: string;
   panelId: string;
   disabled: boolean;
+  panelContent: ReactNode;
 };
 
 type UseAccordionReturn = {
+  contentTextTag: NonNullable<AccordionProps['contentTextTag']>;
+  headingLevel: NonNullable<AccordionProps['headingLevel']>;
   items: UseAccordionItem[];
   expandedKeys: string[];
   containerProps: ComponentProps<'div'>;
@@ -28,11 +34,31 @@ type UseAccordionReturn = {
   getTriggerClassName: () => string;
   getPanelClassName: () => string;
   getDefaultIconClassName: (expanded: boolean) => string;
+  getTitleTextClassName: () => string;
   getIndicatorClassName: () => string;
   getTriggerProps: (item: UseAccordionItem) => ComponentProps<'button'>;
   getPanelProps: (item: UseAccordionItem) => ComponentProps<'div'>;
   isExpanded: (id: string) => boolean;
   toggleItem: (id: string) => void;
+};
+
+const renderAccordionPanelContent = (
+  content: ReactNode,
+  contentTextTag: NonNullable<AccordionProps['contentTextTag']>,
+  contentTextClassName: string
+) => {
+  if (typeof content !== 'string') {
+    return content;
+  }
+
+  const textProps: TextProps = {
+    tag: contentTextTag,
+    className: contentTextClassName,
+    isHtml: false,
+    children: content
+  };
+
+  return createElement(Text, textProps);
 };
 
 const getNextExpandedKeys = ({
@@ -74,6 +100,8 @@ export const useAccordion = ({
   variant = 'default',
   size = 'md',
   hideSeparator = false,
+  headingLevel = 'h3',
+  contentTextTag = 'p',
   className,
   idPrefix,
   ...props
@@ -193,19 +221,6 @@ export const useAccordion = ({
     [focusEnabledItem, toggleItem]
   );
 
-  const preparedItems = items.map((item, index) => {
-    const expanded = isExpanded(item.id);
-
-    return {
-      ...item,
-      index,
-      expanded,
-      triggerId: `${prefix}-trigger-${item.id}`,
-      panelId: `${prefix}-panel-${item.id}`,
-      disabled: disabled || item.disabled === true
-    };
-  });
-
   const containerProps = {
     ...props,
     className: cn(accordionVariants({ variant, size, disabled }), className)
@@ -221,9 +236,27 @@ export const useAccordion = ({
 
   const getPanelClassName = () => accordionPanelVariants({ size });
 
+  const getContentTextClassName = () => accordionContentTextVariants({ size });
+
   const getDefaultIconClassName = (expanded: boolean) => accordionDefaultIconVariants({ expanded });
 
+  const getTitleTextClassName = () => accordionTitleTextVariants({ size });
+
   const getIndicatorClassName = () => accordionIndicatorVariants();
+
+  const preparedItems = items.map((item, index) => {
+    const expanded = isExpanded(item.id);
+
+    return {
+      ...item,
+      index,
+      expanded,
+      triggerId: `${prefix}-trigger-${item.id}`,
+      panelId: `${prefix}-panel-${item.id}`,
+      disabled: disabled || item.disabled === true,
+      panelContent: renderAccordionPanelContent(item.content, contentTextTag, getContentTextClassName())
+    };
+  });
 
   const getTriggerProps = (item: UseAccordionItem): ComponentProps<'button'> => ({
     ref: getTriggerRef(item.index),
@@ -245,6 +278,8 @@ export const useAccordion = ({
   });
 
   return {
+    contentTextTag,
+    headingLevel,
     items: preparedItems,
     expandedKeys,
     containerProps,
@@ -253,6 +288,7 @@ export const useAccordion = ({
     getPanelClassName,
     getDefaultIconClassName,
     getIndicatorClassName,
+    getTitleTextClassName,
     getTriggerProps,
     getPanelProps,
     isExpanded,

@@ -1,13 +1,16 @@
+import type { HeaderVariant } from '@atoms/header';
+import type { TextVariant } from '@atoms/text';
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ComponentProps, ReactNode } from 'react';
 
 export const accordionVariants = cva('w-full text-text-light dark:text-text-dark', {
   variants: {
     variant: {
-      default: 'rounded-lg',
-      surface: 'rounded-xl border border-border-light bg-surface-light dark:border-border-dark dark:bg-surface-dark',
+      default: 'rounded-none',
+      surface:
+        'rounded-xl overflow-hidden border border-border-light bg-surface-light dark:border-border-dark dark:bg-surface-dark',
       bordered:
-        'rounded-xl border border-border-strong-light bg-background-light dark:border-border-strong-dark dark:bg-background-dark',
+        'rounded-xl border overflow-hidden border-border-strong-light bg-background-light dark:border-border-strong-dark dark:bg-background-dark',
       ghost: 'rounded-none bg-transparent'
     },
     size: {
@@ -51,7 +54,7 @@ export const accordionTriggerVariants = cva(
     'flex min-h-11 w-full items-center justify-between gap-3 text-left font-semibold tracking-ui',
     'text-text-light dark:text-text-dark',
     'transition-[background-color,border-color,box-shadow,transform,color] duration-200 ease-out',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'focus-visible:outline-none focus-visible:bg-red-tint-subtle focus-visible:shadow-(--glow-focus-light) dark:focus-visible:bg-red-tint-low dark:focus-visible:shadow-(--glow-focus-dark)',
     'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40'
   ],
   {
@@ -78,9 +81,35 @@ export const accordionTriggerVariants = cva(
 export const accordionPanelVariants = cva('overflow-hidden text-text-secondary-light dark:text-text-secondary-dark', {
   variants: {
     size: {
-      sm: 'px-3 pb-3 text-sm leading-6',
-      md: 'px-4 pb-4 text-base leading-7',
-      lg: 'px-5 pb-5 text-lg leading-8'
+      sm: 'px-3 pt-1 pb-3 text-sm leading-6',
+      md: 'px-4 pt-2 pb-4 text-base leading-7',
+      lg: 'px-5 pt-2 pb-5 text-lg leading-8'
+    }
+  },
+  defaultVariants: {
+    size: 'md'
+  }
+});
+
+export const accordionContentTextVariants = cva('text-text-secondary-light dark:text-text-secondary-dark', {
+  variants: {
+    size: {
+      sm: 'text-sm leading-6',
+      md: 'text-base leading-7',
+      lg: 'text-lg leading-8'
+    }
+  },
+  defaultVariants: {
+    size: 'md'
+  }
+});
+
+export const accordionTitleTextVariants = cva('font-semibold text-text-light dark:text-text-dark', {
+  variants: {
+    size: {
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg'
     }
   },
   defaultVariants: {
@@ -130,6 +159,9 @@ export type AccordionProps = VariantProps<typeof accordionVariants> &
      * @control object
      */
     expandedKeys?: string[];
+    /**
+     * @control object
+     */
     onExpandedChange?: (keys: string[]) => void;
     /**
      * @control boolean
@@ -151,6 +183,16 @@ export type AccordionProps = VariantProps<typeof accordionVariants> &
      * @default false
      */
     hideSeparator?: boolean;
+    /**
+     * @control select
+     * @default h3
+     */
+    headingLevel?: HeaderVariant;
+    /**
+     * @control select
+     * @default p
+     */
+    contentTextTag?: TextVariant;
     /**
      * @control text
      */

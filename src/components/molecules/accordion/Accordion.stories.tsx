@@ -24,39 +24,21 @@ const baseItems: AccordionItem[] = [
   }
 ];
 
-/**
- * ## DESCRIPTION
- * Accordion organizes related content into collapsible sections so users can scan headings first and expand only the panels they need.
- * It is best for FAQs, settings groups, documentation sections, and dense explanatory content where showing everything at once would add noise.
- *
- * ## BEHAVIOR
- * - Renders a list of items with a trigger and an associated panel.
- * - Supports uncontrolled usage with `defaultExpandedKeys`.
- * - Supports controlled usage with `expandedKeys` and `onExpandedChange`.
- * - Supports single-section expansion by default, or multiple open sections with `allowsMultipleExpanded`.
- * - Allows closing the active section with `allowsToggle`.
- * - Supports disabled state at both accordion and item level.
- *
- * ## VISUAL OPTIONS
- * - `variant`: `default`, `surface`, `bordered`, `ghost`.
- * - `size`: `sm`, `md`, `lg`.
- * - `hideSeparator`: removes item dividers for softer grouped surfaces.
- * - `indicator`: lets each item provide a custom decorative expand/collapse marker.
- *
- * ## ACCESSIBILITY
- * - Each trigger is a native `button`.
- * - Triggers expose `aria-expanded`, `aria-controls`, and stable ids.
- * - Panels expose `aria-labelledby` and are hidden when collapsed.
- * - Keyboard users can toggle with Enter or Space.
- * - Arrow Up, Arrow Down, Home, and End move focus between enabled triggers.
- * - Disabled items are skipped by keyboard navigation.
- *
- * ## DEPENDENCIES
- * - Native `button` elements for trigger semantics.
- * - `Icon` atom for the default and custom indicators.
- * - CVA for visual variants and size styles.
- * - Token classes from `theme.css` for surfaces, borders, text, focus ring, spacing, and disabled states.
- */
+const accordionDocsDescription = [
+  '## Descripción',
+  'Accordion organizes related content into collapsible sections so users can scan headings first and expand only the panels they need.',
+  'It is best for FAQs, settings groups, documentation sections, and dense explanatory content where showing everything at once would add noise.',
+  '',
+  '## Dependencies',
+  '- `Header` atom for item heading semantics.',
+  '- `Text` atom for string panel content.',
+  '- `Icon` atom for the default and custom indicators.',
+  '',
+  '## Guía de uso',
+  'Use uncontrolled props (`defaultExpandedKeys`) for static content and controlled props (`expandedKeys`, `onExpandedChange`) when parent state, routing, persistence, or analytics need to observe expansion state.',
+  'Use `allowsMultipleExpanded` when users need to compare multiple panels, and keep custom indicators decorative because the trigger text owns the accessible label.'
+].join('\n');
+
 const meta: Meta<typeof Accordion> = {
   title: 'Molecules/Accordion',
   component: Accordion,
@@ -64,8 +46,7 @@ const meta: Meta<typeof Accordion> = {
     docs: {
       autodocs: true,
       description: {
-        component:
-          'Accordion renders accessible collapsible content sections with controlled and uncontrolled expansion modes.'
+        component: accordionDocsDescription
       }
     }
   },
@@ -133,6 +114,17 @@ export const Large: Story = {
   args: {
     ...Default.args,
     size: 'lg'
+  }
+};
+
+/**
+ * `headingLevel` changes the semantic heading level while preserving the accordion interaction model.
+ * Use it to keep the page outline correct when the accordion appears under different sections.
+ */
+export const HeadingLevel: Story = {
+  args: {
+    ...Default.args,
+    headingLevel: 'h4'
   }
 };
 

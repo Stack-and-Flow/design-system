@@ -105,6 +105,24 @@ describe('Accordion — component behavior', () => {
     expect(trigger).toHaveAttribute('aria-controls', 'test-accordion-panel-first');
   });
 
+  it('renders triggers with the configured Header level', () => {
+    render(<Accordion items={items} headingLevel='h4' />);
+
+    expect(screen.getByRole('heading', { level: 4, name: 'First section' })).toBeInTheDocument();
+  });
+
+  it('renders string panel content with Text', () => {
+    render(<Accordion items={items} defaultExpandedKeys={['first']} />);
+
+    expect(screen.getByText('First panel content').tagName).toBe('P');
+  });
+
+  it('supports configured Text tag for string panel content', () => {
+    render(<Accordion items={items} defaultExpandedKeys={['first']} contentTextTag='small' />);
+
+    expect(screen.getByText('First panel content').tagName).toBe('SMALL');
+  });
+
   it('hides collapsed panels', () => {
     render(<Accordion items={items} idPrefix='test-accordion' />);
 
