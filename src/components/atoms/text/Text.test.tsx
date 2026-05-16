@@ -21,13 +21,16 @@ describe('useText', () => {
           '<script>alert(1)</script>',
           '<a href="javascript:alert(1)">link</a>',
           '<a href="jav&#x61;script:alert(1)">encoded</a>',
+          '<a href="jav&#x09;ascript:alert(1)">control</a>',
           '<img src="d&#x61;ta:text/html,foo">',
+          '<iframe srcdoc="<script>alert(1)</script>"></iframe>',
+          '<object data="javascript:alert(1)"></object>',
           '<script>alert(1)'
         ].join('')
       })
     );
 
-    expect(result.current.sanitizedHtml).toBe('<strong>Safe</strong><a>link</a><a>encoded</a><img>');
+    expect(result.current.sanitizedHtml).toBe('<strong>Safe</strong><a>link</a><a>encoded</a><a>control</a><img>');
   });
 });
 

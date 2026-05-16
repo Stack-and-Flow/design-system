@@ -33,7 +33,7 @@ export const textVariants = cva(['font-weight-regular text-text-light dark:text-
 export type TextVariant = 'p' | 'small' | 'span';
 export type TextFont = 'primary' | 'secondary' | 'secondaryBold';
 
-type NativeTextProps = Omit<HTMLAttributes<HTMLElement>, 'children' | 'className' | 'role'>;
+type NativeTextProps = Omit<HTMLAttributes<HTMLElement>, 'children' | 'className' | 'dangerouslySetInnerHTML' | 'role'>;
 
 type BaseTextProps = NativeTextProps & {
   /**
