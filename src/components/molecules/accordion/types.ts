@@ -54,7 +54,7 @@ export const accordionTriggerVariants = cva(
     'flex min-h-11 w-full items-center justify-between gap-3 text-left font-semibold tracking-ui',
     'text-text-light dark:text-text-dark',
     'transition-[background-color,border-color,box-shadow,transform,color] duration-200 ease-out',
-    'focus-visible:outline-none focus-visible:bg-red-tint-subtle focus-visible:shadow-(--glow-focus-light) dark:focus-visible:bg-red-tint-low dark:focus-visible:shadow-(--glow-focus-dark)',
+    'focus-visible:outline-none focus-visible:bg-red-tint-subtle focus-visible:shadow-glow-focus-light dark:focus-visible:bg-red-tint-low dark:focus-visible:shadow-glow-focus-dark',
     'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40'
   ],
   {
