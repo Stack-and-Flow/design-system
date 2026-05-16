@@ -381,10 +381,10 @@ Checklist mínimo:
 - [ ] Tests relevantes pasan.
 - [ ] Build o checks requeridos pasan.
 - [ ] Pre-PR component review incluido o resumido.
-- [ ] Storybook docs tiene `parameters.docs.description.component`.
-- [ ] `## Descripción` presente.
+- [ ] Storybook docs tiene un bloque JSDoc encima de `const meta`.
+- [ ] `## Description` presente.
 - [ ] `## Dependencies` solo si aplica.
-- [ ] `## Guía de uso` solo si aplica.
+- [ ] `## Usage Guide` solo si aplica.
 
 Prompt sugerido:
 
@@ -398,23 +398,23 @@ Linkeá `Closes #{issue_number}`. Incluí resumen, tabla de cambios, evidencia d
 
 ## Criterio Storybook actual
 
-`parameters.docs.description.component` debe usar esta estructura:
+El bloque JSDoc encima de `const meta` debe usar esta estructura:
 
 ```markdown
-## Descripción
+## Description
 
-Qué hace el componente y cuándo usarlo.
+What the component does and when to use it.
 
 ## Dependencies
 
-Solo si usa otros componentes del design system o primitives externas.
+Only when it uses other design-system components or external primitives.
 
-## Guía de uso
+## Usage Guide
 
-Solo si la composición o uso tiene restricciones no obvias.
+Only when composition or usage has non-obvious constraints.
 ```
 
-El contenido sigue en inglés por defecto; los headings anteriores son la convención canónica.
+Todo el contenido del bloque JSDoc debe estar en inglés, incluidos headings, texto descriptivo y listas.
 
 ---
 

@@ -62,12 +62,12 @@ Todo componente DEBE seguir estrictamente la arquitectura Atomic Design + Contai
 
 Storybook es nuestra única fuente de verdad. Todo componente DEBE estar completamente documentado.
 
-- **Inglés por defecto**: Stories, descripciones, comentarios y labels van en inglés, excepto los headings canónicos de docs.
+- **Inglés obligatorio**: toda la documentación de Storybook va en inglés, incluidos headings de docs, descripciones, comentarios, nombres de stories y labels.
 - **Controls y Args**: DEBES definir `controls` mediante JSDoc en `types.ts` y establecer `args` por defecto en `.stories.tsx`.
-- **Descripción en Docs**: DEBES incluir `parameters.docs.description.component` con esta estructura:
-  - `## Descripción` obligatorio.
+- **Descripción en Docs**: DEBES incluir un bloque JSDoc encima de `const meta` con esta estructura:
+  - `## Description` obligatorio.
   - `## Dependencies` solo si usa otros componentes o primitives externas.
-  - `## Guía de uso` solo si la utilización es compleja.
+  - `## Usage Guide` solo si la utilización es compleja.
 - **Sin `play` functions**: Las interacciones se testean en `ComponentName.test.tsx`, no en stories.
 
 ---
@@ -118,8 +118,8 @@ Antes de pedir revisión, verifica:
 
 - [ ] El componente sigue la arquitectura de 6 archivos perfectamente.
 - [ ] No se usa `interface` (solo `type`). Sin `any`.
-- [ ] Storybook contiene `args`, `controls` y `parameters.docs.description.component`.
-- [ ] `## Descripción` está presente; `## Dependencies` y `## Guía de uso` se usan solo cuando aplican.
+- [ ] Storybook contiene `args`, `controls` y un bloque JSDoc encima de `const meta`.
+- [ ] `## Description` está presente; `## Dependencies` y `## Usage Guide` se usan solo cuando aplican.
 - [ ] Los componentes interactivos tienen tests en `.test.tsx`.
 - [ ] La review pre-PR del componente está pasada o documentada.
 - [ ] Se usan tokens de `theme.css` (sin colores ni espaciados hardcodeados).
@@ -188,7 +188,7 @@ Si usas una herramienta de IA, no le permitas:
 - Modificar los tokens de `src/styles/theme.css` sin tu aprobación explícita
 - Añadir nuevas dependencias `npm` o `pnpm` sin discutirlo
 - Saltarse la estructura de 6 archivos en favor de un enfoque de un solo archivo "más simple"
-- Escribir stories sin args, controls o `parameters.docs.description.component`
+- Escribir stories sin args, controls o un bloque JSDoc encima de `const meta`
 - Usar `interface` en lugar de `type`, o introducir tipos `any`
 
 Si la IA propone alguna de estas cosas, recházala y redirigela al patrón correcto.

@@ -24,35 +24,36 @@ Cada componente DEBE separarse en lógica (Container) y renderizado (Presentatio
 
 Cada componente DEBE vivir dentro de un directorio en kebab-case (`src/components/atoms/button/`) y contener EXACTAMENTE estos seis archivos:
 
-| Archivo | Propósito | Regla |
-| ------- | --------- | ----- |
-| `types.ts` | Tipos y Variantes | Define props con `type`, JSDoc controls y variantes `cva`. |
-| `useButton.ts` | Hook Container | Contiene TODA la lógica, estado, refs, handlers y consumo de clases `cva`. |
-| `Button.tsx` | Componente Presentacional | SOLO JSX. Consume el hook. Sin lógica, estado ni CVA. |
-| `Button.test.tsx` | Tests | Cubre hook y comportamiento del componente. |
-| `Button.stories.tsx` | Documentación | Contiene Storybook autodocs, `args` y `parameters.docs.description.component`. |
-| `index.ts` | API Pública | Re-exporta el componente y los tipos. |
+| Archivo              | Propósito                 | Regla                                                                         |
+| -------------------- | ------------------------- | ----------------------------------------------------------------------------- |
+| `types.ts`           | Tipos y Variantes         | Define props con `type`, JSDoc controls y variantes `cva`.                    |
+| `useButton.ts`       | Hook Container            | Contiene TODA la lógica, estado, refs, handlers y consumo de clases `cva`.    |
+| `Button.tsx`         | Componente Presentacional | SOLO JSX. Consume el hook. Sin lógica, estado ni CVA.                         |
+| `Button.test.tsx`    | Tests                     | Cubre hook y comportamiento del componente.                                   |
+| `Button.stories.tsx` | Documentación             | Contiene Storybook autodocs, `args` y un bloque JSDoc encima de `const meta`. |
+| `index.ts`           | API Pública               | Re-exporta el componente y los tipos.                                         |
 
 ### 1. Tipos y Variantes (`types.ts`)
+
 Todas las variantes `cva` van aquí, nunca en el hook ni en el componente.
 Usa comentarios JSDoc para generar automáticamente los controles de Storybook.
 
 ```typescript
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from "class-variance-authority";
 
 export const buttonVariants = cva(
-  ['flex items-center justify-center font-secondary-bold'],
+  ["flex items-center justify-center font-secondary-bold"],
   {
     variants: {
       variant: {
-        primary: 'bg-secondary text-text-dark',
-        ghost: 'bg-transparent text-text-light'
-      }
+        primary: "bg-secondary text-text-dark",
+        ghost: "bg-transparent text-text-light",
+      },
     },
     defaultVariants: {
-      variant: 'primary'
-    }
-  }
+      variant: "primary",
+    },
+  },
 );
 
 export type ButtonProps = {
@@ -60,20 +61,21 @@ export type ButtonProps = {
    * @control select
    * @default primary
    */
-  variant?: VariantProps<typeof buttonVariants>['variant'];
+  variant?: VariantProps<typeof buttonVariants>["variant"];
   className?: string;
   disabled?: boolean;
 };
 ```
 
 ### 2. Hook Container (`useButton.ts`)
+
 El hook retorna todo lo que el elemento necesita: clases CSS, manejadores de eventos, props mapeadas y atributos `aria`.
 
 ```typescript
-import { buttonVariants, type ButtonProps } from './types';
+import { buttonVariants, type ButtonProps } from "./types";
 
 export const useButton = ({
-  variant = 'primary',
+  variant = "primary",
   className,
   disabled = false,
   ...props
@@ -84,20 +86,21 @@ export const useButton = ({
   return {
     buttonClass,
     disabled,
-    ...props
+    ...props,
   };
 };
 ```
 
 ### 3. Componente Presentacional (`Button.tsx`)
+
 Solo desestructura lo que necesita del hook y lo renderiza.
 
 ```tsx
-import type { FC, ComponentProps } from 'react';
-import type { ButtonProps } from './types';
-import { useButton } from './useButton';
+import type { FC, ComponentProps } from "react";
+import type { ButtonProps } from "./types";
+import { useButton } from "./useButton";
 
-const Button: FC<ButtonProps & ComponentProps<'button'>> = ({ ...props }) => {
+const Button: FC<ButtonProps & ComponentProps<"button">> = ({ ...props }) => {
   const { buttonClass, disabled, children } = useButton(props);
 
   return (
@@ -111,9 +114,10 @@ export default Button;
 ```
 
 ### 4. API Pública (`index.ts`)
+
 ```typescript
-import Button from './Button';
-export * from './types';
+import Button from "./Button";
+export * from "./types";
 export default Button;
 ```
 
@@ -130,17 +134,30 @@ export default Button;
 
 ## Reglas de Storybook
 
-- **Solo en inglés**: Todas las stories deben escribirse en inglés.
+- **Solo en inglés**: Toda la documentación de Storybook debe escribirse en inglés, incluidos headings, descripciones, comentarios, nombres de stories y labels.
 - **Controles obligatorios**: Usa comentarios JSDoc (`/** @control text */`) en `types.ts` para activar los controles.
-- **Descripción obligatoria**: Cada story de componente DEBE incluir una descripción en docs:
+- **Descripción obligatoria**: Cada story de componente DEBE incluir un bloque JSDoc encima de `const meta` con headings en inglés:
   ```typescript
-  parameters: {
-    docs: {
-      description: {
-        component: 'A versatile button component used to trigger actions.'
-      }
-    }
-  }
+  /**
+   * ## Description
+   * A versatile button component used to trigger actions.
+   *
+   * ## Dependencies
+   * Uses `Icon` when an icon slot is provided.
+   *
+   * ## Usage Guide
+   * Use this component for primary actions. Avoid using it for navigation.
+   */
+  const meta: Meta<typeof Button> = {
+    title: "Atoms/Button",
+    component: Button,
+    parameters: {
+      docs: {
+        autodocs: true,
+      },
+    },
+    tags: ["autodocs"],
+  };
   ```
 - **Args**: Define `args` por defecto para la story base.
 
@@ -191,10 +208,10 @@ Cada componente del design system DEBE tener un archivo de test correspondiente 
 
 Seguimos la separación Container/Presentational también en los tests:
 
-| Capa | Herramienta | Qué testear |
-|------|-------------|-------------|
-| `useComponentName.ts` (Hook) | `renderHook` | Lógica pura: valores por defecto, props computadas, manejadores de eventos, forma del retorno |
-| `ComponentName.tsx` (Componente) | `render` + `screen` + `userEvent` | Comportamiento observable: accesibilidad, estado deshabilitado, loading, manejo de clicks |
+| Capa                             | Herramienta                       | Qué testear                                                                                   |
+| -------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------- |
+| `useComponentName.ts` (Hook)     | `renderHook`                      | Lógica pura: valores por defecto, props computadas, manejadores de eventos, forma del retorno |
+| `ComponentName.tsx` (Componente) | `render` + `screen` + `userEvent` | Comportamiento observable: accesibilidad, estado deshabilitado, loading, manejo de clicks     |
 
 **Nunca testees detalles de implementación**: NO hagas assertions sobre cadenas de clases CSS, valores internos de refs, ni qué string de variante se aplica al DOM. Testea lo que un usuario real (o un lector de pantalla) observaría.
 
@@ -228,43 +245,45 @@ Cada archivo de test de componente DEBE cubrir:
 Siempre mockea estos dos paquetes — importan animaciones CSS o módulos dinámicos que rompen jsdom:
 
 ```typescript
-vi.mock('lucide-react/dynamic', () => ({
-  DynamicIcon: () => null
+vi.mock("lucide-react/dynamic", () => ({
+  DynamicIcon: () => null,
 }));
 
-vi.mock('spinners-react', () => ({
-  SpinnerCircular: () => null
+vi.mock("spinners-react", () => ({
+  SpinnerCircular: () => null,
 }));
 ```
 
 También mockea cualquier archivo CSS importado directamente desde el componente:
 
 ```typescript
-vi.mock('@/components/utils/styles/index.css', () => ({}));
+vi.mock("@/components/utils/styles/index.css", () => ({}));
 ```
 
 ### Ejemplos de Referencia
 
 **Test de hook** — usa `renderHook`:
-```typescript
-import { renderHook } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { useButton } from './useButton';
 
-describe('useButton — logic', () => {
-  it('returns disabled: false by default', () => {
+```typescript
+import { renderHook } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { useButton } from "./useButton";
+
+describe("useButton — logic", () => {
+  it("returns disabled: false by default", () => {
     const { result } = renderHook(() => useButton({}));
     expect(result.current.disabled).toBe(false);
   });
 
-  it('returns the correct variant when variant: ghost is passed', () => {
-    const { result } = renderHook(() => useButton({ variant: 'ghost' }));
-    expect(result.current.variant).toBe('ghost');
+  it("returns the correct variant when variant: ghost is passed", () => {
+    const { result } = renderHook(() => useButton({ variant: "ghost" }));
+    expect(result.current.variant).toBe("ghost");
   });
 });
 ```
 
 **Test de componente** — usa `render` + `screen` + `userEvent`:
+
 ```typescript
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

@@ -484,11 +484,12 @@ describe('Component — behavior', () => {
 
 **Rules:**
 
-- English only — titles, descriptions, arg labels, except for the canonical docs section headings below
-- Mandatory `parameters.docs.description.component` using the canonical story header structure:
-  - `## Descripción` — required for every component; explain what it does and when to use it
+- HARD RULE: all Storybook documentation must be in English, including JSDoc headings, descriptions, comments, story names, and arg labels
+- Mandatory component documentation as a JSDoc block immediately above `const meta`; do not put component docs in `parameters.docs.description.component`
+- The JSDoc block must use the canonical English story header structure:
+  - `## Description` — required for every component; explain what it does and when to use it
   - `## Dependencies` — include only when the story/component uses other design-system components or external primitives; list the dependency and why it is used
-  - `## Guía de uso` — include only when usage is complex; explain composition, constraints, or non-obvious behavior
+  - `## Usage Guide` — include only when usage is complex; explain composition, constraints, or non-obvious behavior
 - Mandatory `args` on `Default` story — must NOT hardcode props that override `defaultVariants`
 - Always include: `Default`, `Disabled`, one story per key variant
 - Each story demonstrates ONE axis only — no mixed props across variants in the same story
@@ -503,17 +504,25 @@ describe('Component — behavior', () => {
 import type { Meta, StoryObj } from "@storybook/react";
 import Component from "./Component";
 
+/**
+ * ## Description
+ * Concise English description of what this component does and when to use it.
+ *
+ * ## Dependencies
+ * Include only when the story/component uses other design-system components or external primitives.
+ *
+ * ## Usage Guide
+ * Include only when usage is complex or has non-obvious constraints.
+ */
 const meta: Meta<typeof Component> = {
   title: "Atoms/Component",
   component: Component,
   parameters: {
     docs: {
-      description: {
-        component:
-          "## Descripción\nConcise English description of what this component does and when to use it.",
-      },
+      autodocs: true,
     },
   },
+  tags: ["autodocs"],
 };
 
 export default meta;
@@ -662,7 +671,7 @@ Rules:
 - [ ] `useComponentName.ts` — all logic, no JSX, returns typed object
 - [ ] `ComponentName.tsx` — only JSX, consumes hook, no logic
 - [ ] `ComponentName.test.tsx` — complete test suite (hook tests with renderHook + component tests with render/screen/userEvent)
-- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, English except canonical docs headings, `## Descripción` present, optional `## Dependencies` / `## Guía de uso` used when applicable, no overriding defaultVariants in Default args, canonical autodocs/actions conventions followed, NO play functions
+- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, fully English JSDoc above `meta`, `## Description` present, optional `## Dependencies` / `## Usage Guide` used when applicable, no overriding defaultVariants in Default args, canonical autodocs/actions conventions followed, NO play functions
 - [ ] `index.ts` — re-exports correct
 
 **Tokens & theming**

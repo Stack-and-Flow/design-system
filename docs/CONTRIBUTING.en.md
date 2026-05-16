@@ -62,12 +62,12 @@ Every component MUST strictly follow the Atomic Design + Container/Presentationa
 
 Storybook is our single source of truth. Every component MUST be fully documented.
 
-- **English by default**: Stories, descriptions, comments, and labels are written in English, except the canonical docs headings.
+- **English only**: all Storybook documentation is written in English, including docs headings, descriptions, comments, story names, and arg labels.
 - **Controls & Args**: You MUST define `controls` via JSDoc in `types.ts` and set default `args` in `.stories.tsx`.
-- **Docs Description**: You MUST include `parameters.docs.description.component` with this structure:
-  - `## Descripción` is required.
+- **Docs Description**: You MUST include a JSDoc block above `const meta` with this structure:
+  - `## Description` is required.
   - `## Dependencies` only when the component uses other components or external primitives.
-  - `## Guía de uso` only when usage is complex.
+  - `## Usage Guide` only when usage is complex.
 - **No `play` functions**: Interactions are tested in `ComponentName.test.tsx`, not in stories.
 
 ---
@@ -118,8 +118,8 @@ Before requesting a review, verify:
 
 - [ ] Component follows the 6-file architecture perfectly.
 - [ ] No `interface` used (only `type`). No `any`.
-- [ ] Storybook contains `args`, `controls`, and `parameters.docs.description.component`.
-- [ ] `## Descripción` is present; `## Dependencies` and `## Guía de uso` are used only when applicable.
+- [ ] Storybook contains `args`, `controls`, and a JSDoc block above `const meta`.
+- [ ] `## Description` is present; `## Dependencies` and `## Usage Guide` are used only when applicable.
 - [ ] Interactive components have tests in `.test.tsx`.
 - [ ] The pre-PR component review has passed or is documented.
 - [ ] Tokens from `theme.css` are used (no hardcoded colors or spacing).
@@ -183,7 +183,7 @@ If you are using an AI tool, do not allow it to:
 - Modify `src/styles/theme.css` tokens without your explicit approval
 - Add new `npm` or `pnpm` dependencies without discussion
 - Skip the 6-file structure in favor of a "simpler" single-file approach
-- Write stories without args, controls, or `parameters.docs.description.component`
+- Write stories without args, controls, or a JSDoc block above `const meta`
 - Use `interface` instead of `type`, or introduce `any` types
 
 If the AI proposes any of these, reject it and redirect it to the correct pattern.

@@ -24,30 +24,26 @@ const baseItems: AccordionItem[] = [
   }
 ];
 
-const accordionDocsDescription = [
-  '## Descripción',
-  'Accordion organizes related content into collapsible sections so users can scan headings first and expand only the panels they need.',
-  'It is best for FAQs, settings groups, documentation sections, and dense explanatory content where showing everything at once would add noise.',
-  '',
-  '## Dependencies',
-  '- `Header` atom for item heading semantics.',
-  '- `Text` atom for string panel content.',
-  '- `Icon` atom for the default and custom indicators.',
-  '',
-  '## Guía de uso',
-  'Use uncontrolled props (`defaultExpandedKeys`) for static content and controlled props (`expandedKeys`, `onExpandedChange`) when parent state, routing, persistence, or analytics need to observe expansion state.',
-  'Use `allowsMultipleExpanded` when users need to compare multiple panels, and keep custom indicators decorative because the trigger text owns the accessible label.'
-].join('\n');
-
+/**
+ * ## Description
+ * Accordion organizes related content into collapsible sections so users can scan headings first and expand only the panels they need.
+ * It is best for FAQs, settings groups, documentation sections, and dense explanatory content where showing everything at once would add noise.
+ *
+ * ## Dependencies
+ * - `Header` atom for item heading semantics.
+ * - `Text` atom for string panel content.
+ * - `Icon` atom for the default and custom indicators.
+ *
+ * ## Usage Guide
+ * Use uncontrolled props (`defaultExpandedKeys`) for static content and controlled props (`expandedKeys`, `onExpandedChange`) when parent state, routing, persistence, or analytics need to observe expansion state.
+ * Use `allowsMultipleExpanded` when users need to compare multiple panels, and keep custom indicators decorative because the trigger text owns the accessible label.
+ */
 const meta: Meta<typeof Accordion> = {
   title: 'Molecules/Accordion',
   component: Accordion,
   parameters: {
     docs: {
-      autodocs: true,
-      description: {
-        component: accordionDocsDescription
-      }
+      autodocs: true
     }
   },
   tags: ['autodocs']
