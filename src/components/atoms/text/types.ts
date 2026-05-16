@@ -1,10 +1,9 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import type { ReactNode } from 'react';
+import type { AriaRole, HTMLAttributes, ReactNode } from 'react';
 
 export const textVariants = cva(['font-weight-regular text-text-light dark:text-text-dark'], {
   variants: {
     font: {
-      // Sistema de una sola fuente — todas las variantes usan Space Grotesk Variable
       primary: 'font-primary',
       secondary: 'font-primary',
       secondaryBold: 'font-primary font-weight-bold'
@@ -34,7 +33,9 @@ export const textVariants = cva(['font-weight-regular text-text-light dark:text-
 export type TextVariant = 'p' | 'small' | 'span';
 export type TextFont = 'primary' | 'secondary' | 'secondaryBold';
 
-type BaseTextProps = {
+type NativeTextProps = Omit<HTMLAttributes<HTMLElement>, 'children' | 'className' | 'dangerouslySetInnerHTML' | 'role'>;
+
+type BaseTextProps = NativeTextProps & {
   /**
    * @control select
    * @default secondary
@@ -44,7 +45,7 @@ type BaseTextProps = {
    * @control select
    * @default p
    */
-  tag: TextVariant;
+  tag?: TextVariant;
   /**
    * @control boolean
    * @default false
@@ -60,7 +61,7 @@ type BaseTextProps = {
   /** @control text */
   className?: string;
   /** @control select */
-  role?: 'status' | 'alert' | 'log' | 'marquee' | 'none';
+  role?: Extract<AriaRole, 'status' | 'alert' | 'log' | 'marquee' | 'none'>;
   /** @control text */
   id?: string;
 } & VariantProps<typeof textVariants>;

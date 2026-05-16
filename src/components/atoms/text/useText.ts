@@ -15,7 +15,7 @@ export const useText = ({
   id,
   ...rest
 }: TextProps) => {
-  const sanitizedHtml = isHtml ? sanitizeHtml(children as string) : undefined;
+  const sanitizedHtml = isHtml && typeof children === 'string' ? sanitizeHtml(children) : undefined;
 
   const props = {
     className: cn(textVariants({ font, tag, prominent, srOnly }), className),
