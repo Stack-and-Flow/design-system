@@ -39,7 +39,7 @@ export const chipVariants = cva(
         ].join(' '),
         success: [
           '[--chip-tone:var(--color-green)]',
-          '[--chip-fg:var(--color-green-dark)] dark:[--chip-fg:var(--color-green-light)]',
+          '[--chip-fg:var(--color-text-light)] dark:[--chip-fg:var(--color-text-dark)]',
           '[--chip-solid-bg:var(--color-green)]',
           '[--chip-solid-fg:var(--color-text-light)] dark:[--chip-solid-fg:var(--color-background-dark)]',
           '[--chip-soft-bg:color-mix(in_srgb,var(--chip-tone)_11%,transparent)]',
@@ -50,7 +50,7 @@ export const chipVariants = cva(
         ].join(' '),
         warning: [
           '[--chip-tone:var(--color-yellow)]',
-          '[--chip-fg:var(--color-yellow-dark)] dark:[--chip-fg:var(--color-yellow-light)]',
+          '[--chip-fg:var(--color-text-light)] dark:[--chip-fg:var(--color-text-dark)]',
           '[--chip-solid-bg:var(--color-yellow)]',
           '[--chip-solid-fg:#1a0a00]',
           '[--chip-soft-bg:color-mix(in_srgb,var(--chip-tone)_13%,transparent)]',
