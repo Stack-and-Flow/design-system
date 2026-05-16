@@ -2,7 +2,7 @@
 name: component-contributor
 description: >
   Guides an AI agent through implementing a design system component from a GitHub issue spec.
-  Covers the full contributor workflow: onboarding → read spec → plan → implement (6-file pattern) → explain decisions → visual review.
+  Covers the full contributor workflow: onboarding → read spec → specification review → visual preflight → plan → implement (6-file pattern) → explain decisions → visual review → component review before PR.
   Trigger: When a contributor provides a GitHub issue URL or pastes a component spec and asks to implement it.
   Also delegable from sdd-apply when implementing a component as part of a larger SDD change.
 license: Apache-2.0
@@ -42,6 +42,21 @@ Return your result in the SDD return envelope format:
 **Remaining tasks**: {list or "None"}
 **Status**: {N}/{total} tasks complete. Ready for verify / Blocked by X
 ```
+
+---
+
+## Contributor Workflow Overview
+
+Follow the phases in order. Do not compress or skip the pre-implementation gates just because the component looks simple.
+
+1. **Onboarding** — confirm the contributor understands the stack and project conventions.
+2. **Read the spec** — extract props, variants, states, accessibility, reference URL, and design notes.
+3. **Specification review** — critique gaps, risks, and improvements before committing to an implementation shape.
+4. **Visual preflight** — load design sources and map the component to tokens, surfaces, states, transitions, focus, and disabled treatment before planning.
+5. **Plan** — explain files, tokens, CVA variants, accessibility, stories, and testing before coding.
+6. **Implement + explain** — build the 6-file pattern and teach the reasoning after each file.
+7. **Visual review** — verify state completeness, glow, transitions, contrast, focus, and reduced motion.
+8. **Component review before PR** — run an explicit component audit to catch architecture, story, token, test, and accessibility inconsistencies before opening a pull request.
 
 ---
 
@@ -469,8 +484,11 @@ describe('Component — behavior', () => {
 
 **Rules:**
 
-- English only — titles, descriptions, arg labels
-- Mandatory `parameters.docs.description.component`
+- English only — titles, descriptions, arg labels, except for the canonical docs section headings below
+- Mandatory `parameters.docs.description.component` using the canonical story header structure:
+  - `## Descripción` — required for every component; explain what it does and when to use it
+  - `## Dependencies` — include only when the story/component uses other design-system components or external primitives; list the dependency and why it is used
+  - `## Guía de uso` — include only when usage is complex; explain composition, constraints, or non-obvious behavior
 - Mandatory `args` on `Default` story — must NOT hardcode props that override `defaultVariants`
 - Always include: `Default`, `Disabled`, one story per key variant
 - Each story demonstrates ONE axis only — no mixed props across variants in the same story
@@ -492,7 +510,7 @@ const meta: Meta<typeof Component> = {
     docs: {
       description: {
         component:
-          "Concise English description of what this component does and when to use it.",
+          "## Descripción\nConcise English description of what this component does and when to use it.",
       },
     },
   },
@@ -542,7 +560,7 @@ This is the learning layer — the contributor must understand every decision, n
 
 ## Phase 5 — Visual Review
 
-After all 5 files are written, run a visual quality check before calling the component done.
+After all 6 files are written, run a visual quality check before calling the component done.
 This is not optional — a component that compiles without errors can still be visually broken.
 
 Load the `visual-review` skill for the full review protocol. At minimum, apply these checks:
@@ -591,6 +609,51 @@ Fix all CRITICAL and MAJOR before marking the component complete.
 
 ---
 
+## Phase 6 — Component Review Before PR
+
+Before opening a PR, run a fresh component review to catch inconsistencies that implementation and visual review may have missed.
+This is mandatory for AI-generated or AI-assisted component work.
+
+Load the `components-auditor` skill and audit the component against:
+
+- 6-file pattern and file responsibilities
+- TypeScript conventions (`type`, no `interface`, no `any`, strict return types)
+- CVA structure and variant placement
+- Token usage (`theme.css` utilities, no raw hex, no direct `var()` in component source)
+- Storybook conventions (`autodocs`, actions, controls, docs header sections)
+- Tests (hook logic + component behavior, accessibility, disabled, keyboard)
+- Visual states and accessibility (focus visibility, touch target, contrast, reduced motion)
+
+Report findings before PR in this format:
+
+```markdown
+## Pre-PR Component Review — {ComponentName}
+
+**Verdict**: PASS / PASS WITH WARNINGS / BLOCKED
+
+### Blocking issues
+
+- {issue or "None"}
+
+### Warnings
+
+- {issue or "None"}
+
+### Evidence
+
+- `npm test -- --run src/components/{tier}/{component}/{Component}.test.tsx`: {result}
+- `npm run build` or project-required check: {result}
+- Storybook/manual visual check: {result or "not run — reason"}
+```
+
+Rules:
+
+- Do NOT open a PR with CRITICAL or MAJOR audit issues.
+- If warnings remain, document why they are acceptable or create follow-up issues.
+- Link the component issue in the PR and include the review evidence in the PR body.
+
+---
+
 ## Checklist before finishing
 
 **Structure**
@@ -599,7 +662,7 @@ Fix all CRITICAL and MAJOR before marking the component complete.
 - [ ] `useComponentName.ts` — all logic, no JSX, returns typed object
 - [ ] `ComponentName.tsx` — only JSX, consumes hook, no logic
 - [ ] `ComponentName.test.tsx` — complete test suite (hook tests with renderHook + component tests with render/screen/userEvent)
-- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, English, description present, no overriding defaultVariants in Default args, canonical autodocs/actions conventions followed, NO play functions
+- [ ] `ComponentName.stories.tsx` — Default + Disabled + variant stories, English except canonical docs headings, `## Descripción` present, optional `## Dependencies` / `## Guía de uso` used when applicable, no overriding defaultVariants in Default args, canonical autodocs/actions conventions followed, NO play functions
 - [ ] `index.ts` — re-exports correct
 
 **Tokens & theming**

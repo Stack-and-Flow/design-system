@@ -15,6 +15,7 @@ refactor/what-changed    ← code change without behavior change
 ```
 
 Examples:
+
 ```
 feat/avatar-component
 feat/tooltip
@@ -26,6 +27,7 @@ refactor/dropdown-hook-logic
 ```
 
 Rules:
+
 - Lowercase, kebab-case only
 - Branch name describes WHAT is being worked on
 - One feature/fix per branch — never mix concerns
@@ -38,15 +40,15 @@ Format: `<type>: <description>`
 
 All lowercase. No period at the end. Present tense.
 
-| Type | When to use |
-|------|-------------|
-| `feat:` | New component, new feature, new prop |
-| `fix:` | Bug fix |
-| `chore:` | Dependencies, tooling, config |
-| `docs:` | Documentation only |
+| Type        | When to use                              |
+| ----------- | ---------------------------------------- |
+| `feat:`     | New component, new feature, new prop     |
+| `fix:`      | Bug fix                                  |
+| `chore:`    | Dependencies, tooling, config            |
+| `docs:`     | Documentation only                       |
 | `refactor:` | Code change — no bug fix, no new feature |
-| `style:` | Formatting, whitespace, semicolons |
-| `test:` | Adding or fixing tests |
+| `style:`    | Formatting, whitespace, semicolons       |
+| `test:`     | Adding or fixing tests                   |
 
 ```bash
 # ✅ CORRECT
@@ -99,13 +101,30 @@ Closes #123
 ```
 
 This:
+
 - Links the PR to the issue
 - Automatically closes the issue when the PR is merged
 - Is a hard requirement — PRs without issue link are rejected
 
-### Step 5 — Pass CI before requesting review
+### Step 5 — Run component review before opening the PR
+
+Before creating a component PR, run the component audit workflow from `components-auditor` or the contributor skill's `Phase 6 — Component Review Before PR`.
+
+The pre-PR review must check:
+
+- 6-file architecture and file responsibilities
+- CVA placement and TypeScript conventions
+- Storybook docs/controls/actions conventions
+- Token usage and visual states
+- Accessibility, focus visibility, disabled behavior, and keyboard support
+- Tests and build evidence
+
+Do not open a PR with CRITICAL or MAJOR findings. Fix them first, then rerun the review.
+
+### Step 6 — Pass CI before requesting review
 
 CI checks that must pass:
+
 - Biome format + lint (`biome-staged`)
 - TypeScript type check (`tsc`)
 - Vitest unit tests
@@ -120,16 +139,16 @@ Do NOT request human review if CI is red. Fix CI first.
 
 A PR will be rejected WITHOUT detailed feedback if:
 
-| Violation | Why |
-|-----------|-----|
-| No linked issue | No `Closes #NNN` in description |
-| CI failing | Tests, build, or lint failures |
-| `interface` used | Project uses `type` exclusively |
-| `any` used | Type safety violation |
-| Hardcoded colors/spacing | Must use design tokens from `theme.css` |
-| Missing tests | Unit tests AND story required |
-| Missing story | Storybook is the source of truth |
-| Container/Presentational mixed | Logic in `.tsx` file |
+| Violation                      | Why                                     |
+| ------------------------------ | --------------------------------------- |
+| No linked issue                | No `Closes #NNN` in description         |
+| CI failing                     | Tests, build, or lint failures          |
+| `interface` used               | Project uses `type` exclusively         |
+| `any` used                     | Type safety violation                   |
+| Hardcoded colors/spacing       | Must use design tokens from `theme.css` |
+| Missing tests                  | Unit tests AND story required           |
+| Missing story                  | Storybook is the source of truth        |
+| Container/Presentational mixed | Logic in `.tsx` file                    |
 
 ---
 
@@ -172,6 +191,8 @@ AI-generated code follows the **exact same review process** as human-written cod
 "The AI wrote it" is NOT a valid reason to skip the checklist.
 
 Before opening a PR with AI-generated code:
+
 - Run through the PR checklist manually
-- Fix every violation — reviewers will not accept AI-generated problems as "acceptable"
+- Run the pre-PR component review and include evidence in the PR body
+- Fix every CRITICAL or MAJOR violation — reviewers will not accept AI-generated problems as "acceptable"
 - You are responsible for every line in your PR
