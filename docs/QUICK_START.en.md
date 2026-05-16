@@ -53,7 +53,7 @@ Branch naming follows [Conventional Commits](https://www.conventionalcommits.org
 
 ## 5. Build your component
 
-Every component follows the **5-file pattern**. Use the scaffolding CLI to generate it automatically:
+Every component follows the **6-file pattern**. Use `CONTRIBUTOR-FLOW.md` as the canonical workflow and use the scaffolding CLI only if it matches that structure:
 
 ```bash
 npx compilot-cli
@@ -63,14 +63,15 @@ Or create it manually under the correct atomic layer:
 
 ```
 src/components/atoms/your-component/
-├── YourComponent.tsx        # Presentational layer — JSX only, no logic
-├── useYourComponent.ts      # Container layer — logic, state, CVA
-├── types.ts                 # TypeScript types + CVA variant definitions
-├── index.ts                 # Public exports
-└── YourComponent.stories.tsx  # Storybook documentation
+├── types.ts                   # Types + JSDoc controls + CVA variants
+├── useYourComponent.ts        # Container layer — logic, state, handlers
+├── YourComponent.tsx          # Presentational layer — JSX only
+├── YourComponent.test.tsx     # Hook and component behavior tests
+├── YourComponent.stories.tsx  # Storybook documentation
+└── index.ts                   # Public exports
 ```
 
-Read [GUIDELINES.en.md](./GUIDELINES.en.md) for the full architecture rules before writing any code.
+Read [CONTRIBUTOR-FLOW.md](./CONTRIBUTOR-FLOW.md) for the full workflow and [GUIDELINES.en.md](./GUIDELINES.en.md) for architecture rules before writing code.
 
 ## 6. Run tests
 

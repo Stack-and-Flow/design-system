@@ -55,7 +55,7 @@ El nombre de las ramas sigue [Conventional Commits](https://www.conventionalcomm
 
 ## 5. Construir tu componente
 
-Cada componente sigue el **patrón de 5 archivos**. Usa el CLI de scaffolding para generarlo automáticamente:
+Cada componente sigue el **patrón de 6 archivos**. Usá `CONTRIBUTOR-FLOW.md` como flujo canónico y el CLI de scaffolding solo si está alineado con esa estructura:
 
 ```bash
 npx compilot-cli
@@ -65,14 +65,15 @@ O créalo manualmente en la capa atómica correcta:
 
 ```
 src/components/atoms/tu-componente/
-├── TuComponente.tsx        # Capa Presentacional — solo JSX, sin lógica
-├── useTuComponente.ts      # Capa Container — lógica, estado, CVA
-├── types.ts                # Tipos TypeScript + definiciones de variantes CVA
-├── index.ts                # Exportaciones públicas
-└── TuComponente.stories.tsx  # Documentación de Storybook
+├── types.ts                  # Tipos + JSDoc controls + variantes CVA
+├── useTuComponente.ts        # Capa Container — lógica, estado, handlers
+├── TuComponente.tsx          # Capa Presentacional — solo JSX
+├── TuComponente.test.tsx     # Tests de hook y comportamiento
+├── TuComponente.stories.tsx  # Documentación de Storybook
+└── index.ts                  # Exportaciones públicas
 ```
 
-Lee [GUIDELINES.md](./GUIDELINES.md) para las reglas completas de arquitectura antes de escribir cualquier código.
+Lee [CONTRIBUTOR-FLOW.md](./CONTRIBUTOR-FLOW.md) para el flujo completo y [GUIDELINES.md](./GUIDELINES.md) para las reglas de arquitectura antes de escribir código.
 
 ## 6. Ejecutar tests
 

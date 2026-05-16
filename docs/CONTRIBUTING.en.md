@@ -36,23 +36,23 @@ The design system uses **Space Grotesk Variable**, loaded via `@fontsource-varia
 
 ## How to Create a New Component
 
+The canonical component workflow is [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md). This document only summarizes the main rules.
+
 Every component MUST strictly follow the Atomic Design + Container/Presentational architecture (detailed in [`GUIDELINES.en.md`](./GUIDELINES.en.md)).
 
 1. **Locate the right tier**: Decide if it's an `atom`, `molecule`, or `organism`.
 2. **Create the structure**: If you create a `Button` atom, the structure MUST be exactly:
    ```text
    src/components/atoms/button/
-   ├── Button.tsx           # Presentational layer
-   ├── useButton.ts         # Container layer (Logic & CVA)
-   ├── types.ts             # Types and CVA variants
-   ├── index.ts             # Re-exports
-   └── Button.stories.tsx   # Storybook documentation
+   ├── types.ts             # Types, public props, JSDoc controls, CVA variants
+   ├── useButton.ts         # Container layer: logic, state, refs, handlers
+   ├── Button.tsx           # Presentational layer: JSX only
+   ├── Button.test.tsx      # Hook and component behavior tests
+   ├── Button.stories.tsx   # Storybook documentation
+   └── index.ts             # Re-exports
    ```
-3. **Implement**:
-   - Write variants in `types.ts`.
-   - Write logic in `useButton.ts`.
-   - Consume logic in `Button.tsx`.
-4. **Export**: Re-export correctly in `index.ts`.
+3. **Implement in order**: `types.ts` → hook → component → tests → stories → `index.ts`.
+4. **Review before PR**: run the pre-PR component review defined in `CONTRIBUTOR-FLOW.md`.
 
 ---
 
@@ -60,75 +60,27 @@ Every component MUST strictly follow the Atomic Design + Container/Presentationa
 
 Storybook is our single source of truth. Every component MUST be fully documented.
 
-- **English Only**: All stories, descriptions, and comments MUST be written in English.
-- **Controls & Args**: You MUST define `controls` via JSDoc in your `types.ts` and set default `args` in the `.stories.tsx` file.
-- **Docs Description**: You MUST include a `parameters.docs.description.component` describing what the component does and when to use it.
+- **English by default**: Stories, descriptions, comments, and labels are written in English, except the canonical docs headings.
+- **Controls & Args**: You MUST define `controls` via JSDoc in `types.ts` and set default `args` in `.stories.tsx`.
+- **Docs Description**: You MUST include `parameters.docs.description.component` with this structure:
+  - `## Descripción` is required.
+  - `## Dependencies` only when the component uses other components or external primitives.
+  - `## Guía de uso` only when usage is complex.
+- **No `play` functions**: Interactions are tested in `ComponentName.test.tsx`, not in stories.
 
 ---
 
-## Interaction Tests in Storybook
+## Component Tests
 
-Every interactive component (buttons, inputs, selects, etc.) MUST include interaction tests using `play` functions in their stories.
-
-### How to Write Tests?
-
-Use `@storybook/test` directly in your `.stories.tsx` files:
-
-```tsx
-import { expect, userEvent, within } from '@storybook/test';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
-
-const meta: Meta<typeof Button> = {
-  title: 'Atoms/Button',
-  component: Button
-};
-
-export default meta;
-type Story = StoryObj<typeof Button>;
-
-export const Interactive: Story = {
-  args: {
-    children: 'Click me'
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = canvas.getByRole('button', { name: /click me/i });
-    
-    // Verify button renders
-    await expect(button).toBeInTheDocument();
-    
-    // Simulate a click
-    await userEvent.click(button);
-    
-    // Verify expected result
-    await expect(button).toHaveClass('your-expected-class');
-  }
-};
-```
-
-### Interactions Panel in Storybook
-
-The `@storybook/addon-interactions` addon is enabled. When you run `pnpm storybook`, you'll see an **"Interactions" panel** at the bottom for any story with a `play` function. This panel shows you step-by-step each assertion and action in the test.
-
-### Running Tests from Terminal
-
-```bash
-# Run all Storybook tests
-pnpm test-storybook
-
-# Run tests in watch mode
-pnpm test-storybook --watch
-```
-
-Tests use Playwright under the hood and execute `play` functions in a real browser.
-
-### Test Checklist
+Stories are living documentation, not the test suite. Interaction and behavior tests live in `ComponentName.test.tsx`.
 
 Before opening a PR, verify:
-- [ ] Interactive components have `play` functions with basic tests
-- [ ] Tests verify rendering, interactions (click, hover, type), and accessibility
-- [ ] `pnpm test-storybook` passes without errors (or document known failures)
+
+- [ ] Hook logic is tested with `renderHook` when the hook contains logic.
+- [ ] Component behavior is tested with `render` / `screen` / `userEvent`.
+- [ ] ARIA, keyboard, disabled behavior, and relevant states are covered.
+- [ ] Tests do not use internal CSS class strings as the main contract.
+- [ ] `npm test -- --run src/components/.../ComponentName.test.tsx` passes.
 
 ---
 
@@ -156,11 +108,12 @@ We strictly follow **Conventional Commits**:
 
 ### PR Checklist
 Before requesting a review, verify:
-- [ ] Component follows the 5-file architecture perfectly.
+- [ ] Component follows the 6-file architecture perfectly.
 - [ ] No `interface` used (only `type`). No `any`.
-- [ ] Storybook contains `args`, `controls`, and `description`.
-- [ ] Interactive components have interaction tests with `play` functions.
-- [ ] `pnpm test-storybook` passes without critical errors.
+- [ ] Storybook contains `args`, `controls`, and `parameters.docs.description.component`.
+- [ ] `## Descripción` is present; `## Dependencies` and `## Guía de uso` are used only when applicable.
+- [ ] Interactive components have tests in `.test.tsx`.
+- [ ] The pre-PR component review has passed or is documented.
 - [ ] Tokens from `theme.css` are used (no hardcoded colors or spacing).
 - [ ] ARIA attributes are implemented for interactable elements.
 - [ ] Conventional Commits are used.
@@ -185,7 +138,7 @@ However, two rules are non-negotiable:
 If you use [opencode](https://opencode.ai/), this project includes `.atl/AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
 
 The agents will already know:
-- The 5-file architecture and where each piece of logic belongs
+- The 6-file architecture and where each piece of logic belongs
 - Which design tokens to use (and which hardcoded values to avoid)
 - The Storybook rules and required story structure
 - The full list of anti-patterns that cause PR rejection
@@ -196,14 +149,18 @@ The agents will already know:
 
 ### AI Workflow for Components
 
-When using AI to create a component, follow this adapted workflow:
+When using gentle-ai/opencode, the agent follows `component-contributor`. The full canonical workflow is [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md).
 
-1. **Research** — Ask the AI to scan `src/components/` and confirm the component doesn't already exist. Identify the correct atomic tier.
-2. **Scaffold** — Run `compilot-cli` to generate the 5-file structure, or ask the AI to replicate it exactly.
-3. **Spec first** — Define `types.ts` first: props, CVA variants, and JSDoc controls. Let the AI help, but review every type.
-4. **Implement** — Ask the AI to implement the hook and component strictly following GUIDELINES.en.md. Reference the file explicitly.
-5. **Review** — Manually open each generated file and verify it against the PR checklist below. Do not skip this step.
-6. **Document** — Verify the `.stories.tsx` file has `Default`, `Disabled`, and variant-specific stories with proper `args`, controls, and an English description.
+Phase summary:
+
+1. **Research** — investigate references, API, states, accessibility, and design.
+2. **Spec** — document the issue; the agent reads it without inventing behavior.
+3. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
+4. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
+5. **Plan** — review and approve files, variants, tests, stories, and accessibility.
+6. **Implementation** — the agent creates the 6 files and explains decisions.
+7. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
+8. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
 
 ---
 
@@ -213,8 +170,8 @@ If you are using an AI tool, do not allow it to:
 
 - Modify `src/styles/theme.css` tokens without your explicit approval
 - Add new `npm` or `pnpm` dependencies without discussion
-- Skip the 5-file structure in favor of a "simpler" single-file approach
-- Write Storybook stories in Spanish or without proper controls and descriptions
+- Skip the 6-file structure in favor of a "simpler" single-file approach
+- Write stories without args, controls, or `parameters.docs.description.component`
 - Use `interface` instead of `type`, or introduce `any` types
 
 If the AI proposes any of these, reject it and redirect it to the correct pattern.
@@ -227,7 +184,8 @@ AI-generated code goes through the **exact same review process** as human-writte
 
 Before requesting a review on an AI-assisted PR:
 - Run through the PR checklist as you would for any contribution
-- Fix every violation before requesting review — reviewers will not flag AI-generated issues as "acceptable"
+- Run the pre-PR component review and document the evidence
+- Fix every CRITICAL or MAJOR issue before requesting review
 - If a guideline was broken, the PR will be rejected regardless of the author
 
 ---

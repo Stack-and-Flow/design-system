@@ -59,7 +59,7 @@ Responsabilidades:
 Un PR está listo para fusionar cuando:
 
 - ✅ Todos los checks de CI pasan (tests, build, a11y)
-- ✅ El código sigue la estructura de 5 archivos y el patrón Container/Presentational
+- ✅ El código sigue la estructura de 6 archivos y el patrón Container/Presentational
 - ✅ Los tipos son explícitos — sin `any`, sin `interface`
 - ✅ El componente tiene tests con cobertura mínima requerida
 - ✅ La story de Storybook está completa con controles y descripción

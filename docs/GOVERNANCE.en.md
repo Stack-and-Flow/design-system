@@ -57,7 +57,7 @@ Responsibilities:
 A PR is ready to merge when:
 
 - ✅ All CI checks pass (tests, build, a11y)
-- ✅ Code follows the 5-file structure and Container/Presentational pattern
+- ✅ Code follows the 6-file structure and Container/Presentational pattern
 - ✅ Types are explicit — no `any`, no `interface`
 - ✅ Component has tests with minimum required coverage
 - ✅ Storybook story is complete with controls and description

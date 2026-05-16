@@ -96,7 +96,7 @@ npm install -g opencode-ai
 
 No necesitas configuración manual. Al abrir el directorio del proyecto en opencode, el archivo `.atl/AGENTS.md` se inyecta automáticamente como contexto base para todos los agentes. Esto significa que el agente ya conoce:
 
-- La arquitectura de 5 archivos y las reglas de cada uno
+- La arquitectura de 6 archivos y las reglas de cada uno
 - Los tokens de diseño disponibles y cómo usarlos
 - Las reglas de Storybook y la estructura de stories
 - Los anti-patrones que provocan rechazo de PR

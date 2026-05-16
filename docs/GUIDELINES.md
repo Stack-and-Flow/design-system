@@ -20,17 +20,18 @@ La UI se divide en tres niveles de complejidad:
 
 Cada componente DEBE separarse en lógica (Container) y renderizado (Presentational). Lo logramos mediante custom hooks y archivos `.tsx`.
 
-### Estructura de 5 archivos
+### Estructura de 6 archivos
 
-Cada componente DEBE vivir dentro de un directorio en kebab-case (`src/components/atoms/button/`) y contener EXACTAMENTE estos cinco archivos:
+Cada componente DEBE vivir dentro de un directorio en kebab-case (`src/components/atoms/button/`) y contener EXACTAMENTE estos seis archivos:
 
 | Archivo | Propósito | Regla |
 | ------- | --------- | ----- |
-| `Button.tsx` | Componente Presentacional | SOLO JSX y lógica de renderizado. Consume el hook. |
-| `useButton.ts` | Hook Container | Contiene TODA la lógica, estado y generación de clases `cva`. |
-| `types.ts` | Tipos y Variantes | Define las props del componente usando `type` y exporta variantes `cva`. |
+| `types.ts` | Tipos y Variantes | Define props con `type`, JSDoc controls y variantes `cva`. |
+| `useButton.ts` | Hook Container | Contiene TODA la lógica, estado, refs, handlers y consumo de clases `cva`. |
+| `Button.tsx` | Componente Presentacional | SOLO JSX. Consume el hook. Sin lógica, estado ni CVA. |
+| `Button.test.tsx` | Tests | Cubre hook y comportamiento del componente. |
+| `Button.stories.tsx` | Documentación | Contiene Storybook autodocs, `args` y `parameters.docs.description.component`. |
 | `index.ts` | API Pública | Re-exporta el componente y los tipos. |
-| `Button.stories.tsx` | Documentación | Contiene la definición de Storybook, `args` y `parameters.docs`. |
 
 ### 1. Tipos y Variantes (`types.ts`)
 Todas las variantes `cva` van aquí, nunca en el hook ni en el componente.

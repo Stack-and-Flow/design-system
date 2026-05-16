@@ -1,297 +1,335 @@
 # Flujo del Contributor — Stack-and-Flow Design System
 
-Este documento explica el proceso completo para contribuir un componente al design system, desde que tomas una tarea hasta que el PR está mergeado. Está pensado para seguirse en orden.
+Este es el documento canónico para contribuir componentes al design system. `CONTRIBUTING.md` explica el setup general; este archivo define el flujo operativo de componentes y los checkpoints que debe seguir cualquier contributor, con o sin IA.
 
 ---
 
-## Visión general
+## Resumen rápido
 
+```text
+Project task → Research → Issue spec → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge
 ```
-GitHub Project → Research → Issue (spec) → opencode + gentle-ai → PR → Review → Merge
-```
 
-El flujo tiene dos mitades:
+La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana.
 
-- **Tu trabajo** (Research + Spec): entender el componente, definir su API y documentarla en la issue.
-- **Trabajo asistido por IA** (Implementación + Revisión visual): el agente implementa siguiendo tu spec, tú validas en cada checkpoint.
+---
 
-La IA nunca toma decisiones de diseño por ti. Tú defines qué construir; ella ejecuta cómo construirlo.
+## Fuentes de verdad
+
+| Tema                            | Fuente                                             |
+| ------------------------------- | -------------------------------------------------- |
+| Setup del repo                  | [`CONTRIBUTING.md`](./CONTRIBUTING.md)             |
+| Arquitectura y reglas de código | [`GUIDELINES.md`](./GUIDELINES.md)                 |
+| Tokens y lenguaje visual        | [`DESIGN.md`](./DESIGN.md), `src/styles/theme.css` |
+| Estados visuales por componente | [`COMPONENTS.md`](./COMPONENTS.md)                 |
+| Flujo detallado con IA          | `.atl/skills/component-contributor/SKILL.md`       |
+| Auditoría pre-PR                | `.atl/skills/components-auditor/SKILL.md`          |
+
+Si hay contradicción, el orden de autoridad es: `GUIDELINES.md` / `DESIGN.md` para código visual, `.atl/skills/*` para ejecución asistida por agentes, y este documento para el flujo humano.
 
 ---
 
 ## Paso 1 — Tomar una tarea
 
-Todas las tareas viven en el [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1).
-
-1. Elige una tarea con estado **Ready** o **Backlog**.
-2. Asígnatela a ti mismo.
-3. Muévela a **In Progress**.
-
-Cada tarea tiene una issue asociada. Esa issue es tu punto de partida y también el contrato que el agente usará para implementar.
+1. Elegí una tarea en el [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1).
+2. Asignátela.
+3. Movela a **In Progress**.
+4. Verificá que tenga issue asociada. La issue es el contrato de implementación.
 
 ---
 
 ## Paso 2 — Research
 
-Antes de escribir una sola línea de código o completar la issue, investiga el componente.
+Antes de pedir implementación, investigá el componente.
 
-**Qué investigar:**
+Checklist mínimo:
 
-- **Referencias visuales** — Busca el componente en [HeroUI](https://heroui.com), [Radix UI](https://radix-ui.com), [shadcn/ui](https://ui.shadcn.com) y [MDN](https://developer.mozilla.org). Anota cómo resuelven la API, qué props exponen y cómo gestionan accesibilidad.
-- **Nivel atómico** — Decide si es un `atom`, `molecule` u `organism` según [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/). Los átomos son los bloques más pequeños (Button, Badge, Input). Las moléculas combinan átomos (SearchBar = Input + Button). Los organismos son secciones completas.
-- **Props y variantes** — Lista todas las props que necesita. Identifica qué varía visualmente (variantes CVA) y qué es comportamiento (lógica en el hook).
-- **Estados** — Enumera todos los estados interactivos: default, hover, focus, active/pressed, disabled, loading, error. Todos los estados deben estar implementados — sin excepciones.
-- **Accesibilidad** — Consulta [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/) para el patrón correspondiente. Anota roles, atributos `aria-*` y comportamiento de teclado.
+- Referencias: HeroUI, Radix UI, shadcn/ui, MDN o WAI-ARIA APG según aplique.
+- Nivel atómico: `atom`, `molecule` u `organism`.
+- Props: nombre, tipo, default, required/optional.
+- Variantes CVA: keys y valores.
+- Estados: base, hover, focus, active/pressed, disabled, loading, error, empty si aplica.
+- Accesibilidad: roles, `aria-*`, teclado, focus management, touch target.
+- Diseño: superficie, color, spacing, radius, shadow/glow, transiciones, dark mode.
 
-No hagas research a medias. El agente implementa exactamente lo que hay en la issue — si la spec está incompleta, el componente estará incompleto.
+No hagas research a medias. Si la issue está incompleta, el componente sale incompleto.
 
 ---
 
 ## Paso 3 — Documentar la spec en la issue
 
-Con el research hecho, abre la issue de GitHub y rellena la sección **Specification** usando la plantilla `component.yml`.
+Completá la issue con una spec verificable.
 
-La spec debe incluir:
+| Campo              | Qué debe decir                                             |
+| ------------------ | ---------------------------------------------------------- |
+| Component name     | PascalCase                                                 |
+| Atomic tier        | atom / molecule / organism                                 |
+| Props              | Nombre, tipo TypeScript, default, required/optional        |
+| CVA variants       | Variant keys y valores posibles                            |
+| States             | Descripción visual y de comportamiento por estado          |
+| Accessibility      | Roles, atributos, teclado, focus, reduced motion si aplica |
+| Reference URL      | HeroUI, Radix, MDN, APG, etc.                              |
+| Design notes       | Decisiones visuales específicas del sistema                |
+| Story requirements | Default, Disabled, variantes clave, edge cases             |
 
-| Campo | Qué poner |
-|---|---|
-| **Component name** | Nombre en PascalCase |
-| **Atomic tier** | atom / molecule / organism |
-| **Props** | Nombre, tipo TypeScript, default, required/optional |
-| **CVA variants** | Nombre de la variant key + valores posibles |
-| **States** | Lista de estados con descripción visual |
-| **Accessibility** | Roles ARIA, atributos, comportamiento de teclado |
-| **Reference URL** | URL del componente de referencia (HeroUI, Radix, etc.) |
-| **Design notes** | Cualquier detalle visual o de interacción específico del sistema |
-
-> **Regla de oro:** si no está en la issue, el agente no lo implementará. Si lo inventa, lo rechazarás en el checkpoint de Plan.
+> Regla de oro: si no está en la issue, el agente no debería inventarlo.
 
 ---
 
-## Paso 4 — Configurar el entorno local
-
-Si aún no tienes el entorno listo:
+## Paso 4 — Crear rama y preparar entorno
 
 ```bash
-git clone https://github.com/Stack-and-Flow/design-system.git
-cd design-system
-nvm use
+git checkout main
+git pull --ff-only origin main
+git checkout -b feat/nombre-componente
 pnpm install
 pnpm run storybook
 ```
 
-Crea tu rama antes de empezar:
-
-```bash
-git checkout -b feat/nombre-componente
-```
-
-Nomenclatura: `feat/`, `fix/`, `chore/`, `docs/` según el tipo de cambio.
+Usá una rama por unidad de trabajo: `feat/`, `fix/`, `docs/`, `refactor/`, `chore/`.
 
 ---
 
-## Paso 5 — Iniciar el flujo con gentle-ai
+## Paso 5 — Iniciar el flujo con IA
 
-Abre el directorio del proyecto en [opencode](https://opencode.ai/). El archivo `.atl/AGENTS.md` se inyecta automáticamente — el agente ya conoce la arquitectura, los tokens y las reglas del proyecto sin configuración manual.
+En opencode/gentle-ai, compartí la URL de la issue:
 
-Para activar el flujo, comparte la URL de la issue:
-
-```
+```text
 Implementa este componente: https://github.com/Stack-and-Flow/design-system/issues/XXX
 ```
 
-El agente cargará la skill `component-contributor` y seguirá las 5 fases descritas a continuación.
+El agente debe cargar `component-contributor` y seguir las fases de abajo. Si salta una fase, frenalo.
 
 ---
 
-## Las 5 fases del flujo
+## Las 8 fases del componente
 
 ### Fase 1 — Lectura de spec
 
-El agente extrae de la issue:
+El agente extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
 
-- Nombre del componente y nivel atómico
-- Props completas con tipos
-- Variantes CVA y sus valores
-- Estados interactivos
-- Requisitos de accesibilidad
-- URL de referencia
+Salida esperada:
 
-**Si algo es ambiguo, el agente te pregunta antes de continuar.** No inventa comportamiento. Si ves que asume algo que no definiste, corrígelo aquí — es más barato que corregirlo después.
+- resumen de la spec;
+- preguntas si algo es ambiguo;
+- módulos de referencia/tokens que va a cargar.
 
-El agente también declara qué módulos de tokens necesita (colores, espaciado/tipografía, efectos) según el tipo de componente. Solo carga los módulos relevantes.
+**Checkpoint humano:** no avances si el agente inventa props, estados o comportamiento.
 
 ---
 
-### Fase 2 — Plan
+### Fase 2 — Review de especificación
 
-Antes de escribir código, el agente presenta un plan completo:
+Antes de planificar, el agente critica la spec.
 
-```
-## Implementation Plan
+Debe reportar:
 
-Component: Button
-Tier: atoms
-Directory: src/components/atoms/button/
+- gaps de accesibilidad;
+- stories faltantes;
+- variantes o props ambiguas;
+- riesgos de arquitectura;
+- mejoras propuestas.
 
-Files to create:
-1. types.ts — 4 props, 2 CVA variants (variant, size)
-2. useButton.ts — click handler, aria-disabled, className
-3. Button.tsx — presentational, consumes hook
-4. Button.stories.tsx — 5 stories: Default, Disabled, Outlined, Small, Large
-5. index.ts — re-exports
-
-Design decisions:
-- Tokens: gradient-btn-primary, glow-btn-primary, spacing-md, radius-pill
-- CVA variants: variant (default, outlined), size (sm, md, lg)
-- Radix: no — native <button>
-- Dark mode: paired light/dark tokens
-
-Accessibility:
-- aria-disabled instead of disabled attribute
-- Keyboard: Enter and Space activate
-```
-
-**Este es tu checkpoint más importante.** Revisa el plan con atención:
-
-- ¿Las props son las que definiste?
-- ¿Las variantes tienen sentido?
-- ¿Los tokens son los correctos?
-- ¿La accesibilidad cubre lo que investigaste?
-
-Confirma el plan o pide ajustes. Una vez que lo apruebas, el agente empieza a escribir código.
+**Checkpoint humano:** aceptá la spec, ajustala o pedí cambios. Este es el último momento barato para corregir alcance.
 
 ---
 
-### Fase 3 — Implementación
+### Fase 3 — Prefase visual
 
-El agente crea los 5 archivos en este orden fijo:
+Antes del plan, el agente carga y aplica:
 
-```
-types.ts → useComponentName.ts → ComponentName.tsx → ComponentName.stories.tsx → index.ts
-```
+- `docs/DESIGN.md`;
+- `docs/COMPONENTS.md` si aplica;
+- `src/styles/theme.css`;
+- módulos de tokens relevantes.
 
-**¿Por qué ese orden?** Porque los tipos son el contrato que todo lo demás consume. Si los tipos cambian, cambia todo. Definirlos primero evita reescribir.
+Debe definir:
 
-| Archivo | Responsabilidad |
-|---|---|
-| `types.ts` | Todas las props tipadas + todas las variantes CVA. Nunca `interface`, nunca `any`. |
-| `useComponentName.ts` | Toda la lógica: estado, efectos, handlers, cálculo de className. Sin JSX. |
-| `ComponentName.tsx` | Solo JSX. Consume el hook. Sin lógica, sin estado, sin CVA. |
-| `ComponentName.stories.tsx` | Stories en inglés: Default, Disabled + una por variante clave. |
-| `index.ts` | Re-exportaciones públicas. |
+- patrón de superficie;
+- tokens de texto, fondo, borde, radius, spacing, glow/focus;
+- estados visuales;
+- dark mode;
+- transiciones permitidas;
+- touch target y reduced motion.
 
----
-
-### Fase 4 — Explicación (inline)
-
-Después de cada archivo, el agente explica sus decisiones:
-
-```
-### Why this file looks like this
-
-- CVA en types.ts, no en el hook: porque las variantes son datos de presentación,
-  no lógica. El hook solo las consume.
-- bg-color-primary en lugar de bg-red-500: porque los tokens abstractos permiten
-  cambiar el tema sin tocar los componentes.
-- aria-disabled en vez de disabled: porque el atributo HTML disabled elimina el
-  elemento del tab order, rompiendo la navegación por teclado.
-```
-
-**No te saltes estas explicaciones.** Son la capa de aprendizaje del flujo — la diferencia entre copiar código y entender por qué está escrito así.
+**Checkpoint humano:** confirmá que el componente ya está alineado visualmente antes de escribir código.
 
 ---
 
-### Fase 5 — Revisión visual
+### Fase 4 — Plan
 
-Una vez completados los 5 archivos, el agente ejecuta una revisión visual obligatoria antes de declarar el componente terminado.
+El agente presenta un plan antes de tocar archivos.
 
-**Qué verifica:**
+Debe incluir:
 
-**Estados** — Todos los estados interactivos implementados: base, hover, focus, active/pressed, disabled.
+- directorio y tier;
+- 6 archivos a crear/modificar;
+- CVA variants;
+- lógica del hook;
+- stories previstas;
+- tests previstos;
+- decisiones visuales;
+- accesibilidad.
 
-**Glow y sombras** — Botón primario: glow siempre activo (4 capas). Botón secundario: glow siempre activo (3 capas). Cards y nav: glow solo en hover.
+Arquitectura obligatoria:
 
-**Transiciones** — Nunca `transition: all`. Propiedades específicas enumeradas. Duraciones correctas por tipo de componente (250ms botones, 300ms cards, 150ms dropdowns).
+```text
+types.ts → useComponentName.ts → ComponentName.tsx → ComponentName.test.tsx → ComponentName.stories.tsx → index.ts
+```
 
-**Accesibilidad visual** — Focus ring via `box-shadow`, nunca `outline` desnudo. Disabled via `opacity: 0.4`, nunca sustitución de color. Touch target mínimo `44×44px`. Contraste en light mode: mínimo `#cc0030` para rojo sobre blanco.
-
-**Niveles de severidad:**
-
-| Nivel | Significado | Bloquea el PR |
-|---|---|---|
-| **CRITICAL** | Fallo de accesibilidad | ✅ Sí |
-| **MAJOR** | Regla compositiva rota | ✅ Sí |
-| **MINOR** | Inconsistencia con la spec | Debe corregirse |
-| **SUGGESTION** | Mejora opcional | No |
-
-Si hay fallos CRITICAL o MAJOR, se corrigen antes de abrir el PR. Sin excepciones.
+**Checkpoint humano:** aprobá el plan o pedí ajustes. No se implementa sin aprobación.
 
 ---
 
-## Paso 6 — Abrir el PR
+### Fase 5 — Implementación + explicación
 
-Con el componente implementado y la revisión visual pasada, abre el PR contra `main`.
+El agente implementa el patrón de 6 archivos y explica cada decisión al terminar cada archivo.
 
-**Checklist antes de pedir revisión:**
+| Archivo                     | Responsabilidad                                             |
+| --------------------------- | ----------------------------------------------------------- |
+| `types.ts`                  | Props, tipos públicos, CVA variants, JSDoc controls         |
+| `useComponentName.ts`       | Toda la lógica, handlers, estado, refs, className calculada |
+| `ComponentName.tsx`         | Solo JSX presentacional, consume el hook                    |
+| `ComponentName.test.tsx`    | Tests de hook y comportamiento del componente               |
+| `ComponentName.stories.tsx` | Storybook docs, args, variantes, estados                    |
+| `index.ts`                  | Re-exports públicos                                         |
 
-**Estructura**
-- [ ] Arquitectura de 5 archivos completa y en el directorio correcto
-- [ ] Sin `interface` (solo `type`), sin `any`
-- [ ] Storybook con `args`, `controls` y `description` en inglés
+Reglas duras:
 
-**Tokens y theming**
-- [ ] Solo tokens de `theme.css` — sin valores hardcodeados
-- [ ] Dark mode con clases `light/dark:` pareadas
-
-**Estados visuales**
-- [ ] Hover, focus, active y disabled implementados
-- [ ] Focus ring via `box-shadow`, no `outline`
-- [ ] Disabled via `opacity: 0.4`, sin sustitución de color
-- [ ] Sin `transition: all`
-- [ ] Touch target mínimo `44×44px`
-
-**Accesibilidad**
-- [ ] Atributos ARIA de la spec implementados
-- [ ] `prefers-reduced-motion` si hay transforms
-
-**Git**
-- [ ] Conventional Commits (`feat:`, `fix:`, `docs:`, etc.)
+- `type`, nunca `interface`.
+- Sin `any`.
+- Sin CVA fuera de `types.ts`.
+- Sin lógica en `.tsx` presentacional.
+- Sin valores hardcodeados si existe token.
+- Sin `play` functions: las interacciones se testean en `.test.tsx`.
 
 ---
 
-## Paso 7 — Code review
+### Fase 6 — Visual review
 
-El PR pasa por el mismo proceso de revisión independientemente de si fue asistido por IA o escrito manualmente.
+Con los archivos completos, el agente revisa visualmente antes de declarar terminado.
 
-- CI debe pasar: Biome (lint/format), TypeScript strict, tests, build de Storybook, a11y (axe WCAG AA).
-- Al menos un maintainer debe aprobar antes del merge.
-- "Lo generó la IA" no es una justificación válida para saltarse el checklist. Eres responsable de cada línea en tu PR.
+Debe verificar:
+
+- base, hover, focus, active/pressed, disabled;
+- focus visible con `box-shadow`, nunca `outline` desnudo;
+- touch target mínimo `44×44px`;
+- contraste en light/dark;
+- transiciones específicas, nunca `transition-all`;
+- no animar propiedades de layout;
+- reduced motion si hay transforms o animaciones.
+
+CRITICAL y MAJOR bloquean. Se corrigen antes de continuar.
+
+---
+
+### Fase 7 — Review del componente antes del PR
+
+Antes de abrir PR, corré una auditoría explícita con `components-auditor`.
+
+Debe revisar:
+
+- arquitectura 6-file;
+- responsabilidades por archivo;
+- TypeScript strict;
+- CVA en `types.ts`;
+- tokens y theme;
+- stories y docs header;
+- tests;
+- accesibilidad;
+- visual states.
+
+Formato esperado:
+
+```markdown
+## Pre-PR Component Review — ComponentName
+
+**Verdict**: PASS / PASS WITH WARNINGS / BLOCKED
+
+### Blocking issues
+
+- None
+
+### Warnings
+
+- None
+
+### Evidence
+
+- `npm test -- --run src/components/.../ComponentName.test.tsx`: passed
+- `npm run build`: passed
+- Storybook/manual visual check: passed or documented
+```
+
+No abras PR con issues CRITICAL o MAJOR.
+
+---
+
+### Fase 8 — PR
+
+El PR debe linkear la issue y contener evidencia.
+
+Checklist mínimo:
+
+- [ ] `Closes #NNN` en la descripción.
+- [ ] Conventional commit.
+- [ ] Tests relevantes pasan.
+- [ ] Build o checks requeridos pasan.
+- [ ] Pre-PR component review incluido o resumido.
+- [ ] Storybook docs tiene `parameters.docs.description.component`.
+- [ ] `## Descripción` presente.
+- [ ] `## Dependencies` solo si aplica.
+- [ ] `## Guía de uso` solo si aplica.
+
+---
+
+## Criterio Storybook actual
+
+`parameters.docs.description.component` debe usar esta estructura:
+
+```markdown
+## Descripción
+
+Qué hace el componente y cuándo usarlo.
+
+## Dependencies
+
+Solo si usa otros componentes del design system o primitives externas.
+
+## Guía de uso
+
+Solo si la composición o uso tiene restricciones no obvias.
+```
+
+El contenido sigue en inglés por defecto; los headings anteriores son la convención canónica.
 
 ---
 
 ## Reglas que la IA no puede saltarse
 
-Si el agente propone cualquiera de estas cosas, recházalo y redirigelo:
+Si el agente propone cualquiera de estas cosas, rechazalo:
 
-- Modificar `src/styles/theme.css` sin tu aprobación explícita
-- Añadir dependencias npm/pnpm sin discutirlo
-- Reemplazar la arquitectura de 5 archivos por un archivo único
-- Escribir stories en español o sin controls/descripción
-- Usar `interface` en lugar de `type`, o introducir `any`
-- Hardcodear colores, espaciados o fuentes
+- modificar `src/styles/theme.css` sin aprobación explícita;
+- añadir dependencias sin discutirlo;
+- usar una arquitectura de archivo único;
+- omitir tests `.test.tsx`;
+- meter interacciones en `play` functions en lugar de tests;
+- escribir stories sin args, controles o docs description;
+- usar `interface` o `any`;
+- hardcodear colores, spacing o fuentes;
+- abrir PR sin review pre-PR.
 
 ---
 
 ## Links de referencia
 
-| Recurso | URL |
-|---|---|
+| Recurso               | URL                                                                          |
+| --------------------- | ---------------------------------------------------------------------------- |
 | GitHub Projects Board | [Stack-and-Flow Projects](https://github.com/orgs/Stack-and-Flow/projects/1) |
-| Storybook (producción) | [sf-design-system.netlify.app](https://sf-design-system.netlify.app/) |
-| Guidelines completas | [`docs/GUIDELINES.md`](./GUIDELINES.md) |
-| Referencia visual | [`docs/DESIGN.md`](./DESIGN.md) |
-| Quick Start | [`docs/QUICK_START.md`](./QUICK_START.md) |
-| Gobernanza | [`docs/GOVERNANCE.md`](./GOVERNANCE.md) |
-| opencode | [opencode.ai](https://opencode.ai/) |
-| WAI-ARIA Authoring Practices | [w3.org/WAI/ARIA/apg](https://www.w3.org/WAI/ARIA/apg/) |
+| Storybook producción  | [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)        |
+| Guidelines            | [`docs/GUIDELINES.md`](./GUIDELINES.md)                                      |
+| Diseño                | [`docs/DESIGN.md`](./DESIGN.md)                                              |
+| Componentes           | [`docs/COMPONENTS.md`](./COMPONENTS.md)                                      |
+| Quick Start           | [`docs/QUICK_START.md`](./QUICK_START.md)                                    |
+| Gobernanza            | [`docs/GOVERNANCE.md`](./GOVERNANCE.md)                                      |
+| WAI-ARIA APG          | [w3.org/WAI/ARIA/apg](https://www.w3.org/WAI/ARIA/apg/)                      |
