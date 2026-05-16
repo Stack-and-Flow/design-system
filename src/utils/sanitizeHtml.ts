@@ -1,18 +1,26 @@
+const UNSAFE_URL_PATTERN = /^\s*(javascript|data):/i;
+const URL_ATTRIBUTES = new Set(['href', 'src', 'xlink:href']);
+
 export function sanitizeHtml(html: string): string {
-  const template = document.createElement('template');
-  template.innerHTML = html;
+  const document = new DOMParser().parseFromString(html, 'text/html');
 
-  const scripts = template.content.querySelectorAll('script');
-  scripts.forEach((script) => script.remove());
+  document.querySelectorAll('script').forEach((script) => script.remove());
 
-  const elements = template.content.querySelectorAll('*');
-  elements.forEach((el) => {
-    [...el.attributes].forEach((attr) => {
-      if (attr.name.startsWith('on')) {
-        el.removeAttribute(attr.name);
+  document.querySelectorAll('*').forEach((element) => {
+    [...element.attributes].forEach((attribute) => {
+      const attributeName = attribute.name.toLowerCase();
+      const attributeValue = attribute.value;
+
+      if (attributeName.startsWith('on')) {
+        element.removeAttribute(attribute.name);
+        return;
+      }
+
+      if (URL_ATTRIBUTES.has(attributeName) && UNSAFE_URL_PATTERN.test(attributeValue)) {
+        element.removeAttribute(attribute.name);
       }
     });
   });
 
-  return template.innerHTML;
+  return document.body.innerHTML;
 }

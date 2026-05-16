@@ -1,18 +1,15 @@
-import type { FC } from 'react';
 import type { TextProps } from './types';
 import { useText } from './useText';
 
-const Text: FC<TextProps> = ({ ...props }) => {
+export const Text = (props: TextProps) => {
   const { tag, isHtml, sanitizedHtml, children, ...rest } = useText(props);
   const Component = tag ?? 'p';
   if (isHtml && typeof sanitizedHtml === 'string') {
     return (
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML input is sanitized in useText before rendering.
       <Component {...rest} dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
     );
   }
 
   return <Component {...rest}>{children}</Component>;
 };
-
-export default Text;
