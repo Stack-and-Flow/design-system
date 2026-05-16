@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
+import type { ReactNode } from 'react';
 
 export const headerVariants = cva(['font-normal leading-[1.2] text-text-light dark:text-text-dark'], {
   variants: {
@@ -38,7 +39,7 @@ export type HeaderFont = 'primary' | 'secondary' | 'secondaryBold';
 
 export type HeaderProps = {
   /** @control text */
-  children?: string;
+  children?: ReactNode;
   /** @control select */
   font?: HeaderFont;
   /** @control select */

@@ -17,6 +17,7 @@ export { Switch } from './components/atoms/switch';
 export { Text } from './components/atoms/text';
 
 // ─── Molecules ───────────────────────────────────────────────────────────────
+export { Accordion } from './components/molecules/accordion';
 export { Snippet } from './components/molecules/snippet';
 
 // ─── Organisms ───────────────────────────────────────────────────────────────
