@@ -77,18 +77,13 @@ export function useChip(props: ChipProps) {
 
   const avatarSizeClass = size === 'sm' ? 'chip-avatar-sm' : size === 'lg' ? 'chip-avatar-lg' : 'chip-avatar-md';
 
-  const dotColorClass =
-    color === 'secondary'
-      ? 'chip-dot-secondary'
-      : color === 'success'
-        ? 'chip-dot-success'
-        : color === 'warning'
-          ? 'chip-dot-warning'
-          : color === 'danger'
-            ? 'chip-dot-danger'
-            : 'chip-dot-primary';
-
-  const closeBtnBoxBySize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
+  const closeBtnBoxBySize = size === 'sm' ? 'h-3.5 w-3.5' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
+  const targetAreaBySize =
+    size === 'sm'
+      ? 'before:inset-[-10px] after:inset-[-15px]'
+      : size === 'lg'
+        ? 'before:inset-[-6px] after:inset-[-12px]'
+        : 'before:inset-[-8px] after:inset-[-14px]';
 
   const closeIconSizeBySize: 10 | 12 | 14 = size === 'sm' ? 10 : size === 'lg' ? 14 : 12;
 
@@ -98,29 +93,39 @@ export function useChip(props: ChipProps) {
       'min-w-0',
       className,
       classNames?.base,
-      interactive ? 'cursor-pointer min-h-11 min-w-11' : 'cursor-auto',
+      interactive ? 'cursor-pointer before:absolute before:content-[""] before:rounded-[inherit]' : 'cursor-auto',
+      interactive && targetAreaBySize,
       splitActions && 'focus-within:shadow-glow-focus-light dark:focus-within:shadow-glow-focus-dark',
-      isSelected && 'ring-2 ring-offset-0 ring-inset ring-primary dark:ring-brand-dark',
+      isSelected &&
+        'border-transparent bg-[var(--chip-solid-bg)] text-[var(--chip-solid-fg)] shadow-glow-focus-light dark:shadow-glow-focus-dark',
       iconBySize
     ),
     content: cn('truncate', classNames?.content),
-    dot: cn('inline-block w-2 h-2 rounded-full shrink-0', dotColorClass, classNames?.dot),
-    avatar: cn('chip-avatar-media shrink-0 ltr:mr-px rtl:ml-px', avatarSizeClass, classNames?.avatar),
+    dot: cn('inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--chip-dot)]', classNames?.dot),
+    avatar: cn(
+      'grid shrink-0 place-items-center overflow-hidden rounded-full ltr:mr-px rtl:ml-px',
+      avatarSizeClass,
+      classNames?.avatar
+    ),
 
     actionButton: cn(
-      'inline-flex min-w-0 min-h-11 min-w-11 flex-1 items-center justify-center gap-0.5 rounded-inherit bg-transparent p-0 m-0 border-0 text-inherit',
-      'focus-visible:outline-none transition-transform duration-200 ease-in-out active:translate-y-px active:scale-95',
+      'relative inline-flex flex-1 items-center justify-center gap-1 rounded-[inherit] border-0 bg-transparent p-0 m-0 text-inherit',
+      'before:absolute before:content-[""] before:rounded-[inherit]',
+      targetAreaBySize,
+      'focus-visible:outline-none transition-transform duration-200 ease-in-out motion-safe:active:translate-y-px motion-safe:active:scale-95',
       'disabled:cursor-not-allowed disabled:opacity-40',
       classNames?.actionButton
     ),
 
     closeButton: cn(
-      'inline-flex min-h-11 min-w-11 items-center justify-center overflow-visible rounded-full',
+      'relative inline-flex items-center justify-center overflow-visible rounded-full',
       'shrink-0 leading-none select-none pointer-events-auto cursor-pointer',
       'p-0 m-0 ltr:-ml-0.5 rtl:-mr-0.5',
       closeBtnBoxBySize,
-      'text-current/80 hover:text-current',
-      'hover:bg-transparent hover:ring-0',
+      'after:absolute after:content-[""]',
+      targetAreaBySize,
+      'text-current/70 hover:text-current',
+      'hover:bg-[var(--chip-soft-bg-hover)] hover:ring-0',
       'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
       'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40',
       classNames?.closeButton

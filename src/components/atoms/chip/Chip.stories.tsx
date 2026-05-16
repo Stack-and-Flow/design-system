@@ -7,28 +7,22 @@ import Icon from '../icon/Icon';
 import { Chip } from './Chip';
 
 /**
- * ## DESCRIPTION
- * Chip component is a compact element used to display statuses, keywords, or quick actions.
+ * ## Description
+ * Chip is a compact element used to display statuses, keywords, filters, or quick actions.
  *
- * Common use cases include tags, filters, and state indicators in dense interfaces.
+ * ## Dependencies
+ * Uses `Icon`, `Avatar`, and `lucide-react` icons in examples to document media, action, and composition slots.
  *
- * - Customizable in color, size, variant, radius and animation.
- * - Supports `startContent` / `endContent` (icons or text), optional avatar, and `dot` indicator.
- * - Optional interactivity: clickable (`onClick`/`selectable`), selectable (controlled or uncontrolled), and closable.
- * - `as` is a preference, not an absolute guarantee: when `closable` + interactive are combined, the chip uses a split-actions group with sibling buttons.
- * - Accessible via `ariaLabel` for chips without readable text; close action uses contextual label (`Remove <label>`).
+ * ## Usage Guide
+ * Use `children` for the readable label, `ariaLabel` for dot-only or non-textual chips, and `closable` only when the chip can be removed.
+ * When `closable` and click behavior are combined, the component renders split-actions markup with sibling buttons to avoid nested interactive controls.
  */
-
 const meta: Meta<typeof Chip> = {
   title: 'Atoms/Chip',
   component: Chip,
   parameters: {
     docs: {
-      autodocs: true,
-      description: {
-        component:
-          'Chip is a compact element for statuses, filters, labels, and quick actions. It supports visual variants, optional media/icon slots, selectable state, and closable interactions with accessible split-actions markup when needed.'
-      }
+      autodocs: true
     }
   },
   tags: ['autodocs']
@@ -36,6 +30,9 @@ const meta: Meta<typeof Chip> = {
 export default meta;
 
 type Story = StoryObj<typeof Chip>;
+
+const visualColors = ['primary', 'secondary', 'success', 'warning', 'danger'] as const;
+const visualVariants = ['solid', 'flat', 'shadow', 'bordered', 'light', 'faded', 'dot'] as const;
 
 export const Default: Story = {
   args: {
@@ -92,6 +89,89 @@ export const Variant: Story = {
       <Chip variant='dot' color='warning'>
         With dot
       </Chip>
+    </div>
+  )
+};
+
+/**
+ * Visual review matrix for all semantic colors and visual variants in light and dark surfaces.
+ */
+export const VisualReviewMatrix: Story = {
+  render: () => (
+    <div className='grid gap-6 rounded-xl bg-background-light p-6 dark:bg-background-dark'>
+      {visualVariants.map((variant) => (
+        <section key={variant} className='grid gap-3'>
+          <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+            {variant}
+          </h3>
+          <div className='flex flex-wrap items-center gap-3'>
+            {visualColors.map((color) => (
+              <Chip key={`${variant}-${color}`} variant={variant} color={color}>
+                {color}
+              </Chip>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+};
+
+/**
+ * Product-like examples used to judge whether Chip feels like a premium status/filter/control instead of a small Badge.
+ */
+export const UsageReview: Story = {
+  render: () => (
+    <div className='grid gap-6 rounded-xl bg-background-light p-6 dark:bg-background-dark'>
+      <section className='grid gap-3 rounded-lg border border-border-light bg-surface-light p-4 dark:border-border-dark dark:bg-surface-dark'>
+        <h3 className='fs-base font-secondary-bold text-text-light dark:text-text-dark'>Status row</h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip color='success' variant='flat' startContent={<Check />}>
+            Synced
+          </Chip>
+          <Chip color='warning' variant='dot'>
+            Pending review
+          </Chip>
+          <Chip color='danger' variant='faded'>
+            Failing checks
+          </Chip>
+          <Chip color='secondary' variant='bordered'>
+            Draft
+          </Chip>
+        </div>
+      </section>
+
+      <section className='grid gap-3 rounded-lg border border-border-light bg-surface-light p-4 dark:border-border-dark dark:bg-surface-dark'>
+        <h3 className='fs-base font-secondary-bold text-text-light dark:text-text-dark'>Filters and actions</h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip
+            selectable={true}
+            defaultSelected={true}
+            color='primary'
+            onSelectedChange={action('chip.filter-selected')}
+          >
+            React
+          </Chip>
+          <Chip closable={true} color='secondary' variant='faded' onClose={action('chip.close')}>
+            Design System
+          </Chip>
+          <Chip as='button' color='primary' variant='solid' onClick={action('chip.apply')}>
+            Apply filter
+          </Chip>
+        </div>
+      </section>
+
+      <section className='grid gap-3 rounded-lg border border-border-light bg-surface-light p-4 dark:border-border-dark dark:bg-surface-dark'>
+        <h3 className='fs-base font-secondary-bold text-text-light dark:text-text-dark'>Identity chip</h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip avatar={<Avatar src='/images/logo-only.svg' alt='EG' size='sm' />} color='secondary' variant='flat'>
+            EGDEV
+          </Chip>
+          <Chip startContent={<Icon name='user' />} color='primary' variant='bordered'>
+            Contributor
+          </Chip>
+        </div>
+      </section>
     </div>
   )
 };

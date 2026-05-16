@@ -226,6 +226,8 @@
   /* Glow de focus ring */
   --glow-focus-dark: 0 0 0 3px rgba(255, 0, 54, 0.4);
   --glow-focus-light: 0 0 0 3px rgba(219, 20, 60, 0.35);
+  --shadow-glow-focus-dark: var(--glow-focus-dark);
+  --shadow-glow-focus-light: var(--glow-focus-light);
 
   /* Glow ámbar — GitHub stars */
   --glow-amber: 0 0 0 3px rgba(255, 185, 0, 0.12);
@@ -385,3 +387,18 @@
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@utility chip-avatar-sm {
+  width: var(--size-chip-avatar-sm);
+  height: var(--size-chip-avatar-sm);
+}
+
+@utility chip-avatar-md {
+  width: var(--size-chip-avatar-md);
+  height: var(--size-chip-avatar-md);
+}
+
+@utility chip-avatar-lg {
+  width: var(--size-chip-avatar-lg);
+  height: var(--size-chip-avatar-lg);
+}
