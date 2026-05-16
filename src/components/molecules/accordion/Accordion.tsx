@@ -29,7 +29,7 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
             <button {...getTriggerProps(item)} className={getTriggerClassName()}>
               <Text
                 tag='span'
-                className={cn('font-semibold text-text-light dark:text-text-dark', getTitleTextClassName())}
+                className={getTitleTextClassName()}
               >
                 {item.title}
               </Text>
