@@ -22,6 +22,8 @@ describe('useText', () => {
           '<a href="javascript:alert(1)">link</a>',
           '<a href="jav&#x61;script:alert(1)">encoded</a>',
           '<a href="jav&#x09;ascript:alert(1)">control</a>',
+          '<form action="jav&#x09;ascript:alert(1)"></form>',
+          '<button formaction="javascript:alert(1)">submit</button>',
           '<img src="d&#x61;ta:text/html,foo">',
           '<iframe srcdoc="<script>alert(1)</script>"></iframe>',
           '<object data="javascript:alert(1)"></object>',
@@ -30,7 +32,9 @@ describe('useText', () => {
       })
     );
 
-    expect(result.current.sanitizedHtml).toBe('<strong>Safe</strong><a>link</a><a>encoded</a><a>control</a><img>');
+    expect(result.current.sanitizedHtml).toBe(
+      '<strong>Safe</strong><a>link</a><a>encoded</a><a>control</a><form></form><button>submit</button><img>'
+    );
   });
 });
 

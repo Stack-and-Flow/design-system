@@ -1,7 +1,7 @@
 const UNSAFE_URL_PATTERN = /^(javascript|data):/i;
 const UNSAFE_ELEMENTS = new Set(['embed', 'iframe', 'object']);
 const UNSAFE_ATTRIBUTES = new Set(['srcdoc']);
-const URL_ATTRIBUTES = new Set(['href', 'src', 'xlink:href']);
+const URL_ATTRIBUTES = new Set(['action', 'formaction', 'href', 'poster', 'src', 'xlink:href']);
 
 const removeControlAndWhitespace = (value: string) =>
   [...value]
