@@ -78,12 +78,6 @@ export function useChip(props: ChipProps) {
   const avatarSizeClass = size === 'sm' ? 'chip-avatar-sm' : size === 'lg' ? 'chip-avatar-lg' : 'chip-avatar-md';
 
   const closeBtnBoxBySize = size === 'sm' ? 'h-3.5 w-3.5' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
-  const targetAreaBySize =
-    size === 'sm'
-      ? 'before:inset-[-10px] after:inset-[-15px]'
-      : size === 'lg'
-        ? 'before:inset-[-6px] after:inset-[-12px]'
-        : 'before:inset-[-8px] after:inset-[-14px]';
 
   const closeIconSizeBySize: 10 | 12 | 14 = size === 'sm' ? 10 : size === 'lg' ? 14 : 12;
 
@@ -93,8 +87,7 @@ export function useChip(props: ChipProps) {
       'min-w-0',
       className,
       classNames?.base,
-      interactive ? 'cursor-pointer before:absolute before:content-[""] before:rounded-[inherit]' : 'cursor-auto',
-      interactive && targetAreaBySize,
+      interactive ? 'cursor-pointer' : 'cursor-auto',
       splitActions && 'focus-within:shadow-glow-focus-light dark:focus-within:shadow-glow-focus-dark',
       isSelected &&
         'border-transparent bg-[var(--chip-solid-bg)] text-[var(--chip-solid-fg)] shadow-glow-focus-light dark:shadow-glow-focus-dark',
@@ -109,9 +102,7 @@ export function useChip(props: ChipProps) {
     ),
 
     actionButton: cn(
-      'relative inline-flex flex-1 items-center justify-center gap-1 rounded-[inherit] border-0 bg-transparent p-0 m-0 text-inherit',
-      'before:absolute before:content-[""] before:rounded-[inherit]',
-      targetAreaBySize,
+      'inline-flex flex-1 items-center justify-center gap-1 rounded-[inherit] border-0 bg-transparent p-0 m-0 text-inherit',
       'focus-visible:outline-none transition-transform duration-200 ease-in-out motion-safe:active:translate-y-px motion-safe:active:scale-95',
       'disabled:cursor-not-allowed disabled:opacity-40',
       classNames?.actionButton
@@ -122,8 +113,7 @@ export function useChip(props: ChipProps) {
       'shrink-0 leading-none select-none pointer-events-auto cursor-pointer',
       'p-0 m-0 ltr:-ml-0.5 rtl:-mr-0.5',
       closeBtnBoxBySize,
-      'after:absolute after:content-[""]',
-      targetAreaBySize,
+
       'text-current/70 hover:text-current',
       'hover:bg-[var(--chip-soft-bg-hover)] hover:ring-0',
       'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
