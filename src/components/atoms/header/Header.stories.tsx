@@ -1,11 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Header from './Header';
+import { Header } from './Header';
+import type { HeaderVariant } from './types';
+
+const stackClass =
+  'flex flex-col gap-4 rounded-md border border-border-light bg-surface-light p-4 dark:border-border-dark dark:bg-surface-dark';
+const headingTags: HeaderVariant[] = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
 /**
- * ## DESCRIPTION
- * Header component is used to display headings in various styles and sizes.
- * It supports different fonts, tags, and styles such as prominent and screen reader only.
+ * ## Description
+ * Header renders semantic `h1` through `h6` headings with design-system typography tokens.
+ * Use it to preserve document outline while keeping heading visuals consistent.
  *
+ * ## Usage Guide
+ * Use `tag` for semantic hierarchy and `size` for visual scale. Keep heading levels
+ * in document order for accessibility; do not pick a semantic tag only for styling.
+ * `fontSize` remains supported as a backwards-compatible alias for `size`.
  */
 const meta: Meta<typeof Header> = {
   title: 'Atoms/Header',
@@ -23,170 +32,99 @@ type Story = StoryObj<typeof Header>;
 
 export const Default: Story = {
   args: {
-    children: 'Lorem ipsum',
+    children: 'Build precise interfaces',
+    font: 'primary',
+    tag: 'h1',
     prominent: false,
-    className: '',
     srOnly: false
   }
 };
 
-/**
- * - Different header tags (h1, h2, h3, h4, h5, h6) with primary font.
- */
-
-export const PrimaryHeader: Story = {
+/** Semantic tags map to matching visual heading sizes by default. */
+export const SemanticTags: Story = {
   render: () => (
-    <div className='flex flex-col gap-4 items-center justify-center'>
-      <Header tag='h1' font='primary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h2' font='primary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h3' font='primary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h4' font='primary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h5' font='primary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h6' font='primary'>
-        Lorem Ipsum
-      </Header>
+    <div className={stackClass}>
+      {headingTags.map((tag) => (
+        <Header key={tag} tag={tag}>
+          {tag.toUpperCase()} semantic heading
+        </Header>
+      ))}
     </div>
   )
 };
 
-/**
- * - Differnt header tags (h1, h2, h3, h4, h5, h6) with secondary font.
- */
-
-export const SecondaryHeader: Story = {
+/** Size changes visual scale without changing semantic level. */
+export const VisualSizes: Story = {
   render: () => (
-    <div className='flex flex-col gap-4 items-center justify-center'>
-      <Header tag='h1' font='secondary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h2' font='secondary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h3' font='secondary'>
-        Lorem Ipsum
+    <div className={stackClass}>
+      {headingTags.map((size) => (
+        <Header key={size} tag='h2' size={size}>
+          h2 rendered with {size.toUpperCase()} visual scale
+        </Header>
+      ))}
+    </div>
+  )
+};
+
+/** Font presets keep the single project font family while changing emphasis. */
+export const Fonts: Story = {
+  render: () => (
+    <div className={stackClass}>
+      <Header tag='h4' font='primary'>
+        Primary heading
       </Header>
       <Header tag='h4' font='secondary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h5' font='secondary'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h6' font='secondary'>
-        Lorem Ipsum
-      </Header>
-    </div>
-  )
-};
-
-/**
- * - Differnt header tags (h1, h2, h3, h4, h5, h6) with secondaryBold font.
- */
-
-export const SecondaryHeaderBold: Story = {
-  render: () => (
-    <div className='flex flex-col gap-4 items-center justify-center'>
-      <Header tag='h1' font='secondaryBold'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h2' font='secondaryBold'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h3' font='secondaryBold'>
-        Lorem Ipsum
+        Secondary heading
       </Header>
       <Header tag='h4' font='secondaryBold'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h5' font='secondaryBold'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h6' font='secondaryBold'>
-        Lorem Ipsum
+        Secondary bold heading
       </Header>
     </div>
   )
 };
 
-/**
- * - You can use fontSize prop to change the font size of the header not changing the tag.
- *   For example, you can use `fontSize="h1"` to make the header look like an h1 tag but keep it as an h2 tag.
- */
-
-export const FontSize: Story = {
-  render: () => (
-    <div className='flex flex-col gap-4 items-center justify-center'>
-      <Header tag='h5' fontSize='h1'>
-        Lorem Ipsum
-      </Header>
-      <Header tag='h1' fontSize='h5'>
-        Lorem Ipsum
-      </Header>
-    </div>
-  )
-};
-
-/**
- * - Prominent prop makes the header bold.
- */
+/** Prominent headings increase emphasis without changing semantic level. */
 export const Prominent: Story = {
   args: {
-    children: 'Lorem ipsum',
-    font: 'secondaryBold',
-    tag: 'h1',
+    children: 'Prominent heading',
+    font: 'primary',
+    tag: 'h2',
     prominent: true,
     srOnly: false
   }
 };
 
-/**
- * - The `srOnly` prop hides the header visually but keeps it accessible for screen readers.
- */
-
+/** Screen-reader-only headings provide accessible structure without visible text. */
 export const ScreenReaderOnly: Story = {
   args: {
-    children: 'Lorem ipsum',
-    font: 'secondaryBold',
-    tag: 'h1',
+    children: 'Hidden section heading',
+    font: 'primary',
+    tag: 'h2',
     prominent: false,
     srOnly: true
   }
 };
 
-/**
- * - You can use the `id` prop to set an ID for the header, which is useful for accessibility and linking.
- */
+/** IDs allow headings to be referenced by links and ARIA relationships. */
 export const WithId: Story = {
   args: {
-    children: 'Lorem ipsum',
-    font: 'secondaryBold',
-    tag: 'h1',
+    children: 'Referenced heading',
+    font: 'primary',
+    tag: 'h2',
+    id: 'header-id',
     prominent: false,
-    srOnly: false,
-    id: 'header-id'
+    srOnly: false
   }
 };
 
-/**
- * - You can customize the header with a className.
- */
-
-export const CustomColor: Story = {
+/** Slot-level color overrides should use design-system token utilities. */
+export const CustomTone: Story = {
   args: {
-    children: 'Lorem ipsum',
-    font: 'secondaryBold',
-    tag: 'h1',
+    children: 'Secondary tone heading',
+    font: 'primary',
+    tag: 'h2',
     prominent: false,
     srOnly: false,
-    className: 'text-pink dark:text-pink'
+    className: 'text-text-secondary-light dark:text-text-secondary-dark'
   }
 };
