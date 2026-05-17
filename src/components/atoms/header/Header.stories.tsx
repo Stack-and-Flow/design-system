@@ -70,13 +70,13 @@ export const VisualSizes: Story = {
 export const Fonts: Story = {
   render: () => (
     <div className={stackClass}>
-      <Header tag='h2' font='primary'>
+      <Header tag='h4' font='primary'>
         Primary heading
       </Header>
-      <Header tag='h2' font='secondary'>
+      <Header tag='h4' font='secondary'>
         Secondary heading
       </Header>
-      <Header tag='h2' font='secondaryBold'>
+      <Header tag='h4' font='secondaryBold'>
         Secondary bold heading
       </Header>
     </div>

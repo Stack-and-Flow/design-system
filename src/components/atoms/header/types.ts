@@ -5,8 +5,8 @@ export const headerVariants = cva('font-primary text-text-light dark:text-text-d
   variants: {
     font: {
       primary: 'font-primary',
-      secondary: 'font-primary',
-      secondaryBold: 'font-primary font-weight-bold'
+      secondary: 'font-primary font-medium',
+      secondaryBold: 'font-primary font-bold'
     },
     size: {
       h1: 'fs-h1',
@@ -17,7 +17,7 @@ export const headerVariants = cva('font-primary text-text-light dark:text-text-d
       h6: 'fs-h6'
     },
     prominent: {
-      true: 'font-weight-bold',
+      true: 'font-bold',
       false: ''
     },
     srOnly: {

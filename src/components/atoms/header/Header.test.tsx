@@ -26,6 +26,14 @@ describe('useHeader — logic', () => {
     expect(result.current.className).toContain('fs-h4');
   });
 
+  it('applies font weight presets', () => {
+    const secondary = renderHook(() => useHeader({ children: 'Heading', font: 'secondary' }));
+    const secondaryBold = renderHook(() => useHeader({ children: 'Heading', font: 'secondaryBold' }));
+
+    expect(secondary.result.current.className).toContain('font-medium');
+    expect(secondaryBold.result.current.className).toContain('font-bold');
+  });
+
   it('prefers size over the backwards-compatible fontSize alias', () => {
     const { result } = renderHook(() => useHeader({ children: 'Heading', tag: 'h2', size: 'h3', fontSize: 'h4' }));
     expect(result.current.className).toContain('fs-h3');
