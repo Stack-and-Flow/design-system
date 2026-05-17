@@ -1,11 +1,11 @@
 ---
-name: auditor
+name: system-auditor
 description: >
-  Audits the design system itself against standards for a production-ready, npm-distributable library.
+  Audits Stack-and-Flow as a full design-system package, not individual components.
   Covers: token architecture, theme structure, folder organization, package.json configuration,
   build output, peer dependencies, and design system best practices.
   Proposes concrete improvements — not just flags issues.
-  Trigger: When auditing the design system as a whole — token architecture, folder structure, npm distributable standards.
+  Trigger: system-level audit, design-system audit, token architecture review, folder structure review, npm distributable standards, release readiness.
   Also delegable from sdd-verify or sdd-explore for system-level validation.
 license: Apache-2.0
 metadata:

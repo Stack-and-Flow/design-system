@@ -71,7 +71,7 @@ Load the relevant skill for detailed workflows:
 | Contributor shares a GitHub issue URL or component spec and asks to implement it                                       | [`component-contributor`](skills/component-contributor/SKILL.md)     |
 | User provides a HeroUI/reference component and wants an implementation-ready spec before coding                        | [`component-spec-proposer`](skills/component-spec-proposer/SKILL.md) |
 | Reviewing an existing component — code quality, visual states, tokens, accessibility                                   | [`components-auditor`](skills/components-auditor/SKILL.md)           |
-| Auditing the design system itself — token architecture, folder structure, npm distributable standards                  | [`auditor`](skills/auditor/SKILL.md)                                 |
+| Auditing the design system package — token architecture, folder structure, npm distributable standards                 | [`system-auditor`](skills/system-auditor/SKILL.md)                   |
 | External project wants to use Stack-and-Flow as a base and customize its tokens                                        | [`bootstrapping`](skills/bootstrapping/SKILL.md)                     |
 | Contributor asks if their PR is ready for review, or agent must validate implementation before handoff                 | [`pr-reviewer`](skills/pr-reviewer/SKILL.md)                         |
 | Creating or auditing GitHub Project board tasks — issues, fields, phases, team assignments                             | [`github-project-tasks`](skills/github-project-tasks/SKILL.md)       |
