@@ -19,7 +19,6 @@ export const spacerScaleClasses = {
 } as const;
 
 export type SpacerScale = keyof typeof spacerScaleClasses;
-export type SpacerAxis = 'horizontal' | 'vertical' | 'both';
 
 export const spacerVariants = cva('shrink-0 grow-0', {
   variants: {
@@ -35,8 +34,9 @@ export const spacerVariants = cva('shrink-0 grow-0', {
 });
 
 export type SpacerVariantProps = VariantProps<typeof spacerVariants>;
+export type SpacerAxis = NonNullable<SpacerVariantProps['axis']>;
 
-export type SpacerProps = SpacerVariantProps & {
+export type SpacerProps = Omit<SpacerVariantProps, 'axis'> & {
   /**
    * @control select
    * @default vertical
