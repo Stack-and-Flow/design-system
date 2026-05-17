@@ -1,18 +1,9 @@
-import type { ComponentProps, FC } from 'react';
-import { cn } from '@/lib/utils';
+import type { FC } from 'react';
 import type { SkeletonProps } from './types';
 import { useSkeleton } from './useSkeleton';
 
-const Skeleton: FC<SkeletonProps & ComponentProps<'div'>> = ({ ...props }) => {
-  const { rounded, className, width, height, ...rest } = useSkeleton(props);
-  return (
-    <div
-      {...rest}
-      data-slot='skeleton'
-      className={cn('bg-white-tint-mid animate-pulse', `rounded-${rounded}`, className)}
-      style={{ width: `${width}`, height: `${height}` }}
-    />
-  );
-};
+export const Skeleton: FC<SkeletonProps> = (props) => {
+  const { className, ariaHidden, ...rest } = useSkeleton(props);
 
-export default Skeleton;
+  return <div {...rest} data-slot='skeleton' className={className} aria-hidden={ariaHidden} />;
+};
