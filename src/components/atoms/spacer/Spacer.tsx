@@ -1,15 +1,9 @@
 import type { FC } from 'react';
-
 import type { SpacerProps } from './types';
 import { useSpacer } from './useSpacer';
 
-const Spacer: FC<SpacerProps> = ({ spaceX, spaceY }) => {
-  const { width, height } = useSpacer({ spaceX, spaceY });
-  return (
-    <>
-      <div style={{ width: width, height: height }}></div>
-    </>
-  );
-};
+export const Spacer: FC<SpacerProps> = (props) => {
+  const { className, ariaHidden } = useSpacer(props);
 
-export default Spacer;
+  return <div className={className} aria-hidden={ariaHidden} />;
+};
