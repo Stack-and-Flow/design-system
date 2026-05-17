@@ -38,7 +38,7 @@ export type HeaderVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 export type HeaderFont = NonNullable<HeaderVariantProps['font']>;
 export type HeaderSize = NonNullable<HeaderVariantProps['size']>;
 
-type NativeHeaderProps = Omit<HTMLAttributes<HTMLHeadingElement>, 'children' | 'className'>;
+type NativeHeaderProps = Omit<HTMLAttributes<HTMLHeadingElement>, 'children' | 'className' | 'dangerouslySetInnerHTML'>;
 
 export type HeaderProps = Omit<HeaderVariantProps, 'font' | 'size'> &
   NativeHeaderProps & {

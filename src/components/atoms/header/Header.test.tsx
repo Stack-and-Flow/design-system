@@ -25,6 +25,12 @@ describe('useHeader — logic', () => {
     const { result } = renderHook(() => useHeader({ children: 'Heading', tag: 'h2', fontSize: 'h4' }));
     expect(result.current.className).toContain('fs-h4');
   });
+
+  it('prefers size over the backwards-compatible fontSize alias', () => {
+    const { result } = renderHook(() => useHeader({ children: 'Heading', tag: 'h2', size: 'h3', fontSize: 'h4' }));
+    expect(result.current.className).toContain('fs-h3');
+    expect(result.current.className).not.toContain('fs-h4');
+  });
 });
 
 describe('Header — component behavior', () => {

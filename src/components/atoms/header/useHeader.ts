@@ -18,7 +18,7 @@ export const useHeader = ({
   id,
   ...rest
 }: HeaderProps): UseHeaderReturn => {
-  const resolvedSize = fontSize ?? size ?? tag;
+  const resolvedSize = size ?? fontSize ?? tag;
 
   return {
     tag,
