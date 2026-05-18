@@ -27,6 +27,7 @@ export const useLink = ({
   href,
   title,
   rel,
+  'aria-label': ariaLabelProp,
   disabled = false,
   onClick,
   onKeyDown,
@@ -34,7 +35,7 @@ export const useLink = ({
 }: LinkProps): UseLinkReturn => {
   const iconWidth = { sm: 18, md: 20, lg: 24 }[size] ?? 20;
   const isExternal = target === '_blank';
-  const ariaLabel = title ?? (typeof children === 'string' ? children : undefined);
+  const ariaLabel = ariaLabelProp ?? title ?? (typeof children === 'string' ? children : undefined);
   const isAction = !href;
   const role = isAction ? 'button' : 'link';
 

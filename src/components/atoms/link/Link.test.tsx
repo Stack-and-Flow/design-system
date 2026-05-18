@@ -121,6 +121,16 @@ describe('Link — component behavior', () => {
     expect(screen.getByRole('link', { name: 'Docs' })).toHaveAttribute('rel', 'nofollow noopener noreferrer');
   });
 
+  it('preserves caller aria-label over derived labels', () => {
+    render(
+      <Link href='https://example.com' aria-label='Read migration guide' title='Open docs'>
+        Docs
+      </Link>
+    );
+    const link = screen.getByRole('link', { name: 'Read migration guide' });
+    expect(link).toHaveAttribute('title', 'Open docs');
+  });
+
   it('uses title as aria-label and title attribute', () => {
     render(
       <Link href='https://example.com' title='Open docs'>
@@ -139,6 +149,15 @@ describe('Link — component behavior', () => {
     );
     expect(screen.getByRole('link', { name: 'Docs' })).toBeInTheDocument();
     expect(screen.getByTestId('link-icon')).toHaveAttribute('data-icon', 'image');
+  });
+
+  it('uses caller aria-label for icon-only links', () => {
+    render(
+      <Link href='https://example.com' icon='image' aria-label='Open image gallery'>
+        <span aria-hidden='true' />
+      </Link>
+    );
+    expect(screen.getByRole('link', { name: 'Open image gallery' })).toBeInTheDocument();
   });
 
   it('does not leak visual variant, size, or shadow props to the DOM', () => {
