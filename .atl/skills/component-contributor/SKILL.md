@@ -95,6 +95,8 @@ Before writing a single line of code, extract from the issue:
 6. **Reference URL** — study the linked implementation (HeroUI, Radix, etc.)
 7. **Design notes** — any visual or interaction specifics
 
+If the issue came from GitHub and the rendered page does not expose comments, fetch the issue comments via the GitHub API (`/repos/{owner}/{repo}/issues/{number}/comments`) or `gh api` before extracting the spec. The validated spec may live in a comment thread.
+
 If any of these are missing or ambiguous, **ask the contributor to clarify before proceeding**.
 Do NOT invent props or behaviors that are not in the spec.
 

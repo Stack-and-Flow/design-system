@@ -35,7 +35,7 @@ Do not implement the component. Your job is to turn a vague task into a validate
 
 ## Execution Steps
 
-1. Read the GitHub issue, if provided: title, body, comments, assignees, and URL.
+1. Read the GitHub issue, if provided: title, body, comments, assignees, and URL. If the rendered issue page does not expose the comment thread, fetch the issue comments via the GitHub API (`/repos/{owner}/{repo}/issues/{number}/comments`) or `gh api` before continuing.
 2. Fetch and study the reference URL. Extract behavior, states, accessibility, anatomy, and examples.
 3. Compare against project rules from `component-contributor`, especially Phase 1 requirements.
 4. Present a proposed spec using `references/spec-template.md`.
