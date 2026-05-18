@@ -133,13 +133,13 @@ export const chipVariants = cva(
       {
         color: 'success',
         variant: 'flat',
-        class: 'bg-success-tint text-green-dark dark:text-success data-[interactive=true]:hover:bg-success-tint'
+        class: 'bg-success-tint text-text-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
       },
       {
         color: 'success',
         variant: ['bordered', 'faded', 'dot'],
         class:
-          'border-success-light text-green-dark dark:border-success dark:text-success data-[interactive=true]:hover:border-success-dark dark:data-[interactive=true]:hover:border-green-light'
+          'border-success-light text-text-light dark:border-success dark:text-success data-[interactive=true]:hover:border-success-dark dark:data-[interactive=true]:hover:border-green-light'
       },
       {
         color: 'success',
@@ -149,7 +149,7 @@ export const chipVariants = cva(
       {
         color: 'success',
         variant: 'light',
-        class: 'text-green-dark dark:text-success data-[interactive=true]:hover:bg-success-tint'
+        class: 'text-text-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
       },
       {
         color: 'success',
