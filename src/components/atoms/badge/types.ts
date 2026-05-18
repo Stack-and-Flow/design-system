@@ -13,13 +13,13 @@ export const badgeVariants = cva(
         primary: ['bg-brand-light text-white', 'dark:bg-brand-dark dark:text-white'],
         secondary: ['bg-surface-light text-text-light', 'dark:bg-surface-dark dark:text-text-dark'],
         success: 'bg-success-light text-white dark:bg-success dark:text-white',
-        warning: 'bg-warning-light text-[#1a0a00] dark:bg-warning dark:text-black',
+        warning: 'bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
         danger: 'bg-error-light text-white dark:bg-error dark:text-white'
       },
       size: {
-        sm: 'text-[10px] min-w-[18px] h-[18px] px-[6px] py-[2px] mr-[5px] mt-[2px]',
-        md: 'text-xs min-w-[24px] h-[24px] px-[8px] py-[4px]',
-        lg: 'text-sm min-w-[28px] h-[28px] px-[10px] py-[5px]'
+        sm: 'text-badge-sm min-w-4.5 h-4.5 px-1.5 py-0.5 mr-1.25 mt-0.5',
+        md: 'text-xs min-w-6 h-6 px-2 py-1',
+        lg: 'text-sm min-w-7 h-7 px-2.5 py-1.25'
       },
       rounded: {
         true: 'rounded-full',
@@ -44,57 +44,70 @@ export const badgeVariants = cva(
       }
     },
     compoundVariants: [
-      // flat: opaque background + colored border + colored text
       {
         variant: 'flat',
         color: 'primary',
-        class: '!bg-[#ffe5eb]   border-brand-dark              text-brand-dark   dark:!bg-[#330011]'
+        class: [
+          'bg-red-tint-subtle border-brand-light text-brand-light',
+          'dark:bg-red-tint-subtle dark:border-brand-dark dark:text-brand-dark-light'
+        ]
       },
       {
         variant: 'flat',
         color: 'secondary',
-        class: '!bg-[#f5f5f5] border-border-strong-dark        text-text-dark    dark:!bg-[#1a1a1a]'
+        class: [
+          'bg-surface-raised-light border-border-strong-light text-text-light',
+          'dark:bg-surface-raised-dark dark:border-border-strong-dark dark:text-text-dark'
+        ]
       },
       {
         variant: 'flat',
         color: 'success',
-        class: '!bg-[#dcfce7]  border-success                  text-success      dark:!bg-[#0a3d1f]'
+        class: [
+          'bg-success-tint border-success-light text-success-light',
+          'dark:bg-success-tint dark:border-success dark:text-success'
+        ]
       },
       {
         variant: 'flat',
         color: 'warning',
-        class: '!bg-[#fef9c3]  border-warning                  text-warning      dark:!bg-[#3d3510]'
+        class: [
+          'bg-warning-tint border-warning-light text-warning-light',
+          'dark:bg-warning-tint dark:border-warning dark:text-warning'
+        ]
       },
       {
         variant: 'flat',
         color: 'danger',
-        class: '!bg-[#fee2e2]  border-error                    text-error        dark:!bg-[#3d0f0f]'
+        class: [
+          'bg-error-tint border-error-light text-error-light',
+          'dark:bg-error-tint dark:border-error dark:text-error'
+        ]
       },
-      // subtle: very soft background + no border + colored text
       {
         variant: 'subtle',
         color: 'primary',
-        class: '!bg-[#fff0f3] text-brand-dark   dark:!bg-[#1a0008] dark:text-brand-light'
+        class: ['bg-red-tint-subtle text-brand-light', 'dark:bg-red-tint-subtle dark:text-brand-dark-light']
       },
       {
         variant: 'subtle',
         color: 'secondary',
-        class: '!bg-[#fafafa] text-text-dark    dark:!bg-[#0a0a0a] dark:text-text-dark'
+        class: ['bg-surface-light text-text-secondary-light', 'dark:bg-surface-dark dark:text-text-secondary-dark']
       },
       {
         variant: 'subtle',
         color: 'success',
-        class: '!bg-[#f0fdf4] text-success      dark:!bg-[#051f0d] dark:text-success'
+        class: ['bg-success-tint text-success-light', 'dark:bg-success-tint dark:text-success']
       },
       {
         variant: 'subtle',
         color: 'warning',
-        class: '!bg-[#fefce8] text-warning      dark:!bg-[#1f1a08] dark:text-warning'
+        class: ['bg-warning-tint text-warning-light', 'dark:bg-warning-tint dark:text-warning']
       },
       {
         variant: 'subtle',
         color: 'danger',
-        class: '!bg-[#fef2f2] text-error        dark:!bg-[#1f0505] dark:text-error'
+        class: ['bg-error-tint text-error-light', 'dark:bg-error-tint dark:text-error']
       }
     ],
     defaultVariants: {

@@ -3,18 +3,18 @@ import { cva } from 'class-variance-authority';
 export const dividerVariants = cva('', {
   variants: {
     orientation: {
-      horizontal: 'h-px w-[4px]',
-      vertical: 'w-px h-[4px]'
+      horizontal: 'h-px w-1',
+      vertical: 'w-px h-1'
     },
     corner: {
       rounded: 'rounded-xs',
       none: 'rounded-none'
     },
     thickness: {
-      xs: 'p-[0px]',
-      sm: 'p-[2px]',
-      md: 'p-[3px]',
-      lg: 'p-[5px]'
+      xs: 'p-0',
+      sm: 'p-0.5',
+      md: 'p-0.75',
+      lg: 'p-1.25'
     }
   },
   compoundVariants: [

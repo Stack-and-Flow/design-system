@@ -81,6 +81,33 @@ export function useChip(props: ChipProps) {
 
   const closeIconSizeBySize: 10 | 12 | 14 = size === 'sm' ? 10 : size === 'lg' ? 14 : 12;
 
+  const normalizedColor = color ?? 'primary';
+
+  const selectedClassByColor: Record<NonNullable<ChipProps['color']>, string> = {
+    primary: 'border-transparent bg-brand-light text-white dark:bg-brand-dark dark:text-white',
+    secondary:
+      'border-transparent bg-surface-raised-light text-text-light dark:bg-surface-raised-dark dark:text-text-dark',
+    success: 'border-transparent bg-success-light text-white dark:bg-success dark:text-text-light',
+    warning: 'border-transparent bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
+    danger: 'border-transparent bg-error-light text-white dark:bg-error dark:text-white'
+  };
+
+  const dotClassByColor: Record<NonNullable<ChipProps['color']>, string> = {
+    primary: 'bg-brand-light dark:bg-brand-dark',
+    secondary: 'bg-text-secondary-light dark:bg-text-secondary-dark',
+    success: 'bg-success-light dark:bg-success',
+    warning: 'bg-warning-light dark:bg-warning',
+    danger: 'bg-error-light dark:bg-error'
+  };
+
+  const closeButtonHoverByColor: Record<NonNullable<ChipProps['color']>, string> = {
+    primary: 'hover:bg-red-tint-low',
+    secondary: 'hover:bg-surface-raised-light dark:hover:bg-surface-raised-dark',
+    success: 'hover:bg-success-tint',
+    warning: 'hover:bg-warning-tint',
+    danger: 'hover:bg-error-tint'
+  };
+
   const slots = {
     base: cn(
       baseClasses,
@@ -89,12 +116,11 @@ export function useChip(props: ChipProps) {
       classNames?.base,
       interactive ? 'cursor-pointer' : 'cursor-auto',
       splitActions && 'focus-within:shadow-glow-focus-light dark:focus-within:shadow-glow-focus-dark',
-      isSelected &&
-        'border-transparent bg-[var(--chip-solid-bg)] text-[var(--chip-solid-fg)] shadow-glow-focus-light dark:shadow-glow-focus-dark',
+      isSelected && `${selectedClassByColor[normalizedColor]} shadow-glow-focus-light dark:shadow-glow-focus-dark`,
       iconBySize
     ),
     content: cn('truncate', classNames?.content),
-    dot: cn('inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--chip-dot)]', classNames?.dot),
+    dot: cn('inline-block h-1.5 w-1.5 shrink-0 rounded-full', dotClassByColor[normalizedColor], classNames?.dot),
     avatar: cn(
       'grid shrink-0 place-items-center overflow-hidden rounded-full ltr:mr-px rtl:ml-px',
       avatarSizeClass,
@@ -115,7 +141,8 @@ export function useChip(props: ChipProps) {
       closeBtnBoxBySize,
 
       'text-current/70 hover:text-current',
-      'hover:bg-[var(--chip-soft-bg-hover)] hover:ring-0',
+      closeButtonHoverByColor[normalizedColor],
+      'hover:ring-0',
       'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
       'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40',
       classNames?.closeButton

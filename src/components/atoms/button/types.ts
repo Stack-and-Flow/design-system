@@ -6,7 +6,7 @@ export const buttonVariants = cva(
     'button relative border cursor-pointer max-w-full',
     'active:scale-[0.98]',
     'flex items-center justify-center',
-    'font-semibold whitespace-nowrap line-clamp-1 leading-[1.6] tracking-[0.01em]',
+    'font-semibold whitespace-nowrap line-clamp-1 leading-relaxed tracking-ui',
     'disabled:pointer-events-none disabled:opacity-40',
     'focus-visible:outline-none',
     'focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
@@ -16,11 +16,11 @@ export const buttonVariants = cva(
       variant: {
         primary: [
           'text-white',
-          'bg-[image:var(--background-image-btn-primary)]',
+          'bg-btn-primary',
           'border-brand-light dark:border-brand-dark',
           'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
-          'transition-all duration-250',
-          'hover:bg-[image:var(--background-image-btn-primary-hover)]',
+          'transition-[background,box-shadow,border-color,transform,color] duration-250 ease-out',
+          'hover:bg-btn-primary-hover',
           'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
         ],
         secondary: [
@@ -29,17 +29,17 @@ export const buttonVariants = cva(
           'border border-transparent',
           'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
           'btn-secondary-hover',
-          'active:bg-[rgba(255,0,54,0.16)]',
-          'transition-all duration-250',
+          'active:bg-red-tint-active',
+          'transition-[background,box-shadow,border-color,transform,color] duration-250 ease-out',
           'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover',
-          'hover:bg-[rgba(255,0,54,0.24)]'
+          'hover:bg-red-tint-active'
         ],
         outlined: [
           'text-brand-light dark:text-text-dark',
-          'bg-transpartent',
+          'bg-transparent',
           'border border-transparent',
           'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'transition-all duration-250',
+          'transition-[background,box-shadow,border-color,transform,color] duration-250 ease-out',
           'dark:hover:bg-brand-dark',
           'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
         ],

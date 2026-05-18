@@ -11,15 +11,15 @@ export const modalVariants = cva(
   {
     variants: {
       size: {
-        xs: 'max-w-[20rem] m-0 sm:m-1 rounded-md max-h-[80dvh]',
-        sm: 'max-w-[24rem] m-0 sm:m-1 rounded-md max-h-[80dvh]',
-        md: 'max-w-full sm:max-w-[28rem] m-0 sm:m-1 rounded-md max-h-[80dvh]',
-        lg: 'max-w-full sm:max-w-[32rem] m-0 sm:m-1 rounded-md max-h-[80dvh]',
-        xl: 'max-w-full sm:max-w-[36rem] m-0 sm:m-1 rounded-md max-h-[80dvh]',
-        '2xl': 'max-w-full sm:max-w-[42rem] m-0 sm:m-1 rounded-md max-h-[80dvh]',
-        '3xl': 'max-w-full sm:max-w-[48rem] m-0 sm:m-1 rounded-md max-h-[80dvh]',
-        '4xl': 'max-w-full sm:max-w-[56rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
-        '5xl': 'max-w-full sm:max-w-[64rem] m-0 sm:m-1 rounded-lg max-h-[80dvh]',
+        xs: 'max-w-xs m-0 sm:m-1 rounded-md max-h-modal',
+        sm: 'max-w-sm m-0 sm:m-1 rounded-md max-h-modal',
+        md: 'max-w-full sm:max-w-md m-0 sm:m-1 rounded-md max-h-modal',
+        lg: 'max-w-full sm:max-w-lg m-0 sm:m-1 rounded-md max-h-modal',
+        xl: 'max-w-full sm:max-w-xl m-0 sm:m-1 rounded-md max-h-modal',
+        '2xl': 'max-w-full sm:max-w-2xl m-0 sm:m-1 rounded-md max-h-modal',
+        '3xl': 'max-w-full sm:max-w-3xl m-0 sm:m-1 rounded-md max-h-modal',
+        '4xl': 'max-w-full sm:max-w-4xl m-0 sm:m-1 rounded-lg max-h-modal',
+        '5xl': 'max-w-full sm:max-w-5xl m-0 sm:m-1 rounded-lg max-h-modal',
         full: 'max-w-full m-0 rounded-none h-dvh'
       },
       position: {
