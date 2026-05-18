@@ -27,7 +27,7 @@ vi.mock('lucide-react/dynamic', () => ({
 
 vi.mock('spinners-react', () => ({
   // biome-ignore lint/style/useNamingConvention: must match library export name
-  SpinnerCircular: () => null
+  SpinnerCircular: () => <span data-testid='button-spinner' />
 }));
 
 // CSS import in Button.tsx — mock to prevent parse errors in jsdom
@@ -44,43 +44,53 @@ import { useButton } from './useButton';
 
 describe('useButton — logic', () => {
   it('returns disabled: false by default', () => {
-    const { result } = renderHook(() => useButton({}));
+    const { result } = renderHook(() => useButton({ text: 'Button' }));
     expect(result.current.disabled).toBe(false);
   });
 
   it('returns isLoading: false by default', () => {
-    const { result } = renderHook(() => useButton({}));
+    const { result } = renderHook(() => useButton({ text: 'Button' }));
     expect(result.current.isLoading).toBe(false);
   });
 
   it('returns disabled: true when disabled prop is true', () => {
-    const { result } = renderHook(() => useButton({ disabled: true }));
+    const { result } = renderHook(() => useButton({ text: 'Button', disabled: true }));
     expect(result.current.disabled).toBe(true);
   });
 
-  it('returns the correct variant when variant: ghost is passed', () => {
-    const { result } = renderHook(() => useButton({ variant: 'ghost' }));
-    expect(result.current.variant).toBe('ghost');
+  it('returns a computed className for visual variants', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', variant: 'ghost' }));
+    expect(result.current.className).toEqual(expect.any(String));
   });
 
-  it('iconSize() returns correct class for size sm', () => {
-    const { result } = renderHook(() => useButton({ size: 'sm' }));
-    expect(result.current.iconSize()).toBe('h-md w-auto');
+  it('returns correct icon class for size sm', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', size: 'sm' }));
+    expect(result.current.iconSize).toBe('h-md w-auto');
   });
 
-  it('iconSize() returns correct class for size lg', () => {
-    const { result } = renderHook(() => useButton({ size: 'lg' }));
-    expect(result.current.iconSize()).toBe('h-xl w-auto');
+  it('returns correct icon class for size lg', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', size: 'lg' }));
+    expect(result.current.iconSize).toBe('h-xl w-auto');
   });
 
-  it('iconSize() returns default class for size md', () => {
-    const { result } = renderHook(() => useButton({ size: 'md' }));
-    expect(result.current.iconSize()).toBe('h-lg w-auto');
+  it('returns default icon class for size md', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', size: 'md' }));
+    expect(result.current.iconSize).toBe('h-lg w-auto');
   });
 
   it('passes ariaLabel correctly to return value', () => {
     const { result } = renderHook(() => useButton({ ariaLabel: 'Submit form' }));
     expect(result.current.ariaLabel).toBe('Submit form');
+  });
+
+  it('passes native aria-label correctly to return value', () => {
+    const { result } = renderHook(() => useButton({ 'aria-label': 'Submit form' }));
+    expect(result.current.ariaLabel).toBe('Submit form');
+  });
+
+  it('derives content gap from the size prop', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', size: 'lg' }));
+    expect(result.current.contentClassName).toContain('gap-4');
   });
 });
 
@@ -90,7 +100,7 @@ describe('useButton — logic', () => {
 
 describe('Button — component behavior', () => {
   it('renders a <button> element in the DOM', () => {
-    render(<Button />);
+    render(<Button ariaLabel='Button' />);
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
@@ -137,6 +147,11 @@ describe('Button — component behavior', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Saving' }));
 
     expect(handleClick).not.toHaveBeenCalled();
+  });
+
+  it('keeps the spinner visible for icon-only loading buttons', () => {
+    render(<Button ariaLabel='Refresh' icon='refresh-cw' isLoading={true} />);
+    expect(screen.getByTestId('button-spinner')).toBeInTheDocument();
   });
 
   it('applies aria-pressed when the prop is provided', () => {

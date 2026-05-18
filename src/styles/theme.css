@@ -96,6 +96,7 @@
   --color-white-tint-strong: rgba(255, 255, 255, 0.15); /* Inset highlight button */
   --color-white-tint-heavy: rgba(255, 255, 255, 0.25); /* Inset highlight strong */
 
+  --color-black-tint-low: rgba(0, 0, 0, 0.2); /* Overlay ligero */
   --color-black-tint-mid: rgba(0, 0, 0, 0.4); /* Overlay ligero */
   --color-black-tint-heavy: rgba(0, 0, 0, 0.6); /* Overlay backdrop */
 
@@ -249,9 +250,10 @@
   /* ── Gradientes ──────────────────────────────────────────────── */
   /* Namespace --background-image-* → genera utilidades bg-* en Tailwind v4 */
 
-  /* Botón primary → bg-btn-primary / bg-btn-primary-hover */
+  /* Botón primary → bg-btn-primary / bg-btn-primary-hover / bg-btn-primary-active */
   --background-image-btn-primary: linear-gradient(135deg, #ff1a4b 0%, #cc0030 100%);
   --background-image-btn-primary-hover: linear-gradient(135deg, #ff3366 0%, #e0003a 100%);
+  --background-image-btn-primary-active: linear-gradient(135deg, #cc0030 0%, #990020 100%);
 
   /* Fondos de página → bg-page-dark / bg-page-light */
   --background-image-page-dark: linear-gradient(
