@@ -223,6 +223,16 @@
   --glow-chip-danger-hover:
     0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-red-600) 36%, transparent);
 
+  /* Tailwind shadow utility aliases — shadow-glow-* classes */
+  --shadow-glow-btn-primary: var(--glow-btn-primary);
+  --shadow-glow-btn-primary-hover: var(--glow-btn-primary-hover);
+  --shadow-glow-btn-primary-light: var(--glow-btn-primary-light);
+  --shadow-glow-btn-primary-hover-light: var(--glow-btn-primary-hover-light);
+  --shadow-glow-btn-secondary: var(--glow-btn-secondary);
+  --shadow-glow-btn-secondary-hover: var(--glow-btn-secondary-hover);
+  --shadow-glow-btn-secondary-light: var(--glow-btn-secondary-light);
+  --shadow-glow-btn-secondary-hover-light: var(--glow-btn-secondary-hover-light);
+
   /* Glow de focus ring */
   --glow-focus-dark: 0 0 0 3px rgba(255, 0, 54, 0.4);
   --glow-focus-light: 0 0 0 3px rgba(219, 20, 60, 0.35);

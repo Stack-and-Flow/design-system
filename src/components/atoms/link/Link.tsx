@@ -1,31 +1,47 @@
-import type { VariantProps } from 'class-variance-authority';
 import { DynamicIcon } from 'lucide-react/dynamic';
-import type { ComponentProps, FC } from 'react';
-import { cn } from '@/lib/utils';
-import { type LinkProps, linkVariants } from './types';
+import type { FC } from 'react';
+import type { LinkProps } from './types';
 import { useLink } from './useLink';
 
-const Link: FC<LinkProps & VariantProps<typeof linkVariants> & ComponentProps<'a'>> = ({ ...props }) => {
-  const { href, target, isExternal, title, children, variant, size, className, icon, iconWidth, ...rest } =
-    useLink(props);
+export const Link: FC<LinkProps> = (props) => {
+  const {
+    href,
+    target,
+    rel,
+    title,
+    children,
+    className,
+    icon,
+    iconWidth,
+    disabled,
+    isExternal: _isExternal,
+    ariaLabel,
+    role,
+    tabIndex,
+    handleClick,
+    handleKeyDown,
+    ...rest
+  } = useLink(props);
 
   return (
     <a
       {...rest}
       href={href}
       target={target}
-      rel={isExternal ? 'noopener noreferrer' : undefined}
-      aria-label={title || children}
-      aria-current={props['aria-current'] || undefined}
-      role={variant === 'button' || variant === 'outlined' ? 'button' : 'link'}
-      title={title ?? children}
-      tabIndex={0}
-      className={cn(linkVariants({ variant, size, className }))}
+      rel={rel}
+      aria-label={ariaLabel}
+      aria-disabled={disabled ? true : undefined}
+      data-disabled={disabled ? true : undefined}
+      data-external={_isExternal ? true : undefined}
+      role={role}
+      title={title ?? ariaLabel}
+      tabIndex={tabIndex}
+      className={className}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
     >
-      {icon && <DynamicIcon name={icon} color='currentColor' size={iconWidth} />}
+      {icon && <DynamicIcon name={icon} color='currentColor' size={iconWidth} aria-hidden={true} />}
       {children}
     </a>
   );
 };
-
-export default Link;

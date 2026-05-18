@@ -1,2 +1,2 @@
-export { default as Link } from './Link';
+export { Link } from './Link';
 export * from './types';
