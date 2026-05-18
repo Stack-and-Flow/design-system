@@ -9,7 +9,7 @@ export const buttonVariants = cva(
     'flex items-center justify-center',
     'font-semibold whitespace-nowrap line-clamp-1 leading-relaxed tracking-ui',
     'disabled:pointer-events-none disabled:opacity-40 disabled:cursor-not-allowed',
-    'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-light/35 dark:focus-visible:ring-brand-dark/40',
+    'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-light/35 dark:focus-visible:ring-brand-dark/40',
     'transition-[background,box-shadow,border-color,transform,color] duration-250 ease-out'
   ],
   {
