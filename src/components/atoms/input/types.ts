@@ -16,7 +16,7 @@ export const inputVariants = cva(
           'border-t-transparent',
           'border-l-transparent',
           'border-r-transparent',
-          '!rounded-none',
+          'rounded-none!',
           'border-b-border-light',
           'dark:border-b-border-dark'
         ],
@@ -58,7 +58,7 @@ export const inputVariants = cva(
 
 export const labelVariants = cva(
   [
-    'absolute w-auto line-clamp-1 transition-[top,font-size,color] duration-200 ease-[ease] text-text-light dark:text-text-dark pt-[2px]'
+    'absolute w-auto line-clamp-1 transition-[top,font-size,color] duration-200 ease-[ease] text-text-light dark:text-text-dark pt-0.5'
   ],
   {
     variants: {
@@ -68,7 +68,7 @@ export const labelVariants = cva(
         lg: 'left-4 fs-h6'
       },
       state: {
-        default: 'top-[50%] translate-y-[-50%]',
+        default: 'top-1/2 -translate-y-1/2',
         focusedSm: 'top-1 fs-small font-semibold',
         focusedMd: 'top-1.5 fs-small font-semibold',
         focusedLg: 'top-2 fs-small font-semibold',

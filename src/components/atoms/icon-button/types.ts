@@ -8,7 +8,7 @@ export const iconButtonVariants = cva(
     'transition-[box-shadow,background,border-color] duration-200 ease-[ease]',
     'flex items-center justify-start',
     'whitespace-nowrap line-clamp-1 ',
-    'min-w-[44px] min-h-[44px]',
+    'min-w-11 min-h-11',
     'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
     'disabled:pointer-events-none disabled:opacity-40'
   ],

@@ -16,7 +16,7 @@ export const linkVariants = cva(
           'border-brand-light/60 text-brand-light dark:border-brand-dark-dark dark:text-brand-dark-dark',
           'transition-[color,border-color] duration-200 ease-[ease]',
           'hover:border-brand-light-dark/80 hover:text-brand-light-dark dark:hover:border-brand-dark-light dark:hover:text-brand-dark-light',
-          '[&>svg]:mr-1 [&>svg]:inline-block [&>svg]:align-[-0.125em]'
+          '[&>svg]:mr-1 [&>svg]:inline-block [&>svg]:align-middle'
         ],
         button: [
           'inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-pill border border-transparent font-semibold tracking-ui text-white no-underline',

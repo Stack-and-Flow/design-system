@@ -15,61 +15,11 @@ export const chipVariants = cva(
   {
     variants: {
       color: {
-        primary: [
-          '[--chip-tone:var(--color-primary)] dark:[--chip-tone:var(--color-brand-dark)]',
-          '[--chip-fg:var(--color-brand-light-darkest)] dark:[--chip-fg:var(--color-brand-dark)]',
-          '[--chip-solid-bg:var(--color-primary)] dark:[--chip-solid-bg:var(--color-brand-dark)]',
-          '[--chip-solid-fg:var(--color-text-dark)]',
-          '[--chip-soft-bg:color-mix(in_srgb,var(--chip-tone)_10%,transparent)]',
-          '[--chip-soft-bg-hover:color-mix(in_srgb,var(--chip-tone)_16%,transparent)]',
-          '[--chip-soft-border:color-mix(in_srgb,var(--chip-tone)_28%,transparent)]',
-          '[--chip-solid-hover:var(--color-primary-hover)] dark:[--chip-solid-hover:var(--color-brand-dark-light)]',
-          '[--chip-dot:var(--chip-tone)]'
-        ].join(' '),
-        secondary: [
-          '[--chip-tone:var(--color-border-strong-light)] dark:[--chip-tone:var(--color-border-strong-dark)]',
-          '[--chip-fg:var(--color-text-secondary-light)] dark:[--chip-fg:var(--color-text-secondary-dark)]',
-          '[--chip-solid-bg:var(--color-surface-raised-light)] dark:[--chip-solid-bg:var(--color-surface-raised-dark)]',
-          '[--chip-solid-fg:var(--color-text-light)] dark:[--chip-solid-fg:var(--color-text-dark)]',
-          '[--chip-soft-bg:color-mix(in_srgb,var(--chip-tone)_12%,transparent)]',
-          '[--chip-soft-bg-hover:color-mix(in_srgb,var(--chip-tone)_18%,transparent)]',
-          '[--chip-soft-border:color-mix(in_srgb,var(--chip-tone)_48%,transparent)]',
-          '[--chip-solid-hover:var(--color-surface-light)] dark:[--chip-solid-hover:var(--color-surface-dark)]',
-          '[--chip-dot:var(--color-text-secondary-light)] dark:[--chip-dot:var(--color-text-secondary-dark)]'
-        ].join(' '),
-        success: [
-          '[--chip-tone:var(--color-green)]',
-          '[--chip-fg:var(--color-text-light)] dark:[--chip-fg:var(--color-text-dark)]',
-          '[--chip-solid-bg:var(--color-green)]',
-          '[--chip-solid-fg:var(--color-text-light)] dark:[--chip-solid-fg:var(--color-background-dark)]',
-          '[--chip-soft-bg:color-mix(in_srgb,var(--chip-tone)_11%,transparent)]',
-          '[--chip-soft-bg-hover:color-mix(in_srgb,var(--chip-tone)_18%,transparent)]',
-          '[--chip-soft-border:color-mix(in_srgb,var(--chip-tone)_36%,transparent)]',
-          '[--chip-solid-hover:var(--color-green-dark)] dark:[--chip-solid-hover:var(--color-green-light)]',
-          '[--chip-dot:var(--chip-tone)]'
-        ].join(' '),
-        warning: [
-          '[--chip-tone:var(--color-yellow)]',
-          '[--chip-fg:var(--color-text-light)] dark:[--chip-fg:var(--color-text-dark)]',
-          '[--chip-solid-bg:var(--color-yellow)]',
-          '[--chip-solid-fg:#1a0a00]',
-          '[--chip-soft-bg:color-mix(in_srgb,var(--chip-tone)_13%,transparent)]',
-          '[--chip-soft-bg-hover:color-mix(in_srgb,var(--chip-tone)_20%,transparent)]',
-          '[--chip-soft-border:color-mix(in_srgb,var(--chip-tone)_42%,transparent)]',
-          '[--chip-solid-hover:var(--color-yellow-light)]',
-          '[--chip-dot:var(--chip-tone)]'
-        ].join(' '),
-        danger: [
-          '[--chip-tone:var(--color-red-600)] dark:[--chip-tone:var(--color-red-500)]',
-          '[--chip-fg:var(--color-red-700)] dark:[--chip-fg:var(--color-red-300)]',
-          '[--chip-solid-bg:var(--color-red-600)] dark:[--chip-solid-bg:var(--color-red-500)]',
-          '[--chip-solid-fg:var(--color-text-dark)]',
-          '[--chip-soft-bg:color-mix(in_srgb,var(--chip-tone)_11%,transparent)]',
-          '[--chip-soft-bg-hover:color-mix(in_srgb,var(--chip-tone)_18%,transparent)]',
-          '[--chip-soft-border:color-mix(in_srgb,var(--chip-tone)_36%,transparent)]',
-          '[--chip-solid-hover:var(--color-red-700)] dark:[--chip-solid-hover:var(--color-red-400)]',
-          '[--chip-dot:var(--chip-tone)]'
-        ].join(' ')
+        primary: '',
+        secondary: '',
+        success: '',
+        warning: '',
+        danger: ''
       },
 
       size: {
@@ -81,38 +31,13 @@ export const chipVariants = cva(
       radiusSize: { none: 'rounded-none', sm: 'rounded-sm', md: 'rounded-md', lg: 'rounded-lg', full: 'rounded-full' },
 
       variant: {
-        solid: [
-          'border-transparent bg-[var(--chip-solid-bg)] text-[var(--chip-solid-fg)] shadow-none',
-          'data-[interactive=true]:hover:bg-[var(--chip-solid-hover)]'
-        ].join(' '),
-        flat: [
-          'border-transparent bg-[var(--chip-soft-bg)] text-[var(--chip-fg)]',
-          'data-[interactive=true]:hover:bg-[var(--chip-soft-bg-hover)]'
-        ].join(' '),
-        shadow: [
-          'border-transparent bg-[var(--chip-solid-bg)] text-[var(--chip-solid-fg)]',
-          'shadow-[0_1px_2px_rgba(0,0,0,.12),0_3px_10px_color-mix(in_srgb,var(--chip-tone)_16%,transparent)]',
-          'dark:shadow-[0_1px_2px_rgba(0,0,0,.28),0_3px_10px_color-mix(in_srgb,var(--chip-tone)_14%,transparent)]',
-          'data-[interactive=true]:hover:bg-[var(--chip-solid-hover)]',
-          'data-[interactive=true]:hover:shadow-[0_2px_4px_rgba(0,0,0,.14),0_6px_16px_color-mix(in_srgb,var(--chip-tone)_20%,transparent)]',
-          'dark:data-[interactive=true]:hover:shadow-[0_2px_4px_rgba(0,0,0,.32),0_6px_16px_color-mix(in_srgb,var(--chip-tone)_18%,transparent)]'
-        ].join(' '),
-        bordered: [
-          'border-[var(--chip-soft-border)] bg-transparent text-[var(--chip-fg)]',
-          'data-[interactive=true]:hover:bg-[var(--chip-soft-bg)] data-[interactive=true]:hover:border-[var(--chip-tone)]'
-        ].join(' '),
-        light: [
-          'border-transparent bg-transparent text-[var(--chip-fg)]',
-          'data-[interactive=true]:hover:bg-[var(--chip-soft-bg)]'
-        ].join(' '),
-        faded: [
-          'border-[var(--chip-soft-border)] bg-[var(--chip-soft-bg)] text-[var(--chip-fg)]',
-          'data-[interactive=true]:hover:bg-[var(--chip-soft-bg-hover)] data-[interactive=true]:hover:border-[var(--chip-tone)]'
-        ].join(' '),
-        dot: [
-          'border-[var(--chip-soft-border)] bg-[var(--chip-soft-bg)] text-[var(--chip-fg)]',
-          'data-[interactive=true]:hover:bg-[var(--chip-soft-bg-hover)] data-[interactive=true]:hover:border-[var(--chip-tone)]'
-        ].join(' ')
+        solid: 'border-transparent shadow-none',
+        flat: 'border-transparent',
+        shadow: 'border-transparent',
+        bordered: 'bg-transparent',
+        light: 'border-transparent bg-transparent',
+        faded: '',
+        dot: ''
       },
 
       startContent: { default: '', icon: 'mr-0.5', text: 'font-semibold' },
@@ -125,6 +50,179 @@ export const chipVariants = cva(
         ping: 'motion-safe:animate-badgePing motion-reduce:animate-none'
       }
     },
+
+    compoundVariants: [
+      {
+        color: 'primary',
+        variant: ['solid', 'shadow'],
+        class:
+          'bg-brand-light text-white dark:bg-brand-dark dark:text-white data-[interactive=true]:hover:bg-brand-light-dark dark:data-[interactive=true]:hover:bg-brand-dark-light'
+      },
+      {
+        color: 'primary',
+        variant: 'flat',
+        class:
+          'bg-red-tint-subtle text-brand-light dark:text-brand-dark-light data-[interactive=true]:hover:bg-red-tint-low'
+      },
+      {
+        color: 'primary',
+        variant: ['bordered', 'faded', 'dot'],
+        class:
+          'border-red-tint-border text-brand-light dark:text-brand-dark-light data-[interactive=true]:hover:border-brand-light dark:data-[interactive=true]:hover:border-brand-dark-light'
+      },
+      {
+        color: 'primary',
+        variant: ['faded', 'dot'],
+        class: 'bg-red-tint-subtle data-[interactive=true]:hover:bg-red-tint-low'
+      },
+      {
+        color: 'primary',
+        variant: 'light',
+        class: 'text-brand-light dark:text-brand-dark-light data-[interactive=true]:hover:bg-red-tint-subtle'
+      },
+      {
+        color: 'primary',
+        variant: 'shadow',
+        class:
+          'shadow-glow-chip-primary-light dark:shadow-glow-chip-primary data-[interactive=true]:hover:shadow-glow-chip-primary-hover-light dark:data-[interactive=true]:hover:shadow-glow-chip-primary-hover'
+      },
+
+      {
+        color: 'secondary',
+        variant: ['solid', 'shadow'],
+        class:
+          'bg-surface-raised-light text-text-light dark:bg-surface-raised-dark dark:text-text-dark data-[interactive=true]:hover:bg-surface-light dark:data-[interactive=true]:hover:bg-surface-dark'
+      },
+      {
+        color: 'secondary',
+        variant: 'flat',
+        class:
+          'bg-surface-light text-text-secondary-light dark:bg-surface-dark dark:text-text-secondary-dark data-[interactive=true]:hover:bg-surface-raised-light dark:data-[interactive=true]:hover:bg-surface-raised-dark'
+      },
+      {
+        color: 'secondary',
+        variant: ['bordered', 'faded', 'dot'],
+        class:
+          'border-border-strong-light text-text-secondary-light dark:border-border-strong-dark dark:text-text-secondary-dark data-[interactive=true]:hover:border-text-secondary-light dark:data-[interactive=true]:hover:border-text-secondary-dark'
+      },
+      {
+        color: 'secondary',
+        variant: ['faded', 'dot'],
+        class:
+          'bg-surface-light dark:bg-surface-dark data-[interactive=true]:hover:bg-surface-raised-light dark:data-[interactive=true]:hover:bg-surface-raised-dark'
+      },
+      {
+        color: 'secondary',
+        variant: 'light',
+        class:
+          'text-text-secondary-light dark:text-text-secondary-dark data-[interactive=true]:hover:bg-surface-light dark:data-[interactive=true]:hover:bg-surface-dark'
+      },
+      {
+        color: 'secondary',
+        variant: 'shadow',
+        class:
+          'shadow-glow-chip-secondary-light dark:shadow-glow-chip-secondary data-[interactive=true]:hover:shadow-glow-chip-secondary-hover-light dark:data-[interactive=true]:hover:shadow-glow-chip-secondary-hover'
+      },
+
+      {
+        color: 'success',
+        variant: ['solid', 'shadow'],
+        class:
+          'bg-success-light text-text-light dark:bg-success dark:text-text-light data-[interactive=true]:hover:bg-success-dark dark:data-[interactive=true]:hover:bg-green-light'
+      },
+      {
+        color: 'success',
+        variant: 'flat',
+        class: 'bg-success-tint text-text-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
+      },
+      {
+        color: 'success',
+        variant: ['bordered', 'faded', 'dot'],
+        class:
+          'border-success-light text-text-light dark:border-success dark:text-success data-[interactive=true]:hover:border-success-dark dark:data-[interactive=true]:hover:border-green-light'
+      },
+      {
+        color: 'success',
+        variant: ['faded', 'dot'],
+        class: 'bg-success-tint data-[interactive=true]:hover:bg-success-tint'
+      },
+      {
+        color: 'success',
+        variant: 'light',
+        class: 'text-text-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
+      },
+      {
+        color: 'success',
+        variant: 'shadow',
+        class: 'shadow-glow-chip-success data-[interactive=true]:hover:shadow-glow-chip-success-hover'
+      },
+
+      {
+        color: 'warning',
+        variant: ['solid', 'shadow'],
+        class:
+          'bg-warning-light text-text-light dark:bg-warning dark:text-text-light data-[interactive=true]:hover:bg-warning-dark dark:data-[interactive=true]:hover:bg-yellow-light'
+      },
+      {
+        color: 'warning',
+        variant: 'flat',
+        class: 'bg-warning-tint text-text-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
+      },
+      {
+        color: 'warning',
+        variant: ['bordered', 'faded', 'dot'],
+        class:
+          'border-warning-light text-text-light dark:border-warning dark:text-warning data-[interactive=true]:hover:border-warning-dark dark:data-[interactive=true]:hover:border-yellow-light'
+      },
+      {
+        color: 'warning',
+        variant: ['faded', 'dot'],
+        class: 'bg-warning-tint data-[interactive=true]:hover:bg-warning-tint'
+      },
+      {
+        color: 'warning',
+        variant: 'light',
+        class: 'text-text-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
+      },
+      {
+        color: 'warning',
+        variant: 'shadow',
+        class: 'shadow-glow-chip-warning data-[interactive=true]:hover:shadow-glow-chip-warning-hover'
+      },
+
+      {
+        color: 'danger',
+        variant: ['solid', 'shadow'],
+        class:
+          'bg-error-light text-white dark:bg-error dark:text-white data-[interactive=true]:hover:bg-red-700 dark:data-[interactive=true]:hover:bg-red-400'
+      },
+      {
+        color: 'danger',
+        variant: 'flat',
+        class: 'bg-error-tint text-red-800 dark:text-error data-[interactive=true]:hover:bg-error-tint'
+      },
+      {
+        color: 'danger',
+        variant: ['bordered', 'faded', 'dot'],
+        class:
+          'border-error-light text-red-800 dark:border-error dark:text-error data-[interactive=true]:hover:border-red-700 dark:data-[interactive=true]:hover:border-red-400'
+      },
+      {
+        color: 'danger',
+        variant: ['faded', 'dot'],
+        class: 'bg-error-tint data-[interactive=true]:hover:bg-error-tint'
+      },
+      {
+        color: 'danger',
+        variant: 'light',
+        class: 'text-red-800 dark:text-error data-[interactive=true]:hover:bg-error-tint'
+      },
+      {
+        color: 'danger',
+        variant: 'shadow',
+        class: 'shadow-glow-chip-danger data-[interactive=true]:hover:shadow-glow-chip-danger-hover'
+      }
+    ],
 
     defaultVariants: {
       color: 'primary',
