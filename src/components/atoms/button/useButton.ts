@@ -1,7 +1,19 @@
-import type { VariantProps } from 'class-variance-authority';
-import { type ComponentProps, useRef } from 'react';
+import { type MouseEvent, type RefObject, useRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
-import type { ButtonProps, buttonVariants } from './types';
+import { cn } from '@/lib/utils';
+import { type ButtonProps, buttonVariants } from './types';
+
+type UseButtonReturn = Omit<ButtonProps, 'onClick'> & {
+  ariaLabel: string | undefined;
+  ariaPressed: ButtonProps['aria-pressed'];
+  buttonRef: RefObject<HTMLButtonElement>;
+  className: string;
+  disabled: boolean;
+  handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  iconSize: string;
+  isLoading: boolean;
+  type: NonNullable<ButtonProps['type']>;
+};
 
 export const useButton = ({
   className,
@@ -17,43 +29,49 @@ export const useButton = ({
   rounded = true,
   uppercase = false,
   ariaLabel,
+  'aria-label': nativeAriaLabel,
   'aria-pressed': ariaPressed,
   type = 'button',
   ...props
-}: VariantProps<typeof buttonVariants> & ButtonProps & ComponentProps<'button'>) => {
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+}: ButtonProps): UseButtonReturn => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const isDisabled = disabled || isLoading;
 
   useRipple(buttonRef);
 
-  const iconSize = () => {
-    switch (size) {
-      case 'sm':
-        return 'h-md w-auto';
-      case 'lg':
-        return 'h-xl w-auto';
-      default:
-        return 'h-lg w-auto';
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (isDisabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
     }
+
+    onClick?.(event);
   };
 
   return {
+    ...props,
     buttonRef,
     type,
     ariaPressed,
-    isFullWidth,
-    iconSize,
     icon,
-    rounded,
     text,
     isLoading,
-    variant,
-    size,
-    uppercase,
-    ariaLabel,
-    shadow,
-    className,
-    disabled,
-    onClick,
-    ...props
+    ariaLabel: ariaLabel ?? nativeAriaLabel ?? text,
+    className: cn(buttonVariants({ variant, size, rounded, shadow, uppercase, fullWidth: isFullWidth }), className),
+    disabled: isDisabled,
+    iconSize: getIconSize(size),
+    handleClick
   };
+};
+
+const getIconSize = (size: NonNullable<ButtonProps['size']>): string => {
+  switch (size) {
+    case 'sm':
+      return 'h-md w-auto';
+    case 'lg':
+      return 'h-xl w-auto';
+    default:
+      return 'h-lg w-auto';
+  }
 };

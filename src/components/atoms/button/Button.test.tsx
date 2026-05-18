@@ -58,24 +58,24 @@ describe('useButton — logic', () => {
     expect(result.current.disabled).toBe(true);
   });
 
-  it('returns the correct variant when variant: ghost is passed', () => {
+  it('returns a computed className for visual variants', () => {
     const { result } = renderHook(() => useButton({ variant: 'ghost' }));
-    expect(result.current.variant).toBe('ghost');
+    expect(result.current.className).toEqual(expect.any(String));
   });
 
-  it('iconSize() returns correct class for size sm', () => {
+  it('returns correct icon class for size sm', () => {
     const { result } = renderHook(() => useButton({ size: 'sm' }));
-    expect(result.current.iconSize()).toBe('h-md w-auto');
+    expect(result.current.iconSize).toBe('h-md w-auto');
   });
 
-  it('iconSize() returns correct class for size lg', () => {
+  it('returns correct icon class for size lg', () => {
     const { result } = renderHook(() => useButton({ size: 'lg' }));
-    expect(result.current.iconSize()).toBe('h-xl w-auto');
+    expect(result.current.iconSize).toBe('h-xl w-auto');
   });
 
-  it('iconSize() returns default class for size md', () => {
+  it('returns default icon class for size md', () => {
     const { result } = renderHook(() => useButton({ size: 'md' }));
-    expect(result.current.iconSize()).toBe('h-lg w-auto');
+    expect(result.current.iconSize).toBe('h-lg w-auto');
   });
 
   it('passes ariaLabel correctly to return value', () => {

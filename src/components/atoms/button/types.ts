@@ -1,62 +1,51 @@
 import { cva, type VariantProps } from 'class-variance-authority';
+import type { ComponentProps } from 'react';
 import type { DynamicIconName } from '@/types';
 
 export const buttonVariants = cva(
   [
-    'button relative border cursor-pointer max-w-full',
+    'button relative cursor-pointer max-w-full overflow-hidden',
     'active:scale-[0.98]',
     'flex items-center justify-center',
     'font-semibold whitespace-nowrap line-clamp-1 leading-[1.6] tracking-[0.01em]',
-    'disabled:pointer-events-none disabled:opacity-40',
-    'focus-visible:outline-none',
-    'focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+    'disabled:pointer-events-none disabled:opacity-40 disabled:cursor-not-allowed',
+    'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-light/35 dark:focus-visible:ring-brand-dark/40',
+    'transition-[background,box-shadow,border-color,transform,color] duration-250 ease-out'
   ],
   {
     variants: {
       variant: {
         primary: [
           'text-white',
-          'bg-[image:var(--background-image-btn-primary)]',
-          'border-brand-light dark:border-brand-dark',
+          'bg-btn-primary hover:bg-btn-primary-hover active:bg-btn-primary-active',
+          'border-0',
           'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
-          'transition-all duration-250',
-          'hover:bg-[image:var(--background-image-btn-primary-hover)]',
           'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
         ],
         secondary: [
           'text-brand-light dark:text-text-dark',
-          'bg-red-tint-subtle',
-          'border border-transparent',
+          'bg-red-tint-subtle hover:bg-red-tint-active active:bg-red-tint-active',
+          'border-[1.5px] border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light',
           'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'btn-secondary-hover',
-          'active:bg-[rgba(255,0,54,0.16)]',
-          'transition-all duration-250',
-          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover',
-          'hover:bg-[rgba(255,0,54,0.24)]'
+          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
         ],
         outlined: [
           'text-brand-light dark:text-text-dark',
-          'bg-transpartent',
-          'border border-transparent',
+          'bg-transparent hover:bg-red-tint-low active:bg-red-tint-active',
+          'border-[1.5px] border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light',
           'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'transition-all duration-250',
-          'dark:hover:bg-brand-dark',
-          'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
         ],
         ghost: [
           'text-text-light dark:text-text-dark',
           'bg-transparent dark:bg-transparent',
-          'border-transparent',
-          'hover:bg-white-tint-faint',
-          'hover:border-transparent',
-          'dark:hover:bg-white-tint-faint'
+          'border border-transparent hover:border-transparent',
+          'hover:bg-white-tint-faint dark:hover:bg-white-tint-faint'
         ],
         light: [
           'text-brand-light dark:text-brand-dark',
-          'border-transparent',
-          'bg-transparent',
-          'hover:text-brand-light-dark',
-          'dark:hover:text-brand-dark-light',
+          'border border-transparent bg-transparent',
+          'hover:text-brand-light-dark dark:hover:text-brand-dark-light',
           'hover:bg-red-tint-subtle'
         ]
       },
@@ -73,18 +62,21 @@ export const buttonVariants = cva(
         false: ''
       },
       size: {
-        // 44px minimum touch target per WCAG (Rule 10)
+        sm: 'px-sm h-11 fs-small',
         md: 'px-md h-11 fs-base',
-        lg: 'px-lg h-12 fs-h6',
-        // sm is intentionally compact — slightly below 44px minimum; use md for touch-critical UIs
-        sm: 'px-sm h-9 fs-small'
+        lg: 'px-lg h-12 fs-h6'
+      },
+      fullWidth: {
+        true: 'w-full',
+        false: 'w-auto'
       }
     },
     defaultVariants: {
       variant: 'primary',
       size: 'md',
       rounded: true,
-      shadow: true
+      shadow: true,
+      fullWidth: false
     }
   }
 );
@@ -92,8 +84,9 @@ export const buttonVariants = cva(
 type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
 type ButtonTypeVariants = 'button' | 'submit' | 'reset';
 type ButtonSizeVariants = 'md' | 'sm' | 'lg';
+type NativeButtonProps = Omit<ComponentProps<'button'>, 'type' | 'disabled' | 'className'>;
 
-export type ButtonProps = {
+export type ButtonProps = NativeButtonProps & {
   /**
    * @control select
    * @default primary
@@ -115,7 +108,7 @@ export type ButtonProps = {
   type?: ButtonTypeVariants;
   /**
    * @control boolean
-   * @default false
+   * @default true
    */
   rounded?: boolean;
   /**
@@ -125,7 +118,7 @@ export type ButtonProps = {
   shadow?: boolean;
   /**
    * @control boolean
-   * @default true
+   * @default false
    */
   uppercase?: boolean;
   /**
@@ -151,5 +144,5 @@ export type ButtonProps = {
    * @control boolean
    * @default false
    */
-  'aria-pressed'?: boolean; // Nuevo prop para accesibilidad en botones de alternancia
+  'aria-pressed'?: boolean;
 };
