@@ -85,65 +85,87 @@ export const buttonVariants = cva(
 type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
 type ButtonTypeVariants = 'button' | 'submit' | 'reset';
 type ButtonSizeVariants = 'md' | 'sm' | 'lg';
-type NativeButtonProps = Omit<ComponentProps<'button'>, 'type' | 'disabled' | 'className'>;
+type NativeButtonProps = Omit<ComponentProps<'button'>, 'type' | 'disabled' | 'className' | 'children' | 'aria-label'>;
+type ButtonAccessibleContent =
+  | {
+      /** @control text */
+      text: string;
+      /** @control text */
+      ariaLabel?: string;
+      /** @control text */
+      'aria-label'?: string;
+    }
+  | {
+      /** @control text */
+      text?: string;
+      /** @control text */
+      ariaLabel: string;
+      /** @control text */
+      'aria-label'?: string;
+    }
+  | {
+      /** @control text */
+      text?: string;
+      /** @control text */
+      ariaLabel?: string;
+      /** @control text */
+      'aria-label': string;
+    };
 
-export type ButtonProps = NativeButtonProps & {
-  /**
-   * @control select
-   * @default primary
-   */
-  variant?: ButtonVariant;
-  /** @control text */
-  text?: string;
-  /** @control text */
-  icon?: DynamicIconName;
-  /**
-   * @control select
-   * @default md
-   */
-  size?: ButtonSizeVariants;
-  /**
-   * @control select
-   * @default button
-   */
-  type?: ButtonTypeVariants;
-  /**
-   * @control boolean
-   * @default true
-   */
-  rounded?: boolean;
-  /**
-   * @control boolean
-   * @default true
-   */
-  shadow?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  uppercase?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  disabled?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  isFullWidth?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  isLoading?: boolean;
-  /** @control text */
-  ariaLabel?: string;
-  /** @control text */
-  className?: string;
-  /**
-   * @control boolean
-   * @default false
-   */
-  'aria-pressed'?: boolean;
-};
+export type ButtonProps = NativeButtonProps &
+  ButtonAccessibleContent & {
+    /**
+     * @control select
+     * @default primary
+     */
+    variant?: ButtonVariant;
+    /** @control text */
+    icon?: DynamicIconName;
+    /**
+     * @control select
+     * @default md
+     */
+    size?: ButtonSizeVariants;
+    /**
+     * @control select
+     * @default button
+     */
+    type?: ButtonTypeVariants;
+    /**
+     * @control boolean
+     * @default true
+     */
+    rounded?: boolean;
+    /**
+     * @control boolean
+     * @default true
+     */
+    shadow?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    uppercase?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    disabled?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    isFullWidth?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    isLoading?: boolean;
+    /** @control text */
+    className?: string;
+    /**
+     * @control boolean
+     * @default false
+     */
+    'aria-pressed'?: boolean;
+  };

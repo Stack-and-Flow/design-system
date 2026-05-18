@@ -4,10 +4,11 @@ import { cn } from '@/lib/utils';
 import { type ButtonProps, buttonVariants } from './types';
 
 type UseButtonReturn = Omit<ButtonProps, 'onClick'> & {
-  ariaLabel: string | undefined;
+  ariaLabel: string;
   ariaPressed: ButtonProps['aria-pressed'];
   buttonRef: RefObject<HTMLButtonElement>;
   className: string;
+  contentClassName: string;
   disabled: boolean;
   handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
   iconSize: string;
@@ -57,13 +58,20 @@ export const useButton = ({
     icon,
     text,
     isLoading,
-    ariaLabel: ariaLabel ?? nativeAriaLabel ?? text,
+    ariaLabel: getAriaLabel(ariaLabel, nativeAriaLabel, text),
     className: cn(buttonVariants({ variant, size, rounded, shadow, uppercase, fullWidth: isFullWidth }), className),
+    contentClassName: cn('flex items-center justify-center z-0', getContentGap(size)),
     disabled: isDisabled,
     iconSize: getIconSize(size),
     handleClick
   };
 };
+
+const getAriaLabel = (
+  ariaLabel: string | undefined,
+  nativeAriaLabel: string | undefined,
+  text: string | undefined
+): string => ariaLabel ?? nativeAriaLabel ?? text ?? 'Button';
 
 const getIconSize = (size: NonNullable<ButtonProps['size']>): string => {
   switch (size) {
@@ -73,5 +81,16 @@ const getIconSize = (size: NonNullable<ButtonProps['size']>): string => {
       return 'h-xl w-auto';
     default:
       return 'h-lg w-auto';
+  }
+};
+
+const getContentGap = (size: NonNullable<ButtonProps['size']>): string => {
+  switch (size) {
+    case 'sm':
+      return 'gap-1.5';
+    case 'lg':
+      return 'gap-4';
+    default:
+      return 'gap-2';
   }
 };
