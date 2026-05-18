@@ -87,7 +87,7 @@ export function useChip(props: ChipProps) {
     primary: 'border-transparent bg-brand-light text-white dark:bg-brand-dark dark:text-white',
     secondary:
       'border-transparent bg-surface-raised-light text-text-light dark:bg-surface-raised-dark dark:text-text-dark',
-    success: 'border-transparent bg-success-light text-white dark:bg-success dark:text-text-light',
+    success: 'border-transparent bg-success-light text-text-light dark:bg-success dark:text-text-light',
     warning: 'border-transparent bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
     danger: 'border-transparent bg-error-light text-white dark:bg-error dark:text-white'
   };

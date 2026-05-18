@@ -128,18 +128,18 @@ export const chipVariants = cva(
         color: 'success',
         variant: ['solid', 'shadow'],
         class:
-          'bg-success-light text-white dark:bg-success dark:text-text-light data-[interactive=true]:hover:bg-success-dark dark:data-[interactive=true]:hover:bg-green-light'
+          'bg-success-light text-text-light dark:bg-success dark:text-text-light data-[interactive=true]:hover:bg-success-dark dark:data-[interactive=true]:hover:bg-green-light'
       },
       {
         color: 'success',
         variant: 'flat',
-        class: 'bg-success-tint text-success-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
+        class: 'bg-success-tint text-green-dark dark:text-success data-[interactive=true]:hover:bg-success-tint'
       },
       {
         color: 'success',
         variant: ['bordered', 'faded', 'dot'],
         class:
-          'border-success-light text-success-light dark:border-success dark:text-success data-[interactive=true]:hover:border-success-dark dark:data-[interactive=true]:hover:border-green-light'
+          'border-success-light text-green-dark dark:border-success dark:text-success data-[interactive=true]:hover:border-success-dark dark:data-[interactive=true]:hover:border-green-light'
       },
       {
         color: 'success',
@@ -149,7 +149,7 @@ export const chipVariants = cva(
       {
         color: 'success',
         variant: 'light',
-        class: 'text-success-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
+        class: 'text-green-dark dark:text-success data-[interactive=true]:hover:bg-success-tint'
       },
       {
         color: 'success',
@@ -166,13 +166,13 @@ export const chipVariants = cva(
       {
         color: 'warning',
         variant: 'flat',
-        class: 'bg-warning-tint text-warning-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
+        class: 'bg-warning-tint text-text-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
       },
       {
         color: 'warning',
         variant: ['bordered', 'faded', 'dot'],
         class:
-          'border-warning-light text-warning-light dark:border-warning dark:text-warning data-[interactive=true]:hover:border-warning-dark dark:data-[interactive=true]:hover:border-yellow-light'
+          'border-warning-light text-text-light dark:border-warning dark:text-warning data-[interactive=true]:hover:border-warning-dark dark:data-[interactive=true]:hover:border-yellow-light'
       },
       {
         color: 'warning',
@@ -182,7 +182,7 @@ export const chipVariants = cva(
       {
         color: 'warning',
         variant: 'light',
-        class: 'text-warning-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
+        class: 'text-text-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
       },
       {
         color: 'warning',
@@ -199,13 +199,13 @@ export const chipVariants = cva(
       {
         color: 'danger',
         variant: 'flat',
-        class: 'bg-error-tint text-error-light dark:text-error data-[interactive=true]:hover:bg-error-tint'
+        class: 'bg-error-tint text-red-800 dark:text-error data-[interactive=true]:hover:bg-error-tint'
       },
       {
         color: 'danger',
         variant: ['bordered', 'faded', 'dot'],
         class:
-          'border-error-light text-error-light dark:border-error dark:text-error data-[interactive=true]:hover:border-red-700 dark:data-[interactive=true]:hover:border-red-400'
+          'border-error-light text-red-800 dark:border-error dark:text-error data-[interactive=true]:hover:border-red-700 dark:data-[interactive=true]:hover:border-red-400'
       },
       {
         color: 'danger',
@@ -215,7 +215,7 @@ export const chipVariants = cva(
       {
         color: 'danger',
         variant: 'light',
-        class: 'text-error-light dark:text-error data-[interactive=true]:hover:bg-error-tint'
+        class: 'text-red-800 dark:text-error data-[interactive=true]:hover:bg-error-tint'
       },
       {
         color: 'danger',
