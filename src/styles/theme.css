@@ -96,6 +96,7 @@
   --color-white-tint-strong: rgba(255, 255, 255, 0.15); /* Inset highlight button */
   --color-white-tint-heavy: rgba(255, 255, 255, 0.25); /* Inset highlight strong */
 
+  --color-black-tint-low: rgba(0, 0, 0, 0.2); /* Overlay ligero */
   --color-black-tint-mid: rgba(0, 0, 0, 0.4); /* Overlay ligero */
   --color-black-tint-heavy: rgba(0, 0, 0, 0.6); /* Overlay backdrop */
 

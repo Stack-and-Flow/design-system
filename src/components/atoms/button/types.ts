@@ -7,7 +7,7 @@ export const buttonVariants = cva(
     'button relative cursor-pointer max-w-full overflow-hidden',
     'active:scale-[0.98]',
     'flex items-center justify-center',
-    'font-semibold whitespace-nowrap line-clamp-1 leading-[1.6] tracking-[0.01em]',
+    'font-semibold whitespace-nowrap line-clamp-1 leading-relaxed tracking-ui',
     'disabled:pointer-events-none disabled:opacity-40 disabled:cursor-not-allowed',
     'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-light/35 dark:focus-visible:ring-brand-dark/40',
     'transition-[background,box-shadow,border-color,transform,color] duration-250 ease-out'
@@ -24,24 +24,24 @@ export const buttonVariants = cva(
         ],
         secondary: [
           'text-brand-light dark:text-text-dark',
-          'hover:text-brand-light-darkest dark:hover:text-brand-dark-light',
           'bg-red-tint-subtle hover:bg-red-tint-active active:bg-red-tint-active',
           'border-[1.5px] border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light',
           'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
           'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
         ],
         outlined: [
-          'text-brand-light dark:text-brand-dark-light',
-          'hover:text-brand-light-darkest dark:hover:text-text-dark',
-          'bg-transparent hover:bg-red-tint-low active:bg-red-tint-active',
+          'text-brand-light dark:text-text-dark',
+          'hover:text-text-dark',
+          'bg-red-tint-subtle hover:bg-btn-primary-hover active:bg-red-tint-active',
           'border-[1.5px] border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light',
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
           'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
         ],
         ghost: [
           'text-text-light dark:text-text-dark',
-          'bg-transparent dark:bg-transparent',
-          'border border-transparent hover:border-transparent',
-          'hover:bg-red-tint-subtle dark:hover:bg-white-tint-faint'
+          'bg-transparent',
+          'border border-transparent',
+          'hover:bg-black-tint-low dark:hover:bg-white-tint-faint'
         ],
         light: [
           'text-brand-light dark:text-brand-dark',
