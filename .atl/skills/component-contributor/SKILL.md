@@ -486,10 +486,12 @@ describe('Component — behavior', () => {
 
 - HARD RULE: all Storybook documentation must be in English, including JSDoc headings, descriptions, comments, story names, and arg labels
 - Mandatory component documentation as a JSDoc block immediately above `const meta`; do not put component docs in `parameters.docs.description.component`
-- The JSDoc block must use the canonical English story header structure:
+- The component-level JSDoc block must use the canonical English story header structure:
   - `## Description` — required for every component; explain what it does and when to use it
   - `## Dependencies` — include only when the story/component uses other design-system components or external primitives; list the dependency and why it is used
   - `## Usage Guide` — include only when usage is complex; explain composition, constraints, or non-obvious behavior
+- Every story block must have concise English JSDoc immediately above its `export const StoryName`
+- Do NOT render documentation cards, panels, helper text blocks, or usage notes inside the story canvas; move that text into component-level or story-level JSDoc
 - Mandatory `args` on `Default` story — must NOT hardcode props that override `defaultVariants`
 - Always include: `Default`, `Disabled`, one story per key variant
 - Each story demonstrates ONE axis only — no mixed props across variants in the same story
@@ -528,12 +530,18 @@ const meta: Meta<typeof Component> = {
 export default meta;
 type Story = StoryObj<typeof Component>;
 
+/**
+ * Shows the default component configuration using its default variants.
+ */
 export const Default: Story = {
   args: {
     label: "Example",
   },
 };
 
+/**
+ * Shows the component in a non-interactive disabled state.
+ */
 export const Disabled: Story = {
   args: {
     ...Default.args,

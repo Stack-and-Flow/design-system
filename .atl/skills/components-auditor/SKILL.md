@@ -38,24 +38,27 @@ When delegated: run ALL audit phases and return in the SDD return envelope forma
 **Components audited**: {list}
 
 ### Compliance Matrix
-| Check | Status | Notes |
-|-------|--------|-------|
-| 6-file pattern | ✅ / ❌ | |
-| TypeScript conventions | ✅ / ❌ | |
-| Token usage | ✅ / ❌ | |
-| CVA structure | ✅ / ❌ | |
-| Test coverage | ✅ / ❌ | |
-| Stories coverage | ✅ / ❌ | |
-| Visual states | ✅ / ❌ | |
-| Accessibility | ✅ / ❌ | |
+
+| Check                  | Status  | Notes |
+| ---------------------- | ------- | ----- |
+| 6-file pattern         | ✅ / ❌ |       |
+| TypeScript conventions | ✅ / ❌ |       |
+| Token usage            | ✅ / ❌ |       |
+| CVA structure          | ✅ / ❌ |       |
+| Test coverage          | ✅ / ❌ |       |
+| Stories coverage       | ✅ / ❌ |       |
+| Visual states          | ✅ / ❌ |       |
+| Accessibility          | ✅ / ❌ |       |
 
 ### Issues Found
+
 **CRITICAL**: {list or "None"}
 **MAJOR**: {list or "None"}
 **MINOR**: {list or "None"}
 **SUGGESTION**: {list or "None"}
 
 ### Verdict
+
 {PASS / PASS WITH WARNINGS / FAIL}
 ```
 
@@ -145,12 +148,15 @@ Every component must have exactly these 6 files and nothing else:
 
 ### 1.7 — `ComponentName.stories.tsx` compliance
 
-- [ ] `parameters.docs.description.component` present and in English
+- [ ] Component-level docs are a JSDoc block immediately above `const meta`; `parameters.docs.description.component` is not used
+- [ ] Component-level JSDoc includes `## Description` and only includes `## Dependencies` / `## Usage Guide` when applicable
+- [ ] Every story block has a concise English JSDoc block immediately above its `export const StoryName`
+- [ ] Story canvases do not render documentation cards, panels, helper text blocks, or usage notes; documentation belongs in JSDoc above `meta` or the relevant story export
 - [ ] `Default` story has `args` that do NOT override `defaultVariants`
 - [ ] `Disabled` story present for every interactive component
 - [ ] One story per key variant axis (not one story mixing all variants)
 - [ ] No DOM manipulation in module scope (use `decorators` if needed)
-- [ ] English only — titles, descriptions, arg labels
+- [ ] English only — titles, descriptions, JSDoc, comments, story names, and arg labels
 - [ ] If project `autodocs` is enabled, manual `argTypes` in `meta` or individual stories are forbidden unless a documented project exception exists
 - [ ] Story actions use `@storybook/addon-actions` (`action(...)`) only; no mixed conventions across stories
 - [ ] No inline no-op handlers such as `() => undefined` in story args
@@ -192,8 +198,8 @@ Apply ALL 6 sections of the visual review protocol:
 Classify every finding with severity:
 
 - **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, interactive element below 44px, `outline: none` without alternative, WCAG AA failure
-- **MAJOR** — Compositional rule violation: wrong file structure, CVA in wrong file, `[var(--token)]` bypass, `transition: all`, `border-image`, blur+gradient on same element, wrong glow layer count
-- **MINOR** — Spec inconsistency: wrong transition duration, missing transition property, hover tint value slightly off, missing JSDoc control annotation, incomplete prop JSDoc, non-canonical story actions/autodocs usage when it does not break behavior
+- **MAJOR** — Compositional rule violation: wrong file structure, CVA in wrong file, `[var(--token)]` bypass, `transition: all`, `border-image`, blur+gradient on same element, wrong glow layer count, rendered documentation UI inside story canvases
+- **MINOR** — Spec inconsistency: wrong transition duration, missing transition property, hover tint value slightly off, missing JSDoc control annotation, incomplete prop/story JSDoc, non-canonical story actions/autodocs usage when it does not break behavior
 - **SUGGESTION** — Enhancement: `will-change` on entrance animations, extracting a repeated pattern to a token, improving story coverage
 
 ### Report format
@@ -213,20 +219,21 @@ After listing all issues, provide a summary:
 ```markdown
 ## Audit Summary — {ComponentName}
 
-| Category | Status | Issues |
-|----------|--------|--------|
-| 6-file pattern | ✅ / ⚠️ / ❌ | {count} |
+| Category               | Status       | Issues  |
+| ---------------------- | ------------ | ------- |
+| 6-file pattern         | ✅ / ⚠️ / ❌ | {count} |
 | TypeScript conventions | ✅ / ⚠️ / ❌ | {count} |
-| Token usage | ✅ / ⚠️ / ❌ | {count} |
-| CVA structure | ✅ / ⚠️ / ❌ | {count} |
-| Test coverage | ✅ / ⚠️ / ❌ | {count} |
-| Stories coverage | ✅ / ⚠️ / ❌ | {count} |
-| Visual states | ✅ / ⚠️ / ❌ | {count} |
-| Accessibility | ✅ / ⚠️ / ❌ | {count} |
+| Token usage            | ✅ / ⚠️ / ❌ | {count} |
+| CVA structure          | ✅ / ⚠️ / ❌ | {count} |
+| Test coverage          | ✅ / ⚠️ / ❌ | {count} |
+| Stories coverage       | ✅ / ⚠️ / ❌ | {count} |
+| Visual states          | ✅ / ⚠️ / ❌ | {count} |
+| Accessibility          | ✅ / ⚠️ / ❌ | {count} |
 
 **CRITICAL**: {N} | **MAJOR**: {N} | **MINOR**: {N} | **SUGGESTION**: {N}
 
 ### Verdict
+
 **PASS** — no CRITICAL or MAJOR issues
 **PASS WITH WARNINGS** — no CRITICAL, has MAJOR or MINOR issues
 **FAIL** — has CRITICAL issues; must fix before merging
