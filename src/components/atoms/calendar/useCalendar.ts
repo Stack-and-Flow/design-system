@@ -1,5 +1,5 @@
 import { CalendarDate } from '@internationalized/date';
-import type { CSSProperties } from 'react';
+import type React from 'react';
 import { useMemo, useState } from 'react';
 import type { CalendarProps } from './types';
 
@@ -104,7 +104,7 @@ type CalendarDay = {
   isRangeEnd: boolean;
   isHighlighted: boolean;
   highlightClassName?: string;
-  highlightStyle?: CSSProperties;
+  highlightStyle?: React.CSSProperties;
 };
 
 export const useCalendar = ({
