@@ -8,9 +8,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
     "./styles": "./dist/design-system.css"
   },
@@ -19,6 +19,7 @@
   ],
   "scripts": {
     "build": "vite build && tsc --project tsconfig.build.json",
+    "verify:package": "pnpm run build && node scripts/verify-package-consumption.mjs",
     "clean": "node -e \"['dist','node_modules','pnpm-lock.yaml','package-lock.json'].forEach(p=>require('fs').rmSync(p,{recursive:true,force:true}))\" && npm cache clean --force",
     "reinstall": "pnpm run clean && pnpm install",
     "biome-all": "biome check --write .",
