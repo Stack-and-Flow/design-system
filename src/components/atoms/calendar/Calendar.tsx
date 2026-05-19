@@ -227,7 +227,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                         // Only apply highlight if not selected
                         const isSelectedDay = day.isSelected;
                         let highlightClass;
-                        let highlightStyle;
+                        let highlightStyle: React.CSSProperties | undefined;
                         if (day.isHighlighted) {
                           if (isSelectedDay) {
                             // Only apply border from highlightStyle if present
@@ -247,7 +247,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                           }
                         }
                         // Determine color for selected/range days
-                        let dayStyle = { userSelect: 'none', ...highlightStyle };
+                        let dayStyle: React.CSSProperties = { userSelect: 'none', ...highlightStyle };
                         if ((day.isSelected || day.isInRange || isDragInRange) && !day.isDisabled) {
                           if (variant === 'outlined') {
                             dayStyle = {
