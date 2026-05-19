@@ -1,10 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Header } from './Header';
-import type { HeaderVariant } from './types';
 
 const stackClass =
   'flex flex-col gap-4 rounded-md border border-border-light bg-surface-light p-4 dark:border-border-dark dark:bg-surface-dark';
-const headingTags: HeaderVariant[] = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
 /**
  * ## Description
@@ -44,11 +42,12 @@ export const Default: Story = {
 export const SemanticTags: Story = {
   render: () => (
     <div className={stackClass}>
-      {headingTags.map((tag) => (
-        <Header key={tag} tag={tag}>
-          {tag.toUpperCase()} semantic heading
-        </Header>
-      ))}
+      <Header tag='h1'>H1 semantic heading</Header>
+      <Header tag='h2'>H2 semantic heading</Header>
+      <Header tag='h3'>H3 semantic heading</Header>
+      <Header tag='h4'>H4 semantic heading</Header>
+      <Header tag='h5'>H5 semantic heading</Header>
+      <Header tag='h6'>H6 semantic heading</Header>
     </div>
   )
 };
@@ -57,11 +56,24 @@ export const SemanticTags: Story = {
 export const VisualSizes: Story = {
   render: () => (
     <div className={stackClass}>
-      {headingTags.map((size) => (
-        <Header key={size} tag='h2' size={size}>
-          h2 rendered with {size.toUpperCase()} visual scale
-        </Header>
-      ))}
+      <Header tag='h2' size='h1'>
+        h2 rendered with H1 visual scale
+      </Header>
+      <Header tag='h2' size='h2'>
+        h2 rendered with H2 visual scale
+      </Header>
+      <Header tag='h2' size='h3'>
+        h2 rendered with H3 visual scale
+      </Header>
+      <Header tag='h2' size='h4'>
+        h2 rendered with H4 visual scale
+      </Header>
+      <Header tag='h2' size='h5'>
+        h2 rendered with H5 visual scale
+      </Header>
+      <Header tag='h2' size='h6'>
+        h2 rendered with H6 visual scale
+      </Header>
     </div>
   )
 };

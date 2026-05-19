@@ -205,10 +205,20 @@ export const WithoutSeparator: Story = {
 export const CustomIndicator: Story = {
   args: {
     ...Default.args,
-    items: baseItems.map((item) => ({
-      ...item,
-      indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
-    }))
+    items: [
+      {
+        ...baseItems[0],
+        indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
+      },
+      {
+        ...baseItems[1],
+        indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
+      },
+      {
+        ...baseItems[2],
+        indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
+      }
+    ]
   }
 };
 

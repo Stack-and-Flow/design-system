@@ -5,11 +5,6 @@ import { Button } from '../button';
 import Icon from '../icon/Icon';
 import { Badge } from './Badge';
 
-const colors = ['primary', 'secondary', 'success', 'warning', 'danger'] as const;
-const sizes = ['sm', 'md', 'lg'] as const;
-const variants = ['solid', 'flat', 'subtle'] as const;
-const placements = ['top-right', 'bottom-right', 'top-left', 'bottom-left'] as const;
-
 /**
  * ## Description
  * A small status, count, or label indicator for notification counts, presence dots, and compact metadata.
@@ -53,16 +48,15 @@ export const Default: Story = {
 export const Size: Story = {
   render: () => (
     <div className='flex items-center gap-4'>
-      {sizes.map((size) => (
-        <Badge key={size} content='1' size={size} ariaLabel={`${size} notification badge`}>
-          <Avatar
-            src={`https://i.pravatar.cc/300?u=badge-size-${size}`}
-            alt={`${size} avatar`}
-            rounded='full'
-            size='lg'
-          />
-        </Badge>
-      ))}
+      <Badge content='1' size='sm' ariaLabel='Small notification badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-size-sm' alt='Small avatar' rounded='full' size='lg' />
+      </Badge>
+      <Badge content='1' size='md' ariaLabel='Medium notification badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-size-md' alt='Medium avatar' rounded='full' size='lg' />
+      </Badge>
+      <Badge content='1' size='lg' ariaLabel='Large notification badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-size-lg' alt='Large avatar' rounded='full' size='lg' />
+      </Badge>
     </div>
   )
 };
@@ -73,16 +67,26 @@ export const Size: Story = {
 export const Color: Story = {
   render: () => (
     <div className='flex items-center gap-4'>
-      {colors.map((color, index) => (
-        <Badge key={color} content={index + 1} color={color} ariaLabel={`${color} badge`}>
-          <Avatar
-            src={`https://i.pravatar.cc/300?u=badge-color-${color}`}
-            alt={`${color} avatar`}
-            rounded='full'
-            size='lg'
-          />
-        </Badge>
-      ))}
+      <Badge content={1} color='primary' ariaLabel='Primary badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-color-primary' alt='Primary avatar' rounded='full' size='lg' />
+      </Badge>
+      <Badge content={2} color='secondary' ariaLabel='Secondary badge'>
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-color-secondary'
+          alt='Secondary avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
+      <Badge content={3} color='success' ariaLabel='Success badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-color-success' alt='Success avatar' rounded='full' size='lg' />
+      </Badge>
+      <Badge content={4} color='warning' ariaLabel='Warning badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-color-warning' alt='Warning avatar' rounded='full' size='lg' />
+      </Badge>
+      <Badge content={5} color='danger' ariaLabel='Danger badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-color-danger' alt='Danger avatar' rounded='full' size='lg' />
+      </Badge>
     </div>
   )
 };
@@ -93,13 +97,27 @@ export const Color: Story = {
 export const Variant: Story = {
   render: () => (
     <div className='grid gap-3'>
-      {variants.map((variant) => (
-        <div key={variant} className='flex flex-wrap items-center gap-2'>
-          {colors.map((color) => (
-            <Badge key={`${variant}-${color}`} content={color} color={color} variant={variant} rounded={false} />
-          ))}
-        </div>
-      ))}
+      <div className='flex flex-wrap items-center gap-2'>
+        <Badge content='primary' color='primary' variant='solid' rounded={false} />
+        <Badge content='secondary' color='secondary' variant='solid' rounded={false} />
+        <Badge content='success' color='success' variant='solid' rounded={false} />
+        <Badge content='warning' color='warning' variant='solid' rounded={false} />
+        <Badge content='danger' color='danger' variant='solid' rounded={false} />
+      </div>
+      <div className='flex flex-wrap items-center gap-2'>
+        <Badge content='primary' color='primary' variant='flat' rounded={false} />
+        <Badge content='secondary' color='secondary' variant='flat' rounded={false} />
+        <Badge content='success' color='success' variant='flat' rounded={false} />
+        <Badge content='warning' color='warning' variant='flat' rounded={false} />
+        <Badge content='danger' color='danger' variant='flat' rounded={false} />
+      </div>
+      <div className='flex flex-wrap items-center gap-2'>
+        <Badge content='primary' color='primary' variant='subtle' rounded={false} />
+        <Badge content='secondary' color='secondary' variant='subtle' rounded={false} />
+        <Badge content='success' color='success' variant='subtle' rounded={false} />
+        <Badge content='warning' color='warning' variant='subtle' rounded={false} />
+        <Badge content='danger' color='danger' variant='subtle' rounded={false} />
+      </div>
     </div>
   )
 };
@@ -110,16 +128,38 @@ export const Variant: Story = {
 export const Placement: Story = {
   render: () => (
     <div className='flex items-center gap-5'>
-      {placements.map((placement, index) => (
-        <Badge key={placement} content={index + 1} placement={placement} ariaLabel={`${placement} badge`}>
-          <Avatar
-            src={`https://i.pravatar.cc/300?u=badge-placement-${placement}`}
-            alt={`${placement} avatar`}
-            rounded='full'
-            size='lg'
-          />
-        </Badge>
-      ))}
+      <Badge content={1} placement='top-right' ariaLabel='Top-right badge'>
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-placement-top-right'
+          alt='Top-right avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
+      <Badge content={2} placement='bottom-right' ariaLabel='Bottom-right badge'>
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-placement-bottom-right'
+          alt='Bottom-right avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
+      <Badge content={3} placement='top-left' ariaLabel='Top-left badge'>
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-placement-top-left'
+          alt='Top-left avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
+      <Badge content={4} placement='bottom-left' ariaLabel='Bottom-left badge'>
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-placement-bottom-left'
+          alt='Bottom-left avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
     </div>
   )
 };
@@ -203,23 +243,62 @@ export const BadgeVisibility: Story = {
 export const Animation: Story = {
   render: () => (
     <div className='flex items-center gap-6'>
-      {(['default', 'pulse', 'bounce', 'ping'] as const).map((animation) => (
-        <Badge
-          key={animation}
-          content={<Icon name='bell-dot' size={12} color='text-white' />}
-          color='primary'
-          size='sm'
-          animation={animation}
-          ariaLabel={`${animation} notification animation`}
-        >
-          <Avatar
-            src={`https://i.pravatar.cc/300?u=badge-animation-${animation}`}
-            alt={`${animation} animation avatar`}
-            rounded='full'
-            size='lg'
-          />
-        </Badge>
-      ))}
+      <Badge
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color='primary'
+        size='sm'
+        animation='default'
+        ariaLabel='Default notification animation'
+      >
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-animation-default'
+          alt='Default animation avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
+      <Badge
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color='primary'
+        size='sm'
+        animation='pulse'
+        ariaLabel='Pulse notification animation'
+      >
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-animation-pulse'
+          alt='Pulse animation avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
+      <Badge
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color='primary'
+        size='sm'
+        animation='bounce'
+        ariaLabel='Bounce notification animation'
+      >
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-animation-bounce'
+          alt='Bounce animation avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
+      <Badge
+        content={<Icon name='bell-dot' size={12} color='text-white' />}
+        color='primary'
+        size='sm'
+        animation='ping'
+        ariaLabel='Ping notification animation'
+      >
+        <Avatar
+          src='https://i.pravatar.cc/300?u=badge-animation-ping'
+          alt='Ping animation avatar'
+          rounded='full'
+          size='lg'
+        />
+      </Badge>
     </div>
   )
 };
