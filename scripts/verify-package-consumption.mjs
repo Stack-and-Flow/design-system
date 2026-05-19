@@ -1,8 +1,10 @@
 import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Button } from '@stack-and-flow/design-system';
 
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const loadCjs = createRequire(import.meta.url);
 const cjsExports = loadCjs('@stack-and-flow/design-system');
 const stylesPath = loadCjs.resolve('@stack-and-flow/design-system/styles');
@@ -15,7 +17,7 @@ if (typeof cjsExports.Button !== 'function') {
   throw new TypeError(`Expected CJS Button export to be a function, received ${typeof cjsExports.Button}`);
 }
 
-const cssPath = resolve('dist/design-system.css');
+const cssPath = resolve(packageRoot, 'dist/design-system.css');
 if (stylesPath !== cssPath) {
   throw new Error(`Expected styles subpath to resolve to ${cssPath}, received ${stylesPath}`);
 }

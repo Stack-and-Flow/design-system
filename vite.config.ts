@@ -1,6 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
+import { defineConfig, type UserConfig } from 'vite';
 
 const aliases = {
   '@': path.resolve(__dirname, './src'),
@@ -13,7 +14,21 @@ const aliases = {
   '@utils': path.resolve(__dirname, './src/utils')
 };
 
-const config: Record<string, unknown> = {
+type TestConfig = {
+  globals: boolean;
+  environment: 'jsdom';
+  setupFiles: string[];
+  css: boolean;
+  alias: typeof aliases;
+  coverage: {
+    provider: 'v8';
+    reporter: string[];
+    include: string[];
+    exclude: string[];
+  };
+};
+
+const config = {
   base: './',
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -55,6 +70,6 @@ const config: Record<string, unknown> = {
       exclude: ['src/components/**/*.stories.tsx', 'src/components/**/*.test.*', 'src/components/**/index.ts']
     }
   }
-};
+} satisfies UserConfig & { test: TestConfig };
 
-export default config;
+export default defineConfig(config);
