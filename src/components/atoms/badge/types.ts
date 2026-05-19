@@ -1,5 +1,5 @@
-import { cva } from 'class-variance-authority';
-import type { ReactNode } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { AriaRole, ReactNode } from 'react';
 
 export const badgeVariants = cva(
   [
@@ -31,16 +31,16 @@ export const badgeVariants = cva(
         subtle: ''
       },
       placement: {
-        'top-right': 'absolute top-0 right-0 translate-x-1/2 -translate-y-1/2',
-        'bottom-right': 'absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2',
-        'bottom-left': 'absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2',
-        'top-left': 'absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2'
+        'top-right': 'absolute top-0 right-0 translate-x-1/3 -translate-y-1/3',
+        'bottom-right': 'absolute bottom-0 right-0 translate-x-1/3 translate-y-1/3',
+        'bottom-left': 'absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3',
+        'top-left': 'absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3'
       },
       animation: {
         default: '',
-        pulse: 'animate-pulse',
-        bounce: 'animate-bounce',
-        ping: 'animate-badgePing'
+        pulse: 'motion-safe:animate-pulse motion-reduce:animate-none',
+        bounce: 'motion-safe:animate-bounce motion-reduce:animate-none',
+        ping: 'motion-safe:animate-badgePing motion-reduce:animate-none'
       }
     },
     compoundVariants: [
@@ -113,24 +113,66 @@ export const badgeVariants = cva(
     defaultVariants: {
       color: 'primary',
       size: 'md',
-      rounded: false,
+      rounded: true,
       variant: 'solid',
-      placement: 'top-right'
+      animation: 'default'
     }
   }
 );
-type BadgeColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-type BadgeSize = 'sm' | 'md' | 'lg';
-type BadgeRounded = true | false;
-type BadgePlacement = 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
-type BadgeAnimation = 'default' | 'pulse' | 'bounce' | 'ping';
-type BadgeVariants = 'solid' | 'flat' | 'subtle';
+
+type BadgeVariantProps = VariantProps<typeof badgeVariants>;
 
 export type BadgeProps = {
+  /**
+   * @control select
+   * @default primary
+   */
+  color?: BadgeVariantProps['color'];
+  /**
+   * @control select
+   * @default md
+   */
+  size?: BadgeVariantProps['size'];
+  /**
+   * @control boolean
+   * @default true
+   */
+  rounded?: BadgeVariantProps['rounded'];
+  /**
+   * @control select
+   * @default solid
+   */
+  variant?: BadgeVariantProps['variant'];
+  /**
+   * @control select
+   * @default top-right
+   */
+  placement?: BadgeVariantProps['placement'];
+  /**
+   * @control select
+   * @default default
+   */
+  animation?: BadgeVariantProps['animation'];
   className?: string;
+  /**
+   * Accessible label for icon-only, dot, or contextual badge content.
+   * @control text
+   */
   ariaLabel?: string;
+  /**
+   * Child element the badge should attach to. Without children, the badge renders inline.
+   */
   children?: ReactNode;
-  role?: string;
+  /**
+   * ARIA role for the badge element.
+   * @default status
+   */
+  role?: AriaRole;
+  /**
+   * Live region politeness for dynamic badge updates.
+   * @control select
+   * @default off
+   */
   ariaLive?: 'off' | 'polite' | 'assertive';
   /**
    * @control text
@@ -138,38 +180,8 @@ export type BadgeProps = {
    */
   content?: string | number | ReactNode;
   /**
-   * @control select
-   * @default primary
-   */
-  color?: BadgeColor;
-  /**
-   * @control select
-   * @default top-right
-   */
-  placement?: BadgePlacement;
-  /**
-   * @control select
-   * @default md
-   */
-  size?: BadgeSize;
-  /**
-   * @control boolean
-   * @default true
-   */
-  rounded?: BadgeRounded;
-  /**
-   * @control select
-   * @default solid
-   */
-  variant?: BadgeVariants;
-  /**
    * @control boolean
    * @default true
    */
   visibility?: boolean;
-  /**
-   * @control select
-   * @default default
-   */
-  animation?: BadgeAnimation;
 };
