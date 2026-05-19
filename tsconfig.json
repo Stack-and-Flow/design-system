@@ -30,8 +30,7 @@
       "@atoms/*": ["./src/components/atoms/*"],
       "@molecules/*": ["./src/components/molecules/*"],
       "@organisms/*": ["./src/components/organisms/*"],
-      "@templates/*": ["./src/components/templates/*"],
-      "@hooks/*": ["./src/infrastructure/hooks/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@styles/*": ["./src/styles/*"],
       "@tests/*": ["./tests/*"],
       "@utils/*": ["./src/utils/*"]
