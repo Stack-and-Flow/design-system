@@ -205,10 +205,27 @@ export const WithoutSeparator: Story = {
 export const CustomIndicator: Story = {
   args: {
     ...Default.args,
-    items: baseItems.map((item) => ({
-      ...item,
-      indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
-    }))
+    items: [
+      {
+        id: 'overview',
+        title: 'What is Stack-and-Flow?',
+        content: 'Stack-and-Flow is a React design system focused on accessible, token-driven components.',
+        indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
+      },
+      {
+        id: 'usage',
+        title: 'When should I use Accordion?',
+        content: 'Use Accordion to organize related content sections when users only need to inspect some of them.',
+        indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
+      },
+      {
+        id: 'accessibility',
+        title: 'How does keyboard navigation work?',
+        content:
+          'Use Tab to enter the accordion, arrow keys to move between triggers, and Enter or Space to toggle a panel.',
+        indicator: <Icon name='plus' size={18} color='text-color-brand-light' colorDark='dark:text-color-brand-dark' />
+      }
+    ]
   }
 };
 
