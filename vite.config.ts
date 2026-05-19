@@ -1,8 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
-import { defineConfig } from 'vite';
-import { defineConfig as defineVitestConfig } from 'vitest/config';
+import { defineConfig, type UserConfig } from 'vite';
 
 const aliases = {
   '@': path.resolve(__dirname, './src'),
@@ -10,12 +9,26 @@ const aliases = {
   '@atoms': path.resolve(__dirname, './src/components/atoms'),
   '@molecules': path.resolve(__dirname, './src/components/molecules'),
   '@organisms': path.resolve(__dirname, './src/components/organisms'),
-  '@templates': path.resolve(__dirname, './src/components/templates'),
+  '@hooks': path.resolve(__dirname, './src/hooks'),
   '@styles': path.resolve(__dirname, './src/styles'),
   '@utils': path.resolve(__dirname, './src/utils')
 };
 
-export default defineConfig({
+type TestConfig = {
+  globals: boolean;
+  environment: 'jsdom';
+  setupFiles: string[];
+  css: boolean;
+  alias: typeof aliases;
+  coverage: {
+    provider: 'v8';
+    reporter: string[];
+    include: string[];
+    exclude: string[];
+  };
+};
+
+const config = {
   base: './',
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -26,11 +39,13 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'StackAndFlowDesignSystem',
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`
+      fileName: (format: string) => `index.${format === 'es' ? 'js' : 'cjs'}`
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'lucide-react', /^lucide-react\/.*/],
       output: {
+        assetFileNames: (assetInfo: { name?: string }) =>
+          assetInfo.name?.endsWith('.css') ? 'design-system.css' : 'assets/[name]-[hash][extname]',
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
@@ -55,4 +70,6 @@ export default defineConfig({
       exclude: ['src/components/**/*.stories.tsx', 'src/components/**/*.test.*', 'src/components/**/index.ts']
     }
   }
-});
+} satisfies UserConfig & { test: TestConfig };
+
+export default defineConfig(config);
