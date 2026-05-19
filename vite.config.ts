@@ -1,8 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
-import { defineConfig } from 'vite';
-import { defineConfig as defineVitestConfig } from 'vitest/config';
 
 const aliases = {
   '@': path.resolve(__dirname, './src'),
@@ -15,7 +13,7 @@ const aliases = {
   '@utils': path.resolve(__dirname, './src/utils')
 };
 
-export default defineConfig({
+const config: Record<string, unknown> = {
   base: './',
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -26,11 +24,13 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'StackAndFlowDesignSystem',
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`
+      fileName: (format: string) => `index.${format === 'es' ? 'js' : 'cjs'}`
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'lucide-react', /^lucide-react\/.*/],
       output: {
+        assetFileNames: (assetInfo: { name?: string }) =>
+          assetInfo.name?.endsWith('.css') ? 'design-system.css' : 'assets/[name]-[hash][extname]',
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
@@ -55,4 +55,6 @@ export default defineConfig({
       exclude: ['src/components/**/*.stories.tsx', 'src/components/**/*.test.*', 'src/components/**/index.ts']
     }
   }
-});
+};
+
+export default config;

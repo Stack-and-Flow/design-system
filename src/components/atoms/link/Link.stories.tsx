@@ -16,7 +16,7 @@ const VariantRow = ({ children }: { children: ReactNode }) => (
  * Link renders navigation and action affordances with Stack-and-Flow typography, focus, and token styling.
  *
  * ## Dependencies
- * Uses `lucide-react/dynamic` when the optional `icon` prop is provided.
+ * Uses `lucide-react/dynamic.js` when the optional `icon` prop is provided.
  *
  * ## Usage Guide
  * Use `regular` for inline navigation, `outlined` for secondary call-to-action links, and `button` when a link must visually match a primary action while preserving link semantics when `href` is present. When `href` is omitted, Link behaves as a local action control with button semantics and keyboard activation.

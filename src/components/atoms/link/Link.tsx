@@ -1,4 +1,4 @@
-import { DynamicIcon } from 'lucide-react/dynamic';
+import { DynamicIcon } from 'lucide-react/dynamic.js';
 import type { FC } from 'react';
 import type { LinkProps } from './types';
 import { useLink } from './useLink';
