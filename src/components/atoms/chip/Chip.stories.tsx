@@ -31,9 +31,6 @@ export default meta;
 
 type Story = StoryObj<typeof Chip>;
 
-const visualColors = ['primary', 'secondary', 'success', 'warning', 'danger'] as const;
-const visualVariants = ['solid', 'flat', 'shadow', 'bordered', 'light', 'faded', 'dot'] as const;
-
 export const Default: Story = {
   args: {
     children: 'Chip'
@@ -99,20 +96,160 @@ export const Variant: Story = {
 export const VisualReviewMatrix: Story = {
   render: () => (
     <div className='grid gap-6 rounded-xl bg-background-light p-6 dark:bg-background-dark'>
-      {visualVariants.map((variant) => (
-        <section key={variant} className='grid gap-3'>
-          <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
-            {variant}
-          </h3>
-          <div className='flex flex-wrap items-center gap-3'>
-            {visualColors.map((color) => (
-              <Chip key={`${variant}-${color}`} variant={variant} color={color}>
-                {color}
-              </Chip>
-            ))}
-          </div>
-        </section>
-      ))}
+      <section className='grid gap-3'>
+        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+          Solid
+        </h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip variant='solid' color='primary'>
+            primary
+          </Chip>
+          <Chip variant='solid' color='secondary'>
+            secondary
+          </Chip>
+          <Chip variant='solid' color='success'>
+            success
+          </Chip>
+          <Chip variant='solid' color='warning'>
+            warning
+          </Chip>
+          <Chip variant='solid' color='danger'>
+            danger
+          </Chip>
+        </div>
+      </section>
+      <section className='grid gap-3'>
+        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+          Flat
+        </h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip variant='flat' color='primary'>
+            primary
+          </Chip>
+          <Chip variant='flat' color='secondary'>
+            secondary
+          </Chip>
+          <Chip variant='flat' color='success'>
+            success
+          </Chip>
+          <Chip variant='flat' color='warning'>
+            warning
+          </Chip>
+          <Chip variant='flat' color='danger'>
+            danger
+          </Chip>
+        </div>
+      </section>
+      <section className='grid gap-3'>
+        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+          Shadow
+        </h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip variant='shadow' color='primary'>
+            primary
+          </Chip>
+          <Chip variant='shadow' color='secondary'>
+            secondary
+          </Chip>
+          <Chip variant='shadow' color='success'>
+            success
+          </Chip>
+          <Chip variant='shadow' color='warning'>
+            warning
+          </Chip>
+          <Chip variant='shadow' color='danger'>
+            danger
+          </Chip>
+        </div>
+      </section>
+      <section className='grid gap-3'>
+        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+          Bordered
+        </h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip variant='bordered' color='primary'>
+            primary
+          </Chip>
+          <Chip variant='bordered' color='secondary'>
+            secondary
+          </Chip>
+          <Chip variant='bordered' color='success'>
+            success
+          </Chip>
+          <Chip variant='bordered' color='warning'>
+            warning
+          </Chip>
+          <Chip variant='bordered' color='danger'>
+            danger
+          </Chip>
+        </div>
+      </section>
+      <section className='grid gap-3'>
+        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+          Light
+        </h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip variant='light' color='primary'>
+            primary
+          </Chip>
+          <Chip variant='light' color='secondary'>
+            secondary
+          </Chip>
+          <Chip variant='light' color='success'>
+            success
+          </Chip>
+          <Chip variant='light' color='warning'>
+            warning
+          </Chip>
+          <Chip variant='light' color='danger'>
+            danger
+          </Chip>
+        </div>
+      </section>
+      <section className='grid gap-3'>
+        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+          Faded
+        </h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip variant='faded' color='primary'>
+            primary
+          </Chip>
+          <Chip variant='faded' color='secondary'>
+            secondary
+          </Chip>
+          <Chip variant='faded' color='success'>
+            success
+          </Chip>
+          <Chip variant='faded' color='warning'>
+            warning
+          </Chip>
+          <Chip variant='faded' color='danger'>
+            danger
+          </Chip>
+        </div>
+      </section>
+      <section className='grid gap-3'>
+        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
+          Dot
+        </h3>
+        <div className='flex flex-wrap items-center gap-3'>
+          <Chip variant='dot' color='primary'>
+            primary
+          </Chip>
+          <Chip variant='dot' color='secondary'>
+            secondary
+          </Chip>
+          <Chip variant='dot' color='success'>
+            success
+          </Chip>
+          <Chip variant='dot' color='warning'>
+            warning
+          </Chip>
+          <Chip variant='dot' color='danger'>
+            danger
+          </Chip>
+        </div>
+      </section>
     </div>
   )
 };
