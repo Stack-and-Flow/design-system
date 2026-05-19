@@ -142,7 +142,7 @@
         "noEmptyBlockStatements": "error",
         "noEmptyInterface": "error",
         "noExtraNonNullAssertion": "error",
-        "noExplicitAny": "off",
+        "noExplicitAny": "error",
         "noFallthroughSwitchClause": "error",
         "noFunctionAssign": "error",
         "noGlobalAssign": "error",

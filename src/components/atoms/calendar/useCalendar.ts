@@ -1,4 +1,5 @@
 import { CalendarDate } from '@internationalized/date';
+import type { CSSProperties } from 'react';
 import { useMemo, useState } from 'react';
 import type { CalendarProps } from './types';
 
@@ -92,6 +93,20 @@ const weekdayNamesByLocale: Record<string, string[]> = {
   es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 };
 
+type CalendarDay = {
+  date: Date;
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  isSelected: boolean;
+  isDisabled: boolean;
+  isInRange: boolean;
+  isRangeStart: boolean;
+  isRangeEnd: boolean;
+  isHighlighted: boolean;
+  highlightClassName?: string;
+  highlightStyle?: CSSProperties;
+};
+
 export const useCalendar = ({
   selectedDate: initialSelectedDate = null,
   onDateChange,
@@ -123,8 +138,8 @@ export const useCalendar = ({
   };
 
   // Groups days into weeks of 7 days
-  const groupDaysIntoWeeks = (days: any[]) => {
-    const weeks = [];
+  const groupDaysIntoWeeks = (days: CalendarDay[]): CalendarDay[][] => {
+    const weeks: CalendarDay[][] = [];
     for (let i = 0; i < days.length; i += 7) {
       weeks.push(days.slice(i, i + 7));
     }
@@ -194,7 +209,7 @@ export const useCalendar = ({
     // Prev month days
     const startDayIndex = getStartDayOfMonth(year, month);
     const daysInPrevMonth = new Date(year, month, 0).getDate();
-    const prevDays = [];
+    const prevDays: CalendarDay[] = [];
     for (let i = startDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, daysInPrevMonth - i);
       date.setHours(0, 0, 0, 0);
@@ -227,7 +242,7 @@ export const useCalendar = ({
 
     // Current month days
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const currDays = [];
+    const currDays: CalendarDay[] = [];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     for (let i = 1; i <= daysInMonth; i++) {
@@ -265,7 +280,7 @@ export const useCalendar = ({
     // Next month days
     const totalDaysDisplayed = startDayIndex + daysInMonth;
     const remainingCells = 42 - totalDaysDisplayed; // 6 weeks
-    const nextDays = [];
+    const nextDays: CalendarDay[] = [];
     for (let i = 1; i <= remainingCells; i++) {
       const date = new Date(year, month + 1, i);
       date.setHours(0, 0, 0, 0);
