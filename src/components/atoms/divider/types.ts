@@ -13,8 +13,8 @@ export const dividerVariants = cva('', {
     thickness: {
       xs: 'p-0',
       sm: 'p-0.5',
-      md: 'p-0.75',
-      lg: 'p-1.25'
+      md: 'p-0-75',
+      lg: 'p-1-25'
     }
   },
   compoundVariants: [

@@ -17,9 +17,9 @@ export const badgeVariants = cva(
         danger: 'bg-error-light text-white dark:bg-error dark:text-white'
       },
       size: {
-        sm: 'text-badge-sm min-w-4.5 h-4.5 px-1.5 py-0.5 mr-1.25 mt-0.5',
+        sm: 'text-badge-sm min-w-4-5 h-4-5 px-1.5 py-0.5 mr-1-25 mt-0.5',
         md: 'text-xs min-w-6 h-6 px-2 py-1',
-        lg: 'text-sm min-w-7 h-7 px-2.5 py-1.25'
+        lg: 'text-sm min-w-7 h-7 px-2.5 py-1-25'
       },
       rounded: {
         true: 'rounded-full',

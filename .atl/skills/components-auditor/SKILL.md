@@ -139,6 +139,10 @@ Every component must have exactly these 6 files and nothing else:
 
 - [ ] No hardcoded hex values (`#ff0036`, `#060C13`, etc.) anywhere in the component files
 - [ ] No hardcoded spacing values (`px-4`, `mt-2` are fine as utilities; `mt-[13px]` is not)
+- [ ] Custom fractional spacing tokens from `theme.css` use Tailwind v4 dash utility names, never dotted names:
+  - Correct: `p-0-75`, `p-1-25`, `min-w-4-5`, `h-4-5`
+  - Wrong: `p-0.75`, `p-1.25`, `min-w-4.5`, `h-4.5`
+  - Keep built-in half-step utilities such as `p-0.5`, `gap-1.5`, `px-2.5` unchanged unless `theme.css` defines a dash-named custom token for that exact value.
 - [ ] No `[var(--token)]` when the token exists in `@theme` as a Tailwind utility class
   - Wrong: `bg-[var(--color-surface-dark)]`
   - Right: `bg-surface-dark`

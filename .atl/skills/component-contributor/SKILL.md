@@ -316,6 +316,7 @@ After each file, explain what was done and why (Phase 4 runs inline).
 - Import CVA from `class-variance-authority`
 - Never use `[var(--token)]` when an equivalent Tailwind utility exists in `@theme`
 - Never use `var()` directly in component source files; if Tailwind cannot express a token-backed visual treatment, define a reusable class/token in `src/styles/theme.css` or `src/styles/base.css` first
+- Use Tailwind v4 dash utility names for custom fractional spacing tokens declared in `theme.css`: `p-0-75`, `p-1-25`, `min-w-4-5`, `h-4-5`. Do not write dotted custom-token utilities such as `p-0.75`, `p-1.25`, `min-w-4.5`, or `h-4.5`. Built-in half-step utilities (`p-0.5`, `gap-1.5`, `px-2.5`) remain valid.
 
 **Available control types:**
 
@@ -501,6 +502,7 @@ describe('Component — behavior', () => {
 - Event handlers in stories must use `@storybook/addon-actions` (`action(...)`) — never invent a different helper
 - Never use inline no-op handlers such as `() => undefined` in story args
 - Token styling in stories must use Tailwind utility classes or reusable semantic classes from the style system; do not bypass them with `[var(--token)]` or inline `var()` in story/component source
+- Custom fractional spacing token utilities in stories follow the same Tailwind v4 dash form as source code (`p-0-75`, `p-1-25`, `min-w-4-5`), not dotted custom-token form (`p-0.75`, `p-1.25`, `min-w-4.5`).
 - Story conventions must match the canonical repo pattern for autodocs, controls, and actions
 - NO `play` functions — interaction testing belongs in `.test.tsx`
 

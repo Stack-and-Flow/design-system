@@ -13,6 +13,7 @@ Use this reference BEFORE writing or reviewing stories. Do not improvise Storybo
 - Use `@storybook/addon-actions` with `action(...)` for event args.
 - Never use inline no-op handlers like `() => undefined` in story args.
 - Use Tailwind token utility classes from `@theme` or reusable semantic classes from the style system; do **not** use `[var(--token)]` or direct `var()` in stories.
+- Custom fractional spacing tokens declared in `theme.css` must use Tailwind v4 dash utility names (`p-0-75`, `p-1-25`, `min-w-4-5`), not dotted custom-token names (`p-0.75`, `p-1.25`, `min-w-4.5`). Built-in half-step utilities such as `p-0.5`, `gap-1.5`, and `px-2.5` stay valid.
 - HARD RULE: keep all Storybook documentation in English, including docs headings, descriptions, comments, story names, and arg labels.
 - Component-level docs must be written as a JSDoc block immediately above `const meta`; do **not** put component docs in `parameters.docs.description.component`.
 - The component-level JSDoc block must use this English story header structure:
@@ -73,6 +74,7 @@ export const Default: Story = {
 - Does the story rely on autodocs instead of custom `argTypes`?
 - Are actions wired with `action(...)`?
 - Are token utilities / semantic style-system classes used instead of `[var(--token)]` or direct `var()` bypasses?
+- Do custom fractional spacing utilities use dash names from `theme.css` (`0-75`, `1-25`, `4-5`) instead of dotted custom-token names?
 - Is the component-level docs JSDoc block immediately above `const meta`?
 - Does the component-level JSDoc block include required `## Description`?
 - Are `## Dependencies` and `## Usage Guide` included only when applicable?
