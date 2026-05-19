@@ -9,7 +9,7 @@
  * WHAT we do NOT test: specific CSS class strings, internal refs, ripple implementation
  *
  * MOCKS:
- * - lucide-react/dynamic → DynamicIcon causes dynamic import issues in jsdom
+ * - lucide-react/dynamic.js → DynamicIcon causes dynamic import issues in jsdom
  * - spinners-react → SpinnerCircular uses CSS animations not available in jsdom
  *   but the import itself still resolves, so we mock the module to avoid CSS parse errors
  */
@@ -20,7 +20,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 // --- Mocks (declared before component import) ---
 
-vi.mock('lucide-react/dynamic', () => ({
+vi.mock('lucide-react/dynamic.js', () => ({
   // biome-ignore lint/style/useNamingConvention: must match library export name
   DynamicIcon: () => null
 }));

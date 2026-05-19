@@ -1,3 +1,5 @@
+import './styles/global.css';
+
 // ─── Atoms ───────────────────────────────────────────────────────────────────
 export { Avatar } from './components/atoms/avatar';
 export { Badge } from './components/atoms/badge';
@@ -24,6 +26,3 @@ export { Snippet } from './components/molecules/snippet';
 export { Footer } from './components/organisms/footer';
 export { NavigationHeader } from './components/organisms/header';
 export { Modal } from './components/organisms/modal';
-
-// ─── Hooks ───────────────────────────────────────────────────────────────────
-export { useRipple } from './hooks/useRipple';

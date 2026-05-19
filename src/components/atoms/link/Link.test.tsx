@@ -14,7 +14,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 // --- Mocks (declared before component import) ---
 
-vi.mock('lucide-react/dynamic', () => ({
+vi.mock('lucide-react/dynamic.js', () => ({
   // biome-ignore lint/style/useNamingConvention: must match library export name
   DynamicIcon: ({ name }: { name: string }) => <span aria-hidden='true' data-icon={name} data-testid='link-icon' />
 }));

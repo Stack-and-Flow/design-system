@@ -219,7 +219,7 @@ Every component test file MUST cover:
 Always mock these two packages — they import CSS animations or dynamic modules that break jsdom:
 
 ```typescript
-vi.mock('lucide-react/dynamic', () => ({
+vi.mock('lucide-react/dynamic.js', () => ({
   DynamicIcon: () => null
 }));
 

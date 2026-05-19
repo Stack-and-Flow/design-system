@@ -1,5 +1,5 @@
 import type { VariantProps } from 'class-variance-authority';
-import { DynamicIcon } from 'lucide-react/dynamic';
+import { DynamicIcon } from 'lucide-react/dynamic.js';
 import type { ComponentProps, FC } from 'react';
 import { cn } from '@/lib/utils';
 import { type IconButtonProps, iconButtonVariants } from './types';
