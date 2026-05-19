@@ -22,6 +22,7 @@ export const useAvatar = ({
   type = 'button',
   ...props
 }: AvatarProps): UseAvatarReturn => {
+  const normalizedAlt = normalizeAlt(alt);
   const interactive = typeof onClick === 'function';
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -37,15 +38,20 @@ export const useAvatar = ({
   return {
     ...props,
     src,
-    alt,
+    alt: normalizedAlt,
     disabled,
     type,
     interactive,
     imageAlt: '',
-    fallback: getInitials(alt),
+    fallback: getInitials(normalizedAlt),
     className: cn(avatarVariants({ size, rounded }), className),
     handleClick
   };
+};
+
+const normalizeAlt = (alt: string): string => {
+  const trimmedAlt = alt.trim();
+  return trimmedAlt || 'Avatar';
 };
 
 const getInitials = (alt: string): string => {

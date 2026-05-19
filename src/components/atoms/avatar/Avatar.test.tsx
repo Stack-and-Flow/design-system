@@ -28,6 +28,7 @@ describe('useAvatar — logic', () => {
 
   it('uses a stable fallback initial when alt is blank', () => {
     const { result } = renderHook(() => useAvatar({ alt: '   ' }));
+    expect(result.current.alt).toBe('Avatar');
     expect(result.current.fallback).toBe('A');
   });
 
@@ -65,6 +66,11 @@ describe('Avatar — component behavior', () => {
   it('renders a named image region when src is provided', () => {
     render(<Avatar src='/images/logo-only.svg' alt='EG Logo' />);
     expect(screen.getByRole('img', { name: 'EG Logo' })).toBeInTheDocument();
+  });
+
+  it('falls back to a default accessible name when alt is blank', () => {
+    render(<Avatar alt='   ' />);
+    expect(screen.getByRole('img', { name: 'Avatar' })).toBeInTheDocument();
   });
 
   it('renders a real button when onClick is provided', () => {
