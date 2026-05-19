@@ -4,6 +4,7 @@ import type { BadgeProps } from './types';
 import { badgeVariants } from './types';
 
 type BadgeSize = NonNullable<BadgeProps['size']>;
+type BadgePlacement = NonNullable<BadgeProps['placement']>;
 
 type BadgeElementProps = {
   className: string;
@@ -20,6 +21,8 @@ export type UseBadgeReturn = {
   isDot: boolean;
   isSquare: boolean;
   shouldRenderBadge: boolean;
+  shouldAnimateIn: boolean;
+  resolvedPlacement?: BadgePlacement;
 };
 
 const squareSizeClasses: Record<BadgeSize, string> = {
@@ -51,13 +54,14 @@ export const useBadge = ({
   const shouldRenderBadge = visibility && hasValidContent;
   const resolvedSize = size ?? 'md';
   const shouldAnimateIn = animation === undefined || animation === 'default';
+  const resolvedPlacement = hasChildren ? (placement ?? 'top-right') : undefined;
 
   const badgeClass = badgeVariants({
     color,
     rounded,
     size,
     variant,
-    placement: hasChildren ? (placement ?? 'top-right') : undefined,
+    placement: resolvedPlacement,
     animation
   });
 
@@ -80,6 +84,8 @@ export const useBadge = ({
     hasChildren,
     isDot,
     isSquare,
-    shouldRenderBadge
+    shouldRenderBadge,
+    shouldAnimateIn,
+    resolvedPlacement
   };
 };

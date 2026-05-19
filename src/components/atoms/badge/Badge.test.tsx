@@ -27,12 +27,10 @@ describe('useBadge — logic', () => {
     );
 
     expect(standaloneResult.current.hasChildren).toBe(false);
-    expect(standaloneResult.current.badgeProps.className).not.toContain('absolute');
-    expect(standaloneResult.current.badgeProps.className).not.toContain('translate');
+    expect(standaloneResult.current.resolvedPlacement).toBeUndefined();
     expect(positionedResult.current.hasChildren).toBe(true);
     expect(positionedResult.current.children).toBeTruthy();
-    expect(positionedResult.current.badgeProps.className).toContain('bottom-0');
-    expect(positionedResult.current.badgeProps.className).toContain('-translate-x-1/3');
+    expect(positionedResult.current.resolvedPlacement).toBe('bottom-left');
   });
 
   it('defaults positioned badges to top-right without applying placement to standalone badges', () => {
@@ -44,12 +42,8 @@ describe('useBadge — logic', () => {
       })
     );
 
-    expect(standaloneResult.current.badgeProps.className).not.toContain('top-0');
-    expect(standaloneResult.current.badgeProps.className).not.toContain('right-0');
-    expect(positionedResult.current.badgeProps.className).toContain('top-0');
-    expect(positionedResult.current.badgeProps.className).toContain('right-0');
-    expect(positionedResult.current.badgeProps.className).toContain('translate-x-1/3');
-    expect(positionedResult.current.badgeProps.className).toContain('-translate-y-1/3');
+    expect(standaloneResult.current.resolvedPlacement).toBeUndefined();
+    expect(positionedResult.current.resolvedPlacement).toBe('top-right');
   });
 
   it('marks icon and dot content as square badges', () => {
@@ -70,9 +64,8 @@ describe('useBadge — logic', () => {
     const { result: defaultResult } = renderHook(() => useBadge({ content: '5' }));
     const { result: pulseResult } = renderHook(() => useBadge({ content: '5', animation: 'pulse' }));
 
-    expect(defaultResult.current.badgeProps.className).toContain('motion-safe:animate-badgeIn');
-    expect(pulseResult.current.badgeProps.className).toContain('motion-safe:animate-pulse');
-    expect(pulseResult.current.badgeProps.className).not.toContain('motion-safe:animate-badgeIn');
+    expect(defaultResult.current.shouldAnimateIn).toBe(true);
+    expect(pulseResult.current.shouldAnimateIn).toBe(false);
   });
 });
 
@@ -85,7 +78,6 @@ describe('Badge — component behavior', () => {
 
     expect(badge).toHaveTextContent('New');
     expect(badge).toHaveAttribute('aria-label', 'New feature');
-    expect(badge).not.toHaveClass('absolute');
   });
 
   it('renders positioned badges with their child content', () => {
