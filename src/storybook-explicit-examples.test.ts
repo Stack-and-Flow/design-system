@@ -30,32 +30,45 @@ const getStoryFiles = (directory: string): string[] =>
 
 const getScriptKind = (filePath: string) => (filePath.endsWith('x') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
 
-const findStoryMapViolations = (): StoryMapViolation[] =>
-  getStoryFiles(srcDir).flatMap((filePath) => {
-    const sourceText = readFileSync(filePath, 'utf8');
-    const sourceFile = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true, getScriptKind(filePath));
-    const violations: StoryMapViolation[] = [];
+const getMapPropertyAccessName = (node: ts.Expression) => {
+  if ((ts.isPropertyAccessExpression(node) || ts.isPropertyAccessChain(node)) && node.name.text === 'map') {
+    return node.name;
+  }
 
-    const visit = (node: ts.Node) => {
-      if (
-        ts.isCallExpression(node) &&
-        ts.isPropertyAccessExpression(node.expression) &&
-        node.expression.name.text === 'map'
-      ) {
-        const { line, character } = sourceFile.getLineAndCharacterOfPosition(node.expression.name.getStart(sourceFile));
+  return undefined;
+};
+
+const findMapViolationsInSourceFile = (sourceFile: ts.SourceFile): StoryMapViolation[] => {
+  const violations: StoryMapViolation[] = [];
+
+  const visit = (node: ts.Node) => {
+    if (ts.isCallExpression(node)) {
+      const mapPropertyName = getMapPropertyAccessName(node.expression);
+
+      if (mapPropertyName !== undefined) {
+        const { line, character } = sourceFile.getLineAndCharacterOfPosition(mapPropertyName.getStart(sourceFile));
         violations.push({
           file: relative(root, sourceFile.fileName),
           line: line + 1,
           column: character + 1
         });
       }
+    }
 
-      ts.forEachChild(node, visit);
-    };
+    ts.forEachChild(node, visit);
+  };
 
-    visit(sourceFile);
-    return violations;
-  });
+  visit(sourceFile);
+  return violations;
+};
+
+const findMapViolationsInSourceText = (filePath: string, sourceText: string): StoryMapViolation[] => {
+  const sourceFile = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true, getScriptKind(filePath));
+  return findMapViolationsInSourceFile(sourceFile);
+};
+
+const findStoryMapViolations = (): StoryMapViolation[] =>
+  getStoryFiles(srcDir).flatMap((filePath) => findMapViolationsInSourceText(filePath, readFileSync(filePath, 'utf8')));
 
 describe('Storybook explicit examples', () => {
   it('does not use .map() in story files', () => {
@@ -70,5 +83,24 @@ describe('Storybook explicit examples', () => {
         ...violations.map(({ file, line, column }) => `- ${file}:${line}:${column}`)
       ].join('\n')
     ).toEqual([]);
+  });
+
+  it('detects optional-chained .map() calls', () => {
+    const violations = findMapViolationsInSourceText(
+      join(root, 'src/components/example/Example.stories.tsx'),
+      `
+        export const Example = {
+          render: () => <div>{items?.map((item) => <Component key={item.id} {...item} />)}</div>
+        };
+      `
+    );
+
+    expect(violations).toEqual([
+      {
+        file: 'src/components/example/Example.stories.tsx',
+        line: 3,
+        column: 38
+      }
+    ]);
   });
 });
