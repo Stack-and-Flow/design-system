@@ -377,7 +377,8 @@ El PR debe linkear la issue y contener evidencia.
 Checklist mínimo:
 
 - [ ] `Closes #NNN` en la descripción.
-- [ ] Conventional commit.
+- [ ] Título del PR en formato Conventional Commit: `<type>(<scope opcional>): <descripción>`.
+- [ ] Commits en formato Conventional Commit válido para `commitlint`.
 - [ ] Tests relevantes pasan.
 - [ ] Build o checks requeridos pasan.
 - [ ] Pre-PR component review incluido o resumido.
