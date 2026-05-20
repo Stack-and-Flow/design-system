@@ -18,6 +18,7 @@ Closes #<!-- issue number -->
 - [ ] PR title follows Conventional Commit format: `<type>(<optional scope>): <description>`
 - [ ] Commit messages follow the same commitlint-enforced format
 - [ ] PR description links the issue with `Closes #NNN`
+- [ ] Security checks pass, or any false positives are documented in the PR
 
 ## Component checklist (skip if not applicable)
 
