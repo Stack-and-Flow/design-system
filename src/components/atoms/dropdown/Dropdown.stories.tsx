@@ -11,7 +11,7 @@ import type { DropdownSchema } from './types';
  *
  * ## DEPENDENCIES
  * - [Radix UI Dropdown Menu](https://www.radix-ui.com/docs/primitives/components/dropdown-menu)
- * - [React Spinners](https://github.com/davidhu2000/react-spinners)
+ * - [spinners-react](https://github.com/adexin/spinners-react)
  * - Icon - from Lucide React for icons
  *
  * ## ITEMS STRUCTURE
