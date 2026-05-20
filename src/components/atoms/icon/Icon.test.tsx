@@ -31,12 +31,21 @@ describe('useIcon — logic', () => {
   });
 
   it('returns semantic icon attributes when a label is available', () => {
-    const { result } = renderHook(() => useIcon({ name: 'image', title: 'Gallery image' }));
+    const { result } = renderHook(() => useIcon({ name: 'image', title: ' Gallery image ' }));
 
     expect(result.current.iconProps.role).toBe('img');
     expect(result.current.iconProps['aria-hidden']).toBeUndefined();
     expect(result.current.iconProps['aria-label']).toBe('Gallery image');
     expect(result.current.iconProps.title).toBe('Gallery image');
+  });
+
+  it('does not forward whitespace-only titles', () => {
+    const { result } = renderHook(() => useIcon({ name: 'image', title: '   ' }));
+
+    expect(result.current.iconProps.role).toBeUndefined();
+    expect(result.current.iconProps['aria-hidden']).toBe(true);
+    expect(result.current.iconProps['aria-label']).toBeUndefined();
+    expect(result.current.iconProps.title).toBeUndefined();
   });
 
   it('returns semantic icon attributes when aria-labelledby is available', () => {
@@ -54,6 +63,7 @@ describe('useIcon — logic', () => {
         name: 'image',
         tone: 'success',
         color: 'text-color-orange',
+        colorDark: 'dark:text-color-success',
         className: 'custom-icon'
       })
     );

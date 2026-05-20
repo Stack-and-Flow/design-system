@@ -42,7 +42,7 @@ export const useIcon = ({
       ...props,
       name,
       size,
-      title,
+      title: resolvedTitle,
       className: cn(iconVariants({ tone }), normalizedColor, normalizedColorDark, className),
       focusable: false,
       role: isDecorative ? undefined : 'img',
