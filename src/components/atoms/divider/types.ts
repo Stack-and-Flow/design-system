@@ -1,10 +1,19 @@
-import { cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { ComponentProps } from 'react';
 
-export const dividerVariants = cva('', {
+export const dividerVariants = cva('shrink-0', {
   variants: {
     orientation: {
-      horizontal: 'h-px w-1',
-      vertical: 'w-px h-1'
+      horizontal: 'h-px',
+      vertical: 'w-px'
+    },
+    size: {
+      xs: '',
+      sm: '',
+      md: '',
+      lg: '',
+      xl: '',
+      full: ''
     },
     corner: {
       rounded: 'rounded-xs',
@@ -20,51 +29,126 @@ export const dividerVariants = cva('', {
   compoundVariants: [
     {
       orientation: 'horizontal',
-      class: 'h-px'
+      size: 'xs',
+      class: 'w-8'
+    },
+    {
+      orientation: 'horizontal',
+      size: 'sm',
+      class: 'w-16'
+    },
+    {
+      orientation: 'horizontal',
+      size: 'md',
+      class: 'w-32'
+    },
+    {
+      orientation: 'horizontal',
+      size: 'lg',
+      class: 'w-64'
+    },
+    {
+      orientation: 'horizontal',
+      size: 'xl',
+      class: 'w-96'
+    },
+    {
+      orientation: 'horizontal',
+      size: 'full',
+      class: 'w-full'
     },
     {
       orientation: 'vertical',
-      class: 'w-px'
+      size: 'xs',
+      class: 'h-6'
+    },
+    {
+      orientation: 'vertical',
+      size: 'sm',
+      class: 'h-10'
+    },
+    {
+      orientation: 'vertical',
+      size: 'md',
+      class: 'h-14'
+    },
+    {
+      orientation: 'vertical',
+      size: 'lg',
+      class: 'h-18'
+    },
+    {
+      orientation: 'vertical',
+      size: 'xl',
+      class: 'h-24'
+    },
+    {
+      orientation: 'vertical',
+      size: 'full',
+      class: 'h-full'
     }
   ],
   defaultVariants: {
-    orientation: 'horizontal'
+    orientation: 'horizontal',
+    size: 'full',
+    corner: 'none',
+    thickness: 'xs'
   }
 });
 
-type DividerOrientation = 'horizontal' | 'vertical';
-type DividerThickness = 'xs' | 'sm' | 'md' | 'lg';
-type DividerCorner = 'rounded' | 'none';
-export type DividerProps = {
-  /** Props for the Divider component */
+type DividerVariantProps = VariantProps<typeof dividerVariants>;
+export type DividerColor =
+  | 'bg-primary'
+  | 'bg-brand-light'
+  | 'bg-brand-dark'
+  | 'bg-red-500'
+  | 'bg-red-600'
+  | 'bg-blue'
+  | 'bg-indigo'
+  | 'bg-purple'
+  | 'bg-green'
+  | 'bg-teal'
+  | 'bg-yellow'
+  | 'bg-orange'
+  | 'bg-pink'
+  | (string & {});
 
+type NativeDividerProps = Omit<
+  ComponentProps<'div'>,
+  'aria-hidden' | 'aria-orientation' | 'children' | 'className' | 'color' | 'role'
+>;
+
+export type DividerProps = NativeDividerProps & {
   /**
    * @control select
    * @default horizontal
    */
-  orientation?: DividerOrientation;
-
+  orientation?: NonNullable<DividerVariantProps['orientation']>;
   /**
    * @control select
-   * @default bg-color-primary
+   * @default bg-primary
    */
-  color?: string;
-
+  color?: DividerColor;
   /**
    * @control select
-   * @default xs
+   * @default full
    */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-
+  size?: NonNullable<DividerVariantProps['size']>;
   /**
    * @control select
-   * @default xs
+   * @default none
    */
-  corner?: DividerCorner;
-
+  corner?: NonNullable<DividerVariantProps['corner']>;
   /**
    * @control select
    * @default xs
    */
-  thickness?: DividerThickness;
+  thickness?: NonNullable<DividerVariantProps['thickness']>;
+  /** @control text */
+  className?: string;
+  /**
+   * @control boolean
+   * @default false
+   */
+  decorative?: boolean;
 };
