@@ -1,15 +1,19 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Icon } from '../icon';
-import { Switch } from './index';
+import { Switch } from './Switch';
 
 /**
- * ## DESCRIPTION
- * The Switch component is a customizable toggle input that allows users to switch between two states:
- * **on** and **off**.
+ * ## Description
+ * Switch is a binary form control for enabling or disabling a setting.
+ * It renders an accessible checkbox-based switch with synchronized checked state, visible keyboard focus, and token-backed light/dark visuals.
  *
- * It is commonly used in forms, settings panels, or anywhere a binary choice needs to be represented.
- * The component supports multiple sizes, colors, labels, icons, and can also be disabled to prevent user interaction.
+ * ## Dependencies
+ * Uses `Icon` in icon examples to demonstrate thumb and track content composition.
+ *
+ * ## Usage Guide
+ * Use `defaultChecked` for uncontrolled settings and `checked` with `onChange` for controlled state. Provide either a visible `label`, `ariaLabel`, or native `aria-label` so assistive technology can identify the switch.
  */
 const meta: Meta<typeof Switch> = {
   title: 'Atoms/Switch',
@@ -25,209 +29,191 @@ export default meta;
 
 type Story = StoryObj<typeof Switch>;
 
+/**
+ * Shows the default switch configuration using its default visual variants.
+ */
 export const Default: Story = {
   args: {
-    label: 'Switch label',
-    size: 'md',
-    color: 'default',
-    defaultChecked: true
+    label: 'Notifications',
+    onChange: action('switch-change')
   }
 };
 
 /**
- * The `Switch` component comes in three predefined sizes to adapt to different use cases:
- *
- * - `Small`: compact, best suited for tight layouts or when space is limited.
- * - `Medium`: the default size, balancing usability and compactness.
- * - `Large`: provides a bigger click/tap target, ideal for mobile interfaces or accessibility-first designs.
- *
- * Choosing the right size helps ensure that the switch fits naturally into the overall UI layout.
+ * Shows the reference visual treatment for off, on, and checked hover states.
  */
-
-export const Size: Story = {
-  render: () => {
-    return (
-      <div className='flex gap-6'>
-        <Switch size='sm' label='Small Switch' defaultChecked={true} />
-        <Switch size='md' label='Medium Switch' defaultChecked={true} />
-        <Switch size='lg' label='Large Switch' defaultChecked={true} />
-      </div>
-    );
-  }
+export const VisualReference: Story = {
+  render: () => (
+    <div className='flex items-center gap-6 rounded-lg border border-border-light bg-surface-light p-6 dark:border-border-dark dark:bg-surface-dark'>
+      <Switch ariaLabel='Reference off switch' onChange={action('reference-off-change')} />
+      <Switch ariaLabel='Reference on switch' defaultChecked={true} onChange={action('reference-on-change')} />
+      <Switch
+        ariaLabel='Reference large on switch'
+        size='lg'
+        defaultChecked={true}
+        onChange={action('reference-large-on-change')}
+      />
+    </div>
+  )
 };
 
 /**
- * The `Switch` component can be rendered in a **disabled state**, meaning:
- *
- * - It appears visually inactive (often with reduced opacity or a muted color).
- * - It cannot be toggled via mouse, keyboard, or touch interaction.
- * - The label remains visible, helping users understand the purpose of the switch.
- *
- * This state is useful when a particular option is not available due to conditions in the UI
- * (for example, a setting that depends on another being enabled).
+ * Shows the non-interactive disabled state.
  */
 export const Disabled: Story = {
-  render: () => {
-    return (
-      <div className='flex'>
-        <Switch disabled={true} label='Disabled Switch' defaultChecked={true} color='disabled' />
-      </div>
-    );
-  }
+  render: () => (
+    <div className='flex flex-wrap items-center gap-4'>
+      <Switch label='Disabled off' disabled={true} onChange={action('disabled-off-change')} />
+      <Switch label='Disabled on' disabled={true} defaultChecked={true} onChange={action('disabled-on-change')} />
+    </div>
+  )
 };
 
 /**
- * The `Switch` component supports multiple **visual variants** that change its
- * overall style and appearance.
- *
- * Available variants:
- * - `Default`: standard style for most use cases.
- * - `Flat`: minimal, modern look with no shadows.
- * - `Glass`: translucent background with a frosted-glass effect.
- * - `Shadow`: elevated look with shadows, making it stand out in the UI.
- * - `Neon`: vibrant glowing effect, useful for dark themes or attention-grabbing designs.
- *
- * Variants provide flexibility to adapt the switch to different UI themes and branding needs.
+ * Shows the available size options while preserving the minimum touch target.
+ */
+export const Size: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-center gap-6'>
+      <Switch size='sm' label='Small' defaultChecked={true} onChange={action('small-change')} />
+      <Switch size='md' label='Medium' defaultChecked={true} onChange={action('medium-change')} />
+      <Switch size='lg' label='Large' defaultChecked={true} onChange={action('large-change')} />
+    </div>
+  )
+};
+
+/**
+ * Shows the supported color treatments. The legacy disabled color is rendered with disabled semantics for compatibility.
+ */
+export const Color: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-center gap-6'>
+      <Switch color='default' label='Default color' defaultChecked={true} onChange={action('default-color-change')} />
+      <Switch
+        color='transparent'
+        label='Transparent color'
+        defaultChecked={true}
+        onChange={action('transparent-color-change')}
+      />
+      <Switch color='disabled' label='Legacy disabled color' disabled={true} defaultChecked={true} />
+    </div>
+  )
+};
+
+/**
+ * Shows the available visual variants without mixing them with other prop axes.
  */
 export const Variant: Story = {
-  render: () => {
-    return (
-      <div className='flex gap-4'>
-        <Switch variant='default' label='Default Variant' defaultChecked={true} />
-        <Switch variant='bordered' label='Bordered Variant' defaultChecked={true} color='transparent' />
-        <Switch variant='glass' label='Glass Variant' defaultChecked={true} />
-        <Switch variant='shadow' label='Shadow Variant' defaultChecked={true} />
-      </div>
-    );
-  }
+  render: () => (
+    <div className='flex flex-wrap items-center gap-6'>
+      <Switch variant='default' label='Default' defaultChecked={true} onChange={action('default-variant-change')} />
+      <Switch variant='bordered' label='Bordered' defaultChecked={true} onChange={action('bordered-change')} />
+      <Switch variant='glass' label='Glass' defaultChecked={true} onChange={action('glass-change')} />
+      <Switch variant='shadow' label='Shadow' defaultChecked={true} onChange={action('shadow-change')} />
+    </div>
+  )
 };
 
 /**
- * The `Switch` component supports different **border radius** options, allowing it to
- * appear more rounded or squared depending on the design needs.
- *
- * - `Rounded (true)`: gives the switch a softer, pill-shaped appearance.
- * - `Square (false)`: produces a rectangular look, better suited for strict or formal UI designs.
- *
- * This property is useful for ensuring consistency with the overall visual language of the interface.
+ * Shows rounded and squared track shapes.
  */
 export const Rounded: Story = {
-  render: () => {
-    return (
-      <div className='flex gap-4'>
-        <Switch label='Rounded Switch' rounded={true} defaultChecked={true} />
-        <Switch label='Square Switch' rounded={false} defaultChecked={true} />
-      </div>
-    );
-  }
+  render: () => (
+    <div className='flex flex-wrap items-center gap-6'>
+      <Switch label='Rounded' rounded={true} defaultChecked={true} onChange={action('rounded-change')} />
+      <Switch label='Squared' rounded={false} defaultChecked={true} onChange={action('squared-change')} />
+    </div>
+  )
 };
+
 /**
- * The `Switch` component can display a **custom icon inside the thumb**, enhancing
- * its visual meaning.
- *
- * Typical use cases:
- * - A **moon/sun icon** for dark mode toggles.
- * - A **lock/unlock icon** for privacy or security settings.
- * - Any visual metaphor that helps users quickly understand the state.
- *
- * The `thumbIcon` prop accepts a ReactNode, allowing full customization with
- * your own icons or SVGs.
+ * Shows a thumb icon with light and dark token colors that keep WCAG 1.4.11 non-text contrast in dark mode.
  */
 export const WithThumbIcon: Story = {
-  render: () => {
-    return (
-      <div className='flex'>
-        <Switch
-          label='With Thumb Icon'
-          size='lg'
-          color='default'
-          thumbIcon={
-            <Icon name='moon' colorDark='dark:text-color-brand-dark' color='text-color-brand-light' size={16} />
-          }
-          defaultChecked={true}
-        />
-      </div>
-    );
-  }
+  render: () => (
+    <div className='flex flex-wrap items-center gap-6'>
+      <Switch
+        label='Thumb icon off'
+        size='lg'
+        thumbIcon={<Icon name='moon' tone='muted' size={16} className='text-current!' decorative={true} />}
+        onChange={action('thumb-icon-off-change')}
+      />
+      <Switch
+        label='Thumb icon on'
+        size='lg'
+        thumbIcon={<Icon name='moon' tone='muted' size={16} className='text-current!' decorative={true} />}
+        defaultChecked={true}
+        onChange={action('thumb-icon-on-change')}
+      />
+    </div>
+  )
 };
 
 /**
- * The `Switch` component can display **custom icons** at both ends, enhancing
- * its visual meaning.
- *
- * Typical use cases:
- * - A **moon/sun icon** for dark mode toggles.
- * - A **lock/unlock icon** for privacy or security settings.
- * - Any visual metaphor that helps users quickly understand the state.
- *
- * The `startContent` and `endContent` props accept ReactNodes, allowing full
- * customization with your own icons or SVGs.
+ * Shows start and end content without regressing the switch role or checked state.
  */
-export const WithIcon: Story = {
-  render: () => {
-    return (
-      <div>
-        <Switch
-          size='lg'
-          endContent={<Icon name='sun' size={20} colorDark='dark:text-color-text-dark' />}
-          startContent={<Icon name='moon' size={20} colorDark='dark:text-color-text-dark' />}
-          label='With Icons'
-          defaultChecked={true}
-        />
-      </div>
-    );
-  }
+export const WithIcons: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-center gap-6'>
+      <Switch
+        label='Icons off'
+        size='lg'
+        startContent={<Icon name='moon' tone='muted' size={16} className='text-current!' decorative={true} />}
+        endContent={<Icon name='sun' tone='muted' size={16} className='text-current!' decorative={true} />}
+        onChange={action('icons-off-change')}
+      />
+      <Switch
+        label='Icons on'
+        size='lg'
+        startContent={<Icon name='moon' tone='muted' size={16} className='text-current!' decorative={true} />}
+        endContent={<Icon name='sun' tone='muted' size={16} className='text-current!' decorative={true} />}
+        defaultChecked={true}
+        onChange={action('icons-on-change')}
+      />
+    </div>
+  )
 };
 
 /**
- * The `Switch` component allows **flexible positioning of labels** relative to the
- * switch itself.
- *
- * Available options:
- * - `Left`: places the label on the left side of the switch.
- * - `Right`: default placement, label on the right side.
- * - `Top`: displays the label above the switch.
- * - `Bottom`: displays the label below the switch.
- *
- * This flexibility makes it easier to adapt the component to different layouts
- * and accessibility needs.
+ * Shows every supported label placement.
  */
-
 export const LabelPlacement: Story = {
-  render: () => {
-    return (
-      <div className='flex gap-6'>
-        <Switch label='Left Label' labelPlacement='left' defaultChecked={true} />
-        <Switch label='Right Label' labelPlacement='right' defaultChecked={true} />
-        <Switch label='Bottom Label' labelPlacement='bottom' defaultChecked={true} />
-        <Switch label='Top Label' labelPlacement='top' defaultChecked={true} />
-      </div>
-    );
-  }
+  render: () => (
+    <div className='flex flex-wrap items-center gap-8'>
+      <Switch label='Left label' labelPlacement='left' defaultChecked={true} onChange={action('left-label-change')} />
+      <Switch
+        label='Right label'
+        labelPlacement='right'
+        defaultChecked={true}
+        onChange={action('right-label-change')}
+      />
+      <Switch label='Top label' labelPlacement='top' defaultChecked={true} onChange={action('top-label-change')} />
+      <Switch
+        label='Bottom label'
+        labelPlacement='bottom'
+        defaultChecked={true}
+        onChange={action('bottom-label-change')}
+      />
+    </div>
+  )
 };
 
 /**
- * The `Switch` component can be used as a **controlled component**, meaning its
- * value is fully managed by React state.
- *
- * In this mode, the `checked` prop reflects the current state, and the `onChange`
- * handler is used to update it.
- *
- * Example use cases:
- * - Syncing the switch state with a form library.
- * - Toggling application-wide settings (e.g. dark mode).
- * - Handling more complex logic that depends on the switch’s value.
- *
- * Controlled switches give developers full control over how state is stored
- * and updated.
+ * Shows controlled state management through checked and onChange.
  */
 export const Controlled: Story = {
   render: () => {
     const [checked, setChecked] = useState(false);
+
     return (
-      <div className='flex flex-col gap-4'>
-        <Switch label={checked ? 'ON' : 'OFF'} checked={checked} onChange={setChecked} />
-      </div>
+      <Switch
+        label={checked ? 'Enabled' : 'Disabled'}
+        checked={checked}
+        onChange={(nextChecked) => {
+          action('controlled-change')(nextChecked);
+          setChecked(nextChecked);
+        }}
+      />
     );
   }
 };
