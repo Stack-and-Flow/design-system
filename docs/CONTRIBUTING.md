@@ -158,7 +158,7 @@ Antes de pedir revisión, verifica:
 
 ### Checks de seguridad
 
-Los pull requests ejecutan audit de dependencias y escaneo de secretos antes del merge. Consulta [SECURITY.md](./SECURITY.md) para ver la politica, los pasos de remediacion y el manejo de falsos positivos.
+Los pull requests ejecutan audit de dependencias y escaneo de secretos antes del merge. Consulta [SECURITY.md](./SECURITY.md) para ver la política, los pasos de remediación y el manejo de falsos positivos.
 
 ---
 

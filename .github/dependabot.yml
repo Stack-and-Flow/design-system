@@ -9,6 +9,8 @@ updates:
     open-pull-requests-limit: 5
     groups:
       npm-minor-patch:
+        patterns:
+          - "*"
         update-types:
           - minor
           - patch
