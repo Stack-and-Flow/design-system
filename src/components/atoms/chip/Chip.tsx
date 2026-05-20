@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Icon from '../icon/Icon';
+import { Icon } from '../icon/Icon';
 import type { ChipProps } from './types';
 import { useChip } from './useChip';
 

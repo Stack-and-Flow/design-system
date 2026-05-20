@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Avatar } from '../avatar/Avatar';
 import { Button } from '../button';
-import Icon from '../icon/Icon';
+import { Icon } from '../icon/Icon';
 import { Badge } from './Badge';
 
 /**

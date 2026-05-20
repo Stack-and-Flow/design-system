@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Check, Trash2 } from 'lucide-react';
 import React from 'react';
 import { Avatar } from '../avatar';
-import Icon from '../icon/Icon';
+import { Icon } from '../icon/Icon';
 import { Chip } from './Chip';
 
 /**
