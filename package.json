@@ -61,6 +61,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.12",
+    "@commitlint/cli": "21.0.1",
+    "@commitlint/config-conventional": "21.0.1",
     "@egdev6/compilot-cli": "1.0.9",
     "@fontsource-variable/space-grotesk": "5.2.10",
     "@storybook/addon-a11y": "8.6.18",

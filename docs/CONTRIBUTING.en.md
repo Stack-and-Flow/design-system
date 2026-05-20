@@ -95,7 +95,24 @@ Before opening a PR, verify:
 
 ### Commits
 
-We strictly follow **Conventional Commits**:
+We strictly follow **Conventional Commits**. The `commit-msg` hook runs `commitlint` automatically and rejects any commit that does not match the required format.
+
+Required format:
+
+```text
+<type>(<optional scope>): <description>
+```
+
+Valid examples:
+
+```text
+feat(button): add loading state
+fix(calendar): correct keyboard navigation
+chore(infra): update lint tooling
+docs: update contribution guide
+```
+
+Common types:
 
 - `feat:` for new features or components.
 - `fix:` for bug fixes.
@@ -104,6 +121,12 @@ We strictly follow **Conventional Commits**:
 - `refactor:` for code changes that neither fix a bug nor add a feature.
 - `style:` for formatting, missing semi-colons, etc.
 - `test:` for adding or fixing tests.
+
+Before creating a commit, you can validate a message manually:
+
+```bash
+echo "feat(button): add loading state" | pnpm exec commitlint
+```
 
 ### Pull Request Process
 
