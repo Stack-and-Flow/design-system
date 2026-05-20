@@ -1,60 +1,44 @@
 import { cva, type VariantProps } from 'class-variance-authority';
+import type { ComponentProps } from 'react';
 import type { DynamicIconName, IconSizes } from '@/types';
 
 export const iconButtonVariants = cva(
   [
-    'link relative border cursor-pointer px-1 py-1 max-w-full',
+    'relative overflow-hidden border cursor-pointer px-1 py-1 max-w-full',
     'active:scale-[0.98]',
-    'transition-[box-shadow,background,border-color] duration-200 ease-[ease]',
-    'flex items-center justify-start',
-    'whitespace-nowrap line-clamp-1 ',
+    'transition-[box-shadow,background,border-color,transform,color] duration-250 ease-out',
+    'inline-flex shrink-0 items-center justify-center',
+    'whitespace-nowrap',
     'min-w-11 min-h-11',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
-    'disabled:pointer-events-none disabled:opacity-40'
+    'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-light/35 dark:focus-visible:ring-brand-dark/40',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
   ],
   {
     variants: {
       variant: {
-        primary: [
-          'text-white',
-          'bg-btn-primary',
-          'border-transparent',
-          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
-          'hover:bg-btn-primary-hover',
-          'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+        primary: ['text-white', 'bg-btn-primary hover:bg-btn-primary-hover active:bg-btn-primary-active', 'border-0'],
+        secondary: [
+          'text-brand-light dark:text-text-dark',
+          'bg-red-tint-subtle hover:bg-red-tint-active active:bg-red-tint-active',
+          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light'
+        ],
+        outlined: [
+          'text-brand-light dark:text-text-dark',
+          'hover:text-text-dark',
+          'bg-red-tint-subtle hover:bg-btn-primary-hover active:bg-red-tint-active',
+          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light'
         ],
         ghost: [
           'text-text-light dark:text-text-dark',
-          'bg-transparent dark:bg-transparent',
-          'border-transparent',
-          'hover:bg-white-tint-faint',
-          'hover:border-transparent',
-          'dark:hover:bg-white-tint-faint'
+          'bg-transparent',
+          'border border-transparent',
+          'hover:bg-black-tint-low dark:hover:bg-white-tint-faint'
         ],
         light: [
           'text-brand-light dark:text-brand-dark',
-          'border-transparent',
-          'bg-transparent',
-          'hover:text-brand-light-dark',
-          'dark:hover:text-brand-dark-light',
+          'border border-transparent bg-transparent',
+          'hover:text-brand-light-dark dark:hover:text-brand-dark-light',
           'hover:bg-red-tint-subtle'
-        ],
-        secondary: [
-          'text-text-light dark:text-text-dark',
-          'bg-surface-light dark:bg-surface-dark',
-          'border-border-light dark:border-border-dark',
-          'hover:bg-red-tint-subtle dark:hover:bg-red-tint-subtle',
-          'hover:border-border-strong-light dark:hover:border-border-strong-dark',
-          'hover:shadow-glow-btn-secondary-light dark:hover:shadow-glow-btn-secondary'
-        ],
-        outlined: [
-          'text-brand-light dark:text-brand-dark',
-          'border-brand-light dark:border-brand-dark',
-          'bg-transparent',
-          'hover:text-white dark:hover:text-white',
-          'hover:bg-btn-primary',
-          'hover:border-transparent',
-          'hover:shadow-glow-btn-primary-light dark:hover:shadow-glow-btn-primary'
         ]
       },
       rounded: {
@@ -62,54 +46,110 @@ export const iconButtonVariants = cva(
         false: 'rounded-md'
       },
       shadow: {
-        true: 'hover:shadow-glow-btn-secondary-light dark:hover:shadow-glow-btn-secondary',
+        true: '',
         false: ''
+      },
+      size: {
+        sm: 'h-11 w-11',
+        md: 'h-12 w-12',
+        lg: 'h-14 w-14'
       }
     },
+    compoundVariants: [
+      {
+        variant: 'primary',
+        shadow: true,
+        class:
+          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+      },
+      {
+        variant: ['secondary', 'outlined'],
+        shadow: true,
+        class:
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
+      }
+    ],
     defaultVariants: {
       variant: 'primary',
-      rounded: false,
-      shadow: false
+      rounded: true,
+      shadow: true,
+      size: 'md'
     }
   }
 );
 
-type IconButtonVariant = VariantProps<typeof iconButtonVariants>['variant'];
-export type IconButtonProps = {
-  /**
-   * @control select
-   * @default primary
-   */
-  variant?: IconButtonVariant;
-  /** @control text */
-  icon?: DynamicIconName;
-  /**
-   * @control text
-   * @default 20
-   */
-  size?: IconSizes;
-  /**
-   * @control boolean
-   * @default false
-   */
-  rounded?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  shadow?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  disabled?: boolean;
-  /** @control text */
-  title?: string;
-  /** @control text */
-  className?: string;
-  /**
-   * @control boolean
-   * @default false
-   */
-  'aria-pressed'?: boolean;
-};
+type IconButtonVariantProps = VariantProps<typeof iconButtonVariants>;
+export type IconButtonSize = NonNullable<IconButtonVariantProps['size']>;
+type NativeButtonType = 'button' | 'submit' | 'reset';
+type NativeIconButtonProps = Omit<
+  ComponentProps<'button'>,
+  'aria-label' | 'aria-pressed' | 'children' | 'className' | 'disabled' | 'title' | 'type'
+>;
+type IconButtonAccessibleName =
+  | {
+      /** @control text */
+      title: string;
+      /** @control text */
+      ariaLabel?: string;
+      /** @control text */
+      'aria-label'?: string;
+    }
+  | {
+      /** @control text */
+      title?: string;
+      /** @control text */
+      ariaLabel: string;
+      /** @control text */
+      'aria-label'?: string;
+    }
+  | {
+      /** @control text */
+      title?: string;
+      /** @control text */
+      ariaLabel?: string;
+      /** @control text */
+      'aria-label': string;
+    };
+
+export type IconButtonProps = NativeIconButtonProps &
+  IconButtonAccessibleName & {
+    /**
+     * @control select
+     * @default primary
+     */
+    variant?: IconButtonVariantProps['variant'];
+    /** @control text */
+    icon?: DynamicIconName;
+    /**
+     * @control select
+     * @default md
+     */
+    size?: IconButtonSize | IconSizes;
+    /**
+     * @control select
+     * @default button
+     */
+    type?: NativeButtonType;
+    /**
+     * @control boolean
+     * @default true
+     */
+    rounded?: IconButtonVariantProps['rounded'];
+    /**
+     * @control boolean
+     * @default true
+     */
+    shadow?: IconButtonVariantProps['shadow'];
+    /**
+     * @control boolean
+     * @default false
+     */
+    disabled?: boolean;
+    /** @control text */
+    className?: string;
+    /**
+     * @control boolean
+     * @default false
+     */
+    'aria-pressed'?: boolean;
+  };
