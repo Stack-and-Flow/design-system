@@ -4,8 +4,8 @@ import type { ComponentProps } from 'react';
 export const dividerVariants = cva('shrink-0', {
   variants: {
     orientation: {
-      horizontal: 'h-px',
-      vertical: 'w-px'
+      horizontal: '',
+      vertical: ''
     },
     size: {
       xs: '',
@@ -20,10 +20,10 @@ export const dividerVariants = cva('shrink-0', {
       none: 'rounded-none'
     },
     thickness: {
-      xs: 'p-0',
-      sm: 'p-0.5',
-      md: 'p-0-75',
-      lg: 'p-1-25'
+      xs: '',
+      sm: '',
+      md: '',
+      lg: ''
     }
   },
   compoundVariants: [
@@ -75,7 +75,7 @@ export const dividerVariants = cva('shrink-0', {
     {
       orientation: 'vertical',
       size: 'lg',
-      class: 'h-18'
+      class: 'h-20'
     },
     {
       orientation: 'vertical',
@@ -86,6 +86,46 @@ export const dividerVariants = cva('shrink-0', {
       orientation: 'vertical',
       size: 'full',
       class: 'h-full'
+    },
+    {
+      orientation: 'horizontal',
+      thickness: 'xs',
+      class: 'h-px'
+    },
+    {
+      orientation: 'horizontal',
+      thickness: 'sm',
+      class: 'h-0.5'
+    },
+    {
+      orientation: 'horizontal',
+      thickness: 'md',
+      class: 'h-0-75'
+    },
+    {
+      orientation: 'horizontal',
+      thickness: 'lg',
+      class: 'h-1-25'
+    },
+    {
+      orientation: 'vertical',
+      thickness: 'xs',
+      class: 'w-px'
+    },
+    {
+      orientation: 'vertical',
+      thickness: 'sm',
+      class: 'w-0.5'
+    },
+    {
+      orientation: 'vertical',
+      thickness: 'md',
+      class: 'w-0-75'
+    },
+    {
+      orientation: 'vertical',
+      thickness: 'lg',
+      class: 'w-1-25'
     }
   ],
   defaultVariants: {

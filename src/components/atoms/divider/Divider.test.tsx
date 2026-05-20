@@ -24,7 +24,8 @@ describe('useDivider — logic', () => {
   it('returns token-backed classes for divider variants and color', () => {
     const { result } = renderHook(() => useDivider({ orientation: 'vertical', size: 'lg', thickness: 'md' }));
 
-    expect(result.current.className).toContain('h-18');
+    expect(result.current.className).toContain('h-20');
+    expect(result.current.className).toContain('w-0-75');
     expect(result.current.className).toContain('bg-primary');
   });
 

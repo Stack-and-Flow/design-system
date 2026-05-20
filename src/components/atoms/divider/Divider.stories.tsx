@@ -54,7 +54,7 @@ export const Default: Story = {
 /** Shows the semantic difference between a default separator and a decorative-only divider. */
 export const Decorative: Story = {
   render: () => (
-    <div className='grid w-168 gap-4 md:grid-cols-2'>
+    <div className='grid gap-4 md:grid-cols-2'>
       <section className={`${surfaceClass} flex flex-col gap-4`}>
         <VariantLabel>Semantic separator</VariantLabel>
         <p className={bodyTextClass}>Assistive technology receives role="separator" and the orientation.</p>
@@ -72,7 +72,7 @@ export const Decorative: Story = {
 /** Shows a divider filling the available inline size, and a vertical divider filling a defined parent height. */
 export const FullSize: Story = {
   render: () => (
-    <div className='grid w-168 gap-4 md:grid-cols-2'>
+    <div className='grid gap-4 md:grid-cols-2'>
       <section className={`${surfaceClass} flex flex-col gap-4`}>
         <VariantLabel>Horizontal full</VariantLabel>
         <p className={bodyTextClass}>Fills the available width of its parent.</p>
