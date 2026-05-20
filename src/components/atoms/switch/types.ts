@@ -55,16 +55,16 @@ export const switchTrack = cva(
     'peer-checked:shadow-glow-btn-secondary-hover-light dark:peer-checked:shadow-glow-btn-secondary-hover',
     'active:scale-[0.98]',
     'peer-focus-visible:shadow-glow-focus-light dark:peer-focus-visible:shadow-glow-focus-dark',
-    'peer-checked:[&>span[data-thumb=true]]:bg-white',
+    'peer-checked:[&>span[data-thumb=true]]:bg-white dark:peer-checked:[&>span[data-thumb=true]]:bg-white',
     'peer-checked:[&>span[data-thumb=true]>span[data-thumb-icon=true]]:text-brand-light dark:peer-checked:[&>span[data-thumb=true]>span[data-thumb-icon=true]]:text-brand-dark-dark',
     'peer-checked:[&>span[data-start-content=true]]:opacity-0 peer-checked:[&>span[data-end-content=true]]:opacity-100'
   ],
   {
     variants: {
       size: {
-        sm: 'h-5 w-9 peer-checked:[&>span[data-thumb=true]]:translate-x-3.5',
-        md: 'h-6 w-12 peer-checked:[&>span[data-thumb=true]]:translate-x-5.5',
-        lg: 'h-8 w-16 peer-checked:[&>span[data-thumb=true]]:translate-x-7.5'
+        sm: 'h-5 w-9 peer-checked:[&>span[data-thumb=true]]:translate-x-[14px]',
+        md: 'h-6 w-12 peer-checked:[&>span[data-thumb=true]]:translate-x-[22px]',
+        lg: 'h-8 w-16 peer-checked:[&>span[data-thumb=true]]:translate-x-[30px]'
       },
       color: {
         default: [

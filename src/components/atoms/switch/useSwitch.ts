@@ -126,4 +126,12 @@ const getAriaLabel = (
   ariaLabel: string | undefined,
   nativeAriaLabel: string | undefined,
   label: string | undefined
-): string | undefined => ariaLabel ?? nativeAriaLabel ?? label;
+): string => {
+  const accessibleName = ariaLabel ?? nativeAriaLabel ?? label;
+
+  if (!accessibleName) {
+    throw new Error('Switch requires an accessible name. Provide label, ariaLabel, or aria-label.');
+  }
+
+  return accessibleName;
+};

@@ -32,6 +32,16 @@ describe('useSwitch — logic', () => {
     expect(renderHook(() => useSwitch({ label: 'Visible label' })).result.current.ariaLabel).toBe('Visible label');
   });
 
+  it('throws when no accessible name is available at runtime', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    expect(() => renderHook(() => useSwitch({} as never))).toThrow(
+      'Switch requires an accessible name. Provide label, ariaLabel, or aria-label.'
+    );
+
+    consoleError.mockRestore();
+  });
+
   it('returns computed class names without exposing CVA logic to the component', () => {
     const { result } = renderHook(() => useSwitch({ label: 'Notifications', variant: 'shadow' }));
     expect(result.current.rootClassName).toEqual(expect.any(String));
