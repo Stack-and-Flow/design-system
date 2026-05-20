@@ -95,7 +95,24 @@ Antes de abrir un PR, verifica:
 
 ### Commits
 
-Seguimos estrictamente **Conventional Commits**:
+Seguimos estrictamente **Conventional Commits**. El hook `commit-msg` ejecuta `commitlint` automáticamente y rechaza cualquier commit que no respete el formato.
+
+Formato obligatorio:
+
+```text
+<type>(<scope opcional>): <descripción>
+```
+
+Ejemplos válidos:
+
+```text
+feat(button): add loading state
+fix(calendar): correct keyboard navigation
+chore(infra): update lint tooling
+docs: update contribution guide
+```
+
+Tipos frecuentes:
 
 - `feat:` para nuevas funcionalidades o componentes.
 - `fix:` para corrección de bugs.
@@ -104,6 +121,12 @@ Seguimos estrictamente **Conventional Commits**:
 - `refactor:` para cambios de código que no corrigen un bug ni añaden funcionalidad.
 - `style:` para formato, punto y coma omitidos, etc.
 - `test:` para añadir o corregir tests.
+
+Antes de crear un commit, puedes validar un mensaje manualmente:
+
+```bash
+echo "feat(button): add loading state" | pnpm exec commitlint
+```
 
 ### Proceso de Pull Request
 
