@@ -65,6 +65,14 @@ describe('useIconButton — logic', () => {
     expect(result.current.size).toBe('md');
   });
 
+  it('omits glow classes when shadow is disabled', () => {
+    const { result } = renderHook(() =>
+      useIconButton({ icon: 'star', title: 'Favorite without glow', variant: 'secondary', shadow: false })
+    );
+
+    expect(result.current.className).not.toContain('shadow-glow');
+  });
+
   it('re-exports the component as a named export from the barrel', () => {
     expect(IconButtonFromIndex).toBe(IconButton);
   });

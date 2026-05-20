@@ -16,27 +16,17 @@ export const iconButtonVariants = cva(
   {
     variants: {
       variant: {
-        primary: [
-          'text-white',
-          'bg-btn-primary hover:bg-btn-primary-hover active:bg-btn-primary-active',
-          'border-0',
-          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
-          'hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
-        ],
+        primary: ['text-white', 'bg-btn-primary hover:bg-btn-primary-hover active:bg-btn-primary-active', 'border-0'],
         secondary: [
           'text-brand-light dark:text-text-dark',
           'bg-red-tint-subtle hover:bg-red-tint-active active:bg-red-tint-active',
-          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light',
-          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
+          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light'
         ],
         outlined: [
           'text-brand-light dark:text-text-dark',
           'hover:text-text-dark',
           'bg-red-tint-subtle hover:bg-btn-primary-hover active:bg-red-tint-active',
-          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light',
-          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
+          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light'
         ],
         ghost: [
           'text-text-light dark:text-text-dark',
@@ -57,7 +47,7 @@ export const iconButtonVariants = cva(
       },
       shadow: {
         true: '',
-        false: 'shadow-none hover:shadow-none'
+        false: ''
       },
       size: {
         sm: 'h-11 w-11',
@@ -65,6 +55,20 @@ export const iconButtonVariants = cva(
         lg: 'h-14 w-14'
       }
     },
+    compoundVariants: [
+      {
+        variant: 'primary',
+        shadow: true,
+        class:
+          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+      },
+      {
+        variant: ['secondary', 'outlined'],
+        shadow: true,
+        class:
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
+      }
+    ],
     defaultVariants: {
       variant: 'primary',
       rounded: true,
