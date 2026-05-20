@@ -58,7 +58,7 @@ Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` wi
 - Never modify `theme.css` without explicit user confirmation
 - Never add dependencies without explicit user confirmation
 - English only — code, comments, stories
-- Commit and PR titles must follow the commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>`. Allowed types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`. Use scopes for domains such as `a11y`, `tokens`, or `infra` instead of inventing custom types.
+- Commit messages must follow the commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>`. PR titles should follow the same format for review consistency. Allowed types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`. Use scopes for domains such as `a11y`, `tokens`, or `infra` instead of inventing custom types.
 
 ---
 

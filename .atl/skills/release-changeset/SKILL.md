@@ -114,7 +114,7 @@ Find commits that introduced user-visible changes but have no corresponding chan
 
 ### Conventional Commit contract
 
-Commit messages and PR titles must follow the commitlint-enforced format:
+Commit messages must follow the commitlint-enforced format. PR titles should follow the same Conventional Commit format for review consistency:
 
 ```text
 <type>(<optional scope>): <description>

@@ -111,7 +111,7 @@ fix(a11y): improve input focus ring visibility
 chore(tokens): update spacing token docs
 ```
 
-Format: `type(scope): description`
+Format: `<type>(<optional scope>): <description>` (`scope` is optional)
 
 Common types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`.
 

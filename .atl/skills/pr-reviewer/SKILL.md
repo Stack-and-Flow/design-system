@@ -60,7 +60,7 @@ Report the failing criterion and stop — do not continue with the detailed chec
 |-------|--------------|
 | CI is failing | Look for test, build, or lint failures in the PR |
 | No linked issue | PR description must contain `Closes #NNN` |
-| Invalid PR title | PR title must match commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>` |
+| Invalid PR title | PR title must follow Conventional Commit format: `<type>(<optional scope>): <description>` |
 | `interface` used | Grep for `interface ` in all `.ts` / `.tsx` files |
 | `any` used explicitly | Grep for `: any` or `as any` in all `.ts` / `.tsx` files |
 | Container/Presentational mixed | Logic (useState, useRef, handlers, CVA calls) found in `.tsx` file |

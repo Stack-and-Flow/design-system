@@ -36,7 +36,7 @@ Rules:
 
 ## Conventional Commits
 
-Commit messages and PR titles must follow the commitlint-enforced Conventional Commit format:
+Commit messages must follow the commitlint-enforced Conventional Commit format. PR titles should follow the same format for review consistency:
 
 ```text
 <type>(<optional scope>): <description>
