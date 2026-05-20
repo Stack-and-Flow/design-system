@@ -9,7 +9,9 @@ overrides:
   ws: 8.20.1
 
 patchedDependencies:
-  storybook-dark-mode@4.0.2: 56adb5592ce6441b2d77277017d3a9873b6b08e80049272076badc3c3f39c4e2
+  storybook-dark-mode@4.0.2:
+    hash: 56adb5592ce6441b2d77277017d3a9873b6b08e80049272076badc3c3f39c4e2
+    path: patches/storybook-dark-mode@4.0.2.patch
 
 importers:
 
