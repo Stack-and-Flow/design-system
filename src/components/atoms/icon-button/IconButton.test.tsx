@@ -63,11 +63,11 @@ describe('useIconButton — logic', () => {
     expect(compactResult.current.className).not.toBe(largeResult.current.className);
   });
 
-  it('maps compact legacy numeric icon sizes to the xs button target', () => {
+  it('keeps compact legacy numeric icon sizes on the sm button target', () => {
     const { result } = renderHook(() => useIconButton({ icon: 'menu', title: 'Open menu', size: 14 }));
 
     expect(result.current.iconSize).toBe(14);
-    expect(result.current.size).toBe('xs');
+    expect(result.current.size).toBe('sm');
   });
 
   it('keeps legacy numeric icon sizes while deriving the closest button size', () => {
