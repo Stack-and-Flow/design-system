@@ -63,6 +63,7 @@ export const buttonVariants = cva(
         false: ''
       },
       size: {
+        xs: 'h-9 px-2 fs-xs',
         sm: 'px-sm h-11 fs-small',
         md: 'px-md h-11 fs-base',
         lg: 'px-lg h-12 fs-h6'
@@ -84,7 +85,7 @@ export const buttonVariants = cva(
 
 type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
 type ButtonTypeVariants = 'button' | 'submit' | 'reset';
-type ButtonSizeVariants = 'md' | 'sm' | 'lg';
+type ButtonSizeVariants = 'xs' | 'sm' | 'md' | 'lg';
 type NativeButtonProps = Omit<ComponentProps<'button'>, 'type' | 'disabled' | 'className' | 'children' | 'aria-label'>;
 type ButtonAccessibleContent =
   | {

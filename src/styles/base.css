@@ -53,6 +53,10 @@
     line-height: 1.2;
     font-weight: 600;
   }
+  .fs-xs {
+    font-size: var(--text-xs);
+    line-height: 1.35;
+  }
   .fs-base {
     font-size: var(--text-body-compact);
     line-height: 1.5;
@@ -85,6 +89,9 @@
     }
     .fs-h6 {
       font-size: var(--text-h6);
+    }
+    .fs-xs {
+      font-size: var(--text-xs);
     }
     .fs-base {
       font-size: var(--text-body);

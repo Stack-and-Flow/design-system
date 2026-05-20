@@ -19,14 +19,14 @@ export const linkVariants = cva(
           '[&>svg]:mr-1 [&>svg]:inline-block [&>svg]:align-middle'
         ],
         button: [
-          'inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-pill border border-transparent font-semibold tracking-ui text-white no-underline',
+          'inline-flex items-center justify-center whitespace-nowrap rounded-pill border border-transparent font-semibold tracking-ui text-white no-underline',
           'bg-btn-primary shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
           'transition-[box-shadow,background,transform] duration-250 ease-[ease]',
           'hover:bg-btn-primary-hover hover:text-white hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover',
           'motion-safe:active:scale-[0.98]'
         ],
         outlined: [
-          'inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-pill border font-semibold tracking-ui no-underline',
+          'inline-flex items-center justify-center whitespace-nowrap rounded-pill border font-semibold tracking-ui no-underline',
           'border-red-tint-border bg-red-tint-subtle text-brand-light shadow-glow-btn-secondary-light dark:text-text-dark dark:shadow-glow-btn-secondary',
           'transition-[box-shadow,background,border-color,transform] duration-250 ease-[ease]',
           'hover:border-brand-light/80 hover:bg-red-tint-low hover:text-brand-light-darkest hover:shadow-glow-btn-secondary-hover-light',
@@ -35,6 +35,7 @@ export const linkVariants = cva(
         ]
       },
       size: {
+        xs: 'fs-xs',
         sm: 'fs-small',
         md: 'fs-base',
         lg: 'fs-h5'
@@ -45,9 +46,10 @@ export const linkVariants = cva(
       }
     },
     compoundVariants: [
-      { variant: ['button', 'outlined'], size: 'sm', class: 'h-9 px-sm' },
-      { variant: ['button', 'outlined'], size: 'md', class: 'h-11 px-md' },
-      { variant: ['button', 'outlined'], size: 'lg', class: 'h-12 px-lg' }
+      { variant: ['button', 'outlined'], size: 'xs', class: 'h-9 gap-0-75 px-2' },
+      { variant: ['button', 'outlined'], size: 'sm', class: 'h-11 gap-1 px-sm' },
+      { variant: ['button', 'outlined'], size: 'md', class: 'h-11 gap-1.5 px-md' },
+      { variant: ['button', 'outlined'], size: 'lg', class: 'h-12 gap-2 px-lg' }
     ],
     defaultVariants: {
       variant: 'regular',
@@ -59,7 +61,7 @@ export const linkVariants = cva(
 
 export type LinkVariant = 'regular' | 'button' | 'outlined';
 export type LinkTarget = '_blank' | '_self' | '_parent' | '_top';
-export type LinkSize = 'sm' | 'md' | 'lg';
+export type LinkSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export type LinkProps = Omit<ComponentProps<'a'>, 'children' | 'disabled' | 'target'> &
   VariantProps<typeof linkVariants> & {

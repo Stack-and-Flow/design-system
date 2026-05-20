@@ -9,7 +9,6 @@ export const iconButtonVariants = cva(
     'transition-[box-shadow,background,border-color,transform,color] duration-250 ease-out',
     'inline-flex shrink-0 items-center justify-center',
     'whitespace-nowrap',
-    'min-w-11 min-h-11',
     'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-light/35 dark:focus-visible:ring-brand-dark/40',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
   ],
@@ -50,6 +49,7 @@ export const iconButtonVariants = cva(
         false: ''
       },
       size: {
+        xs: 'h-9 w-9',
         sm: 'h-11 w-11',
         md: 'h-12 w-12',
         lg: 'h-14 w-14'

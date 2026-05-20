@@ -639,7 +639,9 @@ Todos los valores de texto sobre sus respectivos fondos cumplen WCAG AA (4.5:1) 
 > ⚠️ `#6a6b6c` (disabled/muted) no cumple AA sobre los fondos dark — es correcto: WCAG exime explícitamente los estados `disabled` del requisito de contraste.
 
 ### Targets táctiles
-- Botones pill: altura mínima `44px`, padding `10px 20px`
+- Botones pill: altura mínima por defecto `44px`
+- Escala de acciones `xs | sm | md | lg`: `xs` es la variante compacta densa para `Button`, `IconButton` y `Link` CTA (`button` / `outlined`), con menor altura y padding; usá `sm` o superior cuando necesitás conservar el target de `44px`
+- `Link` `regular` sigue siendo tipográfico e inline; los CTA `sm` y superiores mantienen el área mínima de `44px`
 - Nav links: área mínima `44px` de alto incluyendo padding
 - Elementos de menú: `padding: 7px 12px` mínimo con font 14px
 

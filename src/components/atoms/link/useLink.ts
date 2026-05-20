@@ -33,7 +33,7 @@ export const useLink = ({
   onKeyDown,
   ...rest
 }: LinkProps): UseLinkReturn => {
-  const iconWidth = { sm: 18, md: 20, lg: 24 }[size] ?? 20;
+  const iconWidth = { xs: 16, sm: 18, md: 20, lg: 24 }[size] ?? 20;
   const isExternal = target === '_blank';
   const ariaLabel = ariaLabelProp ?? title ?? (typeof children === 'string' ? children : undefined);
   const isAction = !href;
