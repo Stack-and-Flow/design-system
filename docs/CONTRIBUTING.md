@@ -133,7 +133,7 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 1. Sube tu rama y abre un PR contra `main`.
 2. Usa un título de PR con el mismo formato Conventional Commit, por ejemplo `feat(button): add loading state`.
 3. Puedes pedir revisión automática a Copilot hasta que esté listo para revisión humana.
-4. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
+4. El PR DEBE pasar todos los checks de CI, incluidos tests, build de Storybook, accesibilidad y escaneos de seguridad.
 5. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
 
 ### Checklist del PR
@@ -149,11 +149,16 @@ Antes de pedir revisión, verifica:
 - [ ] Se usan tokens de `theme.css` (sin colores ni espaciados hardcodeados).
 - [ ] Se implementan atributos ARIA en elementos interactivos.
 - [ ] Se usan Conventional Commits en mensajes de commit y título del PR.
+- [ ] Los checks de seguridad pasan o los falsos positivos están documentados en el PR.
 - [ ] Estados visuales implementados: hover, focus, active/pressed, disabled.
 - [ ] Focus ring via `box-shadow` — nunca `outline` sin alternativa visible.
 - [ ] Disabled via `opacity: 0.4` — sin sustitución de color.
 - [ ] Sin `transition: all` — propiedades específicas enumeradas.
 - [ ] Touch target mínimo `44×44px` en elementos interactivos.
+
+### Checks de seguridad
+
+Los pull requests ejecutan audit de dependencias y escaneo de secretos antes del merge. Consulta [SECURITY.md](./SECURITY.md) para ver la política, los pasos de remediación y el manejo de falsos positivos.
 
 ---
 

@@ -133,7 +133,7 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 1. Push your branch and open a PR against `main`.
 2. Use a PR title with the same Conventional Commit format, for example `feat(button): add loading state`.
 3. You can request automated Copilot review until the PR is ready for human review.
-4. The PR MUST pass all CI checks (Biome formatting/linting, TypeScript strict checks).
+4. The PR MUST pass all CI checks, including tests, Storybook build, accessibility, and security scans.
 5. The PR MUST be reviewed by at least one core maintainer before merging.
 
 ### PR Checklist
@@ -149,6 +149,11 @@ Before requesting a review, verify:
 - [ ] Tokens from `theme.css` are used (no hardcoded colors or spacing).
 - [ ] ARIA attributes are implemented for interactable elements.
 - [ ] Conventional Commits are used for commit messages and the PR title.
+- [ ] Security checks pass, or any false positives are documented in the PR.
+
+### Security checks
+
+Pull requests run dependency audit and secrets scanning before merge. See [SECURITY.en.md](./SECURITY.en.md) for the policy, remediation steps, and false-positive handling.
 
 ---
 
