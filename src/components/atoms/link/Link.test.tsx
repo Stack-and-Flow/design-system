@@ -73,6 +73,20 @@ describe('useLink — logic', () => {
     const { result } = renderHook(() => useLink({ children: 'Docs', variant: 'button' }));
     expect(result.current.tabIndex).toBe(0);
   });
+
+  it('uses compact icon sizing for xs links', () => {
+    const { result } = renderHook(() => useLink({ children: 'Docs', size: 'xs', icon: 'arrow-right' }));
+    expect(result.current.iconWidth).toBe(16);
+  });
+
+  it('makes CTA-style xs visibly shorter while keeping sm at the 44px target height', () => {
+    const { result: compactResult } = renderHook(() => useLink({ children: 'Docs', variant: 'button', size: 'xs' }));
+    const { result: smallResult } = renderHook(() => useLink({ children: 'Docs', variant: 'outlined', size: 'sm' }));
+
+    expect(compactResult.current.className).toContain('h-9');
+    expect(compactResult.current.className).toContain('px-2');
+    expect(smallResult.current.className).toContain('h-11');
+  });
 });
 
 // ─────────────────────────────────────────────

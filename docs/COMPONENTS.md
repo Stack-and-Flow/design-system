@@ -65,7 +65,10 @@ Never use `outline: none` without an alternative visible focus indicator.
 `border-image` does not work with `border-radius` — the gradient clips to a rectangle, destroying the pill shape. The correct technique uses `::before` absolutely positioned with `inset: -1.5px` and `z-index: -1`, with the gradient as its `background` and `border-radius: inherit`.
 
 **Rule 10 — Minimum touch target is 44×44px for all interactive elements.**
-Buttons: minimum `height: 44px`, `padding: 10px 20px`. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. This is a hard floor — never reduce below it.
+Buttons: default minimum `height: 44px`. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Only the explicit `xs` action size may go below this for dense interfaces; use `sm` or above when the 44px target is required.
+
+**Action size scale — `xs | sm | md | lg`.**
+For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the dense compact size: reduce typography, icon size, gap, horizontal padding, and height so it is visibly smaller than `sm`. `Link` `regular` remains inline typography-only, while CTA-style `sm` and above keep the 44px target.
 
 **Rule 11 — Never animate layout-forcing properties.**
 Do not animate `width`, `height`, `top`, `left`, `margin`, `padding`. These trigger layout reflow on every frame. For position animations use `transform: translateY/translateX`. For size animations use `transform: scale`.
@@ -1004,7 +1007,7 @@ background: linear-gradient(
 - [ ] Primary: white `#ffffff` text over red gradient — contrast passes in both modes
 - [ ] Secondary dark: `color: #ffffff` over `rgba(255,0,54,0.06)` — visually dark background context; border defines the affordance
 - [ ] Secondary light: `color: #cc0030` — NEVER `#ff0036` in light mode (insufficient contrast over white)
-- [ ] Touch target includes padding: `padding: 10px 20px` minimum
+- [ ] Touch target remains at least `44px` for `sm` and above; compact `xs` actions are the documented dense exception with reduced height and padding
 - [ ] `role="button"` if implemented as non-`<button>` element
 
 ### Inputs

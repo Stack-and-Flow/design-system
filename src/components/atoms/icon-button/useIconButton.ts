@@ -72,6 +72,10 @@ const getButtonSize = (size: NonNullable<IconButtonProps['size']>): IconButtonSi
     return size;
   }
 
+  if (size <= 14) {
+    return 'xs';
+  }
+
   if (size <= 16) {
     return 'sm';
   }
@@ -89,6 +93,7 @@ const getIconSize = (size: NonNullable<IconButtonProps['size']>, buttonSize: Ico
   }
 
   const iconSizes = {
+    xs: 14,
     sm: 16,
     md: 20,
     lg: 24

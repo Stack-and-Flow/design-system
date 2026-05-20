@@ -10,7 +10,7 @@ import { IconButton } from './IconButton';
  * Uses Lucide dynamic icons for the visual glyph.
  *
  * ## Usage Guide
- * Provide a meaningful accessible name with `title`, `ariaLabel`, or `aria-label`. Named sizes (`sm`, `md`, `lg`) change both the button target and the icon; legacy numeric sizes keep the exact icon size and map the button target to the closest named size. Use `shadow={false}` only when a quiet context needs to suppress glow, and use `aria-pressed` only to announce toggle-button state to assistive technology.
+ * Provide a meaningful accessible name with `title`, `ariaLabel`, or `aria-label`. Use `xs` for dense, visibly shorter controls and `sm` or above for the 44px action target; legacy numeric sizes keep the exact icon size and map the button target to the closest named size. Use `shadow={false}` only when a quiet context needs to suppress glow, and use `aria-pressed` only to announce toggle-button state to assistive technology.
  */
 const meta: Meta<typeof IconButton> = {
   title: 'Atoms/IconButton',
@@ -54,11 +54,12 @@ export const Variant: Story = {
 };
 
 /**
- * Shows size options changing the full button target and the icon together.
+ * Shows the full `xs` to `lg` size scale with `xs` visibly shorter than `sm`.
  */
 export const Size: Story = {
   render: () => (
     <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton icon='menu' size='xs' title='Open extra small menu' onClick={action('xs-click')} />
       <IconButton icon='menu' size='sm' title='Open small menu' onClick={action('small-click')} />
       <IconButton icon='menu' size='md' title='Open medium menu' onClick={action('medium-click')} />
       <IconButton icon='menu' size='lg' title='Open large menu' onClick={action('large-click')} />

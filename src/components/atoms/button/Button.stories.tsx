@@ -10,7 +10,7 @@ import { Button } from './Button';
  * Uses Lucide icons through the `icon` prop and `spinners-react` for loading feedback.
  *
  * ## Usage Guide
- * Use `primary` for the main action, `secondary` or `outlined` for supporting actions, and `ghost` or `light` for low-emphasis actions. Use `isLoading` while async work is pending so repeated submissions are blocked.
+ * Use `primary` for the main action, `secondary` or `outlined` for supporting actions, and `ghost` or `light` for low-emphasis actions. Use `size='xs'` for dense controls with lower height and tighter padding. Use `isLoading` while async work is pending so repeated submissions are blocked.
  */
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Button',
@@ -52,11 +52,12 @@ export const Variant: Story = {
 };
 
 /**
- * Shows size options while preserving the minimum interactive target.
+ * Shows the full `xs` to `lg` size scale with `xs` visibly shorter than `sm`.
  */
 export const Size: Story = {
   render: () => (
     <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Extra small' size='xs' onClick={action('xs-click')} />
       <Button text='Small' size='sm' onClick={action('small-click')} />
       <Button text='Medium' size='md' onClick={action('medium-click')} />
       <Button text='Large' size='lg' onClick={action('large-click')} />

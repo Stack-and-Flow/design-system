@@ -19,7 +19,7 @@ const VariantRow = ({ children }: { children: ReactNode }) => (
  * Uses `lucide-react/dynamic.js` when the optional `icon` prop is provided.
  *
  * ## Usage Guide
- * Use `regular` for inline navigation, `outlined` for secondary call-to-action links, and `button` when a link must visually match a primary action while preserving link semantics when `href` is present. When `href` is omitted, Link behaves as a local action control with button semantics and keyboard activation.
+ * Use `regular` for inline navigation, `outlined` for secondary call-to-action links, and `button` when a link must visually match a primary action while preserving link semantics when `href` is present. `size='xs'` makes action links denser through smaller type, icon, gap, padding, and height; use `sm` or above when the 44px action target is required. When `href` is omitted, Link behaves as a local action control with button semantics and keyboard activation.
  */
 const meta: Meta<typeof Link> = {
   title: 'Atoms/Link',
@@ -103,13 +103,16 @@ export const Shadow: Story = {
 };
 
 /**
- * Shows how size changes typography and horizontal rhythm while preserving each variant treatment.
+ * Shows the full `xs` to `lg` size scale with `xs` as the visibly shorter dense CTA size.
  */
 export const Sizes: Story = {
   render: () => (
     <StoryCanvas>
       <div className='grid gap-4'>
         <VariantRow>
+          <Link size='xs' href='https://github.com/egdev6'>
+            Extra small inline
+          </Link>
           <Link size='sm' href='https://github.com/egdev6'>
             Small inline
           </Link>
@@ -121,6 +124,9 @@ export const Sizes: Story = {
           </Link>
         </VariantRow>
         <VariantRow>
+          <Link size='xs' variant='outlined' href='https://github.com/egdev6'>
+            Extra small outlined
+          </Link>
           <Link size='sm' variant='outlined' href='https://github.com/egdev6'>
             Small outlined
           </Link>
@@ -132,6 +138,9 @@ export const Sizes: Story = {
           </Link>
         </VariantRow>
         <VariantRow>
+          <Link size='xs' variant='button' href='https://github.com/egdev6'>
+            Extra small button
+          </Link>
           <Link size='sm' variant='button' href='https://github.com/egdev6'>
             Small button
           </Link>

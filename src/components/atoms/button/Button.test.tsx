@@ -63,6 +63,11 @@ describe('useButton — logic', () => {
     expect(result.current.className).toEqual(expect.any(String));
   });
 
+  it('returns correct icon class for size xs', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', size: 'xs' }));
+    expect(result.current.iconSize).toBe('h-sm w-auto');
+  });
+
   it('returns correct icon class for size sm', () => {
     const { result } = renderHook(() => useButton({ text: 'Button', size: 'sm' }));
     expect(result.current.iconSize).toBe('h-md w-auto');
@@ -86,6 +91,13 @@ describe('useButton — logic', () => {
   it('passes native aria-label correctly to return value', () => {
     const { result } = renderHook(() => useButton({ 'aria-label': 'Submit form' }));
     expect(result.current.ariaLabel).toBe('Submit form');
+  });
+
+  it('derives compact classes from size xs', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', size: 'xs' }));
+    expect(result.current.className).toContain('h-9');
+    expect(result.current.className).toContain('px-2');
+    expect(result.current.contentClassName).toContain('gap-1');
   });
 
   it('derives content gap from the size prop', () => {

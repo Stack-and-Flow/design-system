@@ -75,6 +75,8 @@ const getAriaLabel = (
 
 const getIconSize = (size: NonNullable<ButtonProps['size']>): string => {
   switch (size) {
+    case 'xs':
+      return 'h-sm w-auto';
     case 'sm':
       return 'h-md w-auto';
     case 'lg':
@@ -86,6 +88,8 @@ const getIconSize = (size: NonNullable<ButtonProps['size']>): string => {
 
 const getContentGap = (size: NonNullable<ButtonProps['size']>): string => {
   switch (size) {
+    case 'xs':
+      return 'gap-1';
     case 'sm':
       return 'gap-1.5';
     case 'lg':

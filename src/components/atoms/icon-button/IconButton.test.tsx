@@ -48,14 +48,26 @@ describe('useIconButton — logic', () => {
   });
 
   it('derives icon size from the component size', () => {
+    const { result: compactResult } = renderHook(() => useIconButton({ icon: 'menu', title: 'Open menu', size: 'xs' }));
     const { result: smallResult } = renderHook(() => useIconButton({ icon: 'menu', title: 'Open menu', size: 'sm' }));
     const { result: largeResult } = renderHook(() => useIconButton({ icon: 'menu', title: 'Open menu', size: 'lg' }));
 
+    expect(compactResult.current.iconSize).toBe(14);
+    expect(compactResult.current.size).toBe('xs');
     expect(smallResult.current.iconSize).toBe(16);
     expect(smallResult.current.size).toBe('sm');
     expect(largeResult.current.iconSize).toBe(24);
     expect(largeResult.current.size).toBe('lg');
-    expect(smallResult.current.className).not.toBe(largeResult.current.className);
+    expect(compactResult.current.className).toContain('h-9');
+    expect(compactResult.current.className).toContain('w-9');
+    expect(compactResult.current.className).not.toBe(largeResult.current.className);
+  });
+
+  it('maps compact legacy numeric icon sizes to the xs button target', () => {
+    const { result } = renderHook(() => useIconButton({ icon: 'menu', title: 'Open menu', size: 14 }));
+
+    expect(result.current.iconSize).toBe(14);
+    expect(result.current.size).toBe('xs');
   });
 
   it('keeps legacy numeric icon sizes while deriving the closest button size', () => {
@@ -95,10 +107,10 @@ describe('IconButton — component behavior', () => {
   });
 
   it('renders the requested icon with the derived component size', () => {
-    render(<IconButton icon='menu' size='lg' title='Open menu' />);
+    render(<IconButton icon='menu' size='xs' title='Open menu' />);
 
     expect(screen.getByTestId('icon-button-icon')).toHaveAttribute('data-name', 'menu');
-    expect(screen.getByTestId('icon-button-icon')).toHaveAttribute('data-size', '24');
+    expect(screen.getByTestId('icon-button-icon')).toHaveAttribute('data-size', '14');
   });
 
   it('calls onClick when the button is clicked', async () => {
