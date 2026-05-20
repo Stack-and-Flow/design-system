@@ -64,8 +64,8 @@ Never use `outline: none` without an alternative visible focus indicator.
 **Rule 9 — Gradient borders use `::before` pseudo-element, never `border-image`.**
 `border-image` does not work with `border-radius` — the gradient clips to a rectangle, destroying the pill shape. The correct technique uses `::before` absolutely positioned with `inset: -1.5px` and `z-index: -1`, with the gradient as its `background` and `border-radius: inherit`.
 
-**Rule 10 — Minimum touch target is 44×44px for all interactive elements.**
-Buttons: default minimum `height: 44px`. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Only the explicit `xs` action size may go below this for dense interfaces; use `sm` or above when the 44px target is required.
+**Rule 10 — Default touch target is 44×44px for interactive elements.**
+Buttons and action-style links use a default minimum `height: 44px` from `sm` upward. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Only the explicit `xs` action size may go below this for dense interfaces; use `sm` or above when the 44px target is required.
 
 **Action size scale — `xs | sm | md | lg`.**
 For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the dense compact size: reduce typography, icon size, gap, horizontal padding, and height so it is visibly smaller than `sm`. `Link` `regular` remains inline typography-only, while CTA-style `sm` and above keep the 44px target.
