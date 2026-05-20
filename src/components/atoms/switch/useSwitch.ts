@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { type ChangeEvent, useState } from 'react';
+import { cn } from '@/lib/utils';
 import type { SwitchProps } from './types';
 import {
   switchBase,
@@ -11,62 +12,118 @@ import {
   switchTrack,
   switchWrapper
 } from './types';
+
+type UseSwitchReturn = Omit<
+  SwitchProps,
+  | 'aria-label'
+  | 'ariaChecked'
+  | 'ariaLabel'
+  | 'checked'
+  | 'className'
+  | 'color'
+  | 'defaultChecked'
+  | 'disabled'
+  | 'endContent'
+  | 'label'
+  | 'labelPlacement'
+  | 'onChange'
+  | 'role'
+  | 'rounded'
+  | 'size'
+  | 'startContent'
+  | 'thumbIcon'
+  | 'variant'
+> & {
+  ariaChecked: boolean;
+  ariaLabel?: string;
+  checked: boolean;
+  disabled: boolean;
+  endContent: SwitchProps['endContent'];
+  handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  inputRole: 'switch';
+  label: SwitchProps['label'];
+  rootClassName: string;
+  startContent: SwitchProps['startContent'];
+  switchEndContent: string;
+  switchHiddenInput: string;
+  switchLabel: string;
+  switchStartContent: string;
+  switchThumb: string;
+  switchThumbIcon: string;
+  switchTrack: string;
+  switchWrapper: string;
+  thumbIcon: SwitchProps['thumbIcon'];
+};
+
 export const useSwitch = ({
   label,
-  className = '',
+  className,
   size = 'md',
   color = 'default',
   labelPlacement = 'right',
   variant = 'default',
   rounded = true,
   checked: checkedProp,
-  defaultChecked,
+  defaultChecked = false,
   onChange,
   disabled = false,
-  thumbIcon = false,
-  startContent = null,
-  endContent = null,
+  thumbIcon,
+  startContent,
+  endContent,
   role,
   ariaChecked,
-  ariaLabel
-}: SwitchProps) => {
-  const [isChecked, setIsChecked] = useState(defaultChecked);
+  ariaLabel,
+  'aria-label': nativeAriaLabel,
+  ...inputProps
+}: SwitchProps): UseSwitchReturn => {
+  void role;
+  void ariaChecked;
 
+  const actualDisabled = disabled || color === 'disabled';
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = checkedProp !== undefined;
-  const checked = isControlled ? checkedProp : isChecked;
+  const checked = checkedProp ?? internalChecked;
 
-  const handleChange = (value: boolean) => {
-    if (!isControlled) {
-      setIsChecked(value);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (actualDisabled) {
+      return;
     }
-    onChange?.(value);
+
+    const nextChecked = event.target.checked;
+
+    if (!isControlled) {
+      setInternalChecked(nextChecked);
+    }
+
+    onChange?.(nextChecked);
   };
 
   return {
+    ...inputProps,
     label,
-    className,
-    size,
-    color,
-    variant,
-    rounded,
-    labelPlacement,
-    disabled,
+    disabled: actualDisabled,
     thumbIcon,
     startContent,
     endContent,
     checked,
-    onChange: handleChange,
-    switchBase: switchBase({ labelPlacement }),
-    switchWrapper: switchWrapper({ size, rounded }),
+    ariaChecked: checked,
+    ariaLabel: getAriaLabel(ariaLabel, nativeAriaLabel, label),
+    inputRole: 'switch',
+    handleInputChange,
+    rootClassName: cn(switchBase({ labelPlacement, disabled: actualDisabled }), className),
+    switchWrapper: switchWrapper({ disabled: actualDisabled }),
     switchStartContent: switchStartContent({}),
     switchHiddenInput: switchHiddenInput({}),
     switchTrack: switchTrack({ size, color, variant, rounded }),
     switchThumb: switchThumb({ size, color }),
     switchThumbIcon: switchThumbIcon({}),
     switchEndContent: switchEndContent({}),
-    switchLabel: switchLabel({ size, disabled }),
-    role,
-    ariaChecked,
-    ariaLabel
+    switchLabel: switchLabel({ size, disabled: actualDisabled })
   };
 };
+
+const getAriaLabel = (
+  ariaLabel: string | undefined,
+  nativeAriaLabel: string | undefined,
+  label: string | undefined
+): string | undefined => ariaLabel ?? nativeAriaLabel ?? label;

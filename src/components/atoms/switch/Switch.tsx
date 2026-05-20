@@ -1,19 +1,19 @@
 import type { FC } from 'react';
-import { cn } from '@/lib/utils';
 import type { SwitchProps } from './types';
 import { useSwitch } from './useSwitch';
 
-const Switch: FC<SwitchProps> = ({ ...props }) => {
+export const Switch: FC<SwitchProps> = (props) => {
   const {
     label,
-    className,
     thumbIcon,
     disabled,
     checked,
-    onChange,
+    ariaChecked,
+    ariaLabel,
+    inputRole,
     startContent,
     endContent,
-    switchBase,
+    rootClassName,
     switchWrapper,
     switchStartContent,
     switchHiddenInput,
@@ -22,35 +22,45 @@ const Switch: FC<SwitchProps> = ({ ...props }) => {
     switchThumbIcon,
     switchEndContent,
     switchLabel,
-    role,
-    ariaChecked,
-    ariaLabel
+    handleInputChange,
+    ...inputProps
   } = useSwitch(props);
+
   return (
-    <div className={cn(switchBase, className)} role={role}>
-      <label className={switchWrapper}>
+    <label className={rootClassName}>
+      <span className={switchWrapper}>
         <input
+          {...inputProps}
           type='checkbox'
           checked={checked}
-          onChange={(e) => onChange?.(e.target.checked)}
           disabled={disabled}
           className={switchHiddenInput}
           aria-checked={ariaChecked}
-          role='switch'
-          aria-label={ariaLabel ?? label ?? 'switch'}
+          role={inputRole}
+          aria-label={ariaLabel}
+          onChange={handleInputChange}
         />
-
         <span className={switchTrack}>
-          {startContent && <span className={switchStartContent}>{startContent}</span>}
+          {startContent && (
+            <span className={switchStartContent} data-start-content={true}>
+              {startContent}
+            </span>
+          )}
           <span className={switchThumb} data-thumb={true}>
-            {thumbIcon && <span className={switchThumbIcon}>{thumbIcon}</span>}
+            {thumbIcon && (
+              <span className={switchThumbIcon} data-thumb-icon={true}>
+                {thumbIcon}
+              </span>
+            )}
           </span>
-          {endContent && <span className={switchEndContent}>{endContent}</span>}
+          {endContent && (
+            <span className={switchEndContent} data-end-content={true}>
+              {endContent}
+            </span>
+          )}
         </span>
-      </label>
+      </span>
       {label && <span className={switchLabel}>{label}</span>}
-    </div>
+    </label>
   );
 };
-
-export default Switch;
