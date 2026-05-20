@@ -15,7 +15,8 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('../icon/Icon', () => ({
-  default: () => null
+  // biome-ignore lint/style/useNamingConvention: must match module export name
+  Icon: () => null
 }));
 
 import { Chip } from './Chip';
