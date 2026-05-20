@@ -1,17 +1,16 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
-import IconButton from './IconButton';
+import { IconButton } from './IconButton';
 
 /**
- * ## DESCRIPTION
- * IconButton component is a button that displays an icon. It can be used for various actions in the UI, such as opening menus, submitting forms, or triggering other interactions. The component supports different variants, sizes, and styles to fit various design requirements.
+ * ## Description
+ * IconButton renders a single-action control with a Lucide icon and Stack-and-Flow button variants.
  *
- * ## SEARCH ICONS
- * You can search for icons in the [Lucide Icons](https://lucide.dev/icons) library. Use the icon name as the `icon` prop value.
+ * ## Dependencies
+ * Uses Lucide dynamic icons for the visual glyph.
  *
- * ## DEPENDENCIES
- * - Icon: Uses Icon component from `lucide-react` for icons.
- *
+ * ## Usage Guide
+ * Provide a meaningful accessible name with `title`, `ariaLabel`, or `aria-label`. Named sizes (`sm`, `md`, `lg`) change both the button target and the icon; legacy numeric sizes keep the exact icon size and map the button target to the closest named size. Use `shadow={false}` only when a quiet context needs to suppress glow, and use `aria-pressed` only to announce toggle-button state to assistive technology.
  */
 const meta: Meta<typeof IconButton> = {
   title: 'Atoms/IconButton',
@@ -23,196 +22,162 @@ const meta: Meta<typeof IconButton> = {
   },
   tags: ['autodocs']
 };
+
 export default meta;
 
 type Story = StoryObj<typeof IconButton>;
 
+/**
+ * Shows the default icon button configuration without overriding default variants.
+ */
 export const Default: Story = {
   args: {
-    variant: 'primary',
     icon: 'menu',
-    size: 20,
-    rounded: false,
-    shadow: false,
-    disabled: false,
-    className: '',
-    title: 'Menu'
+    title: 'Open menu',
+    onClick: action('icon-button-click')
   }
 };
 
 /**
- * - Default variant is `primary`.
+ * Shows the visual hierarchy available through the variant prop.
  */
-
-export const Primary: Story = {
+export const Variant: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' size={12} title='link' onClick={fn()} />
-      <IconButton icon='menu' size={16} title='link' onClick={fn()} />
-      <IconButton icon='menu' size={22} title='link' onClick={fn()} />
-      <IconButton icon='menu' size={28} title='link' onClick={fn()} />
-      <IconButton icon='menu' size={34} title='link' onClick={fn()} />
-      <IconButton icon='menu' size={40} title='link' onClick={fn()} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton icon='menu' title='Open menu' variant='primary' onClick={action('primary-click')} />
+      <IconButton icon='copy' title='Copy text' variant='secondary' onClick={action('secondary-click')} />
+      <IconButton icon='pencil' title='Edit item' variant='outlined' onClick={action('outlined-click')} />
+      <IconButton icon='x' title='Close panel' variant='ghost' onClick={action('ghost-click')} />
+      <IconButton icon='external-link' title='Open link' variant='light' onClick={action('light-click')} />
     </div>
   )
 };
 
 /**
- * - The secondary variant is used for less prominent actions, such as secondary buttons or links.
- * - It typically has a different color scheme compared to the primary variant, often using a lighter or more subdued color.
+ * Shows size options changing the full button target and the icon together.
  */
-
-export const Secondary: Story = {
+export const Size: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' size={12} title='link' variant='secondary' onClick={fn()} />
-      <IconButton icon='menu' size={16} title='link' variant='secondary' onClick={fn()} />
-      <IconButton icon='menu' size={22} title='link' variant='secondary' onClick={fn()} />
-      <IconButton icon='menu' size={28} title='link' variant='secondary' onClick={fn()} />
-      <IconButton icon='menu' size={34} title='link' variant='secondary' onClick={fn()} />
-      <IconButton icon='menu' size={40} title='link' variant='secondary' onClick={fn()} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton icon='menu' size='sm' title='Open small menu' onClick={action('small-click')} />
+      <IconButton icon='menu' size='md' title='Open medium menu' onClick={action('medium-click')} />
+      <IconButton icon='menu' size='lg' title='Open large menu' onClick={action('large-click')} />
     </div>
   )
 };
 
 /**
- * - The tertiary variant is used for actions that are even less prominent than secondary actions, such as tertiary buttons or links.
- * - It usually has a more subtle appearance, often using a neutral color or a lighter shade of the secondary color.
+ * Shows the rounded shape toggle for square and pill icon buttons.
  */
-
-export const Outlined: Story = {
+export const Rounded: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' size={12} title='link' variant='outlined' onClick={fn()} />
-      <IconButton icon='menu' size={16} title='link' variant='outlined' onClick={fn()} />
-      <IconButton icon='menu' size={22} title='link' variant='outlined' onClick={fn()} />
-      <IconButton icon='menu' size={28} title='link' variant='outlined' onClick={fn()} />
-      <IconButton icon='menu' size={34} title='link' variant='outlined' onClick={fn()} />
-      <IconButton icon='menu' size={40} title='link' variant='outlined' onClick={fn()} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton icon='menu' rounded={false} title='Open square menu' onClick={action('rounded-off-click')} />
+      <IconButton icon='menu' rounded={true} title='Open round menu' onClick={action('rounded-on-click')} />
     </div>
   )
 };
 
 /**
- * - The ghost variant is used for actions that should be very subtle, often used in contexts where the button is not the primary focus.
- * - It typically has no background or border, relying on the icon and hover effects to indicate interactivity.
+ * Shows that shadow only toggles the token glow; it does not change hierarchy or behavior.
  */
-
-export const Ghost: Story = {
+export const Shadow: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' size={12} title='link' variant='ghost' onClick={fn()} />
-      <IconButton icon='menu' size={16} title='link' variant='ghost' onClick={fn()} />
-      <IconButton icon='menu' size={22} title='link' variant='ghost' onClick={fn()} />
-      <IconButton icon='menu' size={28} title='link' variant='ghost' onClick={fn()} />
-      <IconButton icon='menu' size={34} title='link' variant='ghost' onClick={fn()} />
-      <IconButton icon='menu' size={40} title='link' variant='ghost' onClick={fn()} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton icon='star' title='Favorite with glow' variant='secondary' onClick={action('shadow-on-click')} />
+      <IconButton
+        icon='star'
+        shadow={false}
+        title='Favorite without glow'
+        variant='secondary'
+        onClick={action('shadow-off-click')}
+      />
     </div>
   )
 };
 
 /**
- * - The light variant is used for actions that should be visually distinct but not as prominent as the primary or secondary actions.
- * - It often uses a lighter color scheme, making it suitable for actions that are important but not the primary focus of the UI.
+ * Shows toggle-button semantics: aria-pressed announces state, while the variant communicates it visually.
  */
-
-export const Light: Story = {
+export const ToggleState: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' size={12} title='link' variant='light' onClick={fn()} />
-      <IconButton icon='menu' size={16} title='link' variant='light' onClick={fn()} />
-      <IconButton icon='menu' size={22} title='link' variant='light' onClick={fn()} />
-      <IconButton icon='menu' size={28} title='link' variant='light' onClick={fn()} />
-      <IconButton icon='menu' size={34} title='link' variant='light' onClick={fn()} />
-      <IconButton icon='menu' size={40} title='link' variant='light' onClick={fn()} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton
+        icon='bookmark'
+        title='Save item'
+        aria-pressed={false}
+        variant='outlined'
+        onClick={action('toggle-off-click')}
+      />
+      <IconButton
+        icon='bookmark-check'
+        title='Saved item'
+        aria-pressed={true}
+        variant='primary'
+        onClick={action('toggle-on-click')}
+      />
     </div>
   )
 };
 
 /**
- * - You can use the `rounded` prop to make the button fully rounded.
- * - This is useful for creating circular buttons or buttons with a pill shape.
- * * - The `shadow` prop can be used to add a shadow effect to the button, enhancing its visual depth and making it stand out.
- * * - The `shadow` prop can be combined with the `rounded` prop to create buttons with both rounded corners and shadow effects.
+ * Shows the non-interactive disabled state across the available variants.
  */
-
-export const RoundedShadow: Story = {
-  render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' size={12} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
-      <IconButton icon='menu' size={16} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
-      <IconButton icon='menu' size={22} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
-      <IconButton icon='menu' size={28} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
-      <IconButton icon='menu' size={34} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
-      <IconButton icon='menu' size={40} title='link' variant='outlined' rounded={true} shadow={true} onClick={fn()} />
-    </div>
-  )
-};
-
-/**
- * - The `disabled` prop can be used to disable the button, preventing any interaction.
- * - When the button is disabled, it typically appears grayed out or visually distinct to indicate that it is not interactive.
- */
-
 export const Disabled: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' variant='primary' disabled={true} onClick={fn()} />
-      <IconButton icon='menu' variant='secondary' disabled={true} onClick={fn()} />
-      <IconButton icon='menu' variant='outlined' disabled={true} onClick={fn()} />
-      <IconButton icon='menu' variant='ghost' disabled={true} onClick={fn()} />
-      <IconButton icon='menu' variant='light' disabled={true} onClick={fn()} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton
+        icon='menu'
+        title='Open disabled menu'
+        variant='primary'
+        disabled={true}
+        onClick={action('disabled-primary-click')}
+      />
+      <IconButton
+        icon='copy'
+        title='Copy disabled text'
+        variant='secondary'
+        disabled={true}
+        onClick={action('disabled-secondary-click')}
+      />
+      <IconButton
+        icon='pencil'
+        title='Edit disabled item'
+        variant='outlined'
+        disabled={true}
+        onClick={action('disabled-outlined-click')}
+      />
+      <IconButton
+        icon='x'
+        title='Close disabled panel'
+        variant='ghost'
+        disabled={true}
+        onClick={action('disabled-ghost-click')}
+      />
+      <IconButton
+        icon='external-link'
+        title='Open disabled link'
+        variant='light'
+        disabled={true}
+        onClick={action('disabled-light-click')}
+      />
     </div>
   )
 };
 
 /**
- * - The `aria-pressed` prop can be used to indicate the pressed state of a toggle button.
- * - This is useful for accessibility, allowing screen readers to announce the state of the button.
+ * Shows how token-backed utility classes can extend the component without bypassing the theme.
  */
-
-export const AriaPressed: Story = {
+export const CustomClassName: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' variant='primary' aria-pressed={true} onClick={fn()} />
-      <IconButton icon='menu' variant='secondary' aria-pressed={true} onClick={fn()} />
-      <IconButton icon='menu' variant='outlined' aria-pressed={true} onClick={fn()} />
-      <IconButton icon='menu' variant='ghost' aria-pressed={true} onClick={fn()} />
-      <IconButton icon='menu' variant='light' aria-pressed={true} onClick={fn()} />
-    </div>
-  )
-};
-
-/**
- * - The `title` prop can be used to provide a tooltip or additional information about the button's action.
- * - This is useful for improving user experience and accessibility, as it provides context for the button's function.
- */
-export const Title: Story = {
-  render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' variant='primary' title='Menu' onClick={fn()} />
-      <IconButton icon='menu' variant='secondary' title='Menu' onClick={fn()} />
-      <IconButton icon='menu' variant='outlined' title='Menu' onClick={fn()} />
-      <IconButton icon='menu' variant='ghost' title='Menu' onClick={fn()} />
-      <IconButton icon='menu' variant='light' title='Menu' onClick={fn()} />
-    </div>
-  )
-};
-
-/**
- * - The `className` prop can be used to apply custom styles or additional classes to the button.
- * - This allows for greater flexibility in styling the button to match specific design requirements.
- */
-
-export const CutomClass: Story = {
-  render: () => (
-    <div className='flex gap-4 items-center'>
-      <IconButton icon='menu' size={12} title='link' className='bg-blue-500 text-white' onClick={fn()} />
-      <IconButton icon='menu' size={16} title='link' className='bg-green-500 text-white' onClick={fn()} />
-      <IconButton icon='menu' size={22} title='link' className='bg-red-500 text-white' onClick={fn()} />
-      <IconButton icon='menu' size={28} title='link' className='bg-yellow-500 text-white' onClick={fn()} />
-      <IconButton icon='menu' size={34} title='link' className='bg-purple-500 text-white' onClick={fn()} />
-      <IconButton icon='menu' size={40} title='link' className='bg-pink-500 text-white' onClick={fn()} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <IconButton
+        icon='sparkles'
+        title='Highlight item'
+        variant='ghost'
+        className='border-brand-light bg-red-tint-subtle text-brand-light dark:border-brand-dark dark:text-brand-dark'
+        onClick={action('custom-class-click')}
+      />
     </div>
   )
 };
