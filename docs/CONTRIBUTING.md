@@ -132,7 +132,7 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 
 1. Sube tu rama y abre un PR contra `main`.
 2. Usa un título de PR con el mismo formato Conventional Commit, por ejemplo `feat(button): add loading state`.
-3. Puedes pedir revisión automática a copilot hasta que esté listo para revisión humana.
+3. Puedes pedir revisión automática a Copilot hasta que esté listo para revisión humana.
 4. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
 5. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
 
