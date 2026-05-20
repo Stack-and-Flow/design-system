@@ -112,19 +112,32 @@ Verify `.gitignore` does NOT exclude it. If it does, remove that line.
 
 Find commits that introduced user-visible changes but have no corresponding changeset entry.
 
+### Conventional Commit contract
+
+Commit messages and PR titles must follow the commitlint-enforced format:
+
+```text
+<type>(<optional scope>): <description>
+```
+
+Allowed types from `@commitlint/config-conventional`: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`.
+
+Use scopes for domains such as `a11y`, `tokens`, `infra`, or component names. Do not treat those domains as custom commit types.
+
 ### What needs a changeset
 
 A commit NEEDS a changeset if it:
-- Adds a new component or feature (`feat:`)
-- Fixes a bug (`fix:`)
-- Makes a breaking change (any type with `BREAKING CHANGE:` in body or `!` after type)
+- Adds a new component or feature (`feat:` / `feat(scope):`)
+- Fixes a consumer-visible bug (`fix:` / `fix(scope):`)
+- Makes a breaking change (any allowed type with `BREAKING CHANGE:` in body or `!` after type)
 - Updates exported types or public API
 
 A commit does NOT need a changeset if it:
 - Only changes docs (`docs:`)
 - Only changes tests (`test:`)
-- Only changes internal tooling/config (`chore:`)
-- Only changes Storybook stories with no component logic change (`style:`)
+- Only changes CI, internal tooling, or config (`ci:`, `chore:`, `build:`)
+- Only changes formatting (`style:`)
+- Only changes Storybook stories with no component logic change (`docs:` or `style:` depending on the change)
 
 ### How to detect
 
@@ -173,9 +186,10 @@ Recommendation: generate {N} changeset file(s) — see Phase 3.
 | Condition | Bump |
 |-----------|------|
 | Any commit with `BREAKING CHANGE:` in body | **major** |
-| Any commit with `!` after type (e.g. `feat!:`) | **major** |
-| Any `feat:` commit | **minor** |
-| Only `fix:` commits | **patch** |
+| Any commit with `!` after type or scope (e.g. `feat!:` or `feat(button)!:`) | **major** |
+| Any consumer-visible `feat` commit | **minor** |
+| Only consumer-visible `fix` commits | **patch** |
+| Other allowed types (`docs`, `test`, `chore`, `ci`, `build`, `style`, `refactor`, `perf`, `revert`) | Usually no changeset unless public behavior/API changes |
 | Multiple types — take the highest | e.g. feat + fix = **minor** |
 
 ### Changeset file format
@@ -259,7 +273,7 @@ pnpm changeset:version
 
 # 2 — Commit the version bump
 git add .
-git commit -m "chore: release v{new-version}"
+git commit -m "chore(release): publish v{new-version}"
 
 # 3 — Tag the release
 git tag "v{new-version}"

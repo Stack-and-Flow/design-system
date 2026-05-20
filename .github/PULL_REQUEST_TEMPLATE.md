@@ -13,6 +13,12 @@ Closes #<!-- issue number -->
 - [ ] 🏗️ Infrastructure
 - [ ] 📚 Documentation
 
+## Repository checklist
+
+- [ ] PR title follows Conventional Commit format: `<type>(<optional scope>): <description>`
+- [ ] Commit messages follow the same commitlint-enforced format
+- [ ] PR description links the issue with `Closes #NNN`
+
 ## Component checklist (skip if not applicable)
 
 - [ ] Follows the 5-file structure (`types.ts`, `use*.ts`, `Component.tsx`, `index.ts`, `*.stories.tsx`)

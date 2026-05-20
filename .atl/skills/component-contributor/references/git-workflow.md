@@ -36,33 +36,51 @@ Rules:
 
 ## Conventional Commits
 
-Format: `<type>: <description>`
+Commit messages and PR titles must follow the commitlint-enforced Conventional Commit format:
 
-All lowercase. No period at the end. Present tense.
+```text
+<type>(<optional scope>): <description>
+```
+
+This repo uses `@commitlint/config-conventional` via the `commit-msg` hook. Use lowercase type, optional lowercase scope, present-tense description, and no period at the end.
 
 | Type        | When to use                              |
 | ----------- | ---------------------------------------- |
+| `build:`    | Build system or packaging changes        |
+| `chore:`    | Dependencies, tooling, config            |
+| `ci:`       | CI workflow changes                      |
+| `docs:`     | Documentation only                       |
 | `feat:`     | New component, new feature, new prop     |
 | `fix:`      | Bug fix                                  |
-| `chore:`    | Dependencies, tooling, config            |
-| `docs:`     | Documentation only                       |
+| `perf:`     | Performance improvement                  |
 | `refactor:` | Code change — no bug fix, no new feature |
+| `revert:`   | Revert a previous commit                 |
 | `style:`    | Formatting, whitespace, semicolons       |
 | `test:`     | Adding or fixing tests                   |
 
+Use scopes for domains such as `a11y`, `tokens`, or `infra` instead of inventing custom types.
+
 ```bash
 # ✅ CORRECT
-git commit -m "feat: add Avatar component with size and shape variants"
-git commit -m "fix: prevent button onClick when isLoading is true"
-git commit -m "chore: update biome to 2.4.12"
-git commit -m "docs: add forwardRef usage to GUIDELINES"
-git commit -m "test: add renderHook tests for useInput"
+git commit -m "feat(avatar): add size and shape variants"
+git commit -m "fix(button): prevent onClick when loading"
+git commit -m "fix(a11y): improve input focus ring visibility"
+git commit -m "chore(tokens): update spacing token docs"
+git commit -m "docs: add forwardRef usage to guidelines"
+git commit -m "test(input): add renderHook coverage"
 
 # ❌ WRONG
-git commit -m "Added Avatar"           # not conventional
-git commit -m "Feat: Avatar Component" # wrong case
-git commit -m "feat: Avatar."          # has period
-git commit -m "update stuff"           # no type
+git commit -m "Added Avatar"            # not conventional
+git commit -m "Feat: Avatar Component"  # wrong case
+git commit -m "feat: Avatar."           # has period
+git commit -m "a11y: improve focus ring" # unsupported custom type
+git commit -m "update stuff"            # no type
+```
+
+Validate manually before committing when unsure:
+
+```bash
+echo "feat(button): add loading state" | pnpm exec commitlint
 ```
 
 ---
@@ -82,11 +100,11 @@ When creating the issue, use the appropriate template (component, bug, feature).
 git checkout -b feat/my-component
 # ... make changes ...
 git add .
-git commit -m "feat: add MyComponent with variant and size props"
+git commit -m "feat(my-component): add variant and size props"
 git push origin feat/my-component
 ```
 
-Then open the PR via GitHub UI or `gh pr create`.
+Then open the PR via GitHub UI or `gh pr create`. The PR title must also follow the same Conventional Commit format, for example `feat(button): add loading state`.
 
 ### Step 3 — Fill the PR template completely
 
@@ -164,7 +182,8 @@ A PR is ready to merge when:
 - [ ] No hardcoded values — only design tokens
 - [ ] ARIA attributes present and correct
 - [ ] PR template fully filled
-- [ ] Conventional commit message
+- [ ] Conventional Commit messages pass commitlint
+- [ ] PR title follows Conventional Commit format
 - [ ] Linked to an issue with `Closes #NNN`
 
 ---

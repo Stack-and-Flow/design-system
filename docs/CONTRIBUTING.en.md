@@ -131,9 +131,10 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 ### Pull Request Process
 
 1. Push your branch and open a PR against `main`.
-2. You can call automatic review to copilot since it is prepared to human review.
-3. The PR MUST pass all CI checks (Biome formatting/linting, TypeScript strict checks).
-4. The PR MUST be reviewed by at least one core maintainer before merging.
+2. Use a PR title with the same Conventional Commit format, for example `feat(button): add loading state`.
+3. You can call automatic review to copilot since it is prepared to human review.
+4. The PR MUST pass all CI checks (Biome formatting/linting, TypeScript strict checks).
+5. The PR MUST be reviewed by at least one core maintainer before merging.
 
 ### PR Checklist
 
@@ -147,7 +148,7 @@ Before requesting a review, verify:
 - [ ] The pre-PR component review has passed or is documented.
 - [ ] Tokens from `theme.css` are used (no hardcoded colors or spacing).
 - [ ] ARIA attributes are implemented for interactable elements.
-- [ ] Conventional Commits are used.
+- [ ] Conventional Commits are used for commit messages and the PR title.
 
 ---
 

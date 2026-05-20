@@ -107,12 +107,15 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). Git hooks w
 feat(button): add loading state variant
 fix(switch): forward aria-label prop correctly
 docs(modal): add usage examples to Storybook
-a11y(input): improve focus ring visibility
+fix(a11y): improve input focus ring visibility
+chore(tokens): update spacing token docs
 ```
 
 Format: `type(scope): description`
 
-Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `a11y`, `tokens`
+Common types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`.
+
+Use `a11y`, `tokens`, or `infra` as scopes, not as custom types.
 
 ---
 

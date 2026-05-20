@@ -131,9 +131,10 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 ### Proceso de Pull Request
 
 1. Sube tu rama y abre un PR contra `main`.
-2. Puedes pedir revisión automática a copilot hasta que esté listo para revisión humana.
-3. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
-4. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
+2. Usa un título de PR con el mismo formato Conventional Commit, por ejemplo `feat(button): add loading state`.
+3. Puedes pedir revisión automática a copilot hasta que esté listo para revisión humana.
+4. El PR DEBE pasar todos los checks de CI (formato/linting de Biome, checks de TypeScript estricto).
+5. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
 
 ### Checklist del PR
 
@@ -147,7 +148,7 @@ Antes de pedir revisión, verifica:
 - [ ] La review pre-PR del componente está pasada o documentada.
 - [ ] Se usan tokens de `theme.css` (sin colores ni espaciados hardcodeados).
 - [ ] Se implementan atributos ARIA en elementos interactivos.
-- [ ] Se usan Conventional Commits.
+- [ ] Se usan Conventional Commits en mensajes de commit y título del PR.
 - [ ] Estados visuales implementados: hover, focus, active/pressed, disabled.
 - [ ] Focus ring via `box-shadow` — nunca `outline` sin alternativa visible.
 - [ ] Disabled via `opacity: 0.4` — sin sustitución de color.

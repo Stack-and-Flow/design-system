@@ -60,6 +60,7 @@ Report the failing criterion and stop — do not continue with the detailed chec
 |-------|--------------|
 | CI is failing | Look for test, build, or lint failures in the PR |
 | No linked issue | PR description must contain `Closes #NNN` |
+| Invalid PR title | PR title must match commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>` |
 | `interface` used | Grep for `interface ` in all `.ts` / `.tsx` files |
 | `any` used explicitly | Grep for `: any` or `as any` in all `.ts` / `.tsx` files |
 | Container/Presentational mixed | Logic (useState, useRef, handlers, CVA calls) found in `.tsx` file |
@@ -162,7 +163,10 @@ Before the Storybook review, read `.atl/skills/component-contributor/references/
 ### 10 — Git hygiene
 
 - [ ] Branch name follows convention: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`, `test/`
-- [ ] Conventional commit messages — `feat:`, `fix:`, etc.
+- [ ] Commit messages follow the commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>`
+- [ ] PR title follows the same Conventional Commit format
+- [ ] Allowed types only: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`
+- [ ] Domain terms such as `a11y`, `tokens`, or `infra` are scopes, not custom types
 - [ ] PR description contains `Closes #NNN`
 - [ ] PR template fully filled — no placeholder sections left empty
 - [ ] Branch is up to date with `main`
