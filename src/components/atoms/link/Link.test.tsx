@@ -5,7 +5,7 @@
  * - Hook (useLink): tested with renderHook for derived attributes and state.
  * - Component (Link): tested with render/screen/userEvent for observable behavior.
  *
- * We test behavior, not internal CSS class strings.
+ * We primarily test behavior, with narrow class-string assertions for the emphasis migration where decorative glow mapping is the contract.
  */
 
 import { render, renderHook, screen } from '@testing-library/react';
@@ -86,6 +86,32 @@ describe('useLink — logic', () => {
     expect(compactResult.current.className).toContain('h-9');
     expect(compactResult.current.className).toContain('px-2');
     expect(smallResult.current.className).toContain('h-11');
+  });
+
+  it('suppresses decorative glow when emphasis is flat on CTA variants', () => {
+    const { result } = renderHook(() => useLink({ children: 'Docs', variant: 'button', emphasis: 'flat' }));
+
+    expect(result.current.className).not.toContain('shadow-glow-btn-primary');
+  });
+
+  it('keeps legacy shadow={false} as flat emphasis compatibility', () => {
+    const { result } = renderHook(() => useLink({ children: 'Docs', variant: 'outlined', shadow: false }));
+
+    expect(result.current.className).not.toContain('shadow-glow-btn-secondary');
+  });
+
+  it('prefers explicit emphasis over legacy shadow when both are provided', () => {
+    const { result } = renderHook(() =>
+      useLink({ children: 'Docs', variant: 'outlined', emphasis: 'default', shadow: false })
+    );
+
+    expect(result.current.className).toContain('shadow-glow-btn-secondary-light');
+  });
+
+  it('keeps regular links glowless regardless of emphasis', () => {
+    const { result } = renderHook(() => useLink({ children: 'Docs', emphasis: 'default' }));
+
+    expect(result.current.className).not.toContain('shadow-glow-btn');
   });
 });
 
@@ -174,9 +200,9 @@ describe('Link — component behavior', () => {
     expect(screen.getByRole('link', { name: 'Open image gallery' })).toBeInTheDocument();
   });
 
-  it('does not leak visual variant, size, or shadow props to the DOM', () => {
+  it('does not leak visual variant, size, emphasis, or shadow props to the DOM', () => {
     render(
-      <Link href='https://example.com' variant='button' size='lg' shadow={false}>
+      <Link href='https://example.com' variant='button' size='lg' emphasis='flat' shadow={false}>
         Docs
       </Link>
     );
@@ -184,6 +210,7 @@ describe('Link — component behavior', () => {
     const link = screen.getByRole('link', { name: 'Docs' });
     expect(link).not.toHaveAttribute('variant');
     expect(link).not.toHaveAttribute('size');
+    expect(link).not.toHaveAttribute('emphasis');
     expect(link).not.toHaveAttribute('shadow');
   });
 

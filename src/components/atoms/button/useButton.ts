@@ -1,7 +1,7 @@
 import { type MouseEvent, type RefObject, useRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 import { cn } from '@/lib/utils';
-import { type ButtonProps, buttonVariants } from './types';
+import { type ButtonEmphasis, type ButtonProps, buttonVariants } from './types';
 
 type UseButtonReturn = Omit<ButtonProps, 'onClick'> & {
   ariaLabel: string;
@@ -26,6 +26,7 @@ export const useButton = ({
   icon,
   text,
   disabled = false,
+  emphasis,
   shadow = true,
   rounded = true,
   uppercase = false,
@@ -59,7 +60,17 @@ export const useButton = ({
     text,
     isLoading,
     ariaLabel: getAriaLabel(ariaLabel, nativeAriaLabel, text),
-    className: cn(buttonVariants({ variant, size, rounded, shadow, uppercase, fullWidth: isFullWidth }), className),
+    className: cn(
+      buttonVariants({
+        variant,
+        size,
+        rounded,
+        emphasis: resolveEmphasis(emphasis, shadow),
+        uppercase,
+        fullWidth: isFullWidth
+      }),
+      className
+    ),
     contentClassName: cn('flex items-center justify-center z-0', getContentGap(size)),
     disabled: isDisabled,
     iconSize: getIconSize(size),
@@ -72,6 +83,9 @@ const getAriaLabel = (
   nativeAriaLabel: string | undefined,
   text: string | undefined
 ): string => ariaLabel ?? nativeAriaLabel ?? text ?? 'Button';
+
+const resolveEmphasis = (emphasis: ButtonProps['emphasis'], shadow: ButtonProps['shadow']): ButtonEmphasis =>
+  emphasis ?? (shadow === false ? 'flat' : 'default');
 
 const getIconSize = (size: NonNullable<ButtonProps['size']>): string => {
   switch (size) {

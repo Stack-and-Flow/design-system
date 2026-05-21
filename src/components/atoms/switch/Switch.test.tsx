@@ -43,10 +43,25 @@ describe('useSwitch — logic', () => {
   });
 
   it('returns computed class names without exposing CVA logic to the component', () => {
-    const { result } = renderHook(() => useSwitch({ label: 'Notifications', variant: 'shadow' }));
+    const { result } = renderHook(() => useSwitch({ label: 'Notifications' }));
     expect(result.current.rootClassName).toEqual(expect.any(String));
     expect(result.current.switchTrack).toEqual(expect.any(String));
     expect(result.current.switchThumb).toEqual(expect.any(String));
+  });
+
+  it('applies decorative switch glow when emphasis uses the default contract', () => {
+    const { result } = renderHook(() => useSwitch({ label: 'Notifications' }));
+
+    expect(result.current.switchTrack).toContain('shadow-glow-btn-secondary');
+    expect(result.current.switchTrack).toContain('shadow-glow-btn-primary');
+  });
+
+  it('suppresses decorative switch glow when emphasis is flat', () => {
+    const { result } = renderHook(() => useSwitch({ label: 'Notifications', emphasis: 'flat' }));
+
+    expect(result.current.switchTrack).not.toContain('shadow-glow-btn-secondary');
+    expect(result.current.switchTrack).not.toContain('shadow-glow-btn-primary');
+    expect(result.current.switchTrack).toContain('peer-focus-visible:shadow-glow-focus-light');
   });
 
   it('treats the legacy disabled color as disabled semantics', () => {
@@ -190,5 +205,11 @@ describe('Switch — component behavior', () => {
     expect(screen.getByTestId('thumb-icon')).toBeInTheDocument();
     expect(screen.getByTestId('start-icon')).toBeInTheDocument();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
+  });
+
+  it('does not leak emphasis to the input DOM', () => {
+    render(<Switch label='Theme' emphasis='flat' />);
+
+    expect(screen.getByRole('switch', { name: 'Theme' })).not.toHaveAttribute('emphasis');
   });
 });

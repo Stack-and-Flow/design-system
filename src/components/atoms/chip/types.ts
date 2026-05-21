@@ -33,7 +33,6 @@ export const chipVariants = cva(
       variant: {
         solid: 'border-transparent shadow-none',
         flat: 'border-transparent',
-        shadow: 'border-transparent',
         bordered: 'bg-transparent',
         light: 'border-transparent bg-transparent',
         faded: '',
@@ -54,7 +53,7 @@ export const chipVariants = cva(
     compoundVariants: [
       {
         color: 'primary',
-        variant: ['solid', 'shadow'],
+        variant: 'solid',
         class:
           'bg-brand-light text-white dark:bg-brand-dark dark:text-white data-[interactive=true]:hover:bg-brand-light-dark dark:data-[interactive=true]:hover:bg-brand-dark-light'
       },
@@ -80,16 +79,10 @@ export const chipVariants = cva(
         variant: 'light',
         class: 'text-brand-light dark:text-brand-dark-light data-[interactive=true]:hover:bg-red-tint-subtle'
       },
-      {
-        color: 'primary',
-        variant: 'shadow',
-        class:
-          'shadow-glow-chip-primary-light dark:shadow-glow-chip-primary data-[interactive=true]:hover:shadow-glow-chip-primary-hover-light dark:data-[interactive=true]:hover:shadow-glow-chip-primary-hover'
-      },
 
       {
         color: 'secondary',
-        variant: ['solid', 'shadow'],
+        variant: 'solid',
         class:
           'bg-surface-raised-light text-text-light dark:bg-surface-raised-dark dark:text-text-dark data-[interactive=true]:hover:bg-surface-light dark:data-[interactive=true]:hover:bg-surface-dark'
       },
@@ -117,16 +110,10 @@ export const chipVariants = cva(
         class:
           'text-text-secondary-light dark:text-text-secondary-dark data-[interactive=true]:hover:bg-surface-light dark:data-[interactive=true]:hover:bg-surface-dark'
       },
-      {
-        color: 'secondary',
-        variant: 'shadow',
-        class:
-          'shadow-glow-chip-secondary-light dark:shadow-glow-chip-secondary data-[interactive=true]:hover:shadow-glow-chip-secondary-hover-light dark:data-[interactive=true]:hover:shadow-glow-chip-secondary-hover'
-      },
 
       {
         color: 'success',
-        variant: ['solid', 'shadow'],
+        variant: 'solid',
         class:
           'bg-success-light text-text-light dark:bg-success dark:text-text-light data-[interactive=true]:hover:bg-success-dark dark:data-[interactive=true]:hover:bg-green-light'
       },
@@ -151,15 +138,10 @@ export const chipVariants = cva(
         variant: 'light',
         class: 'text-text-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
       },
-      {
-        color: 'success',
-        variant: 'shadow',
-        class: 'shadow-glow-chip-success data-[interactive=true]:hover:shadow-glow-chip-success-hover'
-      },
 
       {
         color: 'warning',
-        variant: ['solid', 'shadow'],
+        variant: 'solid',
         class:
           'bg-warning-light text-text-light dark:bg-warning dark:text-text-light data-[interactive=true]:hover:bg-warning-dark dark:data-[interactive=true]:hover:bg-yellow-light'
       },
@@ -184,15 +166,10 @@ export const chipVariants = cva(
         variant: 'light',
         class: 'text-text-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
       },
-      {
-        color: 'warning',
-        variant: 'shadow',
-        class: 'shadow-glow-chip-warning data-[interactive=true]:hover:shadow-glow-chip-warning-hover'
-      },
 
       {
         color: 'danger',
-        variant: ['solid', 'shadow'],
+        variant: 'solid',
         class:
           'bg-error-light text-white dark:bg-error dark:text-white data-[interactive=true]:hover:bg-red-700 dark:data-[interactive=true]:hover:bg-red-400'
       },
@@ -216,11 +193,6 @@ export const chipVariants = cva(
         color: 'danger',
         variant: 'light',
         class: 'text-red-800 dark:text-error data-[interactive=true]:hover:bg-error-tint'
-      },
-      {
-        color: 'danger',
-        variant: 'shadow',
-        class: 'shadow-glow-chip-danger data-[interactive=true]:hover:shadow-glow-chip-danger-hover'
       }
     ],
 

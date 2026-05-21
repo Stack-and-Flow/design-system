@@ -10,7 +10,7 @@ import { IconButton } from './IconButton';
  * Uses Lucide dynamic icons for the visual glyph.
  *
  * ## Usage Guide
- * Provide a meaningful accessible name with `title`, `ariaLabel`, or `aria-label`. Use `xs` for dense, visibly shorter controls and `sm` or above for the 44px action target; legacy numeric sizes keep the exact icon size and map the button target to the closest named size. Use `shadow={false}` only when a quiet context needs to suppress glow, and use `aria-pressed` only to announce toggle-button state to assistive technology.
+ * Provide a meaningful accessible name with `title`, `ariaLabel`, or `aria-label`. Use `xs` for dense, visibly shorter controls and `sm` or above for the 44px action target; legacy numeric sizes keep the exact icon size and map the button target to the closest named size. Use `emphasis='flat'` when a quiet context needs to reduce decorative glow without removing accessible focus feedback. Use `aria-pressed` only to announce toggle-button state to assistive technology.
  */
 const meta: Meta<typeof IconButton> = {
   title: 'Atoms/IconButton',
@@ -80,18 +80,23 @@ export const Rounded: Story = {
 };
 
 /**
- * Shows that shadow only toggles the token glow; it does not change hierarchy or behavior.
+ * Shows the semantic emphasis toggle while preserving hierarchy and behavior.
  */
-export const Shadow: Story = {
+export const Emphasis: Story = {
   render: () => (
     <div className='flex gap-4 items-center flex-wrap'>
-      <IconButton icon='star' title='Favorite with glow' variant='secondary' onClick={action('shadow-on-click')} />
       <IconButton
         icon='star'
-        shadow={false}
-        title='Favorite without glow'
+        title='Favorite with glow'
         variant='secondary'
-        onClick={action('shadow-off-click')}
+        onClick={action('emphasis-default-click')}
+      />
+      <IconButton
+        icon='star'
+        emphasis='flat'
+        title='Favorite with flat emphasis'
+        variant='secondary'
+        onClick={action('emphasis-flat-click')}
       />
     </div>
   )

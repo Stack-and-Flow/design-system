@@ -63,6 +63,24 @@ describe('useButton — logic', () => {
     expect(result.current.className).toEqual(expect.any(String));
   });
 
+  it('suppresses decorative glow classes when emphasis is flat', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', variant: 'secondary', emphasis: 'flat' }));
+    expect(result.current.className).not.toContain('shadow-glow-btn-secondary');
+  });
+
+  it('keeps legacy shadow={false} as flat emphasis compatibility', () => {
+    const { result } = renderHook(() => useButton({ text: 'Button', variant: 'secondary', shadow: false }));
+    expect(result.current.className).not.toContain('shadow-glow-btn-secondary');
+  });
+
+  it('prefers explicit emphasis over legacy shadow when both are provided', () => {
+    const { result } = renderHook(() =>
+      useButton({ text: 'Button', variant: 'secondary', emphasis: 'default', shadow: false })
+    );
+
+    expect(result.current.className).toContain('shadow-glow-btn-secondary-light');
+  });
+
   it('returns correct icon class for size xs', () => {
     const { result } = renderHook(() => useButton({ text: 'Button', size: 'xs' }));
     expect(result.current.iconSize).toBe('h-sm w-auto');
@@ -131,6 +149,14 @@ describe('Button — component behavior', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
+  it('does not leak emphasis or shadow props to the DOM', () => {
+    render(<Button text='Save' variant='secondary' emphasis='flat' shadow={false} />);
+
+    const button = screen.getByRole('button', { name: 'Save' });
+    expect(button).not.toHaveAttribute('emphasis');
+    expect(button).not.toHaveAttribute('shadow');
+  });
+
   it('is disabled when disabled prop is true', () => {
     render(<Button text='Disabled' disabled={true} />);
     expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
@@ -154,8 +180,6 @@ describe('Button — component behavior', () => {
     const handleClick = vi.fn();
     render(<Button text='Saving' isLoading={true} onClick={handleClick} />);
 
-    // The button is disabled when loading — userEvent click on disabled button
-    // does not fire the event handler, which is the correct behavior
     await userEvent.click(screen.getByRole('button', { name: 'Saving' }));
 
     expect(handleClick).not.toHaveBeenCalled();

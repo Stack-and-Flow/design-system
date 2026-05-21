@@ -44,9 +44,9 @@ export const iconButtonVariants = cva(
         true: 'rounded-pill',
         false: 'rounded-md'
       },
-      shadow: {
-        true: '',
-        false: ''
+      emphasis: {
+        default: '',
+        flat: ''
       },
       size: {
         xs: 'h-9 w-9',
@@ -58,13 +58,13 @@ export const iconButtonVariants = cva(
     compoundVariants: [
       {
         variant: 'primary',
-        shadow: true,
+        emphasis: 'default',
         class:
           'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
       },
       {
         variant: ['secondary', 'outlined'],
-        shadow: true,
+        emphasis: 'default',
         class:
           'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
       }
@@ -72,7 +72,7 @@ export const iconButtonVariants = cva(
     defaultVariants: {
       variant: 'primary',
       rounded: true,
-      shadow: true,
+      emphasis: 'default',
       size: 'md'
     }
   }
@@ -80,6 +80,7 @@ export const iconButtonVariants = cva(
 
 type IconButtonVariantProps = VariantProps<typeof iconButtonVariants>;
 export type IconButtonSize = NonNullable<IconButtonVariantProps['size']>;
+export type IconButtonEmphasis = NonNullable<IconButtonVariantProps['emphasis']>;
 type NativeButtonType = 'button' | 'submit' | 'reset';
 type NativeIconButtonProps = Omit<
   ComponentProps<'button'>,
@@ -131,15 +132,21 @@ export type IconButtonProps = NativeIconButtonProps &
      */
     type?: NativeButtonType;
     /**
+     * @control select
+     * @default default
+     */
+    emphasis?: IconButtonEmphasis;
+    /**
+     * @deprecated Use `emphasis="flat"` instead.
      * @control boolean
      * @default true
      */
-    rounded?: IconButtonVariantProps['rounded'];
+    shadow?: boolean;
     /**
      * @control boolean
      * @default true
      */
-    shadow?: IconButtonVariantProps['shadow'];
+    rounded?: IconButtonVariantProps['rounded'];
     /**
      * @control boolean
      * @default false

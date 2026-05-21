@@ -52,7 +52,6 @@ export const switchTrack = cva(
     'transition-[background-color,border-color,box-shadow,color,transform] duration-300 ease-in-out',
     'hover:bg-surface-raised-light dark:hover:bg-white-tint-heavy',
     'peer-checked:hover:bg-brand-light-darker! dark:peer-checked:hover:bg-brand-dark-darkest!',
-    'peer-checked:shadow-glow-btn-secondary-hover-light dark:peer-checked:shadow-glow-btn-secondary-hover',
     'active:scale-[0.98]',
     'peer-focus-visible:shadow-glow-focus-light dark:peer-focus-visible:shadow-glow-focus-dark',
     'peer-checked:[&>span[data-thumb=true]]:bg-white dark:peer-checked:[&>span[data-thumb=true]]:bg-white',
@@ -94,23 +93,29 @@ export const switchTrack = cva(
           'hover:bg-white-tint-strong dark:hover:bg-white-tint-mid',
           'peer-checked:border-red-tint-border! peer-checked:bg-red-tint-mid! dark:peer-checked:border-brand-dark! dark:peer-checked:bg-red-tint-active!',
           'peer-checked:hover:bg-red-tint-active! dark:peer-checked:hover:bg-red-tint-strong!'
-        ],
-        shadow: [
-          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary',
-          'hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover',
-          'peer-checked:shadow-glow-btn-primary-light dark:peer-checked:shadow-glow-btn-primary',
-          'peer-checked:hover:shadow-glow-btn-primary-hover-light dark:peer-checked:hover:shadow-glow-btn-primary-hover'
         ]
+      },
+      emphasis: {
+        default: '',
+        flat: ''
       },
       rounded: {
         true: 'rounded-pill',
         false: 'rounded-md'
       }
     },
+    compoundVariants: [
+      {
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover peer-checked:shadow-glow-btn-primary-light dark:peer-checked:shadow-glow-btn-primary peer-checked:hover:shadow-glow-btn-primary-hover-light dark:peer-checked:hover:shadow-glow-btn-primary-hover'
+      }
+    ],
     defaultVariants: {
       size: 'md',
       color: 'default',
       variant: 'default',
+      emphasis: 'default',
       rounded: true
     }
   }
@@ -190,6 +195,7 @@ type NativeSwitchProps = Omit<
 export type SwitchSize = NonNullable<SwitchTrackVariants['size']>;
 export type SwitchColor = NonNullable<SwitchTrackVariants['color']>;
 export type SwitchVariant = NonNullable<SwitchTrackVariants['variant']>;
+export type SwitchEmphasis = NonNullable<SwitchTrackVariants['emphasis']>;
 export type SwitchRounded = NonNullable<SwitchTrackVariants['rounded']>;
 export type SwitchLabelPlacement = NonNullable<SwitchBaseVariants['labelPlacement']>;
 
@@ -229,6 +235,11 @@ type SwitchCommonProps = {
    * @default default
    */
   variant?: SwitchVariant;
+  /**
+   * @control select
+   * @default default
+   */
+  emphasis?: SwitchEmphasis;
   /**
    * @control boolean
    * @default true

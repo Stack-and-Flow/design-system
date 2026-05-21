@@ -1,6 +1,6 @@
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { cn } from '@/lib/utils';
-import { type LinkProps, linkVariants } from './types';
+import { type LinkEmphasis, type LinkProps, linkVariants } from './types';
 
 type UseLinkReturn = Omit<LinkProps, 'onClick' | 'onKeyDown'> & {
   ariaLabel: string | undefined;
@@ -21,6 +21,7 @@ export const useLink = ({
   icon = undefined,
   variant = 'regular',
   size = 'md',
+  emphasis,
   shadow = true,
   target = '_blank',
   className,
@@ -74,7 +75,7 @@ export const useLink = ({
     isExternal,
     title,
     children,
-    className: cn(linkVariants({ variant, size, shadow }), className),
+    className: cn(linkVariants({ variant, size, emphasis: resolveEmphasis(variant, emphasis, shadow) }), className),
     icon,
     iconWidth,
     disabled,
@@ -93,4 +94,16 @@ const getSafeRel = (rel: string | undefined, isExternal: boolean): string | unde
 
   const tokens = new Set([...(rel?.split(/\s+/).filter(Boolean) ?? []), 'noopener', 'noreferrer']);
   return Array.from(tokens).join(' ');
+};
+
+const resolveEmphasis = (
+  variant: NonNullable<LinkProps['variant']>,
+  emphasis: LinkProps['emphasis'],
+  shadow: LinkProps['shadow']
+): LinkEmphasis => {
+  if (variant === 'regular') {
+    return 'flat';
+  }
+
+  return emphasis ?? (shadow === false ? 'flat' : 'default');
 };

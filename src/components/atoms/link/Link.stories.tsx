@@ -19,7 +19,7 @@ const VariantRow = ({ children }: { children: ReactNode }) => (
  * Uses `lucide-react/dynamic.js` when the optional `icon` prop is provided.
  *
  * ## Usage Guide
- * Use `regular` for inline navigation, `outlined` for secondary call-to-action links, and `button` when a link must visually match a primary action while preserving link semantics when `href` is present. `size='xs'` makes action links denser through smaller type, icon, gap, padding, and height; use `sm` or above when the 44px action target is required. When `href` is omitted, Link behaves as a local action control with button semantics and keyboard activation.
+ * Use `regular` for inline navigation, `outlined` for secondary call-to-action links, and `button` when a link must visually match a primary action while preserving link semantics when `href` is present. `size='xs'` makes action links denser through smaller type, icon, gap, padding, and height; use `sm` or above when the 44px action target is required. Use `emphasis='flat'` to reduce decorative glow on CTA variants without removing accessible focus feedback. When `href` is omitted, Link behaves as a local action control with button semantics and keyboard activation.
  */
 const meta: Meta<typeof Link> = {
   title: 'Atoms/Link',
@@ -74,27 +74,26 @@ export const Variants: Story = {
 };
 
 /**
- * Shows CTA-style links with their default glow and with glow disabled for quieter layouts.
- * Regular inline links stay glowless regardless of this option.
+ * Shows CTA-style links with semantic decorative emphasis while regular inline links stay glowless.
  */
-export const Shadow: Story = {
+export const Emphasis: Story = {
   render: () => (
     <StoryCanvas>
       <div className='grid gap-4'>
         <VariantRow>
           <Link variant='outlined' href='https://github.com/egdev6'>
-            Outlined with glow
+            Outlined default
           </Link>
-          <Link variant='outlined' shadow={false} href='https://github.com/egdev6'>
-            Outlined without glow
+          <Link variant='outlined' emphasis='flat' href='https://github.com/egdev6'>
+            Outlined flat
           </Link>
         </VariantRow>
         <VariantRow>
           <Link variant='button' href='https://github.com/egdev6'>
-            Primary with glow
+            Primary default
           </Link>
-          <Link variant='button' shadow={false} href='https://github.com/egdev6'>
-            Primary without glow
+          <Link variant='button' emphasis='flat' href='https://github.com/egdev6'>
+            Primary flat
           </Link>
         </VariantRow>
       </div>

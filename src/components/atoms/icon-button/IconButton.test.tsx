@@ -77,12 +77,34 @@ describe('useIconButton — logic', () => {
     expect(result.current.size).toBe('md');
   });
 
-  it('omits glow classes when shadow is disabled', () => {
+  it('omits decorative glow classes when emphasis is flat', () => {
+    const { result } = renderHook(() =>
+      useIconButton({ icon: 'star', title: 'Favorite without glow', variant: 'secondary', emphasis: 'flat' })
+    );
+
+    expect(result.current.className).not.toContain('shadow-glow-btn-secondary');
+  });
+
+  it('keeps legacy shadow={false} compatibility', () => {
     const { result } = renderHook(() =>
       useIconButton({ icon: 'star', title: 'Favorite without glow', variant: 'secondary', shadow: false })
     );
 
-    expect(result.current.className).not.toContain('shadow-glow');
+    expect(result.current.className).not.toContain('shadow-glow-btn-secondary');
+  });
+
+  it('prefers explicit emphasis over legacy shadow when both are provided', () => {
+    const { result } = renderHook(() =>
+      useIconButton({
+        icon: 'star',
+        title: 'Favorite with glow',
+        variant: 'secondary',
+        emphasis: 'default',
+        shadow: false
+      })
+    );
+
+    expect(result.current.className).toContain('shadow-glow-btn-secondary-light');
   });
 
   it('re-exports the component as a named export from the barrel', () => {
@@ -111,6 +133,14 @@ describe('IconButton — component behavior', () => {
 
     expect(screen.getByTestId('icon-button-icon')).toHaveAttribute('data-name', 'menu');
     expect(screen.getByTestId('icon-button-icon')).toHaveAttribute('data-size', '14');
+  });
+
+  it('does not leak emphasis or shadow props to the DOM', () => {
+    render(<IconButton icon='star' title='Favorite' variant='secondary' emphasis='flat' shadow={false} />);
+
+    const button = screen.getByRole('button', { name: 'Favorite' });
+    expect(button).not.toHaveAttribute('emphasis');
+    expect(button).not.toHaveAttribute('shadow');
   });
 
   it('calls onClick when the button is clicked', async () => {

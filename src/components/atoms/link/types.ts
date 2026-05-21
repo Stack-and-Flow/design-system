@@ -20,17 +20,17 @@ export const linkVariants = cva(
         ],
         button: [
           'inline-flex items-center justify-center whitespace-nowrap rounded-pill border border-transparent font-semibold tracking-ui text-white no-underline',
-          'bg-btn-primary shadow-glow-btn-primary-light dark:shadow-glow-btn-primary',
+          'bg-btn-primary',
           'transition-[box-shadow,background,transform] duration-250 ease-[ease]',
-          'hover:bg-btn-primary-hover hover:text-white hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover',
+          'hover:bg-btn-primary-hover hover:text-white',
           'motion-safe:active:scale-[0.98]'
         ],
         outlined: [
           'inline-flex items-center justify-center whitespace-nowrap rounded-pill border font-semibold tracking-ui no-underline',
-          'border-red-tint-border bg-red-tint-subtle text-brand-light shadow-glow-btn-secondary-light dark:text-text-dark dark:shadow-glow-btn-secondary',
+          'border-red-tint-border bg-red-tint-subtle text-brand-light dark:text-text-dark',
           'transition-[box-shadow,background,border-color,transform] duration-250 ease-[ease]',
-          'hover:border-brand-light/80 hover:bg-red-tint-low hover:text-brand-light-darkest hover:shadow-glow-btn-secondary-hover-light',
-          'dark:hover:border-brand-dark-light dark:hover:bg-red-tint-active dark:hover:text-text-dark dark:hover:shadow-glow-btn-secondary-hover',
+          'hover:border-brand-light/80 hover:bg-red-tint-low hover:text-brand-light-darkest',
+          'dark:hover:border-brand-dark-light dark:hover:bg-red-tint-active dark:hover:text-text-dark',
           'motion-safe:active:scale-[0.98]'
         ]
       },
@@ -40,21 +40,33 @@ export const linkVariants = cva(
         md: 'fs-base',
         lg: 'fs-h5'
       },
-      shadow: {
-        true: '',
-        false: 'shadow-none hover:shadow-none dark:shadow-none dark:hover:shadow-none'
+      emphasis: {
+        default: '',
+        flat: ''
       }
     },
     compoundVariants: [
       { variant: ['button', 'outlined'], size: 'xs', class: 'h-9 gap-0-75 px-2' },
       { variant: ['button', 'outlined'], size: 'sm', class: 'h-11 gap-1 px-sm' },
       { variant: ['button', 'outlined'], size: 'md', class: 'h-11 gap-1.5 px-md' },
-      { variant: ['button', 'outlined'], size: 'lg', class: 'h-12 gap-2 px-lg' }
+      { variant: ['button', 'outlined'], size: 'lg', class: 'h-12 gap-2 px-lg' },
+      {
+        variant: 'button',
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+      },
+      {
+        variant: 'outlined',
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
+      }
     ],
     defaultVariants: {
       variant: 'regular',
       size: 'md',
-      shadow: true
+      emphasis: 'default'
     }
   }
 );
@@ -62,6 +74,7 @@ export const linkVariants = cva(
 export type LinkVariant = 'regular' | 'button' | 'outlined';
 export type LinkTarget = '_blank' | '_self' | '_parent' | '_top';
 export type LinkSize = 'xs' | 'sm' | 'md' | 'lg';
+export type LinkEmphasis = NonNullable<VariantProps<typeof linkVariants>['emphasis']>;
 
 export type LinkProps = Omit<ComponentProps<'a'>, 'children' | 'disabled' | 'target'> &
   VariantProps<typeof linkVariants> & {
@@ -89,6 +102,12 @@ export type LinkProps = Omit<ComponentProps<'a'>, 'children' | 'disabled' | 'tar
      */
     icon?: DynamicIconName;
     /**
+     * @control select
+     * @default default
+     */
+    emphasis?: LinkEmphasis;
+    /**
+     * @deprecated Use `emphasis="flat"` instead.
      * @control boolean
      * @default true
      */
