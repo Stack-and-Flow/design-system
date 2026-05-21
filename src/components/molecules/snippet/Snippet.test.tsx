@@ -14,9 +14,7 @@ import { Snippet } from './Snippet';
 import { snippetBase } from './types';
 import { useSnippet } from './useSnippet';
 
-const createClipboardMock = () => {
-  const writeText = vi.fn().mockResolvedValue(undefined);
-
+const createClipboardMock = (writeText = vi.fn().mockResolvedValue(undefined)) => {
   Object.defineProperty(window.navigator, 'clipboard', {
     configurable: true,
     value: { writeText }
@@ -107,6 +105,58 @@ describe('useSnippet — logic', () => {
     });
 
     expect(result.current.copied).toBe(false);
+    expect(result.current.copyAnnouncement).toBeUndefined();
+  });
+
+  it('announces clipboard failures without calling onCopy', async () => {
+    const writeText = createClipboardMock(vi.fn().mockRejectedValue(new Error('Clipboard denied')));
+    const handleCopy = vi.fn();
+    const { result } = renderHook(() => useSnippet({ children: 'pnpm install', onCopy: handleCopy }));
+    const pre = document.createElement('pre');
+
+    pre.textContent = 'pnpm install';
+    result.current.preRef.current = pre;
+
+    await act(async () => {
+      await result.current.copyButtonProps.onClick?.(new MouseEvent('click') as never);
+    });
+
+    expect(writeText).toHaveBeenCalledWith('pnpm install');
+    expect(handleCopy).not.toHaveBeenCalled();
+    expect(result.current.copied).toBe(false);
+    expect(result.current.copyAnnouncement).toBe('Unable to copy snippet');
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    expect(result.current.copyAnnouncement).toBeUndefined();
+  });
+
+  it('announces unsupported clipboard access', async () => {
+    Object.defineProperty(window.navigator, 'clipboard', {
+      configurable: true,
+      value: undefined
+    });
+    const handleCopy = vi.fn();
+    const { result } = renderHook(() => useSnippet({ children: 'pnpm install', onCopy: handleCopy }));
+    const pre = document.createElement('pre');
+
+    pre.textContent = 'pnpm install';
+    result.current.preRef.current = pre;
+
+    await act(async () => {
+      await result.current.copyButtonProps.onClick?.(new MouseEvent('click') as never);
+    });
+
+    expect(handleCopy).not.toHaveBeenCalled();
+    expect(result.current.copied).toBe(false);
+    expect(result.current.copyAnnouncement).toBe('Unable to copy snippet');
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
     expect(result.current.copyAnnouncement).toBeUndefined();
   });
 

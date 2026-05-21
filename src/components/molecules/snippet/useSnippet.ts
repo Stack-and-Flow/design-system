@@ -74,6 +74,7 @@ export const useSnippet = ({
 }: SnippetProps): UseSnippetReturn => {
   const generatedId = useId();
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
   const preRef = useRef<HTMLPreElement>(null);
   const resetTimeoutRef = useRef<number | null>(null);
   const contentId = ariaControls ?? (id ? `${id}-content` : `snippet-${generatedId}`);
@@ -88,29 +89,46 @@ export const useSnippet = ({
     []
   );
 
-  const handleCopy: MouseEventHandler<HTMLButtonElement> = useCallback(async () => {
-    if (disableCopy || !preRef.current || typeof navigator.clipboard?.writeText !== 'function') {
-      return;
-    }
-
-    await navigator.clipboard.writeText(preRef.current.textContent ?? '');
-
-    setCopied(true);
-    onCopy?.();
-
+  const resetCopyStatus = useCallback(() => {
     if (resetTimeoutRef.current) {
       window.clearTimeout(resetTimeoutRef.current);
     }
 
     resetTimeoutRef.current = window.setTimeout(() => {
       setCopied(false);
+      setCopyError(false);
     }, 2000);
-  }, [disableCopy, onCopy]);
+  }, []);
+
+  const handleCopy: MouseEventHandler<HTMLButtonElement> = useCallback(async () => {
+    if (disableCopy || !preRef.current) {
+      return;
+    }
+
+    if (typeof navigator.clipboard?.writeText !== 'function') {
+      setCopied(false);
+      setCopyError(true);
+      resetCopyStatus();
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(preRef.current.textContent ?? '');
+      setCopyError(false);
+      setCopied(true);
+      onCopy?.();
+    } catch {
+      setCopied(false);
+      setCopyError(true);
+    }
+
+    resetCopyStatus();
+  }, [disableCopy, onCopy, resetCopyStatus]);
 
   return {
     children,
     copied,
-    copyAnnouncement: copied ? 'Snippet copied to clipboard' : undefined,
+    copyAnnouncement: copyError ? 'Unable to copy snippet' : copied ? 'Snippet copied to clipboard' : undefined,
     copyButtonProps: {
       'aria-controls': contentId,
       'aria-label': copyLabel,

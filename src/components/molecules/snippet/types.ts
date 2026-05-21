@@ -153,7 +153,7 @@ export type SnippetVariantProps = VariantProps<typeof snippetBase>;
 
 type NativeSnippetProps = Omit<
   ComponentProps<'div'>,
-  'aria-controls' | 'aria-label' | 'children' | 'className' | 'color'
+  'aria-controls' | 'aria-label' | 'children' | 'className' | 'color' | 'onCopy'
 >;
 
 export type SnippetProps = NativeSnippetProps & {
