@@ -1,33 +1,34 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import type { ReactNode } from 'react';
-import type { IconSizes } from '@/types';
+import type { ComponentProps, ReactNode } from 'react';
+import type { IconButtonSize } from '@/components/atoms/icon-button';
+import type { DynamicIconName } from '@/types';
 
-/**
- * CVA configuration for the Snippet component.
- * Controls base styles, variants, and compound variants.
- */
 export const snippetBase = cva(
-  'w-full max-w-full box-border overflow-hidden flex flex-row justify-start items-center gap-2 p-2 font-mono whitespace-pre-wrap text-text-light dark:text-text-dark text-justify',
+  [
+    'box-border flex w-full max-w-full items-start overflow-hidden border',
+    'font-mono text-left text-text-light dark:text-text-dark',
+    'transition-[background-color,border-color,box-shadow] duration-200 ease-out'
+  ],
   {
     variants: {
       size: {
-        sm: 'text-xs',
-        md: 'text-sm',
-        lg: 'text-base'
+        sm: 'gap-1 py-1 pr-1 pl-3 text-xs',
+        md: 'gap-2 py-1 pr-1 pl-3 text-sm',
+        lg: 'gap-2 py-1.5 pr-1.5 pl-4 text-base'
       },
       rounded: {
+        none: 'rounded-none',
         xs: 'rounded-xs',
         sm: 'rounded-sm',
         md: 'rounded-md',
         lg: 'rounded-lg',
         xl: 'rounded-xl',
-        full: 'rounded-full',
-        none: 'rounded-none'
+        full: 'rounded-full'
       },
       variant: {
         solid: '',
-        outline: 'border-2 bg-transparent',
-        shadow: 'shadow-lg'
+        outline: 'bg-transparent',
+        shadow: 'shadow-glow-chip-secondary-light dark:shadow-glow-chip-secondary'
       },
       color: {
         default: '',
@@ -43,86 +44,78 @@ export const snippetBase = cva(
       {
         variant: ['solid', 'shadow'],
         color: 'default',
-        class: 'bg-color-surface-light dark:bg-color-surface-dark'
+        class: 'bg-surface-light border-border-light dark:bg-surface-dark dark:border-border-dark'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'primary',
-        class: 'bg-color-surface-raised-light dark:bg-color-brand-dark'
+        class: 'bg-red-tint-subtle border-brand-light/20 dark:bg-red-tint-low dark:border-brand-dark/30'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'secondary',
-        class: 'bg-color-surface-raised-dark dark:bg-color-surface-raised-dark'
+        class:
+          'bg-surface-raised-light border-border-strong-light dark:bg-surface-raised-dark dark:border-border-strong-dark'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'success',
-        class: 'bg-green-400 dark:bg-green-700'
+        class: 'bg-success-tint border-success-light/30 dark:bg-success-tint dark:border-success/30'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'warning',
-        class: 'bg-yellow-400 dark:bg-yellow-700'
+        class: 'bg-warning-tint border-warning-light/30 dark:bg-warning-tint dark:border-warning/30'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'danger',
-        class: 'bg-red-400 dark:bg-red-700'
+        class: 'bg-error-tint border-error-light/30 dark:bg-error-tint dark:border-error/30'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'info',
-        class: 'bg-blue-400 dark:bg-blue-700'
+        class: 'bg-info-tint border-info-light/30 dark:bg-info-tint dark:border-info/30'
       },
-
       {
         variant: 'outline',
         color: 'default',
-        class: 'border-color-border-light dark:border-color-border-dark'
+        class: 'border-border-light dark:border-border-dark'
       },
       {
         variant: 'outline',
         color: 'primary',
-        class: 'border-color-brand-light dark:border-color-brand-dark'
+        class: 'border-brand-light dark:border-brand-dark'
       },
       {
         variant: 'outline',
         color: 'secondary',
-        class: 'border-color-surface-raised-dark dark:border-color-surface-raised-dark'
+        class: 'border-border-strong-light dark:border-border-strong-dark'
       },
       {
         variant: 'outline',
         color: 'success',
-        class: 'border-green-400 dark:border-green-700'
+        class: 'border-success-light dark:border-success'
       },
       {
         variant: 'outline',
         color: 'warning',
-        class: 'border-yellow-400 dark:border-yellow-700'
+        class: 'border-warning-light dark:border-warning'
       },
       {
         variant: 'outline',
         color: 'danger',
-        class: 'border-red-400 dark:border-red-700'
+        class: 'border-error-light dark:border-error'
       },
       {
         variant: 'outline',
         color: 'info',
-        class: 'border-blue-400 dark:border-blue-700'
+        class: 'border-info-light dark:border-info'
       },
-
-      { variant: 'shadow', color: 'default', class: 'shadow-color-text-muted-light/50' },
-      { variant: 'shadow', color: 'primary', class: 'shadow-red-600/50' },
       {
         variant: 'shadow',
-        color: 'secondary',
-        class: 'shadow-color-text-muted-light/50'
-      },
-      { variant: 'shadow', color: 'success', class: 'shadow-green-600/50' },
-      { variant: 'shadow', color: 'warning', class: 'shadow-yellow-600/50' },
-      { variant: 'shadow', color: 'danger', class: 'shadow-red-600/50' },
-      { variant: 'shadow', color: 'info', class: 'shadow-blue-600/50' }
+        class: 'border-border-strong-light dark:border-border-strong-dark'
+      }
     ],
     defaultVariants: {
       size: 'md',
@@ -133,34 +126,65 @@ export const snippetBase = cva(
   }
 );
 
-/**
- * Snippet component variants generated from CVA.
- */
-export type SnippetVariants = VariantProps<typeof snippetBase>;
+export const snippetPreClassName =
+  'm-0 min-h-9 min-w-0 flex-1 overflow-x-auto whitespace-pre break-words bg-transparent py-2 text-inherit scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent';
 
-type Size = 'sm' | 'md' | 'lg';
+export const snippetCopyButtonWrapperClassName = 'shrink-0 self-start';
 
-/**
- * Icon button sizes for each snippet size.
- */
-export type SizeButton = Record<Size, IconSizes>;
+export const snippetCopyButtonClassName =
+  'opacity-100 transition-[opacity,box-shadow,background-color,color] duration-200 ease-out';
 
-/**
- * Props for the Snippet component.
- * Variants (size, rounded, color, variant) come from SnippetVariants (CVA).
- * @property {ReactNode} children - Content to display inside the snippet.
- * @property {string} [className] - Additional class names.
- * @property {boolean} [disableCopy] - Disables the copy button.
- * @property {() => void} [onCopy] - Callback after copying.
- * @property {string} ['aria-controls'] - ARIA controls attribute.
- * @property {string} ['aria-label'] - ARIA label attribute.
- */
-export type SnippetProps = SnippetVariants & {
+export const snippetStatusClassName = 'sr-only';
+
+export const snippetCopyButtonIcons = {
+  idle: 'copy',
+  success: 'check'
+} as const satisfies Record<'idle' | 'success', DynamicIconName>;
+
+export type SnippetSize = NonNullable<VariantProps<typeof snippetBase>['size']>;
+
+export const snippetCopyButtonSizes = {
+  sm: 'xs',
+  md: 'xs',
+  lg: 'sm'
+} as const satisfies Record<SnippetSize, IconButtonSize>;
+
+export type SnippetVariantProps = VariantProps<typeof snippetBase>;
+
+type NativeSnippetProps = Omit<
+  ComponentProps<'div'>,
+  'aria-controls' | 'aria-label' | 'children' | 'className' | 'color'
+>;
+
+export type SnippetProps = NativeSnippetProps & {
+  /** @control text */
   children: ReactNode;
-  id?: string;
+  /** @control select
+   * @default md
+   */
+  size?: NonNullable<SnippetVariantProps['size']>;
+  /** @control select
+   * @default md
+   */
+  rounded?: NonNullable<SnippetVariantProps['rounded']>;
+  /** @control select
+   * @default solid
+   */
+  variant?: NonNullable<SnippetVariantProps['variant']>;
+  /** @control select
+   * @default default
+   */
+  color?: NonNullable<SnippetVariantProps['color']>;
+  /** @control text */
   className?: string;
+  /** @control boolean
+   * @default false
+   */
   disableCopy?: boolean;
+  /** @control action */
   onCopy?: () => void;
+  /** @control text */
   'aria-controls'?: string;
+  /** @control text */
   'aria-label'?: string;
 };
