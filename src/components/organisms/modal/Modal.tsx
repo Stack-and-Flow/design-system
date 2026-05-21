@@ -2,10 +2,10 @@ import { Button } from '@atoms/button';
 import { IconButton } from '@atoms/icon-button';
 import * as ModalPrimitive from '@radix-ui/react-dialog';
 import { cloneElement, type FC, type ReactNode } from 'react';
-import type { ModalActions, ModalProps } from './types';
+import type { ModalActions, ModalProps, ModalSlot } from './types';
 import { useModal } from './useModal';
 
-const renderModalSlot = (slot: ModalProps['content'], actions: ModalActions): ReactNode =>
+const renderModalSlot = (slot: ModalSlot, actions: ModalActions): ReactNode =>
   typeof slot === 'function' ? slot(actions) : slot;
 
 export const Modal: FC<ModalProps> = (props) => {

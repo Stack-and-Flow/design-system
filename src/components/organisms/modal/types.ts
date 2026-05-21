@@ -79,7 +79,7 @@ export type ModalActions = {
   close: () => void;
 };
 
-type ModalSlot = ReactNode | ((actions: ModalActions) => ReactNode);
+export type ModalSlot = ReactNode | ((actions: ModalActions) => ReactNode);
 
 export type ModalProps = {
   /**

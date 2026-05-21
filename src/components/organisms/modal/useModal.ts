@@ -1,10 +1,9 @@
-import type * as ModalPrimitive from '@radix-ui/react-dialog';
-import { type ComponentPropsWithoutRef, type MouseEvent, useId, useRef, useState } from 'react';
+import type { DialogContentProps } from '@radix-ui/react-dialog';
+import { type MouseEvent, useId, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { type ModalProps, modalContainerVariants, modalOverlayVariants, modalVariants } from './types';
 
-type ContentProps = ComponentPropsWithoutRef<typeof ModalPrimitive.Content>;
-type CloseAutoFocusEvent = Parameters<NonNullable<ContentProps['onCloseAutoFocus']>>[0];
+type CloseAutoFocusEvent = Parameters<NonNullable<DialogContentProps['onCloseAutoFocus']>>[0];
 
 type UseModalReturn = {
   bodyClassName: string;
