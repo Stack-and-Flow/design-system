@@ -3,6 +3,7 @@
   "private": false,
   "version": "1.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.33.4",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -98,5 +99,14 @@
     "typescript": "5.9.3",
     "vite": "6.4.2",
     "vitest": "3.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "minimatch@10.2.5>brace-expansion": "5.0.6",
+      "ws": "8.20.1"
+    },
+    "patchedDependencies": {
+      "storybook-dark-mode@4.0.2": "patches/storybook-dark-mode@4.0.2.patch"
+    }
   }
 }
