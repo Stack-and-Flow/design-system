@@ -382,6 +382,18 @@
   --spacing-2xl: 3rem; /* 48px */
   --spacing-3xl: 5rem; /* 80px */
 
+  /* ── Modal sizing ────────────────────────────────────────────── */
+  --size-modal-viewport: calc(100vw - var(--spacing-8));
+  --size-modal-xs: 20rem;
+  --size-modal-sm: 24rem;
+  --size-modal-md: 28rem;
+  --size-modal-lg: 32rem;
+  --size-modal-xl: 36rem;
+  --size-modal-2xl: 42rem;
+  --size-modal-3xl: 48rem;
+  --size-modal-4xl: 56rem;
+  --size-modal-5xl: 64rem;
+
   /* ── Transiciones ────────────────────────────────────────────── */
   --transition-fast: 150ms ease-in-out;
   --transition-base: 250ms ease;
@@ -435,4 +447,57 @@
 
 @utility max-h-modal {
   max-height: 80dvh;
+}
+
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+
+@utility shadow-modal {
+  box-shadow: var(--shadow-dropdown-light);
+}
+
+@utility shadow-modal-dark {
+  box-shadow: var(--shadow-dropdown);
+}
+
+@utility backdrop-blur-overlay {
+  backdrop-filter: var(--blur-overlay);
+  -webkit-backdrop-filter: var(--blur-overlay);
+}
+
+@utility max-w-modal-xs {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-xs));
+}
+
+@utility max-w-modal-sm {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-sm));
+}
+
+@utility max-w-modal-md {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-md));
+}
+
+@utility max-w-modal-lg {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-lg));
+}
+
+@utility max-w-modal-xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-xl));
+}
+
+@utility max-w-modal-2xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-2xl));
+}
+
+@utility max-w-modal-3xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-3xl));
+}
+
+@utility max-w-modal-4xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-4xl));
+}
+
+@utility max-w-modal-5xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-5xl));
 }

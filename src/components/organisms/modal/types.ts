@@ -1,43 +1,91 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import type { JSX, ReactNode } from 'react';
+import type { MouseEvent, ReactElement, ReactNode } from 'react';
 
 export const modalVariants = cva(
   [
-    'w-full z-modal p-6 shadow-shadow-dropdown',
+    'z-modal flex w-full flex-col border p-6 shadow-modal dark:shadow-modal-dark',
     'bg-surface-light dark:bg-surface-dark',
-    'border border-border-light dark:border-border-dark',
-    'flex flex-col'
+    'border-border-light dark:border-border-dark',
+    'data-[state=closed]:animate-out data-[state=open]:animate-in',
+    'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
   ],
   {
     variants: {
       size: {
-        xs: 'max-w-xs m-0 sm:m-1 rounded-md max-h-modal',
-        sm: 'max-w-sm m-0 sm:m-1 rounded-md max-h-modal',
-        md: 'max-w-full sm:max-w-md m-0 sm:m-1 rounded-md max-h-modal',
-        lg: 'max-w-full sm:max-w-lg m-0 sm:m-1 rounded-md max-h-modal',
-        xl: 'max-w-full sm:max-w-xl m-0 sm:m-1 rounded-md max-h-modal',
-        '2xl': 'max-w-full sm:max-w-2xl m-0 sm:m-1 rounded-md max-h-modal',
-        '3xl': 'max-w-full sm:max-w-3xl m-0 sm:m-1 rounded-md max-h-modal',
-        '4xl': 'max-w-full sm:max-w-4xl m-0 sm:m-1 rounded-lg max-h-modal',
-        '5xl': 'max-w-full sm:max-w-5xl m-0 sm:m-1 rounded-lg max-h-modal',
-        full: 'max-w-full m-0 rounded-none h-dvh'
-      },
-      position: {
-        center: 'm-auto',
-        top: 'top-0',
-        bottom: 'bottom-0'
+        xs: 'm-0 max-h-modal max-w-modal-xs rounded-md sm:m-1',
+        sm: 'm-0 max-h-modal max-w-modal-sm rounded-md sm:m-1',
+        md: 'm-0 max-h-modal max-w-modal-md rounded-md sm:m-1',
+        lg: 'm-0 max-h-modal max-w-modal-lg rounded-md sm:m-1',
+        xl: 'm-0 max-h-modal max-w-modal-xl rounded-md sm:m-1',
+        '2xl': 'm-0 max-h-modal max-w-modal-2xl rounded-md sm:m-1',
+        '3xl': 'm-0 max-h-modal max-w-modal-3xl rounded-md sm:m-1',
+        '4xl': 'm-0 max-h-modal max-w-modal-4xl rounded-lg sm:m-1',
+        '5xl': 'm-0 max-h-modal max-w-modal-5xl rounded-lg sm:m-1',
+        full: 'm-0 h-dvh max-w-full rounded-none'
       }
     },
     defaultVariants: {
-      size: 'md',
-      position: 'center'
+      size: 'md'
     }
   }
 );
 
-type ModalSize = VariantProps<typeof modalVariants>['size'];
+export const modalContainerVariants = cva('fixed inset-0 z-modal flex w-full p-0 md:p-4', {
+  variants: {
+    position: {
+      center: 'items-center justify-center',
+      top: 'items-start justify-center',
+      bottom: 'items-end justify-center'
+    }
+  },
+  defaultVariants: {
+    position: 'center'
+  }
+});
 
-export type ModalProps = VariantProps<typeof modalVariants> & {
+export const modalOverlayVariants = cva(
+  [
+    'fixed inset-0 z-modal',
+    'data-[state=closed]:animate-out data-[state=open]:animate-in',
+    'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'
+  ],
+  {
+    variants: {
+      backdrop: {
+        opacity: 'bg-overlay-dark',
+        blur: 'bg-overlay-dark backdrop-blur-overlay',
+        transparent: 'bg-transparent'
+      }
+    },
+    defaultVariants: {
+      backdrop: 'opacity'
+    }
+  }
+);
+
+type ModalVariantProps = VariantProps<typeof modalVariants>;
+export type ModalSize = NonNullable<ModalVariantProps['size']>;
+export type ModalPosition = NonNullable<VariantProps<typeof modalContainerVariants>['position']>;
+export type ModalBackdrop = NonNullable<VariantProps<typeof modalOverlayVariants>['backdrop']>;
+
+export type ModalTriggerProps = {
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
+  'aria-controls'?: string;
+  'aria-expanded'?: boolean;
+  'aria-haspopup'?: 'dialog';
+};
+
+export type ModalActions = {
+  close: () => void;
+};
+
+export type ModalSlot = ReactNode | ((actions: ModalActions) => ReactNode);
+
+export type ModalProps = {
+  /**
+   * @control custom
+   */
+  children: ReactElement<ModalTriggerProps>;
   /**
    * @control select
    * @default md
@@ -47,29 +95,36 @@ export type ModalProps = VariantProps<typeof modalVariants> & {
    * @control select
    * @default center
    */
-  position?: 'center' | 'top' | 'bottom';
+  position?: ModalPosition;
   /**
    * @control select
    * @default opacity
    */
-  backdrop?: 'opacity' | 'blur' | 'transparent';
+  backdrop?: ModalBackdrop;
   /**
    * @control text
-   * @default 'Modal title'
+   * @default Modal title
    */
   title?: string;
-  header?: ReactNode | JSX.Element;
-  /**
-   * @control text
-   * @default 'Modal content goes here.'
-   */
-  textContent?: string;
-  content?: ReactNode | JSX.Element;
-  footer?: ReactNode | JSX.Element;
-  children?: ReactNode;
   /**
    * @control custom
-   * @default undefined
+   */
+  header?: ReactNode;
+  /**
+   * @control text
+   * @default Modal content goes here.
+   */
+  textContent?: string;
+  /**
+   * @control custom
+   */
+  content?: ModalSlot;
+  /**
+   * @control custom
+   */
+  footer?: ModalSlot;
+  /**
+   * @control custom
    */
   customBackdrop?: string;
 };
