@@ -1024,9 +1024,12 @@ box-shadow:
 
 ```css
 box-shadow:
+  /* L1: near glow */
   0 0 8px 2px rgba(255, 0, 54, 0.15),
-  /* L1: near glow */ 0 0 24px 4px rgba(255, 0, 54, 0.07),
-  /* L2: mid dispersal */ inset 0 0 10px rgba(255, 0, 54, 0.04); /* L3: inset tint (no top highlight) */
+  /* L2: mid dispersal */
+  0 0 24px 4px rgba(255, 0, 54, 0.07),
+  /* L3: inset tint (no top highlight) */
+  inset 0 0 10px rgba(255, 0, 54, 0.04);
 ```
 
 No tight ring layer — secondary doesn't need a border simulation because it already has a real `border: 1.5px solid`.
