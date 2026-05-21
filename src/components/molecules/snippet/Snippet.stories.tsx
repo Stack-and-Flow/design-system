@@ -1,17 +1,17 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import Snippet from './Snippet';
+import { Snippet } from './Snippet';
 
 /**
- * ## DESCRIPTION
- * The `Snippet` component displays code or text snippets with optional copy-to-clipboard functionality.
- * It supports multiple variants, colors, sizes, and rounded corners for flexible use in documentation and UI.
- * The component is fully accessible, keyboard-navigable, and screen-reader friendly.
+ * ## Description
+ * Snippet renders short or multiline code blocks with a token-backed surface and an optional copy action.
  *
- * ## DEPENDENCIES
- * - `IconButton` (atom): Used for the copy-to-clipboard button, providing accessible icon button interactions.
- * - `class-variance-authority (CVA)`: Used for scalable and maintainable styling variants.
+ * ## Dependencies
+ * Uses `IconButton` for the copy affordance.
+ *
+ * ## Usage Guide
+ * Use `aria-label` to customize the copy button name for assistive technology or product-specific copy. `disableCopy` removes the action entirely when the snippet is meant to be read-only or decorative.
  */
-
 const meta: Meta<typeof Snippet> = {
   title: 'Molecules/Snippet',
   component: Snippet,
@@ -22,257 +22,172 @@ const meta: Meta<typeof Snippet> = {
   },
   tags: ['autodocs']
 };
+
 export default meta;
 
 type Story = StoryObj<typeof Snippet>;
 
 /**
- * Demonstrates the default usage of the Snippet component with the copy button enabled.
- *
- * **Props used:**
- * - No additional props (uses all default values)
+ * Shows the default snippet configuration without overriding the default visual variants.
  */
 export const Default: Story = {
   args: {
-    children: 'npm install @your/package'
+    children: 'pnpm add @stack-and-flow/design-system',
+    onCopy: action('copy')
   }
 };
 
 /**
- * Demonstrates the Snippet component with the copy button disabled for all variants.
- *
- * **Props used:**
- * - `disableCopy`: Disables the copy button.
- * - `variant`: solid | outline | shadow
- */
-export const DisabledCopy: Story = {
-  render: () => (
-    <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-      <Snippet variant='solid' disableCopy={true}>
-        npm install @your/package
-      </Snippet>
-      <Snippet variant='outline' disableCopy={true}>
-        npm install @your/package
-      </Snippet>
-      <Snippet variant='shadow' disableCopy={true}>
-        npm install @your/package
-      </Snippet>
-    </div>
-  )
-};
-
-/**
- * Demonstrates the Snippet component with multiline content for each variant.
- *
- * **Props used:**
- * - `variant`: solid | outline | shadow
- * - `children`: Multiline string content
- */
-export const MultiLine: Story = {
-  render: () => (
-    <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-      <Snippet variant='solid'>
-        {`
-# Instalación
-npm install my-library
-
-# Construcción
-npm run build
-
-# Inicio
-npm start
-    `}
-      </Snippet>
-      <Snippet variant='outline'>
-        {`
-# Instalación
-npm install my-library
-
-# Construcción
-npm run build
-
-# Inicio
-npm start
-    `}
-      </Snippet>
-      <Snippet variant='shadow'>
-        {`
-# Instalación
-npm install my-library
-
-# Construcción
-npm run build
-
-# Inicio
-npm start
-    `}
-      </Snippet>
-    </div>
-  )
-};
-
-/**
- * Demonstrates the `variant` prop of the Snippet component, showing all color options for each variant: solid, outline, and shadow.
- *
- * The `variant` prop controls the visual style of the Snippet. Available options are:
- * - `solid`: Filled background (default)
- * - `outline`: Transparent background with border
- * - `shadow`: Adds a shadow effect
+ * Shows the visual hierarchy available through the variant prop.
  */
 export const Variant: Story = {
   render: () => (
-    <div className='space-y-8'>
-      <div>
-        <div className='mb-2 font-semibold text-text-light dark:text-text-dark'>Solid variant</div>
-        <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-          <Snippet variant='solid'>npm install @your/package</Snippet>
-          <Snippet variant='solid' color='primary'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='solid' color='secondary'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='solid' color='info'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='solid' color='success'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='solid' color='warning'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='solid' color='danger'>
-            npm install @your/package
-          </Snippet>
-        </div>
-      </div>
-      <div>
-        <div className='mb-2 font-semibold text-text-light dark:text-text-dark'>Outline variant</div>
-        <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-          <Snippet variant='outline'>npm install @your/package</Snippet>
-          <Snippet variant='outline' color='primary'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='outline' color='secondary'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='outline' color='info'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='outline' color='success'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='outline' color='warning'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='outline' color='danger'>
-            npm install @your/package
-          </Snippet>
-        </div>
-      </div>
-      <div>
-        <div className='mb-2 font-semibold text-text-light dark:text-text-dark'>Shadow variant</div>
-        <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-          <Snippet variant='shadow'>npm install @your/package</Snippet>
-          <Snippet variant='shadow' color='primary'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='shadow' color='secondary'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='shadow' color='info'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='shadow' color='success'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='shadow' color='warning'>
-            npm install @your/package
-          </Snippet>
-          <Snippet variant='shadow' color='danger'>
-            npm install @your/package
-          </Snippet>
-        </div>
-      </div>
+    <div className='grid gap-4 md:grid-cols-3'>
+      <Snippet onCopy={action('solid-copy')}>Solid snippet</Snippet>
+      <Snippet variant='outline' onCopy={action('outline-copy')}>
+        Outline snippet
+      </Snippet>
+      <Snippet variant='shadow' onCopy={action('shadow-copy')}>
+        Shadow snippet
+      </Snippet>
     </div>
   )
 };
 
 /**
- * Demonstrates the different size options for the Snippet component.
- *
- * **Props used:**
- * - `size`: sm | md | lg
+ * Shows the semantic color surface options while keeping the same structure.
+ */
+export const Color: Story = {
+  render: () => (
+    <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+      <Snippet color='default' onCopy={action('default-color-copy')}>
+        Default color
+      </Snippet>
+      <Snippet color='primary' onCopy={action('primary-color-copy')}>
+        Primary color
+      </Snippet>
+      <Snippet color='secondary' onCopy={action('secondary-color-copy')}>
+        Secondary color
+      </Snippet>
+      <Snippet color='success' onCopy={action('success-color-copy')}>
+        Success color
+      </Snippet>
+      <Snippet color='warning' onCopy={action('warning-color-copy')}>
+        Warning color
+      </Snippet>
+      <Snippet color='danger' onCopy={action('danger-color-copy')}>
+        Danger color
+      </Snippet>
+      <Snippet color='info' onCopy={action('info-color-copy')}>
+        Info color
+      </Snippet>
+    </div>
+  )
+};
+
+/**
+ * Shows the supported size scale for compact and large code snippets.
  */
 export const Size: Story = {
   render: () => (
-    <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-      <Snippet size='sm'>npm install @your/package</Snippet>
-      <Snippet size='md'>npm install @your/package</Snippet>
-      <Snippet size='lg'>npm install @your/package</Snippet>
+    <div className='grid gap-4'>
+      <Snippet size='sm' onCopy={action('small-copy')}>
+        Small snippet
+      </Snippet>
+      <Snippet size='md' onCopy={action('medium-copy')}>
+        Medium snippet
+      </Snippet>
+      <Snippet size='lg' onCopy={action('large-copy')}>
+        Large snippet
+      </Snippet>
     </div>
   )
 };
 
 /**
- * Demonstrates the different border radius (rounded) options for the Snippet component.
- *
- * **Props used:**
- * - `rounded`: none | xs | sm | md | lg | xl | full
+ * Shows the available rounded scale for surface composition.
  */
-export const CustomRounded: Story = {
+export const Rounded: Story = {
   render: () => (
-    <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-      <Snippet rounded='none'>npm install @your/package</Snippet>
-      <Snippet rounded='xs'>npm install @your/package</Snippet>
-      <Snippet rounded='sm'>npm install @your/package</Snippet>
-      <Snippet rounded='md'>npm install @your/package</Snippet>
-      <Snippet rounded='lg'>npm install @your/package</Snippet>
-      <Snippet rounded='xl'>npm install @your/package</Snippet>
-      <Snippet rounded='full'>npm install @your/package</Snippet>
+    <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+      <Snippet rounded='none' onCopy={action('rounded-none-copy')}>
+        Rounded none
+      </Snippet>
+      <Snippet rounded='xs' onCopy={action('rounded-xs-copy')}>
+        Rounded xs
+      </Snippet>
+      <Snippet rounded='sm' onCopy={action('rounded-sm-copy')}>
+        Rounded sm
+      </Snippet>
+      <Snippet rounded='md' onCopy={action('rounded-md-copy')}>
+        Rounded md
+      </Snippet>
+      <Snippet rounded='lg' onCopy={action('rounded-lg-copy')}>
+        Rounded lg
+      </Snippet>
+      <Snippet rounded='xl' onCopy={action('rounded-xl-copy')}>
+        Rounded xl
+      </Snippet>
+      <Snippet rounded='full' onCopy={action('rounded-full-copy')}>
+        Rounded full
+      </Snippet>
     </div>
   )
 };
 
 /**
- * Demonstrates usage of the `className` prop for custom styles.
- *
- * **Props used:**
- * - `className`: Custom Tailwind or CSS classes
+ * Shows multiline content while preserving the horizontal copy affordance.
+ */
+export const Multiline: Story = {
+  render: () => (
+    <Snippet onCopy={action('multiline-copy')}>
+      {`pnpm install
+pnpm run build
+pnpm test`}
+    </Snippet>
+  )
+};
+
+/**
+ * Shows the non-interactive state when copy is intentionally unavailable.
+ */
+export const Disabled: Story = {
+  args: {
+    children: 'Read-only snippet',
+    disableCopy: true
+  }
+};
+
+/**
+ * Shows how token-backed utility classes can extend the component without bypassing the theme.
  */
 export const CustomClassName: Story = {
   args: {
-    children: 'npm install @your/package',
-    className:
-      'bg-gradient-to-r from-blue-100 to-blue-300 dark:from-blue-600 dark:to-blue-900 border border-blue-800 dark:border-blue-500'
+    children: 'Themed custom class',
+    className: 'border-brand-light bg-red-tint-subtle text-brand-light dark:border-brand-dark dark:text-brand-dark',
+    onCopy: action('custom-class-copy')
   }
 };
 
 /**
- * Demonstrates usage of the `aria-controls` and `aria-label` props for accessibility.
- *
- * **Props used:**
- * - `aria-label`: Accessible label for the copy button
- * - `aria-controls`: ARIA controls attribute for accessibility
+ * Shows accessible copy-button labeling and an explicit controlled content relationship.
  */
-export const WithAriaControls: Story = {
+export const AccessibleCopyAction: Story = {
   args: {
-    id: 'custom-snippet',
-    children: 'npm install @your/package',
-    'aria-label': 'Copy install command',
-    'aria-controls': 'custom-snippet'
+    id: 'install-command',
+    'aria-controls': 'install-command-code',
+    'aria-label': 'Copy installation command',
+    children: 'pnpm add @stack-and-flow/design-system',
+    onCopy: action('accessible-copy')
   }
 };
 
 /**
- * Demonstrates usage of the `onCopy` callback for custom copy feedback.
- *
- * **Props used:**
- * - `onCopy`: Callback executed after copying
+ * Shows the copy callback using the canonical Storybook action helper.
  */
 export const WithOnCopy: Story = {
   args: {
-    children: 'npm install @your/package',
-    onCopy: () => alert('Copied to clipboard!')
+    children: 'pnpm run storybook',
+    onCopy: action('copy-callback')
   }
 };
