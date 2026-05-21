@@ -79,7 +79,6 @@ export const Variant: Story = {
     <div className='flex min-h-28 items-center gap-4 rounded-lg bg-background-light px-6 py-10 dark:bg-background-dark'>
       <Chip variant='solid'>Solid</Chip>
       <Chip variant='flat'>Flat</Chip>
-      <Chip variant='shadow'>Shadow</Chip>
       <Chip variant='bordered'>Bordered</Chip>
       <Chip variant='light'>Light</Chip>
       <Chip variant='faded'>Faded</Chip>
@@ -136,28 +135,6 @@ export const VisualReviewMatrix: Story = {
             warning
           </Chip>
           <Chip variant='flat' color='danger'>
-            danger
-          </Chip>
-        </div>
-      </section>
-      <section className='grid gap-3'>
-        <h3 className='fs-small font-secondary-bold capitalize text-text-secondary-light dark:text-text-secondary-dark'>
-          Shadow
-        </h3>
-        <div className='flex flex-wrap items-center gap-3'>
-          <Chip variant='shadow' color='primary'>
-            primary
-          </Chip>
-          <Chip variant='shadow' color='secondary'>
-            secondary
-          </Chip>
-          <Chip variant='shadow' color='success'>
-            success
-          </Chip>
-          <Chip variant='shadow' color='warning'>
-            warning
-          </Chip>
-          <Chip variant='shadow' color='danger'>
             danger
           </Chip>
         </div>

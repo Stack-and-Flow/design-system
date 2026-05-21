@@ -1,7 +1,7 @@
 import { type MouseEvent, type RefObject, useRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 import { cn } from '@/lib/utils';
-import { type IconButtonProps, type IconButtonSize, iconButtonVariants } from './types';
+import { type IconButtonEmphasis, type IconButtonProps, type IconButtonSize, iconButtonVariants } from './types';
 
 type UseIconButtonReturn = Omit<
   IconButtonProps,
@@ -30,6 +30,7 @@ export const useIconButton = ({
   ariaLabel,
   'aria-label': nativeAriaLabel,
   rounded = true,
+  emphasis,
   shadow = true,
   disabled = false,
   'aria-pressed': ariaPressed,
@@ -62,7 +63,15 @@ export const useIconButton = ({
     disabled,
     ariaPressed,
     ariaLabel: getAriaLabel(ariaLabel, nativeAriaLabel, title),
-    className: cn(iconButtonVariants({ variant, rounded, shadow, size: buttonSize }), className),
+    className: cn(
+      iconButtonVariants({
+        variant,
+        rounded,
+        emphasis: resolveEmphasis(emphasis, shadow),
+        size: buttonSize
+      }),
+      className
+    ),
     handleClick
   };
 };
@@ -103,3 +112,8 @@ const getAriaLabel = (
   nativeAriaLabel: string | undefined,
   title: string | undefined
 ): string => ariaLabel ?? nativeAriaLabel ?? title ?? 'Icon button';
+
+const resolveEmphasis = (
+  emphasis: IconButtonProps['emphasis'],
+  shadow: IconButtonProps['shadow']
+): IconButtonEmphasis => emphasis ?? (shadow === false ? 'flat' : 'default');

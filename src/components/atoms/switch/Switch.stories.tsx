@@ -13,7 +13,7 @@ import { Switch } from './Switch';
  * Uses `Icon` in icon examples to demonstrate thumb and track content composition.
  *
  * ## Usage Guide
- * Use `defaultChecked` for uncontrolled settings and `checked` with `onChange` for controlled state. Provide either a visible `label`, `ariaLabel`, or native `aria-label` so assistive technology can identify the switch.
+ * Use `defaultChecked` for uncontrolled settings and `checked` with `onChange` for controlled state. Provide either a visible `label`, `ariaLabel`, or native `aria-label` so assistive technology can identify the switch. Use `emphasis='default'` for decorative glow and `emphasis='flat'` for quieter contexts without removing focus-visible feedback.
  */
 const meta: Meta<typeof Switch> = {
   title: 'Atoms/Switch',
@@ -109,7 +109,18 @@ export const Variant: Story = {
       <Switch variant='default' label='Default' defaultChecked={true} onChange={action('default-variant-change')} />
       <Switch variant='bordered' label='Bordered' defaultChecked={true} onChange={action('bordered-change')} />
       <Switch variant='glass' label='Glass' defaultChecked={true} onChange={action('glass-change')} />
-      <Switch variant='shadow' label='Shadow' defaultChecked={true} onChange={action('shadow-change')} />
+    </div>
+  )
+};
+
+/**
+ * Shows how decorative emphasis can flatten switch glow without removing focus-visible feedback.
+ */
+export const Emphasis: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-center gap-6'>
+      <Switch label='Emphasis default' defaultChecked={true} onChange={action('emphasis-default-change')} />
+      <Switch emphasis='flat' label='Emphasis flat' defaultChecked={true} onChange={action('emphasis-flat-change')} />
     </div>
   )
 };

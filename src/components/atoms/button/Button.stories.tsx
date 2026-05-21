@@ -10,7 +10,7 @@ import { Button } from './Button';
  * Uses Lucide icons through the `icon` prop and `spinners-react` for loading feedback.
  *
  * ## Usage Guide
- * Use `primary` for the main action, `secondary` or `outlined` for supporting actions, and `ghost` or `light` for low-emphasis actions. Use `size='xs'` for dense controls with lower height and tighter padding. Use `isLoading` while async work is pending so repeated submissions are blocked.
+ * Use `primary` for the main action, `secondary` or `outlined` for supporting actions, and `ghost` or `light` for low-emphasis actions. Use `size='xs'` for dense controls with lower height and tighter padding. Use `emphasis='flat'` when a variant needs a quieter decorative treatment without removing accessible focus feedback. Use `isLoading` while async work is pending so repeated submissions are blocked.
  */
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Button',
@@ -47,6 +47,24 @@ export const Variant: Story = {
       <Button text='Outlined' variant='outlined' onClick={action('outlined-click')} />
       <Button text='Ghost' variant='ghost' onClick={action('ghost-click')} />
       <Button text='Light' variant='light' onClick={action('light-click')} />
+    </div>
+  )
+};
+
+/**
+ * Shows the semantic decorative emphasis toggle while preserving focus-visible behavior.
+ */
+export const Emphasis: Story = {
+  render: () => (
+    <div className='grid gap-4'>
+      <div className='flex gap-4 items-center flex-wrap'>
+        <Button text='Primary default' variant='primary' onClick={action('primary-default-click')} />
+        <Button text='Primary flat' variant='primary' emphasis='flat' onClick={action('primary-flat-click')} />
+      </div>
+      <div className='flex gap-4 items-center flex-wrap'>
+        <Button text='Secondary default' variant='secondary' onClick={action('secondary-default-click')} />
+        <Button text='Secondary flat' variant='secondary' emphasis='flat' onClick={action('secondary-flat-click')} />
+      </div>
     </div>
   )
 };

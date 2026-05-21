@@ -54,7 +54,8 @@ Every component MUST strictly follow the Atomic Design + Container/Presentationa
    └── index.ts             # Re-exports
    ```
 3. **Implement in order**: `types.ts` → hook → component → tests → stories → `index.ts`.
-4. **Review before PR**: run the pre-PR component review defined in `CONTRIBUTOR-FLOW.md`.
+4. **Design visual semantics deliberately**: decorative glow/elevation belongs to the component contract. When consumers may need a quieter version of a glow-bearing control, prefer `emphasis="default" | "flat"` over a raw `glow?: boolean` prop. Never let decorative emphasis disable focus-visible/accessibility glow.
+5. **Review before PR**: run the pre-PR component review defined in `CONTRIBUTOR-FLOW.md`.
 
 ---
 
