@@ -67,7 +67,8 @@ On `:hover`, primary button gradient shifts lighter (`#ff1a4b → #ff3366` start
 
 - Dark: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`
 - Light: `box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.35)`
-  Never use `outline: none` without an alternative visible focus indicator.
+
+Never use `outline: none` without an alternative visible focus indicator.
 
 **Rule 8 — Disabled state uses opacity, never color change.**
 `opacity: 0.4` on the entire component signals disabled. Never change text color, border color, or background to a "grey" variant — this creates a fake semantic signal and breaks the visual system. Always pair with `cursor: not-allowed` and `pointer-events: none`.
@@ -979,16 +980,16 @@ box-shadow:
   0 0 0 1.5px rgba(255, 60, 90, 0.5),
   /* Layer 2 — near glow (halo): immediate luminosity around the button.
      4px blur, 4px spread — fills the corona right outside the button.
-     Makes the button feel like it's emitting light. */ 0 0 16px 4px
-    rgba(255, 0, 54, 0.45),
+     Makes the button feel like it's emitting light. */
+  0 0 16px 4px rgba(255, 0, 54, 0.45),
   /* Layer 3 — far dispersal: broad bloom that fades into the background.
      40px blur, 6px spread — creates the "neon" feel.
-     Low opacity so it doesn't overpower; adds depth to dark surfaces. */ 0 0
-    40px 6px rgba(255, 0, 54, 0.18),
+     Low opacity so it doesn't overpower; adds depth to dark surfaces. */
+  0 0 40px 6px rgba(255, 0, 54, 0.18),
   /* Layer 4 — inset top highlight: simulates light hitting the top edge.
      Adds the glass-like highlight that gives the button dimension.
-     Purely decorative; creates a subtle 3D feel. */ inset 0 1px 0
-    rgba(255, 255, 255, 0.15);
+     Purely decorative; creates a subtle 3D feel. */
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
 ```
 
 ### Hover amplification:
@@ -996,11 +997,12 @@ box-shadow:
 ```css
 box-shadow:
   0 0 0 1.5px rgba(255, 80, 110, 0.7),
-  /* tighter ring: more saturated */ 0 0 22px 4px rgba(255, 0, 54, 0.65),
-  /* near glow: 22px vs 16px, 0.65 vs 0.45 */ 0 0 55px 8px
-    rgba(255, 0, 54, 0.28),
-  /* far dispersal: 55px vs 40px, 0.28 vs 0.18 */ inset 0 1px 0
-    rgba(255, 255, 255, 0.2); /* inset: 0.20 vs 0.15 */
+  /* tighter ring: more saturated */
+  0 0 22px 4px rgba(255, 0, 54, 0.65),
+  /* near glow: 22px vs 16px, 0.65 vs 0.45 */
+  0 0 55px 8px rgba(255, 0, 54, 0.28),
+  /* far dispersal: 55px vs 40px, 0.28 vs 0.18 */
+  inset 0 1px 0 rgba(255, 255, 255, 0.2); /* inset: 0.20 vs 0.15 */
 ```
 
 ### Decorative glow timing and emphasis
