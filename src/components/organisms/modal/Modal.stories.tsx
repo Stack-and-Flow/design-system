@@ -1,208 +1,222 @@
 import { Button } from '@atoms/button';
 import { IconButton } from '@atoms/icon-button';
 import { Link } from '@atoms/link';
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Modal } from './index';
+import { Modal } from './Modal';
+import type { ModalActions } from './types';
 
 /**
- * ## DESCRIPTION
- * The Modal component is a versatile dialog box that can be used to display content, forms, or any other information in a focused manner. It supports various sizes, positions, and backdrop styles.
- * It can be triggered by a button or any other element, and it can contain custom headers, footers, and content.
+ * ## Description
+ * Modal presents focused content in a dialog layer above the current page.
  *
- * ## DEPENDENCIES
- * - [Radix UI Dialog](https://www.radix-ui.com/docs/primitives/components/dialog)
- * - Header - for displaying a header in the modal
- * - Text - for displaying text content
- * - Icon - from Lucide React for the close button
- * - IconButton - for closing the modal
- * - Button - for closing the modal
+ * ## Dependencies
+ * Uses Radix Dialog for focus management and accessibility. The examples use `Button`, `IconButton`, and `Link` as trigger and footer content.
  *
+ * ## Usage Guide
+ * Use the default title and description props for standard confirmations. When you provide custom header or body content, also provide `title` and `textContent` so the dialog keeps a clear accessible name and description.
+ * Custom `content` and `footer` can be render props that receive `{ close }`, allowing custom actions to dismiss the dialog without importing Radix internals.
  */
-
 const meta: Meta<typeof Modal> = {
   title: 'Organisms/Modal',
   component: Modal,
   parameters: {
+    layout: 'centered',
     docs: {
       autodocs: true
     }
   },
   tags: ['autodocs']
 };
+
 export default meta;
 
 type Story = StoryObj<typeof Modal>;
 
 const CustomHeader = () => (
-  <div className='w-full flex items-center justify-between bg-color-surface-light dark:bg-color-surface-dark border-1 border-color-brand-light dark:border-color-brand-dark border-dashed'>
-    <p className='text-lg text-color-text-light dark:text-color-text-dark w-full text-center'>header</p>
+  <div className='rounded-md border border-border-light bg-surface-raised-light p-4 text-text-light dark:border-border-dark dark:bg-surface-raised-dark dark:text-text-dark'>
+    <p className='fs-h6 font-semibold'>Transfer project ownership</p>
   </div>
 );
 
-const CustomContent = () => (
-  <div className='w-full flex items-center justify-between min-h-24 bg-color-surface-light dark:bg-color-surface-dark border-1 border-color-brand-light dark:border-color-brand-dark border-dashed'>
-    <p className='text-lg text-color-text-light dark:text-color-text-dark w-full text-center'>content</p>
+const CustomBody = () => (
+  <div className='rounded-md border border-border-light bg-surface-raised-light p-4 text-text-secondary-light dark:border-border-dark dark:bg-surface-raised-dark dark:text-text-secondary-dark'>
+    <p>This action moves all billing and repository permissions to the new owner.</p>
   </div>
 );
 
-const CustomFooter = () => (
-  <div className='w-full flex items-center justify-between bg-color-surface-light dark:bg-color-surface-dark border-1 border-color-brand-light dark:border-color-brand-dark border-dashed'>
-    <p className='text-lg text-color-text-light dark:text-color-text-dark w-full text-center'>footer</p>
-  </div>
-);
+const CustomFooter = ({ close }: ModalActions) => {
+  const handleCancel = () => {
+    action('cancel-click')();
+    close();
+  };
 
+  return (
+    <div className='flex w-full justify-end gap-3'>
+      <Button text='Cancel' variant='ghost' onClick={handleCancel} />
+      <Button text='Transfer' variant='primary' onClick={action('transfer-click')} />
+    </div>
+  );
+};
+
+/**
+ * Shows the default dialog configuration using its default variants.
+ */
 export const Default: Story = {
   args: {
-    size: 'md',
-    position: 'center',
-    backdrop: 'opacity',
-    children: <Button text='Open Modal' />,
-    textContent: 'Modal content goes here.',
-    title: 'Modal title'
+    children: <Button text='Open modal' />,
+    title: 'Delete workspace',
+    textContent: 'This action removes the workspace and all related content.'
   }
 };
 
 /**
- * - You can use the `header`, `content`, and `footer` props to customize the modal.
- * - The `header` prop can be used to display a custom header.
- * - The `content` prop can be used to display custom content.
- * - The `footer` prop can be used to display a custom footer.
- * - The `children` prop can be used to trigger the modal.
+ * Shows a disabled trigger that keeps the dialog unavailable.
  */
-
-export const WithCustomContent: Story = {
+export const Disabled: Story = {
   args: {
-    size: 'md',
-    position: 'center',
-    backdrop: 'opacity',
-    children: <Button text='Open Modal' />,
-    header: <CustomHeader />,
-    content: <CustomContent />,
-    footer: <CustomFooter />
+    children: <Button disabled={true} text='Open modal' />,
+    title: 'Disabled modal trigger',
+    textContent: 'This dialog cannot be opened until the trigger is enabled.'
   }
 };
 
 /**
- * - You can use a custom trigger element to open the modal.
- * - The `children` prop can be any React element that will trigger the modal when clicked.
+ * Shows the full size scale from `xs` to `full`.
  */
+export const Size: Story = {
+  render: () => (
+    <div className='flex max-w-full flex-wrap items-center justify-center gap-4'>
+      <Modal size='xs' title='XS modal' textContent='Preview for the xs size.'>
+        <Button emphasis='flat' text='XS' variant='secondary' />
+      </Modal>
+      <Modal size='sm' title='SM modal' textContent='Preview for the sm size.'>
+        <Button emphasis='flat' text='SM' variant='secondary' />
+      </Modal>
+      <Modal size='md' title='MD modal' textContent='Preview for the md size.'>
+        <Button emphasis='flat' text='MD' variant='secondary' />
+      </Modal>
+      <Modal size='lg' title='LG modal' textContent='Preview for the lg size.'>
+        <Button emphasis='flat' text='LG' variant='secondary' />
+      </Modal>
+      <Modal size='xl' title='XL modal' textContent='Preview for the xl size.'>
+        <Button emphasis='flat' text='XL' variant='secondary' />
+      </Modal>
+      <Modal size='2xl' title='2XL modal' textContent='Preview for the 2xl size.'>
+        <Button emphasis='flat' text='2XL' variant='secondary' />
+      </Modal>
+      <Modal size='3xl' title='3XL modal' textContent='Preview for the 3xl size.'>
+        <Button emphasis='flat' text='3XL' variant='secondary' />
+      </Modal>
+      <Modal size='4xl' title='4XL modal' textContent='Preview for the 4xl size.'>
+        <Button emphasis='flat' text='4XL' variant='secondary' />
+      </Modal>
+      <Modal size='5xl' title='5XL modal' textContent='Preview for the 5xl size.'>
+        <Button emphasis='flat' text='5XL' variant='secondary' />
+      </Modal>
+      <Modal size='full' title='Full modal' textContent='Preview for the full-screen size.'>
+        <Button emphasis='flat' text='FULL' variant='secondary' />
+      </Modal>
+    </div>
+  )
+};
 
+/**
+ * Shows the available dialog placements inside the viewport.
+ */
+export const Position: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-center justify-center gap-4'>
+      <Modal
+        position='center'
+        title='Centered dialog'
+        textContent='Centered placement keeps the dialog anchored in the middle.'
+      >
+        <Button emphasis='flat' text='Center' variant='secondary' />
+      </Modal>
+      <Modal position='top' title='Top dialog' textContent='Top placement keeps the dialog close to the viewport edge.'>
+        <Button emphasis='flat' text='Top' variant='secondary' />
+      </Modal>
+      <Modal
+        position='bottom'
+        title='Bottom dialog'
+        textContent='Bottom placement is useful for mobile-oriented action sheets.'
+      >
+        <Button emphasis='flat' text='Bottom' variant='secondary' />
+      </Modal>
+    </div>
+  )
+};
+
+/**
+ * Shows the supported backdrop treatments for the overlay.
+ */
+export const Backdrop: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-center justify-center gap-4'>
+      <Modal backdrop='opacity' title='Opacity backdrop' textContent='Uses the default overlay token without blur.'>
+        <Button emphasis='flat' text='Opacity' variant='secondary' />
+      </Modal>
+      <Modal backdrop='blur' title='Blur backdrop' textContent='Uses the overlay blur token for extra separation.'>
+        <Button emphasis='flat' text='Blur' variant='secondary' />
+      </Modal>
+      <Modal
+        backdrop='transparent'
+        title='Transparent backdrop'
+        textContent='Keeps the page visible while preserving dialog focus handling.'
+      >
+        <Button emphasis='flat' text='Transparent' variant='secondary' />
+      </Modal>
+    </div>
+  )
+};
+
+/**
+ * Shows custom header, content, and footer slots while preserving accessible title and description text.
+ */
+export const CustomContent: Story = {
+  args: {
+    children: <Button text='Open custom modal' />,
+    title: 'Transfer project ownership',
+    textContent: 'Review the ownership transfer details before continuing.',
+    header: <CustomHeader />,
+    content: <CustomBody />,
+    footer: (actions) => <CustomFooter {...actions} />
+  }
+};
+
+/**
+ * Shows that any single interactive element can be used as the dialog trigger.
+ */
 export const CustomTrigger: Story = {
   render: () => (
-    <div className='flex justify-center items-center gap-4'>
-      <Modal size='md' position='center' title='Custom Trigger Modal'>
+    <div className='flex flex-wrap items-center justify-center gap-4'>
+      <Modal
+        title='Link trigger modal'
+        textContent='A text link can open the dialog when it is the single trigger element.'
+      >
         <Link size='md' variant='regular'>
-          Lorem ipsum
+          Read deployment details
         </Link>
       </Modal>
-      <Modal size='md' position='center' title='Custom Trigger Modal'>
-        <IconButton className='' icon='menu' size={20} title='Menu' variant='primary' />
+      <Modal
+        title='Icon trigger modal'
+        textContent='An icon button trigger works with the same focus and accessibility contract.'
+      >
+        <IconButton icon='menu' title='Open menu details' variant='primary' onClick={action('icon-trigger-click')} />
       </Modal>
     </div>
   )
 };
 
 /**
- * - You can choose the size of the modal using the `size` prop.
- * - The `size` prop accepts the following values: `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, and `full`.
- * - Each size corresponds to a different width and height of the modal.
- * - The modal will automatically adjust its size based on the content.
+ * Shows a custom overlay class layered on top of the shared overlay positioning and animation contract.
  */
-
-export const Sizes: Story = {
-  render: () => (
-    <div className='max-w-full flex justify-center items-center gap-4 flex-wrap'>
-      <Modal size='xs' title='XS'>
-        <Button text='XS' />
-      </Modal>
-      <Modal size='sm' title='SM'>
-        <Button text='SM' />
-      </Modal>
-      <Modal size='md' title='MD'>
-        <Button text='MD' />
-      </Modal>
-      <Modal size='lg' title='LG'>
-        <Button text='LG' />
-      </Modal>
-      <Modal size='xl' title='XL'>
-        <Button text='XL' />
-      </Modal>
-      <Modal size='2xl' title='2XL'>
-        <Button text='2XL' />
-      </Modal>
-      <Modal size='3xl' title='3XL'>
-        <Button text='3XL' />
-      </Modal>
-      <Modal size='4xl' title='4XL'>
-        <Button text='4XL' />
-      </Modal>
-      <Modal size='5xl' title='5XL'>
-        <Button text='5XL' />
-      </Modal>
-      <Modal size='full' title='Full Screen'>
-        <Button text='Full Screen' />
-      </Modal>
-    </div>
-  )
-};
-
-/**
- * - You can choose the position of the modal using the `position` prop.
- * - The `position` prop accepts three values: `center`, `top`, and `bottom`.
- */
-
-export const Positions: Story = {
-  render: () => (
-    <div className='flex justify-center items-center gap-4'>
-      <Modal size='md' position='center' title='Center Position'>
-        <Button text='Center Position' />
-      </Modal>
-      <Modal size='md' position='top' title='Top Position'>
-        <Button text='Top Position' />
-      </Modal>
-      <Modal size='md' position='bottom' title='Bottom Position'>
-        <Button text='Bottom Position' />
-      </Modal>
-    </div>
-  )
-};
-
-/**
- * - You can choose the backdrop style of the modal using the `backdrop` prop.
- * - The `backdrop` prop accepts three values: `opacity`, `blur`, and `transparent`.
- * - The `opacity` backdrop provides a semi-transparent black background.
- * - The `blur` backdrop provides a blurred background effect.
- * - The `transparent` backdrop provides a fully transparent background.
- */
-
-export const BackdropVariants: Story = {
-  render: () => (
-    <div className='flex justify-center items-center gap-4'>
-      <Modal size='md' position='center' backdrop='opacity' title='Opacity Backdrop'>
-        <Button text='Opacity Backdrop' />
-      </Modal>
-      <Modal size='md' position='center' backdrop='blur' title='Blur Backdrop'>
-        <Button text='Blur Backdrop' />
-      </Modal>
-      <Modal size='md' position='center' backdrop='transparent' title='Transparent Backdrop'>
-        <Button text='Transparent Backdrop' />
-      </Modal>
-    </div>
-  )
-};
-
-/**
- * - You can customize teh backdrop of the modal using the `customBackdrop` prop.
- * - The `customBackdrop` prop accepts a string with Tailwind CSS classes to style the backdrop.
- * - This allows you to create unique visual effects, such as gradients or custom colors.
- */
-
 export const CustomBackdrop: Story = {
   args: {
-    size: 'md',
-    position: 'center',
-    customBackdrop: 'bg-linear-to-r from-red-500 to-background-dark',
-    children: <Button text='Open Modal' />,
-    title: 'Modal with Custom Backdrop'
+    children: <Button text='Open custom backdrop modal' />,
+    title: 'Custom backdrop modal',
+    textContent: 'Custom backdrop classes can augment the shared overlay base styles.',
+    customBackdrop: 'bg-black-tint-heavy backdrop-blur-overlay'
   }
 };

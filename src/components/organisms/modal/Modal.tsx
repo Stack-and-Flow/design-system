@@ -1,84 +1,87 @@
 import { Button } from '@atoms/button';
-import { Header } from '@atoms/header';
 import { IconButton } from '@atoms/icon-button';
-import { Text } from '@atoms/text';
 import * as ModalPrimitive from '@radix-ui/react-dialog';
-import type { FC } from 'react';
-import { cn } from '@/lib/utils';
-import type { ModalProps } from './types';
-import { modalVariants } from './types';
+import { cloneElement, type FC, type ReactNode } from 'react';
+import type { ModalActions, ModalProps } from './types';
 import { useModal } from './useModal';
 
-const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
+const renderModalSlot = (slot: ModalProps['content'], actions: ModalActions): ReactNode =>
+  typeof slot === 'function' ? slot(actions) : slot;
+
+export const Modal: FC<ModalProps> = (props) => {
   const {
-    isOpen,
-    setIsOpen,
-    contentId,
+    bodyClassName,
     children,
-    currentBackdrop,
-    position,
-    titleId,
-    descriptionId,
-    size,
-    header,
-    title,
+    closeModal,
+    containerClassName,
     content,
+    contentId,
+    footer,
+    getTriggerProps,
+    handleCloseAutoFocus,
+    handleOpenChange,
+    header,
+    isOpen,
+    overlayClassName,
+    panelClassName,
+    shouldRenderCustomContent,
+    shouldRenderCustomFooter,
+    shouldRenderCustomHeader,
     textContent,
-    footer
+    title
   } = useModal(props);
 
+  const modalActions: ModalActions = { close: closeModal };
+  const renderedContent = renderModalSlot(content, modalActions);
+  const renderedFooter = renderModalSlot(footer, modalActions);
+
   return (
-    <ModalPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
-      <ModalPrimitive.Trigger asChild={true} aria-controls={isOpen ? contentId : undefined}>
-        {children}
-      </ModalPrimitive.Trigger>
+    <ModalPrimitive.Root open={isOpen} onOpenChange={handleOpenChange}>
+      {cloneElement(children, getTriggerProps(children.props.onClick))}
       <ModalPrimitive.Portal>
-        <ModalPrimitive.Overlay className={currentBackdrop} />
-        <div
-          className={cn(
-            'fixed w-full inset-0 z-modal flex p-0 md:p-4',
-            position === 'center' && 'items-center justify-center',
-            position === 'top' && 'items-start justify-center',
-            position === 'bottom' && 'items-end justify-center'
-          )}
-        >
-          <ModalPrimitive.Content
-            id={contentId}
-            aria-labelledby={titleId}
-            aria-describedby={descriptionId}
-            className={cn(
-              modalVariants({ size, position }),
-              'data-[state=open]:animate-in data-[state=closed]:animate-out',
-              'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
-            )}
-          >
-            <div className='relative pb-4'>
-              <div className='w-full flex items-start justify-start pr-8'>
-                {header ?? (
-                  <Header tag='h5' id={titleId} className='text-text-light dark:text-text-dark text-lg font-semibold'>
-                    {title}
-                  </Header>
-                )}
-              </div>
+        <ModalPrimitive.Overlay className={overlayClassName} />
+        <div className={containerClassName}>
+          <ModalPrimitive.Content id={contentId} className={panelClassName} onCloseAutoFocus={handleCloseAutoFocus}>
+            <div className='relative pb-4 pr-12'>
+              {shouldRenderCustomHeader ? (
+                <>
+                  <ModalPrimitive.Title className='sr-only'>{title}</ModalPrimitive.Title>
+                  {header}
+                </>
+              ) : (
+                <ModalPrimitive.Title className='fs-h5 font-semibold text-text-light dark:text-text-dark'>
+                  {title}
+                </ModalPrimitive.Title>
+              )}
               <IconButton
+                className='absolute right-0 top-0'
                 icon='x'
-                size={18}
-                title='Close'
+                onClick={closeModal}
+                size='sm'
+                title='Close dialog'
                 variant='ghost'
-                rounded={true}
-                onClick={() => setIsOpen(false)}
-                className='p-1 absolute top-0 right-0'
               />
             </div>
-            <div id={descriptionId} className='py-4 flex-1 overflow-y-auto max-h-[80dvh]'>
-              {content || (
-                <Text tag='p' className='text-sm text-text-secondary-light dark:text-text-secondary-dark'>
+
+            <div className={bodyClassName}>
+              {shouldRenderCustomContent ? (
+                <>
+                  <ModalPrimitive.Description className='sr-only'>{textContent}</ModalPrimitive.Description>
+                  {renderedContent}
+                </>
+              ) : (
+                <ModalPrimitive.Description className='text-sm text-text-secondary-light dark:text-text-secondary-dark'>
                   {textContent}
-                </Text>
+                </ModalPrimitive.Description>
               )}
             </div>
+
             <div className='flex justify-end pt-4'>
-              {footer || <Button text='Close' size='sm' variant='outlined' onClick={() => setIsOpen(false)} />}
+              {shouldRenderCustomFooter ? (
+                renderedFooter
+              ) : (
+                <Button onClick={closeModal} size='sm' text='Close' variant='outlined' />
+              )}
             </div>
           </ModalPrimitive.Content>
         </div>
@@ -86,5 +89,3 @@ const Modal: FC<Omit<ModalProps, 'isOpen'>> = ({ ...props }) => {
     </ModalPrimitive.Root>
   );
 };
-
-export default Modal;
