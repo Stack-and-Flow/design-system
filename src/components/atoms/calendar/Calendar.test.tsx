@@ -187,6 +187,19 @@ describe('Calendar — component behavior', () => {
     expect(disabledButton).toHaveAttribute('aria-disabled', 'true');
   });
 
+  it('initializes focus to the first enabled in-range date when the selected month is unavailable', () => {
+    const minDate = new Date(2025, 8, 10);
+    const firstEnabledDate = new Date(2025, 8, 11);
+
+    render(
+      <Calendar selectedDate={baseDate} minDate={minDate} maxDate={new Date(2025, 8, 20)} disabledDates={[minDate]} />
+    );
+
+    expect(screen.getByRole('grid', { name: /september 2025/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: getDateMatcher(minDate) })).toBeDisabled();
+    expect(screen.getByRole('button', { name: getDateMatcher(firstEnabledDate) })).toHaveAttribute('tabindex', '0');
+  });
+
   it('skips disabled dates during keyboard navigation', async () => {
     const user = userEvent.setup();
 

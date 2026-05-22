@@ -118,7 +118,6 @@ type UseCalendarReturn = {
     onClick: () => void;
     type: 'button';
   };
-  pickerClassName: string;
   pickerDialogProps: {
     'aria-label': string;
     'aria-modal': 'false';
@@ -166,7 +165,7 @@ type UseCalendarReturn = {
   yearsLabel: string;
 };
 
-const DAY_MS = 24 * 60 * 60 * 1000;
+const EMPTY_DISABLED_DATES: Date[] = [];
 
 const startOfDay = (date: Date): Date => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
@@ -179,8 +178,11 @@ const createDate = (year: number, month: number, day: number): Date => {
   return new Date(year, month, safeDay);
 };
 
-const addDays = (date: Date, amount: number): Date =>
-  startOfDay(new Date(startOfDay(date).getTime() + amount * DAY_MS));
+const addDays = (date: Date, amount: number): Date => {
+  const nextDate = startOfDay(date);
+  nextDate.setDate(nextDate.getDate() + amount);
+  return startOfDay(nextDate);
+};
 
 const addMonths = (date: Date, amount: number): Date => {
   const normalizedDate = startOfDay(date);
@@ -403,7 +405,7 @@ export const useCalendar = ({
   color = 'default',
   selectedDate,
   onDateChange,
-  disabledDates = [],
+  disabledDates = EMPTY_DISABLED_DATES,
   variant = 'filled',
   size = 'md',
   radius = 'md',
@@ -418,8 +420,8 @@ export const useCalendar = ({
   locale = 'en',
   visibleMonths = 1
 }: CalendarProps): UseCalendarReturn => {
-  const normalizedMinDate = normalizeNullableDate(minDate);
-  const normalizedMaxDate = normalizeNullableDate(maxDate);
+  const normalizedMinDate = useMemo(() => normalizeNullableDate(minDate), [minDate]);
+  const normalizedMaxDate = useMemo(() => normalizeNullableDate(maxDate), [maxDate]);
   const normalizedDisabledDates = useMemo(
     () => new Set(disabledDates.map((date) => toDateKey(startOfDay(date)))),
     [disabledDates]
@@ -443,8 +445,70 @@ export const useCalendar = ({
   const isRangeMode = Array.isArray(selectedDate);
   const baseId = useId();
 
-  const [currentDate, setCurrentDate] = useState<Date>(() => resolveInitialCurrentDate(selectedDate));
-  const [focusedDate, setFocusedDate] = useState<Date>(() => resolveInitialFocusedDate(selectedDate));
+  const isDateUnavailable = (date: Date): boolean => {
+    const normalizedDate = startOfDay(date);
+    const dateKey = toDateKey(normalizedDate);
+
+    if (disabled || readOnly) {
+      return true;
+    }
+
+    if (normalizedMinDate && isDateBefore(normalizedDate, normalizedMinDate)) {
+      return true;
+    }
+
+    if (normalizedMaxDate && isDateAfter(normalizedDate, normalizedMaxDate)) {
+      return true;
+    }
+
+    return normalizedDisabledDates.has(dateKey);
+  };
+
+  const findEnabledDateFrom = (targetDate: Date, step: 1 | -1): Date | null => {
+    let nextDate = startOfDay(targetDate);
+
+    for (let attempt = 0; attempt < 366; attempt += 1) {
+      if (!isDateUnavailable(nextDate)) {
+        return nextDate;
+      }
+
+      nextDate = addDays(nextDate, step);
+    }
+
+    return null;
+  };
+
+  const resolveEnabledDate = (preferredDate: Date): Date => {
+    const normalizedPreferredDate = startOfDay(preferredDate);
+
+    if (!isDateUnavailable(normalizedPreferredDate)) {
+      return normalizedPreferredDate;
+    }
+
+    const boundedStartDate =
+      normalizedMinDate && isDateBefore(normalizedPreferredDate, normalizedMinDate)
+        ? normalizedMinDate
+        : normalizedPreferredDate;
+    const forwardDate = findEnabledDateFrom(boundedStartDate, 1);
+
+    if (forwardDate) {
+      return forwardDate;
+    }
+
+    const boundedEndDate =
+      normalizedMaxDate && isDateAfter(normalizedPreferredDate, normalizedMaxDate)
+        ? normalizedMaxDate
+        : normalizedPreferredDate;
+    const backwardDate = findEnabledDateFrom(boundedEndDate, -1);
+
+    return backwardDate ?? normalizedPreferredDate;
+  };
+
+  const initialCurrentDate = resolveEnabledDate(resolveInitialCurrentDate(selectedDate));
+  const initialFocusedDate = resolveEnabledDate(resolveInitialFocusedDate(selectedDate));
+
+  const [currentDate, setCurrentDate] = useState<Date>(() => initialCurrentDate);
+  const [focusedDate, setFocusedDate] = useState<Date>(() => initialFocusedDate);
   const [selectedSingle, setSelectedSingle] = useState<Date | null>(() =>
     Array.isArray(selectedDate) ? null : normalizeNullableDate(selectedDate)
   );
@@ -468,11 +532,9 @@ export const useCalendar = ({
       setSelectedRange(nextRange);
       setSelectedSingle(null);
 
-      const nextCurrentDate = nextRange[0] ?? nextRange[1];
-      if (nextCurrentDate) {
-        setCurrentDate(nextCurrentDate);
-        setFocusedDate(nextRange[1] ?? nextCurrentDate);
-      }
+      const nextCurrentDate = resolveEnabledDate(nextRange[0] ?? nextRange[1] ?? focusedDate);
+      setCurrentDate(nextCurrentDate);
+      setFocusedDate(resolveEnabledDate(nextRange[1] ?? nextCurrentDate));
       return;
     }
 
@@ -480,30 +542,12 @@ export const useCalendar = ({
     setSelectedSingle(nextSelectedDate);
     setSelectedRange([null, null]);
 
-    if (nextSelectedDate) {
-      setCurrentDate(nextSelectedDate);
-      setFocusedDate(nextSelectedDate);
-    }
-  }, [selectedDate]);
+    const nextFocusedDate = resolveEnabledDate(nextSelectedDate ?? focusedDate);
+    setCurrentDate(nextFocusedDate);
+    setFocusedDate(nextFocusedDate);
+  }, [selectedDate, normalizedMaxDate, normalizedMinDate, normalizedDisabledDates, disabled, readOnly]);
 
-  const isDateDisabled = (date: Date): boolean => {
-    const normalizedDate = startOfDay(date);
-    const dateKey = toDateKey(normalizedDate);
-
-    if (disabled || readOnly) {
-      return true;
-    }
-
-    if (normalizedMinDate && isDateBefore(normalizedDate, normalizedMinDate)) {
-      return true;
-    }
-
-    if (normalizedMaxDate && isDateAfter(normalizedDate, normalizedMaxDate)) {
-      return true;
-    }
-
-    return normalizedDisabledDates.has(dateKey);
-  };
+  const isDateDisabled = (date: Date): boolean => isDateUnavailable(date);
 
   const updateSelection = (date: Date) => {
     const normalizedDate = startOfDay(date);
@@ -946,7 +990,6 @@ export const useCalendar = ({
     weekdayHeaders,
     months,
     isPickerOpen,
-    pickerClassName: calendarPickerVariants({ size }),
     pickerDialogProps: {
       role: 'dialog',
       'aria-modal': 'false',
