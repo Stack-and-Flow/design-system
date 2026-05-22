@@ -183,8 +183,12 @@ export const useDropdown = ({
       sideOffset: offset,
       avoidCollisions: true,
       className: cn(dropdownContentVariants({ width, side: position }), className),
-      'aria-labelledby': firstLabel?.labelId,
-      'aria-label': firstLabel ? undefined : (explicitAriaLabel ?? 'Dropdown menu')
+      'aria-labelledby': loading ? undefined : firstLabel?.labelId,
+      'aria-label': loading
+        ? (explicitAriaLabel ?? firstLabel?.label ?? 'Dropdown menu')
+        : firstLabel
+          ? undefined
+          : (explicitAriaLabel ?? 'Dropdown menu')
     },
     loadingClassName: dropdownLoadingVariants(),
     spinnerClassName: dropdownSpinnerVariants(),

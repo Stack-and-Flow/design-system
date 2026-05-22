@@ -129,13 +129,21 @@ describe('Dropdown — component behavior', () => {
 
   it('shows loading status semantics without rendering actionable menu items', async () => {
     render(
-      <Dropdown loading={true} items={[{ type: 'item', label: 'Profile', onClick: vi.fn() }]}>
+      <Dropdown
+        loading={true}
+        items={[
+          { type: 'label', label: 'Account actions' },
+          { type: 'item', label: 'Profile', onClick: vi.fn() }
+        ]}
+      >
         <span>Open menu</span>
       </Dropdown>
     );
 
     await userEvent.click(screen.getByRole('button', { name: 'Open menu' }));
 
+    const menu = await screen.findByRole('menu', { name: 'Account actions' });
+    expect(menu).not.toHaveAttribute('aria-labelledby');
     expect(await screen.findByRole('status')).toHaveTextContent('Loading menu items');
     expect(screen.queryByRole('menuitem', { name: 'Profile' })).not.toBeInTheDocument();
   });
