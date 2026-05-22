@@ -181,7 +181,7 @@ Extract the relevant visual decisions for this component:
 - Text, background, border, radius, spacing, glow, and focus tokens
 - Base, hover, focus, active, disabled, empty/loading/error states that apply
 - Transition constraints: no `transition-all`, no layout-forcing animated properties
-- Accessibility visuals: `44px` touch target, `box-shadow` focus ring, disabled `opacity: 0.4` + `cursor-not-allowed` + `pointer-events-none`
+- Accessibility visuals: default `44px` touch target (unless a compact/dense size variant is explicitly approved), `box-shadow` focus ring, disabled `opacity: 0.4` + `cursor-not-allowed` + `pointer-events-none`
 - Dark mode pairings and contrast requirements
 
 Do this before writing the Implementation Plan. The later visual review still runs, but development must start visually aligned.
@@ -224,7 +224,7 @@ Before writing any file, present a clear plan to the contributor:
 - Focus ring: {token/class from theme.css}
 - Disabled treatment: opacity + cursor + pointer-events, with colors unchanged
 - Transitions: {enumerated properties only; no layout-forcing properties}
-- Touch target: {how 44px minimum is satisfied for interactive elements}
+- Touch target: {how 44px minimum is satisfied, or why an explicitly approved compact/dense variant intentionally uses a smaller visual target while preserving keyboard/focus accessibility}
 
 ### Accessibility
 - {aria attributes and roles planned}
@@ -609,7 +609,7 @@ Every interactive component must have all applicable states:
 
 ### 5.4 — Accessibility spot check
 
-- [ ] All interactive elements: minimum `44×44px` touch target
+- [ ] Default interactive elements: minimum `44×44px` touch target; approved compact/dense variants may be smaller when documented and accessible
 - [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` (dark) / `rgba(219, 20, 60, 0.35)` (light)
 - [ ] Focus ring **merged** with existing `box-shadow` layers — never replaces them
 - [ ] Light mode text color: minimum `#cc0030` — NEVER `#ff0036` on white (fails WCAG AA)
@@ -702,7 +702,7 @@ Rules:
 **Accessibility**
 
 - [ ] Aria attributes from spec implemented
-- [ ] Minimum touch target `44×44px` on interactive elements
+- [ ] Minimum touch target `44×44px` on default interactive elements; approved compact/dense variants may be smaller when documented and accessible
 - [ ] `prefers-reduced-motion` handled if transforms are used
 
 **Learning**

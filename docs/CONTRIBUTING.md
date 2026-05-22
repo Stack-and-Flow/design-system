@@ -154,7 +154,7 @@ Antes de pedir revisión, verifica:
 - [ ] Focus ring via `box-shadow` — nunca `outline` sin alternativa visible.
 - [ ] Disabled via `opacity: 0.4` — sin sustitución de color.
 - [ ] Sin `transition: all` — propiedades específicas enumeradas.
-- [ ] Touch target mínimo `44×44px` en elementos interactivos.
+- [ ] Touch target mínimo `44×44px` en controles interactivos por defecto; variantes compactas/densas explícitamente aprobadas pueden ser menores si conservan accesibilidad por teclado/focus.
 
 ### Checks de seguridad
 

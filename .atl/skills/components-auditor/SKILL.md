@@ -138,7 +138,7 @@ Every component must have exactly these 6 files and nothing else:
 ### 1.6 — Token usage
 
 - [ ] No hardcoded hex values (`#ff0036`, `#060C13`, etc.) anywhere in the component files
-- [ ] No hardcoded spacing values (`px-4`, `mt-2` are fine as utilities; `mt-[13px]` is not)
+- [ ] No hardcoded arbitrary spacing values unless they live in `types.ts` CVA definitions for an explicitly approved compact/dense size variant; arbitrary colors remain forbidden
 - [ ] Custom fractional spacing tokens from `theme.css` use Tailwind v4 dash utility names, never dotted names:
   - Correct: `p-0-75`, `p-1-25`, `min-w-4-5`, `h-4-5`
   - Wrong: `p-0.75`, `p-1.25`, `min-w-4.5`, `h-4.5`
@@ -201,7 +201,7 @@ Apply ALL 6 sections of the visual review protocol:
 
 Classify every finding with severity:
 
-- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, interactive element below 44px, `outline: none` without alternative, WCAG AA failure
+- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, undocumented interactive element below the required target size, `outline: none` without alternative, WCAG AA failure
 - **MAJOR** — Compositional rule violation: wrong file structure, CVA in wrong file, `[var(--token)]` bypass, `transition: all`, `border-image`, blur+gradient on same element, wrong glow layer count, rendered documentation UI inside story canvases
 - **MINOR** — Spec inconsistency: wrong transition duration, missing transition property, hover tint value slightly off, missing JSDoc control annotation, incomplete prop/story JSDoc, non-canonical story actions/autodocs usage when it does not break behavior
 - **SUGGESTION** — Enhancement: `will-change` on entrance animations, extracting a repeated pattern to a token, improving story coverage

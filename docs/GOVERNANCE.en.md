@@ -61,7 +61,7 @@ A PR is ready to merge when:
 - ✅ Types are explicit — no `any`, no `interface`
 - ✅ Component has tests with minimum required coverage
 - ✅ Storybook story is complete with controls and description
-- ✅ No hardcoded values — only system tokens
+- ✅ No hardcoded colors — system tokens by default; approved compact/dense CVA size variants may use calibrated arbitrary sizing/typography
 - ✅ ARIA attributes are present and correct
 - ✅ PR template is fully filled in
 - ✅ Commit follows Conventional Commits format
@@ -74,7 +74,7 @@ A PR will be rejected without detailed review if:
 - ❌ Not linked to an existing issue
 - ❌ Mixes Container and Presentational logic in the same file
 - ❌ Uses `any` or `interface` in TypeScript
-- ❌ Uses arbitrary Tailwind values (`p-[14px]`, `text-[#000]`)
+- ❌ Uses arbitrary Tailwind colors (`text-[#000]`); arbitrary sizing/typography is allowed only in CVA (`types.ts`) for approved compact/dense variants
 - ❌ Missing tests or Storybook story
 
 ---

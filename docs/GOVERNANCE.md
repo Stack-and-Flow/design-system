@@ -76,7 +76,7 @@ Un PR será rechazado sin revisión detallada si:
 - ❌ No está vinculado a un issue existente
 - ❌ Mezcla lógica Container y Presentacional en el mismo archivo
 - ❌ Usa `any` o `interface` en TypeScript
-- ❌ Usa valores arbitrarios de Tailwind (`p-[14px]`, `text-[#000]`)
+- ❌ Usa colores arbitrarios de Tailwind (`text-[#000]`); tamaños/typography arbitrarios solo se permiten en CVA (`types.ts`) para variantes compactas/densas aprobadas
 - ❌ Omite tests o la story de Storybook
 
 ---

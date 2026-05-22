@@ -19,9 +19,9 @@ export const calendarVariants = cva(
         ghost: ['bg-transparent border-transparent shadow-none']
       },
       size: {
-        sm: 'gap-3 p-3',
-        md: 'gap-6 p-6',
-        lg: 'gap-10 p-10'
+        sm: 'gap-1 p-1',
+        md: 'gap-1.5 p-1.5',
+        lg: 'gap-4 p-4'
       },
       radius: {
         none: 'rounded-none',
@@ -51,9 +51,9 @@ export const calendarVariants = cva(
 export const calendarHeaderVariants = cva('flex items-center justify-between', {
   variants: {
     size: {
-      sm: 'mb-3 gap-2',
-      md: 'mb-5 gap-4',
-      lg: 'mb-8 gap-6'
+      sm: 'mb-1.5 gap-1',
+      md: 'mb-2 gap-1.5',
+      lg: 'mb-4 gap-3'
     }
   },
   defaultVariants: {
@@ -70,9 +70,9 @@ export const calendarIconButtonVariants = cva(
   {
     variants: {
       size: {
-        sm: 'h-11 w-11',
-        md: 'h-16 w-16',
-        lg: 'h-20 w-20'
+        sm: 'h-4 w-4',
+        md: 'h-[26px] w-[26px]',
+        lg: 'h-[46px] w-[46px]'
       },
       disabled: {
         true: 'cursor-not-allowed opacity-40',
@@ -92,9 +92,9 @@ export const calendarIconButtonVariants = cva(
 export const calendarNavigationIconVariants = cva('', {
   variants: {
     size: {
-      sm: 'size-4',
-      md: 'size-6',
-      lg: 'size-8'
+      sm: 'size-2.5',
+      md: 'size-3.5',
+      lg: 'size-5'
     }
   },
   defaultVariants: {
@@ -111,9 +111,9 @@ export const calendarTriggerButtonVariants = cva(
   {
     variants: {
       size: {
-        sm: 'min-h-11 px-3 py-2 text-sm',
-        md: 'min-h-16 px-5 py-3 text-lg',
-        lg: 'min-h-20 px-8 py-4 text-2xl'
+        sm: 'min-h-4 px-1 py-0.5 text-[0.625rem]',
+        md: 'min-h-[26px] px-2 py-1 text-[0.6875rem]',
+        lg: 'min-h-[46px] px-4 py-2.5 text-base'
       },
       disabled: {
         true: 'cursor-not-allowed opacity-40',
@@ -134,8 +134,8 @@ export const calendarMonthsLayoutVariants = cva('grid', {
   variants: {
     size: {
       sm: 'gap-4',
-      md: 'gap-8',
-      lg: 'gap-12'
+      md: 'gap-6',
+      lg: 'gap-8'
     }
   },
   defaultVariants: {
@@ -146,9 +146,9 @@ export const calendarMonthsLayoutVariants = cva('grid', {
 export const calendarMonthSectionVariants = cva('grid', {
   variants: {
     size: {
-      sm: 'gap-2',
-      md: 'gap-4',
-      lg: 'gap-6'
+      sm: 'gap-0.5',
+      md: 'gap-0.75',
+      lg: 'gap-2'
     }
   },
   defaultVariants: {
@@ -159,9 +159,9 @@ export const calendarMonthSectionVariants = cva('grid', {
 export const calendarMonthHeadingVariants = cva('text-center font-semibold text-text-light dark:text-text-dark', {
   variants: {
     size: {
-      sm: 'text-sm',
-      md: 'text-lg',
-      lg: 'text-2xl'
+      sm: 'text-[0.625rem]',
+      md: 'text-[0.6875rem]',
+      lg: 'text-base'
     }
   },
   defaultVariants: {
@@ -172,9 +172,9 @@ export const calendarMonthHeadingVariants = cva('text-center font-semibold text-
 export const calendarGridVariants = cva('grid', {
   variants: {
     size: {
-      sm: 'gap-1',
-      md: 'gap-3',
-      lg: 'gap-5'
+      sm: 'gap-0',
+      md: 'gap-0.5',
+      lg: 'gap-2'
     }
   },
   defaultVariants: {
@@ -185,9 +185,9 @@ export const calendarGridVariants = cva('grid', {
 export const calendarWeekRowVariants = cva('grid grid-cols-7', {
   variants: {
     size: {
-      sm: 'gap-1',
-      md: 'gap-3',
-      lg: 'gap-5'
+      sm: 'gap-0',
+      md: 'gap-0.5',
+      lg: 'gap-2'
     }
   },
   defaultVariants: {
@@ -200,9 +200,9 @@ export const calendarWeekdayVariants = cva(
   {
     variants: {
       size: {
-        sm: 'min-h-11 text-xs tracking-wide',
-        md: 'min-h-16 text-base tracking-wider',
-        lg: 'min-h-20 text-xl tracking-wider'
+        sm: 'min-h-4 text-[0.5rem] tracking-[0.04em]',
+        md: 'min-h-6 text-[0.625rem] tracking-[0.08em]',
+        lg: 'min-h-10 text-xs tracking-[0.12em]'
       }
     },
     defaultVariants: {
@@ -226,9 +226,9 @@ export const calendarDayButtonVariants = cva(
         ghost: 'border border-transparent bg-transparent'
       },
       size: {
-        sm: 'h-11 w-11 text-sm',
-        md: 'h-16 w-16 text-xl',
-        lg: 'h-20 w-20 text-2xl'
+        sm: 'h-6 w-6 text-[0.625rem]',
+        md: 'h-[34px] w-[34px] text-xs',
+        lg: 'h-[54px] w-[54px] text-lg'
       },
       radius: {
         none: 'rounded-none',
@@ -307,9 +307,9 @@ export const calendarPickerVariants = cva(
   {
     variants: {
       size: {
-        sm: 'w-72 gap-3 p-3',
-        md: 'w-96 gap-6 p-6',
-        lg: 'w-120 gap-10 p-10'
+        sm: 'w-[14.75rem] gap-1.5 p-1.5',
+        md: 'w-[15.375rem] gap-2 p-2',
+        lg: 'w-[16.625rem] gap-3 p-3'
       }
     },
     defaultVariants: {
@@ -321,9 +321,9 @@ export const calendarPickerVariants = cva(
 export const calendarPickerHeaderVariants = cva('flex items-center justify-between', {
   variants: {
     size: {
-      sm: 'gap-2',
-      md: 'gap-4',
-      lg: 'gap-6'
+      sm: 'gap-1',
+      md: 'gap-1.5',
+      lg: 'gap-3'
     }
   },
   defaultVariants: {
@@ -334,9 +334,9 @@ export const calendarPickerHeaderVariants = cva('flex items-center justify-betwe
 export const calendarPickerHeaderContentVariants = cva('grid', {
   variants: {
     size: {
-      sm: 'gap-1',
-      md: 'gap-3',
-      lg: 'gap-5'
+      sm: 'gap-0.5',
+      md: 'gap-1',
+      lg: 'gap-3'
     }
   },
   defaultVariants: {
@@ -347,9 +347,9 @@ export const calendarPickerHeaderContentVariants = cva('grid', {
 export const calendarPickerHeadingVariants = cva('font-semibold text-text-light dark:text-text-dark', {
   variants: {
     size: {
-      sm: 'text-sm',
-      md: 'text-lg',
-      lg: 'text-2xl'
+      sm: 'text-[0.625rem]',
+      md: 'text-[0.6875rem]',
+      lg: 'text-base'
     }
   },
   defaultVariants: {
@@ -360,9 +360,9 @@ export const calendarPickerHeadingVariants = cva('font-semibold text-text-light 
 export const calendarPickerMetaVariants = cva('text-text-tertiary-light dark:text-text-tertiary-dark', {
   variants: {
     size: {
-      sm: 'text-xs',
-      md: 'text-base',
-      lg: 'text-xl'
+      sm: 'text-[0.625rem]',
+      md: 'text-[0.6875rem]',
+      lg: 'text-sm'
     }
   },
   defaultVariants: {
@@ -373,9 +373,9 @@ export const calendarPickerMetaVariants = cva('text-text-tertiary-light dark:tex
 export const calendarPickerPanelsVariants = cva('grid md:grid-cols-2', {
   variants: {
     size: {
-      sm: 'gap-3',
-      md: 'gap-6',
-      lg: 'gap-10'
+      sm: 'gap-1',
+      md: 'gap-1.5',
+      lg: 'gap-3'
     }
   },
   defaultVariants: {
@@ -386,9 +386,9 @@ export const calendarPickerPanelsVariants = cva('grid md:grid-cols-2', {
 export const calendarPickerSectionVariants = cva('grid', {
   variants: {
     size: {
-      sm: 'gap-2',
-      md: 'gap-4',
-      lg: 'gap-6'
+      sm: 'gap-1',
+      md: 'gap-2',
+      lg: 'gap-4'
     }
   },
   defaultVariants: {
@@ -399,9 +399,9 @@ export const calendarPickerSectionVariants = cva('grid', {
 export const calendarPickerOptionsGridVariants = cva('grid grid-cols-2', {
   variants: {
     size: {
-      sm: 'gap-2',
-      md: 'gap-4',
-      lg: 'gap-6'
+      sm: 'gap-1',
+      md: 'gap-2',
+      lg: 'gap-4'
     }
   },
   defaultVariants: {
@@ -418,9 +418,9 @@ export const calendarPickerOptionVariants = cva(
   {
     variants: {
       size: {
-        sm: 'min-h-11 px-2.5 py-2 text-sm',
-        md: 'min-h-16 px-5 py-3 text-lg',
-        lg: 'min-h-20 px-8 py-4 text-2xl'
+        sm: 'min-h-4 px-1 py-0.5 text-[0.625rem]',
+        md: 'min-h-[26px] px-2 py-1 text-[0.6875rem]',
+        lg: 'min-h-[46px] px-3 py-2.5 text-base'
       },
       selected: {
         true: '',
@@ -863,6 +863,7 @@ export type CalendarProps = {
   /**
    * @control select
    * @default md
+   * @dense Approved compact Calendar scale; use only where dense date selection is desired.
    */
   size?: CalendarSize;
   /**

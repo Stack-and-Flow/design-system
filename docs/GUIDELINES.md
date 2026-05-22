@@ -174,7 +174,7 @@ Usamos Tailwind v4 con configuraciones `@theme` definidas en `src/styles/theme.c
 - Si un ajuste responsive requiere un corte intermedio y no hay evidencia fuerte en contra, usa `md` como punto de partida conservador.
 
 - **OBLIGATORIO**: DEBES usar las propiedades CSS personalizadas del design system (tokens) mediante clases de Tailwind.
-- **SIN HARDCODING**: Nunca escribas colores en duro (ej: `#FF0000`), espaciados (`16px`, `1rem`) ni fuentes en estilos inline o clases Tailwind arbitrarias (ej: `text-[#fce9ea]`).
+- **SIN HARDCODING**: Nunca escribas colores en duro (ej: `#FF0000`) ni valores arbitrarios en estilos inline. Las clases Tailwind arbitrarias de tamaño/typography se permiten solo dentro de CVA en `types.ts` para variantes compactas/densas explícitamente aprobadas; colores arbitrarios siguen prohibidos.
 - Usa las clases predefinidas: `text-text-dark`, `bg-secondary`, `gap-sm`, `fs-h1`, etc.
 
 ---
@@ -322,7 +322,7 @@ Las siguientes prácticas resultan en rechazo del PR:
 1. **NO** combinar lógica Presentacional y Container en el mismo archivo `.tsx`.
 2. **NO** poner `cva` dentro del archivo `.tsx` o `useHook.ts` (pertenece a `types.ts`).
 3. **NO** usar `export interface` en TypeScript.
-4. **NO** valores arbitrarios en Tailwind (`p-[14px]`, `text-[#000]`).
+4. **NO** valores arbitrarios de color en Tailwind (`text-[#000]`). Tamaños/typography arbitrarios solo se permiten en CVA (`types.ts`) para variantes compactas/densas explícitamente aprobadas.
 5. **NO** código en español (variables, comentarios y stories deben estar en inglés).
 6. **NO** tipos `any`.
 7. **NO** omitir accesibilidad (`aria-*` o foco por teclado ausente).

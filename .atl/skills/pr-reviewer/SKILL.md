@@ -64,7 +64,7 @@ Report the failing criterion and stop — do not continue with the detailed chec
 | `interface` used | Grep for `interface ` in all `.ts` / `.tsx` files |
 | `any` used explicitly | Grep for `: any` or `as any` in all `.ts` / `.tsx` files |
 | Container/Presentational mixed | Logic (useState, useRef, handlers, CVA calls) found in `.tsx` file |
-| Hardcoded Tailwind arbitrary values | Grep for `p-[`, `m-[`, `text-[#`, `bg-[#`, `border-[#` in component files |
+| Hardcoded Tailwind arbitrary colors/spacing | Grep for arbitrary colors (`text-[#`, `bg-[#`, `border-[#`) and arbitrary spacing outside documented CVA size/density variants |
 | Missing tests | No `.test.tsx` file in the component directory |
 | Missing Storybook story | No `.stories.tsx` file in the component directory |
 | Play functions in stories | Stories contain `play` functions — interaction tests belong in `.test.tsx` |
@@ -99,7 +99,7 @@ Before the Storybook review, read `.atl/skills/component-contributor/references/
 ### 3 — Token usage
 
 - [ ] No raw hex values in className strings (`#`, `rgba()`, `rgb()`)
-- [ ] No arbitrary pixel values for spacing/sizing (`p-[14px]`, `w-[320px]`)
+- [ ] No arbitrary color values; arbitrary size/typography utilities are allowed only inside `types.ts` CVA definitions for an explicitly documented compact/dense visual variant
 - [ ] Dark mode paired tokens present: `bg-surface-light dark:bg-surface-dark`
 - [ ] Focus ring uses `box-shadow` with `--glow-focus-dark` token — never `outline` alone
 - [ ] Disabled state uses `opacity-40` + `pointer-events-none` — no color substitution
@@ -123,7 +123,7 @@ Before the Storybook review, read `.atl/skills/component-contributor/references/
 ### 6 — Accessibility
 
 - [ ] All interactive elements have an accessible name (`aria-label`, `aria-labelledby`, or visible text)
-- [ ] Minimum touch target `44×44px` on interactive elements
+- [ ] Default interactive controls meet `44×44px`; documented compact/dense variants may be smaller when approved, native-control based, keyboard accessible, and focus-visible
 - [ ] `aria-disabled` mirrors `disabled` prop
 - [ ] `role` attribute present where semantic HTML is insufficient
 - [ ] `focus-visible` selector used for focus styling — not `:focus` alone

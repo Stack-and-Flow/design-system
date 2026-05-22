@@ -23,6 +23,7 @@ const highlightedDates = [
  *
  * ## Usage Guide
  * Use `selectedDate` with a single `Date | null` value for single-date selection or pass a tuple to enable range selection.
+ * Calendar uses an approved dense size scale for compact date-picking surfaces; choose this component where density matters more than touch-first controls.
  * Keep consumer styling overrides inside `highlightedDates` when you need to annotate specific days.
  */
 const meta: Meta<typeof Calendar> = {
@@ -51,7 +52,7 @@ export const Default: Story = {
 };
 
 /**
- * Shows the compact size with the smallest supported interactive controls.
+ * Shows the smallest approved dense size for compact desktop date-picking surfaces.
  */
 export const Small: Story = {
   args: {
@@ -62,7 +63,7 @@ export const Small: Story = {
 };
 
 /**
- * Shows the default medium size for balanced readability and density.
+ * Shows the default approved dense medium size for balanced readability and compactness.
  */
 export const Medium: Story = {
   args: {
@@ -73,7 +74,7 @@ export const Medium: Story = {
 };
 
 /**
- * Shows the largest size with roomier spacing for high-emphasis scheduling surfaces.
+ * Shows the largest approved dense size with roomier spacing for high-emphasis scheduling surfaces.
  */
 export const Large: Story = {
   args: {

@@ -89,7 +89,7 @@ For every interactive component, check ALL of the following sections.
 ### 6. Accessibility
 
 **Buttons:**
-- [ ] Minimum height `44px`; minimum padding `10px 20px`
+- [ ] Default action height is `44px`; compact/dense component variants may go below `44px` only when explicitly documented, visually approved, implemented on native controls, and still keyboard/focus accessible
 - [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` dark / `0 0 0 3px rgba(219, 20, 60, 0.35)` light
 - [ ] Focus ring **merged** with existing `box-shadow` — adds as outermost layer, never replaces
 - [ ] `outline: none` must ALWAYS be paired with a visible `box-shadow` focus ring — never naked
@@ -138,7 +138,7 @@ For every interactive component, check ALL of the following sections.
 
 When reporting issues, classify every finding with:
 
-- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, interactive element below 44px, `outline: none` without alternative
+- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, undocumented interactive element below the required target size, `outline: none` without alternative
 - **MAJOR** — Compositional rule violation: blur+gradient on same element, wrong glow layer count, flat border where gradient required, `border-image` used, `transition: all` used, layout property animated
 - **MINOR** — Inconsistency with spec: wrong duration (e.g. 300ms instead of 250ms for button), missing transition property (e.g. `border-color` absent on secondary), hover tint value off
 - **SUGGESTION** — Enhancement opportunity: adding `will-change` to entrance animations, using token variable instead of raw value

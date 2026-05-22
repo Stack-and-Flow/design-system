@@ -77,7 +77,7 @@ Never use `outline: none` without an alternative visible focus indicator.
 `border-image` does not work with `border-radius` — the gradient clips to a rectangle, destroying the pill shape. The correct technique uses `::before` absolutely positioned with `inset: -1.5px` and `z-index: -1`, with the gradient as its `background` and `border-radius: inherit`.
 
 **Rule 10 — Default touch target is 44×44px for interactive elements.**
-Buttons and action-style links use a default minimum `height: 44px` from `sm` upward. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Only the explicit `xs` action size may go below this for dense interfaces; use `sm` or above when the 44px target is required.
+Buttons and action-style links use a default minimum `height: 44px` from `sm` upward. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Component-specific compact/dense size scales may go below 44px only when explicitly approved, documented on the prop/story, implemented on native controls, and still keyboard/focus accessible; use the default scale when touch-first targets are required. Calendar is an approved dense component scale because date grids need compact scanning density.
 
 **Action size scale — `xs | sm | md | lg`.**
 For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the dense compact size: reduce typography, icon size, gap, horizontal padding, and height so it is visibly smaller than `sm`. `Link` `regular` remains inline typography-only, while CTA-style `sm` and above keep the 44px target.
@@ -1134,7 +1134,7 @@ background: linear-gradient(
 - [ ] Primary: white `#ffffff` text over red gradient — contrast passes in both modes
 - [ ] Secondary dark: `color: #ffffff` over `rgba(255,0,54,0.06)` — visually dark background context; border defines the affordance
 - [ ] Secondary light: `color: #cc0030` — NEVER `#ff0036` in light mode (insufficient contrast over white)
-- [ ] Touch target remains at least `44px` for `sm` and above; compact `xs` actions are the documented dense exception with reduced height and padding
+- [ ] Touch target remains at least `44px` for default action sizes; explicitly approved compact/dense variants may use reduced visual targets when documented and keyboard/focus accessible
 - [ ] `role="button"` if implemented as non-`<button>` element
 
 ### Inputs
