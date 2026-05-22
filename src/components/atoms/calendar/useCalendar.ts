@@ -421,7 +421,7 @@ export const useCalendar = ({
   const normalizedMinDate = normalizeNullableDate(minDate);
   const normalizedMaxDate = normalizeNullableDate(maxDate);
   const normalizedDisabledDates = useMemo(
-    () => disabledDates.map((date) => toDateKey(startOfDay(date))),
+    () => new Set(disabledDates.map((date) => toDateKey(startOfDay(date)))),
     [disabledDates]
   );
   const normalizedHighlightedDates = useMemo(
@@ -502,7 +502,7 @@ export const useCalendar = ({
       return true;
     }
 
-    return normalizedDisabledDates.includes(dateKey);
+    return normalizedDisabledDates.has(dateKey);
   };
 
   const updateSelection = (date: Date) => {

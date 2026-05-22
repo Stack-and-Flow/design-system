@@ -299,6 +299,8 @@ export const calendarDayButtonVariants = cva(
   }
 );
 
+// Calendar picker widths intentionally use approved dense-scale rem values instead of spacing tokens.
+// The compact date grid needs precise, non-touch-first sizing while preserving native button a11y.
 export const calendarPickerVariants = cva(
   [
     'grid rounded-md border border-border-light bg-surface-light text-text-light shadow-shadow-dropdown-light',
@@ -469,7 +471,7 @@ const defaultColorTone: CalendarColorTone = {
 
 const orangeColorTone: CalendarColorTone = {
   filledSelected: 'bg-orange text-text-light hover:bg-orange-dark active:bg-orange-dark',
-  filledRange: 'bg-orange/15 text-orange-dark dark:text-orange-light',
+  filledRange: 'bg-orange/15 text-text-light dark:text-orange-light',
   softSelected: 'bg-orange/15 text-orange-dark dark:text-orange-light',
   softRange: 'bg-orange/10 text-orange-dark dark:text-orange-light',
   outlinedSelected: 'border-orange bg-orange/10 text-orange-dark dark:text-orange-light',
@@ -678,7 +680,7 @@ const blueDarkColorTone: CalendarColorTone = {
 };
 
 const indigoColorTone: CalendarColorTone = {
-  filledSelected: 'bg-indigo text-white hover:bg-indigo-dark active:bg-indigo-dark',
+  filledSelected: 'bg-indigo-dark text-white hover:bg-indigo active:bg-indigo-dark',
   filledRange: 'bg-indigo/15 text-indigo-dark dark:text-indigo-light',
   softSelected: 'bg-indigo/15 text-indigo-dark dark:text-indigo-light',
   softRange: 'bg-indigo/10 text-indigo-dark dark:text-indigo-light',
