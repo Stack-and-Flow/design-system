@@ -148,7 +148,7 @@ export default Button;
 We use Tailwind v4 with `@theme` configurations defined in `src/styles/theme.css`.
 
 - **MANDATORY**: You MUST use the design system's CSS custom properties (tokens) via Tailwind classes.
-- **NO HARDCODING**: Never hardcode colors (e.g., `#FF0000`), spacing (`16px`, `1rem`), or fonts in inline styles or arbitrary Tailwind classes (e.g., `text-[#fce9ea]`).
+- **NO HARDCODING**: Never hardcode colors (e.g., `#FF0000`) or arbitrary values in inline styles. Arbitrary Tailwind sizing/typography classes are allowed only inside `types.ts` CVA definitions for explicitly approved compact/dense variants; arbitrary colors remain forbidden.
 - Use the predefined classes: `text-text-dark`, `bg-secondary`, `gap-sm`, `fs-h1`, etc.
 
 ---
@@ -294,7 +294,7 @@ The following practices will result in PR rejection:
 1. **NO** combining Presentational and Container logic in the same `.tsx` file.
 2. **NO** putting `cva` inside the `.tsx` or `useHook.ts` file (it belongs in `types.ts`).
 3. **NO** `export interface` in TypeScript.
-4. **NO** arbitrary values in Tailwind (`p-[14px]`, `text-[#000]`).
+4. **NO** arbitrary Tailwind colors (`text-[#000]`). Arbitrary sizing/typography values are allowed only in CVA (`types.ts`) for explicitly approved compact/dense variants.
 5. **NO** Spanish code or documentation (variables, comments, stories must be in English).
 6. **NO** `any` types.
 7. **NO** skipped accessibility (`aria-*` or missing keyboard focus).

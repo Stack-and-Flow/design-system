@@ -147,7 +147,7 @@ Before requesting a review, verify:
 - [ ] `## Description` is present; `## Dependencies` and `## Usage Guide` are used only when applicable.
 - [ ] Interactive components have tests in `.test.tsx`.
 - [ ] The pre-PR component review has passed or is documented.
-- [ ] Tokens from `theme.css` are used (no hardcoded colors or spacing).
+- [ ] Tokens from `theme.css` are used (no hardcoded colors; arbitrary sizing/typography only in approved compact/dense CVA variants).
 - [ ] ARIA attributes are implemented for interactable elements.
 - [ ] Conventional Commits are used for commit messages and the PR title.
 - [ ] Security checks pass, or any false positives are documented in the PR.
@@ -178,7 +178,7 @@ If you use [opencode](https://opencode.ai/), this project includes `.atl/AGENTS.
 The agents will already know:
 
 - The 6-file architecture and where each piece of logic belongs
-- Which design tokens to use (and which hardcoded values to avoid)
+- Which design tokens to use, which hardcoded values to avoid, and whether a compact/dense CVA size exception is approved
 - The Storybook rules and required story structure
 - The full list of anti-patterns that cause PR rejection
 

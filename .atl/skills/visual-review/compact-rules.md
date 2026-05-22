@@ -38,4 +38,4 @@
 - Buttons: 250ms ease | Cards: 300ms ease | Dropdowns: 150ms ease | Links: 200ms ease | Scroll fade-in: 560ms cubic-bezier(0.2, 0.8, 0.2, 1)
 
 ### Minimum Touch Targets
-- All interactive elements: minimum `44×44px` — buttons `min-height: 44px; padding: 10px 20px`, dropdown items `padding: 7px 12px` with 14px font
+- Default interactive elements target `44×44px`; documented compact/dense variants may go below this when visually approved and still native-button, keyboard, focus-ring, and ARIA accessible
