@@ -254,6 +254,24 @@
   --shadow-glow-focus-dark: var(--glow-focus-dark);
   --shadow-glow-focus-light: var(--glow-focus-light);
 
+  /* Glow de input — softer than button focus rings */
+  --glow-input-focus: 0 0 0 3px rgba(255, 0, 54, 0.12);
+  --glow-input-focus-light: 0 0 0 3px rgba(219, 20, 60, 0.15);
+  --glow-input-error: 0 0 0 3px rgba(255, 0, 54, 0.15);
+  --glow-input-error-light: 0 0 0 3px rgba(219, 20, 60, 0.15);
+  --glow-input-warning: 0 0 0 3px rgba(251, 191, 36, 0.12);
+  --glow-input-warning-light: 0 0 0 3px rgba(217, 119, 6, 0.15);
+  --glow-input-success: 0 0 0 3px rgba(34, 197, 94, 0.12);
+  --glow-input-success-light: 0 0 0 3px rgba(22, 163, 74, 0.15);
+  --shadow-glow-input-focus: var(--glow-input-focus);
+  --shadow-glow-input-focus-light: var(--glow-input-focus-light);
+  --shadow-glow-input-error: var(--glow-input-error);
+  --shadow-glow-input-error-light: var(--glow-input-error-light);
+  --shadow-glow-input-warning: var(--glow-input-warning);
+  --shadow-glow-input-warning-light: var(--glow-input-warning-light);
+  --shadow-glow-input-success: var(--glow-input-success);
+  --shadow-glow-input-success-light: var(--glow-input-success-light);
+
   /* Glow ámbar — GitHub stars */
   --glow-amber: 0 0 0 3px rgba(255, 185, 0, 0.12);
 
