@@ -576,10 +576,10 @@ export const useCalendar = ({
   };
 
   const alignCurrentDateToFocus = (nextFocusedDate: Date) => {
-    const normalizedDate = startOfDay(nextFocusedDate);
-    setCurrentDate(normalizedDate);
-    setFocusedDate(normalizedDate);
-    pendingFocusKeyRef.current = toDateKey(normalizedDate);
+    const enabledDate = resolveEnabledDate(nextFocusedDate);
+    setCurrentDate(enabledDate);
+    setFocusedDate(enabledDate);
+    pendingFocusKeyRef.current = toDateKey(enabledDate);
   };
 
   const goToPreviousMonth = () => {

@@ -211,6 +211,20 @@ describe('Calendar — component behavior', () => {
     expect(screen.getByRole('button', { name: getDateMatcher(new Date(2025, 7, 20)) })).toHaveFocus();
   });
 
+  it('keeps navigation focus on an enabled date when the target date is disabled', async () => {
+    const user = userEvent.setup();
+    const disabledTargetDate = new Date(2025, 8, 14);
+    const fallbackDate = new Date(2025, 8, 15);
+
+    render(<Calendar selectedDate={baseDate} disabledDates={[disabledTargetDate]} />);
+
+    await user.click(screen.getByRole('button', { name: /next month/i }));
+
+    expect(screen.getByRole('grid', { name: /september 2025/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: getDateMatcher(disabledTargetDate) })).toBeDisabled();
+    expect(screen.getByRole('button', { name: getDateMatcher(fallbackDate) })).toHaveFocus();
+  });
+
   it('keeps exactly one roving tab stop in three-month mode', () => {
     render(<Calendar selectedDate={new Date(2025, 8, 1)} visibleMonths={3} />);
 
