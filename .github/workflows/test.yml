@@ -7,8 +7,12 @@ on:
 
 jobs:
   test:
-    name: Run tests
-    runs-on: ubuntu-latest
+    name: Run tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout
