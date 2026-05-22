@@ -48,7 +48,7 @@ const findMapViolationsInSourceFile = (sourceFile: ts.SourceFile): StoryMapViola
       if (mapPropertyName !== undefined) {
         const { line, character } = sourceFile.getLineAndCharacterOfPosition(mapPropertyName.getStart(sourceFile));
         violations.push({
-          file: relative(root, sourceFile.fileName),
+          file: relative(root, sourceFile.fileName).replaceAll('\\', '/'),
           line: line + 1,
           column: character + 1
         });
