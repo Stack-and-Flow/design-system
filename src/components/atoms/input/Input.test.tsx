@@ -104,10 +104,11 @@ describe('Input — component behavior', () => {
   });
 
   it('calls onChange with the event and next value', async () => {
+    const user = userEvent.setup();
     const handleChange = vi.fn();
     render(<Input id='name' label='Name' onChange={handleChange} />);
 
-    await userEvent.type(screen.getByRole('textbox', { name: 'Name' }), 'Ana');
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Ana');
 
     expect(handleChange.mock.lastCall?.[1]).toBe('Ana');
   });
@@ -131,6 +132,12 @@ describe('Input — component behavior', () => {
 
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(input).toHaveAccessibleDescription('Invalid email');
+  });
+
+  it('preserves native aria-invalid values when no error hint is provided', () => {
+    render(<Input id='email' label='Email' aria-invalid='grammar' />);
+
+    expect(screen.getByRole('textbox', { name: 'Email' })).toHaveAttribute('aria-invalid', 'grammar');
   });
 
   it('merges custom aria-describedby with the rendered hint', () => {
@@ -160,19 +167,21 @@ describe('Input — component behavior', () => {
   });
 
   it('toggles password visibility with an accessible button', async () => {
+    const user = userEvent.setup();
     render(<Input id='password' label='Password' type='password' />);
     const input = screen.getByLabelText('Password');
     const toggle = screen.getByRole('button', { name: 'Show password' });
 
     expect(input).toHaveAttribute('type', 'password');
 
-    await userEvent.click(toggle);
+    await user.click(toggle);
 
     expect(input).toHaveAttribute('type', 'text');
     expect(screen.getByRole('button', { name: 'Hide password' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('renders number step buttons as non-submit controls', async () => {
+    const user = userEvent.setup();
     render(<Input id='quantity' label='Quantity' type='number' defaultValue={1} />);
     const input = screen.getByRole('spinbutton', { name: 'Quantity' });
     const increase = screen.getByRole('button', { name: 'Increase value' });
@@ -181,33 +190,65 @@ describe('Input — component behavior', () => {
     expect(increase).toHaveAttribute('type', 'button');
     expect(decrease).toHaveAttribute('type', 'button');
 
-    await userEvent.click(increase);
+    await user.click(increase);
     expect(input).toHaveValue(2);
 
-    await userEvent.click(decrease);
+    await user.click(decrease);
     expect(input).toHaveValue(1);
   });
 
   it('honors native step, min, and max with number controls', async () => {
+    const user = userEvent.setup();
     render(<Input id='quantity' label='Quantity' type='number' defaultValue={0.5} min={0} max={1} step={0.5} />);
     const input = screen.getByRole('spinbutton', { name: 'Quantity' });
     const increase = screen.getByRole('button', { name: 'Increase value' });
     const decrease = screen.getByRole('button', { name: 'Decrease value' });
 
-    await userEvent.click(increase);
+    await user.click(increase);
     expect(input).toHaveValue(1);
 
-    await userEvent.click(increase);
+    await user.click(increase);
     expect(input).toHaveValue(1);
 
-    await userEvent.click(decrease);
+    await user.click(decrease);
     expect(input).toHaveValue(0.5);
 
-    await userEvent.click(decrease);
+    await user.click(decrease);
     expect(input).toHaveValue(0);
 
-    await userEvent.click(decrease);
+    await user.click(decrease);
     expect(input).toHaveValue(0);
+  });
+
+  it('falls back to manual number controls when step is any', async () => {
+    const user = userEvent.setup();
+    render(<Input id='quantity' label='Quantity' type='number' defaultValue={1} min={0} max={2} step='any' />);
+    const input = screen.getByRole('spinbutton', { name: 'Quantity' });
+    const increase = screen.getByRole('button', { name: 'Increase value' });
+    const decrease = screen.getByRole('button', { name: 'Decrease value' });
+
+    await user.click(increase);
+    expect(input).toHaveValue(2);
+
+    await user.click(increase);
+    expect(input).toHaveValue(2);
+
+    await user.click(decrease);
+    expect(input).toHaveValue(1);
+  });
+
+  it('keeps status border precedence while focused', async () => {
+    const user = userEvent.setup();
+    render(<Input id='email' label='Email' hint={{ type: 'error', message: 'Invalid email' }} />);
+    const input = screen.getByRole('textbox', { name: 'Email' });
+
+    await user.click(input);
+
+    const containerClassName = input.closest('div.relative')?.className ?? '';
+    expect(containerClassName).toContain('!border-error-light');
+    expect(containerClassName.lastIndexOf('!border-error-light')).toBeGreaterThan(
+      containerClassName.lastIndexOf('!border-brand-light/50')
+    );
   });
 
   it('supports native aria-labelledby overrides', () => {

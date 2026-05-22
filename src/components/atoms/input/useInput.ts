@@ -105,6 +105,25 @@ const dispatchNativeInputEvents = (input: HTMLInputElement) => {
   input.dispatchEvent(new Event('change', { bubbles: true }));
 };
 
+const parseNumberAttribute = (value: string) => {
+  if (!value) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
+
+const clampNumberValue = (value: number, min?: number, max?: number) =>
+  Math.min(Math.max(value, min ?? value), max ?? value);
+
+const stepNumberValueManually = (input: HTMLInputElement, direction: 'up' | 'down') => {
+  const currentValue = Number.isFinite(input.valueAsNumber) ? input.valueAsNumber : 0;
+  const nextValue = currentValue + (direction === 'up' ? 1 : -1);
+
+  input.value = String(clampNumberValue(nextValue, parseNumberAttribute(input.min), parseNumberAttribute(input.max)));
+};
+
 export const useInput = ({
   rounded = false,
   size = 'md',
@@ -132,6 +151,7 @@ export const useInput = ({
   'aria-describedby': nativeAriaDescribedBy,
   'aria-labelledby': nativeAriaLabelledBy,
   'aria-label': nativeAriaLabel,
+  'aria-invalid': nativeAriaInvalid,
   ...props
 }: InputProps): UseInputReturn => {
   const [isFocused, setIsFocused] = useState(false);
@@ -220,7 +240,9 @@ export const useInput = ({
       return;
     }
 
-    if (direction === 'up') {
+    if (input.step === 'any') {
+      stepNumberValueManually(input, direction);
+    } else if (direction === 'up') {
       input.stepUp();
     } else {
       input.stepDown();
@@ -269,7 +291,7 @@ export const useInput = ({
       placeholder,
       disabled,
       'aria-disabled': disabled ? true : undefined,
-      'aria-invalid': hint?.type === 'error' ? true : undefined,
+      'aria-invalid': hint?.type === 'error' ? true : nativeAriaInvalid,
       'aria-describedby': describedBy,
       'aria-labelledby': labelledBy,
       'aria-label': nativeAriaLabel ?? (!labelledBy ? placeholder : undefined),

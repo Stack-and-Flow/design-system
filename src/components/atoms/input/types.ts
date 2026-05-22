@@ -5,8 +5,7 @@ export const inputVariants = cva(
   [
     'relative flex max-w-full justify-between overflow-hidden border py-2',
     'cursor-text transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-    'focus-within:outline-none',
-    'disabled:pointer-events-none disabled:opacity-40 disabled:cursor-not-allowed'
+    'focus-within:outline-none'
   ],
   {
     variants: {
@@ -54,6 +53,23 @@ export const inputVariants = cva(
         false: 'w-auto'
       }
     },
+    compoundVariants: [
+      {
+        focused: true,
+        status: 'error',
+        class: '!border-error-light dark:!border-error'
+      },
+      {
+        focused: true,
+        status: 'warning',
+        class: '!border-warning-light dark:!border-warning'
+      },
+      {
+        focused: true,
+        status: 'success',
+        class: '!border-success-light dark:!border-success'
+      }
+    ],
     defaultVariants: {
       variant: 'regular',
       rounded: false,
