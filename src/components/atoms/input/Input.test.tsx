@@ -250,6 +250,14 @@ describe('Input — component behavior', () => {
     expect(fireEvent.keyDown(input, { key: 'a' })).toBe(false);
   });
 
+  it('preserves native clipboard shortcuts for tel inputs', () => {
+    render(<Input id='phone' label='Phone' type='tel' />);
+    const input = screen.getByRole('textbox', { name: 'Phone' });
+
+    expect(fireEvent.keyDown(input, { key: 'v', ctrlKey: true })).toBe(true);
+    expect(fireEvent.keyDown(input, { key: 'a', metaKey: true })).toBe(true);
+  });
+
   it('falls back to manual number controls when step is any', async () => {
     const user = userEvent.setup();
     render(<Input id='quantity' label='Quantity' type='number' defaultValue={1} min={0} max={2} step='any' />);

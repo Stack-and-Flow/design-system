@@ -234,7 +234,7 @@ export const useInput = ({
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (type === 'tel') {
+    if (type === 'tel' && !event.ctrlKey && !event.metaKey) {
       const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', 'Home', 'End'];
       const isNumberKey = /^[0-9]$/.test(event.key);
       const isAllowedSign = canTypeLeadingSign(event.currentTarget, event.key);
