@@ -14,7 +14,10 @@ export const inputVariants = cva(
           'bg-surface-light border-border-light hover:bg-surface-raised-light hover:border-border-strong-light',
           'dark:bg-surface-dark dark:border-border-dark dark:hover:bg-surface-raised-dark dark:hover:border-border-strong-dark'
         ],
-        underlined: ['bg-transparent border-border-light hover:border-border-strong-light', 'dark:border-border-dark'],
+        underlined: [
+          'bg-transparent border-border-light hover:border-border-strong-light',
+          'dark:border-border-dark dark:hover:border-border-strong-dark'
+        ],
         line: [
           'bg-transparent border-t-transparent border-l-transparent border-r-transparent rounded-none!',
           'border-b-border-light hover:border-b-border-strong-light',
