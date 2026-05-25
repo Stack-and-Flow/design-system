@@ -124,6 +124,28 @@ const stepNumberValueManually = (input: HTMLInputElement, direction: 'up' | 'dow
   input.value = String(clampNumberValue(nextValue, parseNumberAttribute(input.min), parseNumberAttribute(input.max)));
 };
 
+const canTypeLeadingSign = (input: HTMLInputElement, key: string) => {
+  if (!['+', '-'].includes(key)) {
+    return false;
+  }
+
+  if (input.type === 'tel' && key !== '+') {
+    return false;
+  }
+
+  const selectionStart = input.selectionStart;
+
+  if (selectionStart === null) {
+    return false;
+  }
+
+  const selectionEnd = input.selectionEnd ?? selectionStart;
+  const hasLeadingSign = /^[+-]/.test(input.value);
+  const replacesLeadingSign = selectionStart === 0 && selectionEnd > 0 && hasLeadingSign;
+
+  return selectionStart === 0 && (!hasLeadingSign || replacesLeadingSign);
+};
+
 export const useInput = ({
   rounded = false,
   size = 'md',
@@ -212,15 +234,12 @@ export const useInput = ({
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (['number', 'tel'].includes(type)) {
-      const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', 'Home', 'End', '.'];
+    if (type === 'tel') {
+      const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', 'Home', 'End'];
       const isNumberKey = /^[0-9]$/.test(event.key);
+      const isAllowedSign = canTypeLeadingSign(event.currentTarget, event.key);
 
-      if (!allowedKeys.includes(event.key) && !isNumberKey) {
-        event.preventDefault();
-      }
-
-      if (event.key === '.' && event.currentTarget.value.includes('.')) {
+      if (!allowedKeys.includes(event.key) && !isNumberKey && !isAllowedSign) {
         event.preventDefault();
       }
     }
@@ -267,7 +286,8 @@ export const useInput = ({
     contentClassName: cn(
       'flex w-full items-center justify-between',
       getContentGapClassName(size),
-      label && startContent && 'translate-y-2'
+      label && startContent && 'translate-y-2',
+      hasInlineAction && endContent && 'pr-8'
     ),
     decrementButtonProps: {
       type: 'button',

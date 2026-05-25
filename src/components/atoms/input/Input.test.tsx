@@ -1,4 +1,4 @@
-import { render, renderHook, screen } from '@testing-library/react';
+import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -90,6 +90,20 @@ describe('useInput — logic', () => {
     expect(result.current.containerProps.className).toContain('px-3');
     expect(result.current.contentClassName).toContain('gap-2');
     expect(result.current.adornmentClassName).toContain('fs-small');
+  });
+
+  it('keeps dark hover styling for the underlined variant', () => {
+    const { result } = renderHook(() => useInput({ id: 'email', label: 'Email', variant: 'underlined' }));
+
+    expect(result.current.containerProps.className).toContain('dark:hover:border-border-strong-dark');
+  });
+
+  it('reserves inline-action space when end content is present', () => {
+    const { result } = renderHook(() =>
+      useInput({ id: 'password', label: 'Password', type: 'password', endContent: '.com' })
+    );
+
+    expect(result.current.contentClassName).toContain('pr-8');
   });
 });
 
@@ -218,6 +232,22 @@ describe('Input — component behavior', () => {
 
     await user.click(decrease);
     expect(input).toHaveValue(0);
+  });
+
+  it('does not cancel number key input so the browser controls number editing', () => {
+    render(<Input id='temperature' label='Temperature' type='number' min={-10} defaultValue={12} />);
+    const input = screen.getByRole('spinbutton', { name: 'Temperature' });
+
+    expect(fireEvent.keyDown(input, { key: '-' })).toBe(true);
+    expect(fireEvent.keyDown(input, { key: 'a' })).toBe(true);
+  });
+
+  it('allows leading plus signs for tel inputs while blocking invalid tel letters', () => {
+    render(<Input id='phone' label='Phone' type='tel' />);
+    const input = screen.getByRole('textbox', { name: 'Phone' });
+
+    expect(fireEvent.keyDown(input, { key: '+' })).toBe(true);
+    expect(fireEvent.keyDown(input, { key: 'a' })).toBe(false);
   });
 
   it('falls back to manual number controls when step is any', async () => {
