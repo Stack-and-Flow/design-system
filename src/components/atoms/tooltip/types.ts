@@ -10,7 +10,7 @@ export const tooltipVariants = cva(
   {
     variants: {
       color: {
-        default: 'bg-gray-dark-500 text-text-dark dark:bg-gray-light-300 dark:text-text-light',
+        default: 'bg-surface-dark text-text-dark dark:bg-surface-light dark:text-text-light',
         primary: 'bg-red-600 text-text-dark dark:bg-red-300 dark:text-text-light',
         success: 'bg-green-dark text-text-dark dark:bg-green-light dark:text-text-light',
         warning: 'bg-yellow-dark text-text-dark dark:bg-yellow-light dark:text-text-light',

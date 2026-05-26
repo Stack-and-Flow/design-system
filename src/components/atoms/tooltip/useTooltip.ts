@@ -52,11 +52,11 @@ export const useTooltip = ({
       return triggerInteraction;
     }
 
-    if (onClick) {
+    if (onClick === true) {
       return 'click';
     }
 
-    if (onFocus) {
+    if (onFocus === true) {
       return 'focus';
     }
 

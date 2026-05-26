@@ -38,6 +38,20 @@ describe('useTooltip — logic', () => {
     expect(result.current.enableFocus).toBe(false);
     expect(result.current.enableClick).toBe(true);
   });
+
+  it('ignores non-boolean Storybook action values for legacy interaction flags', () => {
+    const { result } = renderHook(() =>
+      useTooltip({
+        content: 'Storybook action tooltip',
+        onClick: (() => undefined) as unknown as boolean,
+        onFocus: (() => undefined) as unknown as boolean
+      })
+    );
+
+    expect(result.current.enableHover).toBe(true);
+    expect(result.current.enableFocus).toBe(true);
+    expect(result.current.enableClick).toBe(false);
+  });
 });
 
 describe('Tooltip — component behavior', () => {
