@@ -115,8 +115,23 @@ describe('Tooltip — component behavior', () => {
       </Tooltip>
     );
 
-    expect(screen.getByRole('button', { name: 'Fragment trigger' })).not.toHaveAttribute('aria-describedby');
+    const trigger = screen.getByRole('button', { name: 'Fragment trigger' });
+    expect(trigger).not.toHaveAttribute('aria-describedby');
+    expect(trigger.closest('span')).toHaveAttribute('aria-describedby', expect.stringMatching(/^tooltip-/));
     expect(consoleError).not.toHaveBeenCalled();
+  });
+
+  it('applies aria-describedby to the wrapper when the trigger cannot be cloned', () => {
+    render(
+      <Tooltip aria-describedby='external-description' content='Wrapper tooltip' tabIndex={0}>
+        Wrapper trigger
+      </Tooltip>
+    );
+
+    expect(screen.getByText('Wrapper trigger')).toHaveAttribute(
+      'aria-describedby',
+      expect.stringMatching(/^external-description tooltip-/)
+    );
   });
 
   it('renders numeric zero content as valid tooltip content', async () => {

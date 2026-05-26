@@ -43,10 +43,12 @@ export const Tooltip: FC<TooltipProps> = ({ ...props }) => {
   } = rest;
 
   const canCloneTrigger = isValidElement<TriggerChildProps>(children) && children.type !== Fragment;
+  const mergedDescribedBy = [ariaDescribedBy, describedById].filter(Boolean).join(' ') || undefined;
+  const wrapperDescribedBy = canCloneTrigger ? undefined : mergedDescribedBy;
   const trigger = canCloneTrigger
     ? cloneElement(children as ReactElement<TriggerChildProps>, {
         'aria-describedby':
-          [children.props['aria-describedby'], ariaDescribedBy, describedById].filter(Boolean).join(' ') || undefined
+          [children.props['aria-describedby'], mergedDescribedBy].filter(Boolean).join(' ') || undefined
       })
     : children;
   const closestDarkContainer = typeof document === 'undefined' ? null : triggerRef.current?.closest('.dark');
@@ -58,6 +60,7 @@ export const Tooltip: FC<TooltipProps> = ({ ...props }) => {
   return (
     <span
       {...triggerRest}
+      aria-describedby={wrapperDescribedBy}
       ref={triggerRef}
       className={cn('relative inline-flex', className)}
       onMouseEnter={(event) => {
