@@ -53,13 +53,7 @@ Branch naming follows [Conventional Commits](https://www.conventionalcommits.org
 
 ## 5. Build your component
 
-Every component follows the **6-file pattern**. Use `CONTRIBUTOR-FLOW.md` as the canonical workflow and use the scaffolding CLI only if it matches that structure:
-
-```bash
-npx compilot-cli
-```
-
-Or create it manually under the correct atomic layer:
+Every component follows the **6-file pattern**. Use `CONTRIBUTOR-FLOW.md` as the canonical workflow and create it manually under the correct atomic layer:
 
 ```
 src/components/atoms/your-component/

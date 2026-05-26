@@ -55,13 +55,7 @@ El nombre de las ramas sigue [Conventional Commits](https://www.conventionalcomm
 
 ## 5. Construir tu componente
 
-Cada componente sigue el **patrón de 6 archivos**. Usá `CONTRIBUTOR-FLOW.md` como flujo canónico y el CLI de scaffolding solo si está alineado con esa estructura:
-
-```bash
-npx compilot-cli
-```
-
-O créalo manualmente en la capa atómica correcta:
+Cada componente sigue el **patrón de 6 archivos**. Usá `CONTRIBUTOR-FLOW.md` como flujo canónico y crealo manualmente en la capa atómica correcta:
 
 ```
 src/components/atoms/tu-componente/

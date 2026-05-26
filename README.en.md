@@ -64,7 +64,7 @@ nvm use
 pnpm install
 
 # 4. Run Storybook with hot reload
-npx storybook-watch
+pnpm run storybook
 ```
 
 Done! Storybook will open at `http://localhost:6006` 🎉
@@ -127,25 +127,13 @@ This is an **educational and open collaboration project**. We'd love for you to 
 
 ## 🧰 Project Tools
 
-### Compilot CLI
+### Local Storybook
 
-Interactive tool for component scaffolding and maintenance.
-
-```bash
-npx compilot-cli
-```
-
-📖 [More information](https://github.com/Stack-and-Flow/compilot-cli/)
-
-### Storybook Watch
-
-Smart hot reload for Storybook during development.
+Local interactive documentation server during development.
 
 ```bash
-npx storybook-watch
+pnpm run storybook
 ```
-
-📖 [More information](https://github.com/Stack-and-Flow/storybook-watch)
 
 ### Playwright MCP (AI Visual Audit)
 

@@ -64,7 +64,7 @@ nvm use
 pnpm install
 
 # 4. Ejecutar Storybook con hot reload
-npx storybook-watch
+pnpm run storybook
 ```
 
 ¡Listo! Storybook se abrirá en `http://localhost:6006` 🎉
@@ -127,25 +127,13 @@ Este es un **proyecto educativo y abierto a colaboración**. Nos encantaría que
 
 ## 🧰 Herramientas del Proyecto
 
-### Compilot CLI
+### Storybook local
 
-Herramienta interactiva para scaffolding de componentes y mantenimiento.
-
-```bash
-npx compilot-cli
-```
-
-📖 [Más información](https://github.com/Stack-and-Flow/compilot-cli/)
-
-### Storybook Watch
-
-Hot reload inteligente para Storybook durante desarrollo.
+Servidor local de documentación interactiva durante desarrollo.
 
 ```bash
-npx storybook-watch
+pnpm run storybook
 ```
-
-📖 [Más información](https://github.com/Stack-and-Flow/storybook-watch)
 
 ### Playwright MCP (AI Visual Audit)
 
