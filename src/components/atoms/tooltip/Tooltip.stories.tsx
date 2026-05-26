@@ -4,13 +4,12 @@ import IconButton from '../icon-button';
 import Tooltip from './Tooltip';
 
 /**
- * ## DESCRIPTION
- * The Tooltip component is a non-intrusive interface element that displays an informative text message or a short label when the user hovers over an interface element (such as a button or icon).
+ * ## Description
+ * Tooltip displays short contextual help for a trigger without taking permanent layout space.
  *
- *
- * Its main purpose is to improve usability by providing immediate context about the element's function, without taking up permanent screen space.
+ * ## Dependencies
+ * Uses `Button` and `IconButton` to demonstrate text and icon triggers.
  */
-
 const meta: Meta<typeof Tooltip> = {
   title: 'Atoms/Tooltip',
   component: Tooltip,
@@ -25,117 +24,107 @@ export default meta;
 
 type Story = StoryObj<typeof Tooltip>;
 
+/**
+ * Shows the default tooltip behavior with hover and focus support.
+ */
 export const Default: Story = {
   args: {
-    content: 'I`m a Tooltip',
-    color: 'default',
-    placement: 'top',
-    onClick: false,
-    onFocus: false,
-    disabled: false,
-    children: <Button text='Hover me' />,
-    complement: 'default'
+    content: 'Helpful tooltip text',
+    children: <Button text='Hover me' />
   }
 };
 
 /**
- *
- * With Props `content`, we can give you customised text for the tooltip.
- *
+ * Shows that disabled tooltips do not attach behavior to the trigger.
  */
-
-export const Text: Story = {
-  render: () => (
-    <section className='flex items-center gap-4'>
-      <Tooltip content='Menu'>
-        <IconButton className='' icon='menu' size={20} title='Menu' variant='primary' />
-      </Tooltip>
-      <Tooltip content='Image'>
-        <Button icon='image'></Button>
-      </Tooltip>
-    </section>
-  )
-};
-
-/**
- *
- * We have 5 different colour variants so you can use it according to your needs.
- *
- */
-export const colors: Story = {
+export const Disabled: Story = {
   render: () => (
     <section className='flex gap-4'>
-      <Tooltip>
-        <Button text='default'></Button>
+      <Tooltip content='Enabled tooltip'>
+        <Button text='Enabled tooltip' />
       </Tooltip>
-      <Tooltip color='primary'>
-        <Button text='primary'></Button>
-      </Tooltip>
-      <Tooltip color='success'>
-        <Button text='success'></Button>
-      </Tooltip>
-      <Tooltip color='warning'>
-        <Button text='warning'></Button>
-      </Tooltip>
-      <Tooltip color='transparent'>
-        <Button text='transparent'></Button>
+      <Tooltip content='Disabled tooltip' disabled={true}>
+        <Button text='Disabled tooltip' />
       </Tooltip>
     </section>
   )
 };
 
 /**
- *
- * With regard to positioning, we also have several variables that give us different results.
- *
+ * Shows the available color variants.
  */
-export const Placement: Story = {
+export const Colors: Story = {
   render: () => (
-    <section className=' flex flex-col gap-2 items-center'>
+    <section className='flex gap-4'>
+      <Tooltip content='Default tooltip'>
+        <Button text='Default' />
+      </Tooltip>
+      <Tooltip content='Primary tooltip' color='primary'>
+        <Button text='Primary' />
+      </Tooltip>
+      <Tooltip content='Success tooltip' color='success'>
+        <Button text='Success' />
+      </Tooltip>
+      <Tooltip content='Warning tooltip' color='warning'>
+        <Button text='Warning' />
+      </Tooltip>
+      <Tooltip content='Transparent tooltip' color='transparent'>
+        <Button text='Transparent' />
+      </Tooltip>
+    </section>
+  )
+};
+
+/**
+ * Shows the supported tooltip positions.
+ */
+export const Positions: Story = {
+  render: () => (
+    <section className='flex flex-col items-center gap-2'>
       <section className='flex gap-4'>
-        <Tooltip placement='top-start'>
-          <Button text='Top-start'></Button>
+        <Tooltip content='Top start' position='top-start'>
+          <Button text='Top start' />
         </Tooltip>
-        <Tooltip placement='top'>
-          <Button text='top'></Button>
+        <Tooltip content='Top' position='top'>
+          <Button text='Top' />
         </Tooltip>
-        <Tooltip placement='top-end'>
-          <Button text='top-end'></Button>
+        <Tooltip content='Top end' position='top-end'>
+          <Button text='Top end' />
         </Tooltip>
       </section>
       <section className='flex gap-4'>
-        <section className='flex flex-col gap-2 items-start'>
-          <Tooltip placement='left-start'>
-            <Button text='left-start'></Button>
+        <section className='flex flex-col items-start gap-2'>
+          <Tooltip content='Left start' position='left-start'>
+            <Button text='Left start' />
           </Tooltip>
-          <Tooltip placement='left'>
-            <Button text='left'></Button>
+          <Tooltip content='Left' position='left'>
+            <Button text='Left' />
           </Tooltip>
-          <Tooltip placement='left-end'>
-            <Button text='left-end'></Button>
+          <Tooltip content='Left end' position='left-end'>
+            <Button text='Left end' />
           </Tooltip>
         </section>
-        <section className='flex flex-col gap-2 items-end'>
-          <Tooltip placement='right-start'>
-            <Button text='right-start'></Button>
+        <section className='flex flex-col items-end gap-2'>
+          <Tooltip content='Right start' position='right-start'>
+            <Button text='Right start' />
           </Tooltip>
-          <Tooltip placement='right'>
-            <Button text='right'></Button>
+          <Tooltip content='Right' position='right'>
+            <Button text='Right' />
           </Tooltip>
-          <Tooltip placement='right-end'>
-            <Button text='right-end'></Button>
+          <Tooltip content='Right end' position='right-end'>
+            <Button text='Right end' />
           </Tooltip>
         </section>
       </section>
       <section className='flex gap-4'>
-        <Tooltip placement='bottom-start'>
-          <Button text='bottom-start'></Button>
+        <Tooltip content='Bottom start' position='bottom-start'>
+          <Button text='Bottom start' />
         </Tooltip>
-        <Tooltip placement='bottom'>
-          <Button text='bottom'></Button>
+        <Tooltip content='Bottom' position='bottom'>
+          <Button text='Bottom' />
         </Tooltip>
-        <Tooltip placement='bottom-end'>
-          <Button text='bottom-end'></Button>
+        <Tooltip content='Bottom end' position='bottom-end'>
+          <Button text='Bottom end' />
         </Tooltip>
       </section>
     </section>
@@ -143,45 +132,56 @@ export const Placement: Story = {
 };
 
 /**
- *
- * We can give it a delay time for both entry and exit thanks to the `delayShow` and `delayHide` props.
- *
+ * Shows how the trigger interaction can switch between focus and click modes.
  */
-export const delay: Story = {
+export const TriggerInteraction: Story = {
   render: () => (
     <section className='flex gap-4'>
-      <Tooltip>
-        <Button text='delay in display - default'></Button>
+      <Tooltip content='Focus trigger' triggerInteraction='focus'>
+        <Button text='Focus trigger' />
       </Tooltip>
-      <Tooltip delayShow={800}>
-        <Button text='delay in display - 800'></Button>
-      </Tooltip>
-      <Tooltip delayHide={800}>
-        <Button text='delay in hide - 800'></Button>
+      <Tooltip content='Click trigger' triggerInteraction='click'>
+        <Button text='Click trigger' />
       </Tooltip>
     </section>
   )
 };
 
 /**
- *
- * With the `complement` property, we can add a small arrow depending on the positioning we use.
- *
+ * Shows the display delay options.
  */
+export const Delay: Story = {
+  render: () => (
+    <section className='flex gap-4'>
+      <Tooltip content='Default delay'>
+        <Button text='Default delay' />
+      </Tooltip>
+      <Tooltip content='Delay 800ms' delayMs={800}>
+        <Button text='Delay 800ms' />
+      </Tooltip>
+      <Tooltip content='Hide delay 800ms' delayHide={800}>
+        <Button text='Hide delay 800ms' />
+      </Tooltip>
+    </section>
+  )
+};
 
-export const withArrow: Story = {
+/**
+ * Shows the arrow complement for each supported direction.
+ */
+export const WithArrow: Story = {
   render: () => (
     <section className='flex flex-col gap-4'>
-      <Tooltip content='Arrow-Botom' complement='arrow-bottom'>
+      <Tooltip content='Arrow bottom' complement='arrow-bottom'>
         <IconButton className='' icon='menu' size={20} title='Menu' variant='primary' />
       </Tooltip>
-      <Tooltip content='Arrow-Right' placement='left' complement='arrow-right'>
+      <Tooltip content='Arrow right' position='left' complement='arrow-right'>
         <IconButton className='' icon='menu' size={20} title='Menu' variant='primary' />
       </Tooltip>
-      <Tooltip content='Arrow-Left' placement='right' complement='arrow-left'>
+      <Tooltip content='Arrow left' position='right' complement='arrow-left'>
         <IconButton className='' icon='menu' size={20} title='Menu' variant='primary' />
       </Tooltip>
-      <Tooltip content='Arrow-Top' placement='bottom' complement='arrow-top'>
+      <Tooltip content='Arrow top' position='bottom' complement='arrow-top'>
         <IconButton className='' icon='menu' size={20} title='Menu' variant='primary' />
       </Tooltip>
     </section>
@@ -189,61 +189,28 @@ export const withArrow: Story = {
 };
 
 /**
- * We can adjust the text to make it easier to read.
+ * Shows the available width variants.
  */
-export const width: Story = {
+export const Widths: Story = {
   render: () => (
     <section className='flex gap-4'>
       <Tooltip
-        content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         width='default'
       >
-        <Button text='widht - default'></Button>
+        <Button text='Default width' />
       </Tooltip>
       <Tooltip
-        content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         width='md'
       >
-        <Button text='custom width - [200px]'></Button>
+        <Button text='Medium width' />
       </Tooltip>
       <Tooltip
-        content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         width='xl'
       >
-        <Button text='custom width - [500px]'></Button>
-      </Tooltip>
-    </section>
-  )
-};
-
-/**
- * The tooltip is interactive by default (to comply with WCAG 2.1 success criterion 1.4.13). It will not close when the user hovers over the pop-up description before the leaveDelay expires. You can disable this behaviour (thus failing to meet the success criterion required to achieve AA level) by passing disableInteractive.
- */
-
-export const DisabledIteractive: Story = {
-  render: () => (
-    <section className='flex gap-4'>
-      <Tooltip>
-        <Button text='Enabled interactive'></Button>
-      </Tooltip>
-      <Tooltip disabled={true}>
-        <Button text='Disabled interactive'></Button>
-      </Tooltip>
-    </section>
-  )
-};
-
-/**
- * We can define the event that will trigger the tooltip.
- */
-export const Triggers: Story = {
-  render: () => (
-    <section className='flex gap-4'>
-      <Tooltip onFocus={true}>
-        <Button text='On focus'></Button>
-      </Tooltip>
-      <Tooltip onClick={true}>
-        <Button text='On Click'></Button>
+        <Button text='Extra large width' />
       </Tooltip>
     </section>
   )

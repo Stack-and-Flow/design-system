@@ -1,62 +1,75 @@
 import { cn } from '@/lib/utils';
-import type { FC } from 'react';
+import type { FC, ReactElement } from 'react';
+import { cloneElement, isValidElement } from 'react';
 import { createPortal } from 'react-dom';
 import type { TooltipProps } from './types';
 import { useTooltip } from './useTooltip';
 
+type TriggerChildProps = {
+  'aria-describedby'?: string;
+};
+
 const Tooltip: FC<TooltipProps> = ({ ...props }) => {
   const {
-    content,
-    tooltipClass,
-    showTooltip,
-    showClickTooltip,
-    hideTooltip,
-    hideClickTooltip,
-    isVisible,
-    triggerRef,
-    tooltipRef,
-    position,
     children,
-    animationHidde,
-    disabled,
-    onFocus,
-    onClick
+    className,
+    content,
+    coordinates,
+    describedById,
+    enableClick,
+    enableFocus,
+    enableHover,
+    hasTooltipContent,
+    hideTooltip,
+    isClosing,
+    isVisible,
+    rest,
+    showTooltip,
+    toggleClickTooltip,
+    tooltipClass,
+    tooltipId,
+    tooltipRef,
+    triggerRef
   } = useTooltip(props);
 
-  return (
-    <div className='m-3'>
-      <div
-        ref={triggerRef}
-        className='relative'
-        onMouseEnter={onFocus || onClick ? undefined : showTooltip}
-        onMouseLeave={onFocus || onClick ? undefined : hideTooltip}
-        {...(onFocus && {
-          onFocus: showTooltip,
-          onBlur: hideTooltip
-        })}
-        onClick={!isVisible ? showClickTooltip : hideClickTooltip}
-      >
-        {children}
+  const trigger = isValidElement<TriggerChildProps>(children)
+    ? cloneElement(children as ReactElement<TriggerChildProps>, {
+        'aria-describedby': [children.props['aria-describedby'], describedById].filter(Boolean).join(' ') || undefined
+      })
+    : children;
 
-        {isVisible &&
-          createPortal(
-            <p
-              ref={tooltipRef}
-              onMouseEnter={showTooltip}
-              onMouseLeave={hideTooltip}
-              className={cn(tooltipClass, ` ${animationHidde ? 'animate-fadeOut duration-50  ' : ''}`)}
-              style={{
-                top: position.top,
-                left: position.left,
-                pointerEvents: disabled ? 'none' : 'auto'
-              }}
-            >
-              {content}
-            </p>,
-            document.body
-          )}
-      </div>
-    </div>
+  return (
+    <span
+      {...rest}
+      ref={triggerRef}
+      className={cn('relative inline-flex', className)}
+      onMouseEnter={enableHover ? () => showTooltip() : undefined}
+      onMouseLeave={enableHover ? () => hideTooltip() : undefined}
+      onFocus={enableFocus ? () => showTooltip() : undefined}
+      onBlur={enableFocus ? () => hideTooltip() : undefined}
+      onClick={enableClick ? toggleClickTooltip : undefined}
+    >
+      {trigger}
+      {isVisible &&
+        hasTooltipContent &&
+        createPortal(
+          <div
+            ref={tooltipRef}
+            id={tooltipId}
+            role='tooltip'
+            onMouseEnter={enableHover ? () => showTooltip(true) : undefined}
+            onMouseLeave={enableHover ? () => hideTooltip() : undefined}
+            className={cn(tooltipClass, isClosing && 'animate-fadeOut duration-200')}
+            style={{
+              top: coordinates.top,
+              left: coordinates.left
+            }}
+          >
+            {content}
+          </div>,
+          document.body
+        )}
+    </span>
   );
 };
 

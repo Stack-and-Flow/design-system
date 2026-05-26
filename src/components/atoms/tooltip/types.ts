@@ -1,98 +1,133 @@
 import { cva } from 'class-variance-authority';
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+
 export const tooltipVariants = cva(
-  [' absolute ', ' py-1.5 px-2.5 ', ' bg-gray-600 text-[.8rem] text-white text-center ', ' animate-fadeIn'],
+  [
+    'absolute z-50 rounded-md px-2.5 py-1.5',
+    'fs-small text-center shadow-md',
+    'animate-fadeIn transition-opacity duration-200 ease-in-out'
+  ],
   {
     variants: {
       color: {
-        default: 'dark:bg-gray-300 dark:text-gray-800 bg-gray-600',
-        primary: 'dark:bg-red-300 dark:text-gray-800 bg-red-600',
-        success: 'dark:bg-green-light dark:text-gray-800 bg-green-dark',
-        warning: 'dark:bg-yellow-light dark:text-gray-800 bg-yellow-dark',
-        transparent: ' dark:text-gray-300 bg-tranparent dark:bg-tranparent text-gray-800'
+        default: 'bg-gray-dark-500 text-text-dark dark:bg-gray-light-300 dark:text-text-light',
+        primary: 'bg-red-600 text-text-dark dark:bg-red-300 dark:text-text-light',
+        success: 'bg-green-dark text-text-dark dark:bg-green-light dark:text-text-light',
+        warning: 'bg-yellow-dark text-text-dark dark:bg-yellow-light dark:text-text-light',
+        transparent: 'bg-transparent text-text-light dark:bg-transparent dark:text-text-dark'
       },
       complement: {
-        default: ' ',
+        default: '',
         'arrow-bottom':
-          'after:absolute after:bottom-[-5px] after:left-1/2 after:-translate-x-1/2 after:rotate-45 after:w-[10px] after:h-[10px] dark:after:bg-inherit after:bg-inherit ',
+          "after:absolute after:-bottom-1 after:left-1/2 after:size-2.5 after:-translate-x-1/2 after:rotate-45 after:content-[''] after:bg-inherit",
         'arrow-left':
-          'after:absolute after:bottom-[-5px] after:left-0 after:-translate-x-1/2 after:-translate-y-1/2   after:top-1/2 after:rotate-45 after:w-[10px] after:h-[10px] dark:after:bg-inherit after:bg-inherit ',
+          "after:absolute after:top-1/2 after:-left-1 after:size-2.5 after:-translate-y-1/2 after:rotate-45 after:content-[''] after:bg-inherit",
         'arrow-right':
-          'after:absolute after:bottom-[-5px] after:right-0 after:translate-x-1/2 after:-translate-y-1/2  after:top-1/2 after:rotate-45 after:w-[10px] after:h-[10px] dark:after:bg-inherit after:bg-inherit ',
+          "after:absolute after:top-1/2 after:-right-1 after:size-2.5 after:-translate-y-1/2 after:rotate-45 after:content-[''] after:bg-inherit",
         'arrow-top':
-          'after:absolute after:top-[-5px] after:left-1/2 after:-translate-x-1/2 after:rotate-45 after:w-[10px] after:h-[10px] dark:after:bg-inherit after:bg-inherit  '
+          "after:absolute after:-top-1 after:left-1/2 after:size-2.5 after:-translate-x-1/2 after:rotate-45 after:content-[''] after:bg-inherit"
       },
       width: {
-        default: 'w-max',
-        md: 'w-[200px]',
-        xl: 'w-[500px]'
+        default: 'w-max max-w-64',
+        md: 'w-48',
+        xl: 'w-96'
       }
     },
-    defaultVariants: {}
+    defaultVariants: {
+      color: 'default',
+      complement: 'default',
+      width: 'default'
+    }
   }
 );
-type TooltipColor = 'default' | 'primary' | 'success' | 'warning' | 'transparent';
 
-type TooltipComplement = 'default' | 'arrow-bottom' | 'arrow-left' | 'arrow-right' | 'arrow-top';
+export type TooltipColor = 'default' | 'primary' | 'success' | 'warning' | 'transparent';
+export type TooltipComplement = 'default' | 'arrow-bottom' | 'arrow-left' | 'arrow-right' | 'arrow-top';
+export type TooltipWidth = 'default' | 'md' | 'xl';
+export type TooltipPosition =
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end';
+export type TooltipTriggerInteraction = 'hover' | 'focus' | 'click';
 
-type TooltipWidth = 'default' | 'md' | 'xl';
-
-export type TooltipProps = {
+export type TooltipProps = Omit<ComponentProps<'span'>, 'children' | 'color' | 'content' | 'onClick' | 'onFocus'> & {
   /** @control text */
-  content?: string;
-
+  content?: ReactNode;
+  /** @control text */
   children?: ReactNode;
-
   /**
    * @control select
-   * @default primary
+   * @default default
    */
   color?: TooltipColor;
-
-  /** @control select */
-  placement?:
-    | 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end';
-
-  /** @control text */
+  /**
+   * @control select
+   * @default top
+   */
+  position?: TooltipPosition;
+  /**
+   * Legacy alias for `position`.
+   * @control select
+   */
+  placement?: TooltipPosition;
+  /**
+   * @control number
+   * @default 0
+   */
+  delayMs?: number;
+  /**
+   * Legacy alias for `delayMs`.
+   * @control number
+   */
   delayShow?: number;
-
-  /** @control text */
+  /**
+   * @control number
+   * @default 50
+   */
   delayHide?: number;
-
-  /** @control select */
+  /**
+   * @control select
+   * @default default
+   */
   complement?: TooltipComplement;
-
   /**
    * @control select
    * @default default
    */
   width?: TooltipWidth;
-
   /**
    * @control boolean
-   * @default true
+   * @default false
    */
   disabled?: boolean;
-
   /**
+   * @control select
+   */
+  triggerInteraction?: TooltipTriggerInteraction;
+  /**
+   * Legacy compatibility flag that maps to `triggerInteraction="focus"`.
    * @control boolean
    * @default false
    */
   onFocus?: boolean;
   /**
+   * Legacy compatibility flag that maps to `triggerInteraction="click"`.
    * @control boolean
-   * @default true
+   * @default false
    */
   onClick?: boolean;
+  /**
+   * @control boolean
+   */
+  isOpen?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
 };

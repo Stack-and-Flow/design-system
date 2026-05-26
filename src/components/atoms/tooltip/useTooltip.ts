@@ -1,77 +1,192 @@
-import { useLayoutEffect, useRef, useState } from 'react';
-import { type TooltipProps, tooltipVariants } from './types';
+import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { type TooltipPosition, type TooltipProps, tooltipVariants } from './types';
+
+type TooltipCoordinates = {
+  top: number;
+  left: number;
+};
+
+type ResolvedTriggerInteraction = 'hover-focus' | 'hover' | 'focus' | 'click';
 
 export const useTooltip = ({
   content = 'I`m a tooltip',
   children = null,
-  placement = 'top',
+  position,
+  placement,
+  delayMs,
   delayShow,
   delayHide = 50,
   complement = 'default',
   width = 'default',
   color = 'default',
-  disabled,
-  onFocus,
-  onClick
+  disabled = false,
+  onFocus = false,
+  onClick = false,
+  triggerInteraction,
+  isOpen,
+  onOpenChange,
+  className = '',
+  ...rest
 }: TooltipProps) => {
+  const resolvedPosition = position ?? placement ?? 'top';
+  const showDelay = delayMs ?? delayShow ?? 0;
   const tooltipClass = tooltipVariants({ complement, width, color });
-  const [isVisible, setIsVisible] = useState(false);
-  const [animationHidde, setAnimationHide] = useState(false);
-  const [position, setPosition] = useState<{ top: number; left: number }>({
+  const tooltipId = `tooltip-${useId().replace(/:/g, '')}`;
+  const isControlled = typeof isOpen === 'boolean';
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [coordinates, setCoordinates] = useState<TooltipCoordinates>({
     top: 0,
     left: 0
   });
 
   const showTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const triggerRef = useRef<HTMLSpanElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const clearShow = () => {
+  const isVisible = isControlled ? isOpen : uncontrolledOpen;
+
+  const resolvedTriggerInteraction = useMemo<ResolvedTriggerInteraction>(() => {
+    if (triggerInteraction) {
+      return triggerInteraction;
+    }
+
+    if (onClick) {
+      return 'click';
+    }
+
+    if (onFocus) {
+      return 'focus';
+    }
+
+    return 'hover-focus';
+  }, [onClick, onFocus, triggerInteraction]);
+
+  const enableHover =
+    !disabled && (resolvedTriggerInteraction === 'hover-focus' || resolvedTriggerInteraction === 'hover');
+  const enableFocus =
+    !disabled && (resolvedTriggerInteraction === 'hover-focus' || resolvedTriggerInteraction === 'focus');
+  const enableClick = !disabled && resolvedTriggerInteraction === 'click';
+  const hasTooltipContent = content !== null && content !== undefined && content !== false;
+  const describedById = !disabled && hasTooltipContent ? tooltipId : undefined;
+
+  const clearTimers = useCallback(() => {
     if (showTimeout.current) {
       clearTimeout(showTimeout.current);
       showTimeout.current = null;
     }
-  };
 
-  const clearHide = () => {
     if (hideTimeout.current) {
       clearTimeout(hideTimeout.current);
       hideTimeout.current = null;
     }
-  };
+  }, []);
 
-  const showTooltip = () => {
-    clearShow();
-    clearHide();
-    setAnimationHide(false);
-    showTimeout.current = setTimeout(() => {
-      setIsVisible(true);
-    }, delayShow);
-  };
+  const setOpenState = useCallback(
+    (nextOpen: boolean) => {
+      if (!isControlled) {
+        setUncontrolledOpen(nextOpen);
+      }
 
-  const showClickTooltip = () => {
-    setIsVisible(true);
-    setAnimationHide(false);
-  };
+      onOpenChange?.(nextOpen);
+    },
+    [isControlled, onOpenChange]
+  );
 
-  const hideClickTooltip = () => {
-    setTimeout(() => {
-      setIsVisible(false);
-    }, 200);
-    setAnimationHide(true);
-  };
-  const hideTooltip = () => {
-    clearShow();
-    clearHide();
-    hideTimeout.current = setTimeout(() => {
+  const showTooltip = useCallback(
+    (immediate = false) => {
+      if (disabled) {
+        return;
+      }
+
+      clearTimers();
+      setIsClosing(false);
+
+      const openTooltip = () => {
+        setOpenState(true);
+      };
+
+      if (immediate || showDelay === 0) {
+        openTooltip();
+        return;
+      }
+
+      showTimeout.current = setTimeout(() => {
+        openTooltip();
+      }, showDelay);
+    },
+    [clearTimers, disabled, setOpenState, showDelay]
+  );
+
+  const hideTooltip = useCallback(
+    (immediate = false) => {
+      clearTimers();
+
+      const closeTooltip = () => {
+        setIsClosing(true);
+        hideTimeout.current = setTimeout(() => {
+          setOpenState(false);
+          setIsClosing(false);
+        }, 200);
+      };
+
+      if (immediate || delayHide === 0) {
+        closeTooltip();
+        return;
+      }
+
       hideTimeout.current = setTimeout(() => {
-        setIsVisible(false);
-      }, 200);
-      setAnimationHide(true);
-    }, delayHide);
-  };
+        closeTooltip();
+      }, delayHide);
+    },
+    [clearTimers, delayHide, setOpenState]
+  );
 
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
+  const toggleClickTooltip = useCallback(() => {
+    if (!enableClick) {
+      return;
+    }
+
+    if (isVisible) {
+      hideTooltip(true);
+      return;
+    }
+
+    showTooltip(true);
+  }, [enableClick, hideTooltip, isVisible, showTooltip]);
+
+  useEffect(() => {
+    return () => {
+      clearTimers();
+    };
+  }, [clearTimers]);
+
+  useEffect(() => {
+    if (disabled) {
+      clearTimers();
+      setIsClosing(false);
+      setOpenState(false);
+    }
+  }, [clearTimers, disabled, setOpenState]);
+
+  useEffect(() => {
+    if (!isVisible) {
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        hideTooltip(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [hideTooltip, isVisible]);
 
   useLayoutEffect(() => {
     const updatePosition = () => {
@@ -83,13 +198,11 @@ export const useTooltip = ({
       const tooltipSize = tooltipRef.current.getBoundingClientRect();
       const offset = 10;
 
-      const positionTooltip: Record<NonNullable<TooltipProps['placement']>, () => { top: number; left: number }> = {
-        top: () => {
-          return {
-            top: triggerSize.top + window.scrollY - tooltipSize.height - offset,
-            left: triggerSize.left + window.scrollX + triggerSize.width / 2 - tooltipSize.width / 2
-          };
-        },
+      const positions: Record<TooltipPosition, () => TooltipCoordinates> = {
+        top: () => ({
+          top: triggerSize.top + window.scrollY - tooltipSize.height - offset,
+          left: triggerSize.left + window.scrollX + triggerSize.width / 2 - tooltipSize.width / 2
+        }),
         'top-start': () => ({
           top: triggerSize.top + window.scrollY - tooltipSize.height - offset,
           left: triggerSize.left + window.scrollX
@@ -98,14 +211,10 @@ export const useTooltip = ({
           top: triggerSize.top + window.scrollY - tooltipSize.height - offset,
           left: triggerSize.right + window.scrollX - tooltipSize.width
         }),
-        bottom: () => {
-          // Lógica de cálculo para 'bottom'
-          return {
-            top: triggerSize.bottom + window.scrollY + offset,
-            left: triggerSize.left + window.scrollX + triggerSize.width / 2 - tooltipSize.width / 2
-          };
-        },
-
+        bottom: () => ({
+          top: triggerSize.bottom + window.scrollY + offset,
+          left: triggerSize.left + window.scrollX + triggerSize.width / 2 - tooltipSize.width / 2
+        }),
         'bottom-start': () => ({
           top: triggerSize.bottom + window.scrollY + offset,
           left: triggerSize.left + window.scrollX
@@ -114,13 +223,10 @@ export const useTooltip = ({
           top: triggerSize.bottom + window.scrollY + offset,
           left: triggerSize.right + window.scrollX - tooltipSize.width
         }),
-        left: () => {
-          // Lógica de cálculo para 'left'
-          return {
-            top: triggerSize.top + window.scrollY + triggerSize.height / 2 - tooltipSize.height / 2,
-            left: triggerSize.left + window.scrollX - tooltipSize.width - offset
-          };
-        },
+        left: () => ({
+          top: triggerSize.top + window.scrollY + triggerSize.height / 2 - tooltipSize.height / 2,
+          left: triggerSize.left + window.scrollX - tooltipSize.width - offset
+        }),
         'left-start': () => ({
           top: triggerSize.top + window.scrollY,
           left: triggerSize.left + window.scrollX - tooltipSize.width - offset
@@ -129,13 +235,10 @@ export const useTooltip = ({
           top: triggerSize.bottom + window.scrollY - tooltipSize.height,
           left: triggerSize.left + window.scrollX - tooltipSize.width - offset
         }),
-        right: () => {
-          // Lógica de cálculo para 'right'
-          return {
-            top: triggerSize.top + window.scrollY + triggerSize.height / 2 - tooltipSize.height / 2,
-            left: triggerSize.right + window.scrollX + offset
-          };
-        },
+        right: () => ({
+          top: triggerSize.top + window.scrollY + triggerSize.height / 2 - tooltipSize.height / 2,
+          left: triggerSize.right + window.scrollX + offset
+        }),
         'right-start': () => ({
           top: triggerSize.top + window.scrollY,
           left: triggerSize.right + window.scrollX + offset
@@ -146,41 +249,44 @@ export const useTooltip = ({
         })
       };
 
-      const calcFunction = positionTooltip[placement];
-
-      setPosition(calcFunction());
+      setCoordinates(positions[resolvedPosition]());
     };
 
-    if (isVisible) {
-      updatePosition();
-      window.addEventListener('resize', updatePosition);
-      window.addEventListener('scroll', updatePosition);
+    if (!isVisible) {
+      return;
     }
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition);
 
     return () => {
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
     };
-  }, [isVisible]);
+  }, [content, complement, isVisible, resolvedPosition, width]);
 
   return {
-    content,
-    tooltipClass,
-    showTooltip,
-    showClickTooltip,
-    hideTooltip,
-    hideClickTooltip,
-    isVisible,
-    triggerRef,
-    tooltipRef,
-    position,
-    placement,
     children,
-    animationHidde,
-    complement,
-    width,
+    className,
+    content,
+    coordinates,
+    describedById,
     disabled,
-    onFocus,
-    onClick
+    enableClick,
+    enableFocus,
+    enableHover,
+    hasTooltipContent,
+    hideTooltip,
+    isClosing,
+    isVisible,
+    resolvedPosition,
+    rest,
+    showTooltip,
+    toggleClickTooltip,
+    tooltipClass,
+    tooltipId,
+    tooltipRef,
+    triggerRef
   };
 };
