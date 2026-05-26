@@ -1,16 +1,16 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from './Button';
+import { Button } from './Button';
 
 /**
- * ## DESCRIPTION
- * Button component for various actions in the application.
- * It supports different variants, sizes, and loading states.
+ * ## Description
+ * Button is the primary interactive element for triggering actions.
  *
- * ##DEPENDENCIES
- * - `spinners-react`: For loading spinner.
- * - Icon: Uses Icon component from `lucide-react` for icons.
+ * ## Dependencies
+ * Uses Lucide icons through the `icon` prop and `spinners-react` for loading feedback.
  *
+ * ## Usage Guide
+ * Use `primary` for the main action, `secondary` or `outlined` for supporting actions, and `ghost` or `light` for low-emphasis actions. Use `size='xs'` for dense controls with lower height and tighter padding. Use `emphasis='flat'` when a variant needs a quieter decorative treatment without removing accessible focus feedback. Use `isLoading` while async work is pending so repeated submissions are blocked.
  */
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Button',
@@ -26,232 +26,153 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
+/**
+ * Shows the default button configuration using its default variants.
+ */
 export const Default: Story = {
   args: {
-    variant: 'primary',
-    rounded: false,
-    shadow: true,
-    uppercase: true,
-    size: 'md',
-    text: 'Lorem ipsum',
-    type: 'button',
-    disabled: false,
-    isFullWidth: false,
-    isLoading: false,
-    ariaLabel: '',
-    onClick: action('Clicked')
+    text: 'Button',
+    onClick: action('button-click')
   }
 };
 
 /**
- * - Default variant is primary with medium size.
+ * Shows the visual hierarchy available through the variant prop.
  */
-
-export const Primary: Story = {
+export const Variant: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' onClick={action('clicked')} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Primary' variant='primary' onClick={action('primary-click')} />
+      <Button text='Secondary' variant='secondary' onClick={action('secondary-click')} />
+      <Button text='Outlined' variant='outlined' onClick={action('outlined-click')} />
+      <Button text='Ghost' variant='ghost' onClick={action('ghost-click')} />
+      <Button text='Light' variant='light' onClick={action('light-click')} />
     </div>
   )
 };
 
 /**
- * - Secondary variant is used for less emphasized actions.
- * - It has a different color scheme compared to the primary variant.
+ * Shows the semantic decorative emphasis toggle while preserving focus-visible behavior.
  */
-
-export const Secondary: Story = {
+export const Emphasis: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='secondary' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='secondary' onClick={action('clicked')} />
+    <div className='grid gap-4'>
+      <div className='flex gap-4 items-center flex-wrap'>
+        <Button text='Primary default' variant='primary' onClick={action('primary-default-click')} />
+        <Button text='Primary flat' variant='primary' emphasis='flat' onClick={action('primary-flat-click')} />
+      </div>
+      <div className='flex gap-4 items-center flex-wrap'>
+        <Button text='Secondary default' variant='secondary' onClick={action('secondary-default-click')} />
+        <Button text='Secondary flat' variant='secondary' emphasis='flat' onClick={action('secondary-flat-click')} />
+      </div>
     </div>
   )
 };
 
 /**
- * - Outlined variant is used for actions that need to be visually distinct but not as prominent as primary actions.
- * - It has a border but no background color.
- * - ⚠️ This variant uses a transparent background by default. To ensure proper visibility, place it inside a container with a solid or plain background.
+ * Shows the full `xs` to `lg` size scale with `xs` visibly shorter than `sm`.
  */
-
-export const Outlined: Story = {
+export const Size: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='outlined' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='outlined' onClick={action('clicked')} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Extra small' size='xs' onClick={action('xs-click')} />
+      <Button text='Small' size='sm' onClick={action('small-click')} />
+      <Button text='Medium' size='md' onClick={action('medium-click')} />
+      <Button text='Large' size='lg' onClick={action('large-click')} />
     </div>
   )
 };
 
 /**
- * - Ghost variant is used for actions that should blend into the background.
- * - It has no background or border, making it suitable for minimalistic designs.
- * - ⚠️ This variant uses a transparent background by default. To ensure proper visibility, place it inside a container with a solid or plain background.
+ * Shows leading icon support across variants.
  */
-
-export const Ghost: Story = {
-  render: () => (
-    <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='ghost' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='ghost' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='ghost' onClick={action('clicked')} />
-    </div>
-  )
-};
-
-/**
- * - Light variant is used for actions that should be less prominent than primary actions but still noticeable.
- * - It has a lighter color scheme compared to the primary variant.
- * - ⚠️ This variant uses a transparent background by default. To ensure proper visibility, place it inside a container with a solid or plain background.
- */
-
-export const Light: Story = {
-  render: () => (
-    <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='sm' variant='light' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='light' onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='lg' variant='light' onClick={action('clicked')} />
-    </div>
-  )
-};
-
-/**
- * - You can use isLoading prop to indicate that the button is in a loading state.
- * - This will show a spinner inside the button and disable further clicks.
- */
-
-export const Loading: Story = {
-  render: () => (
-    <div className='flex gap-4 items-center'>
-      <Button text='Lorem ipsum' size='md' variant='primary' isLoading={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' isLoading={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' isLoading={true} onClick={action('clicked')} />
-    </div>
-  )
-};
-
-/**
- * - You can use icon prop to add an icon to the button.
- * - This can enhance the visual appeal and usability of the button.
- */
-
 export const WithIcon: Story = {
   render: () => (
-    <>
-      <div className='flex gap-4 items-center justify-center'>
-        <Button text='Lorem ipsum' size='md' variant='primary' icon='image' onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='outlined' icon='image' onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='light' icon='image' onClick={action('clicked')} />
-      </div>
-      <div className='flex gap-4 items-center justify-center pt-4'>
-        <Button text='Lorem ipsum' size='md' variant='secondary' icon='image' onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='ghost' icon='image' onClick={action('clicked')} />
-      </div>
-    </>
-  )
-};
-
-/**
- * - This option allows you to customize the button's appearance with rounded corners.
- * - You can set the rounded prop to true to apply a fully rounded style.
- */
-
-export const Rounded: Story = {
-  render: () => (
-    <>
-      <div className='flex gap-4 items-center justify-center'>
-        <Button text='Lorem ipsum' size='md' variant='primary' rounded={true} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='outlined' rounded={true} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='light' rounded={true} onClick={action('clicked')} />
-      </div>
-      <div className='flex gap-4 items-center justify-center pt-4'>
-        <Button text='Lorem ipsum' size='md' variant='secondary' rounded={true} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='ghost' rounded={true} onClick={action('clicked')} />
-      </div>
-    </>
-  )
-};
-
-/**
- * - This option allows you to customize the button's appearance with uppercase text.
- * - The value is true by default, which means the button text will be displayed in uppercase.
- * - You can set the uppercase prop to false to disable uppercase styling.
- */
-
-export const Lowercase: Story = {
-  render: () => (
-    <>
-      <div className='flex gap-4 items-center justify-center'>
-        <Button text='Lorem ipsum' size='md' variant='primary' uppercase={false} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='outlined' uppercase={false} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='light' uppercase={false} onClick={action('clicked')} />
-      </div>
-      <div className='flex gap-4 items-center justify-center pt-4'>
-        <Button text='Lorem ipsum' size='md' variant='secondary' uppercase={false} onClick={action('clicked')} />
-        <Button text='Lorem ipsum' size='md' variant='ghost' uppercase={false} onClick={action('clicked')} />
-      </div>
-    </>
-  )
-};
-
-/**
- * - This option allows you to customize the button's appearance with full width.
- * - You can set the isFullWidth prop to true to make the button occupy the full width of its container.
- */
-
-export const FullWidth: Story = {
-  render: () => (
-    <div className='flex flex-col gap-4 items-center justify-center'>
-      <Button text='Lorem ipsum' size='md' variant='primary' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='light' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' isFullWidth={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='ghost' isFullWidth={true} onClick={action('clicked')} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Primary' variant='primary' icon='arrow-right' onClick={action('primary-icon-click')} />
+      <Button text='Secondary' variant='secondary' icon='download' onClick={action('secondary-icon-click')} />
+      <Button text='Outlined' variant='outlined' icon='pencil' onClick={action('outlined-icon-click')} />
+      <Button text='Ghost' variant='ghost' icon='trash' onClick={action('ghost-icon-click')} />
+      <Button text='Light' variant='light' icon='external-link' onClick={action('light-icon-click')} />
     </div>
   )
 };
 
 /**
- * -You can disable the button by setting the disabled prop to true.
- * - This will prevent any interaction with the button.
+ * Shows the loading state used while async work is pending.
  */
+export const Loading: Story = {
+  render: () => (
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Primary' variant='primary' isLoading={true} onClick={action('loading-primary-click')} />
+      <Button text='Secondary' variant='secondary' isLoading={true} onClick={action('loading-secondary-click')} />
+      <Button text='Outlined' variant='outlined' isLoading={true} onClick={action('loading-outlined-click')} />
+      <Button text='Ghost' variant='ghost' isLoading={true} onClick={action('loading-ghost-click')} />
+      <Button text='Light' variant='light' isLoading={true} onClick={action('loading-light-click')} />
+    </div>
+  )
+};
 
+/**
+ * Shows the non-interactive disabled state.
+ */
 export const Disabled: Story = {
   render: () => (
-    <div className='flex gap-4 items-center justify-center'>
-      <Button text='Lorem ipsum' size='md' variant='primary' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='outlined' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='light' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='secondary' disabled={true} onClick={action('clicked')} />
-      <Button text='Lorem ipsum' size='md' variant='ghost' disabled={true} onClick={action('clicked')} />
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Primary' variant='primary' disabled={true} onClick={action('disabled-primary-click')} />
+      <Button text='Secondary' variant='secondary' disabled={true} onClick={action('disabled-secondary-click')} />
+      <Button text='Outlined' variant='outlined' disabled={true} onClick={action('disabled-outlined-click')} />
+      <Button text='Ghost' variant='ghost' disabled={true} onClick={action('disabled-ghost-click')} />
+      <Button text='Light' variant='light' disabled={true} onClick={action('disabled-light-click')} />
     </div>
   )
 };
 
 /**
- * - This option allows you to customize the button's appearance editing className.
- * - You can add custom styles or classes to the button using the className prop.
+ * Shows the rounded shape toggle.
  */
+export const Rounded: Story = {
+  render: () => (
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Rounded' rounded={true} onClick={action('rounded-click')} />
+      <Button text='Not rounded' rounded={false} onClick={action('not-rounded-click')} />
+    </div>
+  )
+};
 
-export const CustomStyles: Story = {
-  args: {
-    variant: 'primary',
-    rounded: false,
-    shadow: true,
-    uppercase: true,
-    size: 'md',
-    text: 'Lorem ipsum',
-    type: 'button',
-    disabled: false,
-    isFullWidth: false,
-    isLoading: false,
-    ariaLabel: '',
-    icon: 'arrow-right',
-    className: '!flex-row-reverse'
-  }
+/**
+ * Shows optional uppercase text styling.
+ */
+export const Uppercase: Story = {
+  render: () => (
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Normal case' uppercase={false} onClick={action('normal-case-click')} />
+      <Button text='Uppercase' uppercase={true} onClick={action('uppercase-click')} />
+    </div>
+  )
+};
+
+/**
+ * Shows the full-width layout for constrained containers.
+ */
+export const FullWidth: Story = {
+  render: () => (
+    <div className='flex flex-col gap-4 w-80'>
+      <Button text='Primary' variant='primary' isFullWidth={true} onClick={action('full-primary-click')} />
+      <Button text='Secondary' variant='secondary' isFullWidth={true} onClick={action('full-secondary-click')} />
+      <Button text='Outlined' variant='outlined' isFullWidth={true} onClick={action('full-outlined-click')} />
+    </div>
+  )
+};
+
+/**
+ * Shows toggle-button semantics through aria-pressed.
+ */
+export const Pressed: Story = {
+  render: () => (
+    <div className='flex gap-4 items-center flex-wrap'>
+      <Button text='Unpressed' variant='outlined' aria-pressed={false} onClick={action('unpressed-click')} />
+      <Button text='Pressed' variant='primary' aria-pressed={true} onClick={action('pressed-click')} />
+    </div>
+  )
 };

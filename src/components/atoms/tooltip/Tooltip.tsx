@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
 import type { FC, ReactElement } from 'react';
 import { cloneElement, isValidElement } from 'react';
 import { createPortal } from 'react-dom';
+import { cn } from '@/lib/utils';
 import type { TooltipProps } from './types';
 import { useTooltip } from './useTooltip';
 

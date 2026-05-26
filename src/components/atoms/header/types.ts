@@ -1,19 +1,20 @@
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { HTMLAttributes, ReactNode } from 'react';
 
-export const headerVariants = cva(['font-normal leading-[1.2] text-text-light dark:text-text-dark'], {
+export const headerVariants = cva('font-primary text-text-light dark:text-text-dark', {
   variants: {
     font: {
       primary: 'font-primary',
-      secondary: 'font-secondary',
-      secondaryBold: 'font-secondary-bold'
+      secondary: 'font-primary font-medium',
+      secondaryBold: 'font-primary font-bold'
     },
-    tag: {
-      h1: 'fs-h1 tablet:fs-tablet-h1',
-      h2: 'fs-h2 tablet:fs-tablet-h2',
-      h3: 'fs-h3 tablet:fs-tablet-h3',
-      h4: 'fs-h4 tablet:fs-tablet-h4',
-      h5: 'fs-h5 tablet:fs-tablet-h5',
-      h6: 'fs-h6 tablet:fs-tablet-h6'
+    size: {
+      h1: 'fs-h1',
+      h2: 'fs-h2',
+      h3: 'fs-h3',
+      h4: 'fs-h4',
+      h5: 'fs-h5',
+      h6: 'fs-h6'
     },
     prominent: {
       true: 'font-bold',
@@ -26,30 +27,55 @@ export const headerVariants = cva(['font-normal leading-[1.2] text-text-light da
   },
   defaultVariants: {
     font: 'primary',
-    tag: 'h1',
+    size: 'h1',
     prominent: false,
     srOnly: false
   }
 });
 
+export type HeaderVariantProps = VariantProps<typeof headerVariants>;
 export type HeaderVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-export type HeaderFont = 'primary' | 'secondary' | 'secondaryBold';
+export type HeaderFont = NonNullable<HeaderVariantProps['font']>;
+export type HeaderSize = NonNullable<HeaderVariantProps['size']>;
 
-export type HeaderProps = {
-  /** @control text */
-  children?: string;
-  /** @control select */
-  font?: HeaderFont;
-  /** @control select */
-  tag: HeaderVariant;
-  /** @control select */
-  fontSize?: HeaderVariant;
-  /** @control boolean */
-  prominent?: boolean;
-  /** @control text */
-  className?: string;
-  /** @control boolean */
-  srOnly?: boolean;
-  /** @control text */
-  id?: string; // Nuevo prop opcional para accesibilidad
-} & VariantProps<typeof headerVariants>;
+type NativeHeaderProps = Omit<HTMLAttributes<HTMLHeadingElement>, 'children' | 'className' | 'dangerouslySetInnerHTML'>;
+
+export type HeaderProps = Omit<HeaderVariantProps, 'font' | 'size'> &
+  NativeHeaderProps & {
+    /** @control text */
+    children: ReactNode;
+    /**
+     * @control select
+     * @default primary
+     */
+    font?: HeaderFont;
+    /**
+     * @control select
+     * @default h1
+     */
+    tag?: HeaderVariant;
+    /**
+     * @control select
+     * @default h1
+     */
+    size?: HeaderSize;
+    /**
+     * @control select
+     * @default undefined
+     */
+    fontSize?: HeaderSize;
+    /**
+     * @control boolean
+     * @default false
+     */
+    prominent?: boolean;
+    /** @control text */
+    className?: string;
+    /**
+     * @control boolean
+     * @default false
+     */
+    srOnly?: boolean;
+    /** @control text */
+    id?: string;
+  };

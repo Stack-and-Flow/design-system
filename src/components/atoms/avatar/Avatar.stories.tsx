@@ -1,14 +1,16 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import Avatar from './Avatar';
+import { Avatar } from './Avatar';
 
 /**
- * ## DESCRIPTION
- * Avatar component is used to display user profile images or icons.
- * It supports different sizes and can show a fallback text when the image is not available.
+ * ## Description
+ * Avatar displays a user or organization image with an initials fallback when the image is missing or unavailable.
  *
- * ## DEPENDENCIES
- * - [Radix UI Avatar](https://www.radix-ui.com/docs/primitives/components/avatar)
+ * ## Dependencies
+ * Uses Radix UI Avatar for image loading and fallback behavior.
  *
+ * ## Usage Guide
+ * Use `alt` as the accessible name. Passing `onClick` renders the avatar as a real button for account menus, profile triggers, or identity actions.
  */
 const meta: Meta<typeof Avatar> = {
   title: 'Atoms/Avatar',
@@ -24,63 +26,80 @@ export default meta;
 
 type Story = StoryObj<typeof Avatar>;
 
+/**
+ * Default avatar with the component default size and radius.
+ */
 export const Default: Story = {
   args: {
-    size: 'md',
-    alt: 'EG',
-    className: ''
+    alt: 'El Gentleman',
+    onClick: undefined
   }
 };
 
 /**
- * - If you don't provide an image, the component will show a fallback text.
- * - The fallback text is set to "EG" by default, but you can change it by providing a different `alt` prop.
+ * Avatars can render initials when no image source is available.
  */
-
 export const WithoutImage: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <Avatar src={''} size='sm' alt='EG' />
-      <Avatar src={''} size='md' alt='EG' />
-      <Avatar src={''} size='lg' alt='EG' />
-      <Avatar src={''} size='xl' alt='EG' />
-      <Avatar src={''} size='2xl' alt='EG' />
-      <Avatar src={''} size='3xl' alt='EG' />
+    <div className='flex items-center gap-4'>
+      <Avatar size='sm' alt='El Gentleman' />
+      <Avatar size='md' alt='El Gentleman' />
+      <Avatar size='lg' alt='El Gentleman' />
+      <Avatar size='xl' alt='El Gentleman' />
+      <Avatar size='2xl' alt='El Gentleman' />
+      <Avatar size='3xl' alt='El Gentleman' />
     </div>
   )
 };
 
 /**
- * - You can use the `src` prop to provide an image URL.
- * - The `alt` prop is used for accessibility and should describe the image.
+ * The `src` prop displays an image while keeping `alt` as the accessible avatar name.
  */
-
 export const WithImage: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='sm' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='md' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='lg' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='xl' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='2xl' />
-      <Avatar src='/images/logo-dark-background.png' alt='EG' size='3xl' />
+    <div className='flex items-center gap-4'>
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='sm' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='md' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='lg' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='2xl' />
+      <Avatar src='/images/logo-only.svg' alt='EG Logo' size='3xl' />
     </div>
   )
 };
 
 /**
- *  - You can round the avatar using the `rounded` prop.
- *  - The available options are 'md', 'full', and 'none'.
- *  - The default value is 'md'.
- *  - This prop allows for customization of the avatar's appearance.
+ * The `rounded` prop changes the corner radius.
  */
-
 export const Rounded: Story = {
   render: () => (
-    <div className='flex gap-4 items-center'>
-      <Avatar src='' alt='EG' size='md' rounded='md' />
-      <Avatar src='' alt='EG' size='md' rounded='full' />
-      <Avatar src='' alt='EG' size='md' rounded='none' />
+    <div className='flex items-center gap-4'>
+      <Avatar alt='Square Avatar' rounded='none' />
+      <Avatar alt='Soft Avatar' rounded='md' />
+      <Avatar alt='Pill Avatar' rounded='full' />
     </div>
   )
+};
+
+/**
+ * Passing `onClick` renders Avatar as a button with keyboard and focus semantics.
+ */
+export const Interactive: Story = {
+  args: {
+    alt: 'Open profile',
+    rounded: 'full',
+    onClick: action('avatar.click')
+  }
+};
+
+/**
+ * Disabled interactive avatars keep button semantics while blocking activation.
+ */
+export const Disabled: Story = {
+  args: {
+    alt: 'Profile unavailable',
+    rounded: 'full',
+    disabled: true,
+    onClick: action('avatar.click')
+  }
 };

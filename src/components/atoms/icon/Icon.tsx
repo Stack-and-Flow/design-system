@@ -1,12 +1,10 @@
-import { cn } from '@/lib/utils';
-import { DynamicIcon } from 'lucide-react/dynamic';
+import { DynamicIcon } from 'lucide-react/dynamic.js';
 import type { FC } from 'react';
 import type { IconProps } from './types';
 import { useIcon } from './useIcon';
 
-const Icon: FC<IconProps> = ({ ...props }) => {
-  const { name, color, colorDark, className, size } = useIcon(props);
-  return <DynamicIcon name={name} className={cn(color, colorDark, className)} size={size} />;
-};
+export const Icon: FC<IconProps> = (props) => {
+  const { iconProps } = useIcon(props);
 
-export default Icon;
+  return <DynamicIcon {...iconProps} />;
+};

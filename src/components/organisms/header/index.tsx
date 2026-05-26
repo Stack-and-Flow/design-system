@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 
-const Header: FC = () => (
-  <header className='w-full h-[60px] sm:h-[80px] py-0 px-6 sm:px-12 flex items-center justify-between fixed top-0 left-0 right-0 z-9 backdrop-blur-[10px]'>
+const NavigationHeader: FC = () => (
+  <header className='w-full h-[60px] sm:h-[80px] py-0 px-6 sm:px-12 flex items-center justify-between sticky top-0 z-navbar bg-navbar-light dark:bg-navbar-dark backdrop-blur-[16px] [backdrop-filter:blur(16px)] [-webkit-backdrop-filter:blur(16px)] border-b border-b-border-light dark:border-b-border-dark'>
     <nav />
   </header>
 );
 
-export default Header;
+export { NavigationHeader };

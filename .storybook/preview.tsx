@@ -3,33 +3,28 @@ import { Description, Primary, Stories, Subtitle, Title } from '@storybook/block
 import type { Preview } from '@storybook/react';
 import React from 'react';
 import '../src/styles/global.css';
-import withA11y from '@storybook/addon-a11y';
 import theme from './theme';
 import { withDarkMode } from './withDarkMode';
 
 const preview: Preview = {
+  initialGlobals: {
+    darkMode: true
+  },
   parameters: {
-    layout: 'centered',
+    darkMode: {
+      dark: { ...theme },
+      light: { ...theme },
+      // Now we can safely use empty string for light mode (patch applied)
+      darkClass: 'dark',
+      lightClass: '',
+      classTarget: 'html',
+      stylePreview: true
+    },
     actions: { argTypesRegex: '^on.*' },
     options: {
       theme: theme,
       storySort: {
         order: ['Controls', 'Docs', 'Stories']
-      }
-    },
-    darkMode: {
-      stylePreview: true,
-      dark: {
-        class: 'dark',
-        style: {
-          backgroundColor: '#0E0E0E'
-        }
-      },
-      light: {
-        class: '',
-        style: {
-          backgroundColor: '#dddddd'
-        }
       }
     },
     controls: {
@@ -87,11 +82,10 @@ const preview: Preview = {
         </>
       ),
       disableInjectedStyles: true
-    },
-    tags: ['autodocs'],
-    viewMode: 'docs',
-    decorators: [withDarkMode, withA11y]
+    }
   }
 };
+
+preview.decorators = [withDarkMode];
 
 export default preview;

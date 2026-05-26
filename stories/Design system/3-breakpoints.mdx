@@ -1,0 +1,78 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Design System/Breakpoints" />
+
+export const H2 = ({ children }) => (
+  <h2 style={{ color: '#ff0036', fontSize: '1.125rem', fontWeight: 700, paddingBottom: '12px', marginTop: '2rem', marginBottom: '1rem', borderBottom: '1px solid #172230' }}>
+    {children}
+  </h2>
+);
+
+# Breakpoints & Spacing
+
+<div style={{ color: '#cccccc', marginBottom: '2rem' }}>
+  Official responsive breakpoints and spacing scale for the <strong style={{ color: '#ffffff' }}>Stack-and-Flow Design System</strong>.
+</div>
+
+<H2>Tailwind CSS Native Breakpoints</H2>
+
+<div style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+  <div style={{ position: 'relative', height: '48px', display: 'flex', alignItems: 'center', fontSize: '14px', color: '#fff' }}>
+    <span style={{ width: '50px', color: '#888888' }}>0</span>
+    <div style={{ flex: 1, position: 'relative', height: '4px' }}>
+      <div style={{ position: 'absolute', left: '0', width: '20%', height: '4px', zIndex: 5, background: '#ff809b', borderRadius: '2px' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '40%', height: '4px', zIndex: 4, background: '#ff335e' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '60%', height: '4px', zIndex: 3, background: '#ff0036' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '80%', height: '4px', zIndex: 2, background: '#cc002b' }}></div>
+      <div style={{ position: 'absolute', left: '0', width: '100%', height: '4px', zIndex: 1, background: '#8c0b26', borderRadius: '2px' }}></div>
+    </div>
+    <span style={{ width: '50px', textAlign: 'right', color: '#888888' }}>∞</span>
+  </div>
+  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#888888', fontSize: '12px', paddingTop: '8px', paddingLeft: '50px', paddingRight: '20%' }}>
+    <span>sm<br /><code style={{ color: '#cccccc' }}>≥ 640px</code></span>
+    <span>md<br /><code style={{ color: '#cccccc' }}>≥ 768px</code></span>
+    <span>lg<br /><code style={{ color: '#cccccc' }}>≥ 1024px</code></span>
+    <span>xl<br /><code style={{ color: '#cccccc' }}>≥ 1280px</code></span>
+    <span>2xl<br /><code style={{ color: '#cccccc' }}>≥ 1536px</code></span>
+  </div>
+</div>
+
+<div style={{ marginTop: '1.5rem', color: '#888888', fontSize: '14px', marginBottom: '3rem' }}>
+  <p style={{ marginTop: 0, marginBottom: '0.75rem' }}>
+    The design system uses Tailwind's native responsive prefixes only: <code style={{ color: '#cccccc' }}>sm</code>,{' '}
+    <code style={{ color: '#cccccc' }}>md</code>, <code style={{ color: '#cccccc' }}>lg</code>,{' '}
+    <code style={{ color: '#cccccc' }}>xl</code>, and <code style={{ color: '#cccccc' }}>2xl</code>.
+  </p>
+  <ul style={{ paddingLeft: '1.25rem', lineHeight: 2 }}>
+    <li><code style={{ color: '#cccccc' }}>sm</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 640px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>md</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 768px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>lg</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 1024px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>xl</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 1280px)</code></li>
+    <li><code style={{ color: '#cccccc' }}>2xl</code>: <code style={{ color: '#ff335e' }}>@media (min-width: 1536px)</code></li>
+  </ul>
+</div>
+
+<H2>Spacing Scale</H2>
+
+<div style={{ color: '#888888', marginBottom: '1.5rem', fontSize: '14px' }}>
+  Base unit: <strong style={{ color: '#ffffff' }}>8px</strong>. All values are multiples of 4 or 8. Use semantic aliases in components.
+</div>
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '3rem' }}>
+  {[
+    { label: 'spacing-xxs', value: '0.25rem', px: '4px' },
+    { label: 'spacing-xs',  value: '0.5rem',  px: '8px' },
+    { label: 'spacing-sm',  value: '0.75rem', px: '12px' },
+    { label: 'spacing-md',  value: '1rem',    px: '16px' },
+    { label: 'spacing-lg',  value: '1.5rem',  px: '24px' },
+    { label: 'spacing-xl',  value: '2rem',    px: '32px' },
+    { label: 'spacing-2xl', value: '3rem',    px: '48px' },
+    { label: 'spacing-3xl', value: '5rem',    px: '80px' },
+  ].map(({ label, value, px }) => (
+    <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div style={{ width: value, minWidth: '4px', height: '16px', backgroundColor: '#ff0036', borderRadius: '3px', flexShrink: 0 }}></div>
+      <code style={{ color: '#cccccc', width: '130px', fontSize: '13px' }}>--{label}</code>
+      <span style={{ color: '#888888', fontSize: '13px' }}>{value} — {px}</span>
+    </div>
+  ))}
+</div>

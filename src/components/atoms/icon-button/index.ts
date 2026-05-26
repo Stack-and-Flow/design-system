@@ -1,3 +1,2 @@
-import IconButton from './IconButton';
-export * from './types'
-export default IconButton;
+export { IconButton } from './IconButton';
+export * from './types';

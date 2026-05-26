@@ -1,425 +1,1056 @@
-import { CalendarDate } from '@internationalized/date';
-import { useMemo, useState } from 'react';
-import type { CalendarProps } from './types';
+import { type CSSProperties, type KeyboardEvent, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
+import {
+  type CalendarColor,
+  type CalendarProps,
+  type CalendarSelection,
+  type CalendarVariant,
+  calendarColorTones,
+  calendarDayButtonVariants,
+  calendarGridVariants,
+  calendarHeaderVariants,
+  calendarIconButtonVariants,
+  calendarMonthHeadingVariants,
+  calendarMonthSectionVariants,
+  calendarMonthsLayoutVariants,
+  calendarNavigationIconVariants,
+  calendarPickerHeaderContentVariants,
+  calendarPickerHeaderVariants,
+  calendarPickerHeadingVariants,
+  calendarPickerMetaVariants,
+  calendarPickerOptionsGridVariants,
+  calendarPickerOptionVariants,
+  calendarPickerPanelsVariants,
+  calendarPickerSectionVariants,
+  calendarPickerVariants,
+  calendarTriggerButtonVariants,
+  calendarVariants,
+  calendarWeekdayVariants,
+  calendarWeekRowVariants
+} from './types';
 
-// Utility to convert a native JS Date object to a CalendarDate
-function dateToCalendarDate(date: Date): CalendarDate {
-  return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-}
+type SelectionShape = 'none' | 'single' | 'rangeStart' | 'rangeMiddle' | 'rangeEnd';
 
-// Utility to lighten a hex color for hover effects
-// Converts hex to RGB, increases brightness, and returns hex
-export function lightenColor(hex: string, percent: number): string {
-  // Remove # if present
-  hex = hex.replace(/^#/, '');
-  // Parse hex to RGB
-  const r = parseInt(hex.slice(0, 2), 16);
-  const g = parseInt(hex.slice(2, 4), 16);
-  const b = parseInt(hex.slice(4, 6), 16);
-  // Increase brightness by percent (0-100)
-  const factor = 1 + percent / 100;
-  const newR = Math.min(255, Math.round(r * factor));
-  const newG = Math.min(255, Math.round(g * factor));
-  const newB = Math.min(255, Math.round(b * factor));
-  // Convert back to hex
-  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
-}
-
-// Month names by locale
-// Color palette mapping for Calendar color prop
-export const calendarColorPalette: Record<string, string> = {
-  default: '#e11d48', // current color (red)
-  orange: '#f97316',
-  'orange-light': '#fda65c',
-  'orange-dark': '#d94e08',
-  yellow: '#eab308',
-  'yellow-light': '#fde047',
-  'yellow-dark': '#b58903',
-  green: '#22c55e',
-  'green-light': '#5ee78b',
-  'green-dark': '#138a3d',
-  teal: '#14b8a6',
-  'teal-light': '#40dfcb',
-  'teal-dark': '#0a7f74',
-  blue: '#3b82f6',
-  'blue-light': '#7bb0fa',
-  'blue-dark': '#1e4ed8',
-  indigo: '#6366f1',
-  'indigo-light': '#9ca3fa',
-  'indigo-dark': '#4338ca',
-  purple: '#8b5cf6',
-  'purple-light': '#c4b5fd',
-  'purple-dark': '#6d28d9',
-  pink: '#ec4899',
-  'pink-light': '#fda4cf',
-  'pink-dark': '#be185d'
+type LocalizedText = {
+  backToCalendar: string;
+  calendarGrid: string;
+  chooseMonthAndYear: string;
+  nextMonth: string;
+  previousMonth: string;
+  selected: string;
+  selectedRange: string;
+  startDate: string;
+  today: string;
+  unavailable: string;
+  years: string;
+  months: string;
 };
 
-const monthNamesByLocale: Record<string, string[]> = {
-  en: [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ],
-  es: [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ]
+type CalendarDayViewModel = {
+  ariaLabel: string;
+  buttonClassName: string;
+  buttonProps: {
+    'aria-current'?: 'date';
+    'aria-label': string;
+    'aria-disabled': boolean;
+    disabled: boolean;
+    onClick: () => void;
+    onFocus: () => void;
+    onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
+    ref: (element: HTMLButtonElement | null) => void;
+    tabIndex: number;
+    type: 'button';
+  };
+  cellProps: {
+    'aria-disabled': boolean;
+    'aria-selected': boolean;
+    role: 'gridcell';
+  };
+  date: Date;
+  dayNumber: number;
+  isCurrentMonth: boolean;
+  key: string;
+  style?: CSSProperties;
 };
 
-// Abbreviated weekday names (starting from Sunday)
-const weekdayNamesByLocale: Record<string, string[]> = {
-  en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-  es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+type CalendarMonthViewModel = {
+  gridId: string;
+  key: string;
+  label: string;
+  labelId: string;
+  monthDate: Date;
+  weeks: CalendarDayViewModel[][];
+};
+
+type PickerOption = {
+  ariaLabel: string;
+  className: string;
+  key: string;
+  label: string;
+  props: {
+    'aria-label': string;
+    'aria-pressed': boolean;
+    disabled: boolean;
+    onClick: () => void;
+    type: 'button';
+  };
+};
+
+type UseCalendarReturn = {
+  calendarClassName: string;
+  calendarGridClassName: string;
+  calendarLabel: string;
+  headerClassName: string;
+  headerLabel: string;
+  isPickerOpen: boolean;
+  isVisible: boolean;
+  liveRegionLabel: string;
+  monthHeadingClassName: string;
+  monthPickerLabel: string;
+  monthSectionClassName: string;
+  months: CalendarMonthViewModel[];
+  monthsLayoutClassName: string;
+  navigationIconClassName: string;
+  nextButtonProps: {
+    'aria-label': string;
+    className: string;
+    disabled: boolean;
+    onClick: () => void;
+    type: 'button';
+  };
+  pickerDialogProps: {
+    'aria-label': string;
+    'aria-modal': 'false';
+    className: string;
+    onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
+    role: 'dialog';
+  };
+  pickerCloseButtonProps: {
+    'aria-label': string;
+    className: string;
+    onClick: () => void;
+    ref: (element: HTMLButtonElement | null) => void;
+    type: 'button';
+  };
+  pickerHeaderClassName: string;
+  pickerHeaderContentClassName: string;
+  pickerHeadingClassName: string;
+  pickerMetaClassName: string;
+  pickerMonthOptions: PickerOption[];
+  pickerOptionsGridClassName: string;
+  pickerPanelsClassName: string;
+  pickerSectionClassName: string;
+  pickerYearOptions: PickerOption[];
+  previousButtonProps: {
+    'aria-label': string;
+    className: string;
+    disabled: boolean;
+    onClick: () => void;
+    type: 'button';
+  };
+  themeClassName: string;
+  togglePickerButtonProps: {
+    'aria-expanded': boolean;
+    'aria-haspopup': 'dialog';
+    'aria-label': string;
+    className: string;
+    disabled: boolean;
+    onClick: () => void;
+    ref: (element: HTMLButtonElement | null) => void;
+    type: 'button';
+  };
+  weekRowClassName: string;
+  weekdayClassName: string;
+  weekdayHeaders: string[];
+  yearsLabel: string;
+};
+
+const EMPTY_DISABLED_DATES: Date[] = [];
+
+const startOfDay = (date: Date): Date => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+const normalizeNullableDate = (date: Date | null | undefined): Date | null => (date ? startOfDay(date) : null);
+
+const getDaysInMonth = (year: number, month: number): number => new Date(year, month + 1, 0).getDate();
+
+const createDate = (year: number, month: number, day: number): Date => {
+  const safeDay = Math.min(day, getDaysInMonth(year, month));
+  return new Date(year, month, safeDay);
+};
+
+const addDays = (date: Date, amount: number): Date => {
+  const nextDate = startOfDay(date);
+  nextDate.setDate(nextDate.getDate() + amount);
+  return startOfDay(nextDate);
+};
+
+const addMonths = (date: Date, amount: number): Date => {
+  const normalizedDate = startOfDay(date);
+  return createDate(normalizedDate.getFullYear(), normalizedDate.getMonth() + amount, normalizedDate.getDate());
+};
+
+const isSameDay = (left: Date | null, right: Date | null): boolean => {
+  if (!left || !right) {
+    return false;
+  }
+
+  return (
+    left.getFullYear() === right.getFullYear() &&
+    left.getMonth() === right.getMonth() &&
+    left.getDate() === right.getDate()
+  );
+};
+
+const toDateKey = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const isDateBefore = (left: Date, right: Date): boolean => startOfDay(left).getTime() < startOfDay(right).getTime();
+
+const isDateAfter = (left: Date, right: Date): boolean => startOfDay(left).getTime() > startOfDay(right).getTime();
+
+const isDateBetweenInclusive = (date: Date, start: Date, end: Date): boolean => {
+  const dateTime = startOfDay(date).getTime();
+  const startTime = startOfDay(start).getTime();
+  const endTime = startOfDay(end).getTime();
+  return dateTime >= Math.min(startTime, endTime) && dateTime <= Math.max(startTime, endTime);
+};
+
+const clampFirstDayOfWeek = (value: number | undefined): number => {
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    return 1;
+  }
+
+  if (value < 0) {
+    return 0;
+  }
+
+  if (value > 6) {
+    return 6;
+  }
+
+  return value;
+};
+
+const resolveInitialCurrentDate = (selectedDate: CalendarSelection | undefined): Date => {
+  if (Array.isArray(selectedDate)) {
+    return normalizeNullableDate(selectedDate[0]) ?? normalizeNullableDate(selectedDate[1]) ?? startOfDay(new Date());
+  }
+
+  return normalizeNullableDate(selectedDate) ?? startOfDay(new Date());
+};
+
+const resolveInitialFocusedDate = (selectedDate: CalendarSelection | undefined): Date => {
+  if (Array.isArray(selectedDate)) {
+    return normalizeNullableDate(selectedDate[1]) ?? normalizeNullableDate(selectedDate[0]) ?? startOfDay(new Date());
+  }
+
+  return normalizeNullableDate(selectedDate) ?? startOfDay(new Date());
+};
+
+const getLocaleText = (locale: string): LocalizedText => {
+  if (locale.toLowerCase().startsWith('es')) {
+    return {
+      previousMonth: 'Mes anterior',
+      nextMonth: 'Mes siguiente',
+      chooseMonthAndYear: 'Elegir mes y año',
+      backToCalendar: 'Volver al calendario',
+      calendarGrid: 'Calendario',
+      months: 'Meses',
+      years: 'Años',
+      today: 'Hoy',
+      selected: 'Seleccionado',
+      selectedRange: 'Dentro del rango seleccionado',
+      startDate: 'Fecha de inicio',
+      unavailable: 'No disponible'
+    };
+  }
+
+  return {
+    previousMonth: 'Previous month',
+    nextMonth: 'Next month',
+    chooseMonthAndYear: 'Choose month and year',
+    backToCalendar: 'Back to calendar',
+    calendarGrid: 'Calendar',
+    months: 'Months',
+    years: 'Years',
+    today: 'Today',
+    selected: 'Selected',
+    selectedRange: 'In selected range',
+    startDate: 'Start date',
+    unavailable: 'Unavailable'
+  };
+};
+
+const buildWeekdayHeaders = (locale: string, firstDayOfWeek: number): string[] => {
+  const formatter = new Intl.DateTimeFormat(locale, { weekday: 'short' });
+  const baseDate = new Date(2024, 0, 7);
+  const headers = Array.from({ length: 7 }, (_, index) => formatter.format(addDays(baseDate, index)));
+  return [...headers.slice(firstDayOfWeek), ...headers.slice(0, firstDayOfWeek)];
+};
+
+const buildMonthLabel = (locale: string, date: Date): string =>
+  new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(date);
+
+const buildLongDateLabel = (locale: string, date: Date): string =>
+  new Intl.DateTimeFormat(locale, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(date);
+
+const getMonthOffsets = (visibleMonths: number): number[] => {
+  if (visibleMonths <= 1) {
+    return [0];
+  }
+
+  if (visibleMonths === 3) {
+    return [-1, 0, 1];
+  }
+
+  return Array.from({ length: visibleMonths }, (_, index) => index);
+};
+
+const getSelectionShape = (
+  date: Date,
+  isRangeMode: boolean,
+  selectedSingle: Date | null,
+  selectedRange: [Date | null, Date | null]
+): SelectionShape => {
+  if (!isRangeMode) {
+    return isSameDay(date, selectedSingle) ? 'single' : 'none';
+  }
+
+  const [rangeStart, rangeEnd] = selectedRange;
+
+  if (rangeStart && rangeEnd) {
+    if (isSameDay(rangeStart, rangeEnd) && isSameDay(date, rangeStart)) {
+      return 'single';
+    }
+
+    if (isSameDay(date, rangeStart)) {
+      return 'rangeStart';
+    }
+
+    if (isSameDay(date, rangeEnd)) {
+      return 'rangeEnd';
+    }
+
+    if (isDateBetweenInclusive(date, rangeStart, rangeEnd)) {
+      return 'rangeMiddle';
+    }
+
+    return 'none';
+  }
+
+  if (rangeStart && isSameDay(date, rangeStart)) {
+    return 'single';
+  }
+
+  return 'none';
+};
+
+const getColorClasses = (color: CalendarColor, variant: CalendarVariant, selectionShape: SelectionShape): string => {
+  if (selectionShape === 'none') {
+    return '';
+  }
+
+  const tone = calendarColorTones[color];
+  const isRangeMiddle = selectionShape === 'rangeMiddle';
+
+  switch (variant) {
+    case 'outlined':
+      return isRangeMiddle ? tone.outlinedRange : tone.outlinedSelected;
+    case 'soft':
+      return isRangeMiddle ? tone.softRange : tone.softSelected;
+    case 'ghost':
+      return isRangeMiddle ? tone.ghostRange : tone.ghostSelected;
+    default:
+      return isRangeMiddle ? tone.filledRange : tone.filledSelected;
+  }
+};
+
+const isMonthOutsideRange = (monthDate: Date, minDate?: Date, maxDate?: Date): boolean => {
+  const monthStart = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+  const monthEnd = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0);
+
+  if (minDate && isDateBefore(monthEnd, minDate)) {
+    return true;
+  }
+
+  if (maxDate && isDateAfter(monthStart, maxDate)) {
+    return true;
+  }
+
+  return false;
+};
+
+const buildHeaderLabel = (locale: string, monthDates: Date[]): string => {
+  if (monthDates.length === 1) {
+    return buildMonthLabel(locale, monthDates[0]);
+  }
+
+  const first = monthDates[0];
+  const last = monthDates[monthDates.length - 1];
+  const firstMonth = new Intl.DateTimeFormat(locale, { month: 'long' }).format(first);
+  const lastMonth = new Intl.DateTimeFormat(locale, { month: 'long' }).format(last);
+  const firstYear = first.getFullYear();
+  const lastYear = last.getFullYear();
+
+  return firstYear === lastYear
+    ? `${firstMonth} – ${lastMonth} ${firstYear}`
+    : `${firstMonth} ${firstYear} – ${lastMonth} ${lastYear}`;
 };
 
 export const useCalendar = ({
-  selectedDate: initialSelectedDate = null,
+  color = 'default',
+  selectedDate,
   onDateChange,
-  disabledDates = [], // Make sure this has a default value
-  minDate,
+  disabledDates = EMPTY_DISABLED_DATES,
+  variant = 'filled',
+  size = 'md',
+  radius = 'md',
+  show = true,
   maxDate,
+  minDate,
   disabled = false,
   readOnly = false,
   firstDayOfWeek = 1,
+  theme = 'light',
   highlightedDates = [],
   locale = 'en',
   visibleMonths = 1
-}: CalendarProps & { firstDayOfWeek?: number; locale?: string; visibleMonths?: number }) => {
-  // Helper function to normalize date to local midnight (ignore time and timezone)
-  const normalizeDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  };
-
-  // Helper function to check if a date is disabled
-  const isDateDisabled = (date: Date): boolean => {
-    const normalizedDate = normalizeDate(date);
-    return disabledDates.some((disabledDate) => {
-      const normalizedDisabledDate = normalizeDate(disabledDate);
-      return normalizedDate === normalizedDisabledDate;
-    });
-  };
-
-  // Groups days into weeks of 7 days
-  const groupDaysIntoWeeks = (days: any[]) => {
-    const weeks = [];
-    for (let i = 0; i < days.length; i += 7) {
-      weeks.push(days.slice(i, i + 7));
-    }
-    return weeks;
-  };
-
-  // selectedDate can be Date|null or [Date|null, Date|null]
-  const [currentDate, setCurrentDate] = useState(() => {
-    if (Array.isArray(initialSelectedDate)) {
-      return initialSelectedDate[0] ?? new Date();
-    }
-    return initialSelectedDate ?? new Date();
-  });
-
-  const [selectedDate, setSelectedDate] = useState<Date | null>(
-    Array.isArray(initialSelectedDate) ? null : initialSelectedDate
+}: CalendarProps): UseCalendarReturn => {
+  const normalizedMinDate = useMemo(() => normalizeNullableDate(minDate), [minDate]);
+  const normalizedMaxDate = useMemo(() => normalizeNullableDate(maxDate), [maxDate]);
+  const normalizedDisabledDates = useMemo(
+    () => new Set(disabledDates.map((date) => toDateKey(startOfDay(date)))),
+    [disabledDates]
   );
-
-  const [selectedRange, setSelectedRange] = useState<[Date | null, Date | null]>(
-    Array.isArray(initialSelectedDate) ? initialSelectedDate : [null, null]
+  const normalizedHighlightedDates = useMemo(
+    () =>
+      new Map(
+        highlightedDates.map((entry) => [
+          toDateKey(startOfDay(entry.date)),
+          { className: entry.className, style: entry.style }
+        ])
+      ),
+    [highlightedDates]
   );
+  const localizedText = useMemo(() => getLocaleText(locale), [locale]);
+  const weekdayHeaders = useMemo(
+    () => buildWeekdayHeaders(locale, clampFirstDayOfWeek(firstDayOfWeek)),
+    [firstDayOfWeek, locale]
+  );
+  const monthOffsets = useMemo(() => getMonthOffsets(Math.max(1, visibleMonths)), [visibleMonths]);
+  const isRangeMode = Array.isArray(selectedDate);
+  const baseId = useId();
 
-  // Compare only year, month, day (ignore time)
-  const isSameDay = (d1: Date, d2: Date): boolean => {
-    return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+  const isDateUnavailable = (date: Date): boolean => {
+    const normalizedDate = startOfDay(date);
+    const dateKey = toDateKey(normalizedDate);
+
+    if (disabled || readOnly) {
+      return true;
+    }
+
+    if (normalizedMinDate && isDateBefore(normalizedDate, normalizedMinDate)) {
+      return true;
+    }
+
+    if (normalizedMaxDate && isDateAfter(normalizedDate, normalizedMaxDate)) {
+      return true;
+    }
+
+    return normalizedDisabledDates.has(dateKey);
   };
 
-  const getStartDayOfMonth = (year: number, month: number): number => {
-    const firstDay = new Date(year, month, 1).getDay();
-    return (firstDay - firstDayOfWeek + 7) % 7;
+  const findEnabledDateFrom = (targetDate: Date, step: 1 | -1): Date | null => {
+    let nextDate = startOfDay(targetDate);
+
+    for (let attempt = 0; attempt < 366; attempt += 1) {
+      if (!isDateUnavailable(nextDate)) {
+        return nextDate;
+      }
+
+      nextDate = addDays(nextDate, step);
+    }
+
+    return null;
   };
 
-  const baseWeekdayNames = weekdayNamesByLocale[locale] || weekdayNamesByLocale['en'];
-  const weekdayNames = [...baseWeekdayNames.slice(firstDayOfWeek), ...baseWeekdayNames.slice(0, firstDayOfWeek)];
+  const resolveEnabledDate = (preferredDate: Date): Date => {
+    const normalizedPreferredDate = startOfDay(preferredDate);
 
-  // Memoized month names by locale
-  const monthNames = useMemo(() => {
-    return monthNamesByLocale[locale] || monthNamesByLocale['en'];
-  }, [locale]);
-
-  // Helper function to check if date is in min/max range
-  const isDateInRange = (date: Date): boolean => {
-    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-    if (minDate) {
-      const minDateOnly = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-      if (dateOnly < minDateOnly) {
-        return false;
-      }
+    if (!isDateUnavailable(normalizedPreferredDate)) {
+      return normalizedPreferredDate;
     }
 
-    if (maxDate) {
-      const maxDateOnly = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
-      if (dateOnly > maxDateOnly) {
-        return false;
-      }
+    const boundedStartDate =
+      normalizedMinDate && isDateBefore(normalizedPreferredDate, normalizedMinDate)
+        ? normalizedMinDate
+        : normalizedPreferredDate;
+    const forwardDate = findEnabledDateFrom(boundedStartDate, 1);
+
+    if (forwardDate) {
+      return forwardDate;
     }
 
-    return true;
+    const boundedEndDate =
+      normalizedMaxDate && isDateAfter(normalizedPreferredDate, normalizedMaxDate)
+        ? normalizedMaxDate
+        : normalizedPreferredDate;
+    const backwardDate = findEnabledDateFrom(boundedEndDate, -1);
+
+    return backwardDate ?? normalizedPreferredDate;
   };
 
-  // Function to compute days for a specific month
-  const getMonthDays = (monthDate: Date) => {
-    const year = monthDate.getFullYear();
-    const month = monthDate.getMonth();
+  const initialCurrentDate = resolveEnabledDate(resolveInitialCurrentDate(selectedDate));
+  const initialFocusedDate = resolveEnabledDate(resolveInitialFocusedDate(selectedDate));
 
-    // Prev month days
-    const startDayIndex = getStartDayOfMonth(year, month);
-    const daysInPrevMonth = new Date(year, month, 0).getDate();
-    const prevDays = [];
-    for (let i = startDayIndex - 1; i >= 0; i--) {
-      const date = new Date(year, month - 1, daysInPrevMonth - i);
-      date.setHours(0, 0, 0, 0);
+  const [currentDate, setCurrentDate] = useState<Date>(() => initialCurrentDate);
+  const [focusedDate, setFocusedDate] = useState<Date>(() => initialFocusedDate);
+  const [selectedSingle, setSelectedSingle] = useState<Date | null>(() =>
+    Array.isArray(selectedDate) ? null : normalizeNullableDate(selectedDate)
+  );
+  const [selectedRange, setSelectedRange] = useState<[Date | null, Date | null]>(() =>
+    Array.isArray(selectedDate)
+      ? [normalizeNullableDate(selectedDate[0]), normalizeNullableDate(selectedDate[1])]
+      : [null, null]
+  );
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const dayButtonRefs = useRef(new Map<string, HTMLButtonElement>());
+  const pendingFocusKeyRef = useRef<string | null>(null);
+  const pickerCloseButtonRef = useRef<HTMLButtonElement | null>(null);
+  const togglePickerButtonRef = useRef<HTMLButtonElement | null>(null);
 
-      const isDisabled = disabled || !isDateInRange(date) || isDateDisabled(date);
-      const isInRange = !!(
-        selectedRange[0] &&
-        selectedRange[1] &&
-        date >= selectedRange[0] &&
-        date <= selectedRange[1]
-      );
-      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
-      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
-      const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
+  useEffect(() => {
+    if (Array.isArray(selectedDate)) {
+      const nextRange: [Date | null, Date | null] = [
+        normalizeNullableDate(selectedDate[0]),
+        normalizeNullableDate(selectedDate[1])
+      ];
+      setSelectedRange(nextRange);
+      setSelectedSingle(null);
 
-      prevDays.push({
-        date,
-        isCurrentMonth: false,
-        isToday: false,
-        isSelected: false,
-        isDisabled,
-        isInRange,
-        isRangeStart,
-        isRangeEnd,
-        isHighlighted: !!highlight,
-        highlightClassName: highlight?.className,
-        highlightStyle: highlight?.style
-      });
-    }
-
-    // Current month days
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const currDays = [];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    for (let i = 1; i <= daysInMonth; i++) {
-      const date = new Date(year, month, i);
-      date.setHours(0, 0, 0, 0);
-
-      const isToday = isSameDay(date, today);
-      const isSelected = !!(selectedDate && isSameDay(date, selectedDate));
-      const isDisabled = disabled || !isDateInRange(date) || isDateDisabled(date);
-      const isInRange = !!(
-        selectedRange[0] &&
-        selectedRange[1] &&
-        date >= selectedRange[0] &&
-        date <= selectedRange[1]
-      );
-      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
-      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
-      const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
-
-      currDays.push({
-        date,
-        isCurrentMonth: true,
-        isToday,
-        isSelected,
-        isDisabled,
-        isInRange,
-        isRangeStart,
-        isRangeEnd,
-        isHighlighted: !!highlight,
-        highlightClassName: highlight?.className,
-        highlightStyle: highlight?.style
-      });
-    }
-
-    // Next month days
-    const totalDaysDisplayed = startDayIndex + daysInMonth;
-    const remainingCells = 42 - totalDaysDisplayed; // 6 weeks
-    const nextDays = [];
-    for (let i = 1; i <= remainingCells; i++) {
-      const date = new Date(year, month + 1, i);
-      date.setHours(0, 0, 0, 0);
-
-      const isDisabled = disabled || !isDateInRange(date) || isDateDisabled(date);
-      const isInRange = !!(
-        selectedRange[0] &&
-        selectedRange[1] &&
-        date >= selectedRange[0] &&
-        date <= selectedRange[1]
-      );
-      const isRangeStart = !!(selectedRange[0] && isSameDay(date, selectedRange[0]));
-      const isRangeEnd = !!(selectedRange[1] && isSameDay(date, selectedRange[1]));
-      const highlight = highlightedDates.find((h) => isSameDay(h.date, date));
-
-      nextDays.push({
-        date,
-        isCurrentMonth: false,
-        isToday: false,
-        isSelected: false,
-        isDisabled,
-        isInRange,
-        isRangeStart,
-        isRangeEnd,
-        isHighlighted: !!highlight,
-        highlightClassName: highlight?.className,
-        highlightStyle: highlight?.style
-      });
-    }
-
-    const daysInCalendar = [...prevDays, ...currDays, ...nextDays];
-    const weeks = groupDaysIntoWeeks(daysInCalendar);
-
-    return { weeks, daysInCalendar, label: `${monthNames[month]} ${year}` };
-  };
-
-  // Compute month datas for visible months
-  const monthDatas = useMemo(() => {
-    const datas = [];
-    if (visibleMonths === 1) {
-      // Current month only
-      const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const monthDayData = getMonthDays(monthDate);
-      datas.push({
-        monthDate,
-        weeks: monthDayData.weeks,
-        label: monthDayData.label
-      });
-    } else if (visibleMonths === 2) {
-      // Current and next month
-      for (let i = 0; i < 2; i++) {
-        const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
-        const monthDayData = getMonthDays(monthDate);
-        datas.push({
-          monthDate,
-          weeks: monthDayData.weeks,
-          label: monthDayData.label
-        });
-      }
-    } else if (visibleMonths === 3) {
-      // Previous, current, and next month
-      for (let i = -1; i <= 1; i++) {
-        const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
-        const monthDayData = getMonthDays(monthDate);
-        datas.push({
-          monthDate,
-          weeks: monthDayData.weeks,
-          label: monthDayData.label
-        });
-      }
-    }
-    return datas;
-  }, [
-    currentDate,
-    visibleMonths,
-    selectedDate,
-    selectedRange,
-    disabledDates,
-    minDate,
-    maxDate,
-    disabled,
-    readOnly,
-    highlightedDates,
-    firstDayOfWeek,
-    locale
-  ]);
-
-  const handleDayClick = (date: Date, isDisabled: boolean) => {
-    // Check if date is actually disabled
-    const isActuallyDisabled = isDisabled || readOnly || !isDateInRange(date) || isDateDisabled(date);
-
-    if (isActuallyDisabled) {
+      const nextCurrentDate = resolveEnabledDate(nextRange[0] ?? nextRange[1] ?? focusedDate);
+      setCurrentDate(nextCurrentDate);
+      setFocusedDate(resolveEnabledDate(nextRange[1] ?? nextCurrentDate));
       return;
     }
 
-    // If selectedDate is a range, handle range selection
-    if (Array.isArray(initialSelectedDate)) {
-      // First click: set start, visually mark as selected
-      if (!selectedRange[0] || (selectedRange[0] && selectedRange[1])) {
-        setSelectedRange([date, null]);
-        onDateChange?.([date, null]);
-        setSelectedDate(date); // Mark start date as selected for visual feedback
-      } else if (selectedRange[0] && !selectedRange[1]) {
-        if (date < selectedRange[0]) {
-          setSelectedRange([date, selectedRange[0]]);
-          onDateChange?.([date, selectedRange[0]]);
-          setSelectedDate(date); // Mark new start date
-        } else {
-          setSelectedRange([selectedRange[0], date]);
-          onDateChange?.([selectedRange[0], date]);
-          setSelectedDate(selectedRange[0]); // Keep start visually selected
-        }
+    const nextSelectedDate = normalizeNullableDate(selectedDate);
+    setSelectedSingle(nextSelectedDate);
+    setSelectedRange([null, null]);
+
+    const nextFocusedDate = resolveEnabledDate(nextSelectedDate ?? focusedDate);
+    setCurrentDate(nextFocusedDate);
+    setFocusedDate(nextFocusedDate);
+  }, [selectedDate, normalizedMaxDate, normalizedMinDate, normalizedDisabledDates, disabled, readOnly]);
+
+  const isDateDisabled = (date: Date): boolean => isDateUnavailable(date);
+
+  const updateSelection = (date: Date) => {
+    const normalizedDate = startOfDay(date);
+
+    if (isRangeMode) {
+      const [rangeStart, rangeEnd] = selectedRange;
+
+      if (!rangeStart || rangeEnd) {
+        const nextRange: [Date | null, Date | null] = [normalizedDate, null];
+        setSelectedRange(nextRange);
+        onDateChange?.(nextRange);
+        return;
       }
-    } else {
-      setSelectedDate(date);
-      onDateChange?.(date);
+
+      const nextRange: [Date | null, Date | null] = isDateBefore(normalizedDate, rangeStart)
+        ? [normalizedDate, rangeStart]
+        : [rangeStart, normalizedDate];
+
+      setSelectedRange(nextRange);
+      onDateChange?.(nextRange);
+      return;
     }
+
+    setSelectedSingle(normalizedDate);
+    onDateChange?.(normalizedDate);
   };
 
-  const goToPrevMonth = () => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() - 1);
-      return newDate;
-    });
+  const alignCurrentDateToFocus = (nextFocusedDate: Date) => {
+    const enabledDate = resolveEnabledDate(nextFocusedDate);
+    setCurrentDate(enabledDate);
+    setFocusedDate(enabledDate);
+    pendingFocusKeyRef.current = toDateKey(enabledDate);
+  };
+
+  const goToPreviousMonth = () => {
+    const previousMonthDate = addMonths(currentDate, -1);
+    alignCurrentDateToFocus(previousMonthDate);
   };
 
   const goToNextMonth = () => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() + 1);
-      return newDate;
-    });
+    const nextMonthDate = addMonths(currentDate, 1);
+    alignCurrentDateToFocus(nextMonthDate);
   };
 
-  // Example usage: convert the current date to CalendarDate
-  const currentCalendarDate = dateToCalendarDate(currentDate);
+  const closePicker = () => {
+    setIsPickerOpen(false);
+    togglePickerButtonRef.current?.focus();
+  };
+
+  const findNextEnabledDate = (targetDate: Date, step: 1 | -1): Date | null => {
+    let nextDate = startOfDay(targetDate);
+
+    for (let attempt = 0; attempt < 366; attempt += 1) {
+      if (!isDateDisabled(nextDate)) {
+        return nextDate;
+      }
+
+      nextDate = addDays(nextDate, step);
+    }
+
+    return null;
+  };
+
+  const handleDayKeyDown = (date: Date, isDisabledDate: boolean) => (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (isDisabledDate) {
+      return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      updateSelection(date);
+      return;
+    }
+
+    let nextFocusedDate: Date | null = null;
+    let searchStep: 1 | -1 = 1;
+
+    switch (event.key) {
+      case 'ArrowRight':
+        nextFocusedDate = addDays(date, 1);
+        searchStep = 1;
+        break;
+      case 'ArrowLeft':
+        nextFocusedDate = addDays(date, -1);
+        searchStep = -1;
+        break;
+      case 'ArrowDown':
+        nextFocusedDate = addDays(date, 7);
+        searchStep = 1;
+        break;
+      case 'ArrowUp':
+        nextFocusedDate = addDays(date, -7);
+        searchStep = -1;
+        break;
+      case 'Home':
+        nextFocusedDate = addDays(date, -((date.getDay() - clampFirstDayOfWeek(firstDayOfWeek) + 7) % 7));
+        searchStep = 1;
+        break;
+      case 'End':
+        nextFocusedDate = addDays(date, 6 - ((date.getDay() - clampFirstDayOfWeek(firstDayOfWeek) + 7) % 7));
+        searchStep = -1;
+        break;
+      case 'PageUp':
+        nextFocusedDate = addMonths(date, event.shiftKey ? -12 : -1);
+        searchStep = -1;
+        break;
+      case 'PageDown':
+        nextFocusedDate = addMonths(date, event.shiftKey ? 12 : 1);
+        searchStep = 1;
+        break;
+      default:
+        break;
+    }
+
+    if (!nextFocusedDate) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const enabledFocusedDate = isDateDisabled(nextFocusedDate)
+      ? findNextEnabledDate(nextFocusedDate, searchStep)
+      : nextFocusedDate;
+
+    if (!enabledFocusedDate) {
+      return;
+    }
+
+    alignCurrentDateToFocus(enabledFocusedDate);
+  };
+
+  const monthDates = useMemo(
+    () => monthOffsets.map((offset) => new Date(currentDate.getFullYear(), currentDate.getMonth() + offset, 1)),
+    [currentDate, monthOffsets]
+  );
+
+  const enabledDateKeys = useMemo(() => {
+    const keys: string[] = [];
+
+    for (const monthDate of monthDates) {
+      const year = monthDate.getFullYear();
+      const month = monthDate.getMonth();
+      const monthStartOffset = (new Date(year, month, 1).getDay() - clampFirstDayOfWeek(firstDayOfWeek) + 7) % 7;
+      const gridStartDate = new Date(year, month, 1 - monthStartOffset);
+
+      for (let index = 0; index < 42; index += 1) {
+        const date = addDays(gridStartDate, index);
+        if (!isDateDisabled(date)) {
+          keys.push(toDateKey(date));
+        }
+      }
+    }
+
+    return keys;
+  }, [firstDayOfWeek, monthDates, normalizedDisabledDates, normalizedMaxDate, normalizedMinDate, disabled, readOnly]);
+
+  const effectiveFocusedDate = useMemo(() => {
+    if (enabledDateKeys.includes(toDateKey(focusedDate))) {
+      return focusedDate;
+    }
+
+    const firstEnabledDateKey = enabledDateKeys[0];
+    if (!firstEnabledDateKey) {
+      return focusedDate;
+    }
+
+    const [year, month, day] = firstEnabledDateKey.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }, [enabledDateKeys, focusedDate]);
+
+  const months = useMemo<CalendarMonthViewModel[]>(() => {
+    return monthDates.map((monthDate, monthIndex) => {
+      const year = monthDate.getFullYear();
+      const month = monthDate.getMonth();
+      const monthStartOffset = (new Date(year, month, 1).getDay() - clampFirstDayOfWeek(firstDayOfWeek) + 7) % 7;
+      const gridStartDate = new Date(year, month, 1 - monthStartOffset);
+      const label = buildMonthLabel(locale, monthDate);
+      const labelId = `${baseId}-month-label-${monthIndex}`;
+      const gridId = `${baseId}-grid-${monthIndex}`;
+      const weeks: CalendarDayViewModel[][] = [];
+
+      for (let weekIndex = 0; weekIndex < 6; weekIndex += 1) {
+        const week: CalendarDayViewModel[] = [];
+
+        for (let dayIndex = 0; dayIndex < 7; dayIndex += 1) {
+          const date = addDays(gridStartDate, weekIndex * 7 + dayIndex);
+          const dateKey = toDateKey(date);
+          const selectionShape = getSelectionShape(date, isRangeMode, selectedSingle, selectedRange);
+          const isCurrentMonth = date.getMonth() === month;
+          const isDisabledDate = isDateDisabled(date);
+          const isToday = isSameDay(date, startOfDay(new Date()));
+          const highlight = normalizedHighlightedDates.get(dateKey);
+          const isSelected = selectionShape !== 'none';
+          const ariaLabelParts = [buildLongDateLabel(locale, date)];
+
+          if (isToday) {
+            ariaLabelParts.push(localizedText.today);
+          }
+
+          if (selectionShape === 'single') {
+            ariaLabelParts.push(localizedText.selected);
+          }
+
+          if (selectionShape === 'rangeStart') {
+            ariaLabelParts.push(localizedText.startDate);
+          }
+
+          if (selectionShape === 'rangeMiddle' || selectionShape === 'rangeEnd') {
+            ariaLabelParts.push(localizedText.selectedRange);
+          }
+
+          if (isDisabledDate) {
+            ariaLabelParts.push(localizedText.unavailable);
+          }
+
+          const ariaLabel = ariaLabelParts.join('. ');
+          const buttonClassName = cn(
+            calendarDayButtonVariants({
+              variant,
+              size,
+              radius,
+              currentMonth: isCurrentMonth,
+              interactive: !isDisabledDate,
+              disabled: isDisabledDate,
+              today: isToday,
+              selectionShape
+            }),
+            getColorClasses(color, variant, selectionShape),
+            selectionShape === 'none' && highlight?.className
+          );
+
+          week.push({
+            key: dateKey,
+            date,
+            dayNumber: date.getDate(),
+            ariaLabel,
+            isCurrentMonth,
+            buttonClassName,
+            style: highlight?.style,
+            cellProps: {
+              role: 'gridcell',
+              'aria-selected': isSelected,
+              'aria-disabled': isDisabledDate
+            },
+            buttonProps: {
+              type: 'button',
+              disabled: isDisabledDate,
+              'aria-disabled': isDisabledDate,
+              'aria-label': ariaLabel,
+              'aria-current': isToday ? 'date' : undefined,
+              tabIndex: !isDisabledDate && isCurrentMonth && isSameDay(date, effectiveFocusedDate) ? 0 : -1,
+              onClick: () => updateSelection(date),
+              onFocus: () => setFocusedDate(date),
+              onKeyDown: handleDayKeyDown(date, isDisabledDate),
+              ref: (element) => {
+                if (!isCurrentMonth) {
+                  return;
+                }
+
+                if (element) {
+                  dayButtonRefs.current.set(dateKey, element);
+                  return;
+                }
+
+                dayButtonRefs.current.delete(dateKey);
+              }
+            }
+          });
+        }
+
+        weeks.push(week);
+      }
+
+      return {
+        key: `${monthDate.getFullYear()}-${monthDate.getMonth()}`,
+        monthDate,
+        label,
+        labelId,
+        gridId,
+        weeks
+      };
+    });
+  }, [
+    baseId,
+    color,
+    effectiveFocusedDate,
+    firstDayOfWeek,
+    isRangeMode,
+    locale,
+    localizedText.selected,
+    localizedText.selectedRange,
+    localizedText.startDate,
+    localizedText.today,
+    localizedText.unavailable,
+    monthDates,
+    normalizedHighlightedDates,
+    radius,
+    selectedRange,
+    selectedSingle,
+    size,
+    variant,
+    disabled,
+    readOnly,
+    normalizedDisabledDates,
+    normalizedMaxDate,
+    normalizedMinDate
+  ]);
+
+  useEffect(() => {
+    if (!pendingFocusKeyRef.current) {
+      return;
+    }
+
+    const nextFocusedElement = dayButtonRefs.current.get(pendingFocusKeyRef.current);
+    nextFocusedElement?.focus();
+    pendingFocusKeyRef.current = null;
+  }, [months]);
+
+  const headerLabel = useMemo(() => buildHeaderLabel(locale, monthDates), [locale, monthDates]);
+  const calendarLabel = `${localizedText.calendarGrid}: ${headerLabel}`;
+
+  const pickerYears = useMemo(() => {
+    const currentYear = currentDate.getFullYear();
+    const lowerBound = normalizedMinDate?.getFullYear() ?? currentYear - 6;
+    const upperBound = normalizedMaxDate?.getFullYear() ?? currentYear + 6;
+    const startYear = Math.max(lowerBound, currentYear - 5);
+    const endYear = Math.min(upperBound, startYear + 11);
+    const adjustedStartYear = Math.max(lowerBound, endYear - 11);
+
+    return Array.from({ length: endYear - adjustedStartYear + 1 }, (_, index) => adjustedStartYear + index);
+  }, [currentDate, normalizedMaxDate, normalizedMinDate]);
+
+  const pickerMonthOptions = useMemo<PickerOption[]>(() => {
+    const tone = calendarColorTones[color];
+
+    return Array.from({ length: 12 }, (_, monthIndex) => {
+      const monthDate = new Date(currentDate.getFullYear(), monthIndex, 1);
+      const selected = currentDate.getMonth() === monthIndex;
+      const monthDisabled = isMonthOutsideRange(
+        monthDate,
+        normalizedMinDate ?? undefined,
+        normalizedMaxDate ?? undefined
+      );
+      const label = new Intl.DateTimeFormat(locale, { month: 'long' }).format(monthDate);
+
+      return {
+        key: `${monthIndex}`,
+        label,
+        ariaLabel: label,
+        className: cn(
+          calendarPickerOptionVariants({ size, selected, disabled: monthDisabled }),
+          selected ? tone.pickerSelected : tone.pickerHover
+        ),
+        props: {
+          type: 'button',
+          disabled: monthDisabled,
+          'aria-pressed': selected,
+          'aria-label': label,
+          onClick: () => {
+            const nextDate = createDate(currentDate.getFullYear(), monthIndex, currentDate.getDate());
+            alignCurrentDateToFocus(nextDate);
+            setIsPickerOpen(false);
+          }
+        }
+      };
+    });
+  }, [color, currentDate, locale, normalizedMaxDate, normalizedMinDate, size]);
+
+  const pickerYearOptions = useMemo<PickerOption[]>(() => {
+    const tone = calendarColorTones[color];
+
+    return pickerYears.map((year) => {
+      const selected = currentDate.getFullYear() === year;
+      const monthDate = new Date(year, currentDate.getMonth(), 1);
+      const yearDisabled = isMonthOutsideRange(
+        monthDate,
+        normalizedMinDate ?? undefined,
+        normalizedMaxDate ?? undefined
+      );
+
+      return {
+        key: `${year}`,
+        label: `${year}`,
+        ariaLabel: `${year}`,
+        className: cn(
+          calendarPickerOptionVariants({ size, selected, disabled: yearDisabled }),
+          selected ? tone.pickerSelected : tone.pickerHover
+        ),
+        props: {
+          type: 'button',
+          disabled: yearDisabled,
+          'aria-pressed': selected,
+          'aria-label': `${year}`,
+          onClick: () => {
+            const nextDate = createDate(year, currentDate.getMonth(), currentDate.getDate());
+            alignCurrentDateToFocus(nextDate);
+            setIsPickerOpen(false);
+          }
+        }
+      };
+    });
+  }, [color, currentDate, normalizedMaxDate, normalizedMinDate, pickerYears, size]);
+
+  useEffect(() => {
+    if (isPickerOpen) {
+      pickerCloseButtonRef.current?.focus();
+    }
+  }, [isPickerOpen]);
+
+  const handlePickerKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Escape') {
+      return;
+    }
+
+    event.preventDefault();
+    closePicker();
+  };
+
+  const monthPickerLabel = localizedText.months;
+  const yearsLabel = localizedText.years;
+  const isNavigationDisabled = disabled || readOnly;
 
   return {
-    monthDatas,
-    weekdayNames,
-    monthNames,
-    currentDate,
-    setCurrentDate,
-    currentCalendarDate,
-    selectedDate: Array.isArray(initialSelectedDate) ? null : selectedDate,
-    selectedRange: Array.isArray(initialSelectedDate) ? selectedRange : [null, null],
-    isSameDay,
-    getStartDayOfMonth,
-    groupDaysIntoWeeks,
-    handleDayClick,
-    goToPrevMonth,
-    goToNextMonth,
-    onDateChange,
-    disabledDates
+    isVisible: show,
+    themeClassName: theme === 'dark' ? 'dark' : '',
+    calendarClassName: calendarVariants({ variant, size, radius, disabled, readOnly }),
+    calendarGridClassName: calendarGridVariants({ size }),
+    calendarLabel,
+    headerClassName: calendarHeaderVariants({ size }),
+    headerLabel,
+    liveRegionLabel: headerLabel,
+    monthHeadingClassName: calendarMonthHeadingVariants({ size }),
+    monthPickerLabel,
+    monthSectionClassName: calendarMonthSectionVariants({ size }),
+    monthsLayoutClassName: calendarMonthsLayoutVariants({ size }),
+    navigationIconClassName: calendarNavigationIconVariants({ size }),
+    yearsLabel,
+    weekRowClassName: calendarWeekRowVariants({ size }),
+    weekdayClassName: calendarWeekdayVariants({ size }),
+    weekdayHeaders,
+    months,
+    isPickerOpen,
+    pickerDialogProps: {
+      role: 'dialog',
+      'aria-modal': 'false',
+      'aria-label': localizedText.chooseMonthAndYear,
+      className: calendarPickerVariants({ size }),
+      onKeyDown: handlePickerKeyDown
+    },
+    pickerHeaderClassName: calendarPickerHeaderVariants({ size }),
+    pickerHeaderContentClassName: calendarPickerHeaderContentVariants({ size }),
+    pickerHeadingClassName: calendarPickerHeadingVariants({ size }),
+    pickerMetaClassName: calendarPickerMetaVariants({ size }),
+    pickerOptionsGridClassName: calendarPickerOptionsGridVariants({ size }),
+    pickerPanelsClassName: calendarPickerPanelsVariants({ size }),
+    pickerSectionClassName: calendarPickerSectionVariants({ size }),
+    previousButtonProps: {
+      type: 'button',
+      disabled: isNavigationDisabled,
+      'aria-label': localizedText.previousMonth,
+      className: calendarIconButtonVariants({ size, disabled: isNavigationDisabled }),
+      onClick: goToPreviousMonth
+    },
+    nextButtonProps: {
+      type: 'button',
+      disabled: isNavigationDisabled,
+      'aria-label': localizedText.nextMonth,
+      className: calendarIconButtonVariants({ size, disabled: isNavigationDisabled }),
+      onClick: goToNextMonth
+    },
+    togglePickerButtonProps: {
+      type: 'button',
+      disabled: isNavigationDisabled,
+      'aria-expanded': isPickerOpen,
+      'aria-haspopup': 'dialog',
+      'aria-label': localizedText.chooseMonthAndYear,
+      className: calendarTriggerButtonVariants({ size, disabled: isNavigationDisabled }),
+      onClick: () => {
+        if (isNavigationDisabled) {
+          return;
+        }
+
+        if (isPickerOpen) {
+          closePicker();
+          return;
+        }
+
+        setIsPickerOpen(true);
+      },
+      ref: (element) => {
+        togglePickerButtonRef.current = element;
+      }
+    },
+    pickerCloseButtonProps: {
+      type: 'button',
+      'aria-label': localizedText.backToCalendar,
+      className: calendarTriggerButtonVariants({ size, disabled: false }),
+      onClick: closePicker,
+      ref: (element) => {
+        pickerCloseButtonRef.current = element;
+      }
+    },
+    pickerMonthOptions,
+    pickerYearOptions
   };
 };

@@ -1,55 +1,46 @@
-import { cn } from '@/lib/utils';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import type { ComponentProps, FC } from 'react';
+import type { FC } from 'react';
 import type { AvatarProps } from './types';
 import { useAvatar } from './useAvatar';
 
-function AvatarContainer({ className, ...props }: ComponentProps<typeof AvatarPrimitive.Root>) {
-  return (
+export const Avatar: FC<AvatarProps> = (props) => {
+  const { src, alt, imageAlt, fallback, className, interactive, handleClick, disabled, type, ...rootProps } =
+    useAvatar(props);
+
+  const content = (
+    <>
+      <AvatarPrimitive.Image data-slot='avatar-image' className='aspect-square size-full' src={src} alt={imageAlt} />
+      <AvatarPrimitive.Fallback data-slot='avatar-fallback' className='flex size-full items-center justify-center'>
+        {fallback}
+      </AvatarPrimitive.Fallback>
+    </>
+  );
+
+  return interactive ? (
+    <AvatarPrimitive.Root asChild={true}>
+      <button
+        data-slot='avatar'
+        data-interactive={true}
+        className={className}
+        type={type}
+        aria-label={alt}
+        onClick={handleClick}
+        disabled={disabled}
+        {...rootProps}
+      >
+        {content}
+      </button>
+    </AvatarPrimitive.Root>
+  ) : (
     <AvatarPrimitive.Root
       data-slot='avatar'
-      className={cn('relative flex size-8 shrink-0 overflow-hidden rounded-full', className)}
-      {...props}
-    />
-  );
-}
-
-function AvatarImage({ className, ...props }: ComponentProps<typeof AvatarPrimitive.Image>) {
-  return (
-    <AvatarPrimitive.Image data-slot='avatar-image' className={cn('aspect-square size-full', className)} {...props} />
-  );
-}
-
-function AvatarFallback({ className, ...props }: ComponentProps<typeof AvatarPrimitive.Fallback>) {
-  return (
-    <AvatarPrimitive.Fallback
-      data-slot='avatar-fallback'
-      className={cn('bg-muted flex size-full items-center justify-center rounded-full', className)}
-      {...props}
-    />
-  );
-}
-
-const Avatar: FC<AvatarProps> = ({ ...props }) => {
-  const { src, alt, sizeClass, className, textClass, roundedClass } = useAvatar({ ...props });
-
-  return (
-    <AvatarContainer
-      className={cn(
-        'dark:bg-gray-700 flex items-center justify-center shadow-sm shadow-gray-light-800 dark:shadow-gray-dark-800',
-        roundedClass,
-        className
-      )}
-      style={{ width: sizeClass, height: sizeClass }}
+      data-interactive={false}
+      className={className}
       role='img'
       aria-label={alt}
+      {...rootProps}
     >
-      <AvatarImage src={src} style={{ width: sizeClass, height: sizeClass }} alt={alt} />
-      <AvatarFallback
-        className={cn('text-text-light dark:text-text-dark leading-[1.2] pt-[0.2em]', textClass)}
-      ></AvatarFallback>
-    </AvatarContainer>
+      {content}
+    </AvatarPrimitive.Root>
   );
 };
-
-export default Avatar;

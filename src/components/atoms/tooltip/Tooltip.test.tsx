@@ -83,7 +83,10 @@ describe('Tooltip — component behavior', () => {
     );
 
     const trigger = screen.getByRole('button', { name: 'Focus me' });
-    trigger.focus();
+
+    act(() => {
+      trigger.focus();
+    });
 
     expect(await screen.findByRole('tooltip')).toHaveTextContent('Focus tooltip');
   });

@@ -1,63 +1,130 @@
 @theme {
-  /* Global styles */
-  --color-primary: #830213; /* rgba(131, 2, 19, 1); */
-  --color-secondary: #b41520; /* rgba(180, 21, 32, 1); */
-  --color-accent: #d61e2b; /* rgba(214, 30, 43, 1); */
-  --color-red-100: #fce9ea; /* rgba(252, 233, 234, 1); */
-  --color-red-200: #f6bcc0; /* rgba(246, 188, 192, 1); */
-  --color-red-300: #ef8f96; /* rgba(239, 143, 150, 1); */
-  --color-red-400: #e64c57; /* rgba(230, 76, 87, 1); */
-  --color-red-500: #d61e2b; /* rgba(214, 30, 43, 1); */
-  --color-red-600: #9d161f; /* rgba(157, 22, 31, 1); */
-  --color-red-700: #701016; /* rgba(112, 16, 22, 1); */
-  --color-red-800: #510b10; /* rgba(81, 11, 16, 1); */
-  --color-red-900: #2d0609; /* rgba(45, 6, 9, 1); */
-  /* Dark mode */
-  --color-background-dark: #0e0e10; /* rgba(14, 14, 16, 1); */
-  --color-text-dark: #ffffff; /* rgba(255, 255, 255, 1); */
-  --color-secondary-dark: #9fa3ad; /* rgba(159, 163, 173, 1); */
-  --gradient-background-dark: linear-gradient(
-    130deg,
-    rgba(14, 14, 16, 1) 0%,
-    rgba(21, 22, 27, 1) 50%,
-    rgba(14, 14, 16, 1) 100%
-  );
-  --color-gray-dark-100: #e5e7eb; /* rgba(229, 231, 235, 1); */
-  --color-gray-dark-200: #c2c5cc; /* rgba(194, 197, 204, 1); */
-  --color-gray-dark-300: #9fa3ad; /* rgba(159, 163, 173, 1); */
-  --color-gray-dark-400: #7c818f; /* rgba(124, 129, 143, 1); */
-  --color-gray-dark-500: #595f70; /* rgba(89, 95, 112, 1); */
-  --color-gray-dark-600: #3b3f4e; /* rgba(59, 63, 78, 1); */
-  --color-gray-dark-700: #24252f; /* rgba(36, 37, 47, 1); */
-  --color-gray-dark-800: #15161b; /* rgba(21, 22, 27, 1); */
-  --color-gray-dark-900: #0e0e10; /* rgba(14, 14, 16, 1); */
-  /* Light theme */
-  --color-background-light: #f4f5f7; /* rgba(244, 245, 247, 1); */
-  --color-text-light: #18191e; /* rgba(24, 25, 30, 1); */
-  --color-secondary-light: #7c818f; /* rgba(124, 129, 143, 1); */
-  --gradient-background-light: linear-gradient(
-    130deg,
-    rgba(212, 214, 220, 1) 0%,
-    rgba(229, 231, 235, 1) 50%,
-    rgba(212, 214, 220, 1) 100%
-  );
-  --color-gray-light-100: #f9fafa; /* rgba(249, 250, 250, 1); */
-  --color-gray-light-200: #f1f3f5; /* rgba(241, 243, 245, 1); */
-  --color-gray-light-300: #e5e7eb; /* rgba(229, 231, 235, 1); */
-  --color-gray-light-400: #d4d6dc; /* rgba(212, 214, 220, 1); */
-  --color-gray-light-500: #bfc2ca; /* rgba(191, 194, 202, 1); */
-  --color-gray-light-600: #a3a6af; /* rgba(163, 166, 175, 1); */
-  --color-gray-light-700: #878a94; /* rgba(135, 138, 148, 1); */
-  --color-gray-light-800: #6b6e78; /* rgba(107, 110, 120, 1); */
-  --color-gray-light-900: #4f525c; /* rgba(79, 82, 92, 1); */
-  /* Shadow */
-  --shadow-custom-sm: 0px 0px 16px -1px rgba(180, 21, 32, 1);
-  --shadow-custom-md: 0px 0px 16px 4px rgba(180, 21, 32, 1);
-  --shadow-custom-lg: 0px 0px 30px 10px rgba(180, 21, 32, 1);
-  /* Colors */
-  --color-orange: #f97316;
-  --color-orange-light: #fda65c;
-  --color-orange-dark: #d94e08;
+  /* ════════════════════════════════════════════════════════════════
+     STACK-AND-FLOW DESIGN SYSTEM — Theme Tokens
+     Reference: docs/DESIGN.md
+  ════════════════════════════════════════════════════════════════ */
+
+  /* ── Brand — Crimson Red ─────────────────────────────────────── */
+  /* Light mode: sobrio y accesible sobre blanco                   */
+  --color-brand-light: #db143c;
+  --color-brand-light-dark: #c41136;
+  --color-brand-light-darker: #b60f32;
+  --color-brand-light-darkest: #8c0b26;
+  --color-brand-light-light: #e63358;
+  --color-brand-light-lighter: #ea4566;
+  --color-brand-light-lightest: #f07a92;
+
+  /* Dark mode: vibrante para salir sobre negro absoluto           */
+  --color-brand-dark: #ff0036;
+  --color-brand-dark-dark: #e60030;
+  --color-brand-dark-darker: #cc002b;
+  --color-brand-dark-darkest: #990020;
+  --color-brand-dark-light: #ff335e;
+  --color-brand-dark-lighter: #ff4d72;
+  --color-brand-dark-lightest: #ff809b;
+
+  /* Aliases semánticos (usar estos en los componentes)            */
+  --color-primary: #db143c; /* light default */
+  --color-primary-hover: #b60f32;
+  --color-primary-active: #8c0b26;
+
+  /* Red scale utilitaria */
+  --color-red-100: #fce9ea;
+  --color-red-200: #f6bcc0;
+  --color-red-300: #ef8f96;
+  --color-red-400: #ff4d72;
+  --color-red-500: #ff0036;
+  --color-red-600: #db143c;
+  --color-red-700: #b41520;
+  --color-red-800: #8c0b26;
+  --color-red-900: #4d0012;
+
+  /* ── Fondos y Superficies — Dark ────────────────────────────── */
+  /* Paleta azul-slate: H215 S50 — tinte frío perceptible, accesible con #FF0036  */
+  --color-background-dark: #060c13; /* Canvas base — azul-slate profundo   */
+  --color-surface-dark: #0b131e; /* Cards sólidas, code blocks, dropdowns */
+  --color-surface-raised-dark: #0f1824; /* Headers de tabla, énfasis sutil     */
+  --color-border-dark: #172230; /* Borde estándar                      */
+  --color-border-strong-dark: #202c3c; /* Borde interactivo                   */
+
+  /* Fondos especiales con transparencia — dark */
+  --color-navbar-dark: rgba(6, 12, 19, 0.75);
+  --color-sidebar-mobile-dark: rgba(6, 12, 19, 1);
+  --color-overlay-dark: rgba(0, 0, 0, 0.6);
+
+  /* ── Fondos y Superficies — Light ───────────────────────────── */
+  --color-background-light: #ffffff; /* Canvas base — blanco puro */
+  --color-surface-light: #f4f5f7; /* Cards y contenedores elevados */
+  --color-surface-raised-light: #eaecf0; /* Superficies más elevadas */
+  --color-border-light: rgba(0, 0, 0, 0.1); /* Borde estándar */
+  --color-border-strong-light: rgba(0, 0, 0, 0.18); /* Borde interactivo */
+
+  /* Fondos especiales con transparencia — light */
+  --color-navbar-light: rgba(255, 255, 255, 0.7);
+  --color-sidebar-mobile-light: #ffffff;
+
+  /* ── Texto — Dark ────────────────────────────────────────────── */
+  --color-text-dark: #ffffff; /* Primario — 21:1 sobre #000 */
+  --color-text-secondary-dark: #cccccc; /* Secundario — ~7:1 */
+  --color-text-tertiary-dark: #888888; /* Terciario — ~5.3:1 */
+  --color-text-muted-dark: #adadad; /* Sidebar links — ~6.3:1 */
+  --color-text-disabled-dark: #6a6b6c; /* Disabled — ~4.5:1 */
+
+  /* ── Texto — Light ───────────────────────────────────────────── */
+  --color-text-light: #0a0a0a; /* Primario — máximo contraste */
+  --color-text-secondary-light: #3b3f4e; /* Secundario */
+  --color-text-tertiary-light: #6b6e78; /* Terciario */
+  --color-text-muted-light: #878a94; /* Muted / placeholders */
+  --color-text-disabled-light: #bfc2ca; /* Disabled */
+
+  /* ── Transparencias funcionales ──────────────────────────────── */
+  /* Tints de acento — usados en estados activos, hovers, overlays */
+  --color-red-tint-subtle: rgba(255, 0, 54, 0.06); /* Fondo botón secondary */
+  --color-red-tint-low: rgba(255, 0, 54, 0.08); /* Menu item activo */
+  --color-red-tint-mid: rgba(255, 0, 54, 0.1); /* Menu item activo fuerte */
+  --color-red-tint-active: rgba(255, 0, 54, 0.16); /* Active state botón secondary */
+  --color-red-tint-high: rgba(255, 0, 54, 0.15); /* Glow base / code highlight */
+  --color-red-tint-strong: rgba(255, 0, 54, 0.3); /* Glow activo */
+  --color-red-tint-border: rgba(255, 0, 54, 0.5); /* Borde neon botón secondary (light) */
+  --color-spinner-track: rgba(45, 6, 9, 0.2); /* Spinner secondary track */
+
+  /* Tints de superficie — blancos y negros semitransparentes */
+  --color-white-tint-faint: rgba(255, 255, 255, 0.05); /* Hover bg sutil */
+  --color-white-tint-low: rgba(255, 255, 255, 0.06); /* Borde card faint */
+  --color-white-tint-mid: rgba(255, 255, 255, 0.07); /* Hover bg medium */
+  --color-white-tint-high: rgba(255, 255, 255, 0.1); /* Borde interactivo */
+  --color-white-tint-strong: rgba(255, 255, 255, 0.15); /* Inset highlight button */
+  --color-white-tint-heavy: rgba(255, 255, 255, 0.25); /* Inset highlight strong */
+
+  --color-black-tint-low: rgba(0, 0, 0, 0.2); /* Overlay ligero */
+  --color-black-tint-mid: rgba(0, 0, 0, 0.4); /* Overlay ligero */
+  --color-black-tint-heavy: rgba(0, 0, 0, 0.6); /* Overlay backdrop */
+
+  /* Tint ámbar — GitHub stars badge */
+  --color-amber-tint-low: rgba(255, 185, 0, 0.07);
+  --color-amber-tint-mid: rgba(255, 185, 0, 0.12);
+  --color-amber-tint-high: rgba(255, 185, 0, 0.14);
+
+  /* ── Colores semánticos ──────────────────────────────────────── */
+  --color-success: #22c55e; /* Dark */
+  --color-success-light: #16a34a; /* Light */
+  --color-success-dark: #138a3d;
+  --color-success-tint: rgba(34, 197, 94, 0.12);
+
+  --color-warning: #fbbf24; /* Dark */
+  --color-warning-light: #d97706; /* Light */
+  --color-warning-dark: #b58903;
+  --color-warning-tint: rgba(251, 191, 36, 0.12);
+
+  --color-error: #ff0036; /* Dark — igual que brand en dark */
+  --color-error-light: #db143c; /* Light */
+  --color-error-tint: rgba(255, 0, 54, 0.12);
+
+  --color-info: #3b82f6;
+  --color-info-light: #1d4ed8;
+  --color-info-tint: rgba(59, 130, 246, 0.12);
+
+  /* ── Colores de utilidad (paleta extendida) ──────────────────── */
   --color-yellow: #eab308;
   --color-yellow-light: #fde047;
   --color-yellow-dark: #b58903;
@@ -79,41 +146,376 @@
   --color-pink: #ec4899;
   --color-pink-light: #fda4cf;
   --color-pink-dark: #be185d;
-  /* Spacing */
-  --spacing-xxs: 0.25rem;
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 0.75rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  /* Tipografía */
-  --font-primary: "WildWolf";
-  --font-secondary: "Univia";
-  --font-secondary-bold: "UniviaBold";
-  --text-h1: 3rem;
-  --text-h2: 2.5rem;
-  --text-h3: 2rem;
-  --text-h4: 1.6rem;
-  --text-h5: 1.3rem;
-  --text-h6: 1.2rem;
-  --text-base: 1rem;
-  --text-small: 0.8rem;
-  --text-h1-tablet: 2.4rem;
-  --text-h2-tablet: 2rem;
-  --text-h3-tablet: 1.8rem;
-  --text-h4-tablet: 1.4rem;
-  --text-h5-tablet: 1.2rem;
-  --text-h6-tablet: 1rem;
-  --text-base-tablet: 0.875rem;
-  --text-small-tablet: 0.7rem;
-  /* Animations */
+  --color-orange: #f97316;
+  --color-orange-light: #fda65c;
+  --color-orange-dark: #d94e08;
+
+  /* ── Amber / Stars ───────────────────────────────────────────── */
+  --color-amber: #fbbf24;
+  --color-amber-hover: #ffd700;
+
+  /* ── Chip sizing tokens ───────────────────────────────────────── */
+  --size-chip-avatar-sm: 18px;
+  --size-chip-avatar-md: 22px;
+  --size-chip-avatar-lg: 26px;
+
+  /* ── Glow / Shadow ───────────────────────────────────────────── */
+  --glow-base: 0 4px 20px rgba(219, 20, 60, 0.15); /* Light */
+  --glow-active: 0 8px 30px rgba(219, 20, 60, 0.3); /* Light */
+  --glow-base-dark: 0 4px 20px rgba(255, 0, 54, 0.15); /* Dark */
+  --glow-active-dark: 0 8px 30px rgba(255, 0, 54, 0.3); /* Dark */
+
+  /* Glow de botón primary — Dark: neon multi-capa */
+  --glow-btn-primary:
+    0 0 0 1.5px rgba(255, 60, 90, 0.5), 0 0 16px 4px rgba(255, 0, 54, 0.45), 0 0 40px 6px rgba(255, 0, 54, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --glow-btn-primary-hover:
+    0 0 0 1.5px rgba(255, 80, 110, 0.7), 0 0 22px 4px rgba(255, 0, 54, 0.65), 0 0 55px 8px rgba(255, 0, 54, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  /* Glow de botón primary — Light: sombra suave, sin neon */
+  --glow-btn-primary-light:
+    0 2px 8px rgba(219, 20, 60, 0.22), 0 1px 3px rgba(219, 20, 60, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --glow-btn-primary-hover-light:
+    0 4px 14px rgba(219, 20, 60, 0.32), 0 2px 6px rgba(219, 20, 60, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  /* Glow de botón secondary — Dark: border neon ring + glow exterior + glow interior */
+  --glow-btn-secondary:
+    0 0 0 1px rgba(255, 0, 54, 0.7), 0 0 8px 2px rgba(255, 0, 54, 0.35), 0 0 20px 4px rgba(255, 0, 54, 0.12),
+    inset 0 0 18px 2px rgba(255, 0, 54, 0.12);
+  --glow-btn-secondary-hover:
+    0 0 0 1.5px rgba(255, 40, 80, 0.9), 0 0 14px 4px rgba(255, 0, 54, 0.6), 0 0 32px 8px rgba(255, 0, 54, 0.22),
+    inset 0 0 24px 4px rgba(255, 0, 54, 0.2);
+
+  /* Glow de botón secondary — Light: borde sutil + sombra suave */
+  --glow-btn-secondary-light: 0 0 0 1px rgba(219, 20, 60, 0.35), 0 2px 8px rgba(219, 20, 60, 0.12);
+  --glow-btn-secondary-hover-light: 0 0 0 1px rgba(219, 20, 60, 0.55), 0 4px 12px rgba(219, 20, 60, 0.18);
+
+  /* Glow de chip shadow variants */
+  --glow-chip-primary-light:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-primary) 26%, transparent);
+  --glow-chip-primary-hover-light:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-primary) 34%, transparent);
+  --glow-chip-primary:
+    0 1px 2px rgba(0, 0, 0, 0.28), 0 3px 9px color-mix(in srgb, var(--color-primary) 22%, transparent);
+  --glow-chip-primary-hover:
+    0 2px 4px rgba(0, 0, 0, 0.32), 0 5px 12px color-mix(in srgb, var(--color-primary) 30%, transparent);
+
+  --glow-chip-secondary-light:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-surface-raised-light) 24%, transparent);
+  --glow-chip-secondary-hover-light:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-surface-raised-light) 32%, transparent);
+  --glow-chip-secondary:
+    0 1px 2px rgba(0, 0, 0, 0.28), 0 3px 9px color-mix(in srgb, var(--color-surface-raised-dark) 28%, transparent);
+  --glow-chip-secondary-hover:
+    0 2px 4px rgba(0, 0, 0, 0.32), 0 5px 12px color-mix(in srgb, var(--color-surface-raised-dark) 36%, transparent);
+
+  --glow-chip-success: 0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-green) 24%, transparent);
+  --glow-chip-success-hover:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-green) 32%, transparent);
+
+  --glow-chip-warning:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-yellow) 24%, transparent);
+  --glow-chip-warning-hover:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-yellow) 32%, transparent);
+
+  --glow-chip-danger:
+    0 1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px color-mix(in srgb, var(--color-red-600) 28%, transparent);
+  --glow-chip-danger-hover:
+    0 2px 4px rgba(0, 0, 0, 0.14), 0 5px 12px color-mix(in srgb, var(--color-red-600) 36%, transparent);
+
+  /* Tailwind shadow utility aliases — shadow-glow-* classes */
+  --shadow-glow-btn-primary: var(--glow-btn-primary);
+  --shadow-glow-btn-primary-hover: var(--glow-btn-primary-hover);
+  --shadow-glow-btn-primary-light: var(--glow-btn-primary-light);
+  --shadow-glow-btn-primary-hover-light: var(--glow-btn-primary-hover-light);
+  --shadow-glow-btn-secondary: var(--glow-btn-secondary);
+  --shadow-glow-btn-secondary-hover: var(--glow-btn-secondary-hover);
+  --shadow-glow-btn-secondary-light: var(--glow-btn-secondary-light);
+  --shadow-glow-btn-secondary-hover-light: var(--glow-btn-secondary-hover-light);
+  --shadow-glow-chip-primary: var(--glow-chip-primary);
+  --shadow-glow-chip-primary-hover: var(--glow-chip-primary-hover);
+  --shadow-glow-chip-primary-light: var(--glow-chip-primary-light);
+  --shadow-glow-chip-primary-hover-light: var(--glow-chip-primary-hover-light);
+  --shadow-glow-chip-secondary: var(--glow-chip-secondary);
+  --shadow-glow-chip-secondary-hover: var(--glow-chip-secondary-hover);
+  --shadow-glow-chip-secondary-light: var(--glow-chip-secondary-light);
+  --shadow-glow-chip-secondary-hover-light: var(--glow-chip-secondary-hover-light);
+  --shadow-glow-chip-success: var(--glow-chip-success);
+  --shadow-glow-chip-success-hover: var(--glow-chip-success-hover);
+  --shadow-glow-chip-warning: var(--glow-chip-warning);
+  --shadow-glow-chip-warning-hover: var(--glow-chip-warning-hover);
+  --shadow-glow-chip-danger: var(--glow-chip-danger);
+  --shadow-glow-chip-danger-hover: var(--glow-chip-danger-hover);
+
+  /* Glow de focus ring */
+  --glow-focus-dark: 0 0 0 3px rgba(255, 0, 54, 0.4);
+  --glow-focus-light: 0 0 0 3px rgba(219, 20, 60, 0.35);
+  --shadow-glow-focus-dark: var(--glow-focus-dark);
+  --shadow-glow-focus-light: var(--glow-focus-light);
+
+  /* Glow de input — softer than button focus rings */
+  --glow-input-focus: 0 0 0 3px rgba(255, 0, 54, 0.12);
+  --glow-input-focus-light: 0 0 0 3px rgba(219, 20, 60, 0.15);
+  --glow-input-error: 0 0 0 3px rgba(255, 0, 54, 0.15);
+  --glow-input-error-light: 0 0 0 3px rgba(219, 20, 60, 0.15);
+  --glow-input-warning: 0 0 0 3px rgba(251, 191, 36, 0.12);
+  --glow-input-warning-light: 0 0 0 3px rgba(217, 119, 6, 0.15);
+  --glow-input-success: 0 0 0 3px rgba(34, 197, 94, 0.12);
+  --glow-input-success-light: 0 0 0 3px rgba(22, 163, 74, 0.15);
+  --shadow-glow-input-focus: var(--glow-input-focus);
+  --shadow-glow-input-focus-light: var(--glow-input-focus-light);
+  --shadow-glow-input-error: var(--glow-input-error);
+  --shadow-glow-input-error-light: var(--glow-input-error-light);
+  --shadow-glow-input-warning: var(--glow-input-warning);
+  --shadow-glow-input-warning-light: var(--glow-input-warning-light);
+  --shadow-glow-input-success: var(--glow-input-success);
+  --shadow-glow-input-success-light: var(--glow-input-success-light);
+
+  /* Glow ámbar — GitHub stars */
+  --glow-amber: 0 0 0 3px rgba(255, 185, 0, 0.12);
+
+  /* Sombra dropdown */
+  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-dropdown-light: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* ── Gradientes ──────────────────────────────────────────────── */
+  /* Namespace --background-image-* → genera utilidades bg-* en Tailwind v4 */
+
+  /* Botón primary → bg-btn-primary / bg-btn-primary-hover / bg-btn-primary-active */
+  --background-image-btn-primary: linear-gradient(135deg, #ff1a4b 0%, #cc0030 100%);
+  --background-image-btn-primary-hover: linear-gradient(135deg, #ff3366 0%, #e0003a 100%);
+  --background-image-btn-primary-active: linear-gradient(135deg, #cc0030 0%, #990020 100%);
+
+  /* Fondos de página → bg-page-dark / bg-page-light */
+  --background-image-page-dark: linear-gradient(
+    130deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(10, 10, 10, 1) 50%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  --background-image-page-light: linear-gradient(
+    130deg,
+    rgba(244, 245, 247, 1) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(244, 245, 247, 1) 100%
+  );
+
+  /* Grid de fondo — canvas técnico → bg-grid-dark / bg-grid-light */
+  --background-image-grid-dark:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px;
+  --background-image-grid-light:
+    linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px) 0 0 / 40px 40px;
+
+  /* ── Tipografía ──────────────────────────────────────────────── */
+  --font-primary: "Space Grotesk Variable", "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Roboto Mono", Menlo, Monaco, monospace;
+
+  /* Pesos */
+  --font-weight-regular: 300;
+  --font-weight-medium: 400; /* baseline de body */
+  --font-weight-semibold: 600; /* botones, badges, labels */
+  --font-weight-bold: 700; /* headings h1–h6 */
+
+  /* Tamaños — escala fluida */
+  --text-display: 3.5rem; /* 56px — Display Hero landing */
+  --text-h1: 3rem; /* 48px */
+  --text-h2: 2.5rem; /* 40px */
+  --text-h3: 2rem; /* 32px */
+  --text-h4: 1.5rem; /* 24px */
+  --text-h5: 1.25rem; /* 20px */
+  --text-h6: 1.125rem; /* 18px */
+  --text-body-lg: 1.125rem; /* 18px — párrafos prominentes */
+  --text-body: 1rem; /* 16px — texto principal */
+  --text-body-sm: 0.9375rem; /* 15px */
+  --text-small: 0.875rem; /* 14px — captions, labels */
+  --text-xs: 0.75rem; /* 12px — badges, tags micro */
+  --text-badge-sm: 0.625rem; /* 10px — badge compacto */
+  --text-code: 93%; /* relativo — code blocks */
+
+  /* Tamaños compactos (base < md) */
+  --text-display-compact: 2.75rem;
+  --text-h1-compact: 2.4rem;
+  --text-h2-compact: 2rem;
+  --text-h3-compact: 1.75rem;
+  --text-h4-compact: 1.375rem;
+  --text-h5-compact: 1.125rem;
+  --text-h6-compact: 1rem;
+  --text-body-compact: 0.9375rem;
+  --text-small-compact: 0.8125rem;
+
+  /* Line heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.15;
+  --leading-normal: 1.4;
+  --leading-relaxed: 1.6;
+
+  /* Letter spacing */
+  --tracking-tight: 0px;
+  --tracking-normal: 0.1px;
+  --tracking-wide: 0.2px;
+  --tracking-wider: 0.3px;
+  --tracking-ui: 0.01em; /* botones, nav links */
+  --tracking-badge: 0.02em; /* badges, micro labels */
+
+  /* ── Border radius ───────────────────────────────────────────── */
+  --radius-xs: 4px; /* Badges micro, "New" labels */
+  --radius-sm: 6px; /* Dropdown items, menú links */
+  --radius-md: 8px; /* Cards, inputs, code blocks, botones secondary */
+  --radius-lg: 12px; /* Cards grandes, pagination */
+  --radius-pill: 9999px; /* Botones CTA — pill shape */
+
+  /* ── Espaciado ───────────────────────────────────────────────── */
+  /* Escala base 8px */
+  --spacing-px: 1px;
+  --spacing-0-5: 0.125rem; /* 2px */
+  --spacing-0-75: 0.1875rem; /* 3px */
+  --spacing-1: 0.25rem; /* 4px */
+  --spacing-1-25: 0.3125rem; /* 5px */
+  --spacing-1-5: 0.375rem; /* 6px */
+  --spacing-2: 0.5rem; /* 8px — unidad base */
+  --spacing-2-5: 0.625rem; /* 10px */
+  --spacing-3: 0.75rem; /* 12px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-4-5: 1.125rem; /* 18px */
+  --spacing-5: 1.25rem; /* 20px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-8: 2rem; /* 32px */
+  --spacing-10: 2.5rem; /* 40px */
+  --spacing-12: 3rem; /* 48px */
+  --spacing-16: 4rem; /* 64px */
+  --spacing-20: 5rem; /* 80px */
+  --spacing-24: 6rem; /* 96px */
+  --spacing-30: 7.5rem; /* 120px — padding sección */
+
+  /* Aliases semánticos de espaciado */
+  --spacing-xxs: 0.25rem; /* 4px */
+  --spacing-xs: 0.5rem; /* 8px */
+  --spacing-sm: 0.75rem; /* 12px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+  --spacing-3xl: 5rem; /* 80px */
+
+  /* ── Modal sizing ────────────────────────────────────────────── */
+  --size-modal-viewport: calc(100vw - var(--spacing-8));
+  --size-modal-xs: 20rem;
+  --size-modal-sm: 24rem;
+  --size-modal-md: 28rem;
+  --size-modal-lg: 32rem;
+  --size-modal-xl: 36rem;
+  --size-modal-2xl: 42rem;
+  --size-modal-3xl: 48rem;
+  --size-modal-4xl: 56rem;
+  --size-modal-5xl: 64rem;
+
+  /* ── Transiciones ────────────────────────────────────────────── */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease;
+  --transition-slow: 300ms ease-in-out;
+  --transition-enter: 560ms cubic-bezier(0.2, 0.8, 0.2, 1); /* fade-in sections */
+
+  /* Propiedades de transición comunes */
+  --transition-btn: box-shadow 250ms ease, background 250ms ease;
+  --transition-link: color 200ms ease;
+  --transition-border: border-color 200ms ease, box-shadow 200ms ease;
+
+  /* ── Animaciones ─────────────────────────────────────────────── */
   --animate-fadeIn: fadeIn 400ms ease-in-out;
   --animate-fadeOut: fadeOut 400ms ease-in-out;
-  --animate-rotation-360-reverse: rotation-360 1s linear infinite reverse;
   --animate-rotation-360: rotation-360 1s linear infinite;
+  --animate-rotation-360-reverse: rotation-360 1s linear infinite reverse;
   --animate-badgeIn: badgeIn 0.25s ease-out forwards;
   --animate-badgeOut: badgeOut 0.3s ease-in-out forwards;
   --animate-badgePing: badgePing 1.3s cubic-bezier(1, 0, 0.4, 1) infinite;
+
+  /* ── Backdrop blur ───────────────────────────────────────────── */
+  --blur-navbar: blur(16px); /* Navbar, sidebars flotantes */
+  --blur-overlay: blur(4px); /* Backdrop de modal */
+
+  /* ── Z-index ─────────────────────────────────────────────────── */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-navbar: 300;
+  --z-modal: 400;
+  --z-toast: 500;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@utility chip-avatar-sm {
+  width: var(--size-chip-avatar-sm);
+  height: var(--size-chip-avatar-sm);
+}
+
+@utility chip-avatar-md {
+  width: var(--size-chip-avatar-md);
+  height: var(--size-chip-avatar-md);
+}
+
+@utility chip-avatar-lg {
+  width: var(--size-chip-avatar-lg);
+  height: var(--size-chip-avatar-lg);
+}
+
+@utility max-h-modal {
+  max-height: 80dvh;
+}
+
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+
+@utility shadow-modal {
+  box-shadow: var(--shadow-dropdown-light);
+}
+
+@utility shadow-modal-dark {
+  box-shadow: var(--shadow-dropdown);
+}
+
+@utility backdrop-blur-overlay {
+  backdrop-filter: var(--blur-overlay);
+  -webkit-backdrop-filter: var(--blur-overlay);
+}
+
+@utility max-w-modal-xs {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-xs));
+}
+
+@utility max-w-modal-sm {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-sm));
+}
+
+@utility max-w-modal-md {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-md));
+}
+
+@utility max-w-modal-lg {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-lg));
+}
+
+@utility max-w-modal-xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-xl));
+}
+
+@utility max-w-modal-2xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-2xl));
+}
+
+@utility max-w-modal-3xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-3xl));
+}
+
+@utility max-w-modal-4xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-4xl));
+}
+
+@utility max-w-modal-5xl {
+  max-width: min(var(--size-modal-viewport), var(--size-modal-5xl));
+}

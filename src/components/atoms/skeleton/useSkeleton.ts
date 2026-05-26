@@ -1,18 +1,21 @@
-import type { ComponentProps } from 'react';
-import type { SkeletonProps } from './types';
+import { cn } from '@/lib/utils';
+import { type SkeletonProps, skeletonVariants } from './types';
+
+type UseSkeletonReturn = Omit<SkeletonProps, 'size' | 'rounded' | 'className' | 'ariaHidden'> & {
+  className: string;
+  ariaHidden: boolean;
+};
 
 export const useSkeleton = ({
-  width = '100px',
-  height = '20px',
+  size = 'text',
   rounded = 'md',
   className,
+  ariaHidden = true,
   ...rest
-}: SkeletonProps & ComponentProps<'div'>) => {
+}: SkeletonProps): UseSkeletonReturn => {
   return {
-    rounded,
-    className,
-    width,
-    height,
+    className: cn(skeletonVariants({ size, rounded }), className),
+    ariaHidden,
     ...rest
   };
 };

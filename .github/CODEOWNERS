@@ -1,0 +1,21 @@
+# CODEOWNERS
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Each line defines a pattern and the owner(s) responsible for reviewing changes.
+# The last matching rule takes precedence.
+
+# Default owner for everything in the repo
+* @egdev6
+
+# Design tokens — requires explicit approval from the project lead
+src/styles/ @egdev6
+
+# Architecture files — requires explicit approval
+GUIDELINES.md @egdev6
+GUIDELINES.en.md @egdev6
+GOVERNANCE.md @egdev6
+GOVERNANCE.en.md @egdev6
+.atl/ @egdev6
+
+# CI/CD workflows — requires explicit approval
+.github/workflows/ @egdev6
