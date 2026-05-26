@@ -129,7 +129,7 @@ export const useTooltip = ({
         hideTimeout.current = setTimeout(() => {
           setOpenState(false);
           setIsClosing(false);
-        }, 200);
+        }, 150);
       };
 
       if (immediate || delayHide === 0) {

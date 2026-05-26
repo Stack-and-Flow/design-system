@@ -67,7 +67,11 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
               role='tooltip'
               onMouseEnter={enableHover ? () => showTooltip(true) : undefined}
               onMouseLeave={enableHover ? () => hideTooltip() : undefined}
-              className={cn(tooltipClass, !isPositioned && 'invisible', isClosing && 'animate-fadeOut duration-200')}
+              className={cn(
+                tooltipClass,
+                isPositioned && !isClosing && 'opacity-100',
+                (!isPositioned || isClosing) && 'pointer-events-none'
+              )}
               style={{
                 top: coordinates.top,
                 left: coordinates.left

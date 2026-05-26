@@ -71,7 +71,10 @@ describe('Tooltip — component behavior', () => {
 
     await user.hover(trigger);
 
-    expect(await screen.findByRole('tooltip')).toHaveTextContent('Helpful tooltip text');
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveTextContent('Helpful tooltip text');
+    expect(tooltip).toHaveClass('opacity-100');
+    expect(tooltip.className).not.toContain('animate-fadeIn');
   });
 
   it('renders numeric zero content as valid tooltip content', async () => {
