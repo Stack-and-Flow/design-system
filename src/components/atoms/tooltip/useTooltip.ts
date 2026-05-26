@@ -39,6 +39,7 @@ export const useTooltip = ({
     top: 0,
     left: 0
   });
+  const [isPositioned, setIsPositioned] = useState(false);
 
   const showTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -172,6 +173,7 @@ export const useTooltip = ({
 
   useEffect(() => {
     if (!isVisible) {
+      setIsPositioned(false);
       return;
     }
 
@@ -250,6 +252,7 @@ export const useTooltip = ({
       };
 
       setCoordinates(positions[resolvedPosition]());
+      setIsPositioned(true);
     };
 
     if (!isVisible) {
@@ -279,6 +282,7 @@ export const useTooltip = ({
     hasTooltipContent,
     hideTooltip,
     isClosing,
+    isPositioned,
     isVisible,
     resolvedPosition,
     rest,

@@ -22,6 +22,7 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
     hasTooltipContent,
     hideTooltip,
     isClosing,
+    isPositioned,
     isVisible,
     rest,
     showTooltip,
@@ -37,6 +38,13 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
         'aria-describedby': [children.props['aria-describedby'], describedById].filter(Boolean).join(' ') || undefined
       })
     : children;
+  const closestDarkContainer = typeof document === 'undefined' ? null : triggerRef.current?.closest('.dark');
+  const portalContainer =
+    typeof document === 'undefined'
+      ? null
+      : closestDarkContainer?.tagName === 'HTML'
+        ? document.body
+        : (closestDarkContainer ?? document.body);
 
   return (
     <span
@@ -52,6 +60,7 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
       {trigger}
       {isVisible &&
         hasTooltipContent &&
+        portalContainer &&
         createPortal(
           <div
             ref={tooltipRef}
@@ -59,7 +68,7 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
             role='tooltip'
             onMouseEnter={enableHover ? () => showTooltip(true) : undefined}
             onMouseLeave={enableHover ? () => hideTooltip() : undefined}
-            className={cn(tooltipClass, isClosing && 'animate-fadeOut duration-200')}
+            className={cn(tooltipClass, !isPositioned && 'invisible', isClosing && 'animate-fadeOut duration-200')}
             style={{
               top: coordinates.top,
               left: coordinates.left
@@ -67,7 +76,7 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
           >
             {content}
           </div>,
-          document.body
+          portalContainer
         )}
     </span>
   );

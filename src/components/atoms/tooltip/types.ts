@@ -3,18 +3,20 @@ import type { ComponentProps, ReactNode } from 'react';
 
 export const tooltipVariants = cva(
   [
-    'absolute z-50 rounded-md px-2.5 py-1.5',
+    'absolute z-50 rounded-md border px-2.5 py-1.5',
     'fs-small text-center shadow-md',
     'animate-fadeIn transition-opacity duration-200 ease-in-out'
   ],
   {
     variants: {
       color: {
-        default: 'bg-surface-dark text-text-dark dark:bg-surface-light dark:text-text-light',
-        primary: 'bg-red-600 text-text-dark dark:bg-red-300 dark:text-text-light',
-        success: 'bg-green-dark text-text-dark dark:bg-green-light dark:text-text-light',
-        warning: 'bg-yellow-dark text-text-dark dark:bg-yellow-light dark:text-text-light',
-        transparent: 'bg-transparent text-text-light dark:bg-transparent dark:text-text-dark'
+        default:
+          'border-border-light bg-surface-raised-light text-text-light dark:border-border-dark dark:bg-surface-raised-dark dark:text-text-dark',
+        primary: 'border-transparent bg-red-600 text-text-dark dark:bg-red-300 dark:text-text-light',
+        success: 'border-transparent bg-green-dark text-text-dark dark:bg-green-light dark:text-text-light',
+        warning: 'border-transparent bg-yellow-dark text-text-dark dark:bg-yellow-light dark:text-text-light',
+        transparent:
+          'border-border-light bg-transparent text-text-light dark:border-border-dark dark:bg-transparent dark:text-text-dark'
       },
       complement: {
         default: '',
