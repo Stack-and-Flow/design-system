@@ -20,6 +20,7 @@ export { Text } from './components/atoms/text';
 
 // ─── Molecules ───────────────────────────────────────────────────────────────
 export { Accordion } from './components/molecules/accordion';
+export { Breadcrumb } from './components/molecules/breadcrumb';
 export { Snippet } from './components/molecules/snippet';
 
 // ─── Organisms ───────────────────────────────────────────────────────────────
