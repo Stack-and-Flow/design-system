@@ -22,7 +22,6 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 
 **Available tooling**:
 
-- `compilot-cli` — scaffolds the 6-file component structure
 - `pnpm run storybook` — starts Storybook with hot reload
 - `pnpm run test` — runs Vitest unit tests
 - `pnpm run test:coverage` — runs tests with coverage report
