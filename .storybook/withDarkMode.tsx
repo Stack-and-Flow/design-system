@@ -7,7 +7,7 @@ export const withDarkMode: Decorator = (Story) => {
 
   // Use useLayoutEffect to apply changes BEFORE paint (prevents flicker)
   useLayoutEffect(() => {
-    // Set background colors (the addon handles the 'dark' class automatically)
+    // Set background colors before applying the wrapper-level dark class below.
     const bg = isDark ? '#060C13' : '#f4f5f7';
     document.documentElement.style.background = bg;
     document.body.style.background = bg;
@@ -15,7 +15,7 @@ export const withDarkMode: Decorator = (Story) => {
 
   return (
     <div
-      className='flex flex-row justify-center items-center w-full transition-colors duration-300 p-12'
+      className={`flex flex-row justify-center items-center w-full transition-colors duration-300 p-12 ${isDark ? 'dark' : ''}`}
       style={{
         minHeight: 'fit-content',
         background: isDark
