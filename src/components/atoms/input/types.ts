@@ -1,124 +1,239 @@
-import { type VariantProps, cva } from 'class-variance-authority';
-import type { ChangeEvent, ReactNode } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { ChangeEvent, ComponentProps, ReactNode } from 'react';
 
 export const inputVariants = cva(
-  ['relative overflow-hidden flex py-2 justify-between max-w-full', 'border-2 transition-all duration-200'],
+  [
+    'relative flex max-w-full justify-between overflow-hidden border py-2',
+    'cursor-text transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
+    'focus-within:outline-none'
+  ],
   {
     variants: {
       variant: {
-        regular: ['bg-gray-light-500', 'border-gray-light-500', 'dark:bg-gray-dark-600', 'dark:border-gray-dark-600'],
-        underlined: ['bg-transparent', 'border-gray-light-500', 'dark:bg-transparent', 'dark:border-gray-dark-600'],
-        line: [
-          'bg-transparent',
-          'border-t-transparent',
-          'border-l-transparent',
-          'border-r-transparent',
-          '!rounded-none',
-          'border-b-gray-light-500',
-          'dark:border-b-gray-dark-600'
+        regular: [
+          'bg-surface-light border-border-light hover:bg-surface-raised-light hover:border-border-strong-light',
+          'dark:bg-surface-dark dark:border-border-dark dark:hover:bg-surface-raised-dark dark:hover:border-border-strong-dark'
         ],
-        bordered: ['bg-gray-light-500', 'border-gray-light-600', 'dark:bg-gray-dark-600', 'dark:border-gray-dark-500']
+        underlined: [
+          'bg-transparent border-border-light hover:border-border-strong-light',
+          'dark:border-border-dark dark:hover:border-border-strong-dark'
+        ],
+        line: [
+          'bg-transparent border-t-transparent border-l-transparent border-r-transparent rounded-none!',
+          'border-b-border-light hover:border-b-border-strong-light',
+          'dark:border-b-border-dark dark:hover:border-b-border-strong-dark'
+        ],
+        bordered: [
+          'bg-surface-light border-border-strong-light hover:bg-surface-raised-light',
+          'dark:bg-surface-dark dark:border-border-strong-dark dark:hover:bg-surface-raised-dark'
+        ]
       },
       rounded: {
         true: 'rounded-full',
         false: 'rounded-md'
       },
       size: {
-        sm: 'h-12 px-2 fs-small tablet:fs-small-tablet',
-        md: 'h-14 px-4 fs-base tablet:fs-base-tablet',
-        lg: 'h-16 px-4 fs-h6 tablet:fs-h6-tablet'
+        sm: 'h-12 px-3 fs-small',
+        md: 'h-14 px-4 fs-base',
+        lg: 'h-16 px-4 fs-h6'
       },
-      state: {
+      status: {
         default: '',
-        focused: 'outline-offset-2 dark:outline-white outline-secondary outline-2',
-        focusedRegular:
-          'hover:bg-gray-light-600 hover:border-gray-light-600 dark:hover:bg-gray-dark-500 dark:hover:border-gray-dark-500',
-        focusedUnderlined: 'hover:border-gray-light-600 dark:hover:border-gray-dark-500',
-        focusedLine: 'hover:border-b-gray-light-600 dark:hover:border-b-gray-dark-500',
-        focusedBordered: 'hover:bg-gray-light-600 dark:hover:bg-gray-dark-500'
+        error:
+          'border-error-light shadow-glow-input-error-light hover:!border-error-light dark:border-error dark:shadow-glow-input-error dark:hover:!border-error',
+        warning:
+          'border-warning-light shadow-glow-input-warning-light hover:!border-warning-light dark:border-warning dark:shadow-glow-input-warning dark:hover:!border-warning',
+        success:
+          'border-success-light shadow-glow-input-success-light hover:!border-success-light dark:border-success dark:shadow-glow-input-success dark:hover:!border-success',
+        info: ''
       },
       focused: {
-        true: 'outline-offset-2 dark:outline-white outline-secondary outline-2',
+        true: '!border-brand-light/50 shadow-glow-input-focus-light dark:!border-brand-dark/50 dark:shadow-glow-input-focus',
         false: ''
+      },
+      fullWidth: {
+        true: 'w-full',
+        false: 'w-auto'
       }
     },
+    compoundVariants: [
+      {
+        focused: true,
+        status: 'error',
+        class: '!border-error-light dark:!border-error'
+      },
+      {
+        focused: true,
+        status: 'warning',
+        class: '!border-warning-light dark:!border-warning'
+      },
+      {
+        focused: true,
+        status: 'success',
+        class: '!border-success-light dark:!border-success'
+      }
+    ],
     defaultVariants: {
       variant: 'regular',
       rounded: false,
       size: 'md',
-      state: 'default'
+      status: 'default',
+      focused: false,
+      fullWidth: false
     }
   }
 );
 
 export const labelVariants = cva(
-  ['absolute w-auto line-clamp-1 transition-all duration-200 text-text-light dark:text-text-dark pt-[2px]'],
+  [
+    'absolute w-auto line-clamp-1 pt-0.5 text-text-light dark:text-text-dark',
+    'transition-[top,font-size,color] duration-200 ease-[ease]'
+  ],
   {
     variants: {
       size: {
-        sm: 'left-2 fs-small tablet:fs-small-tablet',
-        md: 'left-4 fs-base tablet:fs-base-tablet',
-        lg: 'left-4 fs-h6 tablet:fs-h6-tablet'
+        sm: 'left-3 font-medium',
+        md: 'left-4 font-medium',
+        lg: 'left-4 font-medium'
       },
       state: {
-        default: 'top-[50%] translate-y-[-50%]',
-        focusedSm: 'top-1 fs-small font-secondary-bold',
-        focusedMd: 'top-1.5 fs-small font-secondary-bold',
-        focusedLg: 'top-2 fs-small font-secondary-bold',
-        hasValueSm: 'top-1 fs-small font-secondary-bold',
-        hasValueMd: 'top-1.5 fs-small font-secondary-bold',
-        hasValueLg: 'top-2 fs-small font-secondary-bold'
+        resting: 'top-1/2 -translate-y-1/2',
+        floatingSm: 'top-0.5 fs-xs font-semibold',
+        floatingMd: 'top-1.5 fs-small font-semibold',
+        floatingLg: 'top-2 fs-small font-semibold'
       }
     },
+    compoundVariants: [
+      {
+        size: 'sm',
+        state: 'resting',
+        class: 'fs-small'
+      },
+      {
+        size: 'md',
+        state: 'resting',
+        class: 'fs-base'
+      },
+      {
+        size: 'lg',
+        state: 'resting',
+        class: 'fs-h6'
+      }
+    ],
     defaultVariants: {
       size: 'md',
-      state: 'default'
+      state: 'resting'
     }
   }
 );
 
-type InputVariant = VariantProps<typeof inputVariants>['variant'];
-type InputTypeVariant = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'hidden';
-type InputSize = VariantProps<typeof inputVariants>['size'];
+export const nativeInputVariants = cva(
+  [
+    'flex-1 border-none bg-transparent font-medium outline-none',
+    'text-text-light dark:text-text-dark placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark',
+    'disabled:cursor-not-allowed'
+  ],
+  {
+    variants: {
+      hasInlineAction: {
+        true: 'pr-6',
+        false: ''
+      }
+    },
+    defaultVariants: {
+      hasInlineAction: false
+    }
+  }
+);
 
-export type InputProps = {
+export const inputInlineButtonVariants = cva(
+  [
+    'cursor-pointer rounded-sm bg-surface-light px-1 text-text-light hover:bg-surface-raised-light',
+    'dark:bg-surface-dark dark:text-text-dark dark:hover:bg-surface-raised-dark',
+    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
+  ],
+  {
+    variants: {
+      shape: {
+        top: 'rounded-b-none',
+        bottom: 'rounded-t-none',
+        icon: 'rounded-full p-0.5'
+      }
+    },
+    defaultVariants: {
+      shape: 'icon'
+    }
+  }
+);
+
+export const hintMessageVariants = cva('fs-small', {
+  variants: {
+    tone: {
+      info: 'text-text-secondary-light dark:text-text-secondary-dark',
+      warning: 'text-warning-light dark:text-warning',
+      error: 'text-error-light dark:text-error',
+      success: 'text-success-light dark:text-success'
+    }
+  },
+  defaultVariants: {
+    tone: 'info'
+  }
+});
+
+type InputVariantProps = VariantProps<typeof inputVariants>;
+type NativeInputProps = Omit<
+  ComponentProps<'input'>,
+  'children' | 'className' | 'disabled' | 'id' | 'onChange' | 'size' | 'type'
+>;
+
+export type InputHintType = 'error' | 'warning' | 'success' | 'info';
+export type InputTypeVariant = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'hidden';
+export type InputVariant = NonNullable<InputVariantProps['variant']>;
+export type InputSize = NonNullable<InputVariantProps['size']>;
+export type InputHint = {
+  message: string;
+  type: InputHintType;
+};
+
+export type InputProps = NativeInputProps & {
   /** @control text */
   id: string;
   /**
    * @control select
-   * @defaultValue regular
+   * @default regular
    */
   variant?: InputVariant;
   /**
    * @control select
-   * @defaultValue text
+   * @default text
    */
   type?: InputTypeVariant;
   /**
    * @control boolean
-   * @defaultValue false
+   * @default false
    */
   rounded?: boolean;
   /** @control text */
   label?: string;
   /**
    * @control boolean
-   * @defaultValue false
+   * @default false
    */
   isRequired?: boolean;
   /**
    * @control boolean
-   * @defaultValue false
+   * @default false
    */
   disabled?: boolean;
   /**
    * @control select
-   * @defaultValue md
+   * @default md
    */
   size?: InputSize;
   /**
    * @control boolean
-   * @defaultValue false
+   * @default false
    */
   isFullWidth?: boolean;
   /** @control text */
@@ -126,8 +241,14 @@ export type InputProps = {
   /** @control text */
   className?: string;
   /** @control object */
-  hint?: { message: string; type: 'error' | 'warning' | 'success' | 'info' };
+  hint?: InputHint;
+  /** @control object */
   startContent?: ReactNode;
+  /** @control object */
   endContent?: ReactNode;
-  onChange?: (e: ChangeEvent, value: string) => void;
+  /** @control text */
+  ariaDescribedBy?: string | string[];
+  /** @control text */
+  ariaLabelledBy?: string | string[];
+  onChange?: (event: ChangeEvent<HTMLInputElement>, value: string) => void;
 };

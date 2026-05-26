@@ -1,36 +1,119 @@
-import { useRipple } from '@/components/utils/hooks/useRipple';
-import type { VariantProps } from 'class-variance-authority';
-import { type ComponentProps, useRef } from 'react';
-import type { IconButtonProps, iconButtonVariants } from './types';
+import { type MouseEvent, type RefObject, useRef } from 'react';
+import { useRipple } from '@/hooks/useRipple';
+import { cn } from '@/lib/utils';
+import { type IconButtonEmphasis, type IconButtonProps, type IconButtonSize, iconButtonVariants } from './types';
+
+type UseIconButtonReturn = Omit<
+  IconButtonProps,
+  'aria-label' | 'aria-pressed' | 'ariaLabel' | 'className' | 'icon' | 'onClick' | 'size' | 'type'
+> & {
+  ariaLabel: string;
+  ariaPressed: IconButtonProps['aria-pressed'];
+  buttonRef: RefObject<HTMLButtonElement>;
+  className: string;
+  disabled: boolean;
+  handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  icon: NonNullable<IconButtonProps['icon']>;
+  iconSize: number;
+  size: IconButtonSize;
+  type: NonNullable<IconButtonProps['type']>;
+};
 
 export const useIconButton = ({
   variant = 'primary',
   icon = 'image',
-  size = 20,
+  size = 'md',
+  type = 'button',
   className,
   onClick,
   title,
-  rounded = false,
-  shadow = false,
+  ariaLabel,
+  'aria-label': nativeAriaLabel,
+  rounded = true,
+  emphasis,
+  shadow = true,
   disabled = false,
   'aria-pressed': ariaPressed,
   ...props
-}: IconButtonProps & VariantProps<typeof iconButtonVariants> & ComponentProps<'button'>) => {
-  const iconButtonRef = useRef<HTMLButtonElement | null>(null);
-  useRipple(iconButtonRef);
+}: IconButtonProps): UseIconButtonReturn => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useRipple(buttonRef);
+
+  const buttonSize = getButtonSize(size);
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    onClick?.(event);
+  };
 
   return {
-    variant,
+    ...props,
+    buttonRef,
+    type,
     icon,
-    size,
-    className,
-    onClick,
+    size: buttonSize,
+    iconSize: getIconSize(size, buttonSize),
     title,
-    rounded,
-    shadow,
     disabled,
-    iconButtonRef,
     ariaPressed,
-    ...props
+    ariaLabel: getAriaLabel(ariaLabel, nativeAriaLabel, title),
+    className: cn(
+      iconButtonVariants({
+        variant,
+        rounded,
+        emphasis: resolveEmphasis(emphasis, shadow),
+        size: buttonSize
+      }),
+      className
+    ),
+    handleClick
   };
 };
+
+const getButtonSize = (size: NonNullable<IconButtonProps['size']>): IconButtonSize => {
+  if (typeof size !== 'number') {
+    return size;
+  }
+
+  if (size <= 16) {
+    return 'sm';
+  }
+
+  if (size <= 20) {
+    return 'md';
+  }
+
+  return 'lg';
+};
+
+const getIconSize = (size: NonNullable<IconButtonProps['size']>, buttonSize: IconButtonSize): number => {
+  if (typeof size === 'number') {
+    return size;
+  }
+
+  const iconSizes = {
+    xs: 14,
+    sm: 16,
+    md: 20,
+    lg: 24
+  } as const;
+
+  return iconSizes[buttonSize];
+};
+
+const getAriaLabel = (
+  ariaLabel: string | undefined,
+  nativeAriaLabel: string | undefined,
+  title: string | undefined
+): string => ariaLabel ?? nativeAriaLabel ?? title ?? 'Icon button';
+
+const resolveEmphasis = (
+  emphasis: IconButtonProps['emphasis'],
+  shadow: IconButtonProps['shadow']
+): IconButtonEmphasis => emphasis ?? (shadow === false ? 'flat' : 'default');

@@ -1,34 +1,38 @@
-import { cn } from '@/lib/utils';
-import type { VariantProps } from 'class-variance-authority';
-import { DynamicIcon } from 'lucide-react/dynamic';
-import type { ComponentProps, FC } from 'react';
-import { type IconButtonProps, iconButtonVariants } from './types';
+import { DynamicIcon } from 'lucide-react/dynamic.js';
+import type { FC } from 'react';
+import type { IconButtonProps } from './types';
 import { useIconButton } from './useIconButton';
-import '@/components/utils/styles/index.css';
 
-const IconButton: FC<IconButtonProps & VariantProps<typeof iconButtonVariants> & ComponentProps<'button'>> = ({
-  ...props
-}) => {
-  const { iconButtonRef, ariaPressed, variant, rounded, shadow, className, disabled, title, icon, size, onClick } =
-    useIconButton(props);
+export const IconButton: FC<IconButtonProps> = (props) => {
+  const {
+    buttonRef,
+    type,
+    ariaPressed,
+    ariaLabel,
+    className,
+    disabled,
+    handleClick,
+    icon,
+    iconSize,
+    size: _size,
+    title,
+    ...restProps
+  } = useIconButton(props);
 
   return (
     <button
-      {...props}
-      ref={iconButtonRef}
-      type='button'
-      role={ariaPressed !== undefined ? 'switch' : 'button'}
-      className={cn('w-auto', iconButtonVariants({ variant, rounded, shadow }), className)}
-      disabled={disabled}
+      {...restProps}
+      ref={buttonRef}
+      type={type}
+      className={className}
+      aria-label={ariaLabel}
       aria-disabled={disabled || undefined}
-      aria-label={title || icon}
       aria-pressed={ariaPressed}
+      disabled={disabled}
       title={title}
-      onClick={(e) => !disabled && onClick?.(e)}
+      onClick={handleClick}
     >
-      <DynamicIcon name={icon} color='currentColor' size={size} />
+      <DynamicIcon aria-hidden='true' color='currentColor' name={icon} size={iconSize} />
     </button>
   );
 };
-
-export default IconButton;

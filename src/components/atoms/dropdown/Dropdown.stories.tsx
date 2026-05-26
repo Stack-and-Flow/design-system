@@ -1,121 +1,106 @@
-import Icon from '@atoms/icon';
+import { buttonVariants } from '@atoms/button/types';
+import { Icon } from '@atoms/icon';
+import { iconButtonVariants } from '@atoms/icon-button/types';
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from '../button';
-import Link from '../link';
-import Dropdown from './Dropdown';
+import { Dropdown } from './Dropdown';
 import type { DropdownSchema } from './types';
 
+const accountMenuItems: DropdownSchema = [
+  { type: 'label', label: 'My Account' },
+  { type: 'separator' },
+  {
+    type: 'item',
+    label: 'Profile',
+    onClick: action('profile-select'),
+    startContent: <Icon name='user' />,
+    endContent: <span>⇧⌘P</span>
+  },
+  {
+    type: 'item',
+    label: 'Billing',
+    onClick: action('billing-select'),
+    endContent: <span>⌘B</span>
+  },
+  { type: 'separator' },
+  {
+    type: 'submenu',
+    label: 'Team',
+    startContent: <Icon name='users' />,
+    items: [
+      { type: 'item', label: 'Invite users', onClick: action('invite-users-select') },
+      { type: 'item', label: 'New team', onClick: action('new-team-select'), endContent: <span>⌘T</span> }
+    ]
+  }
+];
+
+const destructiveMenuItems: DropdownSchema = [
+  { type: 'label', label: 'Danger zone' },
+  { type: 'separator' },
+  {
+    type: 'item',
+    label: 'Delete project',
+    variant: 'destructive',
+    onClick: action('delete-project-select'),
+    endContent: <span>⌘⌫</span>
+  }
+];
+
+const disabledMenuItems: DropdownSchema = [
+  { type: 'label', label: 'Project actions' },
+  { type: 'separator' },
+  { type: 'item', label: 'Rename project', onClick: action('rename-project-select') },
+  { type: 'item', label: 'Transfer ownership', disabled: true, onClick: action('transfer-ownership-select') }
+];
+
+const iconTrigger = (
+  <span className={iconButtonVariants({ variant: 'primary' })}>
+    <Icon color='text-white' colorDark='dark:text-white' decorative={true} name='ellipsis' size={20} />
+  </span>
+);
+
+const Trigger = ({ label }: { label: string }) => (
+  <span className={buttonVariants({ variant: 'primary' })}>{label}</span>
+);
+
 /**
- * ## DESCRIPTION
- * The Dropdown component is a versatile menu element that allows users to select options or navigate through submenus.
- * It supports various configurations, including custom triggers, widths, offsets, alignments, and positions.
- * The component is designed to be accessible and customizable, making it suitable for a wide range of use cases.
+ * ## Description
+ * Dropdown displays a contextual action menu powered by Radix primitives while following the design-system token, accessibility, and Storybook conventions.
  *
- * ## DEPENDENCIES
- * - [Radix UI Dropdown Menu](https://www.radix-ui.com/docs/primitives/components/dropdown-menu)
- * - [React Spinners](https://github.com/davidhu2000/react-spinners)
- * - Icon - from Lucide React for icons
+ * ## Dependencies
+ * Uses `@radix-ui/react-dropdown-menu` for menu semantics and the `Icon` atom to render optional visual affordances in examples.
  *
- * ## ITEMS STRUCTURE
- * The `items` prop defines the structure of the dropdown menu. It is an array of objects, where each object represents a menu element.
- * The following types of elements are supported:
+ * ## Usage Guide
+ * Compose the menu with the `items` prop. Each entry must declare a `type`, and the supported shapes are:
  *
- * ## POSSIBILITIES
- * - **Customizable Content**: Add icons, shortcuts, or any React node to `startContent` and `endContent`.
- * - **Nested Menus**: Use `submenu` to create hierarchical menus.
- * - **Variants**: Style items as `default` or `destructive` for different use cases.
- * - **Disabled Items**: Disable specific items to indicate unavailable actions.
- * - **Dividers and Labels**: Use `separator` and `label` to organize and group items.
- *
- * ## USAGE
- *
- * ### 1. Label
- * A non-interactive label used to group or describe menu items.
- * ```json
- * {
- *   "type": "label",
- *   "label": "My Account"
- * }
- * ```
- *
- * ### 2. Separator
- * A visual divider used to separate groups of menu items.
- * ```json
- * {
- *   "type": "separator"
- * }
- * ```
- *
- * ### 3. Item
- * A clickable menu item that can trigger an action or navigate to a link.
- * ```json
- * {
- *   "type": "item",
- *   "label": "Profile",
- *   "disabled": false,
- *   "variant": "default",
- *   "onClick": () => alert('Profile clicked'),
- *   "startContent": <Icon name="user" />,
- *   "endContent": <span>⇧⌘P</span>
- * }
- * ```
- * - **Properties**:
- *   - `label`: The text displayed for the menu item.
- *   - `disabled`: Whether the item is disabled.
- *   - `variant`: The visual style of the item (`default` or `destructive`).
- *   - `onClick`: A callback function triggered when the item is clicked.
- *   - `startContent`: Optional content (e.g., an icon) displayed at the start of the item.
- *   - `endContent`: Optional content (e.g., a shortcut) displayed at the end of the item.
- *
- * ### 4. Submenu
- * A nested menu that contains additional items.
- * This allows for organizing related actions under a single menu trigger.
- * You can use `startContent` and `endContent` to customize the submenu trigger.
- * ChevronRight icon is rendered by default but you can be overridden with custom icons if needed.
- * ```json
- * {
- *   "type": "submenu",
- *   "label": "Team",
- *   "startContent": <Icon name="users" />,
- *   "endContent": <ChevronRightIcon className="ml-auto size-4" />,
- *   "items": [
- *     { "type": "item", "label": "Invite users" },
- *     { "type": "item", "label": "New Team", "endContent": <span>⌘+T</span> }
- *   ]
- * }
- * ```
- * - **Properties**:
- *   - `label`: The text displayed for the submenu trigger.
- *   - `items`: An array of `DropdownElement` objects defining the submenu's structure.
- *
- * ## EXAMPLE
- * Here is an example of a complete `items` array:
- * ```json
- * [
- *   { "type": "label", "label": "My Account" },
- *   { "type": "separator" },
+ * ```tsx
+ * const items: DropdownSchema = [
+ *   { type: 'label', label: 'My Account' },
+ *   { type: 'separator' },
  *   {
- *     "type": "item",
- *     "label": "Profile",
- *     "onClick": () => alert('Profile clicked'),
- *     "startContent": <Icon name="user" />,
- *     "endContent": <span>⇧⌘P</span>
+ *     type: 'item',
+ *     label: 'Profile',
+ *     onClick: action('profile-select'),
+ *     startContent: <Icon name='user' />,
+ *     endContent: <span>⇧⌘P</span>
  *   },
- *   { "type": "item", "label": "Billing", "endContent": <span>⌘B</span> },
- *   { "type": "separator" },
  *   {
- *     "type": "submenu",
- *     "label": "Team",
- *     "items": [
- *       { "type": "item", "label": "Invite users" },
- *       { "type": "item", "label": "New Team", "endContent": <span>⌘+T</span> }
+ *     type: 'submenu',
+ *     label: 'Team',
+ *     items: [
+ *       { type: 'item', label: 'Invite users', onClick: action('invite-users-select') }
  *     ]
  *   },
- *   { "type": "separator" },
- *   { "type": "item", "label": "Log out", "variant": "destructive", "endContent": <span>⇧⌘Q</span> }
- * ]
+ *   {
+ *     type: 'item',
+ *     label: 'Delete project',
+ *     variant: 'destructive',
+ *     onClick: action('delete-project-select')
+ *   }
+ * ];
  * ```
  *
+ * Use `label` and `separator` entries to group related actions, `item` entries for selectable actions, and `submenu` entries for nested action groups. Use `disabled` on unavailable items, `variant='destructive'` only for irreversible actions, and `startContent` / `endContent` for icons or keyboard shortcuts. Provide `ariaLabel` when the trigger has no visible text.
  */
 const meta: Meta<typeof Dropdown> = {
   title: 'Atoms/Dropdown',
@@ -127,146 +112,143 @@ const meta: Meta<typeof Dropdown> = {
   },
   tags: ['autodocs']
 };
+
 export default meta;
 
 type Story = StoryObj<typeof Dropdown>;
 
-const schema: DropdownSchema = [
-  { type: 'label', label: 'My Account' },
-  { type: 'separator' },
-  {
-    type: 'item',
-    label: 'Profile',
-    endContent: <span>⇧⌘P</span>,
-    onClick: () => alert('Profile clicked'),
-    startContent: <Icon name='user' />
-  },
-  { type: 'item', label: 'Billing', endContent: <span>⌘B</span> },
-  { type: 'separator' },
-  {
-    type: 'submenu',
-    label: 'Team',
-    items: [
-      { type: 'item', label: 'Invite users' },
-      { type: 'item', label: 'New Team', endContent: <span>⌘+T</span>, onClick: () => alert('Profile clicked') }
-    ]
-  },
-  { type: 'separator' },
-  { type: 'item', label: 'Log out', endContent: <span>⇧⌘Q</span>, variant: 'destructive' }
-];
-
 /**
- * - **Default Dropdown**: A basic dropdown with default settings.
+ * Shows the default menu using the component defaults and a text trigger.
  */
 export const Default: Story = {
   args: {
-    width: '250px',
-    position: 'bottom',
-    align: 'center',
-    offset: 1,
-    closeOnSelect: true,
-    loading: false,
-    className: '',
-    items: schema,
-    children: <Button text='Open Menu' />
+    items: accountMenuItems,
+    children: <Trigger label='Open menu' />
   }
 };
-/**
- * - **Loading State**: A dropdown that simulates a loading state.
- *   This is useful for scenarios where the menu items are being fetched asynchronously.
- */
 
+/**
+ * Shows the non-interactive disabled-item state while keeping the menu accessible.
+ */
+export const Disabled: Story = {
+  args: {
+    items: disabledMenuItems,
+    children: <Trigger label='Disabled item' />
+  }
+};
+
+/**
+ * Shows a destructive action item for irreversible operations.
+ */
+export const DestructiveItem: Story = {
+  args: {
+    items: destructiveMenuItems,
+    children: <Trigger label='Danger zone' />
+  }
+};
+
+/**
+ * Shows the loading state used while menu items are being prepared.
+ */
 export const Loading: Story = {
-  render: () => (
-    <div className='flex gap-4 items-start min-h-[250px]'>
-      <Dropdown items={schema} width='250px' loading={true}>
-        <Button text='Loading Menu' />
-      </Dropdown>
-    </div>
-  )
+  args: {
+    items: accountMenuItems,
+    loading: true,
+    children: <Trigger label='Loading menu' />
+  }
 };
 
 /**
- * - **Custom Trigger**: Demonstrates how to use custom elements as triggers for the dropdown.
+ * Shows the width variants available for menu content.
  */
-export const CustomTrigger: Story = {
+export const Width: Story = {
   render: () => (
-    <div className='flex gap-4 items-start min-h-[250px]'>
-      <Dropdown items={schema} width='250px'>
-        <Link size='md' variant='regular'>
-          Lorem ipsum
-        </Link>
+    <div className='flex min-h-64 flex-wrap items-start gap-4'>
+      <Dropdown items={accountMenuItems} width='auto'>
+        <Trigger label='Auto width' />
       </Dropdown>
-      <Dropdown items={schema} width='250px'>
-        <Icon color='text-accent' colorDark='dark:text-accent' name='image-plus' size={24} />
+      <Dropdown items={accountMenuItems} width='sm'>
+        <Trigger label='Small width' />
+      </Dropdown>
+      <Dropdown items={accountMenuItems} width='md'>
+        <Trigger label='Medium width' />
+      </Dropdown>
+      <Dropdown items={accountMenuItems} width='lg'>
+        <Trigger label='Large width' />
       </Dropdown>
     </div>
   )
 };
 
 /**
- * - **Custom Width**: A dropdown with a custom width of 500px.
- */
-export const CustomWidth: Story = {
-  render: () => (
-    <div className='flex gap-4 items-start min-h-[250px]'>
-      <Dropdown items={schema} width='500px'>
-        <Button text='Custom Width' />
-      </Dropdown>
-    </div>
-  )
-};
-
-/**
- * - **Custom Offset**: A dropdown with a custom offset of 20px.
- */
-export const CustomOffset: Story = {
-  render: () => (
-    <div className='flex gap-4 items-start min-h-[250px]'>
-      <Dropdown items={schema} offset={20} width='250px'>
-        <Button text='Custom Offset' />
-      </Dropdown>
-    </div>
-  )
-};
-
-/**
- * - **Position**: Demonstrates dropdowns positioned at different sides (top, bottom, left, right).
+ * Shows menu placement on each supported side.
  */
 export const Position: Story = {
   render: () => (
-    <div className='flex gap-4 items-center min-h-[400px]'>
-      <Dropdown items={schema} position='bottom' width='250px'>
-        <Button text='Bottom' />
+    <div className='flex min-h-80 flex-wrap items-center gap-4'>
+      <Dropdown items={accountMenuItems} position='bottom'>
+        <Trigger label='Bottom' />
       </Dropdown>
-      <Dropdown items={schema} position='top' width='250px'>
-        <Button text='Top' />
+      <Dropdown items={accountMenuItems} position='top'>
+        <Trigger label='Top' />
       </Dropdown>
-      <Dropdown items={schema} position='left' width='250px'>
-        <Button text='Left' />
+      <Dropdown items={accountMenuItems} position='left'>
+        <Trigger label='Left' />
       </Dropdown>
-      <Dropdown items={schema} position='right' width='250px'>
-        <Button text='Right' />
+      <Dropdown items={accountMenuItems} position='right'>
+        <Trigger label='Right' />
       </Dropdown>
     </div>
   )
 };
 
 /**
- * - **Alignment**: Demonstrates dropdowns aligned to the start, center, and end.
+ * Shows start, center, and end alignment for the menu content.
  */
 export const Alignment: Story = {
   render: () => (
-    <div className='flex gap-4 items-start min-h-[250px]'>
-      <Dropdown items={schema} align='start' position='bottom' width='250px'>
-        <Button text='Start' />
+    <div className='flex min-h-64 flex-wrap items-start gap-4'>
+      <Dropdown items={accountMenuItems} align='start'>
+        <Trigger label='Start' />
       </Dropdown>
-      <Dropdown items={schema} align='center' position='bottom' width='250px'>
-        <Button text='Center' />
+      <Dropdown items={accountMenuItems} align='center'>
+        <Trigger label='Center' />
       </Dropdown>
-      <Dropdown items={schema} align='end' position='bottom' width='250px'>
-        <Button text='End' />
+      <Dropdown items={accountMenuItems} align='end'>
+        <Trigger label='End' />
       </Dropdown>
     </div>
   )
+};
+
+/**
+ * Shows a nested submenu structure for grouped actions.
+ */
+export const Submenu: Story = {
+  args: {
+    items: accountMenuItems,
+    children: <Trigger label='Team actions' />
+  }
+};
+
+/**
+ * Shows how to keep the menu open after an item is selected.
+ */
+export const CloseOnSelectFalse: Story = {
+  args: {
+    items: accountMenuItems,
+    closeOnSelect: false,
+    children: <Trigger label='Persistent menu' />
+  }
+};
+
+/**
+ * Shows an icon-only trigger with an explicit accessible label.
+ */
+export const CustomTrigger: Story = {
+  args: {
+    ariaLabel: 'Open account actions',
+    items: accountMenuItems,
+    children: iconTrigger
+  }
 };

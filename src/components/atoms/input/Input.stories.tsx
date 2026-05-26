@@ -1,23 +1,20 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import Icon from '../icon';
-import Text from '../text';
-import Input from './Input';
+import { Icon } from '../icon';
+import { Text } from '../text';
+import { Input } from './Input';
 
 /**
- * ## DESCRIPTION
- * The Input component is a versatile form element that allows users to enter text or other data.
- * It supports various input types, styles, and configurations to suit different use cases.
- * It can be used for text, email, password, number inputs, and more.
- * The component also supports features like labels, placeholders, hints, and different visual styles.
- * It can be customized with rounded corners, different sizes, and variants such as regular, underlined, line, and bordered.
- * Additionally, it can handle controlled and uncontrolled values, making it flexible for both simple and complex forms.
- * It also supports start and end content, allowing for additional elements like icons or text to be displayed alongside the input.
- * The Input component is designed to be accessible and user-friendly, providing a consistent experience across different devices and screen sizes.
- * It can be easily integrated into forms and other UI components, making it a fundamental building block for web applications.
+ * ## Description
+ * Input lets users enter and edit short form values. It supports labels, placeholders, validation hints,
+ * adornments, native input attributes, and token-backed visual variants for common form layouts.
  *
- * ## DEPENDENCIES
- * - Icon: Uses Icon component from `lucide-react` for icons.
- * - Text: Uses Text component for displaying labels and hints.
+ * ## Dependencies
+ * Uses `Icon` for inline adornment and validation status examples. Uses `Text` to show text adornments.
+ *
+ * ## Usage Guide
+ * Provide a visible `label` when possible. When a visual label is not appropriate, pass `aria-label` or
+ * `aria-labelledby` so the input still has an accessible name.
  */
 const meta: Meta<typeof Input> = {
   title: 'Atoms/Input',
@@ -29,301 +26,213 @@ const meta: Meta<typeof Input> = {
   },
   tags: ['autodocs']
 };
-export default meta;
 
+export default meta;
 type Story = StoryObj<typeof Input>;
 
+/**
+ * Shows the default input configuration using its default visual variants.
+ */
 export const Default: Story = {
   args: {
-    id: 'input',
-    label: 'Lorem Ipsum',
-    type: 'text',
-    variant: 'regular',
-    rounded: false,
-    className: '',
-    size: 'md',
-    disabled: false,
-    isFullWidth: false,
-    isRequired: false
+    id: 'input-default',
+    label: 'Email',
+    placeholder: 'name@example.com',
+    onChange: action('change')
   }
 };
 
 /**
- * - **Controlled Input**: The value of the input is managed by React state. Changes to the input value are handled through an `onChange` event, allowing for immediate updates and validation.
+ * Shows the underlined visual variant.
  */
-
-export const ControlledValue: Story = {
-  parameters: {
-    docs: {
-      source: {
-        language: 'tsx',
-        code: `
-import { useState, type ChangeEvent } from 'react';
-import Input from './Input';
-      
-const ControlledInput = () => {
-  const [value, setValue] = useState('Controlled Value');
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, value) => {
-    setValue(value);
-    console.log(value);
+export const Underlined: Story = {
+  args: {
+    ...Default.args,
+    id: 'input-underlined',
+    variant: 'underlined'
   }
-  
-  return (
-    <Input
-      id='controlled-input'
-      label='Controlled Input'
-      value={value}
-      onChange={handleChange}
-      variant='regular'
-      size='md'
-    />
-  );
-}
-`
-      }
-    }
-  },
+};
+
+/**
+ * Shows the single-line visual variant.
+ */
+export const Line: Story = {
+  args: {
+    ...Default.args,
+    id: 'input-line',
+    variant: 'line'
+  }
+};
+
+/**
+ * Shows the bordered visual variant.
+ */
+export const Bordered: Story = {
+  args: {
+    ...Default.args,
+    id: 'input-bordered',
+    variant: 'bordered'
+  }
+};
+
+/**
+ * Shows the available size axis without mixing other variants.
+ */
+export const Sizes: Story = {
   render: () => (
-    <div className='flex items-center gap-4'>
-      <Input id='input1' label='Lorem Ipsum' variant='regular' size='md' />
+    <div className='flex flex-col gap-4'>
+      <Input id='input-size-sm' label='Small' size='sm' defaultValue='Small value' onChange={action('small change')} />
+      <Input
+        id='input-size-md'
+        label='Medium'
+        size='md'
+        defaultValue='Medium value'
+        onChange={action('medium change')}
+      />
+      <Input id='input-size-lg' label='Large' size='lg' defaultValue='Large value' onChange={action('large change')} />
     </div>
   )
 };
 
 /**
- * - **Uncontrolled Input**: The input value is not managed by React state. Instead, it uses a `defaultValue` prop to set the initial value, and changes are logged through an `onChange` event.
+ * Shows the rounded shape axis.
  */
-
-export const UncontrolledValue: Story = {
-  parameters: {
-    docs: {
-      source: {
-        language: 'tsx',
-        code: `
-import { useState, type ChangeEvent } from 'react';
-import Input from './Input';
-      
-const UncontrolledInput = () => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, value: string) => {
-    console.log(value);
-  };
-
-  return (
-    <Input
-      id='controlled-input'
-      label='Controlled Input'
-      defaultValue={'Uncontrolled Value'}
-      onChange={handleChange}
-      variant='regular'
-      size='md'
-    />
-  );
-}
-`
-      }
-    }
-  },
-  render: () => (
-    <div className='flex items-center gap-4'>
-      <Input id='input2' label='Lorem Ipsum' variant='regular' size='md' />
-    </div>
-  )
+export const Rounded: Story = {
+  args: {
+    ...Default.args,
+    id: 'input-rounded',
+    rounded: true
+  }
 };
 
 /**
- * - You can use isRequired to indicate that the input field is mandatory.
- * - This will add an asterisk (*) next to the label to indicate that the field is required.
+ * Shows required field affordance and native required semantics.
  */
 export const Required: Story = {
-  render: () => (
-    <div className='flex items-center gap-4'>
-      <Input id='input38' label='Lorem Ipsum' variant='regular' size='md' isRequired={true} />
-      <Input id='input39' label='Lorem Ipsum' variant='regular' size='lg' isRequired={true} />
-    </div>
-  )
-};
-/**
- * - A standard input field with a solid background.
- */
-
-export const Regular: Story = {
-  render: () => (
-    <div className='flex items-center gap-4'>
-      <Input id='input3' label='Lorem Ipsum' variant='regular' size='sm' />
-      <Input id='input4' label='Lorem Ipsum' variant='regular' size='md' />
-      <Input id='input5' label='Lorem Ipsum' variant='regular' size='lg' />
-    </div>
-  )
+  args: {
+    ...Default.args,
+    id: 'input-required',
+    isRequired: true
+  }
 };
 
 /**
- * - A variant with an underlined style, suitable for minimalistic designs.
- * - ⚠️ This variant uses a transparent background by default. To ensure proper visibility, place it inside a container with a solid or plain background.
+ * Shows validation and helper hint tones.
  */
-
-export const Underlined: Story = {
+export const HintStates: Story = {
   render: () => (
-    <div className='flex items-center gap-4'>
-      <Input id='input6' label='Lorem Ipsum' variant='underlined' size='sm' />
-      <Input id='input7' label='Lorem Ipsum' variant='underlined' size='md' />
-      <Input id='input8' label='Lorem Ipsum' variant='underlined' size='lg' />
+    <div className='flex flex-col gap-4'>
+      <Input id='input-hint-error' label='Error' hint={{ type: 'error', message: 'This field is required.' }} />
+      <Input id='input-hint-warning' label='Warning' hint={{ type: 'warning', message: 'Double-check this value.' }} />
+      <Input id='input-hint-success' label='Success' hint={{ type: 'success', message: 'Looks good.' }} />
+      <Input id='input-hint-info' label='Info' hint={{ type: 'info', message: 'Use your primary email.' }} />
     </div>
   )
 };
 
 /**
- * - A variant with a line style, providing a clean and modern look.
- * - ⚠️ This variant uses a transparent background by default. To ensure proper visibility, place it inside a container with a solid or plain background.
+ * Shows the non-interactive disabled state.
  */
-
-export const Line: Story = {
-  render: () => (
-    <div className='flex items-center gap-4'>
-      <Input id='input9' label='Lorem Ipsum' variant='line' size='sm' />
-      <Input id='input10' label='Lorem Ipsum' variant='line' size='md' />
-      <Input id='input11' label='Lorem Ipsum' variant='line' size='lg' />
-    </div>
-  )
-};
-
-/**
- * - A bordered variant that provides a distinct outline around the input field.
- */
-
-export const Bordered: Story = {
-  render: () => (
-    <div className='flex items-center gap-4'>
-      <Input id='input12' label='Lorem Ipsum' variant='bordered' size='sm' />
-      <Input id='input13' label='Lorem Ipsum' variant='bordered' size='md' />
-      <Input id='input14' label='Lorem Ipsum' variant='bordered' size='lg' />
-    </div>
-  )
-};
-
-/**
- * - A variant with rounded corners for a softer appearance.
- * - This variant can be applied to any of the input styles (regular, underlined, line, bordered).
- */
-
-export const Rounded: Story = {
-  render: () => (
-    <div className='flex flex-col justify-center gap-4'>
-      <Input id='input15' label='Lorem Ipsum' variant='regular' rounded={true} />
-      <Input id='input16' label='Lorem Ipsum' variant='underlined' rounded={true} />
-      <Input id='input17' label='Lorem Ipsum' variant='line' rounded={true} />
-      <Input id='input18' label='Lorem Ipsum' variant='bordered' rounded={true} />
-    </div>
-  )
-};
-
-/**
- * - Input fields for number inputs, allowing users to enter numeric values.
- */
-
-export const InputNumber: Story = {
-  render: () => (
-    <div className='flex flex-col justify-center gap-4'>
-      <Input id='input19' label='Lorem Ipsum' variant='regular' type='number' />
-      <Input id='input20' label='Lorem Ipsum' variant='underlined' type='number' />
-      <Input id='input21' label='Lorem Ipsum' variant='line' type='number' />
-      <Input id='input22' label='Lorem Ipsum' variant='bordered' type='number' />
-    </div>
-  )
-};
-
-/**
- * - Input fields specifically for password entry, which typically include features like masking the input.
- */
-
-export const InputPassword: Story = {
-  render: () => (
-    <div className='flex flex-col justify-center gap-4'>
-      <Input id='input23' label='Lorem Ipsum' variant='regular' type='password' />
-      <Input id='input24' label='Lorem Ipsum' variant='underlined' type='password' />
-      <Input id='input25' label='Lorem Ipsum' variant='line' type='password' />
-      <Input id='input26' label='Lorem Ipsum' variant='bordered' type='password' />
-    </div>
-  )
-};
-
-/**
- * - Input fields with hints to provide additional context or instructions to the user.
- * - Hints can be styled based on their type (error, warning, success, info).
- * - ⚠️ This variant uses a transparent background by default. To ensure proper visibility, place it inside a container with a solid or plain background.
- */
-
-export const Hint: Story = {
-  render: () => (
-    <div className='flex flex-col justify-center gap-4'>
-      <Input id='input27' label='Lorem Ipsum' variant='regular' hint={{ type: 'error', message: 'Lorem ipsum' }} />
-      <Input id='input28' label='Lorem Ipsum' variant='regular' hint={{ type: 'warning', message: 'Lorem ipsum' }} />
-      <Input id='input29' label='Lorem Ipsum' variant='regular' hint={{ type: 'success', message: 'Lorem ipsum' }} />
-      <Input id='input30' label='Lorem Ipsum' variant='regular' hint={{ type: 'info', message: 'Lorem ipsum' }} />
-    </div>
-  )
-};
-
-/**
- * - Disabled input fields that cannot be interacted with.
- * - Useful for indicating that a field is not currently available for input.
- */
-
 export const Disabled: Story = {
+  args: {
+    ...Default.args,
+    id: 'input-disabled',
+    disabled: true
+  }
+};
+
+/**
+ * Shows the password input with an accessible visibility toggle.
+ */
+export const Password: Story = {
+  args: {
+    id: 'input-password',
+    label: 'Password',
+    type: 'password',
+    onChange: action('password change')
+  }
+};
+
+/**
+ * Shows number input controls.
+ */
+export const NumberInput: Story = {
+  args: {
+    id: 'input-number',
+    label: 'Quantity',
+    type: 'number',
+    defaultValue: 1,
+    onChange: action('number change')
+  }
+};
+
+/**
+ * Shows common native input type variants.
+ */
+export const TypeVariants: Story = {
   render: () => (
-    <div className='flex flex-col justify-center items-center gap-4'>
-      <Input id='input31' label='Lorem Ipsum' variant='regular' disabled={true} />
-      <Input id='input32' label='Lorem Ipsum' variant='underlined' disabled={true} />
-      <Input id='input33' label='Lorem Ipsum' variant='line' disabled={true} />
-      <Input id='input34' label='Lorem Ipsum' variant='bordered' disabled={true} />
+    <div className='flex flex-col gap-4'>
+      <Input id='input-type-text' label='Text' type='text' onChange={action('text change')} />
+      <Input id='input-type-email' label='Email' type='email' onChange={action('email change')} />
+      <Input id='input-type-tel' label='Phone' type='tel' onChange={action('phone change')} />
+      <Input id='input-type-url' label='Website' type='url' onChange={action('url change')} />
+      <Input id='input-type-search' label='Search' type='search' onChange={action('search change')} />
     </div>
   )
 };
 
 /**
- * - Input fields with additional content at the start or end, such as icons or text.
- * - This can enhance the usability and visual appeal of the input field.
+ * Shows start and end content slots for prefixes, suffixes, and icons.
  */
-
-export const StartAndEnd: Story = {
+export const StartAndEndContent: Story = {
   render: () => (
     <div className='flex flex-col gap-4'>
       <Input
-        id='input35'
-        placeholder='Placeholder'
-        variant='regular'
+        id='input-start-end-text'
+        label='Amount'
+        placeholder='0.00'
         startContent={
-          <Text tag='p' className='pt-[2px]'>
-            Start
+          <Text tag='small' className='font-medium text-text-secondary-light dark:text-text-secondary-dark'>
+            $
           </Text>
         }
         endContent={
-          <Text tag='p' className='pt-[2px]'>
-            End
+          <Text tag='small' className='font-medium text-text-secondary-light dark:text-text-secondary-dark'>
+            USD
           </Text>
         }
+        onChange={action('amount change')}
       />
       <Input
-        id='input36'
+        id='input-start-end-icon'
         type='email'
-        placeholder='Placeholder'
-        startContent={<Icon name='mail' color='text-text-light' colorDark='dark:text-text-dark' />}
+        label='Email'
+        startContent={<Icon name='mail' tone='muted' decorative={true} />}
         endContent={
-          <Text tag='p' className='pt-[2px]'>
-            @gmail.com
+          <Text tag='small' className='font-medium text-text-secondary-light dark:text-text-secondary-dark'>
+            @example.com
           </Text>
         }
-      />
-      <Input
-        id='input37'
-        type='url'
-        placeholder='Placeholder'
-        startContent={
-          <Text tag='p' className='pt-[2px]'>
-            https://
-          </Text>
-        }
+        onChange={action('email change')}
       />
     </div>
   )
+};
+
+/**
+ * Shows full-width layout behavior.
+ */
+export const FullWidth: Story = {
+  args: {
+    ...Default.args,
+    id: 'input-full-width',
+    isFullWidth: true
+  },
+  decorators: [
+    (StoryComponent) => (
+      <div className='w-full max-w-modal-md'>
+        <StoryComponent />
+      </div>
+    )
+  ]
 };

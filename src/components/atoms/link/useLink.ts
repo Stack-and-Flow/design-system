@@ -1,20 +1,109 @@
-import type { VariantProps } from 'class-variance-authority';
-import type { ComponentProps } from 'react';
-import type { LinkProps, linkVariants } from './types';
+import type { KeyboardEvent, MouseEvent } from 'react';
+import { cn } from '@/lib/utils';
+import { type LinkEmphasis, type LinkProps, linkVariants } from './types';
+
+type UseLinkReturn = Omit<LinkProps, 'onClick' | 'onKeyDown'> & {
+  ariaLabel: string | undefined;
+  className: string;
+  disabled: boolean;
+  handleClick: (event: MouseEvent<HTMLAnchorElement>) => void;
+  handleKeyDown: (event: KeyboardEvent<HTMLAnchorElement>) => void;
+  iconWidth: number;
+  isExternal: boolean;
+  rel: string | undefined;
+  role: 'button' | 'link';
+  tabIndex: number | undefined;
+  target: NonNullable<LinkProps['target']>;
+};
 
 export const useLink = ({
   children,
   icon = undefined,
   variant = 'regular',
   size = 'md',
+  emphasis,
+  shadow = true,
   target = '_blank',
   className,
   href,
   title,
+  rel,
+  'aria-label': ariaLabelProp,
+  disabled = false,
+  onClick,
+  onKeyDown,
   ...rest
-}: LinkProps & VariantProps<typeof linkVariants> & ComponentProps<'a'>) => {
-  const iconWidth = { sm: 18, md: 20, lg: 24 }[size] || 22;
+}: LinkProps): UseLinkReturn => {
+  const iconWidth = { xs: 16, sm: 18, md: 20, lg: 24 }[size] ?? 20;
   const isExternal = target === '_blank';
+  const ariaLabel = ariaLabelProp ?? title ?? (typeof children === 'string' ? children : undefined);
+  const isAction = !href;
+  const role = isAction ? 'button' : 'link';
 
-  return { href, target, isExternal, title, children, variant, size, className, icon, iconWidth, ...rest };
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    onClick?.(event);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLAnchorElement>) => {
+    if (disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    onKeyDown?.(event);
+
+    if (event.defaultPrevented || !isAction || (event.key !== 'Enter' && event.key !== ' ')) {
+      return;
+    }
+
+    event.preventDefault();
+    event.currentTarget.click();
+  };
+
+  return {
+    ...rest,
+    href,
+    target,
+    rel: getSafeRel(rel, isExternal),
+    isExternal,
+    title,
+    children,
+    className: cn(linkVariants({ variant, size, emphasis: resolveEmphasis(variant, emphasis, shadow) }), className),
+    icon,
+    iconWidth,
+    disabled,
+    ariaLabel,
+    role,
+    tabIndex: disabled ? -1 : (rest.tabIndex ?? (isAction ? 0 : undefined)),
+    handleClick,
+    handleKeyDown
+  };
+};
+
+const getSafeRel = (rel: string | undefined, isExternal: boolean): string | undefined => {
+  if (!isExternal) {
+    return rel;
+  }
+
+  const tokens = new Set([...(rel?.split(/\s+/).filter(Boolean) ?? []), 'noopener', 'noreferrer']);
+  return Array.from(tokens).join(' ');
+};
+
+const resolveEmphasis = (
+  variant: NonNullable<LinkProps['variant']>,
+  emphasis: LinkProps['emphasis'],
+  shadow: LinkProps['shadow']
+): LinkEmphasis => {
+  if (variant === 'regular') {
+    return 'flat';
+  }
+
+  return emphasis ?? (shadow === false ? 'flat' : 'default');
 };

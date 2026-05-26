@@ -1,98 +1,120 @@
-import type { DynamicIconName } from '@/components/utils/types';
-import { cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { ComponentProps, ReactNode } from 'react';
+import type { DynamicIconName } from '@/types';
 
 export const linkVariants = cva(
   [
-    'link w-auto relative overflow-hidden cursor-pointer',
-    'transition-all duration-200 ease-in-out',
-    'flex gap-1 items-center justify-start',
-    'font-secondary whitespace-nowrapline-clamp-1 leading-[1.2]',
-    'focus-visible:outline-2 focus-visible:outline-offset-2',
-    'dark:focus-visible:outline-white focus-visible:outline-accent'
+    'link relative w-auto cursor-pointer font-medium leading-normal',
+    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-40'
   ],
   {
     variants: {
       variant: {
         regular: [
-          'hover:text-secondary',
-          'text-text-light',
-          'dark:text-text-dark',
-          'dark:hover:text-accent',
-          'underline-offset-2 underline'
+          'inline border-b font-bold no-underline',
+          'border-brand-light/60 text-brand-light dark:border-brand-dark-dark dark:text-brand-dark-dark',
+          'transition-[color,border-color] duration-200 ease-[ease]',
+          'hover:border-brand-light-dark/80 hover:text-brand-light-dark dark:hover:border-brand-dark-light dark:hover:text-brand-dark-light',
+          '[&>svg]:mr-1 [&>svg]:inline-block [&>svg]:align-middle'
         ],
         button: [
-          'px-4 py-2',
-          'rounded-md',
-          'border-2',
-          'text-text-dark',
-          'bg-secondary',
-          'border-secondary',
-          'hover:border-accent',
-          'hover:bg-accent',
-          'hover:shadow-secondary',
-          'dark:hover:bg-accent',
-          'dark:hover:shadow-secondary',
-          'hover:shadow-custom-md'
+          'inline-flex items-center justify-center whitespace-nowrap rounded-pill border border-transparent font-semibold tracking-ui text-white no-underline',
+          'bg-btn-primary',
+          'transition-[box-shadow,background,transform] duration-250 ease-[ease]',
+          'hover:bg-btn-primary-hover hover:text-white',
+          'motion-safe:active:scale-[0.98]'
         ],
         outlined: [
-          'px-4 py-2',
-          'rounded-md',
-          'border-2',
-          'text-secondary',
-          'border-secondary',
-          'hover:text-text-dark',
-          'bg-transparent',
-          'hover:border-accent',
-          'hover:bg-accent',
-          'hover:shadow-secondary',
-          'dark:hover:bg-accent',
-          'dark:transparent',
-          'dark:text-text-dark',
-          'dark:hover:shadow-secondary',
-          'hover:shadow-custom-sm'
+          'inline-flex items-center justify-center whitespace-nowrap rounded-pill border font-semibold tracking-ui no-underline',
+          'border-red-tint-border bg-red-tint-subtle text-brand-light dark:text-text-dark',
+          'transition-[box-shadow,background,border-color,transform] duration-250 ease-[ease]',
+          'hover:border-brand-light/80 hover:bg-red-tint-low hover:text-brand-light-darkest',
+          'dark:hover:border-brand-dark-light dark:hover:bg-red-tint-active dark:hover:text-text-dark',
+          'motion-safe:active:scale-[0.98]'
         ]
       },
       size: {
-        md: 'px-md fs-base tablet:fs-base-tablet',
-        lg: 'px-lg fs-h6 tablet:fs-h6-tablet',
-        sm: 'px-sm fs-small tablet:fs-small-tablet'
+        xs: 'fs-xs',
+        sm: 'fs-small',
+        md: 'fs-base',
+        lg: 'fs-h5'
+      },
+      emphasis: {
+        default: '',
+        flat: ''
       }
     },
+    compoundVariants: [
+      { variant: ['button', 'outlined'], size: 'xs', class: 'h-9 gap-0-75 px-2' },
+      { variant: ['button', 'outlined'], size: 'sm', class: 'h-11 gap-1 px-sm' },
+      { variant: ['button', 'outlined'], size: 'md', class: 'h-11 gap-1.5 px-md' },
+      { variant: ['button', 'outlined'], size: 'lg', class: 'h-12 gap-2 px-lg' },
+      {
+        variant: 'button',
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+      },
+      {
+        variant: 'outlined',
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
+      }
+    ],
     defaultVariants: {
       variant: 'regular',
-      size: 'md'
+      size: 'md',
+      emphasis: 'default'
     }
   }
 );
 
-type ButtonVariants = 'regular' | 'button' | 'outlined';
-type TargetVariants = '_blank' | '_self' | '_parent' | '_top';
-type LinkSizes = 'sm' | 'md' | 'lg';
+export type LinkVariant = 'regular' | 'button' | 'outlined';
+export type LinkTarget = '_blank' | '_self' | '_parent' | '_top';
+export type LinkSize = 'xs' | 'sm' | 'md' | 'lg';
+export type LinkEmphasis = NonNullable<VariantProps<typeof linkVariants>['emphasis']>;
 
-export type LinkProps = {
-  /**
-   * @control select
-   * @default regular
-   * */
-  variant?: ButtonVariants;
-  /** @control text */
-  href?: string;
-  /**
-   * @control text
-   * @default _blank
-   * */
-  target?: TargetVariants;
-  /**
-   * @control select
-   * @default md
-   * */
-  size: LinkSizes;
-  /** @control text */
-  icon?: DynamicIconName;
-  /** @control text */
-  title?: string;
-  /** @control text */
-  className?: string;
-  /** @control text */
-  children: string;
-};
+export type LinkProps = Omit<ComponentProps<'a'>, 'children' | 'disabled' | 'target'> &
+  VariantProps<typeof linkVariants> & {
+    /**
+     * @control text
+     */
+    children: ReactNode;
+    /**
+     * @control select
+     * @default regular
+     */
+    variant?: LinkVariant;
+    /**
+     * @control select
+     * @default md
+     */
+    size?: LinkSize;
+    /**
+     * @control select
+     * @default _blank
+     */
+    target?: LinkTarget;
+    /**
+     * @control text
+     */
+    icon?: DynamicIconName;
+    /**
+     * @control select
+     * @default default
+     */
+    emphasis?: LinkEmphasis;
+    /**
+     * @deprecated Use `emphasis="flat"` instead.
+     * @control boolean
+     * @default true
+     */
+    shadow?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    disabled?: boolean;
+  };

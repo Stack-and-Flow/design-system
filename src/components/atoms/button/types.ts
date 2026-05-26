@@ -1,166 +1,183 @@
-import type { DynamicIconName } from '@/components/utils/types';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { ComponentProps } from 'react';
+import type { DynamicIconName } from '@/types';
 
 export const buttonVariants = cva(
   [
-    'button relative overflow-hidden border-2 cursor-pointer max-w-full',
-    'transition-all duration-200 ease-in-out',
+    'button relative cursor-pointer max-w-full overflow-hidden',
+    'active:scale-[0.98]',
     'flex items-center justify-center',
-    'font-secondary-bold whitespace-nowrap line-clamp-1 leading-[1.2]',
-    'disabled:pointer-events-none disabled:opacity-60',
-    'focus-visible:outline-offset-2 dark:focus-visible:outline-white focus-visible:outline-secondary focus-visible:outline-2'
+    'font-semibold whitespace-nowrap line-clamp-1 leading-relaxed tracking-ui',
+    'disabled:pointer-events-none disabled:opacity-40 disabled:cursor-not-allowed',
+    'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand-light/35 dark:focus-visible:ring-brand-dark/40',
+    'transition-[background,box-shadow,border-color,transform,color] duration-250 ease-out'
   ],
   {
     variants: {
       variant: {
-        primary: [
-          'text-text-dark',
-          'bg-secondary',
-          'border-secondary',
-          'hover:border-accent',
-          'hover:bg-accent',
-          'hover:shadow-secondary',
-          'dark:hover:bg-accent',
-          'dark:hover:shadow-secondary'
-        ],
-        ghost: [
-          'text-text-light',
-          'bg-transparent',
-          'border-transparent',
-          'hover:bg-gray-light-600',
-          'hover:border-gray-light-600',
-          'hover:!shadow-transparent',
-          'dark:text-text-dark',
-          'dark:border-transparent',
-          'dark:hover:bg-gray-dark-400',
-          'dark:hover:border-gray-dark-400',
-          'dark:hover:shadow-gray-900'
-        ],
-        light: [
-          'text-secondary',
-          'border-transparent',
-          'bg-transparent',
-          'hover:text-text-dark',
-          'dark:text-text-dark',
-          'hover:border-accent',
-          'hover:bg-accent',
-          'hover:shadow-secondary'
-        ],
+        primary: ['text-white', 'bg-btn-primary hover:bg-btn-primary-hover active:bg-btn-primary-active', 'border-0'],
         secondary: [
-          'text-text-light',
-          'bg-gray-light-500',
-          'border-gray-light-500',
-          'hover:bg-gray-light-600',
-          'hover:border-gray-light-600',
-          'hover:!shadow-transparent',
-          'dark:text-text-dark',
-          'dark:bg-gray-dark-500',
-          'dark:border-gray-dark-500',
-          'dark:hover:bg-gray-dark-400',
-          'dark:hover:border-gray-dark-400',
-          'dark:hover:shadow-gray-dark-900'
+          'text-brand-light dark:text-text-dark',
+          'bg-red-tint-subtle hover:bg-red-tint-active active:bg-red-tint-active',
+          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light'
         ],
         outlined: [
-          'text-secondary',
-          'border-secondary',
+          'text-brand-light dark:text-text-dark',
           'hover:text-text-dark',
+          'bg-red-tint-subtle hover:bg-btn-primary-hover active:bg-red-tint-active',
+          'border border-red-tint-border hover:border-brand-light dark:hover:border-brand-dark-light'
+        ],
+        ghost: [
+          'text-text-light dark:text-text-dark',
           'bg-transparent',
-          'hover:border-accent',
-          'hover:bg-accent',
-          'hover:shadow-secondary',
-          'dark:hover:bg-accent',
-          'dark:text-text-dark',
-          'dark:hover:shadow-secondary'
+          'border border-transparent',
+          'hover:bg-black-tint-low dark:hover:bg-white-tint-faint'
+        ],
+        light: [
+          'text-brand-light dark:text-brand-dark',
+          'border border-transparent bg-transparent',
+          'hover:text-brand-light-dark dark:hover:text-brand-dark-light',
+          'hover:bg-red-tint-subtle'
         ]
       },
       rounded: {
-        true: 'rounded-full',
+        true: 'rounded-pill',
         false: 'rounded-md'
       },
-      shadow: {
-        true: 'hover:shadow-custom-sm',
-        false: ''
+      emphasis: {
+        default: '',
+        flat: ''
       },
       uppercase: {
         true: 'uppercase',
         false: ''
       },
       size: {
-        md: 'px-md h-10 fs-base tablet:fs-base-tablet',
-        lg: 'px-lg h-12 fs-h6 tablet:fs-h6-tablet',
-        sm: 'px-sm h-8 fs-small tablet:fs-small-tablet'
+        xs: 'h-9 px-2 fs-xs',
+        sm: 'px-sm h-11 fs-small',
+        md: 'px-md h-11 fs-base',
+        lg: 'px-lg h-12 fs-h6'
+      },
+      fullWidth: {
+        true: 'w-full',
+        false: 'w-auto'
       }
     },
+    compoundVariants: [
+      {
+        variant: 'primary',
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-primary-light dark:shadow-glow-btn-primary hover:shadow-glow-btn-primary-hover-light dark:hover:shadow-glow-btn-primary-hover'
+      },
+      {
+        variant: ['secondary', 'outlined'],
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover'
+      }
+    ],
     defaultVariants: {
       variant: 'primary',
       size: 'md',
-      rounded: false,
-      shadow: true
+      rounded: true,
+      emphasis: 'default',
+      fullWidth: false
     }
   }
 );
 
 type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
 type ButtonTypeVariants = 'button' | 'submit' | 'reset';
-type ButtonSizeVariants = 'md' | 'sm' | 'lg';
+type ButtonSizeVariants = 'xs' | 'sm' | 'md' | 'lg';
+export type ButtonEmphasis = NonNullable<VariantProps<typeof buttonVariants>['emphasis']>;
+type NativeButtonProps = Omit<ComponentProps<'button'>, 'type' | 'disabled' | 'className' | 'children' | 'aria-label'>;
+type ButtonAccessibleContent =
+  | {
+      /** @control text */
+      text: string;
+      /** @control text */
+      ariaLabel?: string;
+      /** @control text */
+      'aria-label'?: string;
+    }
+  | {
+      /** @control text */
+      text?: string;
+      /** @control text */
+      ariaLabel: string;
+      /** @control text */
+      'aria-label'?: string;
+    }
+  | {
+      /** @control text */
+      text?: string;
+      /** @control text */
+      ariaLabel?: string;
+      /** @control text */
+      'aria-label': string;
+    };
 
-export type ButtonProps = {
-  /**
-   * @control select
-   * @default primary
-   */
-  variant?: ButtonVariant;
-  /** @control text */
-  text?: string;
-  /** @control text */
-  icon?: DynamicIconName;
-  /**
-   * @control select
-   * @default md
-   */
-  size?: ButtonSizeVariants;
-  /**
-   * @control select
-   * @default button
-   */
-  type?: ButtonTypeVariants;
-  /**
-   * @control boolean
-   * @default false
-   */
-  rounded?: boolean;
-  /**
-   * @control boolean
-   * @default true
-   */
-  shadow?: boolean;
-  /**
-   * @control boolean
-   * @default true
-   */
-  uppercase?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  disabled?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  isFullWidth?: boolean;
-  /**
-   * @control boolean
-   * @default false
-   */
-  isLoading?: boolean;
-  /** @control text */
-  ariaLabel?: string;
-  /** @control text */
-  className?: string;
-  /**
-   * @control boolean
-   * @default false
-   */
-  'aria-pressed'?: boolean; // Nuevo prop para accesibilidad en botones de alternancia
-};
+export type ButtonProps = NativeButtonProps &
+  ButtonAccessibleContent & {
+    /**
+     * @control select
+     * @default primary
+     */
+    variant?: ButtonVariant;
+    /** @control text */
+    icon?: DynamicIconName;
+    /**
+     * @control select
+     * @default md
+     */
+    size?: ButtonSizeVariants;
+    /**
+     * @control select
+     * @default button
+     */
+    type?: ButtonTypeVariants;
+    /**
+     * @control select
+     * @default default
+     */
+    emphasis?: ButtonEmphasis;
+    /**
+     * @deprecated Use `emphasis="flat"` instead.
+     * @control boolean
+     * @default true
+     */
+    shadow?: boolean;
+    /**
+     * @control boolean
+     * @default true
+     */
+    rounded?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    uppercase?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    disabled?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    isFullWidth?: boolean;
+    /**
+     * @control boolean
+     * @default false
+     */
+    isLoading?: boolean;
+    /** @control text */
+    className?: string;
+    /**
+     * @control boolean
+     * @default false
+     */
+    'aria-pressed'?: boolean;
+  };

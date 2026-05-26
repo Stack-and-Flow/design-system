@@ -1,140 +1,224 @@
-import { cva } from 'class-variance-authority';
-import type { ReactNode } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { ComponentProps, ReactNode } from 'react';
 
 export const switchBase = cva(
   [
-    'relative inline-flex items-center cursor-pointer',
-    'transition-colors duration-200 ease-in-out',
-    'focus:outline-none focus:ring-2 focus:ring-offset-2',
-    'text-gray-dark-900 dark:text-gray-light-300',
-    'disabled:cursor-not-allowed disabled:opacity-30'
+    'relative inline-flex items-center cursor-pointer select-none',
+    'text-text-light dark:text-text-dark',
+    'transition-[color,opacity] duration-200 ease-out'
   ],
   {
     variants: {
       labelPlacement: {
-        top: 'flex-col-reverse gap-2',
+        top: 'flex-col-reverse gap-0.5',
         right: 'flex-row gap-2',
-        bottom: 'flex-col gap-2',
+        bottom: 'flex-col gap-0.5',
         left: 'flex-row-reverse gap-2'
+      },
+      disabled: {
+        true: 'cursor-not-allowed pointer-events-none opacity-40',
+        false: ''
       }
     },
     defaultVariants: {
-      labelPlacement: 'right'
+      labelPlacement: 'right',
+      disabled: false
     }
   }
 );
 
 export const switchWrapper = cva(
   [
-    'flex-shrink-0 relative inline-flex cursor-pointer',
-    'bg-gray-400 dark:bg-gray-800 flex items-center justify-center gap-6'
+    'relative inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center',
+    'cursor-pointer transition-opacity duration-200 ease-out'
+  ],
+  {
+    variants: {
+      disabled: {
+        true: 'cursor-not-allowed pointer-events-none',
+        false: ''
+      }
+    },
+    defaultVariants: {
+      disabled: false
+    }
+  }
+);
+
+export const switchTrack = cva(
+  [
+    'relative inline-flex items-center border p-0.5',
+    'text-text-light dark:text-text-dark peer-checked:text-text-dark',
+    'transition-[background-color,border-color,box-shadow,color,transform] duration-300 ease-in-out',
+    'hover:bg-surface-raised-light dark:hover:bg-white-tint-heavy',
+    'peer-checked:hover:bg-brand-light-darker! dark:peer-checked:hover:bg-brand-dark-darkest!',
+    'active:scale-[0.98]',
+    'peer-focus-visible:shadow-glow-focus-light dark:peer-focus-visible:shadow-glow-focus-dark',
+    'peer-checked:[&>span[data-thumb=true]]:bg-white dark:peer-checked:[&>span[data-thumb=true]]:bg-white',
+    'peer-checked:[&>span[data-thumb=true]>span[data-thumb-icon=true]]:text-brand-light dark:peer-checked:[&>span[data-thumb=true]>span[data-thumb-icon=true]]:text-brand-dark-dark',
+    'peer-checked:[&>span[data-start-content=true]]:opacity-0 peer-checked:[&>span[data-end-content=true]]:opacity-100'
   ],
   {
     variants: {
       size: {
-        sm: 'w-9 h-5',
-        md: 'w-12 h-6',
-        lg: 'w-16 h-8'
+        sm: 'h-5 w-9 peer-checked:[&>span[data-thumb=true]]:translate-x-[14px]',
+        md: 'h-6 w-12 peer-checked:[&>span[data-thumb=true]]:translate-x-[22px]',
+        lg: 'h-8 w-16 peer-checked:[&>span[data-thumb=true]]:translate-x-[30px]'
+      },
+      color: {
+        default: [
+          'border-border-strong-light bg-surface-raised-light dark:border-white-tint-high dark:bg-white-tint-strong',
+          'peer-checked:border-brand-light-darker peer-checked:bg-brand-light-darker dark:peer-checked:border-brand-dark-darkest dark:peer-checked:bg-brand-dark-darkest'
+        ],
+        transparent: [
+          'border border-border-strong-light bg-transparent dark:border-border-strong-dark',
+          'peer-checked:border-brand-light peer-checked:bg-red-tint-subtle dark:peer-checked:border-brand-dark'
+        ],
+        disabled: [
+          'border-border-strong-light bg-surface-raised-light dark:border-white-tint-high dark:bg-white-tint-strong',
+          'peer-checked:border-brand-light-darker peer-checked:bg-brand-light-darker dark:peer-checked:border-brand-dark-darkest dark:peer-checked:bg-brand-dark-darkest'
+        ]
+      },
+      variant: {
+        default: '',
+        bordered: [
+          'bg-transparent dark:bg-transparent',
+          'border-border-strong-light dark:border-white-tint-high',
+          'hover:border-brand-light dark:hover:border-brand-dark-light',
+          'peer-checked:border-brand-light! peer-checked:bg-red-tint-active! dark:peer-checked:border-brand-dark! dark:peer-checked:bg-red-tint-strong!',
+          'peer-checked:hover:border-brand-light! dark:peer-checked:hover:border-brand-dark-light!'
+        ],
+        glass: [
+          'border-white-tint-high bg-white-tint-mid backdrop-blur-sm dark:bg-white-tint-faint',
+          'hover:bg-white-tint-strong dark:hover:bg-white-tint-mid',
+          'peer-checked:border-red-tint-border! peer-checked:bg-red-tint-mid! dark:peer-checked:border-brand-dark! dark:peer-checked:bg-red-tint-active!',
+          'peer-checked:hover:bg-red-tint-active! dark:peer-checked:hover:bg-red-tint-strong!'
+        ]
+      },
+      emphasis: {
+        default: '',
+        flat: ''
       },
       rounded: {
-        true: 'rounded-full',
-        false: 'rounded-lg'
-      },
-      disabled: {
-        true: 'opacity-30 cursor-not-allowed'
+        true: 'rounded-pill',
+        false: 'rounded-md'
       }
     },
+    compoundVariants: [
+      {
+        emphasis: 'default',
+        class:
+          'shadow-glow-btn-secondary-light dark:shadow-glow-btn-secondary hover:shadow-glow-btn-secondary-hover-light dark:hover:shadow-glow-btn-secondary-hover peer-checked:shadow-glow-btn-primary-light dark:peer-checked:shadow-glow-btn-primary peer-checked:hover:shadow-glow-btn-primary-hover-light dark:peer-checked:hover:shadow-glow-btn-primary-hover'
+      }
+    ],
     defaultVariants: {
       size: 'md',
+      color: 'default',
+      variant: 'default',
+      emphasis: 'default',
       rounded: true
     }
   }
 );
 
-export const switchTrack = cva(['relative w-full h-full p-0.5 flex items-center transition-colors duration-300'], {
-  variants: {
-    size: {
-      sm: 'w-8 h-2 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-4',
-      md: 'w-10 h-3 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-5.5',
-      lg: 'w-12 h-4 p-0.5 peer-checked:[&>span[data-thumb]]:translate-x-8'
+export const switchThumb = cva(
+  ['absolute left-0.5 z-10 translate-x-0 rounded-full', 'transition-all duration-300 ease-in-out'],
+  {
+    variants: {
+      size: {
+        sm: 'h-4 w-4',
+        md: 'h-5 w-5',
+        lg: 'h-7 w-7'
+      },
+      color: {
+        default: 'bg-white dark:bg-white-tint-heavy',
+        transparent: 'bg-white dark:bg-white-tint-heavy',
+        disabled: 'bg-white dark:bg-white-tint-heavy'
+      }
     },
-    color: {
-      default: 'bg-transparent-300 peer-checked:bg-primary dark:peer-checked:bg-accent',
-      disabled: 'bg-transparent-300 peer-checked:bg-primary opacity-50',
-      transparent: 'bg-transparent border border-gray-400 peer-checked:border-red-500'
-    },
-    variant: {
-      default: '',
-      bordered: 'border',
-      glass:
-        'bg-white/30 backdrop-blur-md border border-white/30 shadow-md peer-checked:bg-primary/70 border-primary/50 dark:peer-checked:bg-accent/60 backdrop-blur-md ',
-      shadow: 'bg-transparent shadow-gray-500 shadow-md peer-checked:shadow-primary/90'
-    },
-    rounded: {
-      true: 'rounded-full',
-      false: 'rounded-md'
+    defaultVariants: {
+      size: 'md',
+      color: 'default'
     }
-  },
-  defaultVariants: {
-    size: 'md',
-    color: 'default',
-    rounded: true
   }
-});
+);
 
-export const switchThumb = cva(['absolute rounded-full transition-transform duration-300 left-1 top-0.8 z-10'], {
-  variants: {
-    size: {
-      sm: 'h-3 w-3',
-      md: 'h-4 w-4',
-      lg: 'h-5 w-5'
-    },
-    color: {
-      default: 'bg-white',
-      disabled: 'bg-white opacity-70',
-      transparent: 'bg-white'
-    }
-  },
-  defaultVariants: {
-    size: 'md',
-    color: 'default'
-  }
-});
-
-export const switchLabel = cva(['select-none'], {
+export const switchLabel = cva('select-none', {
   variants: {
     size: {
       sm: 'text-sm',
-      md: 'text-md',
+      md: 'text-base',
       lg: 'text-lg'
     },
     disabled: {
-      true: 'opacity-30 cursor-not-allowed'
+      true: 'cursor-not-allowed',
+      false: ''
     }
   },
   defaultVariants: {
-    size: 'md'
+    size: 'md',
+    disabled: false
   }
 });
+
 export const switchStartContent = cva(
-  'absolute left-1.5 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100 peer-checked:opacity-0'
+  'pointer-events-none absolute left-1.5 z-20 flex items-center justify-center text-text-secondary-light opacity-100 transition-opacity duration-300 ease-in-out dark:text-text-secondary-dark'
 );
+
 export const switchEndContent = cva(
-  'absolute right-2 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100 peer-checked:opacity-0'
+  'pointer-events-none absolute right-2 z-20 flex items-center justify-center text-brand-light opacity-0 transition-opacity duration-300 ease-in-out dark:text-brand-dark-dark'
 );
-export const switchHiddenInput = cva('sr-only peer');
-export const switchThumbIcon = cva('flex items-center justify-center w-full h-full');
 
-type SwitchSize = 'sm' | 'md' | 'lg';
-type SwitchColor = 'default' | 'disabled' | 'transparent';
-type SwitchVariants = 'default' | 'bordered' | 'glass' | 'shadow';
-type SwitchRounded = true | false;
-type SwitchLabelPlacement = 'top' | 'right' | 'bottom' | 'left';
+export const switchHiddenInput = cva('peer sr-only');
 
-export type SwitchProps = {
+export const switchThumbIcon = cva(
+  'flex h-full w-full items-center justify-center text-text-secondary-light transition-colors duration-300 ease-in-out dark:text-text-secondary-dark'
+);
+
+type SwitchBaseVariants = VariantProps<typeof switchBase>;
+type SwitchTrackVariants = VariantProps<typeof switchTrack>;
+
+type NativeSwitchProps = Omit<
+  ComponentProps<'input'>,
+  | 'aria-checked'
+  | 'children'
+  | 'checked'
+  | 'className'
+  | 'color'
+  | 'defaultChecked'
+  | 'onChange'
+  | 'role'
+  | 'size'
+  | 'type'
+>;
+
+export type SwitchSize = NonNullable<SwitchTrackVariants['size']>;
+export type SwitchColor = NonNullable<SwitchTrackVariants['color']>;
+export type SwitchVariant = NonNullable<SwitchTrackVariants['variant']>;
+export type SwitchEmphasis = NonNullable<SwitchTrackVariants['emphasis']>;
+export type SwitchRounded = NonNullable<SwitchTrackVariants['rounded']>;
+export type SwitchLabelPlacement = NonNullable<SwitchBaseVariants['labelPlacement']>;
+
+type SwitchAccessibleNameProps =
+  | {
+      label: string;
+      ariaLabel?: string;
+      'aria-label'?: string;
+    }
+  | {
+      label?: string;
+      ariaLabel: string;
+      'aria-label'?: string;
+    }
+  | {
+      label?: string;
+      ariaLabel?: string;
+      'aria-label': string;
+    };
+
+type SwitchCommonProps = {
+  /** @control text */
   className?: string;
-  children?: ReactNode;
-  label?: string;
   /**
    * @control select
    * @default md
@@ -143,15 +227,21 @@ export type SwitchProps = {
   /**
    * @control select
    * @default default
+   * Legacy note: `color="disabled"` is preserved for compatibility, but `disabled` should be used for disabled semantics.
    */
   color?: SwitchColor;
   /**
    * @control select
    * @default default
    */
-  variant?: SwitchVariants;
+  variant?: SwitchVariant;
   /**
-   * @control switch
+   * @control select
+   * @default default
+   */
+  emphasis?: SwitchEmphasis;
+  /**
+   * @control boolean
    * @default true
    */
   rounded?: SwitchRounded;
@@ -161,18 +251,42 @@ export type SwitchProps = {
    */
   labelPlacement?: SwitchLabelPlacement;
   /**
-   * @control select
+   * @control boolean
    * @default false
    */
   disabled?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   checked?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   defaultChecked?: boolean;
+  /** @control action */
   onChange?: (checked: boolean) => void;
+  /** @control object */
   startContent?: ReactNode;
+  /** @control object */
   thumbIcon?: ReactNode;
+  /** @control object */
   endContent?: ReactNode;
-  role?: string;
+  /** @control text */
   ariaLabel?: string;
+  /** @control text */
+  'aria-label'?: string;
+  /**
+   * @deprecated The input always uses role="switch" so semantics cannot drift.
+   * @control text
+   */
+  role?: string;
+  /**
+   * @deprecated `aria-checked` is derived from the checked state so it cannot drift.
+   * @control boolean
+   */
   ariaChecked?: boolean;
-  tabIndex?: string | number;
 };
+
+export type SwitchProps = NativeSwitchProps & SwitchCommonProps & SwitchAccessibleNameProps;

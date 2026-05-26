@@ -1,4 +1,4 @@
-import { sanitizeHtml } from '@/components/utils/functions';
+import { sanitizeHtml } from '@utils/sanitizeHtml';
 import { cn } from '@/lib/utils';
 import { type TextProps, textVariants } from './types';
 
@@ -15,10 +15,10 @@ export const useText = ({
   id,
   ...rest
 }: TextProps) => {
-  const sanitizedHtml = isHtml ? sanitizeHtml(children as string) : undefined;
+  const sanitizedHtml = isHtml && typeof children === 'string' ? sanitizeHtml(children) : undefined;
 
   const props = {
-    className: cn(textVariants({ tag, prominent, srOnly }), className),
+    className: cn(textVariants({ font, tag, prominent, srOnly }), className),
     'aria-live': ariaLive || undefined,
     role: role || undefined,
     id: id || undefined,
