@@ -116,7 +116,10 @@ describe('Breadcrumb — component behavior', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Show 3 hidden breadcrumb items' }));
-    await user.click(screen.getByRole('link', { name: 'API' }));
+
+    const hiddenLink = screen.getByRole('link', { name: 'API' });
+    expect(hiddenLink).toHaveClass('min-w-0');
+    await user.click(hiddenLink);
 
     expect(handleItemClick).toHaveBeenCalledWith(duplicatedItems[3], 3);
   });
@@ -148,6 +151,13 @@ describe('Breadcrumb — component behavior', () => {
 
     expect(handleCollapsedClick).toHaveBeenCalledWith([items[1], items[2]]);
     expect(document.getElementById(trigger.getAttribute('aria-controls') ?? '')).toBeInTheDocument();
+  });
+
+  it('allows breadcrumb labels to shrink before truncating', () => {
+    render(<Breadcrumb items={items} />);
+
+    expect(screen.getByRole('link', { name: 'Components' })).toHaveClass('min-w-0', 'max-w-full');
+    expect(screen.getByText('Breadcrumb').closest('li')).toHaveClass('min-w-0');
   });
 
   it('uses the established design-system classes for sizing and important rounded variants', () => {
