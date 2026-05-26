@@ -91,7 +91,7 @@ describe('Tooltip — component behavior', () => {
     expect(await screen.findByRole('tooltip')).toHaveTextContent('0');
   });
 
-  it('portals into the nearest dark container when the trigger is scoped to dark mode', async () => {
+  it('portals to body while preserving scoped dark mode inheritance', async () => {
     const user = userEvent.setup();
 
     render(
@@ -106,6 +106,7 @@ describe('Tooltip — component behavior', () => {
 
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toHaveTextContent('Dark scoped tooltip');
+    expect(document.body).toContainElement(tooltip);
     expect(tooltip.parentElement).toHaveClass('dark');
   });
 

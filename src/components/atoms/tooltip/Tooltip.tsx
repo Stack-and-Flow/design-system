@@ -39,12 +39,10 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
       })
     : children;
   const closestDarkContainer = typeof document === 'undefined' ? null : triggerRef.current?.closest('.dark');
-  const portalContainer =
-    typeof document === 'undefined'
-      ? null
-      : closestDarkContainer?.tagName === 'HTML'
-        ? document.body
-        : (closestDarkContainer ?? document.body);
+  const needsScopedDarkPortal = Boolean(
+    closestDarkContainer && closestDarkContainer.tagName !== 'HTML' && closestDarkContainer.tagName !== 'BODY'
+  );
+  const portalContainer = typeof document === 'undefined' ? null : document.body;
 
   return (
     <span
@@ -62,19 +60,21 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
         hasTooltipContent &&
         portalContainer &&
         createPortal(
-          <div
-            ref={tooltipRef}
-            id={tooltipId}
-            role='tooltip'
-            onMouseEnter={enableHover ? () => showTooltip(true) : undefined}
-            onMouseLeave={enableHover ? () => hideTooltip() : undefined}
-            className={cn(tooltipClass, !isPositioned && 'invisible', isClosing && 'animate-fadeOut duration-200')}
-            style={{
-              top: coordinates.top,
-              left: coordinates.left
-            }}
-          >
-            {content}
+          <div className={needsScopedDarkPortal ? 'dark' : undefined} style={{ display: 'contents' }}>
+            <div
+              ref={tooltipRef}
+              id={tooltipId}
+              role='tooltip'
+              onMouseEnter={enableHover ? () => showTooltip(true) : undefined}
+              onMouseLeave={enableHover ? () => hideTooltip() : undefined}
+              className={cn(tooltipClass, !isPositioned && 'invisible', isClosing && 'animate-fadeOut duration-200')}
+              style={{
+                top: coordinates.top,
+                left: coordinates.left
+              }}
+            >
+              {content}
+            </div>
           </div>,
           portalContainer
         )}
