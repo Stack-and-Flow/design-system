@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { type TooltipPosition, type TooltipProps, tooltipVariants } from './types';
 
-const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : React.useLayoutEffect;
 
 type TooltipCoordinates = {
   top: number;
