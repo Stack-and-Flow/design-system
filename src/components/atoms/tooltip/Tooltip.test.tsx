@@ -9,6 +9,8 @@ import { useTooltip } from './useTooltip';
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   vi.useRealTimers();
 });
 
@@ -121,6 +123,37 @@ describe('Tooltip — component behavior', () => {
     });
 
     expect(await screen.findByRole('tooltip')).toHaveTextContent('Focus tooltip');
+  });
+
+  it('positions the tooltip from viewport coordinates and keeps it in view', async () => {
+    const user = userEvent.setup();
+
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function getBoundingClientRectMock(
+      this: Element
+    ) {
+      if ((this as HTMLElement).getAttribute('role') === 'tooltip') {
+        return { bottom: 30, height: 30, left: 0, right: 120, top: 0, width: 120, x: 0, y: 0 } as DOMRect;
+      }
+
+      if ((this as HTMLElement).tagName === 'SPAN') {
+        return { bottom: 124, height: 44, left: 300, right: 360, top: 80, width: 60, x: 300, y: 80 } as DOMRect;
+      }
+
+      return { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0 } as DOMRect;
+    });
+    vi.stubGlobal('innerWidth', 360);
+    vi.stubGlobal('innerHeight', 240);
+
+    render(
+      <Tooltip content='Positioned tooltip' position='right'>
+        <button type='button'>Position trigger</button>
+      </Tooltip>
+    );
+
+    await user.hover(screen.getByRole('button', { name: 'Position trigger' }));
+
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveStyle({ left: '232px', top: '87px' });
   });
 
   it('only toggles on click when click interaction is configured', async () => {

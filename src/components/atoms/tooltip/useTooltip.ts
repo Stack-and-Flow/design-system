@@ -199,59 +199,67 @@ export const useTooltip = ({
       const triggerSize = triggerRef.current.getBoundingClientRect();
       const tooltipSize = tooltipRef.current.getBoundingClientRect();
       const offset = 10;
+      const viewportPadding = 8;
+      const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+      const maxTop = Math.max(viewportPadding, window.innerHeight - tooltipSize.height - viewportPadding);
+      const maxLeft = Math.max(viewportPadding, window.innerWidth - tooltipSize.width - viewportPadding);
+      const keepInViewport = (nextCoordinates: TooltipCoordinates): TooltipCoordinates => ({
+        top: clamp(nextCoordinates.top, viewportPadding, maxTop),
+        left: clamp(nextCoordinates.left, viewportPadding, maxLeft)
+      });
 
       const positions: Record<TooltipPosition, () => TooltipCoordinates> = {
         top: () => ({
-          top: triggerSize.top + window.scrollY - tooltipSize.height - offset,
-          left: triggerSize.left + window.scrollX + triggerSize.width / 2 - tooltipSize.width / 2
+          top: triggerSize.top - tooltipSize.height - offset,
+          left: triggerSize.left + triggerSize.width / 2 - tooltipSize.width / 2
         }),
         'top-start': () => ({
-          top: triggerSize.top + window.scrollY - tooltipSize.height - offset,
-          left: triggerSize.left + window.scrollX
+          top: triggerSize.top - tooltipSize.height - offset,
+          left: triggerSize.left
         }),
         'top-end': () => ({
-          top: triggerSize.top + window.scrollY - tooltipSize.height - offset,
-          left: triggerSize.right + window.scrollX - tooltipSize.width
+          top: triggerSize.top - tooltipSize.height - offset,
+          left: triggerSize.right - tooltipSize.width
         }),
         bottom: () => ({
-          top: triggerSize.bottom + window.scrollY + offset,
-          left: triggerSize.left + window.scrollX + triggerSize.width / 2 - tooltipSize.width / 2
+          top: triggerSize.bottom + offset,
+          left: triggerSize.left + triggerSize.width / 2 - tooltipSize.width / 2
         }),
         'bottom-start': () => ({
-          top: triggerSize.bottom + window.scrollY + offset,
-          left: triggerSize.left + window.scrollX
+          top: triggerSize.bottom + offset,
+          left: triggerSize.left
         }),
         'bottom-end': () => ({
-          top: triggerSize.bottom + window.scrollY + offset,
-          left: triggerSize.right + window.scrollX - tooltipSize.width
+          top: triggerSize.bottom + offset,
+          left: triggerSize.right - tooltipSize.width
         }),
         left: () => ({
-          top: triggerSize.top + window.scrollY + triggerSize.height / 2 - tooltipSize.height / 2,
-          left: triggerSize.left + window.scrollX - tooltipSize.width - offset
+          top: triggerSize.top + triggerSize.height / 2 - tooltipSize.height / 2,
+          left: triggerSize.left - tooltipSize.width - offset
         }),
         'left-start': () => ({
-          top: triggerSize.top + window.scrollY,
-          left: triggerSize.left + window.scrollX - tooltipSize.width - offset
+          top: triggerSize.top,
+          left: triggerSize.left - tooltipSize.width - offset
         }),
         'left-end': () => ({
-          top: triggerSize.bottom + window.scrollY - tooltipSize.height,
-          left: triggerSize.left + window.scrollX - tooltipSize.width - offset
+          top: triggerSize.bottom - tooltipSize.height,
+          left: triggerSize.left - tooltipSize.width - offset
         }),
         right: () => ({
-          top: triggerSize.top + window.scrollY + triggerSize.height / 2 - tooltipSize.height / 2,
-          left: triggerSize.right + window.scrollX + offset
+          top: triggerSize.top + triggerSize.height / 2 - tooltipSize.height / 2,
+          left: triggerSize.right + offset
         }),
         'right-start': () => ({
-          top: triggerSize.top + window.scrollY,
-          left: triggerSize.right + window.scrollX + offset
+          top: triggerSize.top,
+          left: triggerSize.right + offset
         }),
         'right-end': () => ({
-          top: triggerSize.bottom + window.scrollY - tooltipSize.height,
-          left: triggerSize.right + window.scrollX + offset
+          top: triggerSize.bottom - tooltipSize.height,
+          left: triggerSize.right + offset
         })
       };
 
-      setCoordinates(positions[resolvedPosition]());
+      setCoordinates(keepInViewport(positions[resolvedPosition]()));
       setIsPositioned(true);
     };
 

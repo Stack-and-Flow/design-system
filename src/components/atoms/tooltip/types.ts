@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 export const tooltipVariants = cva(
   [
-    'absolute z-50 rounded-md border px-2.5 py-1.5',
+    'fixed z-50 rounded-md border px-2.5 py-1.5',
     'fs-small text-center shadow-md',
     'animate-fadeIn transition-opacity duration-200 ease-in-out'
   ],
