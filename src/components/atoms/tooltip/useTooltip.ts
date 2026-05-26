@@ -9,7 +9,7 @@ type TooltipCoordinates = {
 type ResolvedTriggerInteraction = 'hover-focus' | 'hover' | 'focus' | 'click';
 
 export const useTooltip = ({
-  content = 'I`m a tooltip',
+  content = "I'm a tooltip",
   children = null,
   position,
   placement,
@@ -20,8 +20,8 @@ export const useTooltip = ({
   width = 'default',
   color = 'default',
   disabled = false,
-  onFocus = false,
-  onClick = false,
+  openOnFocus = false,
+  openOnClick = false,
   triggerInteraction,
   isOpen,
   onOpenChange,
@@ -53,16 +53,16 @@ export const useTooltip = ({
       return triggerInteraction;
     }
 
-    if (onClick === true) {
+    if (openOnClick) {
       return 'click';
     }
 
-    if (onFocus === true) {
+    if (openOnFocus) {
       return 'focus';
     }
 
     return 'hover-focus';
-  }, [onClick, onFocus, triggerInteraction]);
+  }, [openOnClick, openOnFocus, triggerInteraction]);
 
   const enableHover =
     !disabled && (resolvedTriggerInteraction === 'hover-focus' || resolvedTriggerInteraction === 'hover');
@@ -97,11 +97,12 @@ export const useTooltip = ({
 
   const showTooltip = useCallback(
     (immediate = false) => {
-      if (disabled) {
+      clearTimers();
+
+      if (disabled || !hasTooltipContent) {
         return;
       }
 
-      clearTimers();
       setIsClosing(false);
 
       const openTooltip = () => {
@@ -117,7 +118,7 @@ export const useTooltip = ({
         openTooltip();
       }, showDelay);
     },
-    [clearTimers, disabled, setOpenState, showDelay]
+    [clearTimers, disabled, hasTooltipContent, setOpenState, showDelay]
   );
 
   const hideTooltip = useCallback(
@@ -145,7 +146,7 @@ export const useTooltip = ({
   );
 
   const toggleClickTooltip = useCallback(() => {
-    if (!enableClick) {
+    if (!enableClick || !hasTooltipContent) {
       return;
     }
 
@@ -155,7 +156,7 @@ export const useTooltip = ({
     }
 
     showTooltip(true);
-  }, [enableClick, hideTooltip, isVisible, showTooltip]);
+  }, [enableClick, hasTooltipContent, hideTooltip, isVisible, showTooltip]);
 
   useEffect(() => {
     return () => {
@@ -164,12 +165,12 @@ export const useTooltip = ({
   }, [clearTimers]);
 
   useEffect(() => {
-    if (disabled) {
+    if (disabled || !hasTooltipContent) {
       clearTimers();
       setIsClosing(false);
       setOpenState(false);
     }
-  }, [clearTimers, disabled, setOpenState]);
+  }, [clearTimers, disabled, hasTooltipContent, setOpenState]);
 
   useEffect(() => {
     if (!isVisible) {
@@ -269,11 +270,11 @@ export const useTooltip = ({
 
     updatePosition();
     window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
 
     return () => {
       window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
     };
   }, [content, complement, isVisible, resolvedPosition, width]);
 

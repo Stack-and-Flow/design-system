@@ -4,7 +4,7 @@ import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import Tooltip from './Tooltip';
+import { Tooltip } from './Tooltip';
 import { useTooltip } from './useTooltip';
 
 afterEach(() => {
@@ -25,13 +25,13 @@ describe('useTooltip — logic', () => {
     expect(result.current.describedById).toMatch(/^tooltip-/);
   });
 
-  it('maps legacy props to the new public API', () => {
+  it('maps convenience props to the new public API', () => {
     const { result } = renderHook(() =>
       useTooltip({
-        content: 'Legacy tooltip',
+        content: 'Convenience tooltip',
         placement: 'left',
         delayShow: 120,
-        onClick: true
+        openOnClick: true
       })
     );
 
@@ -41,12 +41,12 @@ describe('useTooltip — logic', () => {
     expect(result.current.enableClick).toBe(true);
   });
 
-  it('ignores non-boolean Storybook action values for legacy interaction flags', () => {
+  it('keeps native event handlers separate from tooltip trigger mode', () => {
     const { result } = renderHook(() =>
       useTooltip({
-        content: 'Storybook action tooltip',
-        onClick: (() => undefined) as unknown as boolean,
-        onFocus: (() => undefined) as unknown as boolean
+        content: 'Native event tooltip',
+        onClick: () => undefined,
+        onFocus: () => undefined
       })
     );
 
@@ -73,7 +73,11 @@ describe('Tooltip — component behavior', () => {
 
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toHaveTextContent('Helpful tooltip text');
-    expect(tooltip).toHaveClass('opacity-100');
+
+    await waitFor(() => {
+      expect(tooltip).toHaveClass('opacity-100');
+    });
+
     expect(tooltip.className).not.toContain('animate-fadeIn');
   });
 
@@ -158,6 +162,74 @@ describe('Tooltip — component behavior', () => {
 
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toHaveStyle({ left: '232px', top: '87px' });
+  });
+
+  it('composes consumer event handlers with tooltip behavior', async () => {
+    const user = userEvent.setup();
+    const onMouseEnter = vi.fn();
+    const onFocus = vi.fn();
+
+    render(
+      <Tooltip content='Composed tooltip' onFocus={onFocus} onMouseEnter={onMouseEnter}>
+        <button type='button'>Composed trigger</button>
+      </Tooltip>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Composed trigger' });
+    await user.hover(trigger);
+
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Composed tooltip');
+
+    act(() => {
+      trigger.focus();
+    });
+
+    expect(onFocus).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not open or notify when tooltip content is empty', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <Tooltip content={null} onOpenChange={onOpenChange}>
+        <button type='button'>Empty trigger</button>
+      </Tooltip>
+    );
+
+    await user.hover(screen.getByRole('button', { name: 'Empty trigger' }));
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    expect(onOpenChange).not.toHaveBeenCalledWith(true);
+  });
+
+  it('cancels a delayed open when content becomes empty before the timer fires', async () => {
+    vi.useFakeTimers();
+    const onOpenChange = vi.fn();
+
+    const { rerender } = render(
+      <Tooltip content='Delayed content' delayMs={200} onOpenChange={onOpenChange}>
+        <button type='button'>Delayed content trigger</button>
+      </Tooltip>
+    );
+
+    act(() => {
+      fireEvent.mouseEnter(screen.getByRole('button', { name: 'Delayed content trigger' }));
+    });
+
+    rerender(
+      <Tooltip content={null} delayMs={200} onOpenChange={onOpenChange}>
+        <button type='button'>Delayed content trigger</button>
+      </Tooltip>
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    expect(onOpenChange).not.toHaveBeenCalledWith(true);
   });
 
   it('only toggles on click when click interaction is configured', async () => {

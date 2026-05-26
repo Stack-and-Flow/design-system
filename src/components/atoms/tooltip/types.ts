@@ -61,7 +61,7 @@ export type TooltipPosition =
   | 'right-end';
 export type TooltipTriggerInteraction = 'hover' | 'focus' | 'click';
 
-export type TooltipProps = Omit<ComponentProps<'span'>, 'children' | 'color' | 'content' | 'onClick' | 'onFocus'> & {
+export type TooltipProps = Omit<ComponentProps<'span'>, 'children' | 'color' | 'content'> & {
   /** @control text */
   content?: ReactNode;
   /** @control text */
@@ -116,17 +116,19 @@ export type TooltipProps = Omit<ComponentProps<'span'>, 'children' | 'color' | '
    */
   triggerInteraction?: TooltipTriggerInteraction;
   /**
-   * Legacy compatibility flag that maps to `triggerInteraction="focus"`.
+   * Convenience flag that maps to `triggerInteraction="focus"`.
+   * Prefer `triggerInteraction` for new code.
    * @control boolean
    * @default false
    */
-  onFocus?: boolean;
+  openOnFocus?: boolean;
   /**
-   * Legacy compatibility flag that maps to `triggerInteraction="click"`.
+   * Convenience flag that maps to `triggerInteraction="click"`.
+   * Prefer `triggerInteraction` for new code.
    * @control boolean
    * @default false
    */
-  onClick?: boolean;
+  openOnClick?: boolean;
   /**
    * @control boolean
    */

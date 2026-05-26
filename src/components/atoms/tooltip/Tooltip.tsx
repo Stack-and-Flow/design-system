@@ -9,7 +9,7 @@ type TriggerChildProps = {
   'aria-describedby'?: string;
 };
 
-const Tooltip: FC<TooltipProps> = ({ ...props }) => {
+export const Tooltip: FC<TooltipProps> = ({ ...props }) => {
   const {
     children,
     className,
@@ -32,6 +32,7 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
     tooltipRef,
     triggerRef
   } = useTooltip(props);
+  const { onBlur, onClick, onFocus, onMouseEnter, onMouseLeave, ...triggerRest } = rest;
 
   const trigger = isValidElement<TriggerChildProps>(children)
     ? cloneElement(children as ReactElement<TriggerChildProps>, {
@@ -46,14 +47,44 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
 
   return (
     <span
-      {...rest}
+      {...triggerRest}
       ref={triggerRef}
       className={cn('relative inline-flex', className)}
-      onMouseEnter={enableHover ? () => showTooltip() : undefined}
-      onMouseLeave={enableHover ? () => hideTooltip() : undefined}
-      onFocus={enableFocus ? () => showTooltip() : undefined}
-      onBlur={enableFocus ? () => hideTooltip() : undefined}
-      onClick={enableClick ? toggleClickTooltip : undefined}
+      onMouseEnter={(event) => {
+        onMouseEnter?.(event);
+
+        if (enableHover && !event.defaultPrevented) {
+          showTooltip();
+        }
+      }}
+      onMouseLeave={(event) => {
+        onMouseLeave?.(event);
+
+        if (enableHover && !event.defaultPrevented) {
+          hideTooltip();
+        }
+      }}
+      onFocus={(event) => {
+        onFocus?.(event);
+
+        if (enableFocus && !event.defaultPrevented) {
+          showTooltip();
+        }
+      }}
+      onBlur={(event) => {
+        onBlur?.(event);
+
+        if (enableFocus && !event.defaultPrevented) {
+          hideTooltip();
+        }
+      }}
+      onClick={(event) => {
+        onClick?.(event);
+
+        if (enableClick && !event.defaultPrevented) {
+          toggleClickTooltip();
+        }
+      }}
     >
       {trigger}
       {isVisible &&
@@ -85,5 +116,3 @@ const Tooltip: FC<TooltipProps> = ({ ...props }) => {
     </span>
   );
 };
-
-export default Tooltip;
