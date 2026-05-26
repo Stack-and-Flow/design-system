@@ -17,6 +17,7 @@ export { Skeleton } from './components/atoms/skeleton';
 export { Spacer } from './components/atoms/spacer';
 export { Switch } from './components/atoms/switch';
 export { Text } from './components/atoms/text';
+export { Tooltip } from './components/atoms/tooltip';
 
 // ─── Molecules ───────────────────────────────────────────────────────────────
 export { Accordion } from './components/molecules/accordion';
