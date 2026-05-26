@@ -1,5 +1,5 @@
 import type { FC, ReactElement } from 'react';
-import { cloneElement, isValidElement } from 'react';
+import { cloneElement, Fragment, isValidElement } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import type { TooltipProps } from './types';
@@ -32,11 +32,21 @@ export const Tooltip: FC<TooltipProps> = ({ ...props }) => {
     tooltipRef,
     triggerRef
   } = useTooltip(props);
-  const { onBlur, onClick, onFocus, onMouseEnter, onMouseLeave, ...triggerRest } = rest;
+  const {
+    'aria-describedby': ariaDescribedBy,
+    onBlur,
+    onClick,
+    onFocus,
+    onMouseEnter,
+    onMouseLeave,
+    ...triggerRest
+  } = rest;
 
-  const trigger = isValidElement<TriggerChildProps>(children)
+  const canCloneTrigger = isValidElement<TriggerChildProps>(children) && children.type !== Fragment;
+  const trigger = canCloneTrigger
     ? cloneElement(children as ReactElement<TriggerChildProps>, {
-        'aria-describedby': [children.props['aria-describedby'], describedById].filter(Boolean).join(' ') || undefined
+        'aria-describedby':
+          [children.props['aria-describedby'], ariaDescribedBy, describedById].filter(Boolean).join(' ') || undefined
       })
     : children;
   const closestDarkContainer = typeof document === 'undefined' ? null : triggerRef.current?.closest('.dark');

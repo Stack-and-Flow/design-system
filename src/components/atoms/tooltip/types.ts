@@ -12,9 +12,9 @@ export const tooltipVariants = cva(
       color: {
         default:
           'border-border-light bg-surface-raised-light text-text-light dark:border-border-dark dark:bg-surface-raised-dark dark:text-text-dark',
-        primary: 'border-transparent bg-red-600 text-text-dark dark:bg-red-300 dark:text-text-light',
-        success: 'border-transparent bg-green-dark text-text-dark dark:bg-green-light dark:text-text-light',
-        warning: 'border-transparent bg-yellow-dark text-text-dark dark:bg-yellow-light dark:text-text-light',
+        primary: 'border-transparent bg-btn-primary text-white',
+        success: 'border-transparent bg-success-light text-text-light dark:bg-success dark:text-text-light',
+        warning: 'border-transparent bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
         transparent:
           'border-border-light bg-transparent text-text-light dark:border-border-dark dark:bg-transparent dark:text-text-dark'
       },

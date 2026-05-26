@@ -25,6 +25,14 @@ describe('useTooltip — logic', () => {
     expect(result.current.describedById).toMatch(/^tooltip-/);
   });
 
+  it('treats missing content as no tooltip content', () => {
+    const { result } = renderHook(() => useTooltip({}));
+
+    expect(result.current.content).toBeUndefined();
+    expect(result.current.hasTooltipContent).toBe(false);
+    expect(result.current.describedById).toBeUndefined();
+  });
+
   it('maps convenience props to the new public API', () => {
     const { result } = renderHook(() =>
       useTooltip({
@@ -79,6 +87,36 @@ describe('Tooltip — component behavior', () => {
     });
 
     expect(tooltip.className).not.toContain('animate-fadeIn');
+  });
+
+  it('merges consumer aria-describedby onto the trigger child', () => {
+    render(
+      <Tooltip aria-describedby='external-description' content='Merged tooltip'>
+        <button aria-describedby='existing-description' type='button'>
+          Merge trigger
+        </button>
+      </Tooltip>
+    );
+
+    expect(screen.getByRole('button', { name: 'Merge trigger' })).toHaveAttribute(
+      'aria-describedby',
+      expect.stringMatching(/^existing-description external-description tooltip-/)
+    );
+  });
+
+  it('does not clone fragments with DOM-only tooltip attributes', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    render(
+      <Tooltip content='Fragment tooltip'>
+        <>
+          <button type='button'>Fragment trigger</button>
+        </>
+      </Tooltip>
+    );
+
+    expect(screen.getByRole('button', { name: 'Fragment trigger' })).not.toHaveAttribute('aria-describedby');
+    expect(consoleError).not.toHaveBeenCalled();
   });
 
   it('renders numeric zero content as valid tooltip content', async () => {

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { type TooltipPosition, type TooltipProps, tooltipVariants } from './types';
 
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
 type TooltipCoordinates = {
   top: number;
   left: number;
@@ -9,7 +11,7 @@ type TooltipCoordinates = {
 type ResolvedTriggerInteraction = 'hover-focus' | 'hover' | 'focus' | 'click';
 
 export const useTooltip = ({
-  content = "I'm a tooltip",
+  content,
   children = null,
   position,
   placement,
@@ -191,7 +193,7 @@ export const useTooltip = ({
     };
   }, [hideTooltip, isVisible]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const updatePosition = () => {
       if (!isVisible || !triggerRef.current || !tooltipRef.current) {
         return;
