@@ -114,24 +114,24 @@
     @apply pb-4!;
   }
 
-  .sbdocs-content table {
+  .sbdocs-content table:not(.table-wrapper table) {
     @apply border-separate rounded-lg overflow-hidden p-0.5;
   }
 
-  .sbdocs-content table thead > tr > th {
+  .sbdocs-content table:not(.table-wrapper table) thead > tr > th {
     @apply border-t! border-border-dark! bg-surface-raised-dark;
   }
 
-  .sbdocs-content table thead > tr:first-of-type > th:first-of-type {
+  .sbdocs-content table:not(.table-wrapper table) thead > tr:first-of-type > th:first-of-type {
     @apply border-l! rounded-tl-md overflow-hidden;
   }
 
-  .sbdocs-content table thead > tr:first-of-type > th:last-of-type {
+  .sbdocs-content table:not(.table-wrapper table) thead > tr:first-of-type > th:last-of-type {
     @apply border-r! rounded-tr-md overflow-hidden;
   }
 
-  .sbdocs-content table tbody > tr:first-of-type > td:first-of-type,
-  .sbdocs-content table tbody > tr:first-of-type > td:last-of-type {
+  .sbdocs-content table:not(.table-wrapper table) tbody > tr:first-of-type > td:first-of-type,
+  .sbdocs-content table:not(.table-wrapper table) tbody > tr:first-of-type > td:last-of-type {
     @apply rounded-none!;
   }
 
