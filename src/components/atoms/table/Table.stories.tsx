@@ -1,9 +1,10 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import * as React from 'react';
 import Table from './Table';
-import type { CompleteTableProps, TableColumn } from './types';
+import type { CompleteTableProps, Selection, SortDescriptor, TableColumn } from './types';
 
-interface UserData {
+type UserData = {
   id: number;
   name: string;
   email: string;
@@ -14,25 +15,44 @@ interface UserData {
   location?: string;
   joinDate?: string;
   salary?: number;
-}
+};
 
 /**
  * StatusBadge component optimized for WCAG 2.1 AA accessibility compliance.
- * Uses high-contrast colors that remain readable even with 50% opacity in disabled rows.
+ * Uses design-system semantic colors that remain readable even with reduced opacity in disabled rows.
  */
+const statusBadgeClasses: Record<string, string> = {
+  active:
+    'border border-success-light bg-success-tint text-success-light dark:border-success dark:bg-success-tint dark:text-success',
+  inactive:
+    'border border-error-light bg-error-tint text-error-light dark:border-error dark:bg-error-tint dark:text-error',
+  pending:
+    'border border-warning-light bg-warning-tint text-warning-light dark:border-warning dark:bg-warning-tint dark:text-warning'
+};
+
+const departmentBadgeClasses: Record<string, string> = {
+  design: 'bg-purple/10 text-purple-dark dark:text-purple-light',
+  engineering: 'bg-blue/10 text-blue-dark dark:text-blue-light',
+  marketing: 'bg-success-tint text-success-light dark:text-success',
+  sales: 'bg-warning-tint text-warning-light dark:text-warning'
+};
+
 const StatusBadge = ({ status }: { status: string }) => (
   <span
-    className={`px-2 py-1 rounded-full text-xs font-medium inline-flex items-center justify-center min-w-[60px] ${
-      status === 'Active'
-        ? 'bg-green-950 text-green-50 border border-green-900 dark:bg-green-950 dark:text-green-50 dark:border-green-900'
-        : status === 'Inactive'
-          ? 'bg-red-950 text-red-50 border border-red-900 dark:bg-red-950 dark:text-red-50 dark:border-red-900'
-          : 'bg-yellow-950 text-white border border-yellow-900 dark:bg-yellow-950 dark:text-white dark:border-yellow-900'
-    }`}
+    className={`inline-flex min-w-16 items-center justify-center rounded-full px-2 py-1 text-xs font-medium ${statusBadgeClasses[status.toLocaleLowerCase()] ?? 'border border-border-strong-light bg-surface-raised-light text-text-light dark:border-border-strong-dark dark:bg-surface-raised-dark dark:text-text-dark'}`}
     role='status'
     aria-label={`Status: ${status}`}
   >
     {status}
+  </span>
+);
+
+const TruncatedText = ({ value, className }: { value: string; className?: string }) => (
+  <span
+    className={`block w-full min-w-0 max-w-full overflow-hidden truncate whitespace-nowrap ${className ?? ''}`}
+    title={value}
+  >
+    {value}
   </span>
 );
 
@@ -144,6 +164,27 @@ const generateUsers = (count: number): UserData[] => {
  */
 const sampleData: UserData[] = generateUsers(12);
 
+const selectionChangedAction = action('selection-change');
+const sortChangedAction = action('sort-change');
+const pageChangedAction = action('page-change');
+const rowClickAction = action('row-click');
+const rowActionTriggered = action('row-action');
+const editUserAction = action('edit-user');
+const deleteUserAction = action('delete-user');
+
+const getRowIds = (data: UserData[]) => {
+  const ids: string[] = [];
+
+  for (const item of data) {
+    ids.push(item.id.toString());
+  }
+
+  return ids;
+};
+
+const toSelectionSet = (keys: Selection, data: UserData[]) =>
+  keys === 'all' ? new Set(getRowIds(data)) : new Set(Array.from(keys, (key) => String(key)));
+
 /**
  * Column definitions for different table configurations
  */
@@ -158,17 +199,17 @@ const basicColumns: TableColumn<UserData>[] = [
   {
     key: 'name',
     header: 'Name',
-    cell: (row: UserData) => row.name
+    cell: (row: UserData) => <TruncatedText value={row.name} />
   },
   {
     key: 'email',
     header: 'Email',
-    cell: (row: UserData) => row.email
+    cell: (row: UserData) => <TruncatedText value={row.email} />
   },
   {
     key: 'role',
     header: 'Role',
-    cell: (row: UserData) => row.role
+    cell: (row: UserData) => <TruncatedText value={row.role} />
   },
   {
     key: 'status',
@@ -179,18 +220,41 @@ const basicColumns: TableColumn<UserData>[] = [
 ];
 
 // Sortable columns
-const sortableColumns: TableColumn<UserData>[] = basicColumns.map((col) => ({
-  ...col,
-  allowsSorting: true
-}));
+const sortableColumns: TableColumn<UserData>[] = [
+  {
+    ...basicColumns[0],
+    allowsSorting: true,
+    filterable: false
+  },
+  {
+    ...basicColumns[1],
+    allowsSorting: true,
+    filterable: true
+  },
+  {
+    ...basicColumns[2],
+    allowsSorting: true,
+    filterable: false
+  },
+  {
+    ...basicColumns[3],
+    allowsSorting: true,
+    filterable: false
+  },
+  {
+    ...basicColumns[4],
+    allowsSorting: true,
+    filterable: false
+  }
+];
 
 /**
- * ## DESCRIPTION
+ * ## Description
  * The Table component is a powerful and accessible data presentation element for displaying structured information in rows and columns.
  * It supports sorting, filtering, pagination, row selection, and custom cell rendering.
  * Designed for both simple datasets and complex API-driven applications with comprehensive accessibility features.
  *
- * ## FEATURES
+ * ## Usage Guide
  * - **Interactive Sorting**: Click column headers to sort data in ascending or descending order
  * - **Row Selection**: Single or multiple selection modes with keyboard support and visual feedback
  * - **Pagination**: Built-in or API-driven pagination controls with customizable page sizes
@@ -206,7 +270,7 @@ const sortableColumns: TableColumn<UserData>[] = basicColumns.map((col) => ({
  * - **Dark Mode**: Full theme support with consistent colors across light and dark themes
  * - **WCAG Compliance**: Meets WCAG 2.1 AA accessibility standards for color contrast and interaction
  *
- * ## USAGE PATTERNS
+ * ### Usage Patterns
  *
  * ### Column Definition
  * Columns define how data is displayed and can include custom renderers, sorting logic, and alignment:
@@ -246,7 +310,7 @@ const sortableColumns: TableColumn<UserData>[] = basicColumns.map((col) => ({
  * - **Client-side**: Pass all data via `items` prop, table handles sorting/filtering internally
  * - **API-driven**: Use callbacks (`onSortChange`, `onPageChange`, `onFilterChange`) to fetch data from backend
  *
- * ## ACCESSIBILITY
+ * ### Accessibility
  * - **Keyboard Navigation**: Arrow keys (↑↓←→), Home, End, Page Up/Down for cell navigation
  * - **ARIA Roles**: Proper grid, row, gridcell, columnheader roles for screen readers
  * - **Screen Reader Support**: Announcements for loading states, page changes, and row counts
@@ -256,7 +320,7 @@ const sortableColumns: TableColumn<UserData>[] = basicColumns.map((col) => ({
  * - **Color Contrast**: WCAG 2.1 AA compliant colors in both light and dark themes
  * - **Disabled States**: Clear visual indicators with aria-disabled attributes
  *
- * ## DEPENDENCIES
+ * ## Dependencies
  * - React: Core functionality and hooks (useState, useCallback, useMemo, useRef, useEffect)
  * - Tailwind CSS: Styling with dark mode support and responsive utilities
  * - class-variance-authority (CVA): Type-safe variant management for component styling
@@ -272,89 +336,7 @@ const meta: Meta<typeof Table<UserData>> = {
       autodocs: true
     }
   },
-  tags: ['autodocs'],
-  argTypes: {
-    items: {
-      description: 'Array of data objects to display in the table',
-      control: false
-    },
-    columns: {
-      description: 'Array of column definitions with headers and cell renderers',
-      control: false
-    },
-    selectionMode: {
-      control: 'select',
-      options: ['none', 'single', 'multiple'],
-      description: 'Controls how users can select table rows'
-    },
-    selectionBehavior: {
-      control: 'select',
-      options: ['toggle', 'replace'],
-      description: 'Defines selection behavior when clicking rows'
-    },
-    selectedKeys: {
-      description: 'Set of currently selected row keys (controlled)',
-      control: false
-    },
-    disabledKeys: {
-      description: 'Set of disabled row keys that cannot be selected',
-      control: false
-    },
-    disallowEmptySelection: {
-      control: 'boolean',
-      description: 'Prevents clearing all selections when enabled'
-    },
-    isStriped: {
-      control: 'boolean',
-      description: 'Adds alternating row background colors for better readability'
-    },
-    isCompact: {
-      control: 'boolean',
-      description: 'Reduces row padding for denser data presentation'
-    },
-    hideHeader: {
-      control: 'boolean',
-      description: 'Hides the table header row when enabled'
-    },
-    removeWrapper: {
-      control: 'boolean',
-      description: 'Removes the default container wrapper for custom styling'
-    },
-    loading: {
-      control: 'boolean',
-      description: 'Shows loading state with skeleton placeholders'
-    },
-    emptyContent: {
-      description: 'Content to display when the table has no data',
-      control: 'text'
-    },
-    variant: {
-      control: 'select',
-      options: ['default', 'striped', 'surface'],
-      description: 'Visual style variant of the table'
-    },
-    size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
-      description: 'Size preset that affects padding and typography'
-    },
-    onSelectionChange: {
-      description: 'Callback fired when row selection changes',
-      action: 'selectionChanged'
-    },
-    onSortChange: {
-      description: 'Callback fired when column sorting is requested',
-      action: 'sortChanged'
-    },
-    onRowAction: {
-      description: 'Callback fired when a row is clicked or activated',
-      action: 'rowAction'
-    },
-    onPageChange: {
-      description: 'Callback fired when pagination page changes',
-      action: 'pageChanged'
-    }
-  }
+  tags: ['autodocs']
 };
 
 export default meta;
@@ -444,9 +426,9 @@ export const EmptyState: Story = {
     items: [],
     columns: basicColumns,
     emptyContent: (
-      <div className='text-center py-6 bg-white dark:bg-gray-dark-900'>
+      <div className='bg-background-light py-6 text-center dark:bg-surface-dark'>
         <svg
-          className='mx-auto h-12 w-12 text-gray-light-400 dark:text-gray-dark-400'
+          className='mx-auto h-12 w-12 text-text-tertiary-light dark:text-text-tertiary-dark'
           fill='none'
           viewBox='0 0 24 24'
           stroke='currentColor'
@@ -459,9 +441,11 @@ export const EmptyState: Story = {
           />
         </svg>
         <h3 className='mt-2 text-sm font-medium text-text-light dark:text-text-dark'>No users found</h3>
-        <p className='mt-1 text-sm text-gray-light-500 dark:text-gray-dark-300'>Get started by creating a new user.</p>
+        <p className='mt-1 text-sm text-text-secondary-light dark:text-text-secondary-dark'>
+          Get started by creating a new user.
+        </p>
         <div className='mt-6'>
-          <button className='inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-secondary'>
+          <button className='inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-btn-primary hover:bg-btn-primary-hover'>
             Add User
           </button>
         </div>
@@ -536,9 +520,9 @@ import Table from './Table';
 const SingleSelectionTable = () => {
   const [selectedKeys, setSelectedKeys] = useState<Set<React.Key>>(new Set());
 
-  const handleSelectionChange = (keys: any) => {
+  const handleSelectionChange = (keys: Selection) => {
     setSelectedKeys(keys);
-    console.log('Selected row:', Array.from(keys)[0]);
+    selectionChangedAction(keys);
   };
 
   return (
@@ -558,12 +542,10 @@ const SingleSelectionTable = () => {
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
 
-    const handleSelectionChange = (keys: any) => {
-      setSelectedKeys(keys);
-      console.log('Single selection changed:', Array.from(keys));
-      // Handle single selection change
-      // In production, you would update your application state here
-      // Example: setSelectedUser(Array.from(keys)[0])
+    const handleSelectionChange = (keys: Selection) => {
+      const nextSelection = toSelectionSet(keys, sampleData.slice(0, 8));
+      setSelectedKeys(nextSelection);
+      selectionChangedAction(keys);
     };
 
     return (
@@ -596,13 +578,13 @@ import Table from './Table';
 const MultipleSelectionTable = () => {
   const [selectedKeys, setSelectedKeys] = useState<Set<React.Key>>(new Set());
 
-  const handleSelectionChange = (keys: any) => {
+  const handleSelectionChange = (keys: Selection) => {
     if (keys === 'all') {
       setSelectedKeys(new Set(data.map((item) => item.id.toString())));
     } else {
       setSelectedKeys(keys);
     }
-    console.log('Selected rows:', Array.from(keys));
+    selectionChangedAction(keys);
   };
 
   return (
@@ -622,16 +604,9 @@ const MultipleSelectionTable = () => {
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
 
-    const handleSelectionChange = (keys: any) => {
-      if (keys === 'all') {
-        setSelectedKeys(new Set(sampleData.slice(0, 8).map((item) => item.id.toString())));
-      } else {
-        setSelectedKeys(keys);
-      }
-      console.log('Multiple selection changed:', Array.from(keys));
-      // Handle multiple selection change
-      // In production, you would update your application state here
-      // Example: setSelectedUsers(Array.from(keys))
+    const handleSelectionChange = (keys: Selection) => {
+      setSelectedKeys(toSelectionSet(keys, sampleData.slice(0, 8)));
+      selectionChangedAction(keys);
     };
 
     return (
@@ -656,14 +631,17 @@ export const DisallowEmptySelection: Story = {
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set(['1']));
 
-    const handleSelectionChange = (keys: any) => {
-      // Prevent empty selection
-      if (keys.size === 0) {
-        console.log('Empty selection prevented - keeping current selection');
+    const handleSelectionChange = (keys: Selection) => {
+      if (keys === 'all') {
         return;
       }
-      setSelectedKeys(keys);
-      console.log('Selection changed (disallow empty):', Array.from(keys));
+
+      if (keys.size === 0) {
+        return;
+      }
+
+      setSelectedKeys(new Set(Array.from(keys, (key) => String(key))));
+      selectionChangedAction(keys);
     };
 
     return (
@@ -689,18 +667,23 @@ export const DisabledRows: Story = {
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
 
-    const handleSelectionChange = (keys: any) => {
+    const handleSelectionChange = (keys: Selection) => {
       if (keys === 'all') {
-        // Filter out disabled keys when selecting all
-        const enabledIds = sampleData
-          .slice(0, 8)
-          .filter((item) => !['2', '4', '6'].includes(item.id.toString()))
-          .map((item) => item.id.toString());
+        const enabledIds: string[] = [];
+
+        for (const item of sampleData.slice(0, 8)) {
+          if (!['2', '4', '6'].includes(item.id.toString())) {
+            enabledIds.push(item.id.toString());
+          }
+        }
+
         setSelectedKeys(new Set(enabledIds));
-      } else {
-        setSelectedKeys(keys);
+        selectionChangedAction(keys);
+        return;
       }
-      console.log('Selection changed (with disabled rows):', Array.from(keys));
+
+      setSelectedKeys(new Set(Array.from(keys, (key) => String(key))));
+      selectionChangedAction(keys);
     };
 
     return (
@@ -736,10 +719,8 @@ export const SortingRows: Story = {
 import Table from './Table';
 
 const SortableTable = () => {
-  const handleSortChange = (sortDescriptor) => {
-    console.log('Sort requested:', sortDescriptor);
-    // Send sort request to API
-    // Example: fetchSortedData(sortDescriptor.column, sortDescriptor.direction)
+  const handleSortChange = (sortDescriptor: SortDescriptor | null) => {
+    sortChangedAction(sortDescriptor);
   };
 
   return (
@@ -757,11 +738,7 @@ const SortableTable = () => {
   args: {
     items: sampleData,
     columns: sortableColumns,
-    onSortChange: (sortDescriptor) => {
-      console.log('Sort change requested:', sortDescriptor);
-      // In production, you would send this to your API
-      // Example: fetchSortedData(sortDescriptor.column, sortDescriptor.direction)
-    }
+    onSortChange: sortChangedAction
   }
 };
 
@@ -799,9 +776,7 @@ import Table from './Table';
 
 const PaginatedTableExample = () => {
   const handlePageChange = (page: number) => {
-    console.log('Page requested:', page);
-    // Fetch data for the requested page from API
-    // Example: fetchPageData(page, pageSize)
+    pageChangedAction(page);
   };
 
   return (
@@ -823,11 +798,7 @@ const PaginatedTableExample = () => {
     columns: basicColumns,
     pagination: true,
     pageSize: 5,
-    onPageChange: (page) => {
-      console.log('Page change requested:', page);
-      // In production, you would send this to your API
-      // Example: fetchPageData(page, pageSize)
-    }
+    onPageChange: pageChangedAction
   }
 };
 
@@ -845,15 +816,12 @@ const PaginatedTableExample = () => {
 export const DynamicInteractions: Story = {
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
-    const [sortDescriptor, setSortDescriptor] = React.useState<any>(null);
+    const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor | null>(null);
     const dynamicData = generateUsers(15);
 
-    const handleSelectionChange = (keys: any) => {
-      if (keys === 'all') {
-        setSelectedKeys(new Set(dynamicData.map((item) => item.id.toString())));
-      } else {
-        setSelectedKeys(keys);
-      }
+    const handleSelectionChange = (keys: Selection) => {
+      setSelectedKeys(toSelectionSet(keys, dynamicData));
+      selectionChangedAction(keys);
     };
 
     return (
@@ -866,13 +834,23 @@ export const DynamicInteractions: Story = {
         sortDescriptor={sortDescriptor}
         onSortChange={(descriptor) => {
           setSortDescriptor(descriptor);
-          console.log('Sort requested:', descriptor);
+          sortChangedAction(descriptor);
+        }}
+        onRowClick={(row) => {
+          rowClickAction(row);
         }}
         onRowAction={(key) => {
-          const user = dynamicData.find((u) => u.id.toString() === key);
-          alert(`Row action triggered for: ${user?.name} (ID: ${key})`);
+          const user = dynamicData.find((item) => item.id.toString() === String(key));
+          rowActionTriggered({ key, user: user?.name });
         }}
+        rowKey={(row) => row.email}
         selectionMode='multiple'
+        layout='fixed'
+        classNames={{
+          ...args.classNames,
+          th: `${args.classNames?.th ?? ''} overflow-hidden`,
+          td: `${args.classNames?.td ?? ''} overflow-hidden`
+        }}
       />
     );
   }
@@ -893,7 +871,7 @@ export const RichCustomCells: Story = {
 import Table from './Table';
 import type { TableColumn } from './types';
 
-interface UserData {
+type UserData = {
   id: number;
   name: string;
   email: string;
@@ -902,7 +880,7 @@ interface UserData {
   role: string;
   salary: number;
   status: string;
-}
+};
 
 const RichCellsExample = () => {
   const richColumns: TableColumn<UserData>[] = [
@@ -910,11 +888,11 @@ const RichCellsExample = () => {
       key: 'employee',
       header: 'Employee',
       cell: (row) => (
-        <div className="flex items-center gap-3">
-          <img src={row.avatar} alt={row.name} className="w-10 h-10 rounded-full" />
-          <div>
-            <div className="font-medium">{row.name}</div>
-            <div className="text-sm text-gray-600">{row.email}</div>
+        <div className="flex w-full min-w-0 max-w-full items-center gap-3 overflow-hidden">
+          <img src={row.avatar} alt={row.name} className="h-10 w-10 shrink-0 rounded-full" />
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <div className="truncate font-medium" title={row.name}>{row.name}</div>
+            <div className="truncate text-sm text-text-secondary-light dark:text-text-secondary-dark" title={row.email}>{row.email}</div>
           </div>
         </div>
       ),
@@ -925,10 +903,10 @@ const RichCellsExample = () => {
       header: 'Compensation',
       cell: (row) => (
         <div className="text-right">
-          <div className="font-medium text-green-700">
+          <div className="font-medium text-success-light dark:text-success">
             €{row.salary.toLocaleString()}
           </div>
-          <div className="text-xs text-gray-500">Annual</div>
+          <div className="text-xs text-text-tertiary-light dark:text-text-tertiary-dark">Annual</div>
         </div>
       ),
       allowsSorting: true
@@ -950,15 +928,12 @@ const RichCellsExample = () => {
   },
   render: (args) => {
     const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(new Set());
-    const [sortDescriptor, setSortDescriptor] = React.useState<any>(null);
+    const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor | null>(null);
     const richData = generateUsers(20);
 
-    const handleSelectionChange = (keys: any) => {
-      if (keys === 'all') {
-        setSelectedKeys(new Set(richData.map((item) => item.id.toString())));
-      } else {
-        setSelectedKeys(keys);
-      }
+    const handleSelectionChange = (keys: Selection) => {
+      setSelectedKeys(toSelectionSet(keys, richData));
+      selectionChangedAction(keys);
     };
 
     // Enhanced columns with rich formatting including avatars and complex layouts
@@ -967,12 +942,20 @@ const RichCellsExample = () => {
         key: 'employee',
         header: 'Employee',
         cell: (row: UserData) => (
-          <div className='flex items-center gap-3'>
-            <img src={row.avatar} alt={row.name} className='w-10 h-10 rounded-full' />
-            <div>
-              <div className='font-medium text-text-light dark:text-text-dark'>{row.name}</div>
-              <div className='text-sm text-gray-light-700 dark:text-gray-dark-300'>{row.email}</div>
-              <div className='text-xs text-gray-light-600 dark:text-gray-dark-400'>{row.location}</div>
+          <div className='flex w-full min-w-0 max-w-full items-center gap-3 overflow-hidden'>
+            <img src={row.avatar} alt={row.name} className='h-10 w-10 shrink-0 rounded-full' />
+            <div className='min-w-0 flex-1 overflow-hidden'>
+              <TruncatedText value={row.name} className='font-medium text-text-light dark:text-text-dark' />
+              <TruncatedText
+                value={row.email}
+                className='text-sm text-text-secondary-light dark:text-text-secondary-dark'
+              />
+              {row.location && (
+                <TruncatedText
+                  value={row.location}
+                  className='text-xs text-text-tertiary-light dark:text-text-tertiary-dark'
+                />
+              )}
             </div>
           </div>
         ),
@@ -983,23 +966,20 @@ const RichCellsExample = () => {
         key: 'department',
         header: 'Department',
         cell: (row: UserData) => (
-          <div>
+          <div className='min-w-0 overflow-hidden'>
             <div
-              className={`px-2 py-1 rounded text-xs font-medium ${
-                row.team === 'Engineering'
-                  ? 'bg-blue-900 text-blue-50 dark:bg-blue-900 dark:text-blue-50'
-                  : row.team === 'Design'
-                    ? 'bg-purple-900 text-purple-50 dark:bg-purple-900 dark:text-purple-50'
-                    : row.team === 'Marketing'
-                      ? 'bg-green-900 text-green-50 dark:bg-green-900 dark:text-green-50'
-                      : row.team === 'Sales'
-                        ? 'bg-yellow-900 text-yellow-50 dark:bg-yellow-900 dark:text-yellow-50'
-                        : 'bg-gray-900 text-gray-50 dark:bg-gray-900 dark:text-gray-50'
+              className={`block max-w-full truncate rounded px-2 py-1 text-xs font-medium ${
+                departmentBadgeClasses[row.team?.toLocaleLowerCase() ?? ''] ??
+                'bg-surface-raised-light text-text-light dark:bg-surface-raised-dark dark:text-text-dark'
               }`}
+              title={row.team}
             >
               {row.team}
             </div>
-            <div className='text-xs text-gray-light-600 dark:text-gray-dark-300 mt-1'>{row.role}</div>
+            <TruncatedText
+              value={row.role}
+              className='mt-1 text-xs text-text-tertiary-light dark:text-text-tertiary-dark'
+            />
           </div>
         ),
         allowsSorting: true
@@ -1009,10 +989,10 @@ const RichCellsExample = () => {
         header: 'Compensation',
         cell: (row: UserData) => (
           <div className='text-right'>
-            <div className='font-medium text-green-700 dark:text-green-300'>
+            <div className='font-medium text-success-light dark:text-success'>
               {row.salary ? `€${row.salary.toLocaleString()}` : 'N/A'}
             </div>
-            <div className='text-xs text-gray-light-600 dark:text-gray-dark-400'>Annual</div>
+            <div className='text-xs text-text-tertiary-light dark:text-text-tertiary-dark'>Annual</div>
           </div>
         ),
         allowsSorting: true,
@@ -1037,7 +1017,9 @@ const RichCellsExample = () => {
               <div className='font-medium text-text-light dark:text-text-dark'>
                 {years > 0 ? `${years}y ${months}m` : `${months}m`}
               </div>
-              <div className='text-xs text-gray-light-600 dark:text-gray-dark-300'>{joinDate.toLocaleDateString()}</div>
+              <div className='text-xs text-text-tertiary-light dark:text-text-tertiary-dark'>
+                {joinDate.toLocaleDateString()}
+              </div>
             </div>
           );
         },
@@ -1055,23 +1037,23 @@ const RichCellsExample = () => {
         key: 'actions',
         header: 'Actions',
         cell: (row: UserData) => (
-          <div className='flex gap-2' role='group' aria-label='Row actions'>
+          <div className='flex flex-wrap gap-2' role='group' aria-label='Row actions'>
             <button
-              className='text-gray-light-700 hover:text-gray-light-800 dark:text-gray-dark-200 dark:hover:text-gray-dark-100 font-medium transition-colors'
+              className='font-medium text-text-secondary-light transition-colors hover:text-text-light dark:text-text-secondary-dark dark:hover:text-text-dark'
               aria-label={`Edit user ${row.name}`}
               onClick={(e) => {
                 e.stopPropagation();
-                alert(`Edit user: ${row.name}`);
+                editUserAction(row.name);
               }}
             >
               Edit
             </button>
             <button
-              className='text-red-600 hover:text-red-700 dark:text-red-300 dark:hover:text-red-200 font-medium transition-colors'
+              className='font-medium text-error-light transition-colors hover:text-brand-light-dark dark:text-error dark:hover:text-brand-dark-light'
               aria-label={`Delete user ${row.name}`}
               onClick={(e) => {
                 e.stopPropagation();
-                alert(`Delete user: ${row.name}`);
+                deleteUserAction(row.name);
               }}
             >
               Delete
@@ -1089,9 +1071,18 @@ const RichCellsExample = () => {
         selectedKeys={selectedKeys}
         onSelectionChange={handleSelectionChange}
         sortDescriptor={sortDescriptor}
-        onSortChange={setSortDescriptor}
+        onSortChange={(descriptor) => {
+          setSortDescriptor(descriptor);
+          sortChangedAction(descriptor);
+        }}
         selectionMode='multiple'
         isStriped={true}
+        layout='fixed'
+        classNames={{
+          ...args.classNames,
+          th: `${args.classNames?.th ?? ''} overflow-hidden`,
+          td: `${args.classNames?.td ?? ''} overflow-hidden`
+        }}
       />
     );
   }

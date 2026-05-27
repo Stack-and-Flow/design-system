@@ -1,8 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import type * as React from 'react';
-import type { Selection, SelectionMode, SortDescriptor, TableColumn } from './types';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { cn } from '@/lib/utils';
+import {
+  type ColumnAlign,
+  type Selection,
+  type SelectionMode,
+  type SortDescriptor,
+  type TableClassNames,
+  type TableColumn,
+  type TableComparableValue,
+  type TableLayout,
+  type TableRadius,
+  type TableRowData,
+  type TableShadow,
+  type TableSize,
+  type TableVariant,
+  tableCellVariants,
+  tableElementVariants,
+  tableHeaderCellVariants,
+  tableHeaderVariants,
+  tableRowVariants,
+  tableVariants
+} from './types';
 
-interface UseTableProps<T> {
+type UseTableProps<T extends TableRowData> = {
   data?: T[];
   items?: T[];
   columns: TableColumn<T>[];
@@ -18,101 +39,284 @@ interface UseTableProps<T> {
   selectedKeys?: Selection;
   defaultSelectedKeys?: Selection;
   disabledKeys?: Selection;
+  disallowEmptySelection?: boolean;
   onSelectionChange?: (keys: Selection) => void;
-  sortDescriptor?: SortDescriptor;
-  onSortChange?: (descriptor: SortDescriptor) => void;
+  sortDescriptor?: SortDescriptor | null;
+  onSortChange?: (descriptor: SortDescriptor | null) => void;
   onFilterChange?: (filters: Record<string, string>) => void;
-}
+  rowKey?: (row: T) => React.Key;
+};
 
-export function useTable<T>({
+type UseTableReturn<T extends TableRowData> = {
+  allFilteredData: T[];
+  currentPage: number;
+  filterValues: Record<string, string>;
+  filteredData: T[];
+  getColumnValue: (row: T, column: TableColumn<T>) => unknown;
+  getRowIndex: (item: T, fallbackIndex: number) => number;
+  getRowKey: (item: T, index: number) => React.Key;
+  handlePageChange: (page: number) => void;
+  handleSelectionChange: (keys: Selection) => void;
+  handleSort: (columnKey: React.Key) => void;
+  isLoading: boolean;
+  selectedKeys: Selection;
+  selectedRows: T[];
+  setFilter: (columnKey: string, value: string) => void;
+  setIsLoading: (value: boolean) => void;
+  sortDescriptor: SortDescriptor | null;
+  toggleAllRowsSelection: () => void;
+  toggleRowSelection: (row: T) => void;
+  totalPages: number;
+};
+
+type FocusedCell = { row: number; col: number } | null;
+
+type UseTableClassesProps = {
+  classNames?: TableClassNames;
+  focusedCell?: FocusedCell;
+  fullWidth?: boolean;
+  isCompact?: boolean;
+  isHeaderSticky?: boolean;
+  isStriped?: boolean;
+  layout?: TableLayout;
+  radius?: TableRadius;
+  removeWrapper?: boolean;
+  shadow?: TableShadow;
+  size?: TableSize;
+  variant?: TableVariant;
+};
+
+type HeaderCellColumn = Pick<TableColumn<TableRowData>, 'align' | 'allowsSorting' | 'sortable'>;
+
+const getSelectionSet = (selection?: Selection): Set<string> => {
+  if (!selection || selection === 'all') {
+    return new Set();
+  }
+
+  return new Set(Array.from(selection, (key) => String(key)));
+};
+
+const isReactKeyValue = (value: unknown): value is React.Key => typeof value === 'string' || typeof value === 'number';
+
+const toComparableValue = (value: TableComparableValue): string | number => {
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+
+  if (typeof value === 'boolean') {
+    return value ? 1 : 0;
+  }
+
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  return String(value ?? '').toLocaleLowerCase();
+};
+
+const compareValues = (left: TableComparableValue, right: TableComparableValue) => {
+  if (left == null && right == null) {
+    return 0;
+  }
+
+  if (left == null) {
+    return 1;
+  }
+
+  if (right == null) {
+    return -1;
+  }
+
+  const normalizedLeft = toComparableValue(left);
+  const normalizedRight = toComparableValue(right);
+
+  if (typeof normalizedLeft === 'number' && typeof normalizedRight === 'number') {
+    return normalizedLeft - normalizedRight;
+  }
+
+  return String(normalizedLeft).localeCompare(String(normalizedRight), undefined, {
+    numeric: true,
+    sensitivity: 'base'
+  });
+};
+
+const normalizeFilterValue = (value: unknown) =>
+  String(value ?? '')
+    .trim()
+    .toLocaleLowerCase();
+
+const toTableComparableValue = (value: unknown): TableComparableValue => {
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value instanceof Date) {
+    return value;
+  }
+
+  return undefined;
+};
+
+export const useTable = <T extends TableRowData>({
   data = [],
   items = [],
-
+  columns,
   propLoading = false,
   pagination = false,
   pageSize = 10,
   totalRows,
   onPageChange,
   rowSelection = false,
-  selectedRows = [],
+  selectedRows,
   onSelectRows,
   selectionMode = 'none',
   selectedKeys,
   defaultSelectedKeys,
+  disabledKeys,
+  disallowEmptySelection = false,
   onSelectionChange,
   sortDescriptor: controlledSortDescriptor,
   onSortChange,
-  onFilterChange
-}: UseTableProps<T>) {
-  const actualData = items && items.length > 0 ? Array.from(items) : data || [];
-
-  // Helper function to compare two Sets
-  const areSetsEqual = (set1: Selection, set2: Selection): boolean => {
-    if (set1 === set2) {
-      return true;
-    }
-    if (set1 === 'all' || set2 === 'all') {
-      return set1 === set2;
-    }
-    if (!(set1 instanceof Set) || !(set2 instanceof Set)) {
-      return false;
-    }
-    if (set1.size !== set2.size) {
-      return false;
-    }
-    for (const item of set1) {
-      if (!set2.has(item)) {
-        return false;
-      }
-    }
-    return true;
-  };
-
+  onFilterChange,
+  rowKey
+}: UseTableProps<T>): UseTableReturn<T> => {
+  const actualData = useMemo(() => (items.length > 0 ? [...items] : [...data]), [data, items]);
   const [isLoading, setIsLoading] = useState(propLoading);
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [internalSelectedRows, setInternalSelectedRows] = useState<T[]>(selectedRows || []);
-  const [internalSelectedKeys, setInternalSelectedKeys] = useState<Selection>(defaultSelectedKeys || new Set());
+  const [internalSelectedKeys, setInternalSelectedKeys] = useState<Selection>(defaultSelectedKeys ?? new Set());
+  const [internalSortDescriptor, setInternalSortDescriptor] = useState<SortDescriptor | null>(
+    controlledSortDescriptor ?? null
+  );
 
-  const [internalSortDescriptor, setInternalSortDescriptor] = useState<SortDescriptor | null>(null);
-  const currentSortDescriptor = controlledSortDescriptor || internalSortDescriptor;
+  const isKeysControlled = selectedKeys !== undefined;
+  const isRowsControlled = !isKeysControlled && selectedRows !== undefined;
 
   useEffect(() => {
-    if (propLoading !== undefined) {
-      setIsLoading(propLoading);
-    }
+    setIsLoading(propLoading);
   }, [propLoading]);
 
   useEffect(() => {
-    // Only update internalSelectedRows if we're in controlled mode (selectedKeys is defined)
-    if (
-      selectedKeys !== undefined &&
-      selectedRows &&
-      JSON.stringify(selectedRows) !== JSON.stringify(internalSelectedRows)
-    ) {
-      setInternalSelectedRows(selectedRows);
+    if (controlledSortDescriptor !== undefined) {
+      setInternalSortDescriptor(controlledSortDescriptor);
     }
-  }, [selectedRows, selectedKeys]);
+  }, [controlledSortDescriptor]);
 
-  const setFilter = useCallback(
-    (columnKey: string, value: string) => {
-      const newFilters = {
-        ...filterValues,
-        [columnKey]: value
-      };
-      setFilterValues(newFilters);
-      setCurrentPage(1);
+  const getRowKey = useCallback(
+    (item: T, index: number): React.Key => {
+      if (rowKey) {
+        return rowKey(item);
+      }
 
-      // Notify backend of filter changes for API-driven approach
-      onFilterChange?.(newFilters);
+      if (isReactKeyValue(item.id)) {
+        return item.id;
+      }
+
+      if (isReactKeyValue(item.key)) {
+        return item.key;
+      }
+
+      if (typeof item.email === 'string') {
+        return item.email;
+      }
+
+      if (typeof item.name === 'string') {
+        return `${item.name}-${index}`;
+      }
+
+      return `row-${index}`;
     },
-    [filterValues, onFilterChange]
+    [rowKey]
   );
 
-  // API-driven approach: data comes already filtered and sorted from backend
+  const getRowIndex = useCallback(
+    (item: T, fallbackIndex: number) => {
+      const dataIndex = actualData.indexOf(item);
+      return dataIndex >= 0 ? dataIndex : fallbackIndex;
+    },
+    [actualData]
+  );
+
+  const getColumnValue = useCallback((row: T, column: TableColumn<T>): unknown => {
+    if (typeof column.key === 'symbol') {
+      return undefined;
+    }
+
+    return row[String(column.key)];
+  }, []);
+
+  const getColumnComparableValue = useCallback(
+    (row: T, column: TableColumn<T>): TableComparableValue => {
+      const explicitSortValue = column.sortValue?.(row);
+
+      if (explicitSortValue !== undefined) {
+        return explicitSortValue;
+      }
+
+      return toTableComparableValue(getColumnValue(row, column));
+    },
+    [getColumnValue]
+  );
+
+  const getColumnFilterValue = useCallback(
+    (row: T, column: TableColumn<T>) => column.filterValue?.(row) ?? getColumnComparableValue(row, column),
+    [getColumnComparableValue]
+  );
+
+  const currentSortDescriptor =
+    controlledSortDescriptor !== undefined ? controlledSortDescriptor : internalSortDescriptor;
+  const disabledKeySet = useMemo(() => getSelectionSet(disabledKeys), [disabledKeys]);
+
   const filteredAndSortedData = useMemo(() => {
-    return actualData || [];
-  }, [actualData]);
+    const filteredData = actualData.filter((row) => {
+      return Object.entries(filterValues).every(([columnKey, rawFilterValue]) => {
+        const filterValue = rawFilterValue.trim();
+
+        if (!filterValue) {
+          return true;
+        }
+
+        const column = columns.find((item) => String(item.key) === columnKey);
+
+        if (!column?.filterable) {
+          return true;
+        }
+
+        const comparableValue = getColumnFilterValue(row, column);
+        return normalizeFilterValue(comparableValue).includes(filterValue.toLocaleLowerCase());
+      });
+    });
+
+    if (!currentSortDescriptor) {
+      return filteredData;
+    }
+
+    const sortColumn = columns.find((column) => column.key === currentSortDescriptor.column);
+
+    if (!sortColumn) {
+      return filteredData;
+    }
+
+    return [...filteredData].sort((left, right) => {
+      const comparison = compareValues(
+        getColumnComparableValue(left, sortColumn),
+        getColumnComparableValue(right, sortColumn)
+      );
+
+      return currentSortDescriptor.direction === 'ascending' ? comparison : comparison * -1;
+    });
+  }, [actualData, columns, currentSortDescriptor, filterValues, getColumnComparableValue, getColumnFilterValue]);
+
+  const totalPages = useMemo(() => {
+    if (!pagination) {
+      return 1;
+    }
+
+    const total = totalRows ?? filteredAndSortedData.length;
+    return Math.max(1, Math.ceil(total / pageSize));
+  }, [filteredAndSortedData.length, pageSize, pagination, totalRows]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const paginatedData = useMemo(() => {
     if (!pagination) {
@@ -120,321 +324,347 @@ export function useTable<T>({
     }
 
     const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    return filteredAndSortedData.slice(start, end);
-  }, [filteredAndSortedData, pagination, currentPage, pageSize]);
+    return filteredAndSortedData.slice(start, start + pageSize);
+  }, [currentPage, filteredAndSortedData, pageSize, pagination]);
 
-  const totalPages = useMemo(() => {
-    if (!pagination) {
-      return 1;
+  const selectedKeysFromRows = useMemo<Selection>(() => {
+    if (!isRowsControlled || !selectedRows) {
+      return new Set();
     }
-    const total = totalRows || filteredAndSortedData.length;
-    return Math.ceil(total / pageSize);
-  }, [pagination, totalRows, filteredAndSortedData.length, pageSize]);
+
+    return new Set(selectedRows.map((row, index) => String(getRowKey(row, getRowIndex(row, index)))));
+  }, [getRowIndex, getRowKey, isRowsControlled, selectedRows]);
+
+  const currentSelection = isKeysControlled
+    ? selectedKeys
+    : isRowsControlled
+      ? selectedKeysFromRows
+      : internalSelectedKeys;
+
+  const currentSelectionSet = useMemo(() => {
+    if (currentSelection === 'all') {
+      return new Set(actualData.map((row, index) => String(getRowKey(row, index))));
+    }
+
+    return getSelectionSet(currentSelection);
+  }, [actualData, currentSelection, getRowKey]);
+
+  const currentSelectedRows = useMemo(() => {
+    if (isRowsControlled && selectedRows) {
+      return selectedRows;
+    }
+
+    return actualData.filter((row, index) => currentSelectionSet.has(String(getRowKey(row, index))));
+  }, [actualData, currentSelectionSet, getRowKey, isRowsControlled, selectedRows]);
+
+  const commitSelection = useCallback(
+    (nextSelectionSet: Set<string>, emittedSelection: Selection = new Set(nextSelectionSet)) => {
+      const nextSelectedRows = actualData.filter((row, index) => nextSelectionSet.has(String(getRowKey(row, index))));
+      const nextSelection = new Set(nextSelectionSet);
+
+      if (!isKeysControlled && !isRowsControlled) {
+        setInternalSelectedKeys(nextSelection);
+      }
+
+      onSelectionChange?.(emittedSelection);
+      onSelectRows?.(nextSelectedRows);
+    },
+    [actualData, getRowKey, isKeysControlled, isRowsControlled, onSelectRows, onSelectionChange]
+  );
+
+  const setFilter = useCallback(
+    (columnKey: string, value: string) => {
+      setFilterValues((currentFilters) => {
+        const nextFilters = {
+          ...currentFilters,
+          [columnKey]: value
+        };
+
+        onFilterChange?.(nextFilters);
+        return nextFilters;
+      });
+      setCurrentPage(1);
+    },
+    [onFilterChange]
+  );
 
   const handlePageChange = useCallback(
     (page: number) => {
-      if (page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
-        onPageChange?.(page);
+      if (page < 1 || page > totalPages) {
+        return;
       }
-    },
-    [totalPages, onPageChange]
-  );
 
-  const getRowKey = useCallback((item: T, index: number): React.Key => {
-    if (typeof item === 'object' && item !== null) {
-      const obj = item as Record<string, any>;
-      if (obj.id !== undefined) {
-        return String(obj.id);
-      }
-      if (obj.key !== undefined) {
-        return String(obj.key);
-      }
-      if (obj.email !== undefined) {
-        return obj.email;
-      }
-      if (obj.name !== undefined) {
-        return `${obj.name}-${index}`;
-      }
-    }
-    return `row-${index}`;
-  }, []);
+      setCurrentPage(page);
+      onPageChange?.(page);
+    },
+    [onPageChange, totalPages]
+  );
 
   const toggleRowSelection = useCallback(
     (row: T) => {
-      const rowKey = getRowKey(row, actualData.indexOf(row));
+      const rowIndex = getRowIndex(row, 0);
+      const rowKeyValue = String(getRowKey(row, rowIndex));
+
+      if (disabledKeySet.has(rowKeyValue)) {
+        return;
+      }
+
       const isSingleMode = rowSelection === 'single' || selectionMode === 'single';
-      const keyAsString = String(rowKey);
-
-      // Use controlled selectedKeys if provided, otherwise use internal state
-      const currentSelectedKeys = selectedKeys !== undefined ? selectedKeys : internalSelectedKeys;
-      const isCurrentlySelected =
-        currentSelectedKeys instanceof Set ? currentSelectedKeys.has(keyAsString) : currentSelectedKeys === 'all';
-
-      let newSelection: T[];
-      let newKeys: Selection;
+      const nextSelectionSet = new Set(currentSelectionSet);
+      const isCurrentlySelected = nextSelectionSet.has(rowKeyValue);
 
       if (isSingleMode) {
-        if (isCurrentlySelected) {
-          newSelection = [];
-          newKeys = new Set();
-        } else {
-          newSelection = [row];
-          newKeys = new Set([keyAsString]);
+        if (isCurrentlySelected && disallowEmptySelection) {
+          return;
         }
+
+        nextSelectionSet.clear();
+
+        if (!isCurrentlySelected) {
+          nextSelectionSet.add(rowKeyValue);
+        }
+      } else if (isCurrentlySelected) {
+        if (disallowEmptySelection && nextSelectionSet.size === 1) {
+          return;
+        }
+
+        nextSelectionSet.delete(rowKeyValue);
       } else {
-        if (selectedKeys !== undefined) {
-          // Controlled selection mode
-          if (isCurrentlySelected) {
-            const currentRows = actualData.filter(
-              (r) =>
-                currentSelectedKeys instanceof Set &&
-                currentSelectedKeys.has(String(getRowKey(r, actualData.indexOf(r))))
-            );
-            newSelection = currentRows.filter((r) => String(getRowKey(r, actualData.indexOf(r))) !== keyAsString);
-
-            const keysSet = new Set(currentSelectedKeys instanceof Set ? currentSelectedKeys : []);
-            keysSet.delete(keyAsString);
-            newKeys = keysSet;
-          } else {
-            const currentRows = actualData.filter(
-              (r) =>
-                currentSelectedKeys instanceof Set &&
-                currentSelectedKeys.has(String(getRowKey(r, actualData.indexOf(r))))
-            );
-            newSelection = [...currentRows, row];
-
-            const keysSet = new Set(currentSelectedKeys instanceof Set ? currentSelectedKeys : []);
-            keysSet.add(keyAsString);
-            newKeys = keysSet;
-          }
-        } else {
-          // Uncontrolled selection mode - use internal state
-          if (isCurrentlySelected) {
-            newSelection = internalSelectedRows.filter(
-              (r) => String(getRowKey(r, actualData.indexOf(r))) !== keyAsString
-            );
-            const keysSet = new Set(internalSelectedKeys);
-            keysSet.delete(keyAsString);
-            newKeys = keysSet;
-          } else {
-            newSelection = [...internalSelectedRows, row];
-            const keysSet = new Set(internalSelectedKeys);
-            keysSet.add(keyAsString);
-            newKeys = keysSet;
-          }
-        }
+        nextSelectionSet.add(rowKeyValue);
       }
 
-      // In controlled mode, we compare with the current state of selectedKeys
-      // In uncontrolled mode, we compare with internalSelectedRows
-      const shouldUpdate =
-        selectedKeys !== undefined
-          ? !areSetsEqual(newKeys, currentSelectedKeys)
-          : JSON.stringify(newSelection) !== JSON.stringify(internalSelectedRows);
-
-      if (shouldUpdate) {
-        if (selectedKeys !== undefined) {
-          // Controlled mode - only call callbacks
-          onSelectionChange?.(newKeys);
-          onSelectRows?.(newSelection);
-        } else {
-          // Uncontrolled mode - update internal state
-          setInternalSelectedRows(newSelection);
-          setInternalSelectedKeys(newKeys);
-          onSelectRows?.(newSelection);
-          onSelectionChange?.(newKeys);
-        }
-      }
+      commitSelection(nextSelectionSet);
     },
     [
-      internalSelectedRows,
-      internalSelectedKeys,
-      selectedKeys,
-      rowSelection,
-      selectionMode,
-      onSelectRows,
-      onSelectionChange,
+      actualData,
+      commitSelection,
+      currentSelectionSet,
+      disabledKeySet,
+      disallowEmptySelection,
+      getRowIndex,
       getRowKey,
-      actualData
+      rowSelection,
+      selectionMode
     ]
   );
 
   const toggleAllRowsSelection = useCallback(() => {
-    const isAllSelected =
-      internalSelectedRows.length === filteredAndSortedData.length && filteredAndSortedData.length > 0;
-    const newSelection = isAllSelected ? [] : [...filteredAndSortedData];
+    const visibleSelectableRows = filteredAndSortedData.filter((row, index) => {
+      const rowIndex = getRowIndex(row, index);
+      return !disabledKeySet.has(String(getRowKey(row, rowIndex)));
+    });
+    const visibleSelectableKeys = new Set(
+      visibleSelectableRows.map((row, index) => String(getRowKey(row, getRowIndex(row, index))))
+    );
+    const allSelectableKeys = new Set(
+      actualData.map((row, index) => String(getRowKey(row, index))).filter((key) => !disabledKeySet.has(key))
+    );
+    const allVisibleSelected =
+      visibleSelectableKeys.size > 0 && [...visibleSelectableKeys].every((key) => currentSelectionSet.has(key));
+    const nextSelectionSet = new Set(currentSelectionSet);
 
-    const newKeys: Selection = isAllSelected ? new Set() : 'all';
+    if (allVisibleSelected) {
+      if (disallowEmptySelection && nextSelectionSet.size === visibleSelectableKeys.size) {
+        return;
+      }
 
-    // If using controlled selection, only call the callback
-    if (selectedKeys !== undefined) {
-      onSelectionChange?.(newKeys);
-      onSelectRows?.(newSelection);
-    } else {
-      // Otherwise, update internal state
-      setInternalSelectedRows(newSelection);
-      setInternalSelectedKeys(newKeys);
-      onSelectRows?.(newSelection);
-      onSelectionChange?.(newKeys);
+      visibleSelectableKeys.forEach((key) => {
+        nextSelectionSet.delete(key);
+      });
+      commitSelection(nextSelectionSet);
+      return;
     }
-  }, [internalSelectedRows, filteredAndSortedData, onSelectRows, onSelectionChange, selectedKeys]);
+
+    visibleSelectableKeys.forEach((key) => {
+      nextSelectionSet.add(key);
+    });
+
+    const selectsEverySelectableRow =
+      visibleSelectableKeys.size === allSelectableKeys.size &&
+      [...allSelectableKeys].every((key) => visibleSelectableKeys.has(key));
+
+    commitSelection(nextSelectionSet, selectsEverySelectableRow ? 'all' : new Set(nextSelectionSet));
+  }, [
+    actualData,
+    commitSelection,
+    currentSelectionSet,
+    disabledKeySet,
+    disallowEmptySelection,
+    filteredAndSortedData,
+    getRowIndex,
+    getRowKey
+  ]);
 
   const handleSort = useCallback(
     (columnKey: React.Key) => {
-      const newSortDescriptor: SortDescriptor | null = (() => {
-        if (!currentSortDescriptor || currentSortDescriptor.column !== columnKey) {
+      const getNextSortDescriptor = (descriptor: SortDescriptor | null): SortDescriptor | null => {
+        if (!descriptor || descriptor.column !== columnKey) {
           return { column: columnKey, direction: 'ascending' };
         }
 
-        if (currentSortDescriptor.direction === 'ascending') {
+        if (descriptor.direction === 'ascending') {
           return { column: columnKey, direction: 'descending' };
         }
-        return null;
-      })();
 
-      if (controlledSortDescriptor && onSortChange) {
-        if (newSortDescriptor) {
-          onSortChange(newSortDescriptor);
-        }
-      } else {
-        setInternalSortDescriptor(newSortDescriptor);
+        return null;
+      };
+
+      if (controlledSortDescriptor === undefined) {
+        setInternalSortDescriptor((currentDescriptor) => {
+          const nextSortDescriptor = getNextSortDescriptor(currentDescriptor);
+          onSortChange?.(nextSortDescriptor);
+          return nextSortDescriptor;
+        });
+
+        return;
       }
+
+      onSortChange?.(getNextSortDescriptor(controlledSortDescriptor));
     },
-    [currentSortDescriptor, controlledSortDescriptor, onSortChange]
+    [controlledSortDescriptor, onSortChange]
   );
 
   const handleSelectionChange = useCallback(
     (keys: Selection) => {
-      setInternalSelectedKeys(keys);
-      onSelectionChange?.(keys);
+      const nextSelectionSet =
+        keys === 'all'
+          ? new Set(
+              actualData.map((row, index) => String(getRowKey(row, index))).filter((key) => !disabledKeySet.has(key))
+            )
+          : getSelectionSet(keys);
+      commitSelection(nextSelectionSet, keys);
     },
-    [onSelectionChange]
+    [actualData, commitSelection, disabledKeySet, getRowKey]
   );
 
   return {
-    filteredData: paginatedData,
     allFilteredData: filteredAndSortedData,
-
-    isLoading,
-    setIsLoading,
-
-    filterValues,
-    setFilter,
-
     currentPage,
-    totalPages,
+    filterValues,
+    filteredData: paginatedData,
+    getColumnValue,
+    getRowIndex,
+    getRowKey,
     handlePageChange,
-
-    selectedRows: internalSelectedRows,
-    toggleRowSelection,
-    toggleAllRowsSelection,
-
-    selectedKeys: selectedKeys || internalSelectedKeys,
     handleSelectionChange,
-
-    sortDescriptor: currentSortDescriptor,
     handleSort,
-
-    getRowKey
+    isLoading,
+    selectedKeys: currentSelection === 'all' ? new Set(currentSelectionSet) : new Set(currentSelectionSet),
+    selectedRows: currentSelectedRows,
+    setFilter,
+    setIsLoading,
+    sortDescriptor: currentSortDescriptor,
+    toggleAllRowsSelection,
+    toggleRowSelection,
+    totalPages
   };
-}
+};
 
-export const useKeyboardNavigation = (rowCount: number, columnCount: number, disabled: boolean = false) => {
-  const [focusedCell, setFocusedCell] = useState<{ row: number; col: number } | null>(null);
+export const useKeyboardNavigation = (rowCount: number, columnCount: number, disabled = false) => {
+  const [focusedCell, setFocusedCell] = useState<FocusedCell>(null);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (disabled || !focusedCell) {
+    (event: React.KeyboardEvent) => {
+      if (disabled || rowCount === 0 || columnCount === 0) {
+        return;
+      }
+
+      const initialCell = (() => {
+        switch (event.key) {
+          case 'ArrowUp':
+          case 'ArrowLeft':
+          case 'Home':
+          case 'PageUp':
+            return { row: 0, col: 0 };
+          case 'ArrowDown':
+          case 'ArrowRight':
+          case 'End':
+          case 'PageDown':
+            return { row: 0, col: 0 };
+          default:
+            return null;
+        }
+      })();
+
+      if (!focusedCell && initialCell) {
+        event.preventDefault();
+        setFocusedCell(initialCell);
+        return;
+      }
+
+      if (!focusedCell) {
         return;
       }
 
       const { row, col } = focusedCell;
-      let newRow = row;
-      let newCol = col;
-      let preventDefault = true;
+      let nextRow = row;
+      let nextCol = col;
+      let shouldPreventDefault = true;
 
-      switch (e.key) {
+      switch (event.key) {
         case 'ArrowUp':
-          newRow = Math.max(0, row - 1);
+          nextRow = Math.max(0, row - 1);
           break;
         case 'ArrowDown':
-          newRow = Math.min(rowCount - 1, row + 1);
+          nextRow = Math.min(rowCount - 1, row + 1);
           break;
         case 'ArrowLeft':
-          newCol = Math.max(0, col - 1);
+          nextCol = Math.max(0, col - 1);
           break;
         case 'ArrowRight':
-          newCol = Math.min(columnCount - 1, col + 1);
+          nextCol = Math.min(columnCount - 1, col + 1);
           break;
         case 'Home':
-          if (e.ctrlKey) {
-            newRow = 0;
-            newCol = 0;
-          } else {
-            newCol = 0;
+          nextCol = 0;
+          if (event.ctrlKey) {
+            nextRow = 0;
           }
           break;
         case 'End':
-          if (e.ctrlKey) {
-            newRow = rowCount - 1;
-            newCol = columnCount - 1;
-          } else {
-            newCol = columnCount - 1;
+          nextCol = columnCount - 1;
+          if (event.ctrlKey) {
+            nextRow = rowCount - 1;
           }
           break;
         case 'PageUp':
-          newRow = Math.max(0, row - 10);
+          nextRow = Math.max(0, row - 10);
           break;
         case 'PageDown':
-          newRow = Math.min(rowCount - 1, row + 10);
+          nextRow = Math.min(rowCount - 1, row + 10);
           break;
         default:
-          preventDefault = false;
+          shouldPreventDefault = false;
       }
 
-      if (preventDefault) {
-        e.preventDefault();
-        setFocusedCell({ row: newRow, col: newCol });
+      if (shouldPreventDefault) {
+        event.preventDefault();
+        setFocusedCell({ row: nextRow, col: nextCol });
       }
     },
-    [focusedCell, rowCount, columnCount, disabled]
+    [columnCount, disabled, focusedCell, rowCount]
   );
 
-  return { focusedCell, setFocusedCell, handleKeyDown };
+  return { focusedCell, handleKeyDown, setFocusedCell };
 };
 
-export const useTableEvents = <T>(
+export const useTableEvents = <T extends TableRowData>(
   getRowKey: (item: T, index: number) => React.Key,
-  setFocusedCell: (cell: { row: number; col: number } | null) => void,
   onRowAction?: (key: React.Key) => void,
   onCellAction?: (key: React.Key) => void,
   onRowClick?: (row: T) => void
 ) => {
   const handleCellClick = useCallback(
-    (rowIndex: number, columnIndex: number, row: T) => {
-      setFocusedCell({ row: rowIndex, col: columnIndex });
-
-      if (onCellAction) {
-        const key = getRowKey(row, rowIndex);
-        onCellAction(key);
-      }
+    (_rowIndex: number, _columnIndex: number, row: T, keyIndex = _rowIndex) => {
+      onCellAction?.(getRowKey(row, keyIndex));
     },
-    [getRowKey, onCellAction, setFocusedCell]
+    [getRowKey, onCellAction]
   );
 
   const handleRowClick = useCallback(
-    (rowIndex: number, row: T) => {
-      const key = getRowKey(row, rowIndex);
-
-      if (onRowAction) {
-        onRowAction(key);
-      }
-
-      if (onRowClick) {
-        onRowClick(row);
-      }
+    (rowIndex: number, row: T, keyIndex = rowIndex) => {
+      const key = getRowKey(row, keyIndex);
+      onRowAction?.(key);
+      onRowClick?.(row);
     },
     [getRowKey, onRowAction, onRowClick]
   );
@@ -442,7 +672,7 @@ export const useTableEvents = <T>(
   return { handleCellClick, handleRowClick };
 };
 
-export const useTableClasses = <T = any>({
+export const useTableClasses = ({
   fullWidth,
   classNames,
   removeWrapper,
@@ -451,152 +681,97 @@ export const useTableClasses = <T = any>({
   isStriped,
   variant,
   isCompact,
-  size,
+  size = 'md',
   isHeaderSticky,
-  focusedCell
-}: {
-  fullWidth?: boolean;
-  classNames?: Partial<{
-    base: string;
-    table: string;
-    thead: string;
-    tbody: string;
-    tfoot: string;
-    emptyWrapper: string;
-    loadingWrapper: string;
-    wrapper: string;
-    tr: string;
-    th: string;
-    td: string;
-    sortIcon: string;
-  }>;
-  removeWrapper?: boolean;
-  shadow?: 'none' | 'sm' | 'md' | 'lg';
-  layout?: 'auto' | 'fixed';
-  isStriped?: boolean;
-  variant?: 'default' | 'striped' | 'surface';
-  isCompact?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  isHeaderSticky?: boolean;
-  focusedCell?: { row: number; col: number } | null;
-}) => {
-  const getBaseClasses = useCallback(() => {
-    let classes = 'relative';
-    if (fullWidth) {
-      classes += ' w-full';
-    }
-    if (classNames?.base) {
-      classes += ` ${classNames.base}`;
-    }
-    return classes;
-  }, [fullWidth, classNames?.base]);
+  focusedCell,
+  radius = 'md'
+}: UseTableClassesProps) => {
+  const getBaseClasses = useCallback(
+    () => cn('relative', fullWidth && 'w-full', classNames?.base),
+    [classNames?.base, fullWidth]
+  );
 
-  const getWrapperClasses = useCallback(() => {
-    let classes = 'flex flex-col relative';
-    if (!removeWrapper) {
-      classes += ' border border-gray-light-300 dark:border-gray-dark-600 rounded-lg bg-white dark:bg-gray-dark-900';
-      if (shadow && shadow !== 'none') {
-        const shadowMap = {
-          sm: 'shadow-sm',
-          md: 'shadow-md',
-          lg: 'shadow-lg'
-        };
-        classes += ` ${shadowMap[shadow]}`;
-      }
-    }
-    if (classNames?.wrapper) {
-      classes += ` ${classNames.wrapper}`;
-    }
-    return classes;
-  }, [removeWrapper, shadow, classNames?.wrapper]);
+  const getWrapperClasses = useCallback(
+    () =>
+      cn(
+        'flex flex-col relative',
+        !removeWrapper && tableVariants({ shadow, radius }),
+        removeWrapper && 'border-0 bg-transparent shadow-none',
+        classNames?.wrapper
+      ),
+    [classNames?.wrapper, radius, removeWrapper, shadow]
+  );
 
-  const getTableClasses = useCallback(() => {
-    let classes = `table-${layout} w-full bg-white dark:bg-gray-dark-900 text-text-light dark:text-text-dark`;
+  const getTableClasses = useCallback(
+    () =>
+      cn(
+        tableElementVariants({ fullWidth, layout }),
+        size === 'sm' && 'text-sm',
+        size === 'md' && 'text-base',
+        size === 'lg' && 'text-lg',
+        variant === 'surface' && 'bg-surface-raised-light dark:bg-surface-raised-dark',
+        classNames?.table
+      ),
+    [classNames?.table, fullWidth, layout, size, variant]
+  );
 
-    if (isStriped || variant === 'striped') {
-      classes += ' [&>tbody>tr:nth-child(odd)]:bg-gray-light-50 dark:[&>tbody>tr:nth-child(odd)]:bg-gray-dark-800';
-    }
-
-    if (isCompact) {
-      classes += ' [&>thead>tr>th]:py-1 [&>tbody>tr>td]:py-1';
-    }
-
-    const sizeMap = {
-      sm: 'text-sm',
-      md: 'text-base',
-      lg: 'text-lg'
-    };
-    classes += ` ${sizeMap[size || 'md'] || sizeMap.md}`;
-
-    if (classNames?.table) {
-      classes += ` ${classNames.table}`;
-    }
-    return classes;
-  }, [layout, isStriped, variant, isCompact, size, classNames?.table]);
-
-  const getHeaderClasses = useCallback(() => {
-    let classes = 'bg-gray-light-100 dark:bg-primary border-b border-gray-light-300 dark:border-gray-dark-600';
-    if (isHeaderSticky) {
-      classes += ' sticky top-0 z-10';
-    }
-    if (classNames?.thead) {
-      classes += ` ${classNames.thead}`;
-    }
-    return classes;
-  }, [isHeaderSticky, classNames?.thead]);
+  const getHeaderClasses = useCallback(
+    () => cn(tableHeaderVariants({ isSticky: isHeaderSticky }), classNames?.thead),
+    [classNames?.thead, isHeaderSticky]
+  );
 
   const getHeaderCellClasses = useCallback(
-    (column: TableColumn<T>, columnIndex: number) => {
-      let classes = 'px-4 py-3 text-left font-semibold text-text-light dark:text-white';
+    (column?: HeaderCellColumn, columnIndex?: number) =>
+      cn(
+        tableHeaderCellVariants({
+          size,
+          align: column?.align ?? 'start',
+          allowsSorting: Boolean(column?.allowsSorting || column?.sortable)
+        }),
+        'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+        focusedCell &&
+          focusedCell.row === -1 &&
+          focusedCell.col === columnIndex &&
+          'shadow-glow-focus-light dark:shadow-glow-focus-dark',
+        classNames?.th
+      ),
+    [classNames?.th, focusedCell, size]
+  );
 
-      if (column.align) {
-        const alignMap = {
-          start: 'text-left',
-          center: 'text-center',
-          end: 'text-right'
-        };
-        classes = classes.replace('text-left', alignMap[column.align] || 'text-left');
-      }
-
-      if (column.allowsSorting || column.sortable) {
-        classes += ' cursor-pointer hover:bg-gray-light-200 dark:hover:bg-secondary transition-colors';
-      }
-
-      if (focusedCell && focusedCell.row === -1 && focusedCell.col === columnIndex) {
-        classes += ' ring-2 ring-accent ring-inset';
-      }
-
-      if (classNames?.th) {
-        classes += ` ${classNames.th}`;
-      }
-      return classes;
-    },
-    [focusedCell, classNames?.th]
+  const getRowClasses = useCallback(
+    ({ isDisabled, isInteractive, isSelected }: { isDisabled: boolean; isInteractive: boolean; isSelected: boolean }) =>
+      cn(
+        tableRowVariants({
+          isDisabled,
+          isSelectable: isInteractive,
+          isSelected,
+          isStriped: Boolean(isStriped || variant === 'striped')
+        }),
+        classNames?.tr
+      ),
+    [classNames?.tr, isStriped, variant]
   );
 
   const getCellClasses = useCallback(
-    (rowIndex: number, columnIndex: number) => {
-      let classes =
-        'px-4 py-3 text-text-light dark:text-white border-b border-gray-light-300 dark:border-gray-dark-600';
-
-      if (focusedCell && focusedCell.row === rowIndex && focusedCell.col === columnIndex) {
-        classes += ' ring-2 ring-accent ring-inset';
-      }
-
-      if (classNames?.td) {
-        classes += ` ${classNames.td}`;
-      }
-      return classes;
-    },
-    [focusedCell, classNames?.td]
+    ({ align, columnIndex, rowIndex }: { align?: ColumnAlign; columnIndex: number; rowIndex: number }) =>
+      cn(
+        tableCellVariants({ align: align ?? 'start', isCompact, size }),
+        focusedCell &&
+          focusedCell.row === rowIndex &&
+          focusedCell.col === columnIndex &&
+          'shadow-glow-focus-light dark:shadow-glow-focus-dark',
+        classNames?.td
+      ),
+    [classNames?.td, focusedCell, isCompact, size]
   );
 
   return {
     getBaseClasses,
-    getWrapperClasses,
-    getTableClasses,
-    getHeaderClasses,
+    getCellClasses,
     getHeaderCellClasses,
-    getCellClasses
+    getHeaderClasses,
+    getRowClasses,
+    getTableClasses,
+    getWrapperClasses
   };
 };

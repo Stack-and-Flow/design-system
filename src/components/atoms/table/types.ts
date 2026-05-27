@@ -1,33 +1,40 @@
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import type * as React from 'react';
+import type { ComponentProps } from 'react';
 
-// ========================================
-// CVA VARIANTS
-// ========================================
-
-export const tableVariants = cva(['table-wrapper relative overflow-auto w-full'], {
-  variants: {
-    shadow: {
-      none: '',
-      sm: 'shadow-sm dark:shadow-gray-dark-900',
-      md: 'shadow-md dark:shadow-gray-dark-900',
-      lg: 'shadow-lg dark:shadow-gray-dark-900'
+export const tableVariants = cva(
+  [
+    'table-wrapper relative w-full overflow-auto',
+    'border border-border-light bg-surface-light dark:border-border-dark dark:bg-surface-dark'
+  ],
+  {
+    variants: {
+      shadow: {
+        none: '',
+        sm: 'shadow-sm dark:shadow-dropdown',
+        md: 'shadow-md dark:shadow-dropdown',
+        lg: 'shadow-lg dark:shadow-dropdown'
+      },
+      radius: {
+        none: 'rounded-none',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg'
+      }
     },
-    radius: {
-      none: 'rounded-none',
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-lg'
+    defaultVariants: {
+      shadow: 'sm',
+      radius: 'md'
     }
-  },
-  defaultVariants: {
-    shadow: 'sm',
-    radius: 'md'
   }
-});
+);
 
 export const tableElementVariants = cva(
-  ['table w-full border-collapse bg-white dark:bg-gray-dark-800 transition-colors'],
+  [
+    'w-full border-collapse text-text-light dark:text-text-dark',
+    'bg-surface-light dark:bg-surface-dark',
+    'transition-[background-color,color] duration-200 ease-out'
+  ],
   {
     variants: {
       layout: {
@@ -48,9 +55,9 @@ export const tableElementVariants = cva(
 
 export const tableHeaderVariants = cva(
   [
-    'table-header bg-gray-light-100 dark:bg-gray-dark-700',
-    'border-b-2 border-gray-light-300 dark:border-gray-dark-600',
-    'transition-colors'
+    'bg-surface-raised-light dark:bg-surface-raised-dark',
+    'border-b border-border-light dark:border-border-dark',
+    'transition-[background-color,border-color] duration-200 ease-out'
   ],
   {
     variants: {
@@ -67,16 +74,16 @@ export const tableHeaderVariants = cva(
 
 export const tableHeaderCellVariants = cva(
   [
-    'table-header-cell font-secondary-bold text-text-light dark:text-text-dark',
-    'border-b border-gray-light-300 dark:border-gray-dark-600',
-    'transition-colors select-none'
+    'border-b border-border-light dark:border-border-dark',
+    'text-text-light dark:text-text-dark',
+    'transition-[background-color,border-color,box-shadow,color] duration-150 ease-out'
   ],
   {
     variants: {
       size: {
-        sm: 'px-2 py-1 fs-small tablet:fs-small-tablet',
-        md: 'px-4 py-2 fs-base tablet:fs-base-tablet',
-        lg: 'px-6 py-3 fs-h6 tablet:fs-h6-tablet'
+        sm: 'px-3 py-2 text-sm font-medium',
+        md: 'px-4 py-3 text-base font-semibold',
+        lg: 'px-5 py-4 text-lg font-semibold'
       },
       align: {
         start: 'text-left',
@@ -84,7 +91,7 @@ export const tableHeaderCellVariants = cva(
         end: 'text-right'
       },
       allowsSorting: {
-        true: 'cursor-pointer hover:bg-gray-light-200 dark:hover:bg-gray-dark-600',
+        true: 'cursor-pointer hover:bg-surface-light dark:hover:bg-white-tint-faint',
         false: ''
       }
     },
@@ -97,23 +104,27 @@ export const tableHeaderCellVariants = cva(
 );
 
 export const tableRowVariants = cva(
-  ['table-row transition-colors', 'border-b border-gray-light-200 dark:border-gray-dark-700', 'last:border-b-0'],
+  [
+    'transition-[background-color,border-color,box-shadow,opacity] duration-150 ease-out',
+    'border-b border-border-light dark:border-border-dark',
+    'last:border-b-0'
+  ],
   {
     variants: {
       isStriped: {
-        true: 'even:bg-gray-light-50 dark:even:bg-gray-dark-750',
+        true: 'even:bg-surface-raised-light dark:even:bg-surface-raised-dark',
         false: ''
       },
       isSelectable: {
-        true: 'cursor-pointer hover:bg-gray-light-100 dark:hover:bg-gray-dark-600',
+        true: 'cursor-pointer hover:bg-surface-raised-light dark:hover:bg-white-tint-faint',
         false: ''
       },
       isSelected: {
-        true: 'bg-secondary/10 dark:bg-secondary/20 hover:bg-secondary/20 dark:hover:bg-secondary/30',
+        true: 'bg-red-tint-subtle hover:bg-red-tint-low dark:bg-red-tint-low dark:hover:bg-red-tint-active',
         false: ''
       },
       isDisabled: {
-        true: 'opacity-50 cursor-not-allowed pointer-events-none',
+        true: 'pointer-events-none cursor-not-allowed opacity-40',
         false: ''
       }
     },
@@ -126,43 +137,48 @@ export const tableRowVariants = cva(
   }
 );
 
-export const tableCellVariants = cva(['table-cell text-text-light dark:text-text-dark transition-colors'], {
-  variants: {
-    size: {
-      sm: 'px-2 py-1 fs-small tablet:fs-small-tablet',
-      md: 'px-4 py-2 fs-base tablet:fs-base-tablet',
-      lg: 'px-6 py-3 fs-h6 tablet:fs-h6-tablet'
+export const tableCellVariants = cva(
+  [
+    'border-b border-border-light dark:border-border-dark',
+    'text-text-secondary-light dark:text-text-secondary-dark',
+    'transition-[background-color,border-color,box-shadow,color] duration-150 ease-out'
+  ],
+  {
+    variants: {
+      size: {
+        sm: 'px-3 py-2 text-sm',
+        md: 'px-4 py-3 text-base',
+        lg: 'px-5 py-4 text-lg'
+      },
+      align: {
+        start: 'text-left',
+        center: 'text-center',
+        end: 'text-right'
+      },
+      isCompact: {
+        true: 'py-2',
+        false: ''
+      }
     },
-    align: {
-      start: 'text-left',
-      center: 'text-center',
-      end: 'text-right'
-    },
-    isCompact: {
-      true: 'py-1',
-      false: ''
+    defaultVariants: {
+      size: 'md',
+      align: 'start',
+      isCompact: false
     }
-  },
-  defaultVariants: {
-    size: 'md',
-    align: 'start',
-    isCompact: false
   }
-});
+);
 
 export const loadingOverlayVariants = cva(
   [
-    'loading-overlay absolute inset-0 z-20',
-    'bg-white/80 dark:bg-gray-dark-800/80',
-    'backdrop-blur-sm',
-    'flex items-center justify-center',
-    'transition-opacity'
+    'absolute inset-0 z-20 flex items-center justify-center',
+    'bg-background-light/80 dark:bg-background-dark/80',
+    'backdrop-blur-sm transition-opacity duration-200 ease-out'
   ],
   {
     variants: {
       isVisible: {
         true: 'opacity-100',
-        false: 'opacity-0 pointer-events-none'
+        false: 'pointer-events-none opacity-0'
       }
     },
     defaultVariants: {
@@ -171,38 +187,46 @@ export const loadingOverlayVariants = cva(
   }
 );
 
-// ========================================
-// TYPE DEFINITIONS
-// ========================================
-
+export type TableRowData = Record<string, unknown>;
 export type Selection = 'all' | Set<React.Key>;
-
+export type SortDirection = 'ascending' | 'descending';
 export type SortDescriptor = {
   column: React.Key;
-  direction: 'ascending' | 'descending';
+  direction: SortDirection;
 };
-
+export type TableComparableValue = string | number | boolean | Date | null | undefined;
+export type TableFilterValue = string | number | boolean | null | undefined;
 export type LoadingState = 'loading' | 'sorting' | 'loadingMore' | 'error' | 'idle' | 'filtering';
-
 export type SelectionMode = 'none' | 'single' | 'multiple';
-
 export type SelectionBehavior = 'toggle' | 'replace';
-
 export type DisabledBehavior = 'selection' | 'all';
-
 export type TableRadius = 'none' | 'sm' | 'md' | 'lg';
-
 export type TableShadow = 'none' | 'sm' | 'md' | 'lg';
-
 export type TableLayout = 'auto' | 'fixed';
-
 export type ColumnAlign = 'start' | 'center' | 'end';
+export type TableSize = 'sm' | 'md' | 'lg';
+export type TableVariant = 'default' | 'striped' | 'surface';
+export type TableClassNames = Partial<{
+  base: string;
+  table: string;
+  thead: string;
+  tbody: string;
+  tfoot: string;
+  emptyWrapper: string;
+  loadingWrapper: string;
+  wrapper: string;
+  tr: string;
+  th: string;
+  td: string;
+  sortIcon: string;
+}>;
 
-export interface TableColumn<T = any> {
+export type TableColumn<T extends TableRowData = TableRowData> = {
   key: React.Key;
   header?: React.ReactNode;
   cell?: (row: T) => React.ReactNode;
-  sortValue?: (row: T) => any;
+  sortValue?: (row: T) => TableComparableValue;
+  filterValue?: (row: T) => TableFilterValue;
   align?: ColumnAlign;
   hideHeader?: boolean;
   allowsSorting?: boolean;
@@ -214,9 +238,19 @@ export interface TableColumn<T = any> {
   maxWidth?: string | number;
   sortable?: boolean;
   filterable?: boolean;
-}
+};
 
-export interface TableProps<T = any> {
+export type TableEvents = {
+  onRowAction?: (key: React.Key) => void;
+  onCellAction?: (key: React.Key) => void;
+  onSelectionChange?: (keys: Selection) => void;
+  onSortChange?: (descriptor: SortDescriptor | null) => void;
+  onFilterChange?: (filters: Record<string, string>) => void;
+};
+
+type NativeTableProps = Omit<ComponentProps<'table'>, 'children' | 'className'>;
+
+export type TableProps<T extends TableRowData = TableRowData> = NativeTableProps & {
   children?: React.ReactNode;
   items?: T[];
   columns?: TableColumn<T>[];
@@ -233,7 +267,7 @@ export interface TableProps<T = any> {
   fullWidth?: boolean;
   removeWrapper?: boolean;
   showSelectionCheckboxes?: boolean;
-  sortDescriptor?: SortDescriptor;
+  sortDescriptor?: SortDescriptor | null;
   selectedKeys?: Selection;
   defaultSelectedKeys?: Selection;
   disabledKeys?: Selection;
@@ -244,27 +278,15 @@ export interface TableProps<T = any> {
   allowDuplicateSelectionEvents?: boolean;
   disableAnimation?: boolean;
   isKeyboardNavigationDisabled?: boolean;
-  classNames?: Partial<{
-    base: string;
-    table: string;
-    thead: string;
-    tbody: string;
-    tfoot: string;
-    emptyWrapper: string;
-    loadingWrapper: string;
-    wrapper: string;
-    tr: string;
-    th: string;
-    td: string;
-    sortIcon: string;
-  }>;
+  classNames?: TableClassNames;
   data?: T[];
   loading?: boolean;
   emptyContent?: React.ReactNode;
   onRowClick?: (row: T) => void;
-  rowKey?: (row: T) => string | number;
-  variant?: 'default' | 'striped' | 'surface';
-  size?: 'sm' | 'md' | 'lg';
+  rowKey?: (row: T) => React.Key;
+  getRowLabel?: (row: T) => string;
+  variant?: TableVariant;
+  size?: TableSize;
   className?: string;
   pagination?: boolean;
   pageSize?: number;
@@ -273,16 +295,11 @@ export interface TableProps<T = any> {
   rowSelection?: 'single' | 'multiple' | false;
   selectedRows?: T[];
   onSelectRows?: (selectedRows: T[]) => void;
-}
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+};
 
-export interface TableEvents {
-  onRowAction?: (key: React.Key) => void;
-  onCellAction?: (key: React.Key) => void;
-  onSelectionChange?: (keys: Selection) => void;
-  onSortChange?: (descriptor: SortDescriptor) => void;
-}
-
-export interface TableBodyProps<T = any> {
+export type TableBodyProps<T extends TableRowData = TableRowData> = {
   children?: React.ReactElement | React.ReactElement[] | ((item: T) => React.ReactElement);
   items?: Iterable<T>;
   isLoading?: boolean;
@@ -290,23 +307,19 @@ export interface TableBodyProps<T = any> {
   loadingContent?: React.ReactNode;
   emptyContent?: React.ReactNode;
   onLoadMore?: () => void;
-}
+};
 
-export interface TableRowProps<T = any> {
+export type TableRowProps<T extends TableRowData = TableRowData> = {
   children?: React.ReactElement | React.ReactElement[] | ((item: T) => React.ReactElement);
   textValue?: string;
-}
+};
 
-export interface TableCellProps {
+export type TableCellProps = {
   children: React.ReactNode;
   textValue?: string;
-}
+};
 
-export interface CompleteTableProps<T = any> extends TableProps<T>, TableEvents {}
-
-// ========================================
-// VARIANT TYPES
-// ========================================
+export type CompleteTableProps<T extends TableRowData = TableRowData> = TableProps<T> & TableEvents;
 
 export type TableVariants = VariantProps<typeof tableVariants>;
 export type TableElementVariants = VariantProps<typeof tableElementVariants>;
