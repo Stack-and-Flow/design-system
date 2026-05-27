@@ -251,7 +251,6 @@ export type TableEvents = {
 type NativeTableProps = Omit<ComponentProps<'table'>, 'children' | 'className'>;
 
 export type TableProps<T extends TableRowData = TableRowData> = NativeTableProps & {
-  children?: React.ReactNode;
   items?: T[];
   columns?: TableColumn<T>[];
   layout?: TableLayout;

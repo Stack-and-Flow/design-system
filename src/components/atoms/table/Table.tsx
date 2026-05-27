@@ -174,6 +174,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
   );
   const hasActiveFilters = Object.values(tableState.filterValues).some((value) => value.trim().length > 0);
   const hasFilteredResults = tableState.allFilteredData.length > 0;
+  const representedDataRowCount = totalRows ?? tableState.allFilteredData.length;
   const allVisibleSelectableKeys = useMemo(
     () =>
       tableState.filteredData
@@ -270,7 +271,6 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
                   checked={areAllVisibleRowsSelected}
                   onChange={tableState.toggleAllRowsSelection}
                   aria-label='Select all rows'
-                  disabled={disallowEmptySelection && tableState.selectedRows.length === 1}
                 />
               ) : (
                 <span className='sr-only'>Selection</span>
@@ -400,7 +400,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
     <div className={`${getBaseClasses()} ${className ?? ''}`}>
       <div className={getWrapperClasses()}>
         <div id={`${tableId}-description`} className='sr-only'>
-          Table with {tableState.allFilteredData.length} data rows
+          Table with {representedDataRowCount} data rows
           {selectionEnabled ? ' and row selection enabled' : ''}
           {tableState.sortDescriptor ? `, sorted by ${String(tableState.sortDescriptor.column)}` : ''}
         </div>
@@ -412,7 +412,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
           aria-describedby={`${tableId}-description`}
           aria-labelledby={tableLabelledBy}
           aria-label={tableLabelledBy ? undefined : tableLabel}
-          aria-rowcount={tableState.filteredData.length + (hideHeader ? 0 : 1)}
+          aria-rowcount={representedDataRowCount + (hideHeader ? 0 : 1)}
           aria-colcount={columns.length + (selectionEnabled ? 1 : 0)}
           onKeyDown={handleKeyDown}
           tabIndex={isKeyboardNavigationDisabled ? -1 : 0}

@@ -92,6 +92,22 @@ describe('useTable — logic', () => {
     expect(Array.from(result.current.selectedKeys)).toEqual(['bruno@example.com', 'carla@example.com']);
   });
 
+  it('excludes disabled rows when controlled selection uses the all sentinel', () => {
+    const { result } = renderHook(() =>
+      useTable({
+        columns,
+        disabledKeys: new Set(['bruno@example.com']),
+        items: rows,
+        rowKey: (row) => row.email,
+        selectedKeys: 'all',
+        selectionMode: 'multiple'
+      })
+    );
+
+    expect(Array.from(result.current.selectedKeys)).toEqual(['carla@example.com', 'alice@example.com']);
+    expect(result.current.selectedRows.map((row) => row.email)).toEqual(['carla@example.com', 'alice@example.com']);
+  });
+
   it('emits sort callbacks consistently, including clearing the sort', () => {
     const handleSortChange = vi.fn<(descriptor: SortDescriptor | null) => void>();
     const { result } = renderHook(() =>
@@ -246,5 +262,35 @@ describe('Table — component behavior', () => {
 
     expect(handleSelectionChange).toHaveBeenCalledTimes(1);
     expect(handleSelectionChange).toHaveBeenCalledWith('all');
+  });
+
+  it('keeps select all available when disallowEmptySelection starts with one selected row', async () => {
+    const user = userEvent.setup();
+    const handleSelectionChange = vi.fn<(keys: Selection) => void>();
+
+    render(
+      <Table
+        columns={columns}
+        disallowEmptySelection={true}
+        items={rows}
+        selectedKeys={new Set(['alice@example.com'])}
+        rowKey={(row) => row.email}
+        selectionMode='multiple'
+        onSelectionChange={handleSelectionChange}
+      />
+    );
+
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all rows' });
+    expect(selectAll).not.toBeDisabled();
+
+    await user.click(selectAll);
+
+    expect(handleSelectionChange).toHaveBeenCalledWith('all');
+  });
+
+  it('uses the represented total row count for paginated tables', () => {
+    render(<Table columns={columns} items={rows} pageSize={2} pagination={true} totalRows={42} />);
+
+    expect(screen.getByRole('grid')).toHaveAttribute('aria-rowcount', '43');
   });
 });

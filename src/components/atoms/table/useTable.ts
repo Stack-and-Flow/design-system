@@ -343,11 +343,13 @@ export const useTable = <T extends TableRowData>({
 
   const currentSelectionSet = useMemo(() => {
     if (currentSelection === 'all') {
-      return new Set(actualData.map((row, index) => String(getRowKey(row, index))));
+      return new Set(
+        actualData.map((row, index) => String(getRowKey(row, index))).filter((key) => !disabledKeySet.has(key))
+      );
     }
 
     return getSelectionSet(currentSelection);
-  }, [actualData, currentSelection, getRowKey]);
+  }, [actualData, currentSelection, disabledKeySet, getRowKey]);
 
   const currentSelectedRows = useMemo(() => {
     if (isRowsControlled && selectedRows) {

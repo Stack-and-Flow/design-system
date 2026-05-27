@@ -264,7 +264,7 @@ const sortableColumns: TableColumn<UserData>[] = [
  * - **Disabled Rows**: Mark specific rows as non-selectable with visual indicators
  * - **Striped Rows**: Alternating row backgrounds for improved readability
  * - **Empty States**: Customizable messages when no data is available
- * - **Filtering**: Column-based filtering with debounced input for performance
+ * - **Filtering**: Column-based filtering with immediate client-side updates
  * - **API Integration**: Designed for backend-driven sorting, filtering, and pagination
  * - **Responsive Design**: Adapts to different screen sizes with horizontal scrolling when needed
  * - **Dark Mode**: Full theme support with consistent colors across light and dark themes
