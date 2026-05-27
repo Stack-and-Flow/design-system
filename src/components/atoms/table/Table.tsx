@@ -511,7 +511,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
             type='button'
             onClick={() => tableState.handlePageChange(tableState.currentPage - 1)}
             disabled={tableState.currentPage === 1}
-            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:outline-none focus-visible:shadow-glow-focus-light disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light dark:focus-visible:shadow-glow-focus-dark'
+            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light-darkest transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:outline-none focus-visible:shadow-glow-focus-light disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light dark:focus-visible:shadow-glow-focus-dark'
             aria-label='Go to previous page'
           >
             Previous
@@ -523,7 +523,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
             type='button'
             onClick={() => tableState.handlePageChange(tableState.currentPage + 1)}
             disabled={tableState.currentPage === tableState.totalPages}
-            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:outline-none focus-visible:shadow-glow-focus-light disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light dark:focus-visible:shadow-glow-focus-dark'
+            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light-darkest transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:outline-none focus-visible:shadow-glow-focus-light disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light dark:focus-visible:shadow-glow-focus-dark'
             aria-label='Go to next page'
           >
             Next
