@@ -23,18 +23,18 @@ type UserData = {
  */
 const statusBadgeClasses: Record<string, string> = {
   active:
-    'border border-success-light bg-success-tint text-success-light dark:border-success dark:bg-success-tint dark:text-success',
+    'border border-success-light bg-success-tint text-text-light dark:border-success dark:bg-success-tint dark:text-text-dark',
   inactive:
-    'border border-error-light bg-error-tint text-error-light dark:border-error dark:bg-error-tint dark:text-error',
+    'border border-error-light bg-error-tint text-text-light dark:border-error dark:bg-error-tint dark:text-text-dark',
   pending:
-    'border border-warning-light bg-warning-tint text-warning-light dark:border-warning dark:bg-warning-tint dark:text-warning'
+    'border border-warning-light bg-warning-tint text-text-light dark:border-warning dark:bg-warning-tint dark:text-text-dark'
 };
 
 const departmentBadgeClasses: Record<string, string> = {
-  design: 'bg-purple/10 text-purple-dark dark:text-purple-light',
-  engineering: 'bg-blue/10 text-blue-dark dark:text-blue-light',
-  marketing: 'bg-success-tint text-success-light dark:text-success',
-  sales: 'bg-warning-tint text-warning-light dark:text-warning'
+  design: 'bg-purple/10 text-text-light dark:text-text-dark',
+  engineering: 'bg-blue/10 text-text-light dark:text-text-dark',
+  marketing: 'bg-success-tint text-text-light dark:text-text-dark',
+  sales: 'bg-warning-tint text-text-light dark:text-text-dark'
 };
 
 const StatusBadge = ({ status }: { status: string }) => (
@@ -903,10 +903,10 @@ const RichCellsExample = () => {
       header: 'Compensation',
       cell: (row) => (
         <div className="text-right">
-          <div className="font-medium text-success-light dark:text-success">
+          <div className="font-medium text-text-light dark:text-text-dark">
             €{row.salary.toLocaleString()}
           </div>
-          <div className="text-xs text-text-tertiary-light dark:text-text-tertiary-dark">Annual</div>
+          <div className="text-xs text-text-secondary-light dark:text-text-secondary-dark">Annual</div>
         </div>
       ),
       allowsSorting: true
@@ -953,7 +953,7 @@ const RichCellsExample = () => {
               {row.location && (
                 <TruncatedText
                   value={row.location}
-                  className='text-xs text-text-tertiary-light dark:text-text-tertiary-dark'
+                  className='text-xs text-text-secondary-light dark:text-text-secondary-dark'
                 />
               )}
             </div>
@@ -978,7 +978,7 @@ const RichCellsExample = () => {
             </div>
             <TruncatedText
               value={row.role}
-              className='mt-1 text-xs text-text-tertiary-light dark:text-text-tertiary-dark'
+              className='mt-1 text-xs text-text-secondary-light dark:text-text-secondary-dark'
             />
           </div>
         ),
@@ -989,10 +989,10 @@ const RichCellsExample = () => {
         header: 'Compensation',
         cell: (row: UserData) => (
           <div className='text-right'>
-            <div className='font-medium text-success-light dark:text-success'>
+            <div className='font-medium text-text-light dark:text-text-dark'>
               {row.salary ? `€${row.salary.toLocaleString()}` : 'N/A'}
             </div>
-            <div className='text-xs text-text-tertiary-light dark:text-text-tertiary-dark'>Annual</div>
+            <div className='text-xs text-text-secondary-light dark:text-text-secondary-dark'>Annual</div>
           </div>
         ),
         allowsSorting: true,
@@ -1017,7 +1017,7 @@ const RichCellsExample = () => {
               <div className='font-medium text-text-light dark:text-text-dark'>
                 {years > 0 ? `${years}y ${months}m` : `${months}m`}
               </div>
-              <div className='text-xs text-text-tertiary-light dark:text-text-tertiary-dark'>
+              <div className='text-xs text-text-secondary-light dark:text-text-secondary-dark'>
                 {joinDate.toLocaleDateString()}
               </div>
             </div>
@@ -1049,7 +1049,7 @@ const RichCellsExample = () => {
               Edit
             </button>
             <button
-              className='font-medium text-error-light transition-colors hover:text-brand-light-dark dark:text-error dark:hover:text-brand-dark-light'
+              className='font-medium text-brand-light-darkest transition-colors hover:text-brand-light-dark dark:text-error dark:hover:text-brand-dark-light'
               aria-label={`Delete user ${row.name}`}
               onClick={(e) => {
                 e.stopPropagation();
