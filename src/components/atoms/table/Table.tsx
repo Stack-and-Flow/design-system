@@ -3,7 +3,7 @@ import type { CompleteTableProps, TableColumn, TableRowData } from './types';
 import { useKeyboardNavigation, useTable, useTableClasses, useTableEvents } from './useTable';
 
 const getColumnHeaderLabel = <T extends TableRowData>(column: TableColumn<T>) => {
-  if (typeof column.header === 'string') {
+  if (typeof column.header === 'string' && column.header.trim().length > 0) {
     return column.header;
   }
 
@@ -227,6 +227,12 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
     (column: TableColumn<T>) => {
       const columnLabel = getColumnHeaderLabel(column);
       const isSortable = Boolean(column.allowsSorting || column.sortable);
+      const headerContent =
+        column.header === undefined ||
+        column.header === null ||
+        (typeof column.header === 'string' && column.header.trim().length === 0)
+          ? columnLabel
+          : column.header;
 
       return (
         <div className='flex items-center gap-2'>
@@ -234,13 +240,14 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
             <button
               type='button'
               className='inline-flex min-h-11 items-center gap-2 text-left text-inherit focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+              aria-label={columnLabel}
               onClick={() => tableState.handleSort(column.key)}
             >
-              <span>{column.header}</span>
+              <span>{headerContent}</span>
               {renderSortIcon(column)}
             </button>
           ) : (
-            <span>{column.header}</span>
+            <span>{headerContent}</span>
           )}
           {column.filterable && (
             <input
@@ -317,49 +324,53 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
     ]
   );
 
-  const renderLoadingState = () => (
-    <div className={`${getBaseClasses()} ${className ?? ''}`}>
-      <div className={getWrapperClasses()}>
-        <div aria-atomic='true' aria-live='polite' className='sr-only'>
-          Loading table data
-        </div>
-        <table
-          {...restTableProps}
-          className={getTableClasses()}
-          role='grid'
-          aria-busy='true'
-          aria-labelledby={tableLabelledBy}
-          aria-label={tableLabelledBy ? undefined : tableLabel}
-        >
-          {!hideHeader && renderTableHead()}
-          <tbody className={classNames.tbody}>
-            {Array.from({ length: pageSize }).map((_, rowIndex) => (
-              <tr key={`loading-row-${rowIndex}`} role='row' aria-rowindex={rowIndex + 2}>
-                {selectionEnabled && (
-                  <td className={getCellClasses({ columnIndex: -1, rowIndex, align: 'center' })} role='gridcell'>
-                    <div className='size-4 rounded bg-border-strong-light dark:bg-border-strong-dark' />
-                  </td>
-                )}
-                {columns.map((column, columnIndex) => (
-                  <td
-                    key={`loading-cell-${String(column.key)}`}
-                    className={getCellClasses({ align: column.align, columnIndex, rowIndex })}
-                    role='gridcell'
-                  >
-                    <div className='h-4 rounded bg-border-strong-light dark:bg-border-strong-dark' />
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className='flex items-center justify-center gap-3 px-4 py-4 text-text-secondary-light dark:text-text-secondary-dark'>
-          <div className='size-5 animate-spin rounded-full border-2 border-border-light border-t-brand-light dark:border-border-dark dark:border-t-brand-dark' />
-          <span>Loading data...</span>
+  const renderLoadingState = () => {
+    const bodyRowIndexOffset = hideHeader ? 1 : 2;
+
+    return (
+      <div className={`${getBaseClasses()} ${className ?? ''}`}>
+        <div className={getWrapperClasses()}>
+          <div aria-atomic='true' aria-live='polite' className='sr-only'>
+            Loading table data
+          </div>
+          <table
+            {...restTableProps}
+            className={getTableClasses()}
+            role='grid'
+            aria-busy='true'
+            aria-labelledby={tableLabelledBy}
+            aria-label={tableLabelledBy ? undefined : tableLabel}
+          >
+            {!hideHeader && renderTableHead()}
+            <tbody className={classNames.tbody}>
+              {Array.from({ length: pageSize }).map((_, rowIndex) => (
+                <tr key={`loading-row-${rowIndex}`} role='row' aria-rowindex={rowIndex + bodyRowIndexOffset}>
+                  {selectionEnabled && (
+                    <td className={getCellClasses({ columnIndex: -1, rowIndex, align: 'center' })} role='gridcell'>
+                      <div className='size-4 rounded bg-border-strong-light dark:bg-border-strong-dark' />
+                    </td>
+                  )}
+                  {columns.map((column, columnIndex) => (
+                    <td
+                      key={`loading-cell-${String(column.key)}`}
+                      className={getCellClasses({ align: column.align, columnIndex, rowIndex })}
+                      role='gridcell'
+                    >
+                      <div className='h-4 rounded bg-border-strong-light dark:bg-border-strong-dark' />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className='flex items-center justify-center gap-3 px-4 py-4 text-text-secondary-light dark:text-text-secondary-dark'>
+            <div className='size-5 animate-spin rounded-full border-2 border-border-light border-t-brand-light dark:border-border-dark dark:border-t-brand-dark' />
+            <span>Loading data...</span>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderEmptyState = () => (
     <div className={`${getBaseClasses()} ${className ?? ''}`}>

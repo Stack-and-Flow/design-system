@@ -198,8 +198,6 @@ export type TableComparableValue = string | number | boolean | Date | null | und
 export type TableFilterValue = string | number | boolean | null | undefined;
 export type LoadingState = 'loading' | 'sorting' | 'loadingMore' | 'error' | 'idle' | 'filtering';
 export type SelectionMode = 'none' | 'single' | 'multiple';
-export type SelectionBehavior = 'toggle' | 'replace';
-export type DisabledBehavior = 'selection' | 'all';
 export type TableRadius = 'none' | 'sm' | 'md' | 'lg';
 export type TableShadow = 'none' | 'sm' | 'md' | 'lg';
 export type TableLayout = 'auto' | 'fixed';
@@ -256,9 +254,6 @@ export type TableProps<T extends TableRowData = TableRowData> = NativeTableProps
   layout?: TableLayout;
   radius?: TableRadius;
   shadow?: TableShadow;
-  maxTableHeight?: number;
-  rowHeight?: number;
-  isVirtualized?: boolean;
   hideHeader?: boolean;
   isStriped?: boolean;
   isCompact?: boolean;
@@ -272,10 +267,6 @@ export type TableProps<T extends TableRowData = TableRowData> = NativeTableProps
   disabledKeys?: Selection;
   disallowEmptySelection?: boolean;
   selectionMode?: SelectionMode;
-  selectionBehavior?: SelectionBehavior;
-  disabledBehavior?: DisabledBehavior;
-  allowDuplicateSelectionEvents?: boolean;
-  disableAnimation?: boolean;
   isKeyboardNavigationDisabled?: boolean;
   classNames?: TableClassNames;
   data?: T[];

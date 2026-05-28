@@ -288,6 +288,30 @@ describe('Table — component behavior', () => {
     expect(handleSelectionChange).toHaveBeenCalledWith('all');
   });
 
+  it('labels sortable header buttons when the visible header is omitted', () => {
+    const fallbackColumns: TableColumn<TestRow>[] = [
+      {
+        key: 'name',
+        allowsSorting: true,
+        cell: (row) => row.name,
+        textValue: 'Customer name'
+      }
+    ];
+
+    render(<Table columns={fallbackColumns} items={rows} />);
+
+    expect(screen.getByRole('button', { name: 'Customer name' })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Customer name' })).toHaveAttribute('aria-sort', 'none');
+  });
+
+  it('starts loading body row indexes at one when the header is hidden', () => {
+    render(<Table columns={columns} hideHeader={true} items={rows} loading={true} pageSize={2} />);
+
+    const skeletonRows = screen.getAllByRole('row');
+    expect(skeletonRows[0]).toHaveAttribute('aria-rowindex', '1');
+    expect(skeletonRows[1]).toHaveAttribute('aria-rowindex', '2');
+  });
+
   it('uses the represented total row count for paginated tables', () => {
     render(<Table columns={columns} items={rows} pageSize={2} pagination={true} totalRows={42} />);
 
