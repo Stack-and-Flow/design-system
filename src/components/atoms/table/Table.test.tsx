@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Table as RootTable } from '../../../index';
 import { Table } from './Table';
 import type { Selection, SortDescriptor, TableColumn } from './types';
-import { useTable } from './useTable';
+import { useKeyboardNavigation, useTable } from './useTable';
 
 type TestRow = {
   id: number;
@@ -130,6 +130,40 @@ describe('useTable — logic', () => {
       [{ column: 'name', direction: 'descending' }],
       [null]
     ]);
+  });
+
+  it('keeps selectedKeys referentially stable while selection is unchanged', () => {
+    const defaultSelectedKeys = new Set(['alice@example.com']);
+    const rowKey = (row: TestRow) => row.email;
+    const { result, rerender } = renderHook(() =>
+      useTable({
+        columns,
+        defaultSelectedKeys,
+        items: rows,
+        rowKey,
+        selectionMode: 'multiple'
+      })
+    );
+
+    const selectedKeys = result.current.selectedKeys;
+    rerender();
+
+    expect(result.current.selectedKeys).toBe(selectedKeys);
+  });
+
+  it('clamps focused keyboard cells when table dimensions shrink', () => {
+    const { result, rerender } = renderHook(
+      ({ columnCount, rowCount }) => useKeyboardNavigation(rowCount, columnCount),
+      { initialProps: { columnCount: 3, rowCount: 3 } }
+    );
+
+    act(() => {
+      result.current.setFocusedCell({ row: 2, col: 2 });
+    });
+
+    rerender({ columnCount: 1, rowCount: 1 });
+
+    expect(result.current.focusedCell).toEqual({ row: 0, col: 0 });
   });
 });
 
@@ -371,6 +405,17 @@ describe('Table — component behavior', () => {
     render(<Table columns={columns} items={rows} />);
 
     expect(fireEvent.keyDown(screen.getByRole('textbox', { name: 'Filter by Name' }), { key: 'ArrowLeft' })).toBe(true);
+  });
+
+  it('exposes the active keyboard cell through aria-activedescendant', () => {
+    render(<Table columns={columns} items={rows} />);
+
+    const grid = screen.getByRole('grid');
+    fireEvent.keyDown(grid, { key: 'ArrowDown' });
+
+    const activeDescendantId = grid.getAttribute('aria-activedescendant');
+    expect(activeDescendantId).toBeTruthy();
+    expect(document.getElementById(activeDescendantId ?? '')).toHaveTextContent('Carla');
   });
 
   it('is exported from the package root', () => {

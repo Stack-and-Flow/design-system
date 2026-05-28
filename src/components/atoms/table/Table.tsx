@@ -185,6 +185,10 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
 
   const areAllVisibleRowsSelected =
     allVisibleSelectableKeys.length > 0 && allVisibleSelectableKeys.every((key) => selectedKeySet.has(key));
+  const activeDescendantId =
+    focusedCell && tableState.filteredData[focusedCell.row] && columns[focusedCell.col]
+      ? `${tableId}-cell-${focusedCell.row}-${focusedCell.col}`
+      : undefined;
 
   const renderSortIcon = useCallback(
     (column: TableColumn<T>) => {
@@ -425,6 +429,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
           aria-label={tableLabelledBy ? undefined : tableLabel}
           aria-rowcount={representedDataRowCount + (hideHeader ? 0 : 1)}
           aria-colcount={columns.length + (selectionEnabled ? 1 : 0)}
+          aria-activedescendant={activeDescendantId}
           onKeyDown={handleKeyDown}
           tabIndex={isKeyboardNavigationDisabled ? -1 : 0}
         >
@@ -503,6 +508,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
                       return (
                         <td
                           key={String(column.key)}
+                          id={`${tableId}-cell-${rowIndex}-${columnIndex}`}
                           className={getCellClasses({ align: column.align, columnIndex, rowIndex })}
                           role={column.isRowHeader ? 'rowheader' : 'gridcell'}
                           aria-colindex={columnIndex + (selectionEnabled ? 2 : 1)}

@@ -154,7 +154,7 @@ const generateUsers = (count: number): UserData[] => {
       avatar: getAvatarForUser(name, i),
       location: LOCATIONS[i % LOCATIONS.length],
       joinDate: new Date(2020 + (i % 4), i % 12, (i % 28) + 1).toISOString().split('T')[0],
-      salary: 45000 + i * 1000 + Math.floor(Math.random() * 15000)
+      salary: 45000 + i * 1000 + ((i * 7919) % 15000)
     };
   });
 };

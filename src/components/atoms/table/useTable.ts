@@ -88,6 +88,8 @@ type UseTableClassesProps = {
 
 type HeaderCellColumn = Pick<TableColumn<TableRowData>, 'align' | 'allowsSorting' | 'sortable'>;
 
+const EMPTY_TABLE_DATA: TableRowData[] = [];
+
 const getSelectionSet = (selection?: Selection): Set<string> => {
   if (!selection || selection === 'all') {
     return new Set();
@@ -166,8 +168,8 @@ const toTableComparableValue = (value: unknown): TableComparableValue => {
 };
 
 export const useTable = <T extends TableRowData>({
-  data = [],
-  items = [],
+  data: rawData,
+  items: rawItems,
   columns,
   propLoading = false,
   pagination = false,
@@ -188,6 +190,8 @@ export const useTable = <T extends TableRowData>({
   onFilterChange,
   rowKey
 }: UseTableProps<T>): UseTableReturn<T> => {
+  const data = (rawData ?? EMPTY_TABLE_DATA) as T[];
+  const items = (rawItems ?? EMPTY_TABLE_DATA) as T[];
   const actualData = useMemo(() => (items.length > 0 ? [...items] : [...data]), [data, items]);
   const [isLoading, setIsLoading] = useState(propLoading);
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
@@ -560,6 +564,8 @@ export const useTable = <T extends TableRowData>({
     [actualData, commitSelection, disabledKeySet, getRowKey]
   );
 
+  const stableSelectedKeys = useMemo(() => new Set(currentSelectionSet), [currentSelectionSet]);
+
   return {
     allFilteredData: filteredAndSortedData,
     currentPage,
@@ -572,7 +578,7 @@ export const useTable = <T extends TableRowData>({
     handleSelectionChange,
     handleSort,
     isLoading,
-    selectedKeys: currentSelection === 'all' ? new Set(currentSelectionSet) : new Set(currentSelectionSet),
+    selectedKeys: stableSelectedKeys,
     selectedRows: currentSelectedRows,
     setFilter,
     setIsLoading,
@@ -585,6 +591,25 @@ export const useTable = <T extends TableRowData>({
 
 export const useKeyboardNavigation = (rowCount: number, columnCount: number, disabled = false) => {
   const [focusedCell, setFocusedCell] = useState<FocusedCell>(null);
+
+  useEffect(() => {
+    setFocusedCell((currentCell) => {
+      if (disabled || rowCount === 0 || columnCount === 0) {
+        return currentCell === null ? currentCell : null;
+      }
+
+      if (!currentCell) {
+        return currentCell;
+      }
+
+      const nextCell = {
+        row: Math.min(currentCell.row, rowCount - 1),
+        col: Math.min(currentCell.col, columnCount - 1)
+      };
+
+      return nextCell.row === currentCell.row && nextCell.col === currentCell.col ? currentCell : nextCell;
+    });
+  }, [columnCount, disabled, rowCount]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
