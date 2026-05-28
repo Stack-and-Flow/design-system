@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ReactNode } from 'react';
+import { hintMessageVariants as inputHintMessageVariants } from '@/components/atoms/input/types';
 
 export type SelectOption = {
   key: string;
@@ -9,6 +10,14 @@ export type SelectOption = {
   startContent?: ReactNode;
   endContent?: ReactNode;
 };
+
+export type SelectHint = {
+  message: string;
+  type: 'error' | 'warning' | 'success' | 'info';
+};
+
+/** Re-exported from Input for consistency — avoids API drift. */
+export const hintMessageVariants = inputHintMessageVariants;
 
 export const selectBase = cva('relative flex flex-col gap-1.5');
 
@@ -47,6 +56,14 @@ export const selectTrigger = cva(
           'hover:bg-surface-raised-light dark:hover:bg-surface-raised-dark',
           'active:bg-surface-raised-light dark:active:bg-surface-raised-dark'
         ],
+        line: [
+          'bg-transparent',
+          'border border-border-light dark:border-border-dark',
+          'text-text-secondary-light dark:text-text-secondary-dark',
+          'hover:border-border-strong-light dark:hover:border-border-strong-dark',
+          'hover:bg-surface-raised-light dark:hover:bg-surface-raised-dark',
+          'active:bg-surface-raised-light dark:active:bg-surface-raised-dark'
+        ],
         underlined: [
           'bg-transparent',
           'border-b border-b-border-strong-light dark:border-b-border-strong-dark',
@@ -59,29 +76,41 @@ export const selectTrigger = cva(
         md: 'h-14 px-4 fs-base',
         lg: 'h-16 px-4 fs-h6'
       },
-      isInvalid: {
-        true: '',
-        false: ''
+      status: {
+        default: '',
+        error:
+          'border-error-light dark:border-error shadow-glow-input-error-light dark:shadow-glow-input-error hover:!border-error-light dark:hover:!border-error',
+        warning:
+          'border-warning-light dark:border-warning shadow-glow-input-warning-light dark:shadow-glow-input-warning hover:!border-warning-light dark:hover:!border-warning',
+        success:
+          'border-success-light dark:border-success shadow-glow-input-success-light dark:shadow-glow-input-success hover:!border-success-light dark:hover:!border-success',
+        info: ''
       }
     },
     compoundVariants: [
       {
-        variant: ['regular', 'bordered', 'faded'],
-        isInvalid: true,
+        variant: 'underlined',
+        status: 'error',
         class:
-          'border-error-light dark:border-error shadow-glow-input-error-light dark:shadow-glow-input-error hover:!border-error-light dark:hover:!border-error'
+          'border-b-error-light dark:border-b-error shadow-glow-input-error-light dark:shadow-glow-input-error hover:!border-error-light dark:hover:!border-error'
       },
       {
         variant: 'underlined',
-        isInvalid: true,
+        status: 'warning',
         class:
-          'border-b-error-light dark:border-b-error shadow-glow-input-error-light dark:shadow-glow-input-error hover:!border-error-light dark:hover:!border-error'
+          'border-b-warning-light dark:border-b-warning shadow-glow-input-warning-light dark:shadow-glow-input-warning hover:!border-warning-light dark:hover:!border-warning'
+      },
+      {
+        variant: 'underlined',
+        status: 'success',
+        class:
+          'border-b-success-light dark:border-b-success shadow-glow-input-success-light dark:shadow-glow-input-success hover:!border-success-light dark:hover:!border-success'
       }
     ],
     defaultVariants: {
       variant: 'regular',
       size: 'md',
-      isInvalid: false
+      status: 'default'
     }
   }
 );
@@ -148,7 +177,7 @@ export const selectItem = cva(
 
 export const selectLabel = cva(
   [
-    'w-auto line-clamp-1 pt-0.5 text-text-light dark:text-text-dark pointer-events-none',
+    'absolute w-auto line-clamp-1 pt-0.5 text-text-light dark:text-text-dark pointer-events-none',
     'motion-safe:transition-[top,font-size,color] motion-safe:duration-200 motion-safe:ease-[ease]'
   ],
   {
@@ -159,14 +188,32 @@ export const selectLabel = cva(
         lg: 'left-4 font-medium'
       },
       state: {
+        resting: 'top-1/2 -translate-y-1/2',
         floatingSm: 'top-0.5 fs-xs font-semibold',
         floatingMd: 'top-1.5 fs-small font-semibold',
         floatingLg: 'top-2 fs-small font-semibold'
       }
     },
+    compoundVariants: [
+      {
+        size: 'sm',
+        state: 'resting',
+        class: 'fs-small'
+      },
+      {
+        size: 'md',
+        state: 'resting',
+        class: 'fs-base'
+      },
+      {
+        size: 'lg',
+        state: 'resting',
+        class: 'fs-h6'
+      }
+    ],
     defaultVariants: {
       size: 'md',
-      state: 'floatingMd'
+      state: 'resting'
     }
   }
 );
@@ -187,6 +234,7 @@ export const selectClearButton = cva([
   'focus-visible:outline-none focus-visible:shadow-glow-input-focus-light dark:focus-visible:shadow-glow-input-focus'
 ]);
 
+/** @deprecated Use hintMessageVariants with hint pattern instead. */
 export const selectErrorMessage = cva('text-sm text-error-light dark:text-error');
 
 export const selectDescription = cva('text-sm text-text-secondary-light dark:text-text-secondary-dark');
@@ -209,9 +257,15 @@ export type SelectProps = VariantProps<typeof selectTrigger> & {
   label?: string;
   /** @control text */
   description?: string;
-  /** @control text */
+  /**
+   * @control text
+   * @deprecated Use `hint` instead. `errorMessage` maps to `hint: { message: errorMessage, type: 'error' }`.
+   */
   errorMessage?: string;
-  /** @control boolean @default false */
+  /**
+   * @control boolean @default false
+   * @deprecated Use `hint` instead. `isInvalid` maps to `status: 'error'`.
+   */
   isInvalid?: boolean;
   /** @control boolean @default false */
   isDisabled?: boolean;
@@ -231,6 +285,7 @@ export type SelectProps = VariantProps<typeof selectTrigger> & {
   classNames?: {
     base?: string;
     trigger?: string;
+    container?: string;
     value?: string;
     indicator?: string;
     popover?: string;
@@ -238,5 +293,8 @@ export type SelectProps = VariantProps<typeof selectTrigger> & {
     clearButton?: string;
     label?: string;
     errorMessage?: string;
+    hint?: string;
   };
+  /** @control object */
+  hint?: SelectHint;
 };
