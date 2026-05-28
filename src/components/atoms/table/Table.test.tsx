@@ -109,6 +109,18 @@ describe('useTable — logic', () => {
     expect(result.current.selectedRows.map((row) => row.email)).toEqual(['carla@example.com', 'alice@example.com']);
   });
 
+  it('lets an explicitly empty items prop take precedence over fallback data', () => {
+    const { result } = renderHook(() =>
+      useTable({
+        columns,
+        data: rows,
+        items: []
+      })
+    );
+
+    expect(result.current.filteredData).toEqual([]);
+  });
+
   it('emits sort callbacks consistently, including clearing the sort', () => {
     const handleSortChange = vi.fn<(descriptor: SortDescriptor | null) => void>();
     const { result } = renderHook(() =>
@@ -213,6 +225,19 @@ describe('Table — component behavior', () => {
 
     await user.click(screen.getByRole('checkbox', { name: 'Toggle selection for Carla' }));
     expect(handleRowClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders an empty state when items is explicitly empty even if data has rows', () => {
+    render(<Table columns={columns} data={rows} items={[]} emptyContent='No server results' />);
+
+    expect(screen.getByText('No server results')).toBeInTheDocument();
+    expect(screen.queryByText('Carla')).not.toBeInTheDocument();
+  });
+
+  it('uses data rows when items is omitted', () => {
+    render(<Table columns={columns} data={rows} />);
+
+    expect(screen.getByText('Carla')).toBeInTheDocument();
   });
 
   it('supports rowKey-driven uncontrolled selection and marks disabled rows as aria-disabled', async () => {
@@ -429,6 +454,31 @@ describe('Table — component behavior', () => {
 
     expect(checkbox).toBeChecked();
     expect(handleRowClick).not.toHaveBeenCalled();
+  });
+
+  it('does not trigger row or cell actions from interactive SVG descendants', () => {
+    const handleCellAction = vi.fn();
+    const handleRowAction = vi.fn();
+    const interactiveColumns: TableColumn<TestRow>[] = [
+      {
+        key: 'action',
+        header: 'Action',
+        cell: () => (
+          <button type='button' aria-label='Open actions'>
+            <svg data-testid='action-icon' aria-hidden='true' />
+          </button>
+        )
+      }
+    ];
+
+    render(
+      <Table columns={interactiveColumns} items={rows} onCellAction={handleCellAction} onRowAction={handleRowAction} />
+    );
+
+    fireEvent.click(screen.getAllByTestId('action-icon')[0]);
+
+    expect(handleCellAction).not.toHaveBeenCalled();
+    expect(handleRowAction).not.toHaveBeenCalled();
   });
 
   it('does not intercept editing keys inside column filter inputs', () => {

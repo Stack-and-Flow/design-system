@@ -99,7 +99,7 @@ const getSelectionSet = (selection?: Selection): Set<string> => {
 };
 
 export const isInteractiveEventTarget = (target: EventTarget | null) => {
-  if (!(target instanceof HTMLElement)) {
+  if (!(target instanceof Element)) {
     return false;
   }
 
@@ -192,7 +192,7 @@ export const useTable = <T extends TableRowData>({
 }: UseTableProps<T>): UseTableReturn<T> => {
   const data = (rawData ?? EMPTY_TABLE_DATA) as T[];
   const items = (rawItems ?? EMPTY_TABLE_DATA) as T[];
-  const actualData = useMemo(() => (items.length > 0 ? [...items] : [...data]), [data, items]);
+  const actualData = useMemo(() => [...(rawItems === undefined ? data : items)], [data, items, rawItems]);
   const [isLoading, setIsLoading] = useState(propLoading);
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
   const [currentPage, setCurrentPage] = useState(1);

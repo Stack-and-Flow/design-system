@@ -48,7 +48,7 @@ const formatCellValue = (value: unknown) => {
 
 export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
   const {
-    items = [],
+    items,
     columns = [],
     variant = 'default',
     size = 'md',
@@ -61,7 +61,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
     loading = false,
     emptyContent = 'No data available',
     onRowClick,
-    data = [],
+    data,
     pagination = false,
     pageSize = 10,
     totalRows,
@@ -99,7 +99,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
   const tableId = useId().replace(/:/g, '');
   const tableLabel = ariaLabel?.trim() || nativeAriaLabel?.trim() || 'Data table';
   const tableLabelledBy = ariaLabelledBy?.trim() || nativeAriaLabelledBy?.trim() || undefined;
-  const dataSource = items.length > 0 ? items : data;
+  const dataSource = items === undefined ? (data ?? []) : items;
   const effectiveSelectionMode = selectionMode !== 'none' ? selectionMode : rowSelection || 'none';
   const selectionEnabled = effectiveSelectionMode !== 'none' || showSelectionCheckboxes;
   const resolvedSelectionMode = rowSelection ?? (effectiveSelectionMode === 'none' ? false : effectiveSelectionMode);
@@ -475,8 +475,8 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
                     data-disabled={isDisabled || undefined}
                     data-selected={isSelected || undefined}
                     className={getRowClasses({ isDisabled, isInteractive: rowIsInteractive, isSelected })}
-                    onClick={() => {
-                      if (rowIsInteractive) {
+                    onClick={(event) => {
+                      if (rowIsInteractive && !isInteractiveEventTarget(event.target)) {
                         handleRowClick(rowIndex, row, rowDataIndex);
                       }
                     }}
@@ -523,7 +523,11 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
                           className={getCellClasses({ align: column.align, columnIndex, rowIndex })}
                           role={column.isRowHeader ? 'rowheader' : 'gridcell'}
                           aria-colindex={columnIndex + (selectionEnabled ? 2 : 1)}
-                          onClick={() => handleCellClick(rowIndex, columnIndex, row, rowDataIndex)}
+                          onClick={(event) => {
+                            if (!isInteractiveEventTarget(event.target)) {
+                              handleCellClick(rowIndex, columnIndex, row, rowDataIndex);
+                            }
+                          }}
                         >
                           {cellContent}
                         </td>
