@@ -185,6 +185,8 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
 
   const areAllVisibleRowsSelected =
     allVisibleSelectableKeys.length > 0 && allVisibleSelectableKeys.every((key) => selectedKeySet.has(key));
+  const areSomeVisibleRowsSelected = allVisibleSelectableKeys.some((key) => selectedKeySet.has(key));
+  const isSelectAllIndeterminate = areSomeVisibleRowsSelected && !areAllVisibleRowsSelected;
   const activeDescendantId =
     focusedCell && tableState.filteredData[focusedCell.row] && columns[focusedCell.col]
       ? `${tableId}-cell-${focusedCell.row}-${focusedCell.col}`
@@ -280,7 +282,13 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
                 <input
                   type='checkbox'
                   checked={areAllVisibleRowsSelected}
+                  ref={(element) => {
+                    if (element) {
+                      element.indeterminate = isSelectAllIndeterminate;
+                    }
+                  }}
                   onChange={tableState.toggleAllRowsSelection}
+                  aria-checked={isSelectAllIndeterminate ? 'mixed' : areAllVisibleRowsSelected}
                   aria-label='Select all rows'
                 />
               ) : (
@@ -317,6 +325,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
     ),
     [
       areAllVisibleRowsSelected,
+      isSelectAllIndeterminate,
       columns,
       disallowEmptySelection,
       getHeaderCellClasses,
@@ -367,7 +376,9 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
               ))}
             </tbody>
           </table>
-          <div className='flex items-center justify-center gap-3 px-4 py-4 text-text-secondary-light dark:text-text-secondary-dark'>
+          <div
+            className={`flex items-center justify-center gap-3 px-4 py-4 text-text-secondary-light dark:text-text-secondary-dark ${classNames.loadingWrapper ?? ''}`}
+          >
             <div className='size-5 animate-spin rounded-full border-2 border-border-light border-t-brand-light dark:border-border-dark dark:border-t-brand-dark' />
             <span>Loading data...</span>
           </div>
@@ -391,7 +402,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
             <tr role='row'>
               <td
                 colSpan={columns.length + (selectionEnabled ? 1 : 0)}
-                className='px-4 py-8 text-center text-text-secondary-light dark:text-text-secondary-dark'
+                className={`px-4 py-8 text-center text-text-secondary-light dark:text-text-secondary-dark ${classNames.emptyWrapper ?? ''}`}
                 role='gridcell'
               >
                 {emptyContent}

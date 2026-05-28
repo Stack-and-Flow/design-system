@@ -362,6 +362,22 @@ describe('Table — component behavior', () => {
     expect(handleSelectionChange).toHaveBeenCalledWith('all');
   });
 
+  it('marks select all as indeterminate when visible rows are partially selected', () => {
+    render(
+      <Table
+        columns={columns}
+        items={rows}
+        selectedKeys={new Set(['alice@example.com'])}
+        rowKey={(row) => row.email}
+        selectionMode='multiple'
+      />
+    );
+
+    const selectAll = screen.getByRole('checkbox', { name: 'Select all rows' });
+    expect(selectAll).toHaveAttribute('aria-checked', 'mixed');
+    expect((selectAll as HTMLInputElement).indeterminate).toBe(true);
+  });
+
   it('labels sortable header buttons when the visible header is omitted', () => {
     const fallbackColumns: TableColumn<TestRow>[] = [
       {
@@ -384,6 +400,20 @@ describe('Table — component behavior', () => {
     const skeletonRows = screen.getAllByRole('row');
     expect(skeletonRows[0]).toHaveAttribute('aria-rowindex', '1');
     expect(skeletonRows[1]).toHaveAttribute('aria-rowindex', '2');
+  });
+
+  it('applies loading and empty wrapper class overrides', () => {
+    const { rerender } = render(
+      <Table columns={columns} items={rows} loading={true} classNames={{ loadingWrapper: 'custom-loading' }} />
+    );
+
+    expect(screen.getByText('Loading data...').parentElement).toHaveClass('custom-loading');
+
+    rerender(
+      <Table columns={columns} items={[]} emptyContent='Nothing here' classNames={{ emptyWrapper: 'custom-empty' }} />
+    );
+
+    expect(screen.getByText('Nothing here')).toHaveClass('custom-empty');
   });
 
   it('lets interactive row descendants handle keyboard activation', async () => {
