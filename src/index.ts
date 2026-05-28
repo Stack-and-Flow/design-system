@@ -16,6 +16,7 @@ export { Link } from './components/atoms/link';
 export { Skeleton } from './components/atoms/skeleton';
 export { Spacer } from './components/atoms/spacer';
 export { Switch } from './components/atoms/switch';
+export { Table } from './components/atoms/table';
 export { Text } from './components/atoms/text';
 export { Tooltip } from './components/atoms/tooltip';
 
