@@ -74,11 +74,11 @@ export const Variants: Story = {
       </div>
       <div className='w-48'>
         <Select
-          label='Faded'
-          variant='faded'
+          label='Line'
+          variant='line'
           placeholder='Select...'
           options={defaultOptions}
-          onChange={action('faded-change')}
+          onChange={action('line-change')}
         />
       </div>
       <div className='w-48'>
@@ -152,14 +152,59 @@ export const WithDescription: Story = {
 };
 
 /**
- * Shows the invalid state with a highlighted border and error message.
+ * Shows the invalid state with a highlighted border and error hint.
  */
 export const WithError: Story = {
   args: {
     ...Default.args,
-    isInvalid: true,
-    errorMessage: 'Country is required for shipping calculations.'
+    hint: { message: 'Country is required for shipping calculations.', type: 'error' }
   }
+};
+
+/**
+ * Shows all hint types side by side.
+ */
+export const HintTypes: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-start gap-6'>
+      <div className='w-48'>
+        <Select
+          label='Error'
+          placeholder='Select...'
+          options={defaultOptions}
+          hint={{ message: 'Invalid selection', type: 'error' }}
+          onChange={action('hint-error')}
+        />
+      </div>
+      <div className='w-48'>
+        <Select
+          label='Warning'
+          placeholder='Select...'
+          options={defaultOptions}
+          hint={{ message: 'Review your choice', type: 'warning' }}
+          onChange={action('hint-warning')}
+        />
+      </div>
+      <div className='w-48'>
+        <Select
+          label='Success'
+          placeholder='Select...'
+          options={defaultOptions}
+          hint={{ message: 'Looks good', type: 'success' }}
+          onChange={action('hint-success')}
+        />
+      </div>
+      <div className='w-48'>
+        <Select
+          label='Info'
+          placeholder='Select...'
+          options={defaultOptions}
+          hint={{ message: 'More info here', type: 'info' }}
+          onChange={action('hint-info')}
+        />
+      </div>
+    </div>
+  )
 };
 
 /**
@@ -241,11 +286,11 @@ export const WithIcon: Story = {
         </div>
         <div className='w-48'>
           <Select
-            label='Faded'
-            variant='faded'
+            label='Line'
+            variant='line'
             placeholder='Currency'
             options={currencyOptions}
-            onChange={action('icon-faded')}
+            onChange={action('icon-line')}
           />
         </div>
         <div className='w-48'>
@@ -260,4 +305,33 @@ export const WithIcon: Story = {
       </div>
     );
   }
+};
+
+/**
+ * Shows the deprecated `faded` variant still functioning with a console warning.
+ */
+export const WithFadedDeprecated: Story = {
+  args: {
+    ...Default.args,
+    variant: 'faded'
+  }
+};
+
+/**
+ * Shows floating label behavior in different states.
+ */
+export const FloatingLabelStates: Story = {
+  render: () => (
+    <div className='flex flex-wrap items-start gap-6'>
+      <div className='w-48'>
+        <Select label='Empty' placeholder='Select...' options={defaultOptions} />
+      </div>
+      <div className='w-48'>
+        <Select label='With Value' options={defaultOptions} defaultValue='ar' />
+      </div>
+      <div className='w-48'>
+        <Select label='With Placeholder' placeholder='Choose one...' options={defaultOptions} />
+      </div>
+    </div>
+  )
 };
