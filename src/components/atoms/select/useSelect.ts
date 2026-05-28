@@ -356,6 +356,8 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
           e.preventDefault();
           if (!isOpen) {
             openPopover();
+            const lastEnabled = enabled[enabled.length - 1] ?? 0;
+            setFocusedIndex(lastEnabled);
             return;
           }
           const currentPos = enabled.indexOf(focusedIndex);

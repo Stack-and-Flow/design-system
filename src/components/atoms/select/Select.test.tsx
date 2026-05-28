@@ -325,6 +325,89 @@ describe('Select — interaction', () => {
     // After clearing in uncontrolled mode, clear button should disappear
     expect(screen.queryByRole('button', { name: /clear/i })).not.toBeInTheDocument();
   });
+
+  it('closes popover when Tab is pressed', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    await user.keyboard('{Tab}');
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('selects option via type-ahead when typing a character', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('b');
+
+    expect(screen.getByRole('option', { name: 'Brazil' })).toHaveAttribute('data-focused', 'true');
+  });
+
+  it('opens popover and focuses first item on Home when closed', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{Home}');
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Argentina' })).toHaveAttribute('data-focused', 'true');
+  });
+
+  it('opens popover and focuses last item on End when closed', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{End}');
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Uruguay' })).toHaveAttribute('data-focused', 'true');
+  });
+
+  it('opens popover on Enter when closed', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{Enter}');
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+  });
+
+  it('opens popover on Space when closed', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard(' ');
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+  });
+
+  it('opens popover and focuses last item on ArrowUp when closed', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowUp}');
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Uruguay' })).toHaveAttribute('data-focused', 'true');
+  });
 });
 
 describe('Select — accessibility', () => {
