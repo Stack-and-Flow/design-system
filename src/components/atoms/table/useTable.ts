@@ -96,6 +96,18 @@ const getSelectionSet = (selection?: Selection): Set<string> => {
   return new Set(Array.from(selection, (key) => String(key)));
 };
 
+export const isInteractiveEventTarget = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  return Boolean(
+    target.closest(
+      'a[href], button, input, textarea, select, [contenteditable="true"], [role="button"], [role="checkbox"], [role="combobox"], [role="link"], [role="radio"], [role="searchbox"], [role="slider"], [role="spinbutton"], [role="textbox"]'
+    )
+  );
+};
+
 const isReactKeyValue = (value: unknown): value is React.Key => typeof value === 'string' || typeof value === 'number';
 
 const toComparableValue = (value: TableComparableValue): string | number => {
@@ -359,8 +371,16 @@ export const useTable = <T extends TableRowData>({
     return actualData.filter((row, index) => currentSelectionSet.has(String(getRowKey(row, index))));
   }, [actualData, currentSelectionSet, getRowKey, isRowsControlled, selectedRows]);
 
+  const getSelectionFromKeySet = useCallback(
+    (selectionSet: Set<string>): Set<React.Key> => {
+      const keyMap = new Map(actualData.map((row, index) => [String(getRowKey(row, index)), getRowKey(row, index)]));
+      return new Set(Array.from(selectionSet, (key) => keyMap.get(key) ?? key));
+    },
+    [actualData, getRowKey]
+  );
+
   const commitSelection = useCallback(
-    (nextSelectionSet: Set<string>, emittedSelection: Selection = new Set(nextSelectionSet)) => {
+    (nextSelectionSet: Set<string>, emittedSelection: Selection = getSelectionFromKeySet(nextSelectionSet)) => {
       const nextSelectedRows = actualData.filter((row, index) => nextSelectionSet.has(String(getRowKey(row, index))));
       const nextSelection = new Set(nextSelectionSet);
 
@@ -371,7 +391,7 @@ export const useTable = <T extends TableRowData>({
       onSelectionChange?.(emittedSelection);
       onSelectRows?.(nextSelectedRows);
     },
-    [actualData, getRowKey, isKeysControlled, isRowsControlled, onSelectRows, onSelectionChange]
+    [actualData, getRowKey, getSelectionFromKeySet, isKeysControlled, isRowsControlled, onSelectRows, onSelectionChange]
   );
 
   const setFilter = useCallback(
@@ -485,7 +505,7 @@ export const useTable = <T extends TableRowData>({
       visibleSelectableKeys.size === allSelectableKeys.size &&
       [...allSelectableKeys].every((key) => visibleSelectableKeys.has(key));
 
-    commitSelection(nextSelectionSet, selectsEverySelectableRow ? 'all' : new Set(nextSelectionSet));
+    commitSelection(nextSelectionSet, selectsEverySelectableRow ? 'all' : getSelectionFromKeySet(nextSelectionSet));
   }, [
     actualData,
     commitSelection,
@@ -494,7 +514,8 @@ export const useTable = <T extends TableRowData>({
     disallowEmptySelection,
     filteredAndSortedData,
     getRowIndex,
-    getRowKey
+    getRowKey,
+    getSelectionFromKeySet
   ]);
 
   const handleSort = useCallback(
@@ -567,7 +588,7 @@ export const useKeyboardNavigation = (rowCount: number, columnCount: number, dis
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      if (disabled || rowCount === 0 || columnCount === 0) {
+      if (disabled || rowCount === 0 || columnCount === 0 || isInteractiveEventTarget(event.target)) {
         return;
       }
 

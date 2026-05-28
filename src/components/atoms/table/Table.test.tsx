@@ -1,6 +1,7 @@
-import { act, render, renderHook, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import { Table as RootTable } from '../../../index';
 import { Table } from './Table';
 import type { Selection, SortDescriptor, TableColumn } from './types';
 import { useTable } from './useTable';
@@ -252,6 +253,25 @@ describe('Table — component behavior', () => {
     expect(Array.from(handleSelectionChange.mock.calls[0][0])).toEqual(['alice@example.com', 'carla@example.com']);
   });
 
+  it('emits selection keys using the original row key types', async () => {
+    const user = userEvent.setup();
+    const handleSelectionChange = vi.fn<(keys: Selection) => void>();
+
+    render(
+      <Table
+        columns={columns}
+        items={rows}
+        rowKey={(row) => row.id}
+        selectionMode='multiple'
+        onSelectionChange={handleSelectionChange}
+      />
+    );
+
+    await user.click(screen.getByRole('checkbox', { name: 'Toggle selection for Carla' }));
+
+    expect(handleSelectionChange).toHaveBeenCalledWith(new Set([3]));
+  });
+
   it('emits the all selection sentinel from the header checkbox', async () => {
     const user = userEvent.setup();
     const handleSelectionChange = vi.fn<(keys: Selection) => void>();
@@ -262,6 +282,26 @@ describe('Table — component behavior', () => {
 
     expect(handleSelectionChange).toHaveBeenCalledTimes(1);
     expect(handleSelectionChange).toHaveBeenCalledWith('all');
+  });
+
+  it('emits original key types when selecting a filtered subset from the header checkbox', async () => {
+    const user = userEvent.setup();
+    const handleSelectionChange = vi.fn<(keys: Selection) => void>();
+
+    render(
+      <Table
+        columns={columns}
+        items={rows}
+        rowKey={(row) => row.id}
+        selectionMode='multiple'
+        onSelectionChange={handleSelectionChange}
+      />
+    );
+
+    await user.type(screen.getByRole('textbox', { name: 'Filter by Name' }), 'ali');
+    await user.click(screen.getByRole('checkbox', { name: 'Select all rows' }));
+
+    expect(handleSelectionChange).toHaveBeenCalledWith(new Set([1]));
   });
 
   it('keeps select all available when disallowEmptySelection starts with one selected row', async () => {
@@ -310,6 +350,38 @@ describe('Table — component behavior', () => {
     const skeletonRows = screen.getAllByRole('row');
     expect(skeletonRows[0]).toHaveAttribute('aria-rowindex', '1');
     expect(skeletonRows[1]).toHaveAttribute('aria-rowindex', '2');
+  });
+
+  it('lets interactive row descendants handle keyboard activation', async () => {
+    const user = userEvent.setup();
+    const handleRowClick = vi.fn();
+
+    render(<Table columns={columns} items={rows} onRowClick={handleRowClick} selectionMode='multiple' />);
+
+    const checkbox = screen.getByRole('checkbox', { name: 'Toggle selection for Carla' });
+    checkbox.focus();
+    await user.keyboard('[Space]');
+    fireEvent.keyDown(checkbox, { key: 'Enter' });
+
+    expect(checkbox).toBeChecked();
+    expect(handleRowClick).not.toHaveBeenCalled();
+  });
+
+  it('does not intercept editing keys inside column filter inputs', () => {
+    render(<Table columns={columns} items={rows} />);
+
+    expect(fireEvent.keyDown(screen.getByRole('textbox', { name: 'Filter by Name' }), { key: 'ArrowLeft' })).toBe(true);
+  });
+
+  it('is exported from the package root', () => {
+    expect(RootTable).toBe(Table);
+  });
+
+  it('does not include unsupported column-level hideHeader API', () => {
+    // @ts-expect-error hideHeader is intentionally table-level only until column-level hiding is implemented.
+    const unsupportedColumn: TableColumn<TestRow> = { key: 'name', hideHeader: true };
+
+    expect(unsupportedColumn).toEqual({ key: 'name', hideHeader: true });
   });
 
   it('uses the represented total row count for paginated tables', () => {

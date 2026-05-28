@@ -226,7 +226,6 @@ export type TableColumn<T extends TableRowData = TableRowData> = {
   sortValue?: (row: T) => TableComparableValue;
   filterValue?: (row: T) => TableFilterValue;
   align?: ColumnAlign;
-  hideHeader?: boolean;
   allowsSorting?: boolean;
   sortIcon?: React.ReactNode;
   isRowHeader?: boolean;

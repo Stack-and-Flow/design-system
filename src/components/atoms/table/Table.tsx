@@ -1,6 +1,6 @@
 import { useCallback, useId, useMemo } from 'react';
 import type { CompleteTableProps, TableColumn, TableRowData } from './types';
-import { useKeyboardNavigation, useTable, useTableClasses, useTableEvents } from './useTable';
+import { isInteractiveEventTarget, useKeyboardNavigation, useTable, useTableClasses, useTableEvents } from './useTable';
 
 const getColumnHeaderLabel = <T extends TableRowData>(column: TableColumn<T>) => {
   if (typeof column.header === 'string' && column.header.trim().length > 0) {
@@ -465,7 +465,11 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
                       }
                     }}
                     onKeyDown={(event) => {
-                      if (rowIsInteractive && (event.key === 'Enter' || event.key === ' ')) {
+                      if (
+                        rowIsInteractive &&
+                        (event.key === 'Enter' || event.key === ' ') &&
+                        !isInteractiveEventTarget(event.target)
+                      ) {
                         event.preventDefault();
                         handleRowClick(rowIndex, row, rowDataIndex);
                       }
