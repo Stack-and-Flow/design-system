@@ -152,16 +152,6 @@ export const WithDescription: Story = {
 };
 
 /**
- * Shows the invalid state with a highlighted border and error hint.
- */
-export const WithError: Story = {
-  args: {
-    ...Default.args,
-    hint: { message: 'Country is required for shipping calculations.', type: 'error' }
-  }
-};
-
-/**
  * Shows all hint types side by side.
  */
 export const HintTypes: Story = {

@@ -144,7 +144,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
 
   const resolvedVariant = variant === 'faded' ? 'line' : variant;
   const effectiveHint = hint ?? (errorMessage ? { message: errorMessage, type: 'error' as const } : undefined);
-  const status = effectiveHint?.type ?? 'default';
+  const status = effectiveHint?.type ?? (isInvalid ? 'error' : 'default');
 
   const generatedId = useId().replaceAll(':', '');
   const id = idProp ?? `select-${generatedId}`;
@@ -419,7 +419,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const baseClassName = cn(selectBase(), className, classNames?.base);
   const triggerClassName = cn(
     selectTrigger({ variant: resolvedVariant, size: resolvedSize, status }),
-    label ? 'items-end' : 'items-center',
+    'items-stretch',
     classNames?.container,
     classNames?.trigger
   );

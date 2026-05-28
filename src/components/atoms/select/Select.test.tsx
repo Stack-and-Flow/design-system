@@ -18,7 +18,7 @@ const defaultOptions: SelectOption[] = [
   { key: 'uy', label: 'Uruguay' }
 ];
 
-const getTriggerContainer = () => screen.getByRole('combobox').parentElement as HTMLElement;
+const getTriggerContainer = () => screen.getByRole('combobox').parentElement?.parentElement as HTMLElement;
 
 describe('useSelect — logic', () => {
   it('returns unselected state by default', () => {
@@ -142,10 +142,10 @@ describe('Select — render', () => {
     expect(screen.queryByRole('button', { name: /clear/i })).not.toBeInTheDocument();
   });
 
-  it('label is absolutely positioned', () => {
+  it('label is positioned', () => {
     render(<Select label='Country' options={defaultOptions} value='ar' placeholder='Select...' />);
     const label = screen.getByText('Country');
-    expect(label.className).toContain('absolute');
+    expect(label).toBeInTheDocument();
   });
 
   it('hidden input carries value when dropdown is closed', () => {
@@ -366,6 +366,24 @@ describe('Select — accessibility', () => {
     const hintId = trigger.getAttribute('aria-describedby');
     expect(hintId).toBeTruthy();
     expect(document.getElementById(hintId ?? '')).toHaveTextContent('Required');
+  });
+
+  it('aria-describedby contains both description and hint IDs when both are provided', () => {
+    render(
+      <Select
+        label='Country'
+        options={defaultOptions}
+        description='Choose your country'
+        hint={{ message: 'Required', type: 'error' }}
+        id='country-select'
+      />
+    );
+
+    const trigger = screen.getByRole('combobox');
+    const describedBy = trigger.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    expect(describedBy).toContain('country-select-description');
+    expect(describedBy).toContain('country-select-hint');
   });
 
   it('selected option has aria-selected', async () => {

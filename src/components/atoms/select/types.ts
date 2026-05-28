@@ -19,7 +19,7 @@ export type SelectHint = {
 /** Re-exported from Input for consistency — avoids API drift. */
 export const hintMessageVariants = inputHintMessageVariants;
 
-export const selectBase = cva('relative flex flex-col gap-1.5');
+export const selectBase = cva('relative flex flex-col gap-2');
 
 export const selectTrigger = cva(
   [
@@ -72,9 +72,9 @@ export const selectTrigger = cva(
         ]
       },
       size: {
-        sm: 'h-12 px-3 fs-small',
-        md: 'h-14 px-4 fs-base',
-        lg: 'h-16 px-4 fs-h6'
+        sm: 'min-h-12 px-3 fs-small',
+        md: 'min-h-14 px-4 fs-base',
+        lg: 'min-h-16 px-4 fs-h6'
       },
       status: {
         default: '',
@@ -177,7 +177,7 @@ export const selectItem = cva(
 
 export const selectLabel = cva(
   [
-    'absolute w-auto line-clamp-1 pt-0.5 text-text-light dark:text-text-dark pointer-events-none',
+    'w-auto line-clamp-1 text-text-light dark:text-text-dark pointer-events-none',
     'motion-safe:transition-[top,font-size,color] motion-safe:duration-200 motion-safe:ease-[ease]'
   ],
   {

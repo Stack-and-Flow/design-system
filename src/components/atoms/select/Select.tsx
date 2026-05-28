@@ -47,21 +47,23 @@ export const Select: FC<SelectProps> = (props) => {
         </div>
       )}
       <div {...containerProps} className={triggerClassName}>
-        {label && (
-          <label {...labelProps} className={labelClassName}>
-            {label}
-            {isRequired && (
-              <span aria-hidden={true} className='text-brand-light dark:text-brand-dark'>
-                {' *'}
-              </span>
-            )}
-          </label>
-        )}
-        <button {...triggerProps} className='flex-1 text-left bg-transparent border-none p-0'>
-          <span className={valueClassName}>
-            {selectedOption ? selectedOption.label : <span className={selectPlaceholder()}>{placeholder}</span>}
-          </span>
-        </button>
+        <div className='flex flex-col flex-1 justify-between py-2'>
+          {label && (
+            <label {...labelProps} className={labelClassName}>
+              {label}
+              {isRequired && (
+                <span aria-hidden={true} className='text-brand-light dark:text-brand-dark'>
+                  {' *'}
+                </span>
+              )}
+            </label>
+          )}
+          <button {...triggerProps} className='text-left bg-transparent border-none p-0'>
+            <span className={valueClassName}>
+              {selectedOption ? selectedOption.label : <span className={selectPlaceholder()}>{placeholder}</span>}
+            </span>
+          </button>
+        </div>
         <div className='flex shrink-0 items-center gap-1'>
           {showClearButton && (
             <span
