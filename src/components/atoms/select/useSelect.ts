@@ -1,11 +1,13 @@
 import type { ComponentProps, CSSProperties, KeyboardEvent, MouseEvent, RefObject } from 'react';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import type { SelectOption, SelectProps } from './types';
+import type { DynamicIconName } from '@/types';
+import type { IconTone } from '../icon';
+import type { SelectHint, SelectOption, SelectProps } from './types';
 import {
+  hintMessageVariants,
   selectBase,
   selectClearButton,
-  selectErrorMessage,
   selectIndicator,
   selectItem,
   selectLabel,
@@ -14,7 +16,38 @@ import {
   selectValue
 } from './types';
 
-const getFloatingLabelState = ({ size }: { size: NonNullable<SelectProps['size']> }) => {
+type HintIconProps = {
+  name: DynamicIconName;
+  tone: IconTone;
+  size: 16;
+};
+
+const getHintIconProps = (type?: SelectHint['type']): HintIconProps | undefined => {
+  switch (type) {
+    case 'error':
+      return { name: 'circle-alert', tone: 'danger', size: 16 };
+    case 'warning':
+      return { name: 'triangle-alert', tone: 'warning', size: 16 };
+    case 'success':
+      return { name: 'circle-check', tone: 'success', size: 16 };
+    case 'info':
+      return { name: 'info', tone: 'muted', size: 16 };
+    default:
+      return undefined;
+  }
+};
+
+const getFloatingLabelState = ({
+  hasFloatingLabel,
+  size
+}: {
+  hasFloatingLabel: boolean;
+  size: NonNullable<SelectProps['size']>;
+}) => {
+  if (!hasFloatingLabel) {
+    return 'resting';
+  }
+
   if (size === 'sm') {
     return 'floatingSm';
   }
@@ -35,15 +68,12 @@ type UseSelectReturn = {
   showClearButton: boolean;
   isLoading: boolean;
   isRequired: boolean;
-  isInvalid: boolean;
   label: string | undefined;
   description: string | undefined;
-  errorMessage: string | undefined;
   options: SelectOption[];
   placeholder: string | undefined;
   triggerRef: RefObject<HTMLButtonElement>;
   popoverRef: RefObject<HTMLDivElement>;
-  handleTriggerClick: () => void;
   handleItemSelect: (option: SelectOption) => void;
   handleClear: (e: MouseEvent<HTMLElement>) => void;
   handleKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => void;
@@ -53,7 +83,6 @@ type UseSelectReturn = {
   indicatorClassName: string;
   clearButtonClassName: string;
   labelClassName: string;
-  errorMessageClassName: string;
   baseClassName: string;
   getOptionClassName: (option: SelectOption, index: number) => string;
   popoverStyle: CSSProperties;
@@ -62,8 +91,13 @@ type UseSelectReturn = {
   getOptionProps: (option: SelectOption, index: number) => ComponentProps<'div'>;
   labelProps: ComponentProps<'label'>;
   descriptionProps: ComponentProps<'div'>;
-  errorMessageProps: ComponentProps<'div'>;
   hiddenInputProps: ComponentProps<'input'>;
+  containerProps: ComponentProps<'div'>;
+  hasHint: boolean;
+  hintIconProps?: HintIconProps;
+  hintMessage?: string;
+  hintMessageClassName: string;
+  effectiveHint?: SelectHint;
 };
 
 export const useSelect = (props: SelectProps): UseSelectReturn => {
@@ -89,13 +123,32 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     classNames,
     variant = 'regular',
     size = 'md',
+    hint,
     ...rest
   } = props;
 
   const resolvedSize = (size ?? 'md') as NonNullable<typeof size>;
 
+  // Deprecation warnings
+  if (errorMessage !== undefined) {
+    console.warn(
+      '[Select] `errorMessage` is deprecated. Use `hint={{ message: errorMessage, type: "error" }}` instead.'
+    );
+  }
+  if (isInvalid) {
+    console.warn('[Select] `isInvalid` is deprecated. Use `hint={{ type: "error" }}` instead.');
+  }
+  if (variant === 'faded') {
+    console.warn('[Select] `variant="faded"` is deprecated. Use `variant="line"` instead.');
+  }
+
+  const resolvedVariant = variant === 'faded' ? 'line' : variant;
+  const effectiveHint = hint ?? (errorMessage ? { message: errorMessage, type: 'error' as const } : undefined);
+  const status = effectiveHint?.type ?? 'default';
+
   const generatedId = useId().replaceAll(':', '');
   const id = idProp ?? `select-${generatedId}`;
+  const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
@@ -126,6 +179,9 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
         return;
       }
       if (triggerRef.current?.contains(target)) {
+        return;
+      }
+      if (containerRef.current?.contains(target)) {
         return;
       }
       setIsOpen(false);
@@ -202,17 +258,20 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     triggerRef.current?.focus();
   }, [onOpenChange]);
 
-  const handleTriggerMouseDown = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      if (isOpen) {
-        closePopover();
-      } else {
-        openPopover();
-      }
-    },
-    [isOpen, closePopover, openPopover]
-  );
+  const handleContainerClick = useCallback(() => {
+    if (effectiveDisabled) {
+      return;
+    }
+    if (isOpen) {
+      closePopover();
+    } else {
+      openPopover();
+    }
+  }, [effectiveDisabled, isOpen, closePopover, openPopover]);
+
+  const handleTriggerMouseDown = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  }, []);
 
   const handleTriggerClick = useCallback(() => {
     if (skipNextClickRef.current) {
@@ -355,21 +414,25 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     [closePopover, focusedIndex, getEnabledIndices, handleItemSelect, handleTypeAhead, isOpen, openPopover, options]
   );
 
+  const hasFloatingLabel = Boolean(label) && (isOpen || hasValue || Boolean(placeholder));
+
   const baseClassName = cn(selectBase(), className, classNames?.base);
   const triggerClassName = cn(
-    selectTrigger({ variant, size: resolvedSize, isInvalid }),
-    label ? 'flex-col' : 'items-center',
+    selectTrigger({ variant: resolvedVariant, size: resolvedSize, status }),
+    label ? 'items-end' : 'items-center',
+    classNames?.container,
     classNames?.trigger
   );
   const valueClassName = cn(selectValue(), classNames?.value);
   const indicatorClassName = cn(selectIndicator({ isOpen }), classNames?.indicator);
   const popoverClassName = cn(selectPopover(), classNames?.popover);
   const labelClassName = cn(
-    selectLabel({ size: resolvedSize, state: getFloatingLabelState({ size: resolvedSize }) }),
-    'relative left-auto top-auto translate-y-0',
+    selectLabel({
+      size: resolvedSize,
+      state: getFloatingLabelState({ hasFloatingLabel, size: resolvedSize })
+    }),
     classNames?.label
   );
-  const errorMessageClassName = cn(selectErrorMessage(), classNames?.errorMessage);
   const clearButtonClassName = cn(selectClearButton(), classNames?.clearButton);
 
   const getOptionClassName = useCallback(
@@ -390,11 +453,12 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     'aria-haspopup': 'listbox',
     'aria-expanded': isOpen,
     'aria-controls': isOpen ? `${id}-listbox` : undefined,
-    'aria-invalid': isInvalid,
+    'aria-invalid': effectiveHint?.type === 'error' || isInvalid || undefined,
     'aria-required': isRequired || undefined,
     'aria-describedby':
-      [description ? `${id}-description` : null, errorMessage ? `${id}-error` : null].filter(Boolean).join(' ') ||
-      undefined,
+      [description ? `${id}-description` : null, effectiveHint?.message ? `${id}-hint` : null]
+        .filter(Boolean)
+        .join(' ') || undefined,
     'aria-labelledby': label ? `${id}-label` : undefined,
     disabled: effectiveDisabled,
     'aria-disabled': effectiveDisabled || undefined,
@@ -436,15 +500,21 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     id: `${id}-description`
   };
 
-  const errorMessageProps: ComponentProps<'div'> = {
-    id: `${id}-error`
-  };
-
   const hiddenInputProps: ComponentProps<'input'> = {
     type: 'hidden',
     name,
     value: selectedValue ?? ''
   };
+
+  const containerProps: ComponentProps<'div'> = {
+    ref: containerRef,
+    onClick: handleContainerClick
+  };
+
+  const hintIconProps = useMemo(() => getHintIconProps(effectiveHint?.type), [effectiveHint?.type]);
+  const hasHint = Boolean(effectiveHint?.message);
+  const hintMessage = effectiveHint?.message;
+  const hintMessageClassName = cn(hintMessageVariants({ tone: effectiveHint?.type ?? 'info' }), classNames?.hint);
 
   return {
     isOpen,
@@ -455,15 +525,12 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     showClearButton,
     isLoading,
     isRequired,
-    isInvalid,
     label,
     description,
-    errorMessage,
     options,
     placeholder,
     triggerRef,
     popoverRef,
-    handleTriggerClick,
     handleItemSelect,
     handleClear,
     handleKeyDown,
@@ -473,7 +540,6 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     indicatorClassName,
     clearButtonClassName,
     labelClassName,
-    errorMessageClassName,
     baseClassName,
     getOptionClassName,
     triggerProps,
@@ -482,7 +548,12 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     getOptionProps,
     labelProps,
     descriptionProps,
-    errorMessageProps,
-    hiddenInputProps
+    hiddenInputProps,
+    containerProps,
+    hasHint,
+    hintIconProps,
+    hintMessage,
+    hintMessageClassName,
+    effectiveHint
   };
 };

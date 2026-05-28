@@ -14,7 +14,6 @@ export const Select: FC<SelectProps> = (props) => {
     isRequired,
     label,
     description,
-    errorMessage,
     options,
     placeholder,
     triggerClassName,
@@ -23,7 +22,6 @@ export const Select: FC<SelectProps> = (props) => {
     indicatorClassName,
     clearButtonClassName,
     labelClassName,
-    errorMessageClassName,
     baseClassName,
     getOptionClassName,
     getOptionProps,
@@ -32,9 +30,13 @@ export const Select: FC<SelectProps> = (props) => {
     popoverStyle,
     labelProps,
     descriptionProps,
-    errorMessageProps,
     hiddenInputProps,
-    handleClear
+    handleClear,
+    containerProps,
+    hasHint,
+    hintIconProps,
+    hintMessage,
+    hintMessageClassName
   } = useSelect(props);
 
   return (
@@ -44,69 +46,42 @@ export const Select: FC<SelectProps> = (props) => {
           {description}
         </div>
       )}
-      <button {...triggerProps} className={triggerClassName}>
-        {label ? (
-          <div className='flex flex-col w-full gap-0.5'>
-            <div className='flex items-center justify-between gap-1'>
-              <label {...labelProps} className={labelClassName}>
-                {label}
-                {isRequired && (
-                  <span aria-hidden={true} className='text-brand-light dark:text-brand-dark'>
-                    {' *'}
-                  </span>
-                )}
-              </label>
-              <div className='flex items-center gap-1 shrink-0'>
-                {showClearButton && (
-                  <span
-                    role='button'
-                    tabIndex={-1}
-                    aria-label='Clear selection'
-                    className={clearButtonClassName}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleClear(e);
-                    }}
-                  >
-                    <Icon name='x' size={16} decorative={true} />
-                  </span>
-                )}
-                <span className={indicatorClassName}>
-                  <Icon name='chevron-down' size={16} decorative={true} />
-                </span>
-              </div>
-            </div>
-            <span className={valueClassName}>
-              {selectedOption ? selectedOption.label : <span className={selectPlaceholder()}>{placeholder}</span>}
-            </span>
-          </div>
-        ) : (
-          <>
-            <span className={valueClassName}>
-              {selectedOption ? selectedOption.label : <span className={selectPlaceholder()}>{placeholder}</span>}
-            </span>
-            <div className='flex items-center gap-1 shrink-0'>
-              {showClearButton && (
-                <span
-                  role='button'
-                  tabIndex={-1}
-                  aria-label='Clear selection'
-                  className={clearButtonClassName}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleClear(e);
-                  }}
-                >
-                  <Icon name='x' size={16} decorative={true} />
-                </span>
-              )}
-              <span className={indicatorClassName}>
-                <Icon name='chevron-down' size={16} decorative={true} />
+      <div {...containerProps} className={triggerClassName}>
+        {label && (
+          <label {...labelProps} className={labelClassName}>
+            {label}
+            {isRequired && (
+              <span aria-hidden={true} className='text-brand-light dark:text-brand-dark'>
+                {' *'}
               </span>
-            </div>
-          </>
+            )}
+          </label>
         )}
-      </button>
+        <button {...triggerProps} className='flex-1 text-left bg-transparent border-none p-0'>
+          <span className={valueClassName}>
+            {selectedOption ? selectedOption.label : <span className={selectPlaceholder()}>{placeholder}</span>}
+          </span>
+        </button>
+        <div className='flex shrink-0 items-center gap-1'>
+          {showClearButton && (
+            <span
+              role='button'
+              tabIndex={-1}
+              aria-label='Clear selection'
+              className={clearButtonClassName}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClear(e);
+              }}
+            >
+              <Icon name='x' size={16} decorative={true} />
+            </span>
+          )}
+          <span className={indicatorClassName}>
+            <Icon name='chevron-down' size={16} decorative={true} />
+          </span>
+        </div>
+      </div>
       <input {...hiddenInputProps} />
       {isOpen &&
         createPortal(
@@ -133,9 +108,10 @@ export const Select: FC<SelectProps> = (props) => {
           </div>,
           document.body
         )}
-      {errorMessage && (
-        <div {...errorMessageProps} className={errorMessageClassName}>
-          {errorMessage}
+      {hasHint && (
+        <div id={`${triggerProps.id}-hint`} className='flex items-center gap-2 py-0.5'>
+          {hintIconProps && <Icon {...hintIconProps} decorative={true} />}
+          <span className={hintMessageClassName}>{hintMessage}</span>
         </div>
       )}
     </div>
