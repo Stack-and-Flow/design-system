@@ -215,8 +215,8 @@ Este repositorio tiene **fines educativos** y está completamente abierto a cola
 <!-- MARKDOWN LINKS & IMAGES -->
 [stars-shield]: https://img.shields.io/github/stars/Stack-and-Flow/design-system.svg?style=for-the-badge&cacheBust=1
 [stars-url]: https://github.com/Stack-and-Flow/design-system/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Stack-and-Flow/design-system.svg?style=for-the-badge
-[issues-url]: https://github.com/Stack-and-Flow/design-system/issues
+[issues-shield]: https://img.shields.io/github/issues-search?query=repo%3AStack-and-Flow%2Fdesign-system%20is%3Aissue%20is%3Aopen%20milestone%3AMVP&label=MVP%20issues&style=for-the-badge
+[issues-url]: https://github.com/Stack-and-Flow/design-system/issues?q=is%3Aissue%20is%3Aopen%20milestone%3AMVP
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/egdev6
 [demo-url]: https://sf-design-system.netlify.app/

@@ -27,7 +27,10 @@ export const Accordion: FC<AccordionProps> = ({ ...props }) => {
         <div key={item.id} className={getItemClassName()}>
           <Header tag={headingLevel} className='contents'>
             <button {...getTriggerProps(item)} className={getTriggerClassName()}>
-              <Text tag='span' className={getTitleTextClassName()}>
+              <Text
+                tag='span'
+                className={getTitleTextClassName()}
+              >
                 {item.title}
               </Text>
               <span className={cn(getIndicatorClassName(), item.disabled && 'opacity-40')} aria-hidden='true'>
