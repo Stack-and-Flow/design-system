@@ -177,6 +177,7 @@ describe('Select — interaction', () => {
     const trigger = screen.getByRole('combobox');
     await user.click(trigger);
 
+    expect(trigger).toHaveFocus();
     expect(screen.getByRole('listbox')).toBeInTheDocument();
     expect(screen.getByRole('option', { name: 'Argentina' })).toBeInTheDocument();
 
@@ -390,8 +391,9 @@ describe('Select — interaction', () => {
     const clearButton = screen.getByRole('button', { name: /clear/i });
     await user.click(clearButton);
 
-    // After clearing in uncontrolled mode, clear button should disappear
+    // After clearing in uncontrolled mode, clear button should disappear and the popover should stay closed.
     expect(screen.queryByRole('button', { name: /clear/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
   it('closes popover when Tab is pressed', async () => {

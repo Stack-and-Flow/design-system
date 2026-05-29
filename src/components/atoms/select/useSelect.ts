@@ -164,7 +164,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     }
   }, [errorMessage, isInvalid, variant]);
 
-  const resolvedVariant = variant === 'faded' ? 'line' : variant;
+  const resolvedVariant = variant;
   const effectiveHint = hint ?? (errorMessage ? { message: errorMessage, type: 'error' as const } : undefined);
   const status = effectiveHint?.type ?? (isInvalid ? 'error' : 'default');
 
@@ -263,6 +263,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
       return;
     }
     setIsOpen(true);
+    triggerRef.current?.focus();
     onOpenChange?.(true);
 
     const enabled = getEnabledIndices();

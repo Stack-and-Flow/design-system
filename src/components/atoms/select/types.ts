@@ -31,6 +31,12 @@ export const selectBase = cva('relative flex max-w-full flex-col gap-2', {
   }
 });
 
+const selectLineVariantClasses = [
+  'bg-transparent border-t-transparent border-l-transparent border-r-transparent rounded-none!',
+  'border-b-border-light hover:border-b-border-strong-light',
+  'dark:border-b-border-dark dark:hover:border-b-border-strong-dark'
+];
+
 export const selectTrigger = cva(
   [
     'relative flex w-full max-w-full justify-between overflow-hidden border py-2 cursor-pointer rounded-md',
@@ -50,16 +56,8 @@ export const selectTrigger = cva(
           'bg-surface-light border-border-strong-light hover:bg-surface-raised-light',
           'dark:bg-surface-dark dark:border-border-strong-dark dark:hover:bg-surface-raised-dark'
         ],
-        faded: [
-          'bg-transparent border-t-transparent border-l-transparent border-r-transparent rounded-none!',
-          'border-b-border-light hover:border-b-border-strong-light',
-          'dark:border-b-border-dark dark:hover:border-b-border-strong-dark'
-        ],
-        line: [
-          'bg-transparent border-t-transparent border-l-transparent border-r-transparent rounded-none!',
-          'border-b-border-light hover:border-b-border-strong-light',
-          'dark:border-b-border-dark dark:hover:border-b-border-strong-dark'
-        ],
+        faded: selectLineVariantClasses,
+        line: selectLineVariantClasses,
         underlined: [
           'bg-transparent border-border-light hover:border-border-strong-light',
           'dark:border-border-dark dark:hover:border-border-strong-dark'
