@@ -30,7 +30,7 @@ Do not implement the component. Your job is to turn a vague task into a validate
 | Issue URL missing                            | Produce the proposal only; do not update GitHub.                               |
 | Component tier unclear                       | Ask whether it is atom, molecule, or organism.                                 |
 | Reference implies complex composite behavior | Flag possible molecule/organism mismatch before validation.                    |
-| User approves proposal                       | Add the validated spec to the issue, then set Project Status to `In progress`. |
+| User approves proposal                       | Add the validated spec to the issue; leave Project `In progress` transition to START WORK. |
 | User requests changes                        | Revise the proposal and ask for validation again.                              |
 
 ## Execution Steps
@@ -42,8 +42,8 @@ Do not implement the component. Your job is to turn a vague task into a validate
 5. Include an `Assumptions to validate` section for choices not explicit in the issue/reference.
 6. Ask the user to approve, reject, or edit the proposal. Do not write to GitHub before approval.
 7. After approval, append or update a GitHub issue comment headed `## Validated component spec` using the approved spec.
-8. Locate the Project item for the issue and set Status to `In progress` using the project field IDs from `github-project-tasks`.
-9. Report the issue URL, project item ID, updated status, and next command/action: start `component-contributor`.
+8. If the issue is not on the Project board or Team/Category fields are missing, report the missing setup instead of mutating status.
+9. Report the issue URL, spec comment status, and next command/action: run START WORK via `github-project-tasks`, then start `component-contributor`.
 
 ## Output Contract
 
@@ -70,9 +70,8 @@ After approval and GitHub update, return:
 
 **Issue**: #{number} {title}
 **Spec**: Added to issue as `Validated component spec`
-**Project status**: In progress
-**Project item ID**: {itemId}
-**Next**: Run `component-contributor` for implementation.
+**Project setup**: {team/category present or missing setup}
+**Next**: Run START WORK via `github-project-tasks`, then run `component-contributor` for implementation.
 ```
 
 ## References
