@@ -7,7 +7,7 @@ Este es el documento canónico para contribuir componentes al design system. `CO
 ## Resumen rápido
 
 ```text
-Project task → Research → Spec proposal skill → Validated issue spec → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge
+Project task → START WORK → Research → Spec proposal skill → Validated issue spec → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
 ```
 
 La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana.
@@ -33,9 +33,13 @@ Si hay contradicción, el orden de autoridad es: `GUIDELINES.md` / `DESIGN.md` p
 ## Paso 1 — Tomar una tarea
 
 1. Elegí una tarea en el [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1).
-2. Asignátela.
-3. Movela a **In Progress**.
-4. Verificá que tenga issue asociada. La issue es el contrato de implementación.
+2. Verificá que tenga issue asociada. La issue es el contrato de implementación.
+3. Corré el gate **START WORK**:
+   - asignate la issue;
+   - mové el Project item a **In progress**;
+   - confirmá Team y Category;
+   - registrá branch y worktree plan.
+4. Si el usuario pidió trabajo offline/no-network, no mutés GitHub: dejá registrado el follow-up de START WORK y seguí solo con trabajo local.
 
 ---
 
@@ -45,7 +49,7 @@ Antes de pedir implementación, investigá el componente.
 
 Checklist mínimo:
 
-- Referencias: HeroUI, Radix UI, shadcn/ui, MDN o WAI-ARIA APG según aplique.
+- Referencias: Radix UI primitives, MDN o WAI-ARIA APG según aplique.
 - Nivel atómico: `atom`, `molecule` u `organism`.
 - Props: nombre, tipo, default, required/optional.
 - Variantes CVA: keys y valores.
@@ -63,7 +67,7 @@ Antes de implementar, usá la skill `component-spec-proposer` para convertir la 
 
 Cuándo usarla:
 
-- La issue tiene una referencia HeroUI, Radix, MDN, APG o similar.
+- La issue tiene una referencia Radix UI primitive, MDN, APG o similar.
 - La tarea todavía es vaga o tiene decisiones abiertas.
 - Necesitás preparar la issue antes de pasar a implementación.
 
@@ -85,7 +89,7 @@ La skill debe:
 3. Listar assumptions a validar.
 4. Esperar aprobación humana.
 5. Recién después de la aprobación, escribir `## Validated component spec` en la issue.
-6. Actualizar el Project item a `In progress` cuando corresponda.
+6. Verificar que el Project item quede en `In progress` cuando corresponda.
 7. Indicar el siguiente paso: arrancar `component-contributor`.
 
 No uses `component-contributor` para implementar hasta que la spec esté validada.
@@ -104,7 +108,7 @@ La spec validada debe quedar en la issue como contrato verificable.
 | CVA variants       | Variant keys y valores posibles                            |
 | States             | Descripción visual y de comportamiento por estado          |
 | Accessibility      | Roles, atributos, teclado, focus, reduced motion si aplica |
-| Reference URL      | HeroUI, Radix, MDN, APG, etc.                              |
+| Reference URL      | Radix UI primitives, MDN, APG, etc.                       |
 | Design notes       | Decisiones visuales específicas del sistema                |
 | Story requirements | Default, Disabled, variantes clave, edge cases             |
 
@@ -112,14 +116,37 @@ La spec validada debe quedar en la issue como contrato verificable.
 
 ---
 
-## Paso 5 — Crear rama y preparar entorno
+## Paso 5 — Crear rama, worktree sibling y preparar entorno
+
+Si la tarea viene de una issue, usá naming derivado de issue:
+
+```text
+branch:   {type}/{issue-number}-{slug}
+worktree: ../design-system-{type}-{issue-number}-{slug}
+```
+
+Ejemplos:
+
+```text
+feat/123-button
+fix/128-modal-focus-trap
+../design-system-feat-123-button
+```
+
+Preferí worktrees sibling del repo. Evitá `/tmp` salvo que se pida explícitamente.
 
 ```bash
 git checkout main
 git pull --ff-only origin main
-git checkout -b feat/nombre-componente
+git checkout -b feat/123-button
 pnpm install
 pnpm run storybook
+```
+
+Si usás worktree:
+
+```bash
+git worktree add -b feat/123-button ../design-system-feat-123-button HEAD
 ```
 
 Usá una rama por unidad de trabajo: `feat/`, `fix/`, `docs/`, `refactor/`, `chore/`.
@@ -386,6 +413,8 @@ Checklist mínimo:
 - [ ] `## Description` presente.
 - [ ] `## Dependencies` solo si aplica.
 - [ ] `## Usage Guide` solo si aplica.
+- [ ] Antes de commit/review corriste limpieza MCP:
+  `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`.
 
 Prompt sugerido:
 
@@ -394,6 +423,22 @@ Prepará el PR para {component_name}.
 
 Linkeá `Closes #{issue_number}`. Incluí resumen, tabla de cambios, evidencia de tests/build, resultado de la pre-PR component review y notas visuales si aplica. No abras el PR si la review está BLOCKED.
 ```
+
+### Fase 9 — END WORK
+
+Cerrá la tarea en GitHub Project solo cuando haya evidencia de cierre real:
+
+- PR merged verificado; o
+- aprobación explícita del maintainer/usuario para cerrar sin PR.
+
+Checklist mínimo:
+
+- [ ] evidencia de validación comentada en la issue;
+- [ ] merged PR o aprobación explícita registrada;
+- [ ] Project status movido a `Done`;
+- [ ] follow-ups documentados si quedan pendientes.
+
+Si estás offline/no-network, no intentes mutar GitHub: dejá `END WORK` como follow-up pendiente.
 
 ---
 
@@ -428,10 +473,12 @@ Si el agente propone cualquiera de estas cosas, rechazalo:
 - usar una arquitectura de archivo único;
 - omitir tests `.test.tsx`;
 - meter interacciones en `play` functions en lugar de tests;
-- escribir stories sin args, controles o docs description;
+- escribir stories sin args, controles o bloque JSDoc encima de `const meta`;
+- usar `description.component` en `parameters.docs`;
 - usar `interface` o `any`;
 - hardcodear colores, spacing o fuentes;
-- abrir PR sin review pre-PR.
+- abrir PR sin review pre-PR;
+- dejar artefactos MCP antes de commit/review.
 
 ---
 

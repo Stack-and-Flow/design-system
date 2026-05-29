@@ -1,219 +1,119 @@
 ---
 name: pr-reviewer
 description: >
-  Runs a complete pre-review checklist against a PR before requesting human review.
-  Verifies code structure, TypeScript rules, token usage, tests, Storybook, accessibility, and git hygiene.
-  Trigger: When a contributor asks "is my PR ready for review?", "review my PR", or "check my PR before I submit".
-  Also delegable from sdd-verify to validate implementation against project standards.
+  Runs the final Stack-and-Flow PR readiness gate: CI evidence, linked issue, title/template hygiene, component audit evidence, visual/MCP cleanup, and clean review scope.
+  Trigger: ready for review, review my PR, check PR before submit, delegated from sdd-verify.
 license: Apache-2.0
 metadata:
   author: stack-and-flow
-  version: "1.0"
+  version: "2.0"
 ---
 
-## When to Use
+## Activation Contract
 
-- Contributor asks "is this ready for review?", "can I open the PR?", or similar
-- Agent finishes implementing a component and must validate before handing off
-- Delegated from `sdd-verify` to run the full project checklist against an implementation
+Use this skill immediately before requesting human review or opening/submitting a PR. This is a **PR gate**, not the owner of component implementation rules.
 
----
+For component-quality details, load:
+
+- `.atl/skills/_shared/component-contract.md`
+- `.atl/skills/components-auditor/SKILL.md`
+- `.atl/skills/component-contributor/references/stories.md`
+- `.atl/skills/visual-review/SKILL.md`
 
 ## When Delegated by SDD Orchestrator
 
-You may receive this delegation from `sdd-verify`:
+If delegated from `sdd-verify`, return the SDD PR review envelope requested by the parent, including verdict, blockers, approval criteria, issues, and recommendation.
 
-- **Change name**: the SDD change being validated
-- **Files to review**: list of files or the component directory to check
-- **Spec reference**: path to the delta spec to validate against
+## Automatic Rejection Check
 
-When delegated: run all checks below and return your result in the SDD return envelope:
-
-```markdown
-## PR Review Result
-
-**Change**: {change-name}
-**Files reviewed**: {list}
-**Verdict**: APPROVED / NEEDS WORK / REJECTED
-
-### Automatic rejection triggers hit
-{list or "None"}
-
-### Approval criteria — status
-{table: criterion | pass/fail | notes}
-
-### Issues found
-{list: [SEVERITY] file:line — description — fix required}
-
-### Recommendation
-{Approve with minor fixes / Request changes / Reject — reason}
-```
-
----
-
-## Automatic Rejection Check (run first)
-
-These are hard stops. If ANY is true, the PR is rejected WITHOUT further review.
-Report the failing criterion and stop — do not continue with the detailed checklist.
+Run first. If any check fails, return **REJECTED** and do not continue to optional polish.
 
 | Check | How to verify |
-|-------|--------------|
-| CI is failing | Look for test, build, or lint failures in the PR |
-| No linked issue | PR description must contain `Closes #NNN` |
-| Invalid PR title | PR title must follow Conventional Commit format: `<type>(<optional scope>): <description>` |
-| `interface` used | Grep for `interface ` in all `.ts` / `.tsx` files |
-| `any` used explicitly | Grep for `: any` or `as any` in all `.ts` / `.tsx` files |
-| Container/Presentational mixed | Logic (useState, useRef, handlers, CVA calls) found in `.tsx` file |
-| Hardcoded Tailwind arbitrary colors/spacing | Grep for arbitrary colors (`text-[#`, `bg-[#`, `border-[#`) and arbitrary spacing outside documented CVA size/density variants |
-| Missing tests | No `.test.tsx` file in the component directory |
-| Missing Storybook story | No `.stories.tsx` file in the component directory |
-| Play functions in stories | Stories contain `play` functions — interaction tests belong in `.test.tsx` |
+| --- | --- |
+| CI/build/test evidence missing or failing | Inspect CI output or run the agreed local commands. |
+| No linked issue | PR description must contain `Closes #NNN` unless maintainer explicitly waives it. |
+| Invalid PR title | Conventional Commit format: `<type>(<optional scope>): <description>`. |
+| PR template incomplete | No required placeholder sections left empty. |
+| Branch/diff scope unclear | Diff contains unrelated work without an explicit explanation. |
+| Component audit missing for component changes | Run or cite `components-auditor`; CRITICAL/MAJOR findings block PR. |
+| Storybook conventions contradicted | Use `component-contributor/references/stories.md` as source of truth; reject drift such as `parameters.docs.description.component`. |
+| Forbidden TS patterns in changed source | No `interface`, explicit `any`, naked non-null assertion, or unexplained TS suppression in changed `.ts`/`.tsx`. |
+| Container/presentational split broken | Component `.tsx` contains logic/state/CVA that belongs in the hook or `types.ts`. |
+| Story `play` functions present | Interaction tests belong in `.test.tsx`. |
+| MCP runtime artifacts present | Run `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`, then `git status --short --untracked-files=all`; reject if any MCP artifact remains. |
 
----
+## Detailed PR Checklist
 
-## Detailed Checklist
+Run after automatic rejection checks pass.
 
-Run these only AFTER the automatic rejection check passes.
+### 1 — Review scope
 
-Before the Storybook review, read `.atl/skills/component-contributor/references/stories.md` if it exists. Treat it as the source of truth for autodocs/actions/controls conventions.
+- [ ] Diff is focused and reviewable.
+- [ ] Generated/build/runtime artifacts are absent.
+- [ ] Review workload is reasonable; if over 400 changed lines, use chained PR strategy or record maintainer exception.
+- [ ] Public API changes are intentional and documented.
 
-### 1 — File structure
+### 2 — Component quality evidence
 
-- [ ] Exactly 6 files: `types.ts`, `useComponentName.ts`, `ComponentName.tsx`, `ComponentName.test.tsx`, `ComponentName.stories.tsx`, `index.ts`
-- [ ] Directory name is `kebab-case` matching the component name
-- [ ] Correct atomic tier: `atoms/` | `molecules/` | `organisms/`
-- [ ] `index.ts` re-exports the named component and all types
+For component changes:
 
-### 2 — TypeScript
+- [ ] `components-auditor` result is PASS or accepted PASS WITH WARNINGS.
+- [ ] Shared component contract was applied.
+- [ ] Storybook reference was applied.
+- [ ] Visual-review result is included when visuals changed.
+- [ ] Tests cover the changed behavior.
 
-- [ ] All imports of types use `import type`
-- [ ] Reusable design-system prop types come from `src/types` instead of being redefined locally in the component
-- [ ] All exports of types use `export type`
-- [ ] No `interface` — only `type`
-- [ ] No `any` — if present, must have documented justification
-- [ ] No `!` non-null assertion — use optional chaining or guards
-- [ ] No `Array<T>` — use `T[]` shorthand
-- [ ] `ComponentProps<'element'>` intersection present in hook input type
-- [ ] Props that conflict with native HTML props use `Omit`
+Do not duplicate the component checklist here; cite the audit evidence and only report PR-blocking gaps.
 
-### 3 — Token usage
+### 3 — Validation evidence
 
-- [ ] No raw hex values in className strings (`#`, `rgba()`, `rgb()`)
-- [ ] No arbitrary color values; arbitrary size/typography utilities are allowed only inside `types.ts` CVA definitions for an explicitly documented compact/dense visual variant
-- [ ] Dark mode paired tokens present: `bg-surface-light dark:bg-surface-dark`
-- [ ] Focus ring uses `box-shadow` with `--glow-focus-dark` token — never `outline` alone
-- [ ] Disabled state uses `opacity-40` + `pointer-events-none` — no color substitution
-- [ ] All tokens traceable to `src/styles/theme.css`
+- [ ] TypeScript check passed or failure is explained.
+- [ ] Relevant unit tests passed.
+- [ ] Build passed when package/config/source exports changed.
+- [ ] Storybook build or manual visual evidence is included when stories/visuals changed.
+- [ ] Accessibility evidence is included for interactive components.
 
-### 4 — Architecture
+### 4 — Git hygiene
 
-- [ ] `types.ts` — all CVA variants defined here, all props typed, complete public-prop JSDoc present (description + `@control` + `@default`), JSDoc controls follow canonical format
-- [ ] `useComponentName.ts` — all state, effects, handlers, CVA calls live here; no JSX
-- [ ] `ComponentName.tsx` — only JSX; consumes hook; zero `useState`, `useRef`, or CVA calls
-- [ ] `cn()` imported from `@/lib/utils` — not `clsx` or `twMerge` directly
-- [ ] `...rest` spread on the native element (passes through data-*, aria-*, form attrs)
+- [ ] Branch name follows issue-derived project convention when applicable: `{type}/{issue-number}-{slug}` (for example `feat/123-button`) or has an approved exception.
+- [ ] Commit messages and PR title follow Conventional Commit format.
+- [ ] Allowed types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`.
+- [ ] Domain terms such as `a11y`, `tokens`, or `infra` are scopes, not custom types.
+- [ ] Branch is up to date with `main` or divergence is explained.
+- [ ] Playwright MCP artifacts have been forcibly removed before commit/review.
+- [ ] If closing a GitHub issue/board task after merge or maintainer approval, `github-project-tasks` END WORK has validation/PR evidence ready.
 
-### 5 — Radix (if used)
-
-- [ ] Imported as namespace alias (`import * as XxxPrimitive from '@radix-ui/...'`)
-- [ ] Floating content wrapped in `Portal`
-- [ ] `asChild={true}` on `Trigger`
-- [ ] Animations use `data-[state=open/closed]` — not manual state class toggling
-
-### 6 — Accessibility
-
-- [ ] All interactive elements have an accessible name (`aria-label`, `aria-labelledby`, or visible text)
-- [ ] Default interactive controls meet `44×44px`; documented compact/dense variants may be smaller when approved, native-control based, keyboard accessible, and focus-visible
-- [ ] `aria-disabled` mirrors `disabled` prop
-- [ ] `role` attribute present where semantic HTML is insufficient
-- [ ] `focus-visible` selector used for focus styling — not `:focus` alone
-- [ ] `prefers-reduced-motion` guard if transforms or animations are used
-
-### 7 — Tests
-
-- [ ] Complete test suite in `ComponentName.test.tsx`
-- [ ] Hook tested with `renderHook` — all returned values and computed functions covered
-- [ ] Component tested with `render/screen/userEvent` — rendering, ARIA, interaction, disabled states
-- [ ] All mocks declared BEFORE component imports (`lucide-react/dynamic`, `spinners-react`, CSS files)
-- [ ] No tests against internal CSS class strings
-
-### 8 — Storybook
-
-- [ ] English only — titles, descriptions, arg labels, comments
-- [ ] `parameters.docs.description.component` present and descriptive
-- [ ] `Default` story has `args` set; does NOT override `defaultVariants`
-- [ ] At least: `Default`, `Disabled`, one story per key variant
-- [ ] Each story demonstrates ONE axis — no mixed-variant stories
-- [ ] If project `autodocs` is enabled, no manual `argTypes` in `meta` or individual stories unless a documented project exception exists
-- [ ] Story event actions use `@storybook/addon-actions` (`action(...)`) only
-- [ ] No inline no-op handlers such as `() => undefined` in story args
-- [ ] No `[var(--token)]` in stories when equivalent Tailwind utilities exist in `@theme`
-- [ ] No direct `var()` in stories or component source; reusable token-backed classes must come from `src/styles/theme.css` / `src/styles/base.css`
-- [ ] Story conventions match the canonical project story reference/pattern
-- [ ] NO `play` functions — all interaction tests belong in `ComponentName.test.tsx`
-
-### 9 — Visual states
-
-- [ ] Hover state implemented — at least one visible property changes
-- [ ] Focus ring: `box-shadow` only, merged with existing shadows
-- [ ] Active/pressed: `scale(0.98)` on buttons
-- [ ] Disabled: `opacity: 0.4` + `pointer-events: none`
-- [ ] No `transition: all` — specific properties enumerated
-
-### 10 — Git hygiene
-
-- [ ] Branch name follows convention: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`, `test/`
-- [ ] Commit messages follow the commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>`
-- [ ] PR title follows the same Conventional Commit format
-- [ ] Allowed types only: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`
-- [ ] Domain terms such as `a11y`, `tokens`, or `infra` are scopes, not custom types
-- [ ] PR description contains `Closes #NNN`
-- [ ] PR template fully filled — no placeholder sections left empty
-- [ ] Branch is up to date with `main`
-
----
-
-## Severity classification
-
-When reporting issues:
+## Severity Classification
 
 | Severity | Meaning |
-|----------|---------|
-| **BLOCKER** | Automatic rejection trigger — PR cannot be submitted |
-| **CRITICAL** | Accessibility or TypeScript safety violation — must fix before review |
-| **MAJOR** | Architecture rule broken — reviewer will reject |
-| **MINOR** | Spec inconsistency or style issue — fix recommended |
-| **SUGGESTION** | Optional improvement — no review impact |
+| --- | --- |
+| **BLOCKER** | PR cannot be submitted. |
+| **CRITICAL** | Must fix before review. |
+| **MAJOR** | Likely reviewer rejection; fix or get explicit acceptance. |
+| **MINOR** | Recommended fix. |
+| **SUGGESTION** | Optional improvement. |
 
----
+## Report Format
 
-## Report format
-
-```
-## PR Review — {ComponentName}
+```markdown
+## PR Review — {scope or PR title}
 
 **Verdict**: APPROVED / NEEDS WORK / REJECTED
 
-### Blockers (automatic rejection)
-- [BLOCKER] {criterion} — {what was found}
+### Blockers
+- [BLOCKER] {criterion} — {evidence}
 
 ### Issues to fix before review
-- [CRITICAL] {file}:{line} — {problem} — Fix: {what to do}
-- [MAJOR] {file}:{line} — {problem} — Fix: {what to do}
+- [CRITICAL|MAJOR] `file:line` — {problem} — Fix: {what to do}
 
-### Recommendations (optional)
-- [MINOR] {file}:{line} — {suggestion}
+### Evidence checked
+- Component audit: {pass/fail/not applicable}
+- Visual review: {pass/fail/not applicable}
+- Typecheck/tests/build/storybook: {results}
+- MCP cleanup: {pass/fail}
 
-### Checklist summary
-{table: section | pass / fail / n/a}
+### Recommendation
+{Ready for human review / Request changes / Reject — reason}
 ```
 
-If there are NO blockers and NO critical/major issues:
-
-```
-## PR Review — {ComponentName}
-
-**Verdict**: APPROVED ✅
-
-All checks passed. Ready for human review.
-```
+If there are no blockers and no critical/major issues, return `APPROVED ✅`.

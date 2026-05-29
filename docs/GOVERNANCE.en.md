@@ -50,6 +50,7 @@ Responsibilities:
 3. Project Lead or Maintainer reviews the code
 4. If there is feedback → Contributor applies changes
 5. Project Lead approves and merges
+6. The task moves to `Done` only after the PR is merged or the Project Lead/maintainer explicitly approves closure, with validation evidence
 ```
 
 ### Approval criteria
@@ -60,7 +61,7 @@ A PR is ready to merge when:
 - ✅ Code follows the 6-file structure and Container/Presentational pattern
 - ✅ Types are explicit — no `any`, no `interface`
 - ✅ Component has tests with minimum required coverage
-- ✅ Storybook story is complete with controls and description
+- ✅ Storybook story is complete with `args`, JSDoc-driven controls, and component docs in the JSDoc block above `const meta`
 - ✅ No hardcoded colors — system tokens by default; approved compact/dense CVA size variants may use calibrated arbitrary sizing/typography
 - ✅ ARIA attributes are present and correct
 - ✅ PR template is fully filled in

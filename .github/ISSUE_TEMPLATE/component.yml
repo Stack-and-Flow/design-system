@@ -1,13 +1,13 @@
-﻿name: "ðŸ§© New Component"
-description: Create a new component for the design system (atom, molecule or organism)
+name: "New Component"
+description: Create a new component for the design system (atom, molecule, or organism)
 title: "[ATOMS] ComponentName"
 labels: ["component"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## ðŸ§© New Component Task
-        Follow all 6 phases in order. The contributor does phases 1â€“5, egdev6 handles the merge (phase 6).
+        ## New Component Task
+        Follow all 6 phases in order. The contributor handles phases 1-5; egdev6 handles the merge in phase 6.
 
   - type: input
     id: component-name
@@ -33,8 +33,8 @@ body:
     id: reference
     attributes:
       label: Reference URL
-      description: Link to a reference implementation (e.g. HeroUI, Radix, shadcn)
-      placeholder: https://www.heroui.com/docs/components/...
+      description: Link to the relevant primitive/spec reference (for example Radix UI, MDN, or WAI-ARIA APG)
+      placeholder: https://www.radix-ui.com/primitives/docs/components/...
 
   - type: textarea
     id: context
@@ -46,19 +46,19 @@ body:
   - type: checkboxes
     id: phases
     attributes:
-      label: "âœ… Development phases"
+      label: "Development phases"
       options:
-        - label: "1. **Research** â€” investigate similar solutions, existing patterns, real use cases. Add screenshots, links or benchmarks."
-        - label: "2. **Specification** â€” define props, states, interaction, accessibility, variants. Document in this issue."
-        - label: "3. **Implementation** â€” build the component based on the spec. Follow the 5-file pattern (types, hook, component, stories, index)."
-        - label: "4. **Storybook** â€” document with controls, usage examples, and MDX/JSDoc if applicable."
-        - label: "5. **Code review** â€” functional review + visual review (alignment with design system) + fix suggestions."
-        - label: "6. **Merge to main** â€” once approved, project lead merges the PR."
+        - label: "1. **Research** - investigate similar solutions, existing patterns, real use cases. Add screenshots, links, or benchmarks if applicable."
+        - label: "2. **Specification** - define props, states, interaction, accessibility, variants, and Storybook coverage. Document the validated spec in this issue."
+        - label: "3. **Implementation** - build the component based on the spec. Follow the 6-file pattern: types, hook, component, tests, stories, index."
+        - label: "4. **Storybook** - document with args, controls, JSDoc above `const meta`, and JSDoc above every story export."
+        - label: "5. **Code review** - functional review, component audit, visual review, accessibility review, and fix suggestions."
+        - label: "6. **Merge to main** - once approved, project lead merges the PR."
 
   - type: textarea
     id: spec
     attributes:
-      label: "ðŸ“‹ Specification (fill after phase 2)"
+      label: "Specification (fill after phase 2)"
       description: Props, variants, states, interactions, a11y requirements. This is what the AI agent will use to implement.
       placeholder: |
         ### Props
@@ -67,24 +67,26 @@ body:
         - `disabled`: boolean
 
         ### States
-        - default, hover, focus, disabled, loading
+        - default, hover, focus, active, disabled, loading
 
         ### Accessibility
         - aria-label required when no visible label
-        - keyboard navigable (Tab, Enter, Escape)
+        - keyboard navigable (Tab, Enter, Escape where applicable)
+        - visible focus ring and reduced-motion behavior
 
         ### Notes
-        - Uses Radix UI primitive under the hood
+        - Uses Radix UI primitive under the hood when a primitive is needed
         - CVA for variant management
+        - Named component export plus type exports from `index.ts`
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
+      label: "Additional notes"
       placeholder: Any comments, decisions made, or special considerations. Tag @Stack-and-Flow/maintainers for questions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "ðŸ”— Related resources"
+      label: "Related resources"
       placeholder: External links, Figma files, prior art, etc.
