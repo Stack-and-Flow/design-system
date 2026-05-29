@@ -38,6 +38,7 @@ That template is the single source of truth for the issue body. Do not duplicate
 | Status values | `Todo`, `In progress`, `Done` |
 | Team values | `Squad 1`, `Squad 2`, `Squad 3` |
 | Category values | `component`, `fix`, `infra`, `a11y`, `docs`, `tokens` |
+| Milestone values | Query open repo milestones at creation time; current values are `Core`, `MVP`, `V1` |
 
 Field IDs:
 
@@ -69,7 +70,8 @@ Option IDs:
 - Never use emojis in issue body markdown; Windows/PowerShell + `gh` can corrupt them.
 - Avoid accent marks in section headings; body text may use accents.
 - Always write multi-line issue bodies to a temp file and pass `--body-file`.
-- Confirm task name, tier/type, reference URL when applicable, assignee, team, and category before CREATE.
+- Confirm task name, tier/type, reference URL when applicable, assignee, team, category, and milestone before CREATE.
+- Milestone is mandatory for CREATE. If it is missing, ask interactively before creating the issue; do not invent it.
 - Before implementation starts from a GitHub issue, require the exact issue label `status:approved`, then run START WORK: assign the issue to the contributor/user and move the Project item to `In progress`.
 - Before marking a task done, run END WORK: add validation/PR evidence and move the Project item to `Done` only when merged or explicitly approved by the maintainer/user.
 - Do not invent a missing reference URL; ask or research.
@@ -90,17 +92,35 @@ Option IDs:
 ## Mode 1 — CREATE
 
 1. Read the issue body template reference.
-2. Fill placeholders into a temp file.
-3. Create issue:
+2. Collect required fields interactively when missing: task name, tier/type, reference URL when applicable, assignee, Team, Category, and Milestone.
+3. List available open milestones before asking for Milestone:
+
+```bash
+gh api repos/Stack-and-Flow/design-system/milestones --jq '.[].title'
+```
+
+When running inside Pi, present the open milestone titles as an interactive single-select question, the same way Team/Squad is selected. If the user picks a milestone that is not open in GitHub, stop and ask for a valid milestone or maintainer action to create it.
+
+4. Fill placeholders into a temp file.
+5. Create issue with the selected milestone:
 
 ```powershell
 $issueUrl = gh issue create `
   --repo Stack-and-Flow/design-system `
   --title "[ATOMS] {ComponentName}" `
+  --milestone "{milestone}" `
   --body-file "$env:TEMP\issue-body.md"
 ```
 
-4. Add issue to board:
+If the issue already exists or was created without milestone, set it explicitly:
+
+```powershell
+gh issue edit {issue_number} `
+  --repo Stack-and-Flow/design-system `
+  --milestone "{milestone}"
+```
+
+6. Add issue to board:
 
 ```powershell
 $itemId = gh project item-add 1 `
@@ -109,8 +129,8 @@ $itemId = gh project item-add 1 `
   --format json | ConvertFrom-Json | Select-Object -ExpandProperty id
 ```
 
-5. Set Status, Team, and Category with `gh project item-edit` using the field/option IDs above.
-6. Report issue number, URL, board item ID, and fields set.
+7. Set Status, Team, and Category with `gh project item-edit` using the field/option IDs above. The Project Milestone field is derived from the linked issue milestone; do not try to fake it as a single-select field.
+8. Report issue number, URL, board item ID, milestone, and fields set.
 
 ## Mode 2 — START WORK
 
@@ -298,6 +318,7 @@ Check each item:
 | Has notes section | Body contains `### Notes`. |
 | Has resources section | Body contains `### Resources`. |
 | Board fields set | status, team, category are present. |
+| Milestone set | Issue has a GitHub milestone assigned. |
 | In progress has assignee | Items in `In progress` have at least one assignee. |
 | Assigned Todo is intentional | Assigned issues still in `Todo` are flagged for confirmation. |
 | Done has closure evidence | Items in `Done` have a merged PR link or explicit maintainer/user closure note plus validation evidence. |
@@ -314,6 +335,7 @@ For CREATE or AUDIT:
 **Mode**: CREATE / AUDIT
 **Issues touched**: {list}
 **Board fields set**: {status/team/category or "n/a"}
+**Milestone**: {milestone or "missing"}
 **Violations**: {list or "None"}
 **Needs human input**: {list or "None"}
 ```
