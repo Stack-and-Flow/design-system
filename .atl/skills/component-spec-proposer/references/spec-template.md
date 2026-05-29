@@ -48,14 +48,43 @@ Out of scope:
 - error:
 - empty:
 
-### Accessibility
+### Accessibility contract
 
-- Role:
-- ARIA:
-- Keyboard behavior:
-- Focus behavior:
-- Touch target:
+For non-interactive display components, state: `Native/static semantics only; custom keyboard, focus, and state announcements are not applicable.`
+
+For interactive or composite components, complete:
+
+- Pattern reference: native / Radix / WAI-ARIA APG pattern name
+- Roles: root, trigger, popup/list, option/item, label/description/error when applicable
+- Accessible name: visible label, `aria-label`, or `aria-labelledby` source
+- ARIA relationships: `aria-controls`, `aria-expanded`, `aria-activedescendant`, `aria-describedby`, `aria-invalid`, etc. when applicable
+- Keyboard matrix:
+  - Tab / Shift+Tab:
+  - Enter / Space:
+  - Arrow keys:
+  - Escape:
+  - Home / End / typeahead, if applicable:
+- Focus lifecycle: initial focus, roving/active descendant, focus restore, trap/portal behavior if applicable
+- State announcements:
+  - disabled:
+  - required:
+  - invalid/error:
+  - loading:
+  - empty/no results:
+- Touch target: default and compact exceptions
 - Reduced motion:
+
+### Accessibility acceptance criteria
+
+For non-interactive display components, include the role/name or semantic rendering check only.
+
+For interactive or composite components, complete:
+
+- Keyboard-only user can:
+- Screen reader user hears:
+- Focus is managed by:
+- Disabled/invalid/loading/empty states expose:
+- Automated/manual checks required:
 
 ### Storybook stories required
 
@@ -96,13 +125,20 @@ Do not implement:
 - Required token modules:
 - Required reference modules:
 - Expected tests:
+  - Role/name or semantic rendering queries:
+  - Keyboard behavior, if interactive:
+  - Focus behavior, if interactive:
+  - ARIA state transitions, if applicable:
+  - Disabled/invalid/loading/empty states, if applicable:
+  - Axe/Storybook/manual notes:
 ```
 
 ## Proposal guidance
 
 - For simple display components, keep props minimal and composable.
-- For interactive components, specify keyboard behavior and focus states before approval.
-- For composite components such as Autocomplete, Select, DatePicker, Drawer, Accordion, or Toast, explicitly decide whether the component remains an atom or should become a molecule/organism.
+- For interactive components, specify the full accessibility contract before approval; vague ARIA or keyboard notes are not enough.
+- For composite components such as Autocomplete, Select, DatePicker, Drawer, Accordion, or Toast, explicitly decide whether the component remains an atom or should become a molecule/organism, and name the native/Radix/WAI-ARIA pattern being followed.
 - Prefer controlled/uncontrolled API decisions only when the reference behavior requires them.
 - Include `className` only as an extension point, never as a substitute for missing variants.
 - Mention if a dependency or token change would be required, but do not approve it implicitly.
+- Include at least one acceptance criterion for keyboard-only use and one for screen reader semantics when the component is interactive.
