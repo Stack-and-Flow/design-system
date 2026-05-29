@@ -15,7 +15,6 @@ import {
   dropdownLabelVariants,
   dropdownLoadingVariants,
   dropdownSeparatorVariants,
-  dropdownSpinnerVariants,
   dropdownSubContentVariants,
   dropdownSubTriggerVariants,
   dropdownTriggerVariants
@@ -57,7 +56,6 @@ type UseDropdownReturn = {
   loading: boolean;
   loadingClassName: string;
   loadingLabel: string;
-  spinnerClassName: string;
   triggerProps: ComponentProps<'button'>;
   getItemProps: (element: DropdownRenderableItem) => {
     'aria-disabled': true | undefined;
@@ -191,7 +189,6 @@ export const useDropdown = ({
           : (explicitAriaLabel ?? 'Dropdown menu')
     },
     loadingClassName: dropdownLoadingVariants(),
-    spinnerClassName: dropdownSpinnerVariants(),
     loadingLabel: 'Loading menu items',
     getItemProps: (element) => ({
       disabled: element.disabled,
