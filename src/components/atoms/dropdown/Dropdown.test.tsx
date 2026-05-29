@@ -7,6 +7,11 @@ vi.mock('lucide-react', () => ({
   ChevronRightIcon: () => <span data-testid='submenu-chevron' />
 }));
 
+vi.mock('spinners-react', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
+  SpinnerCircular: () => <span data-testid='dropdown-spinner' />
+}));
+
 import { Dropdown } from './Dropdown';
 import type { DropdownItem, DropdownSchema } from './types';
 import { useDropdown } from './useDropdown';
@@ -145,6 +150,7 @@ describe('Dropdown — component behavior', () => {
     const menu = await screen.findByRole('menu', { name: 'Account actions' });
     expect(menu).not.toHaveAttribute('aria-labelledby');
     expect(await screen.findByRole('status')).toHaveTextContent('Loading menu items');
+    expect(screen.getByTestId('dropdown-spinner')).toBeInTheDocument();
     expect(screen.queryByRole('menuitem', { name: 'Profile' })).not.toBeInTheDocument();
   });
 

@@ -94,11 +94,6 @@ export const dropdownLoadingVariants = cva(
   'flex min-h-11 items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
 );
 
-export const dropdownSpinnerVariants = cva([
-  'size-5 animate-spin rounded-full border-2 border-border-light border-t-brand-light',
-  'dark:border-border-dark dark:border-t-brand-dark motion-reduce:animate-none'
-]);
-
 export const dropdownTriggerVariants = cva([
   'inline-flex min-h-11 min-w-11 items-center justify-center rounded-md',
   'focus-visible:outline-none focus-visible:shadow-glow-focus-light',
