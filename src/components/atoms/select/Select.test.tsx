@@ -105,6 +105,15 @@ describe('Select — render', () => {
     expect(screen.getByRole('combobox')).toHaveTextContent('Brazil');
   });
 
+  it('treats an empty string option key as a selected value', () => {
+    const optionsWithEmptyKey: SelectOption[] = [{ key: '', label: 'None' }, ...defaultOptions];
+
+    render(<Select label='Country' options={optionsWithEmptyKey} value='' isClearable={true} />);
+
+    expect(screen.getByRole('combobox')).toHaveTextContent('None');
+    expect(screen.getByRole('button', { name: /clear/i })).toBeInTheDocument();
+  });
+
   it('renders disabled state with aria-disabled', () => {
     render(<Select label='Country' options={defaultOptions} isDisabled={true} />);
     expect(screen.getByRole('combobox')).toHaveAttribute('aria-disabled', 'true');
@@ -112,12 +121,12 @@ describe('Select — render', () => {
 
   it('renders loading state with spinner in popover', async () => {
     const user = userEvent.setup();
-    render(<Select label='Country' options={defaultOptions} isLoading={true} />);
+    render(<Select label='Country' options={defaultOptions} isLoading={true} loadingLabel='Loading countries' />);
     expect(screen.getByRole('combobox')).toBeInTheDocument();
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
-    expect(screen.getByText('Loading options...')).toBeInTheDocument();
+    expect(screen.getByText('Loading countries')).toBeInTheDocument();
   });
 
   it('renders clear button when isClearable and has value', () => {
@@ -243,13 +252,14 @@ describe('Select — interaction', () => {
         options={defaultOptions}
         value='ar'
         isClearable={true}
+        clearAriaLabel='Clear country'
         onClear={handleClear}
         onChange={handleChange}
       />
     );
 
     await user.click(screen.getByRole('combobox'));
-    await user.click(screen.getByRole('button', { name: /clear/i }));
+    await user.click(screen.getByRole('button', { name: 'Clear country' }));
 
     expect(handleClear).toHaveBeenCalledTimes(1);
     expect(handleChange).not.toHaveBeenCalled();
@@ -507,6 +517,16 @@ describe('Select — accessibility', () => {
 
     await user.click(trigger);
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('uses ariaLabel for unlabeled trigger and listbox', async () => {
+    const user = userEvent.setup();
+    render(<Select ariaLabel='Country selector' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox', { name: 'Country selector' });
+    await user.click(trigger);
+
+    expect(screen.getByRole('listbox')).toHaveAttribute('aria-label', 'Country selector');
   });
 
   it('links the trigger to the active option while navigating the listbox', async () => {

@@ -12,6 +12,8 @@ export const Select: FC<SelectProps> = (props) => {
     showClearButton,
     isLoading,
     isRequired,
+    clearAriaLabel,
+    loadingLabel,
     label,
     description,
     options,
@@ -73,7 +75,7 @@ export const Select: FC<SelectProps> = (props) => {
           {showClearButton && (
             <button
               type='button'
-              aria-label='Clear selection'
+              aria-label={clearAriaLabel}
               className={clearButtonClassName}
               onClick={(e) => {
                 handleClear(e);
@@ -96,7 +98,7 @@ export const Select: FC<SelectProps> = (props) => {
               {isLoading ? (
                 <div className={selectLoadingVariants()} role='status' aria-live='polite'>
                   <span aria-hidden='true' className={selectSpinnerVariants()} />
-                  <span>Loading options...</span>
+                  <span>{loadingLabel}</span>
                 </div>
               ) : (
                 options.map((option, index) => (

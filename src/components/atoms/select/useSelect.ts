@@ -71,6 +71,8 @@ type UseSelectReturn = {
   showClearButton: boolean;
   isLoading: boolean;
   isRequired: boolean;
+  clearAriaLabel: string;
+  loadingLabel: string;
   label: string | undefined;
   description: string | undefined;
   options: SelectOption[];
@@ -126,6 +128,9 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     isLoading = false,
     isClearable = false,
     isFullWidth = false,
+    ariaLabel,
+    clearAriaLabel = 'Clear selection',
+    loadingLabel = 'Loading options...',
     name,
     id: idProp,
     className,
@@ -137,6 +142,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     onKeyDown: onKeyDownProp,
     onMouseDown: onMouseDownProp,
     'aria-describedby': ariaDescribedByProp,
+    'aria-label': nativeAriaLabel,
     ...rest
   } = props;
 
@@ -186,7 +192,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const isControlled = valueProp !== undefined;
   const selectedValue = isControlled ? valueProp : internalValue;
   const selectedOption = options.find((opt) => opt.key === selectedValue);
-  const hasValue = selectedValue != null && selectedValue !== '';
+  const hasValue = selectedValue != null;
   const showClearButton = isClearable && hasValue && !isDisabled && !isLoading;
 
   const effectiveDisabled = isDisabled;
@@ -529,6 +535,8 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     [classNames?.item, selectedValue, resolvedSize]
   );
 
+  const explicitAriaLabel = ariaLabel ?? nativeAriaLabel;
+
   const triggerProps: ComponentProps<'button'> = {
     ...rest,
     ref: triggerRef,
@@ -545,6 +553,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
       [ariaDescribedByProp, description ? `${id}-description` : null, effectiveHint?.message ? `${id}-hint` : null]
         .filter(Boolean)
         .join(' ') || undefined,
+    'aria-label': label ? undefined : explicitAriaLabel,
     'aria-labelledby': label ? `${id}-label` : undefined,
     disabled: effectiveDisabled,
     'aria-disabled': effectiveDisabled || undefined,
@@ -557,7 +566,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     ref: popoverRef,
     role: 'listbox',
     id: `${id}-listbox`,
-    'aria-label': label ?? 'Select options'
+    'aria-label': label ?? explicitAriaLabel
   };
 
   const getOptionProps = useCallback(
@@ -621,6 +630,8 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     showClearButton,
     isLoading,
     isRequired,
+    clearAriaLabel,
+    loadingLabel,
     label,
     description,
     options,
