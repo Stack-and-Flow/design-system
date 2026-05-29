@@ -36,14 +36,25 @@ Ve al [tablero del proyecto en GitHub](https://github.com/orgs/Stack-and-Flow/pr
 
 > **¿Primera vez?** Busca issues etiquetados como `layer: atom` con `category: component` — son autocontenidos y bien definidos.
 
-Comenta en el issue para que otros sepan que estás trabajando en él.
+Antes de escribir código, asegurate de que la spec esté definida y la issue tenga el label `status:approved`. Recién entonces corré **START WORK**:
+- asignate la issue;
+- movela a `In progress`;
+- registrá branch y worktree plan.
 
 ## 4. Crear tu rama
 
+Si la tarea viene de una issue, usá naming derivado de issue:
+
 ```bash
-git checkout -b feat/nombre-de-tu-componente
+git checkout -b feat/123-tu-componente
 # o
-git checkout -b fix/descripcion-corta
+git checkout -b fix/128-descripcion-corta
+```
+
+Si trabajás con worktree, usa el sibling path equivalente:
+
+```text
+../design-system-feat-123-tu-componente
 ```
 
 El nombre de las ramas sigue [Conventional Commits](https://www.conventionalcommits.org/):
@@ -82,7 +93,7 @@ Todos los tests deben pasar antes de abrir un PR. Si estás añadiendo un nuevo 
 Sube tu rama y abre un PR contra `main`:
 
 ```bash
-git push origin feat/nombre-de-tu-componente
+git push origin feat/123-tu-componente
 ```
 
 Luego ve a GitHub → tu rama → **Compare & pull request**.
@@ -90,8 +101,9 @@ Luego ve a GitHub → tu rama → **Compare & pull request**.
 - Usa la plantilla de PR — completa cada sección
 - Vincula el issue en el resumen (`Closes #123`)
 - Añade capturas de pantalla si hay cambios visuales
+- Limpia artefactos MCP antes de commit/review: `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`
 
-> El project lead revisa y fusiona. No tienes que preocuparte por el merge en sí.
+> El project lead revisa y fusiona. La tarea pasa a `Done` solo con **END WORK** después de PR merged o aprobación explícita.
 
 ---
 

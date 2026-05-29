@@ -267,11 +267,9 @@ After configuration, verify the setup is working correctly.
 ### Step 4.1 — Import a component and verify rendering
 
 ```typescript
-import Button from '@stack-and-flow/design-system'
-// or named import
 import { Button } from '@stack-and-flow/design-system'
 
-export default function TestPage() {
+export function TestPage() {
   return (
     <div className="min-h-screen bg-canvas p-8">
       <Button variant="primary">Test Button</Button>

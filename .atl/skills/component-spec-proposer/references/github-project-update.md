@@ -19,15 +19,8 @@ item_id=$(gh project item-list 1 \
   --jq ".items[] | select(.content.url == \"$issue_url\") | .id")
 ```
 
-Set Project Status to `In progress`:
-
-```bash
-gh project item-edit \
-  --project-id PVT_kwDOEHd14s4BUsw- \
-  --id "$item_id" \
-  --field-id PVTSSF_lADOEHd14s4BUsw-zhCIcdo \
-  --single-select-option-id 47fc9ee4
-```
+Do not move Project Status to `In progress` from `component-spec-proposer`.
+That transition belongs to START WORK in `github-project-tasks`, after spec approval, after the linked issue has label `status:approved`, and immediately before implementation.
 
 Add the approved spec to the issue:
 
@@ -38,3 +31,5 @@ gh issue comment NUMBER \
 ```
 
 If a previous `Validated component spec` comment exists, prefer editing it manually or with the GitHub API instead of adding duplicates.
+
+After writing the validated spec, report that the task is waiting for the issue label `status:approved`. Do not start `component-contributor` or move the Project item to `In progress` until that label is present.

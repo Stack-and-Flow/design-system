@@ -1,6 +1,12 @@
 import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('spinners-react', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
+  SpinnerCircular: () => <span data-testid='table-spinner' />
+}));
+
 import { Table as RootTable } from '../../../index';
 import { Table } from './Table';
 import type { Selection, SortDescriptor, TableColumn } from './types';
@@ -421,6 +427,8 @@ describe('Table — component behavior', () => {
 
   it('starts loading body row indexes at one when the header is hidden', () => {
     render(<Table columns={columns} hideHeader={true} items={rows} loading={true} pageSize={2} />);
+
+    expect(screen.getByTestId('table-spinner')).toBeInTheDocument();
 
     const skeletonRows = screen.getAllByRole('row');
     expect(skeletonRows[0]).toHaveAttribute('aria-rowindex', '1');

@@ -113,7 +113,7 @@ const Input = forwardRef<HTMLInputElement, InputComponentProps>(
 );
 
 Input.displayName = 'Input';
-export default Input;
+export { Input };
 ```
 
 **When NOT to use forwardRef**: buttons (the hook manages its own ref internally via `useRef`), purely presentational wrappers, components that never need external ref access.

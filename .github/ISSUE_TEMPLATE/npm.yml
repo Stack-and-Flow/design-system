@@ -1,13 +1,15 @@
-﻿name: "ðŸ“¦ NPM / Dependencies"
-description: Update, add or remove npm packages
-title: "[NPM] Package name â€” short description"
-labels: ["dependencies"]
+name: "NPM / Dependencies"
+description: Update, add, remove, or audit npm packages and package metadata
+title: "[INFRA] dependency update - package name"
+labels: ["dependencies", "infra"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## ðŸ“¦ NPM / Dependencies Task
-        Use this for dependency updates, security fixes, or adding/removing packages.
+        ## NPM / Dependencies Task
+        Use this for dependency updates, security fixes, peer dependency changes, package metadata, or dependency removals.
+
+        Current flow: research changelog and risk -> define update plan -> wait for issue label `status:approved` -> START WORK Project gate -> update -> verify build/tests/package consumption -> PR -> END WORK after merge or maintainer approval.
 
   - type: dropdown
     id: change-type
@@ -15,62 +17,79 @@ body:
       label: Type of change
       options:
         - Update existing dependency (minor/patch)
-        - Update existing dependency (major â€” breaking)
+        - Update existing dependency (major or breaking)
         - Add new dependency
         - Remove dependency
         - Security fix
+        - Package metadata or exports change
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
     validations:
       required: true
 
   - type: textarea
     id: packages
     attributes:
-      label: Package(s) affected
+      label: Package or metadata affected
       placeholder: |
-        - `vitest`: 1.6.0 â†’ 2.1.0
-        - `@testing-library/react`: 14.x â†’ 16.x
+        - `vitest`: 1.x -> 2.x
+        - `package.json` exports map
+        - `pnpm-lock.yaml`
     validations:
       required: true
 
   - type: textarea
     id: motivation
     attributes:
-      label: Motivation
-      description: Why is this change needed?
+      label: Motivation and risk
       placeholder: |
-        vitest 2.x improves workspace support and fixes a memory leak in watch mode.
-        The update also resolves 2 moderate security advisories.
+        Why this is needed:
+        Security/advisory link:
+        Breaking changes:
+        Peer dependency or consumer impact:
     validations:
       required: true
 
   - type: textarea
-    id: breaking-changes
+    id: validation
     attributes:
-      label: Known breaking changes / migration notes
+      label: Validation plan
+      description: Include package consumption checks when package output or exports change.
       placeholder: |
-        vitest 2.x removes the `globals` option in tsconfig â€” must use `/// <reference types="vitest" />` instead.
-        Reference: https://vitest.dev/guide/migration.html
+        Commands/checks:
+        - pnpm test
+        - pnpm run build
+        - pnpm run verify:package, if package output changed
+        Rollback plan:
+    validations:
+      required: true
 
   - type: checkboxes
-    id: phases
+    id: workflow-gates
     attributes:
-      label: "âœ… Implementation phases"
+      label: Workflow gates
       options:
-        - label: "1. **Research** â€” read changelogs, identify breaking changes, check peer dependency conflicts."
-        - label: "2. **Update** â€” run `pnpm update` and resolve any conflicts."
-        - label: "3. **Verify** â€” run `pnpm test`, `pnpm build`, `pnpm storybook` to confirm nothing is broken."
-        - label: "4. **Document** â€” note any config changes needed in PR description."
-        - label: "5. **Code review** â€” review by egdev6."
-        - label: "6. **Merge to main** â€” project lead merges the PR."
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: PR must link this issue and include validation evidence.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Any edge cases or special considerations. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Migration notes, lockfile concerns, rollback notes, related issues, or maintainer decisions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "ðŸ”— Related resources"
-      placeholder: Changelog URLs, migration guides, related security advisories.
+      label: Related resources
+      placeholder: Changelog, migration guide, advisory, package docs, related PRs.

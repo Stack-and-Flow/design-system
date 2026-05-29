@@ -90,7 +90,7 @@ Descarga el instalador desde [opencode.ai](https://opencode.ai/) o instala via t
 npm install -g opencode-ai
 ```
 
-📹 **Video de instalación y primeros pasos:** *(añade aquí el link cuando esté disponible)*
+Consulta la documentación oficial de opencode para tutoriales y walkthroughs actualizados.
 
 ### Cómo funciona gentle-ai en este proyecto
 
@@ -107,13 +107,17 @@ Cuando vayas a implementar un componente, simplemente di:
 Implementa este componente: https://github.com/Stack-and-Flow/design-system/issues/XXX
 ```
 
-El agente cargará la skill `component-contributor` y seguirá el flujo de 5 fases automáticamente.
+El agente cargará la skill `component-contributor` y seguirá el flujo actual: verificación del label `status:approved`, START WORK cuando aplique, lectura de spec validada, spec review, visual preflight, plan, implementación, visual review, component audit pre-PR y END WORK al cerrar la tarea.
 
 ---
 
 ## 4 — MCP Playwright
 
-Los MCPs (Model Context Protocol servers) extienden las capacidades del agente. Playwright MCP permite al agente interactuar con el navegador — útil para revisar Storybook visualmente durante el desarrollo.
+Los MCPs (Model Context Protocol servers) extienden las capacidades del agente. Playwright MCP permite al agente interactuar con el navegador — útil para revisar Storybook visualmente durante el desarrollo. Antes de commit o review, limpia sus artefactos locales:
+
+```bash
+rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output
+```
 
 ### Instalación
 
@@ -141,7 +145,7 @@ Reinicia opencode después de añadir la configuración para que el MCP se regis
 
 **Verificar que está activo:** al iniciar una conversación en opencode, el agente tendrá acceso a herramientas de browser como `browser_navigate`, `browser_snapshot` y `browser_screenshot`.
 
-> 📹 **Más información sobre MCPs en opencode:** *(añade aquí el link cuando esté disponible)*
+> Consulta la documentación oficial de opencode y Playwright MCP para ejemplos de configuración y troubleshooting actualizados.
 
 ---
 
@@ -198,13 +202,21 @@ git config --global user.email "tu@email.com"
 
 ### Convención de ramas
 
-Antes de empezar cualquier tarea, crea tu rama desde `main`:
+Antes de empezar cualquier tarea, crea tu rama desde `main`. Si la tarea viene de una issue, usa naming derivado de issue:
 
 ```bash
 git checkout main
-git pull
-git checkout -b feat/nombre-componente
+git pull --ff-only origin main
+git checkout -b feat/123-button
 ```
+
+Si trabajás con worktree, usa sibling worktrees del repo, por ejemplo:
+
+```text
+../design-system-feat-123-button
+```
+
+Evitá `/tmp` salvo que se pida explícitamente.
 
 | Prefijo | Cuándo usarlo |
 |---|---|
@@ -232,7 +244,7 @@ Los hooks de pre-commit corren Biome y TypeScript automáticamente. Si el commit
 
 Con el entorno configurado, el siguiente paso es el flujo del contributor:
 
-👉 **[Flujo del Contributor — Stack-and-Flow Design System](https://www.notion.so/Flujo-del-Contributor-Stack-and-Flow-Design-System-3457b3df860880fd9663df8c086b1028?source=copy_link)**
+👉 **[Flujo del Contributor — Stack-and-Flow Design System](./CONTRIBUTOR-FLOW.md)**
 
 ---
 

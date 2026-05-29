@@ -1,19 +1,23 @@
-﻿name: "ðŸ§© New Component"
-description: Create a new component for the design system (atom, molecule or organism)
+name: "New Component"
+description: Propose and implement a new design-system component through the current spec-first workflow
 title: "[ATOMS] ComponentName"
 labels: ["component"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## ðŸ§© New Component Task
-        Follow all 6 phases in order. The contributor does phases 1â€“5, egdev6 handles the merge (phase 6).
+        ## New Component Task
+        Use this for atoms, molecules, and organisms. New components must go through `component-spec-proposer` before implementation.
+
+        Current flow: reference and context -> validated component spec -> wait for issue label `status:approved` -> START WORK Project gate -> implementation -> component audit, visual review, accessibility evidence -> PR -> END WORK after merge or maintainer approval.
+
+        Set the title prefix to `[ATOMS]`, `[MOLECULES]`, or `[ORGANISMS]` based on the selected level.
 
   - type: input
     id: component-name
     attributes:
       label: Component name
-      placeholder: e.g. Autocomplete, DatePicker, Modal
+      placeholder: e.g. Select, Autocomplete, DatePicker, Modal
     validations:
       required: true
 
@@ -21,11 +25,24 @@ body:
     id: atomic-level
     attributes:
       label: Atomic level
-      description: Where does this component live in the atomic design hierarchy?
+      description: Where should this component live?
       options:
         - Atom
         - Molecule
         - Organism
+        - Needs proposal
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      description: Project board team field.
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
     validations:
       required: true
 
@@ -33,58 +50,59 @@ body:
     id: reference
     attributes:
       label: Reference URL
-      description: Link to a reference implementation (e.g. HeroUI, Radix, shadcn)
-      placeholder: https://www.heroui.com/docs/components/...
+      description: Required before spec proposal. Use HeroUI, Radix, MDN, WAI-ARIA APG, or another source of behavior.
+      placeholder: https://www.heroui.com/docs/components/select
+    validations:
+      required: true
 
   - type: textarea
     id: context
     attributes:
-      label: Context / motivation
-      description: Why does this component need to exist? What problem does it solve?
-      placeholder: Brief description of the use case and why it belongs in the design system.
-
-  - type: checkboxes
-    id: phases
-    attributes:
-      label: "âœ… Development phases"
-      options:
-        - label: "1. **Research** â€” investigate similar solutions, existing patterns, real use cases. Add screenshots, links or benchmarks."
-        - label: "2. **Specification** â€” define props, states, interaction, accessibility, variants. Document in this issue."
-        - label: "3. **Implementation** â€” build the component based on the spec. Follow the 5-file pattern (types, hook, component, stories, index)."
-        - label: "4. **Storybook** â€” document with controls, usage examples, and MDX/JSDoc if applicable."
-        - label: "5. **Code review** â€” functional review + visual review (alignment with design system) + fix suggestions."
-        - label: "6. **Merge to main** â€” once approved, project lead merges the PR."
+      label: Context and motivation
+      description: What problem does this component solve? Who needs it?
+      placeholder: Describe the product/design-system need and any known constraints.
+    validations:
+      required: true
 
   - type: textarea
-    id: spec
+    id: validated-spec
     attributes:
-      label: "ðŸ“‹ Specification (fill after phase 2)"
-      description: Props, variants, states, interactions, a11y requirements. This is what the AI agent will use to implement.
+      label: Validated component spec
+      description: Fill this after `component-spec-proposer` and maintainer validation. Do not implement from an unvalidated spec.
       placeholder: |
-        ### Props
-        - `variant`: 'default' | 'outlined' | 'ghost'
-        - `size`: 'sm' | 'md' | 'lg'
-        - `disabled`: boolean
+        Paste the `## Validated component spec` output here after approval.
 
-        ### States
-        - default, hover, focus, disabled, loading
+        Must include scope, API props, CVA variants, states, accessibility contract, accessibility acceptance criteria, stories, design notes, reference behavior, and expected tests.
 
-        ### Accessibility
-        - aria-label required when no visible label
-        - keyboard navigable (Tab, Enter, Escape)
+  - type: checkboxes
+    id: accessibility-gate
+    attributes:
+      label: Accessibility gate for interactive or composite components
+      options:
+        - label: "Pattern reference is named: native, Radix primitive, or WAI-ARIA APG pattern."
+        - label: "Roles, accessible name, ARIA relationships, keyboard matrix, and focus lifecycle are specified."
+        - label: "Disabled, required, invalid/error, loading, and empty states have expected semantics where applicable."
+        - label: "Expected tests include role/name queries, keyboard behavior, focus behavior, and ARIA state transitions where applicable."
 
-        ### Notes
-        - Uses Radix UI primitive under the hood
-        - CVA for variant management
+  - type: checkboxes
+    id: workflow-gates
+    attributes:
+      label: Workflow gates
+      options:
+        - label: Spec proposal must be approved before implementation starts.
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: Implementation must follow the 6-file component pattern.
+        - label: Component audit, visual review, accessibility evidence, and focused tests are required before PR review.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Any comments, decisions made, or special considerations. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Open questions, tradeoffs, expected non-goals, or related decisions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "ðŸ”— Related resources"
-      placeholder: External links, Figma files, prior art, etc.
+      label: Related resources
+      placeholder: Figma, examples, APG links, related issues, screenshots, or prior art.

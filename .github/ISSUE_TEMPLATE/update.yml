@@ -1,19 +1,46 @@
-﻿name: "ðŸ”„ Update / Refactor"
-description: Improve, refactor or extend an existing component or feature
+name: "Update or Refactor"
+description: Improve, refactor, or extend an existing component or system behavior
 title: "[UPDATE] Short description of the change"
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## ðŸ”„ Update / Refactor Task
-        Use this for improvements, refactors, or extensions to existing functionality.
+        ## Update or Refactor Task
+        Use this for behavior extensions, API changes, refactors, and quality improvements that are not simple bug fixes.
+
+        Current flow: define motivation and scope -> record validated spec/plan when behavior changes -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> validation and audit evidence -> PR -> END WORK after merge or maintainer approval.
 
   - type: input
-    id: affected-component
+    id: affected-area
     attributes:
-      label: Affected component / area
-      placeholder: e.g. Button variants, Modal controlled pattern, token system
+      label: Affected component or area
+      placeholder: e.g. Modal controlled pattern, Table sorting, token system
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
+    validations:
+      required: true
+
+  - type: dropdown
+    id: board-category
+    attributes:
+      label: Board category
+      description: Choose the Project board category this update belongs to.
+      options:
+        - component
+        - infra
+        - a11y
+        - docs
+        - tokens
     validations:
       required: true
 
@@ -21,10 +48,8 @@ body:
     id: motivation
     attributes:
       label: Motivation
-      description: Why is this change needed? What problem or limitation does it solve?
-      placeholder: |
-        The current Modal only works as uncontrolled. We need a controlled mode
-        so consumers can manage open/close state externally.
+      description: Why is this change needed? What limitation does it solve?
+      placeholder: Describe the current limitation, desired outcome, and user impact.
     validations:
       required: true
 
@@ -32,39 +57,78 @@ body:
     id: proposed-change
     attributes:
       label: Proposed change
-      description: What exactly needs to change? Be specific about props, API, behavior.
+      description: Define the API, behavior, migration, and non-goals before implementation.
       placeholder: |
-        Add `open` and `onOpenChange` props following the controlled/uncontrolled pattern.
-        Keep backward compatibility â€” if `open` is not provided, it stays uncontrolled.
+        Proposed behavior/API:
+        Non-goals:
+        Backward compatibility:
+        Migration notes:
+    validations:
+      required: true
+
+  - type: textarea
+    id: accessibility-impact
+    attributes:
+      label: Accessibility impact
+      description: State `Not applicable` only when interaction, semantics, focus, contrast, and motion are unaffected.
+      placeholder: |
+        Pattern or standard:
+        Keyboard impact:
+        Screen reader impact:
+        Focus impact:
+        Contrast or reduced-motion impact:
+        Required accessibility validation:
+    validations:
+      required: true
+
+  - type: textarea
+    id: validation-plan
+    attributes:
+      label: Validation plan
+      placeholder: |
+        TypeScript:
+        Unit tests:
+        Build/package:
+        Storybook or visual check:
+        Accessibility check:
+    validations:
+      required: true
 
   - type: checkboxes
-    id: phases
+    id: behavior-gates
     attributes:
-      label: "âœ… Implementation phases"
+      label: Behavior and accessibility gates
       options:
-        - label: "1. **Research** â€” review current implementation and identify impact surface."
-        - label: "2. **Specification** â€” define the new API / behavior. Document in this issue."
-        - label: "3. **Implementation** â€” apply the change following project conventions."
-        - label: "4. **Storybook** â€” update or add stories to reflect the new behavior."
-        - label: "5. **Code review** â€” functional + visual review + migration notes if breaking."
-        - label: "6. **Merge to main** â€” project lead merges the PR."
+        - label: Public API changes are intentional and documented.
+        - label: Accessibility contract is updated when interaction, focus, semantics, or state announcements change.
+        - label: Storybook stories/docs are updated when user-facing behavior changes.
+        - label: Tests cover the changed behavior and old behavior that must remain compatible.
 
   - type: checkboxes
     id: breaking
     attributes:
-      label: Breaking change?
+      label: Breaking change
       options:
-        - label: "Yes â€” this change breaks existing consumers (describe migration in notes)"
-        - label: "No â€” fully backward compatible"
+        - label: This change is backward compatible.
+        - label: This change breaks existing consumers and requires migration notes.
+
+  - type: checkboxes
+    id: workflow-gates
+    attributes:
+      label: Workflow gates
+      options:
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: PR must link this issue and include validation evidence.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Migration guide, deprecation notices, related issues. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Migration guide, deprecation plan, related issues, or maintainer decisions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "ðŸ”— Related resources"
-      placeholder: Issues, PRs, documentation links.
+      label: Related resources
+      placeholder: Issues, PRs, docs, references, examples, or design notes.

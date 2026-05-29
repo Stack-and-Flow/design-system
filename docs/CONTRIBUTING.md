@@ -68,6 +68,7 @@ Storybook es nuestra única fuente de verdad. Todo componente DEBE estar complet
   - `## Description` obligatorio.
   - `## Dependencies` solo si usa otros componentes o primitives externas.
   - `## Usage Guide` solo si la utilización es compleja.
+- **Sin `parameters.docs.description.component`**: la documentación del componente vive en JSDoc encima de `const meta`.
 - **Sin `play` functions**: Las interacciones se testean en `ComponentName.test.tsx`, no en stories.
 
 ---
@@ -91,7 +92,9 @@ Antes de abrir un PR, verifica:
 ### Estrategia de ramas
 
 - `main` es la rama base. Todos los PRs apuntan a `main`.
-- Nomenclatura de ramas: `feat/nombre-componente`, `fix/nombre-bug`, `chore/nombre-tarea`.
+- Si la tarea viene de una issue, usa: `{type}/{issue-number}-{slug}` (por ejemplo `feat/123-button`).
+- Si además trabajás con worktree, usa el sibling worktree correspondiente: `../design-system-{type}-{issue-number}-{slug}`.
+- Para el flujo completo de naming, START WORK y END WORK, consulta [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md).
 
 ### Commits
 
@@ -130,11 +133,13 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 
 ### Proceso de Pull Request
 
-1. Sube tu rama y abre un PR contra `main`.
-2. Usa un título de PR con el mismo formato Conventional Commit, por ejemplo `feat(button): add loading state`.
-3. Puedes pedir revisión automática a Copilot hasta que esté listo para revisión humana.
-4. El PR DEBE pasar todos los checks de CI, incluidos tests, build de Storybook, accesibilidad y escaneos de seguridad.
-5. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
+1. Antes de implementar desde una issue, verificá que la spec esté definida y que la issue tenga el label `status:approved`; recién ahí corré **START WORK**: asignar la issue, moverla a `In progress` y registrar branch/worktree.
+2. Sube tu rama y abre un PR contra `main`.
+3. Usa un título de PR con el mismo formato Conventional Commit, por ejemplo `feat(button): add loading state`.
+4. Puedes pedir revisión automática a Copilot hasta que esté listo para revisión humana.
+5. El PR DEBE pasar todos los checks de CI, incluidos tests, build de Storybook, accesibilidad y escaneos de seguridad.
+6. El PR DEBE ser revisado por al menos un maintainer antes de hacer merge.
+7. Marca la tarea como `Done` solo mediante **END WORK** después de PR merged o aprobación explícita del maintainer/usuario.
 
 ### Checklist del PR
 
@@ -155,6 +160,7 @@ Antes de pedir revisión, verifica:
 - [ ] Disabled via `opacity: 0.4` — sin sustitución de color.
 - [ ] Sin `transition: all` — propiedades específicas enumeradas.
 - [ ] Touch target mínimo `44×44px` en controles interactivos por defecto; variantes compactas/densas explícitamente aprobadas pueden ser menores si conservan accesibilidad por teclado/focus.
+- [ ] Limpieza MCP hecha antes de commit/review: `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`.
 
 ### Checks de seguridad
 
@@ -198,15 +204,18 @@ Resumen de fases:
 
 1. **Research** — investigas referencias, API, estados, accesibilidad y diseño.
 2. **Spec proposal** — usas `component-spec-proposer` para convertir la tarea y referencia en una spec validada en la issue.
-3. **Spec intake** — `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
-4. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
-5. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
-6. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
-7. **Implementación** — el agente crea los 6 archivos y explica decisiones.
-8. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
-9. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
+3. **Approval gate** — una vez escrita la spec, esperas el label `status:approved` en la issue; sin ese label no hay START WORK ni implementación bajo ningún concepto.
+4. **START WORK** — después del label `status:approved`, asignas la issue, la mueves a `In progress` y registras branch/worktree.
+5. **Spec intake** — con START WORK ya completado, `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
+6. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
+7. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
+8. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
+9. **Implementación** — el agente crea los 6 archivos y explica decisiones.
+10. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
+11. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
+12. **END WORK** — al cerrar, la tarea pasa a `Done` solo con PR merged o aprobación explícita, más evidencia de validación.
 
-> Para activar el flujo completo, primero pedí la spec con `component-spec-proposer`; después de validarla, comparte la URL de la issue y di "implementa este componente".
+> Para activar el flujo completo, primero pedí la spec con `component-spec-proposer`; después de validarla, esperá `status:approved`, compartí la URL de la issue y decí "implementa este componente".
 
 ---
 

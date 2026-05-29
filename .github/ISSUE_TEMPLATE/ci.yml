@@ -1,27 +1,40 @@
-﻿name: "âš™ï¸ CI / Tooling"
-description: Add or improve GitHub Actions workflows, build tooling, or dev infrastructure
-title: "[CI] Short description"
-labels: ["ci", "tooling"]
+name: "Infrastructure / Tooling"
+description: Add or improve CI, build tooling, project automation, or development infrastructure
+title: "[INFRA] Short description"
+labels: ["ci", "tooling", "infra"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## âš™ï¸ CI / Tooling Task
-        Use this for GitHub Actions, Vite config, Biome, Lefthook, Storybook build, or other dev tooling.
+        ## Infrastructure Task
+        Use this for GitHub Actions, Vite, Biome, Lefthook, Storybook build, tests, release automation, or project tooling.
+
+        Current flow: define problem and risk -> plan exact config change -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> verify with local command or workflow run -> PR -> END WORK after merge or maintainer approval.
 
   - type: dropdown
     id: area
     attributes:
       label: Area
       options:
-        - GitHub Actions (CI/CD)
+        - GitHub Actions / CI
         - Vite / build config
-        - Biome (linting / formatting)
-        - Lefthook (git hooks)
+        - Biome / formatting
+        - Lefthook / git hooks
         - Storybook build / deployment
-        - Testing infrastructure (Vitest)
+        - Testing infrastructure
         - Release / versioning
         - Other tooling
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
     validations:
       required: true
 
@@ -30,9 +43,7 @@ body:
     attributes:
       label: Motivation
       description: What problem does this solve or what capability does it add?
-      placeholder: |
-        Currently there is no automated test run on PRs. Contributors can merge code
-        that breaks existing tests without noticing until after merge.
+      placeholder: Describe the current limitation, failure mode, or missing automation.
     validations:
       required: true
 
@@ -42,33 +53,42 @@ body:
       label: Proposed change
       description: What exactly needs to be added or changed?
       placeholder: |
-        Add a GitHub Actions workflow `.github/workflows/ci.yml` that:
-        - Runs on every PR targeting `main`
-        - Executes `pnpm test` and reports results
-        - Blocks merge if tests fail
+        Files/config affected:
+        Expected behavior:
+        Secrets or environment assumptions:
+        Rollback plan:
+    validations:
+      required: true
+
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: How should this be verified before PR review?
+      placeholder: |
+        Local commands:
+        Workflow run URL or draft PR check:
+        Failure/rollback check:
     validations:
       required: true
 
   - type: checkboxes
-    id: phases
+    id: workflow-gates
     attributes:
-      label: "âœ… Implementation phases"
+      label: Workflow gates
       options:
-        - label: "1. **Research** â€” investigate the right approach, existing examples, constraints."
-        - label: "2. **Specification** â€” define the exact configuration. Document in this issue."
-        - label: "3. **Implementation** â€” write the workflow / config."
-        - label: "4. **Verify** â€” test locally or on a draft PR."
-        - label: "5. **Code review** â€” review by egdev6."
-        - label: "6. **Merge to main** â€” project lead merges the PR."
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: PR must link this issue and include validation evidence.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Any constraints, secrets needed, or related issues. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Constraints, secrets, compatibility risks, or related decisions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "ðŸ”— Related resources"
-      placeholder: GitHub Actions docs, existing workflow references, related issues.
+      label: Related resources
+      placeholder: GitHub Actions docs, workflow runs, logs, examples, related issues.

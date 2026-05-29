@@ -1,4 +1,5 @@
 import { useCallback, useId, useMemo } from 'react';
+import { SpinnerCircular } from 'spinners-react';
 import type { CompleteTableProps, TableColumn, TableRowData } from './types';
 import { isInteractiveEventTarget, useKeyboardNavigation, useTable, useTableClasses, useTableEvents } from './useTable';
 
@@ -379,7 +380,9 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
           <div
             className={`flex items-center justify-center gap-3 px-4 py-4 text-text-secondary-light dark:text-text-secondary-dark ${classNames.loadingWrapper ?? ''}`}
           >
-            <div className='size-5 animate-spin rounded-full border-2 border-border-light border-t-brand-light dark:border-border-dark dark:border-t-brand-dark' />
+            <span aria-hidden='true' className='inline-flex'>
+              <SpinnerCircular color='currentColor' thickness={200} size='1.25em' />
+            </span>
             <span>Loading data...</span>
           </div>
         </div>

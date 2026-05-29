@@ -11,22 +11,13 @@
 
 <img width="5120" height="1440" alt="V2design-system" src="https://github.com/user-attachments/assets/9f09a8ca-5d50-466d-9a63-d5194433c15e" />
 
+## Qué es este proyecto
 
-## 🎯 ¿Qué es este proyecto?
+Stack-and-Flow es un **design system educativo, accesible y publicable como paquete npm**, construido con React, TypeScript, Tailwind CSS v4, Radix UI primitives, CVA, Storybook y Vite.
 
-Un **Design System** moderno, escalable y accesible construido desde cero con **React**, **TypeScript**, **Tailwind CSS v4** y **Storybook**. Este proyecto sigue patrones profesionales de arquitectura como **Atomic Design** y **Container/Presentational** para mantener un código limpio, predecible y fácil de mantener.
+El objetivo es aprender y practicar cómo se construye una librería de componentes real: tokens, arquitectura, documentación viva, tests, accesibilidad, revisión visual y flujo de contribución con GitHub Projects.
 
-### ✨ Características principales
-
-- 🧱 **Arquitectura Atomic Design**: Componentes organizados en átomos, moléculas y organismos
-- 🎨 **Diseño tokenizado**: Sistema consistente de colores, tipografías y espaciados
-- ♿ **Accesibilidad primero**: ARIA attributes, navegación por teclado y cumplimiento WCAG
-- 📚 **Documentación en vivo**: Todos los componentes documentados en Storybook
-- 🔒 **Type-safe**: TypeScript estricto sin `any` permitidos
-- 🎭 **Dark mode**: Soporte nativo para temas claro y oscuro
-- 🚀 **Developer Experience**: Git hooks, linting automático y herramientas CLI personalizadas
-
-## 🛠️ Stack Tecnológico
+## Stack
 
 <div align="center">
 
@@ -35,165 +26,127 @@ Un **Design System** moderno, escalable y accesible construido desde cero con **
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Storybook](https://img.shields.io/badge/-Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)
 ![radixUI](https://img.shields.io/badge/radixUI-%23000000.svg?style=for-the-badge&logo=radixui&logoColor=white)
-![Zustand](https://img.shields.io/badge/zustand-brown?style=for-the-badge&logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![Biome](https://img.shields.io/badge/Biome-60A5FA?style=for-the-badge&logo=biome&logoColor=white)
 ![PNPM](https://img.shields.io/badge/Pnpm-gray?style=for-the-badge&logo=pnpm&logoColor=white)
 
 </div>
 
-## 🚀 Inicio Rápido
-
-### Prerrequisitos
-
-- **Node.js** (versión especificada en `.nvmrc`)
-- **pnpm** - [Guía de instalación](https://pnpm.io/installation)
-- **nvm** (opcional pero recomendado) - [UNIX](https://github.com/nvm-sh/nvm) | [Windows](https://github.com/coreybutler/nvm-windows)
-
-### Instalación
+## Inicio rápido
 
 ```bash
-# 1. Clonar el repositorio
 git clone https://github.com/Stack-and-Flow/design-system.git
 cd design-system
-
-# 2. Usar la versión correcta de Node
 nvm use
-
-# 3. Instalar dependencias
 pnpm install
-
-# 4. Ejecutar Storybook con hot reload
 pnpm run storybook
 ```
 
-¡Listo! Storybook se abrirá en `http://localhost:6006` 🎉
+Storybook queda disponible en `http://localhost:6006`.
 
-## 📖 Demo en Vivo
+Demo pública: **[sf-design-system.netlify.app](https://sf-design-system.netlify.app/)**
 
-Explora todos los componentes y su documentación interactiva:
+## Arquitectura de componentes
 
-**🔗 [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)**
+Cada componente vive en `src/components/{atoms|molecules|organisms}/{kebab-name}/` y usa el patrón obligatorio de **6 archivos**:
 
-## 🏗️ Arquitectura de Componentes
-
-Cada componente sigue una estructura estricta de **5 archivos** que separa responsabilidades:
-
-```
+```text
 src/components/atoms/button/
-├── Button.tsx           # Capa Presentacional (solo JSX)
-├── useButton.ts         # Capa Container (lógica + CVA)
-├── types.ts             # Tipos + Variantes CVA
-├── index.ts             # Exportaciones públicas
-└── Button.stories.tsx   # Documentación Storybook
+├── types.ts              # Props, tipos públicos y variantes CVA
+├── useButton.ts          # Lógica, estado, handlers, aria y className computado
+├── Button.tsx            # JSX presentacional; consume el hook
+├── Button.test.tsx       # Tests de hook y comportamiento del componente
+├── Button.stories.tsx    # Storybook autodocs, args, variants y estados
+└── index.ts              # Named export del componente + type exports
 ```
 
-### ¿Por qué esta arquitectura?
+Reglas base:
 
-- ✅ **Separación clara** de lógica y presentación
-- ✅ **Reutilización** de hooks entre componentes
-- ✅ **Testing** simplificado (prueba lógica independiente de UI)
-- ✅ **Escalabilidad** predecible y mantenible
+- `type`, nunca `interface`.
+- Sin `any` explícito.
+- CVA vive en `types.ts`.
+- El componente `.tsx` no contiene lógica ni llamadas CVA.
+- Exports/imports públicos son nombrados, por ejemplo `import { Button } from '@stack-and-flow/design-system'`.
+- Storybook usa JSDoc encima de `const meta` y encima de cada `export const StoryName`.
+- No usamos `parameters.docs.description.component`.
 
-## 🤝 ¿Cómo Contribuir?
+## Contribuir
 
-Este es un **proyecto educativo y abierto a colaboración**. Nos encantaría que participes, sin importar tu nivel de experiencia.
+Este proyecto usa GitHub Issues + GitHub Projects como flujo de trabajo.
 
-### Flujo de Trabajo
+Ruta corta:
 
-1. **Investiga** componentes similares y patrones
-2. **Define** la funcionalidad, props, variantes y casos de uso
-3. **Implementa** siguiendo la arquitectura de 5 archivos
-4. **Documenta** en Storybook con controles y ejemplos
-5. **Abre un PR** siguiendo [Conventional Commits](https://www.conventionalcommits.org/)
-
-🚀 **¿Primera vez?** Sigue la [Quick Start Guide](./docs/QUICK_START.md) y haz tu primera contribución en menos de 10 minutos.
-
-📚 **Documentación completa**: Lee [CONTRIBUTING.md](./docs/CONTRIBUTING.md) y [GUIDELINES.md](./docs/GUIDELINES.md) antes de empezar.
-
-### Reglas de Oro
-
-- ✅ Solo usamos **Radix UI** como librería base (primitivos sin estilos)
-- ✅ Usa tokens del sistema (colores, espaciados, fuentes) en `src/styles/theme.css`
-- ✅ **TypeScript estricto**: tipos explícitos, nada de `any`
-- ✅ **Accesibilidad obligatoria**: atributos ARIA, navegación por teclado
-- ✅ **Inglés en código**: variables, comentarios y documentación
-
-### 💡 ¿Tienes ideas?
-
-- 🆕 **Propón componentes** en el [Kanban Board](https://github.com/orgs/Stack-and-Flow/projects/1)
-- 🐛 **Reporta bugs** usando las plantillas de issues
-- 💬 **Contacta al Project Lead** para discutir features antes de implementar
-
-## 🧰 Herramientas del Proyecto
-
-### Storybook local
-
-Servidor local de documentación interactiva durante desarrollo.
+1. Elegí una issue del [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1).
+2. Antes de implementar, verificá que la spec esté definida y que la issue tenga el label `status:approved`.
+3. Recién después ejecutá **START WORK**:
+   - asignar la issue al contributor;
+   - mover el Project item a `In progress`;
+   - registrar branch y worktree.
+4. Usá branch issue-based:
+   - `feat/{issue-number}-{slug}`
+   - `fix/{issue-number}-{slug}`
+   - `docs/{issue-number}-{slug}`
+5. Si necesitás worktree, crealo como sibling del repo:
+   - `../design-system-{type}-{issue-number}-{slug}`
+   - no en `/tmp`, salvo pedido explícito.
+6. Implementá con el patrón de 6 archivos.
+7. Corré tests/build/revisión visual según corresponda.
+8. Antes de commit/review, limpiá artefactos MCP:
 
 ```bash
-pnpm run storybook
+rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output
 ```
 
-### Playwright MCP (AI Visual Audit)
+9. Al cerrar, usá **END WORK** sólo si hay PR merged o aprobación explícita del maintainer/usuario, con evidencia de validación.
 
-Herramienta para que el agente AI pueda abrir el navegador, navegar Storybook y tomar capturas de pantalla durante auditorías visuales. Es infraestructura del agente — **no forma parte del proyecto** ni se instala con `pnpm install`.
+Documentación recomendada:
 
-> **Nota:** Solo es necesario si usas un agente AI (como opencode) para hacer auditorías visuales de componentes.
+- [Quick Start](./docs/QUICK_START.md)
+- [Contributor Flow](./docs/CONTRIBUTOR-FLOW.md)
+- [Contributing](./docs/CONTRIBUTING.md)
+- [Guidelines](./docs/GUIDELINES.md)
+- [Design Reference](./docs/DESIGN.md)
+- [Components Reference](./docs/COMPONENTS.md)
 
-#### Prerrequisitos
+## Reglas de oro
 
-- [opencode](https://opencode.ai) u otro cliente AI compatible con MCP
-- Node.js disponible globalmente
+- Sólo usamos **Radix UI primitives** como base sin estilos.
+- No usamos shadcn como fuente de componentes ni configuración.
+- Usá tokens desde `src/styles/theme.css`; no hardcodees colores, fuentes o spacing.
+- Si falta un token, proponé agregarlo centralmente antes de usar valores raw.
+- Accesibilidad obligatoria: nombre accesible, teclado, focus visible, contraste, reduced motion.
+- Código, comentarios, Storybook y nombres públicos en inglés.
 
-#### Configuración
-
-Añade el siguiente bloque a tu archivo de configuración del agente (p. ej. `~/.config/opencode/opencode.json`):
-
-```json
-"playwright": {
-  "type": "local",
-  "command": [
-    "npx",
-    "@playwright/mcp@latest",
-    "--output-dir",
-    ".playwright-mcp"
-  ]
-}
-```
-
-Reemplaza `/ruta/absoluta/a/tu/proyecto/screenshots` con la ruta real en tu máquina.
-
-#### Carpeta de capturas
-
-Las capturas se guardan en `screenshots/` en la raíz del proyecto. Esta carpeta está incluida en `.gitignore` — no se sube al repositorio.
+## Scripts útiles
 
 ```bash
-# La carpeta ya existe en el repo (vacía, ignorada por git)
-screenshots/
+pnpm run storybook       # Storybook local
+pnpm run test            # Vitest
+pnpm run test:coverage   # Cobertura
+pnpm run build           # Build de librería + tipos
 ```
 
----
+## Playwright MCP y auditoría visual AI
 
-## 📚 Recursos de Aprendizaje
+Playwright MCP es infraestructura opcional para agentes AI. Puede generar artefactos como `.playwright-mcp/`, `page-*.png`, `page-*.jpeg` o `*.md.playwright-output`.
 
-- **HeroUI**: [UI library reference](https://heroui.com/docs/react/components)
-- **📖 Wiki Deepwiki**: [deepwiki.com/Stack-and-Flow/design-system](https://deepwiki.com/Stack-and-Flow/design-system)
-- **🎨 Referencias UI**: [UI Libraries repo](https://github.com/Stack-and-Flow/ui-libraries)
-- **📋 Kanban Board**: [GitHub Projects](https://github.com/orgs/Stack-and-Flow/projects/1)
+Estos archivos **no se commitean**. Antes de commit o review:
 
-## 🎓 Proyecto Educativo
+```bash
+rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output
+```
 
-Este repositorio tiene **fines educativos** y está completamente abierto a colaboración. Si estás interesado en:
+## Recursos
 
-- Aprender cómo se construye un Design System profesional
-- Mejorar tus habilidades en React, TypeScript o Arquitectura de Software
-- Contribuir a un proyecto open-source real
-- Trabajar con patrones avanzados (Atomic Design, Container/Presentational)
+- **Storybook live**: [sf-design-system.netlify.app](https://sf-design-system.netlify.app/)
+- **Project Board**: [GitHub Projects](https://github.com/orgs/Stack-and-Flow/projects/1)
+- **Wiki Deepwiki**: [deepwiki.com/Stack-and-Flow/design-system](https://deepwiki.com/Stack-and-Flow/design-system)
 
-📩 **¡Contáctame directamente o abre un issue!** Eres más que bienvenido.
+## Proyecto educativo
 
-## 📫 Contacto
+Este repositorio está abierto a colaboración. Es ideal si querés aprender design systems, React, TypeScript, arquitectura de componentes, accesibilidad, Storybook y publicación de librerías.
+
+## Contacto
 
 <div align="center">
 
@@ -221,5 +174,3 @@ Este repositorio tiene **fines educativos** y está completamente abierto a cola
 [linkedin-url]: https://linkedin.com/in/egdev6
 [demo-url]: https://sf-design-system.netlify.app/
 [demo-shield]: https://img.shields.io/badge/-Demo-black.svg?style=for-the-badge&colorB=555
-[wiki-url]: https://deepwiki.com/Stack-and-Flow/design-system
-[wiki-shield]: https://img.shields.io/badge/-Wiki-black.svg?style=for-the-badge&colorB=555

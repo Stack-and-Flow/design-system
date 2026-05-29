@@ -1,74 +1,111 @@
-﻿name: "â™¿ Accessibility"
-description: Fix or improve accessibility in a component or the design system overall
-title: "[A11Y] ComponentName â€” short description"
+name: "Accessibility"
+description: Fix or improve accessibility in a component, pattern, token, or workflow
+title: "[FIX] a11y - short description"
 labels: ["accessibility", "a11y"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## â™¿ Accessibility Task
-        Use this for WCAG compliance, ARIA improvements, keyboard navigation, or screen reader support.
+        ## Accessibility Task
+        Use this for WCAG, ARIA, keyboard navigation, focus management, screen reader behavior, or contrast issues.
+
+        Current flow: reproduce/audit -> define expected accessible behavior -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> keyboard/screen reader/axe evidence -> PR -> END WORK after merge or maintainer approval.
+
+        Use `[FIX]` for accessibility defects and `[UPDATE]` for intentional accessibility improvements.
 
   - type: input
-    id: affected-component
+    id: affected-area
     attributes:
-      label: Affected component / area
-      placeholder: e.g. Switch, Modal, Color tokens â€” contrast ratios
+      label: Affected component or area
+      placeholder: e.g. Select, Modal focus restore, color tokens contrast
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
     validations:
       required: true
 
   - type: dropdown
     id: wcag-level
     attributes:
-      label: WCAG level targeted
+      label: WCAG target
       options:
-        - A (minimum)
-        - AA (standard â€” our baseline)
-        - AAA (enhanced)
+        - A
+        - AA (baseline)
+        - AAA
         - Not WCAG-specific
     validations:
       required: true
 
   - type: textarea
-    id: issue-description
+    id: current-problem
     attributes:
-      label: Accessibility issue
-      description: What is the current problem? How was it detected?
+      label: Current accessibility problem
+      description: What happens today? How was it detected?
       placeholder: |
-        The Switch component uses `aria-label` on the wrapper `<div>` instead of the `<input>`.
-        Screen readers announce the label but don't associate it correctly with the control.
-        Detected via: axe DevTools / manual VoiceOver testing / automated audit.
+        Current behavior:
+        Expected behavior:
+        Detected with: keyboard / VoiceOver / NVDA / axe / Storybook / code review
     validations:
       required: true
 
   - type: textarea
-    id: proposed-fix
+    id: expected-contract
     attributes:
-      label: Proposed fix
+      label: Expected accessibility contract
+      description: Define the target pattern before implementation.
       placeholder: |
-        Move `aria-label` to the `<input type="checkbox">` element.
-        Add `aria-describedby` linking to the helper text if present.
+        Pattern reference: native / Radix / WAI-ARIA APG
+        Roles and accessible name:
+        Keyboard behavior:
+        Focus lifecycle:
+        State announcements:
+        WCAG criterion, if known:
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction or audit evidence
+      placeholder: Steps, screenshots, axe output, screen reader notes, failing test, or Storybook URL.
 
   - type: checkboxes
-    id: phases
+    id: validation
     attributes:
-      label: "âœ… Implementation phases"
+      label: Required validation
       options:
-        - label: "1. **Audit** â€” reproduce the issue with a screen reader or axe tool. Document findings."
-        - label: "2. **Specification** â€” define the correct ARIA pattern and keyboard behavior."
-        - label: "3. **Implementation** â€” apply the fix following WCAG guidelines."
-        - label: "4. **Test** â€” verify with axe-core, keyboard navigation, and screen reader (VoiceOver / NVDA)."
-        - label: "5. **Storybook** â€” add or update a11y notes in docs."
-        - label: "6. **Merge to main** â€” project lead merges the PR."
+        - label: Role/name semantics verified.
+        - label: Keyboard-only flow verified.
+        - label: Focus lifecycle verified.
+        - label: Screen reader or axe/manual evidence included where applicable.
+        - label: Regression test added or updated.
+        - label: Storybook notes or examples updated when user-facing behavior changes.
+
+  - type: checkboxes
+    id: workflow-gates
+    attributes:
+      label: Workflow gates
+      options:
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: PR must link this issue and include validation evidence.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Screen reader tested, tools used, WCAG criterion reference. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Related issues, constraints, or maintainer decisions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "ðŸ”— Related resources"
-      placeholder: WCAG docs, ARIA authoring practices, axe report, related issues.
+      label: Related resources
+      placeholder: WCAG, APG, axe report, browser/screen-reader matrix, related PRs.

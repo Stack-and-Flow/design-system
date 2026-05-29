@@ -1,6 +1,7 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ChevronRightIcon } from 'lucide-react';
 import type { FC } from 'react';
+import { SpinnerCircular } from 'spinners-react';
 import type { DropdownProps } from './types';
 import { type DropdownRenderableElement, useDropdown } from './useDropdown';
 
@@ -79,7 +80,6 @@ export const Dropdown: FC<DropdownProps> = (props) => {
     loading,
     loadingClassName,
     loadingLabel,
-    spinnerClassName,
     triggerProps,
     getItemProps,
     getLabelProps,
@@ -97,7 +97,9 @@ export const Dropdown: FC<DropdownProps> = (props) => {
         <DropdownMenuPrimitive.Content {...contentProps}>
           {loading ? (
             <div className={loadingClassName} role='status' aria-live='polite'>
-              <span aria-hidden='true' className={spinnerClassName} />
+              <span aria-hidden='true' className='inline-flex'>
+                <SpinnerCircular color='currentColor' thickness={200} size='1.25em' />
+              </span>
               <span className='sr-only'>{loadingLabel}</span>
             </div>
           ) : (
