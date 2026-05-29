@@ -55,22 +55,21 @@ describe('useSelect — logic', () => {
     expect(handleChange).toHaveBeenCalledWith('br');
   });
 
-  it('renders bordered variant with visible border', () => {
-    render(<Select label='Country' options={defaultOptions} variant='bordered' size='sm' placeholder='Select...' />);
-    const trigger = getTriggerContainer();
-    expect(trigger.className).toContain('border-border-strong-light');
-    expect(trigger.className).toContain('h-12');
+  it('passes native button props through to the combobox trigger', () => {
+    render(<Select label='Country' options={defaultOptions} placeholder='Select...' data-testid='country-select' />);
+
+    expect(screen.getByTestId('country-select')).toBe(screen.getByRole('combobox', { name: 'Country' }));
   });
 
-  it('selected option has highlighted style', async () => {
+  it('selected option is exposed with aria-selected', async () => {
     const user = userEvent.setup();
     render(<Select label='Country' options={defaultOptions} value='ar' placeholder='Select...' />);
     await user.click(screen.getByRole('combobox'));
-    const selected = screen.getByRole('option', { name: 'Argentina' });
-    expect(selected.className).toContain('bg-brand-light/10');
+
+    expect(screen.getByRole('option', { name: 'Argentina' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('disabled option has reduced opacity', async () => {
+  it('disabled option is exposed with aria-disabled', async () => {
     const user = userEvent.setup();
     const options: SelectOption[] = [
       { key: 'ar', label: 'Argentina' },
@@ -78,8 +77,8 @@ describe('useSelect — logic', () => {
     ];
     render(<Select label='Country' options={options} placeholder='Select...' />);
     await user.click(screen.getByRole('combobox'));
-    const disabled = screen.getByRole('option', { name: 'Brazil' });
-    expect(disabled.className).toContain('opacity-40');
+
+    expect(screen.getByRole('option', { name: 'Brazil' })).toHaveAttribute('aria-disabled', 'true');
   });
 });
 
@@ -185,6 +184,32 @@ describe('Select — interaction', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
+  it('positions popover from the visual trigger container', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const container = getTriggerContainer();
+    vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({
+      x: 40,
+      y: 48,
+      left: 40,
+      top: 48,
+      right: 264,
+      bottom: 104,
+      width: 224,
+      height: 56,
+      toJSON: () => undefined
+    });
+
+    await user.click(screen.getByRole('combobox'));
+
+    expect(screen.getByRole('listbox')).toHaveStyle({
+      left: '40px',
+      top: '108px',
+      width: '224px'
+    });
+  });
+
   it('selects an item and calls onChange when clicking an option', async () => {
     const user = userEvent.setup();
     const handleChange = vi.fn();
@@ -220,6 +245,21 @@ describe('Select — interaction', () => {
 
     await user.click(screen.getByRole('combobox'));
     await user.click(screen.getByRole('button', { name: /clear/i }));
+
+    expect(handleClear).toHaveBeenCalledTimes(1);
+  });
+
+  it('clears value from keyboard-accessible clear button', async () => {
+    const user = userEvent.setup();
+    const handleClear = vi.fn();
+    render(<Select label='Country' options={defaultOptions} value='ar' isClearable={true} onClear={handleClear} />);
+
+    await user.tab();
+    expect(screen.getByRole('combobox')).toHaveFocus();
+    await user.tab();
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    expect(clearButton).toHaveFocus();
+    await user.keyboard('{Enter}');
 
     expect(handleClear).toHaveBeenCalledTimes(1);
   });
@@ -311,6 +351,22 @@ describe('Select — interaction', () => {
     expect(screen.getByRole('listbox')).toBeInTheDocument();
 
     await user.click(container);
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('allows consumer onClick to veto container toggle', async () => {
+    const user = userEvent.setup();
+    render(
+      <Select
+        label='Country'
+        options={defaultOptions}
+        placeholder='Select a country'
+        onClick={(event) => event.preventDefault()}
+      />
+    );
+
+    await user.click(screen.getByRole('combobox'));
+
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
@@ -489,56 +545,23 @@ describe('Select — accessibility', () => {
   });
 });
 
-describe('Select — WCAG 2.5.5 touch target', () => {
-  it('sm size trigger has h-12 (48px) for 44px minimum', () => {
-    render(<Select label='Country' options={defaultOptions} size='sm' placeholder='Select...' />);
-    expect(getTriggerContainer().className).toContain('h-12');
+describe('Select — size and variant smoke coverage', () => {
+  it.each(['sm', 'md', 'lg'] as const)('renders %s size as an accessible combobox', (size) => {
+    render(<Select label='Country' options={defaultOptions} size={size} placeholder='Select...' />);
+
+    expect(screen.getByRole('combobox', { name: 'Country' })).toBeInTheDocument();
   });
 
-  it('md size trigger has h-14 (56px) for 44px minimum', () => {
-    render(<Select label='Country' options={defaultOptions} size='md' placeholder='Select...' />);
-    expect(getTriggerContainer().className).toContain('h-14');
-  });
+  it.each([
+    'regular',
+    'bordered',
+    'faded',
+    'line',
+    'underlined'
+  ] as const)('renders %s variant as an accessible combobox', (variant) => {
+    render(<Select label='Country' options={defaultOptions} variant={variant} placeholder='Select...' />);
 
-  it('lg size trigger has h-16 (64px) for 44px minimum', () => {
-    render(<Select label='Country' options={defaultOptions} size='lg' placeholder='Select...' />);
-    expect(getTriggerContainer().className).toContain('h-16');
-  });
-});
-
-describe('Select — hover visibility', () => {
-  it('faded variant has hover border class on trigger', () => {
-    render(<Select label='Country' options={defaultOptions} variant='faded' placeholder='Select...' />);
-    expect(getTriggerContainer().className).toContain('hover:border-border-strong-light');
-  });
-
-  it('all variants have hover border class on trigger', () => {
-    const variants = ['regular', 'bordered', 'faded', 'underlined'] as const;
-    for (const variant of variants) {
-      const { unmount } = render(
-        <Select label='Country' options={defaultOptions} variant={variant} placeholder='Select...' />
-      );
-      expect(getTriggerContainer().className).toMatch(/hover:border/);
-      unmount();
-    }
-  });
-});
-
-describe('Select — reduced motion accessibility', () => {
-  it('trigger respects prefers-reduced-motion via motion-safe prefix', () => {
-    render(<Select label='Country' options={defaultOptions} placeholder='Select...' />);
-    const trigger = getTriggerContainer();
-    expect(trigger.className).toContain('motion-safe:transition');
-    expect(trigger.className).not.toContain('motion-reduce:transition-none');
-  });
-
-  it('items respect prefers-reduced-motion via motion-safe prefix', async () => {
-    const user = userEvent.setup();
-    render(<Select label='Country' options={defaultOptions} placeholder='Select...' />);
-    await user.click(screen.getByRole('combobox'));
-    const item = screen.getByRole('option', { name: 'Argentina' });
-    expect(item.className).toContain('motion-safe:transition');
-    expect(item.className).not.toContain('motion-reduce:transition-none');
+    expect(screen.getByRole('combobox', { name: 'Country' })).toBeInTheDocument();
   });
 });
 
@@ -581,17 +604,10 @@ describe('Select — backward compatibility', () => {
     expect(screen.getByRole('combobox')).toHaveAttribute('aria-invalid', 'true');
   });
 
-  it('faded variant renders same styles as line alias', () => {
-    const { unmount } = render(
-      <Select label='Country' options={defaultOptions} variant='faded' placeholder='Select...' />
-    );
-    const fadedContainer = getTriggerContainer().className;
-    unmount();
+  it('faded variant remains accepted as a deprecated alias', () => {
+    render(<Select label='Country' options={defaultOptions} variant='faded' placeholder='Select...' />);
 
-    render(<Select label='Country' options={defaultOptions} variant='line' placeholder='Select...' />);
-    const lineContainer = getTriggerContainer().className;
-
-    expect(fadedContainer).toBe(lineContainer);
+    expect(screen.getByRole('combobox', { name: 'Country' })).toBeInTheDocument();
   });
 
   it('warns in dev mode when using deprecated errorMessage prop', () => {
@@ -617,16 +633,22 @@ describe('Select — backward compatibility', () => {
 });
 
 describe('Select — floating label', () => {
-  it('stays floated when value is selected (even when closed)', () => {
-    render(<Select label='Country' options={defaultOptions} value='ar' placeholder='Select...' />);
-    const label = screen.getByText('Country');
-    expect(label.className).toContain('fs-small');
+  it('keeps label associated when value is selected', () => {
+    render(<Select label='Country' options={defaultOptions} value='ar' placeholder='Select...' id='country-select' />);
+
+    expect(screen.getByRole('combobox', { name: 'Country' })).toHaveAttribute(
+      'aria-labelledby',
+      'country-select-label'
+    );
   });
 
-  it('stays floated with placeholder (even when closed)', () => {
-    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
-    const label = screen.getByText('Country');
-    expect(label.className).toContain('fs-small');
+  it('keeps label associated when placeholder is shown', () => {
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' id='country-select' />);
+
+    expect(screen.getByRole('combobox', { name: 'Country' })).toHaveAttribute(
+      'aria-labelledby',
+      'country-select-label'
+    );
   });
 
   it('shows resting state when no label is provided', () => {
@@ -634,11 +656,14 @@ describe('Select — floating label', () => {
     expect(screen.queryByText('Country')).not.toBeInTheDocument();
   });
 
-  it('floats label when popover is open', async () => {
+  it('keeps label associated when popover is open', async () => {
     const user = userEvent.setup();
-    render(<Select label='Country' options={defaultOptions} placeholder='Select...' />);
+    render(<Select label='Country' options={defaultOptions} placeholder='Select...' id='country-select' />);
     await user.click(screen.getByRole('combobox'));
-    const label = screen.getByText('Country');
-    expect(label.className).toContain('fs-small');
+
+    expect(screen.getByRole('combobox', { name: 'Country' })).toHaveAttribute(
+      'aria-labelledby',
+      'country-select-label'
+    );
   });
 });

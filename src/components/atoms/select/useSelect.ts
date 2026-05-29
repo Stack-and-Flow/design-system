@@ -6,11 +6,14 @@ import type { IconTone } from '../icon';
 import type { SelectHint, SelectOption, SelectProps } from './types';
 import {
   hintMessageVariants,
+  selectActionGroup,
   selectBase,
   selectClearButton,
+  selectContent,
   selectIndicator,
   selectItem,
   selectLabel,
+  selectNativeTrigger,
   selectPopover,
   selectTrigger,
   selectValue
@@ -79,7 +82,10 @@ type UseSelectReturn = {
   handleKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => void;
   triggerClassName: string;
   popoverClassName: string;
+  contentClassName: string;
+  nativeTriggerClassName: string;
   valueClassName: string;
+  actionGroupClassName: string;
   indicatorClassName: string;
   clearButtonClassName: string;
   labelClassName: string;
@@ -117,6 +123,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     isRequired = false,
     isLoading = false,
     isClearable = false,
+    isFullWidth = false,
     name,
     id: idProp,
     className,
@@ -124,6 +131,10 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     variant = 'regular',
     size = 'md',
     hint,
+    onClick: onClickProp,
+    onKeyDown: onKeyDownProp,
+    onMouseDown: onMouseDownProp,
+    'aria-describedby': ariaDescribedByProp,
     ...rest
   } = props;
 
@@ -208,16 +219,16 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     }
 
     const updatePosition = () => {
-      const trigger = triggerRef.current;
-      if (!trigger) {
+      const container = containerRef.current;
+      if (!container) {
         return;
       }
-      const rect = trigger.getBoundingClientRect();
+      const rect = container.getBoundingClientRect();
       setPopoverStyle({
         position: 'fixed',
         left: rect.left,
         top: rect.bottom + 4,
-        minWidth: trigger.offsetWidth
+        width: rect.width
       });
     };
 
@@ -258,26 +269,42 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     triggerRef.current?.focus();
   }, [onOpenChange]);
 
-  const handleContainerClick = useCallback(() => {
-    if (effectiveDisabled) {
-      return;
-    }
-    if (isOpen) {
-      closePopover();
-    } else {
-      openPopover();
-    }
-  }, [effectiveDisabled, isOpen, closePopover, openPopover]);
+  const handleContainerClick = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      if (effectiveDisabled || e.defaultPrevented) {
+        return;
+      }
+      if (isOpen) {
+        closePopover();
+      } else {
+        openPopover();
+      }
+    },
+    [effectiveDisabled, isOpen, closePopover, openPopover]
+  );
 
-  const handleTriggerMouseDown = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-  }, []);
+  const handleTriggerMouseDown = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      onMouseDownProp?.(e);
+      if (!e.defaultPrevented) {
+        e.preventDefault();
+      }
+    },
+    [onMouseDownProp]
+  );
 
-  const handleTriggerClick = useCallback(() => {
-    if (skipNextClickRef.current) {
-      skipNextClickRef.current = false;
-    }
-  }, []);
+  const handleTriggerClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      onClickProp?.(e);
+      if (e.defaultPrevented) {
+        return;
+      }
+      if (skipNextClickRef.current) {
+        skipNextClickRef.current = false;
+      }
+    },
+    [onClickProp]
+  );
 
   const handleItemSelect = useCallback(
     (option: SelectOption) => {
@@ -338,6 +365,11 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLButtonElement>) => {
+      onKeyDownProp?.(e);
+      if (e.defaultPrevented) {
+        return;
+      }
+
       const enabled = getEnabledIndices();
 
       switch (e.key) {
@@ -413,19 +445,33 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
         }
       }
     },
-    [closePopover, focusedIndex, getEnabledIndices, handleItemSelect, handleTypeAhead, isOpen, openPopover, options]
+    [
+      closePopover,
+      focusedIndex,
+      getEnabledIndices,
+      handleItemSelect,
+      handleTypeAhead,
+      isOpen,
+      onKeyDownProp,
+      openPopover,
+      options
+    ]
   );
 
   const hasFloatingLabel = Boolean(label) && (isOpen || hasValue || Boolean(placeholder));
 
-  const baseClassName = cn(selectBase(), className, classNames?.base);
+  const baseClassName = cn(selectBase({ fullWidth: isFullWidth }), className, classNames?.base);
   const triggerClassName = cn(
     selectTrigger({ variant: resolvedVariant, size: resolvedSize, status }),
-    'items-stretch',
+    label ? 'items-end' : 'items-center',
+    effectiveDisabled && 'pointer-events-none cursor-not-allowed opacity-40',
     classNames?.container,
     classNames?.trigger
   );
+  const contentClassName = selectContent({ hasLabel: Boolean(label) });
+  const nativeTriggerClassName = selectNativeTrigger();
   const valueClassName = cn(selectValue(), classNames?.value);
+  const actionGroupClassName = selectActionGroup({ size: resolvedSize });
   const indicatorClassName = cn(selectIndicator({ isOpen }), classNames?.indicator);
   const popoverClassName = cn(selectPopover(), classNames?.popover);
   const labelClassName = cn(
@@ -458,7 +504,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     'aria-invalid': effectiveHint?.type === 'error' || isInvalid || undefined,
     'aria-required': isRequired || undefined,
     'aria-describedby':
-      [description ? `${id}-description` : null, effectiveHint?.message ? `${id}-hint` : null]
+      [ariaDescribedByProp, description ? `${id}-description` : null, effectiveHint?.message ? `${id}-hint` : null]
         .filter(Boolean)
         .join(' ') || undefined,
     'aria-labelledby': label ? `${id}-label` : undefined,
@@ -486,6 +532,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
         id: `${id}-option-${option.key}`,
         'aria-selected': isSelected,
         'data-focused': isFocused ? 'true' : undefined,
+        'aria-disabled': option.disabled ? 'true' : undefined,
         'data-disabled': option.disabled ? 'true' : undefined,
         onClick: () => handleItemSelect(option)
       } as ComponentProps<'div'>;
@@ -538,7 +585,10 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     handleKeyDown,
     triggerClassName,
     popoverClassName,
+    contentClassName,
+    nativeTriggerClassName,
     valueClassName,
+    actionGroupClassName,
     indicatorClassName,
     clearButtonClassName,
     labelClassName,

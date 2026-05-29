@@ -9,11 +9,12 @@ import { Select } from './Select';
  * validation hints, keyboard navigation with type-ahead, clearable selection, and token-backed visual variants.
  *
  * ## Dependencies
- * Uses `Icon` for the chevron indicator and clear button. Uses `SpinnerCircular` from `spinners-react` for loading feedback.
+ * Uses `Icon` for the chevron indicator and clear button. Uses a token-backed CSS spinner for loading feedback.
  *
  * ## Usage Guide
  * Provide an `options` array with `{ key, label }` objects. Use `defaultValue` for uncontrolled usage
  * and `value` + `onChange` for controlled. Set `isClearable` to allow clearing the current selection.
+ * The default width is fixed so the trigger does not resize after selection; use `isFullWidth` for fluid forms.
  */
 const meta: Meta<typeof Select> = {
   title: 'Atoms/Select',
@@ -305,6 +306,23 @@ export const WithFadedDeprecated: Story = {
     ...Default.args,
     variant: 'faded'
   }
+};
+
+/**
+ * Shows full-width layout behavior inside a constrained parent.
+ */
+export const FullWidth: Story = {
+  args: {
+    ...Default.args,
+    isFullWidth: true
+  },
+  decorators: [
+    (StoryComponent) => (
+      <div className='w-full max-w-modal-md'>
+        <StoryComponent />
+      </div>
+    )
+  ]
 };
 
 /**

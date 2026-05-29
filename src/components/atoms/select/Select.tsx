@@ -18,7 +18,10 @@ export const Select: FC<SelectProps> = (props) => {
     placeholder,
     triggerClassName,
     popoverClassName,
+    contentClassName,
+    nativeTriggerClassName,
     valueClassName,
+    actionGroupClassName,
     indicatorClassName,
     clearButtonClassName,
     labelClassName,
@@ -47,40 +50,38 @@ export const Select: FC<SelectProps> = (props) => {
         </div>
       )}
       <div {...containerProps} className={triggerClassName}>
-        <div className='flex flex-col flex-1 justify-between py-2'>
-          {label && (
-            <label {...labelProps} className={labelClassName}>
-              {label}
-              {isRequired && (
-                <span aria-hidden={true} className='text-brand-light dark:text-brand-dark'>
-                  {' *'}
-                </span>
-              )}
-            </label>
-          )}
-          <button {...triggerProps} className='text-left bg-transparent border-none p-0'>
+        {label && (
+          <label {...labelProps} className={labelClassName}>
+            {label}
+            {isRequired && (
+              <span aria-hidden={true} className='text-brand-light dark:text-brand-dark'>
+                {' *'}
+              </span>
+            )}
+          </label>
+        )}
+        <div className={contentClassName}>
+          <button {...triggerProps} className={nativeTriggerClassName}>
             <span className={valueClassName}>
               {selectedOption ? selectedOption.label : <span className={selectPlaceholder()}>{placeholder}</span>}
             </span>
           </button>
         </div>
-        <div className='flex shrink-0 items-center gap-1'>
+        <div className={actionGroupClassName}>
           {showClearButton && (
-            <span
-              role='button'
-              tabIndex={-1}
+            <button
+              type='button'
               aria-label='Clear selection'
               className={clearButtonClassName}
               onClick={(e) => {
-                e.stopPropagation();
                 handleClear(e);
               }}
             >
               <Icon name='x' size={16} decorative={true} />
-            </span>
+            </button>
           )}
           <span className={indicatorClassName}>
-            <Icon name='chevron-down' size={16} decorative={true} />
+            <Icon name='chevron-down' size={20} decorative={true} />
           </span>
         </div>
       </div>
