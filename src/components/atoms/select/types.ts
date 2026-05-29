@@ -249,11 +249,6 @@ export const selectLoadingVariants = cva(
   'flex min-h-11 items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
 );
 
-export const selectSpinnerVariants = cva([
-  'size-5 animate-spin rounded-full border-2 border-border-light border-t-brand-light',
-  'dark:border-border-dark dark:border-t-brand-dark motion-reduce:animate-none'
-]);
-
 export const selectClearButton = cva([
   'inline-flex items-center justify-center p-0.5 rounded-full shrink-0',
   'border-none bg-transparent cursor-pointer',

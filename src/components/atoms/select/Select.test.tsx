@@ -2,6 +2,11 @@ import { act, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
+vi.mock('spinners-react', () => ({
+  // biome-ignore lint/style/useNamingConvention: matches the named export from spinners-react package
+  SpinnerCircular: () => <span data-testid='select-spinner' />
+}));
+
 import { Select } from './Select';
 import type { SelectOption } from './types';
 import { useSelect } from './useSelect';
@@ -126,6 +131,7 @@ describe('Select — render', () => {
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.getByTestId('select-spinner')).toBeInTheDocument();
     expect(screen.getByText('Loading countries')).toBeInTheDocument();
   });
 

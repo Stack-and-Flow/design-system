@@ -1,8 +1,9 @@
 import type { FC } from 'react';
 import { createPortal } from 'react-dom';
+import { SpinnerCircular } from 'spinners-react';
 import { Icon } from '../icon';
 import type { SelectProps } from './types';
-import { selectDescription, selectLoadingVariants, selectPlaceholder, selectSpinnerVariants } from './types';
+import { selectDescription, selectLoadingVariants, selectPlaceholder } from './types';
 import { useSelect } from './useSelect';
 
 export const Select: FC<SelectProps> = (props) => {
@@ -97,7 +98,9 @@ export const Select: FC<SelectProps> = (props) => {
             <div {...popoverProps} className={popoverClassName} style={popoverStyle}>
               {isLoading ? (
                 <div className={selectLoadingVariants()} role='status' aria-live='polite'>
-                  <span aria-hidden='true' className={selectSpinnerVariants()} />
+                  <span aria-hidden='true' className='inline-flex text-brand-light dark:text-brand-dark'>
+                    <SpinnerCircular color='currentColor' thickness={200} size='1.25em' />
+                  </span>
                   <span>{loadingLabel}</span>
                 </div>
               ) : (

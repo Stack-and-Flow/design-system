@@ -9,7 +9,7 @@ import { Select } from './Select';
  * validation hints, keyboard navigation with type-ahead, clearable selection, and token-backed visual variants.
  *
  * ## Dependencies
- * Uses `Icon` for the chevron indicator and clear button. Uses a token-backed CSS spinner for loading feedback.
+ * Uses `Icon` for the chevron indicator and clear button. Uses `spinners-react` for loading feedback.
  *
  * ## Usage Guide
  * Provide an `options` array with `{ key, label }` objects. Use `defaultValue` for uncontrolled usage

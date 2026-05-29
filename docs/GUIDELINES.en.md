@@ -222,7 +222,7 @@ vi.mock('spinners-react', () => ({
 }));
 ```
 
-When a component needs a real loading spinner, prefer `SpinnerCircular` from `spinners-react` where appropriate, following `Button` as the reference. Structural, non-interactive loading surfaces may use a token-backed CSS spinner when the component owns that custom loading surface.
+When a component renders a loading spinner, it must use `SpinnerCircular` from `spinners-react`, following `Button` as the reference. Do not implement component-local CSS spinners.
 
 Also mock any CSS files imported directly from the component:
 

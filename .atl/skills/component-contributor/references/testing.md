@@ -61,7 +61,7 @@ import { useMyComponent } from './useMyComponent';
 
 **Why**: jsdom cannot handle dynamic imports (lucide-react/dynamic), CSS animations (spinners-react), or raw CSS files. Mocking them prevents test crashes that are unrelated to component logic.
 
-**Rule**: Mock only what the component imports. If the component imports `spinners-react`, mock `SpinnerCircular`; do not add a spinner mock to components that use a token-backed CSS loader and never import the package. If a component needs an actual loading spinner, prefer `SpinnerCircular` from `spinners-react` where appropriate, following `Button` as the canonical example.
+**Rule**: Mock only what the component imports. Any component that renders a loading spinner must import `SpinnerCircular` from `spinners-react`, following `Button` as the canonical example, and must mock that import in tests. Do not implement component-local CSS spinners.
 
 ---
 
