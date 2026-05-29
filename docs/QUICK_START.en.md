@@ -34,7 +34,7 @@ Go to the [GitHub Project board](https://github.com/orgs/Stack-and-Flow/projects
 
 > **First time?** Look for issues tagged `layer: atom` with `category: component` — these are self-contained and well-defined.
 
-Before writing code, run the canonical **START WORK** gate:
+Before writing code, make sure the spec is defined and the issue has the `status:approved` label. Only then run **START WORK**:
 - assign the issue to yourself;
 - move it to `In progress`;
 - record the branch and worktree plan.
@@ -64,7 +64,7 @@ Branch naming follows [Conventional Commits](https://www.conventionalcommits.org
 
 ## 5. Build your component
 
-Every component follows the **6-file pattern**. Use `CONTRIBUTOR-FLOW.md` as the canonical workflow and create it manually under the correct atomic layer:
+Every component follows the **6-file pattern**. Use `CONTRIBUTOR-FLOW.en.md` as the canonical workflow and create it manually under the correct atomic layer:
 
 ```
 src/components/atoms/your-component/
@@ -76,7 +76,7 @@ src/components/atoms/your-component/
 └── index.ts                   # Public exports
 ```
 
-Read [CONTRIBUTOR-FLOW.md](./CONTRIBUTOR-FLOW.md) for the full workflow and [GUIDELINES.en.md](./GUIDELINES.en.md) for architecture rules before writing code.
+Read [CONTRIBUTOR-FLOW.en.md](./CONTRIBUTOR-FLOW.en.md) for the full workflow and [GUIDELINES.en.md](./GUIDELINES.en.md) for architecture rules before writing code.
 
 ## 6. Run tests
 

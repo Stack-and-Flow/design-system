@@ -14,7 +14,7 @@ metadata:
 Use this skill for Stack-and-Flow GitHub issue + Project board work. It has four modes:
 
 - **CREATE** — create issue(s), add to Project, set fields.
-- **START WORK** — assign the issue, move the Project item to `In progress`, and record the branch/worktree plan before implementation starts.
+- **START WORK** — after the linked issue has label `status:approved`, assign the issue, move the Project item to `In progress`, and record the branch/worktree plan before implementation starts.
 - **END WORK** — comment validation/PR evidence and move the Project item to `Done` only after the task is genuinely complete.
 - **AUDIT** — detect malformed existing issues or board items.
 
@@ -70,7 +70,7 @@ Option IDs:
 - Avoid accent marks in section headings; body text may use accents.
 - Always write multi-line issue bodies to a temp file and pass `--body-file`.
 - Confirm task name, tier/type, reference URL when applicable, assignee, team, and category before CREATE.
-- Before implementation starts from a GitHub issue, run START WORK: assign the issue to the contributor/user and move the Project item to `In progress`.
+- Before implementation starts from a GitHub issue, require the exact issue label `status:approved`, then run START WORK: assign the issue to the contributor/user and move the Project item to `In progress`.
 - Before marking a task done, run END WORK: add validation/PR evidence and move the Project item to `Done` only when merged or explicitly approved by the maintainer/user.
 - Do not invent a missing reference URL; ask or research.
 
@@ -114,19 +114,31 @@ $itemId = gh project item-add 1 `
 
 ## Mode 2 — START WORK
 
-Run this before implementation starts from an existing GitHub issue or board card, unless the user explicitly asks to work offline/no-network. In offline mode, do not attempt GitHub mutations; record the skipped START WORK state in the handoff instead.
+Run this before implementation starts from an existing GitHub issue or board card, after the linked issue has label `status:approved`. Offline/no-network mode may skip GitHub mutations only after approval evidence confirms the label is present; it does not permit implementation without `status:approved`.
 
 Inputs required:
 
 1. Issue URL or issue number.
-2. GitHub username of the contributor/user doing the work.
-3. Planned branch name.
-4. Planned worktree path when a worktree will be used.
+2. Evidence that the linked issue has label `status:approved`.
+3. GitHub username of the contributor/user doing the work.
+4. Planned branch name.
+5. Planned worktree path when a worktree will be used.
 
 Steps:
 
 1. Confirm the issue is the right task and the contributor/user is correct.
-2. Assign the issue:
+2. Verify the exact issue label `status:approved` is present. If it is missing, stop; do not move the Project item to `In progress`.
+
+```powershell
+$approvalLabel = gh issue view {issue_number} `
+  --repo Stack-and-Flow/design-system `
+  --json labels `
+  --jq '.labels[].name' | Select-String -SimpleMatch 'status:approved'
+```
+
+If `$approvalLabel` is empty, the approval gate is not satisfied. Stop; implementation must not start under any circumstance.
+
+3. Assign the issue:
 
 ```powershell
 gh issue edit {issue_number} `
@@ -134,8 +146,8 @@ gh issue edit {issue_number} `
   --add-assignee {username}
 ```
 
-3. Ensure the issue is on Project `1`. If not, add it with `gh project item-add`.
-4. Resolve the Project item ID for existing cards:
+4. Ensure the issue is on Project `1`. If not, add it with `gh project item-add`.
+5. Resolve the Project item ID for existing cards:
 
 ```powershell
 $issueUrl = "https://github.com/Stack-and-Flow/design-system/issues/{issue_number}"
@@ -148,7 +160,7 @@ $itemId = gh project item-list 1 `
 
 If `$itemId` is empty after adding/checking the Project item, stop and report the blocker.
 
-5. Move Project Status to `In progress`:
+6. Move Project Status to `In progress`:
 
 ```powershell
 gh project item-edit `
@@ -158,14 +170,15 @@ gh project item-edit `
   --single-select-option-id 47fc9ee4
 ```
 
-6. Confirm Team and Category are set. If missing, set them using the option IDs above.
-7. Report the work-start state:
+7. Confirm Team and Category are set. If missing, set them using the option IDs above.
+8. Report the work-start state:
 
 ```markdown
 ## Work Started
 
 **Issue**: #{number} — {title}
 **Assignee**: @{username}
+**Approval gate**: issue label `status:approved` verified
 **Project status**: In progress
 **Team**: {team}
 **Category**: {category}
@@ -173,7 +186,7 @@ gh project item-edit `
 **Worktree**: `{path or "not used"}`
 ```
 
-Do not start implementation if assignment, item lookup, or `In progress` status fails, unless the user explicitly asks to continue offline/no-network.
+Do not start implementation if the `status:approved` label is missing or unverified. Do not start implementation if assignment, item lookup, or `In progress` status fails, unless the user explicitly asks to continue offline/no-network after the approval label has been verified.
 
 ## Branch and Worktree Naming
 
@@ -311,7 +324,8 @@ For START WORK, return the `## Work Started` report shown in Mode 2, or:
 ## Work Start Skipped
 
 **Issue**: #{number} — {title}
-**Reason**: offline/no-network requested or GitHub mutation failed
+**Reason**: offline/no-network requested or GitHub mutation failed after `status:approved` was verified
+**Approval gate**: issue label `status:approved` verified; if not verified, implementation remains blocked
 **Required follow-up**: assign issue, move Project status to `In progress`, confirm team/category
 **Branch**: `{branch}`
 **Worktree**: `{path or "not used"}`

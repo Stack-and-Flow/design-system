@@ -7,10 +7,10 @@ This is the canonical document for contributing components to the design system.
 ## Quick summary
 
 ```text
-Project task → START WORK → Research → Spec proposal skill → Validated issue spec → Spec review → Visual preflight → Plan → Implementation → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
+Project task → Research → Spec proposal skill → Validated issue spec → wait for `status:approved` → START WORK → Spec review → Visual preflight → Plan → Implementation → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
 ```
 
-Core rule: **AI executes, the contributor decides**. The spec, visual criteria, and checkpoint approvals remain human responsibility.
+Core rule: **AI executes, the contributor decides**. The spec, visual criteria, and checkpoint approvals remain human responsibility. After the validated spec is written in the task, implementation stays blocked until the linked issue has the `status:approved` label.
 
 ---
 
@@ -34,12 +34,8 @@ If these sources disagree, the authority order is: `GUIDELINES*.md` / `DESIGN*.m
 
 1. Pick a task in the [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1).
 2. Verify that it has an issue attached. The issue is the implementation contract.
-3. Run the **START WORK** gate:
-   - assign the issue to yourself;
-   - move the Project item to **In progress**;
-   - confirm Team and Category;
-   - record the branch and worktree plan.
-4. If the user requested offline/no-network work, do not mutate GitHub: record the START WORK follow-up and continue with local work only.
+3. Do not run **START WORK** yet if the spec is not defined and approved. The contributor may research and propose the spec, but must not start implementation.
+4. If the user requested offline/no-network work, do not mutate GitHub: record the required follow-up. Do not start implementation until verifying that the issue has the `status:approved` label.
 
 ---
 
@@ -89,10 +85,10 @@ The skill must:
 3. List assumptions to validate.
 4. Wait for human approval.
 5. Only after approval, write `## Validated component spec` in the issue.
-6. Verify that the Project item remains in `In progress` when appropriate.
-7. Indicate the next step: start `component-contributor`.
+6. Leave the task waiting for approval: do not move it to `In progress` from `component-spec-proposer`.
+7. Indicate the next step: wait for the `status:approved` issue label before starting `component-contributor`.
 
-Do not use `component-contributor` to implement until the spec is validated.
+Do not use `component-contributor` to implement until the spec is validated and the issue has the `status:approved` label.
 
 ---
 
@@ -116,7 +112,20 @@ The validated spec must live in the issue as a verifiable contract.
 
 ---
 
-## Step 5 — Create the branch, sibling worktree, and environment
+## Step 5 — Wait for `status:approved` and run START WORK
+
+After documenting the spec, the contributor must wait for explicit maintainer/project lead approval. The operational signal is the exact GitHub label `status:approved` on the linked issue; it is not a free-text comment and it does not replace the Project Status field, which still uses `Todo`, `In progress`, and `Done`.
+
+Rules:
+
+- Do not create the implementation branch, plan, or code before `status:approved`.
+- Do not move the Project item to `In progress` from the spec proposal phase.
+- When the `status:approved` label is present on the issue, run **START WORK**: assign the issue, move the Project item to `In progress`, confirm Team/Category, and record branch/worktree.
+- If the `status:approved` label is missing, stop and request approval; do not replace it with implicit chat approval.
+
+---
+
+## Step 6 — Create the branch, sibling worktree, and environment
 
 If the task comes from an issue, use issue-derived naming:
 
@@ -153,7 +162,7 @@ Use one branch per work unit: `feat/`, `fix/`, `docs/`, `refactor/`, `chore/`.
 
 ---
 
-## Step 6 — Start the AI implementation flow
+## Step 7 — Start the AI implementation flow
 
 In opencode/gentle-ai, share the issue URL:
 
@@ -164,10 +173,10 @@ Implement this component using component-contributor.
 
 Issue: {issue_url}
 
-Use the `## Validated component spec` section as the contract. Do not invent props or behavior outside the spec. Pause at spec review, visual preflight, and plan checkpoints before writing code.
+Use the `## Validated component spec` section as the contract. Before reading the spec in detail, planning, or writing code, verify that the issue has the `status:approved` label; if it is missing, stop. Run START WORK before implementation intake. Do not invent props or behavior outside the spec. Pause at spec review, visual preflight, and plan checkpoints before writing code.
 ```
 
-The agent must load `component-contributor` and consume the validated spec from `component-spec-proposer`. If it skips a phase, stop it.
+The agent must load `component-contributor`, check the `status:approved` label, run START WORK, and only then consume the validated spec from `component-spec-proposer`. If it skips a phase, stop it.
 
 ---
 
@@ -175,11 +184,12 @@ The agent must load `component-contributor` and consume the validated spec from 
 
 ### Phase 1 — Read the validated spec
 
-The agent reads the `## Validated component spec` section in the issue and extracts the component, tier, props, variants, states, accessibility, reference, and design notes.
+Before this phase, the agent must already have verified the `status:approved` label and completed START WORK. It then reads the `## Validated component spec` section in the issue and extracts the component, tier, props, variants, states, accessibility, reference, and design notes.
 
 Expected output:
 
 - spec summary;
+- evidence of the `status:approved` label and START WORK;
 - questions if anything is ambiguous;
 - reference/token modules it plans to load.
 

@@ -77,26 +77,27 @@ Este proyecto usa GitHub Issues + GitHub Projects como flujo de trabajo.
 Ruta corta:
 
 1. Elegí una issue del [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1).
-2. Antes de implementar, ejecutá el flujo **START WORK**:
+2. Antes de implementar, verificá que la spec esté definida y que la issue tenga el label `status:approved`.
+3. Recién después ejecutá **START WORK**:
    - asignar la issue al contributor;
    - mover el Project item a `In progress`;
    - registrar branch y worktree.
-3. Usá branch issue-based:
+4. Usá branch issue-based:
    - `feat/{issue-number}-{slug}`
    - `fix/{issue-number}-{slug}`
    - `docs/{issue-number}-{slug}`
-4. Si necesitás worktree, crealo como sibling del repo:
+5. Si necesitás worktree, crealo como sibling del repo:
    - `../design-system-{type}-{issue-number}-{slug}`
    - no en `/tmp`, salvo pedido explícito.
-5. Implementá con el patrón de 6 archivos.
-6. Corré tests/build/revisión visual según corresponda.
-7. Antes de commit/review, limpiá artefactos MCP:
+6. Implementá con el patrón de 6 archivos.
+7. Corré tests/build/revisión visual según corresponda.
+8. Antes de commit/review, limpiá artefactos MCP:
 
 ```bash
 rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output
 ```
 
-8. Al cerrar, usá **END WORK** sólo si hay PR merged o aprobación explícita del maintainer/usuario, con evidencia de validación.
+9. Al cerrar, usá **END WORK** sólo si hay PR merged o aprobación explícita del maintainer/usuario, con evidencia de validación.
 
 Documentación recomendada:
 

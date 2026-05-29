@@ -9,7 +9,7 @@ body:
         ## New Component Task
         Use this for atoms, molecules, and organisms. New components must go through `component-spec-proposer` before implementation.
 
-        Current flow: reference and context -> validated component spec -> START WORK Project gate -> implementation -> component audit, visual review, accessibility evidence -> PR -> END WORK after merge or maintainer approval.
+        Current flow: reference and context -> validated component spec -> wait for issue label `status:approved` -> START WORK Project gate -> implementation -> component audit, visual review, accessibility evidence -> PR -> END WORK after merge or maintainer approval.
 
         Set the title prefix to `[ATOMS]`, `[MOLECULES]`, or `[ORGANISMS]` based on the selected level.
 
@@ -90,7 +90,7 @@ body:
       label: Workflow gates
       options:
         - label: Spec proposal must be approved before implementation starts.
-        - label: START WORK must assign the issue, move Project status to `In progress`, and record branch/worktree.
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
         - label: Implementation must follow the 6-file component pattern.
         - label: Component audit, visual review, accessibility evidence, and focused tests are required before PR review.
         - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.

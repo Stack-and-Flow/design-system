@@ -7,10 +7,10 @@ Este es el documento canónico para contribuir componentes al design system. `CO
 ## Resumen rápido
 
 ```text
-Project task → START WORK → Research → Spec proposal skill → Validated issue spec → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
+Project task → Research → Spec proposal skill → Validated issue spec → esperar `status:approved` → START WORK → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
 ```
 
-La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana.
+La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana. Después de escribir la spec validada en la tarea, la implementación queda bloqueada hasta que la issue asociada tenga el label `status:approved`.
 
 ---
 
@@ -34,12 +34,8 @@ Si hay contradicción, el orden de autoridad es: `GUIDELINES.md` / `DESIGN.md` p
 
 1. Elegí una tarea en el [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1).
 2. Verificá que tenga issue asociada. La issue es el contrato de implementación.
-3. Corré el gate **START WORK**:
-   - asignate la issue;
-   - mové el Project item a **In progress**;
-   - confirmá Team y Category;
-   - registrá branch y worktree plan.
-4. Si el usuario pidió trabajo offline/no-network, no mutés GitHub: dejá registrado el follow-up de START WORK y seguí solo con trabajo local.
+3. No corras **START WORK** todavía si la spec no está definida y aprobada. El contributor puede investigar y proponer la spec, pero no puede arrancar implementación.
+4. Si el usuario pidió trabajo offline/no-network, no mutés GitHub: dejá registrado el follow-up necesario. No empieces implementación hasta verificar que la issue tenga el label `status:approved`.
 
 ---
 
@@ -89,10 +85,10 @@ La skill debe:
 3. Listar assumptions a validar.
 4. Esperar aprobación humana.
 5. Recién después de la aprobación, escribir `## Validated component spec` en la issue.
-6. Verificar que el Project item quede en `In progress` cuando corresponda.
-7. Indicar el siguiente paso: arrancar `component-contributor`.
+6. Dejar la tarea esperando aprobación: no moverla a `In progress` desde `component-spec-proposer`.
+7. Indicar el siguiente paso: esperar el marcador `status:approved` antes de arrancar `component-contributor`.
 
-No uses `component-contributor` para implementar hasta que la spec esté validada.
+No uses `component-contributor` para implementar hasta que la spec esté validada y la issue tenga el label `status:approved`.
 
 ---
 
@@ -116,7 +112,20 @@ La spec validada debe quedar en la issue como contrato verificable.
 
 ---
 
-## Paso 5 — Crear rama, worktree sibling y preparar entorno
+## Paso 5 — Esperar `status:approved` y correr START WORK
+
+Después de documentar la spec, el contributor debe esperar aprobación explícita de maintainer/project lead. La señal operativa es el label exacto de GitHub `status:approved` en la issue asociada; no es un comentario libre ni reemplaza el campo Project Status, que sigue usando `Todo`, `In progress` y `Done`.
+
+Reglas:
+
+- No crear rama de implementación, plan ni código antes de `status:approved`.
+- No mover el Project item a `In progress` desde la fase de spec proposal.
+- Cuando el label `status:approved` esté presente en la issue, corré **START WORK**: asignate la issue, mové el Project item a `In progress`, confirmá Team/Category y registrá branch/worktree.
+- Si falta el label `status:approved`, frená y pedí aprobación; no lo reemplaces por aprobación implícita en chat.
+
+---
+
+## Paso 6 — Crear rama, worktree sibling y preparar entorno
 
 Si la tarea viene de una issue, usá naming derivado de issue:
 
@@ -153,7 +162,7 @@ Usá una rama por unidad de trabajo: `feat/`, `fix/`, `docs/`, `refactor/`, `cho
 
 ---
 
-## Paso 6 — Iniciar el flujo de implementación con IA
+## Paso 7 — Iniciar el flujo de implementación con IA
 
 En opencode/gentle-ai, compartí la URL de la issue:
 
@@ -164,10 +173,10 @@ Implementá este componente usando component-contributor.
 
 Issue: {issue_url}
 
-Usá la sección `## Validated component spec` como contrato. No inventes props ni comportamiento fuera de la spec. Pausá en los checkpoints de spec review, visual preflight y plan antes de escribir código.
+Usá la sección `## Validated component spec` como contrato. Antes de leer la spec en detalle, planificar o escribir código, verificá que la issue tenga el label `status:approved`; si falta, frená. Ejecutá START WORK antes del intake de implementación. No inventes props ni comportamiento fuera de la spec. Pausá en los checkpoints de spec review, visual preflight y plan antes de escribir código.
 ```
 
-El agente debe cargar `component-contributor` y consumir la spec validada por `component-spec-proposer`. Si salta una fase, frenalo.
+El agente debe cargar `component-contributor`, comprobar el label `status:approved`, correr START WORK y recién después consumir la spec validada por `component-spec-proposer`. Si salta una fase, frenalo.
 
 ---
 
@@ -175,11 +184,12 @@ El agente debe cargar `component-contributor` y consumir la spec validada por `c
 
 ### Fase 1 — Lectura de spec validada
 
-El agente lee la sección `## Validated component spec` de la issue y extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
+Antes de esta fase, el agente ya debe haber verificado el label `status:approved` y completado START WORK. Luego lee la sección `## Validated component spec` de la issue y extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
 
 Salida esperada:
 
 - resumen de la spec;
+- evidencia del label `status:approved` y START WORK;
 - preguntas si algo es ambiguo;
 - módulos de referencia/tokens que va a cargar.
 

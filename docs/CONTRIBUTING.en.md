@@ -38,7 +38,7 @@ The design system uses **Space Grotesk Variable**, loaded via `@fontsource-varia
 
 ## How to Create a New Component
 
-The canonical component workflow is [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md). This document only summarizes the main rules.
+The canonical component workflow is [`CONTRIBUTOR-FLOW.en.md`](./CONTRIBUTOR-FLOW.en.md). This document only summarizes the main rules.
 
 Every component MUST strictly follow the Atomic Design + Container/Presentational architecture (detailed in [`GUIDELINES.en.md`](./GUIDELINES.en.md)).
 
@@ -55,7 +55,7 @@ Every component MUST strictly follow the Atomic Design + Container/Presentationa
    ```
 3. **Implement in order**: `types.ts` → hook → component → tests → stories → `index.ts`.
 4. **Design visual semantics deliberately**: decorative glow/elevation belongs to the component contract. When consumers may need a quieter version of a glow-bearing control, prefer `emphasis="default" | "flat"` over a raw `glow?: boolean` prop. Never let decorative emphasis disable focus-visible/accessibility glow.
-5. **Review before PR**: run the pre-PR component review defined in `CONTRIBUTOR-FLOW.md`.
+5. **Review before PR**: run the pre-PR component review defined in `CONTRIBUTOR-FLOW.en.md`.
 
 ---
 
@@ -95,7 +95,7 @@ Before opening a PR, verify:
 - `main` is the base branch. All PRs target `main`.
 - If the task comes from an issue, use: `{type}/{issue-number}-{slug}` (for example `feat/123-button`).
 - If you also use a worktree, use the matching sibling worktree path: `../design-system-{type}-{issue-number}-{slug}`.
-- See [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md) for the full naming, START WORK, and END WORK lifecycle.
+- See [`CONTRIBUTOR-FLOW.en.md`](./CONTRIBUTOR-FLOW.en.md) for the full naming, START WORK, and END WORK lifecycle.
 
 ### Commits
 
@@ -134,7 +134,7 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 
 ### Pull Request Process
 
-1. Before implementing from an issue, run the canonical **START WORK** gate: assign the issue, move it to `In progress`, and record the branch/worktree plan.
+1. Before implementing from an issue, verify that the spec is defined and the issue has the `status:approved` label; only then run **START WORK**: assign the issue, move it to `In progress`, and record the branch/worktree plan.
 2. Push your branch and open a PR against `main`.
 3. Use a PR title with the same Conventional Commit format, for example `feat(button): add loading state`.
 4. You can request automated Copilot review until the PR is ready for human review.
@@ -194,23 +194,24 @@ The agents will already know:
 
 ### AI Workflow for Components
 
-When using gentle-ai/opencode, the agent follows `component-contributor`. The full canonical workflow is [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md).
+When using gentle-ai/opencode, the agent follows `component-contributor`. The full canonical workflow is [`CONTRIBUTOR-FLOW.en.md`](./CONTRIBUTOR-FLOW.en.md).
 
 Phase summary:
 
-1. **START WORK** — assign the issue, move it to `In progress`, and record branch/worktree.
-2. **Research** — investigate references, API, states, accessibility, and design.
-3. **Spec proposal** — use `component-spec-proposer` to turn the task and reference into a validated issue spec.
-4. **Spec intake** — `component-contributor` reads the `## Validated component spec` section without inventing behavior.
-5. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
-6. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
-7. **Plan** — review and approve files, variants, tests, stories, and accessibility.
-8. **Implementation** — the agent creates the 6 files and explains decisions.
-9. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
-10. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
-11. **END WORK** — move the task to `Done` only with a merged PR or explicit maintainer/user approval plus validation evidence.
+1. **Research** — investigate references, API, states, accessibility, and design.
+2. **Spec proposal** — use `component-spec-proposer` to turn the task and reference into a validated issue spec.
+3. **Approval gate** — once the spec is written, wait for the `status:approved` label on the issue; without that label there is no START WORK or implementation under any circumstance.
+4. **START WORK** — after the `status:approved` label, assign the issue, move it to `In progress`, and record branch/worktree.
+5. **Spec intake** — with START WORK already completed, `component-contributor` reads the `## Validated component spec` section without inventing behavior.
+6. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
+7. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
+8. **Plan** — review and approve files, variants, tests, stories, and accessibility.
+9. **Implementation** — the agent creates the 6 files and explains decisions.
+10. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
+11. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
+12. **END WORK** — move the task to `Done` only with a merged PR or explicit maintainer/user approval plus validation evidence.
 
-> To activate the full flow, first prepare the spec with `component-spec-proposer`; after validation, share the issue URL and ask the agent to implement the component.
+> To activate the full flow, first prepare the spec with `component-spec-proposer`; after validation, wait for `status:approved`, share the issue URL, and ask the agent to implement the component.
 
 ---
 

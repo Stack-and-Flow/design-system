@@ -9,7 +9,7 @@ body:
         ## Update or Refactor Task
         Use this for behavior extensions, API changes, refactors, and quality improvements that are not simple bug fixes.
 
-        Current flow: define motivation and scope -> approve spec/plan when behavior changes -> START WORK Project gate -> implement -> validation and audit evidence -> PR -> END WORK after merge or maintainer approval.
+        Current flow: define motivation and scope -> record validated spec/plan when behavior changes -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> validation and audit evidence -> PR -> END WORK after merge or maintainer approval.
 
   - type: input
     id: affected-area
@@ -117,7 +117,7 @@ body:
     attributes:
       label: Workflow gates
       options:
-        - label: START WORK must assign the issue, move Project status to `In progress`, and record branch/worktree before implementation.
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
         - label: PR must link this issue and include validation evidence.
         - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 

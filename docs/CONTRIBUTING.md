@@ -133,7 +133,7 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 
 ### Proceso de Pull Request
 
-1. Antes de implementar desde una issue, corre el lifecycle gate **START WORK** del flujo canónico: asignar la issue, moverla a `In progress` y registrar branch/worktree.
+1. Antes de implementar desde una issue, verificá que la spec esté definida y que la issue tenga el label `status:approved`; recién ahí corré **START WORK**: asignar la issue, moverla a `In progress` y registrar branch/worktree.
 2. Sube tu rama y abre un PR contra `main`.
 3. Usa un título de PR con el mismo formato Conventional Commit, por ejemplo `feat(button): add loading state`.
 4. Puedes pedir revisión automática a Copilot hasta que esté listo para revisión humana.
@@ -202,19 +202,20 @@ Al usar gentle-ai (opencode), el agente sigue `component-contributor`. El flujo 
 
 Resumen de fases:
 
-1. **START WORK** — asignas la issue, la mueves a `In progress` y registras branch/worktree.
-2. **Research** — investigas referencias, API, estados, accesibilidad y diseño.
-3. **Spec proposal** — usas `component-spec-proposer` para convertir la tarea y referencia en una spec validada en la issue.
-4. **Spec intake** — `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
-5. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
-6. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
-7. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
-8. **Implementación** — el agente crea los 6 archivos y explica decisiones.
-9. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
-10. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
-11. **END WORK** — al cerrar, la tarea pasa a `Done` solo con PR merged o aprobación explícita, más evidencia de validación.
+1. **Research** — investigas referencias, API, estados, accesibilidad y diseño.
+2. **Spec proposal** — usas `component-spec-proposer` para convertir la tarea y referencia en una spec validada en la issue.
+3. **Approval gate** — una vez escrita la spec, esperas el label `status:approved` en la issue; sin ese label no hay START WORK ni implementación bajo ningún concepto.
+4. **START WORK** — después del label `status:approved`, asignas la issue, la mueves a `In progress` y registras branch/worktree.
+5. **Spec intake** — con START WORK ya completado, `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
+6. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
+7. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
+8. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
+9. **Implementación** — el agente crea los 6 archivos y explica decisiones.
+10. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
+11. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
+12. **END WORK** — al cerrar, la tarea pasa a `Done` solo con PR merged o aprobación explícita, más evidencia de validación.
 
-> Para activar el flujo completo, primero pedí la spec con `component-spec-proposer`; después de validarla, comparte la URL de la issue y di "implementa este componente".
+> Para activar el flujo completo, primero pedí la spec con `component-spec-proposer`; después de validarla, esperá `status:approved`, compartí la URL de la issue y decí "implementa este componente".
 
 ---
 

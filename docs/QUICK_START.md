@@ -36,7 +36,7 @@ Ve al [tablero del proyecto en GitHub](https://github.com/orgs/Stack-and-Flow/pr
 
 > **¿Primera vez?** Busca issues etiquetados como `layer: atom` con `category: component` — son autocontenidos y bien definidos.
 
-Antes de escribir código, corré el lifecycle gate **START WORK** del flujo canónico:
+Antes de escribir código, asegurate de que la spec esté definida y la issue tenga el label `status:approved`. Recién entonces corré **START WORK**:
 - asignate la issue;
 - movela a `In progress`;
 - registrá branch y worktree plan.
