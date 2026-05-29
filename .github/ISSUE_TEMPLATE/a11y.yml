@@ -32,6 +32,18 @@ body:
     validations:
       required: true
 
+
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      description: Required for issue creation. The agent must also set the GitHub issue milestone to this value.
+      options:
+        - Core
+        - MVP
+        - V1
+    validations:
+      required: true
   - type: dropdown
     id: wcag-level
     attributes:

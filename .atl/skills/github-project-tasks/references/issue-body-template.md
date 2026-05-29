@@ -13,6 +13,10 @@ Canonical Stack-and-Flow issue body for automated issue creation. Keep headings 
 
 {team}
 
+### Milestone
+
+{milestone}
+
 ### Reference
 
 {reference_url_or_not_applicable}
@@ -29,7 +33,7 @@ Out of scope:
 
 ### Current workflow
 
-- [ ] Issue triaged with Team and Category fields set on the Project board.
+- [ ] Issue triaged with Team and Category fields set on the Project board, and GitHub milestone assigned.
 - [ ] Specification or plan recorded in this issue when behavior, API, accessibility, or tokens are affected.
 - [ ] Validated spec reviewed and linked issue labeled `status:approved` before implementation starts.
 - [ ] START WORK completed after label `status:approved`: assignee set, Project status moved to `In progress`, branch/worktree recorded.
@@ -104,5 +108,6 @@ Add related links, Figma references, docs, logs, screenshots, or prior art here.
 
 - Do not add emoji to section headings.
 - Avoid accent marks in headings; body text may use accents.
-- Replace `{TaskName}`, `{category}`, `{team}`, and `{reference_url_or_not_applicable}` before creating the issue.
+- Replace `{TaskName}`, `{category}`, `{team}`, `{milestone}`, and `{reference_url_or_not_applicable}` before creating the issue.
+- The selected milestone must also be assigned as the GitHub issue milestone; body text alone is not enough.
 - Write this body to a temp file and pass it with `--body-file`; do not pass multi-line markdown directly through `--body`.
