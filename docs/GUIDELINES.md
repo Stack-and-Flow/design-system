@@ -30,7 +30,7 @@ Cada componente DEBE vivir dentro de un directorio en kebab-case (`src/component
 | `useButton.ts`       | Hook Container            | Contiene TODA la lógica, estado, refs, handlers y consumo de clases `cva`.    |
 | `Button.tsx`         | Componente Presentacional | SOLO JSX. Consume el hook. Sin lógica, estado ni CVA.                         |
 | `Button.test.tsx`    | Tests                     | Cubre hook y comportamiento del componente.                                   |
-| `Button.stories.tsx` | Documentación             | Contiene Storybook autodocs, `args` y un bloque JSDoc encima de `const meta`. |
+| `Button.stories.tsx` | Documentación             | Contiene Storybook autodocs, `args`, JSDoc encima de `const meta` y JSDoc encima de cada story. |
 | `index.ts`           | API Pública               | Re-exporta el componente y los tipos.                                         |
 
 ### 1. Tipos y Variantes (`types.ts`)
@@ -110,15 +110,14 @@ const Button: FC<ButtonProps & ComponentProps<"button">> = ({ ...props }) => {
   );
 };
 
-export default Button;
+export { Button };
 ```
 
 ### 4. API Pública (`index.ts`)
 
 ```typescript
-import Button from "./Button";
-export * from "./types";
-export default Button;
+export { Button } from "./Button";
+export type * from "./types";
 ```
 
 ---
@@ -128,7 +127,7 @@ export default Button;
 - **`type` sobre `interface`**: USA SIEMPRE `export type ComponentProps = {}`. NO uses `interface`.
 - **Sin `any`**: El uso explícito de `any` está estrictamente prohibido. Si no conoces el tipo, usa `unknown` o reduce el tipo correctamente.
 - **Props explícitas**: Nunca tipifiques props implícitamente. Todo DEBE estar definido explícitamente en `types.ts`.
-- **Definición de componente**: Usa `FC<ComponentProps>` y `export default Component`.
+- **Definición de componente**: Usa `FC<ComponentProps>` y exports nombrados — nunca default exports para componentes.
 
 ---
 
@@ -159,7 +158,9 @@ export default Button;
     tags: ["autodocs"],
   };
   ```
-- **Args**: Define `args` por defecto para la story base.
+- **Sin `parameters.docs.description.component`**: la documentación del componente vive en el bloque JSDoc encima de `const meta`.
+- **Stories documentadas**: añade un bloque JSDoc corto encima de cada `export const StoryName`.
+- **Args**: Define `args` por defecto para la story base sin pisar `defaultVariants`.
 
 ---
 
@@ -288,7 +289,7 @@ describe("useButton — logic", () => {
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import Button from './Button';
+import { Button } from './Button';
 
 describe('Button — component behavior', () => {
   it('is disabled when isLoading is true', () => {

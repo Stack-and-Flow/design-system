@@ -69,6 +69,7 @@ Storybook is our single source of truth. Every component MUST be fully documente
   - `## Description` is required.
   - `## Dependencies` only when the component uses other components or external primitives.
   - `## Usage Guide` only when usage is complex.
+- **No `parameters.docs.description.component`**: component docs live in JSDoc above `const meta`.
 - **No `play` functions**: Interactions are tested in `ComponentName.test.tsx`, not in stories.
 
 ---
@@ -92,7 +93,9 @@ Before opening a PR, verify:
 ### Branching Strategy
 
 - `main` is the base branch. All PRs target `main`.
-- Branch naming convention: `feat/component-name`, `fix/bug-name`, `chore/task-name`.
+- If the task comes from an issue, use: `{type}/{issue-number}-{slug}` (for example `feat/123-button`).
+- If you also use a worktree, use the matching sibling worktree path: `../design-system-{type}-{issue-number}-{slug}`.
+- See [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md) for the full naming, START WORK, and END WORK lifecycle.
 
 ### Commits
 
@@ -131,11 +134,13 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 
 ### Pull Request Process
 
-1. Push your branch and open a PR against `main`.
-2. Use a PR title with the same Conventional Commit format, for example `feat(button): add loading state`.
-3. You can request automated Copilot review until the PR is ready for human review.
-4. The PR MUST pass all CI checks, including tests, Storybook build, accessibility, and security scans.
-5. The PR MUST be reviewed by at least one core maintainer before merging.
+1. Before implementing from an issue, run the canonical **START WORK** gate: assign the issue, move it to `In progress`, and record the branch/worktree plan.
+2. Push your branch and open a PR against `main`.
+3. Use a PR title with the same Conventional Commit format, for example `feat(button): add loading state`.
+4. You can request automated Copilot review until the PR is ready for human review.
+5. The PR MUST pass all CI checks, including tests, Storybook build, accessibility, and security scans.
+6. The PR MUST be reviewed by at least one core maintainer before merging.
+7. Mark the task `Done` only through **END WORK** after the PR is merged or the maintainer/user explicitly approves closure.
 
 ### PR Checklist
 
@@ -151,6 +156,7 @@ Before requesting a review, verify:
 - [ ] ARIA attributes are implemented for interactable elements.
 - [ ] Conventional Commits are used for commit messages and the PR title.
 - [ ] Security checks pass, or any false positives are documented in the PR.
+- [ ] MCP cleanup ran before commit/review: `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`.
 
 ### Security checks
 
@@ -192,15 +198,17 @@ When using gentle-ai/opencode, the agent follows `component-contributor`. The fu
 
 Phase summary:
 
-1. **Research** — investigate references, API, states, accessibility, and design.
-2. **Spec proposal** — use `component-spec-proposer` to turn the task and reference into a validated issue spec.
-3. **Spec intake** — `component-contributor` reads the `## Validated component spec` section without inventing behavior.
-4. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
-5. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
-6. **Plan** — review and approve files, variants, tests, stories, and accessibility.
-7. **Implementation** — the agent creates the 6 files and explains decisions.
-8. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
-9. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
+1. **START WORK** — assign the issue, move it to `In progress`, and record branch/worktree.
+2. **Research** — investigate references, API, states, accessibility, and design.
+3. **Spec proposal** — use `component-spec-proposer` to turn the task and reference into a validated issue spec.
+4. **Spec intake** — `component-contributor` reads the `## Validated component spec` section without inventing behavior.
+5. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
+6. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
+7. **Plan** — review and approve files, variants, tests, stories, and accessibility.
+8. **Implementation** — the agent creates the 6 files and explains decisions.
+9. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
+10. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
+11. **END WORK** — move the task to `Done` only with a merged PR or explicit maintainer/user approval plus validation evidence.
 
 > To activate the full flow, first prepare the spec with `component-spec-proposer`; after validation, share the issue URL and ask the agent to implement the component.
 

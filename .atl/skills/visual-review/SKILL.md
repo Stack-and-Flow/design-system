@@ -1,3 +1,12 @@
+---
+name: visual-review
+description: "Trigger: visual review, component visual quality, hover/focus/active states, glow, transition, contrast, accessibility visuals. Audit Stack-and-Flow visual rules."
+license: Apache-2.0
+metadata:
+  author: stack-and-flow
+  version: "1.0"
+---
+
 # Visual Review Skill — Stack-and-Flow
 
 ## Trigger
@@ -17,6 +26,21 @@ Always read (in this order):
 3. `src/styles/theme.css` — verify token values before flagging issues
 
 > **Never flag a value as wrong without checking `theme.css` first.** The token may be exactly correct; the issue may be that a raw value is being used instead of a token.
+
+---
+
+## MCP Artifact Cleanup Gate
+
+Visual review commonly uses Playwright MCP. Its runtime artifacts are useful while investigating but must never survive into a commit.
+
+Before declaring the visual review complete, before handing off for PR review, and always before any commit, forcibly remove MCP-generated artifacts:
+
+```bash
+rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output
+git status --short --untracked-files=all
+```
+
+If any MCP artifact still appears in git status after cleanup, stop and report it as a blocker. Do not commit, stage, or ask for review until the workspace is clean of MCP runtime output.
 
 ---
 

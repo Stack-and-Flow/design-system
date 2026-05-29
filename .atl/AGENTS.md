@@ -76,3 +76,5 @@ Load the relevant skill for detailed workflows:
 | Creating or auditing GitHub Project board tasks — issues, fields, phases, team assignments                             | [`github-project-tasks`](skills/github-project-tasks/SKILL.md)       |
 | Creating a release, bumping versions, generating changelogs, publishing to npm                                         | [`release-changeset`](skills/release-changeset/SKILL.md)             |
 | Preparing the package for npm distribution — exports map, vite lib mode, package.json hygiene, TypeScript declarations | [`npm-architect`](skills/npm-architect/SKILL.md)                     |
+| Visual review — component states, glow, transitions, focus rings, contrast, accessibility visuals                    | [`visual-review`](skills/visual-review/SKILL.md)                     |
+| Creating git worktrees or isolated writer checkouts for this repo                                                     | [`worktree-location`](skills/worktree-location/SKILL.md)             |

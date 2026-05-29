@@ -34,14 +34,25 @@ Go to the [GitHub Project board](https://github.com/orgs/Stack-and-Flow/projects
 
 > **First time?** Look for issues tagged `layer: atom` with `category: component` — these are self-contained and well-defined.
 
-Comment on the issue to let others know you're working on it.
+Before writing code, run the canonical **START WORK** gate:
+- assign the issue to yourself;
+- move it to `In progress`;
+- record the branch and worktree plan.
 
 ## 4. Create your branch
 
+If the task comes from an issue, use issue-derived naming:
+
 ```bash
-git checkout -b feat/your-component-name
+git checkout -b feat/123-your-component
 # or
-git checkout -b fix/short-description
+git checkout -b fix/128-short-description
+```
+
+If you use a worktree, use the matching sibling path:
+
+```text
+../design-system-feat-123-your-component
 ```
 
 Branch naming follows [Conventional Commits](https://www.conventionalcommits.org/):
@@ -80,7 +91,7 @@ All tests must pass before opening a PR. If you're adding a new component, add t
 Push your branch and open a PR against `main`:
 
 ```bash
-git push origin feat/your-component-name
+git push origin feat/123-your-component
 ```
 
 Then go to GitHub → your branch → **Compare & pull request**.
@@ -88,8 +99,9 @@ Then go to GitHub → your branch → **Compare & pull request**.
 - Use the PR template — fill in every section
 - Link the issue in the summary (`Closes #123`)
 - Add screenshots if there are visual changes
+- Clean MCP artifacts before commit/review: `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`
 
-> The project lead reviews and merges. You don't need to worry about the merge itself.
+> The project lead reviews and merges. The task moves to `Done` only through **END WORK** after the PR is merged or explicit approval is given.
 
 ---
 
