@@ -168,7 +168,9 @@ export const selectItem = cva(
     'relative flex items-center cursor-pointer',
     'motion-safe:transition-[background,color] motion-safe:duration-150 motion-safe:ease-out',
     'text-text-light dark:text-text-dark',
-    'hover:bg-surface-raised-light dark:hover:bg-white-tint-mid'
+    'hover:bg-surface-raised-light dark:hover:bg-white-tint-mid',
+    'data-[focused=true]:bg-brand-light/10 data-[focused=true]:text-brand-light',
+    'dark:data-[focused=true]:bg-brand-dark/10 dark:data-[focused=true]:text-brand-dark'
   ],
   {
     variants: {

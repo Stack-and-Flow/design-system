@@ -466,6 +466,17 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const activeDescendantId =
     isOpen && focusedIndex >= 0 && options[focusedIndex] ? `${id}-option-${options[focusedIndex].key}` : undefined;
 
+  useEffect(() => {
+    if (!activeDescendantId) {
+      return;
+    }
+
+    const activeOption = document.getElementById(activeDescendantId);
+    if (typeof activeOption?.scrollIntoView === 'function') {
+      activeOption.scrollIntoView({ block: 'nearest' });
+    }
+  }, [activeDescendantId]);
+
   const baseClassName = cn(selectBase({ fullWidth: isFullWidth }), className, classNames?.base);
   const triggerClassName = cn(
     selectTrigger({ variant: resolvedVariant, size: resolvedSize, status }),
