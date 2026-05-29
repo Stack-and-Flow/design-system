@@ -274,10 +274,16 @@ Check each item:
 | --- | --- |
 | Title format | Starts with an approved prefix. |
 | Body not empty | `content.body` is not empty/null. |
-| Has 6 phases | Body contains the 6 checkbox phases from the template. |
+| Has workflow checklist | Body contains `### Current workflow` and START WORK / END WORK checklist items. |
 | No emoji corruption | Body does not contain `���`. |
-| Has reference section | Body contains `### Referencia`. |
-| Has notes section | Body contains `### Notas adicionales`. |
+| Has reference section | Body contains `### Reference`. |
+| Has spec or plan section | Body contains `### Specification or plan`. |
+| Has accessibility impact section | Body contains `### Accessibility impact`. |
+| Has validation plan | Body contains `### Validation plan`. |
+| Has work start section | Body contains `### Work start state`. |
+| Has PR/completion section | Body contains `### PR and completion evidence`. |
+| Has notes section | Body contains `### Notes`. |
+| Has resources section | Body contains `### Resources`. |
 | Board fields set | status, team, category are present. |
 | In progress has assignee | Items in `In progress` have at least one assignee. |
 | Assigned Todo is intentional | Assigned issues still in `Todo` are flagged for confirmation. |

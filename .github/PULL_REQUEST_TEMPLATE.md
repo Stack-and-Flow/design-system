@@ -1,51 +1,74 @@
 ## Summary
 
-<!-- What does this PR do? One or two sentences. -->
+<!-- What changed, who it helps, and why it matters. Keep it short. -->
 
 Closes #<!-- issue number -->
+
+## Review scope
+
+<!-- Tell reviewers what to inspect first and what is intentionally out of scope. -->
+
+- Primary files/areas:
+- Out of scope:
+- Review workload: <!-- small / medium / large; explain if >400 changed lines -->
 
 ## Type of change
 
 - [ ] New component
+- [ ] Existing component update/refactor
 - [ ] Bug fix
-- [ ] Design tokens
 - [ ] Accessibility
-- [ ] Infrastructure
-- [ ] Documentation
+- [ ] Design tokens
+- [ ] Storybook/docs
+- [ ] Infrastructure/tooling
+- [ ] NPM/dependencies
 
-## Repository checklist
+## Workflow gates
 
-- [ ] PR title follows Conventional Commit format: `<type>(<optional scope>): <description>`
-- [ ] Commit messages follow the same commitlint-enforced format
-- [ ] PR description links the issue with `Closes #NNN`
-- [ ] Security checks pass, or any false positives are documented in the PR
-- [ ] MCP/runtime artifacts are absent: `.playwright-mcp`, `page-*.png`, `page-*.jpeg`, `*.md.playwright-output`
+- [ ] Linked issue is present with `Closes #NNN` or maintainer approved an exception.
+- [ ] Work was started through the Project flow: assignee set, Project status `In progress`, branch/worktree recorded.
+- [ ] PR title follows Conventional Commit format: `<type>(<optional scope>): <description>`.
+- [ ] Commits follow the same commitlint-enforced format.
+- [ ] Diff is focused; unrelated work is called out in Review scope.
+- [ ] MCP/runtime artifacts are absent: `.playwright-mcp`, `page-*.png`, `page-*.jpeg`, `*.md.playwright-output`.
 
-## Component checklist (skip if not applicable)
+## Component evidence (required for component changes)
 
-- [ ] Follows the 6-file pattern (`types.ts`, `use*.ts`, `Component.tsx`, `Component.test.tsx`, `Component.stories.tsx`, `index.ts`)
-- [ ] Uses named component exports plus type exports
-- [ ] CVA variants defined in `types.ts`, not inline
-- [ ] No hardcoded colors — uses tokens from `theme.css`
-- [ ] No `any` types — TypeScript strict
-- [ ] ARIA attributes present and correct
-- [ ] Keyboard navigable (Tab, Enter, Escape where applicable)
-- [ ] Dark mode works correctly
-- [ ] Storybook stories cover default, variants, and states; docs use JSDoc above `const meta` and each story export
-- [ ] Tests added or updated
+- [ ] Validated component spec is linked or quoted in the issue.
+- [ ] Accessibility contract from the spec was implemented or deviations are explained below.
+- [ ] Follows the 6-file pattern: `types.ts`, `use*.ts`, `Component.tsx`, `Component.test.tsx`, `Component.stories.tsx`, `index.ts`.
+- [ ] CVA variants live in `types.ts`; JSX component has no state, CVA calls, or business logic.
+- [ ] Uses design tokens from `theme.css`; no hardcoded colors or arbitrary color utilities.
+- [ ] Storybook covers default, variants, documented states, edge cases, and dark mode when visually different.
+- [ ] Component audit result is PASS or accepted PASS WITH WARNINGS.
+- [ ] Visual review result is included when visuals changed.
 
-## How to test
+## Accessibility evidence
 
-<!-- Steps to verify this works locally -->
+<!-- Required for interactive components and a11y changes. Use N/A only for static display changes. -->
 
-1. `pnpm run storybook`
-2. Navigate to `...`
-3. Verify that `...`
+- [ ] Role/name semantics verified with Testing Library queries or equivalent.
+- [ ] Keyboard-only behavior verified: Tab / Shift+Tab, Enter / Space, Arrow keys, Escape, Home / End / typeahead where applicable.
+- [ ] Focus lifecycle verified: initial focus, roving/active descendant, focus restore, trap/portal behavior where applicable.
+- [ ] Disabled, required, invalid/error, loading, and empty states expose the expected semantics where applicable.
+- [ ] Reduced motion behavior is respected where motion changed.
+- [ ] Screen reader or axe/manual evidence is included below when applicable.
 
-## Screenshots / recordings (if applicable)
+## Validation evidence
 
-<!-- Drag and drop images or screen recordings here -->
+<!-- Paste commands and results. If a check was skipped, explain why. -->
+
+- TypeScript:
+- Unit tests:
+- Build/package:
+- Storybook or visual check:
+- Accessibility check:
+- Security/dependency check:
+
+## Screenshots or recordings
+
+<!-- Required for visual changes when possible. Drag and drop images or recordings here. -->
 
 ## Notes for reviewer
 
-<!-- Anything the reviewer should know: tradeoffs, known limitations, follow-up issues -->
+<!-- Tradeoffs, known limitations, follow-up issues, spec deviations, or maintainer decisions. -->

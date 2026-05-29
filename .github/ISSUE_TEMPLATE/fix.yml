@@ -1,30 +1,43 @@
-﻿name: "ðŸ› Bug Fix"
-description: Report and fix a bug in an existing component or utility
+name: "Bug Fix"
+description: Report and fix a bug in an existing component, utility, workflow, or package behavior
 title: "[FIX] Short description of the bug"
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## ðŸ› Bug Fix Task
-        Describe the bug clearly so the fix can be implemented without ambiguity.
+        ## Bug Fix Task
+        Use this when existing behavior is wrong or regressed.
+
+        Current flow: reproduce with evidence -> identify root cause -> START WORK Project gate -> fix with regression test -> focused validation -> PR -> END WORK after merge or maintainer approval.
 
   - type: input
-    id: affected-component
+    id: affected-area
     attributes:
-      label: Affected component / file
-      placeholder: e.g. Button, Switch, src/components/atoms/switch/Switch.tsx
+      label: Affected component, file, or workflow
+      placeholder: e.g. Button, Select keyboard behavior, src/components/atoms/select/Select.tsx
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
     validations:
       required: true
 
   - type: textarea
-    id: description
+    id: behavior
     attributes:
-      label: Bug description
-      description: What is happening? What should be happening instead?
+      label: Current and expected behavior
       placeholder: |
-        **Current behavior:** ...
-        **Expected behavior:** ...
+        Current behavior:
+        Expected behavior:
+        User impact:
     validations:
       required: true
 
@@ -33,32 +46,41 @@ body:
     attributes:
       label: Steps to reproduce
       placeholder: |
-        1. Render `<Switch label="test" />`
-        2. Inspect the DOM
-        3. Notice `aria-label` is missing on the `<input>` element
+        1. Render or open ...
+        2. Perform ...
+        3. Observe ...
     validations:
       required: true
 
   - type: textarea
-    id: context
+    id: root-cause
     attributes:
-      label: Context / root cause (if known)
-      placeholder: Optional â€” share any investigation or hypothesis about why this happens.
+      label: Root cause or investigation notes
+      description: Optional when opening; required before implementation handoff if known.
+      placeholder: Failing test, suspect file, previous PR, browser/device, or logs.
 
   - type: checkboxes
-    id: phases
+    id: validation
     attributes:
-      label: "âœ… Fix phases"
+      label: Fix validation
       options:
-        - label: "1. **Reproduce** â€” confirm the bug locally with a test case."
-        - label: "2. **Root cause** â€” identify why it happens. Document in this issue."
-        - label: "3. **Fix** â€” implement the correction following project conventions."
-        - label: "4. **Test** â€” add or update tests that cover this case."
-        - label: "5. **Code review** â€” functional + visual review."
-        - label: "6. **Merge to main** â€” project lead merges the PR."
+        - label: Regression test added or updated.
+        - label: Focused affected tests pass.
+        - label: TypeScript/build impact checked when source or exports changed.
+        - label: Storybook/manual reproduction checked when UI behavior changed.
+        - label: Accessibility evidence included when the bug affects semantics, keyboard, focus, or contrast.
+
+  - type: checkboxes
+    id: workflow-gates
+    attributes:
+      label: Workflow gates
+      options:
+        - label: START WORK must assign the issue, move Project status to `In progress`, and record branch/worktree before implementation.
+        - label: PR must link this issue and include validation evidence.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Any edge cases, related issues, or decisions. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Edge cases, related issues, known limitations, or maintainer decisions.

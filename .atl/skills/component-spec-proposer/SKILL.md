@@ -33,9 +33,9 @@ Do not implement the component. Your job is to turn a vague task into a validate
 | Issue URL missing                            | Produce the proposal only; do not update GitHub.                               |
 | Component tier unclear                       | Ask whether it is atom, molecule, or organism.                                 |
 | Reference implies complex composite behavior | Flag possible molecule/organism mismatch before validation.                    |
-| Accessibility contract is vague or missing   | Stop and ask; do not produce a ready-to-approve spec.                           |
-| Composite keyboard/focus behavior unclear    | Ask for the intended pattern before validation.                                 |
-| Expected a11y tests are missing              | Add them before asking for approval.                                            |
+| Accessibility contract is vague or missing   | Stop and ask; do not produce a ready-to-approve spec.                          |
+| Composite keyboard/focus behavior unclear    | Ask for the intended pattern before validation.                                |
+| Expected a11y tests are missing              | Add them before asking for approval.                                           |
 | User approves proposal                       | Add the validated spec to the issue, then set Project Status to `In progress`. |
 | User requests changes                        | Revise the proposal and ask for validation again.                              |
 
@@ -77,9 +77,8 @@ After approval and GitHub update, return:
 
 **Issue**: #{number} {title}
 **Spec**: Added to issue as `Validated component spec`
-**Project status**: In progress
-**Project item ID**: {itemId}
-**Next**: Run `component-contributor` for implementation.
+**Project setup**: {team/category present or missing setup}
+**Next**: Run START WORK via `github-project-tasks`, then run `component-contributor` for implementation.
 ```
 
 ## References

@@ -1,61 +1,93 @@
-﻿name: "ðŸ“– Storybook"
-description: Add or improve stories, MDX documentation, or Storybook configuration
-title: "[STORYBOOK] ComponentName â€” short description"
+name: "Storybook / Docs"
+description: Add or improve stories, MDX documentation, usage guidelines, or Storybook configuration
+title: "[DOCS] ComponentName - storybook update"
 labels: ["documentation", "storybook"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## ðŸ“– Storybook Task
-        Use this for stories, MDX docs, argTypes, controls, or Storybook config improvements.
+        ## Storybook / Docs Task
+        Use this for stories, MDX docs, controls, usage guidelines, visual examples, or Storybook configuration.
+
+        Current flow: identify documentation gap -> define required stories/docs -> START WORK Project gate -> implement -> Storybook/manual visual evidence -> PR -> END WORK after merge or maintainer approval.
 
   - type: input
-    id: component
+    id: affected-area
     attributes:
-      label: Component / section
-      placeholder: e.g. Button, Typography, Design Tokens â€” Colors
+      label: Component or documentation area
+      placeholder: e.g. Button, Select, Design Tokens - Colors
     validations:
       required: true
 
   - type: dropdown
     id: task-type
     attributes:
-      label: Type of Storybook work
+      label: Type of work
       options:
         - Add missing stories
-        - Improve existing stories (controls, args, decorators)
+        - Improve stories or controls
         - Write MDX documentation
-        - Add usage guidelines / design notes
+        - Add usage guidelines or design notes
         - Fix broken stories
         - Storybook configuration
     validations:
       required: true
 
-  - type: textarea
-    id: description
+  - type: dropdown
+    id: team
     attributes:
-      label: What needs to be done
-      description: Be specific â€” which stories are missing, what controls are broken, what docs are incomplete.
+      label: Team
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Which stories, docs pages, controls, or examples need work?
       placeholder: |
-        The Button component is missing stories for the `ghost` and `link` variants.
-        The `size` control is not connected to argTypes, so it doesn't appear in the Controls panel.
+        Current gap:
+        Required stories/docs:
+        Out of scope:
+    validations:
+      required: true
+
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      placeholder: |
+        Storybook command/check:
+        Manual visual review notes:
+        Accessibility notes for interactive examples:
     validations:
       required: true
 
   - type: checkboxes
-    id: phases
+    id: docs-gates
     attributes:
-      label: "âœ… Implementation phases"
+      label: Storybook/docs gates
       options:
-        - label: "1. **Research** â€” review current stories and identify gaps or issues."
-        - label: "2. **Specification** â€” list all stories / docs to add or fix."
-        - label: "3. **Implementation** â€” write stories and/or MDX following project conventions."
-        - label: "4. **Visual review** â€” verify stories render correctly in Storybook locally."
-        - label: "5. **Code review** â€” review by egdev6 or another contributor."
-        - label: "6. **Merge to main** â€” project lead merges the PR."
+        - label: Stories follow project conventions and do not use Storybook `play` functions.
+        - label: Controls and args reflect the public API.
+        - label: Visual states and edge cases are represented when relevant.
+        - label: Accessibility notes are included for interactive examples when relevant.
+
+  - type: checkboxes
+    id: workflow-gates
+    attributes:
+      label: Workflow gates
+      options:
+        - label: START WORK must assign the issue, move Project status to `In progress`, and record branch/worktree before implementation.
+        - label: PR must link this issue and include validation evidence.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Any context, Figma references, or design guidelines. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Figma references, guidelines, examples, related issues, or maintainer decisions.

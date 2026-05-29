@@ -1,13 +1,15 @@
-﻿name: "ðŸŽ¨ Design Tokens"
-description: Add, update or review design tokens (colors, spacing, typography, shadows, etc.)
-title: "[TOKENS] Short description"
+name: "Design Tokens"
+description: Add, update, audit, or deprecate design tokens
+title: "[UPDATE] token area - short description"
 labels: ["tokens", "design"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## ðŸŽ¨ Design Tokens Task
-        Use this for changes to CSS custom properties, Tailwind theme config, or color/typography systems.
+        ## Design Tokens Task
+        Use this for CSS custom properties, Tailwind token utilities, color, typography, spacing, radius, shadow, motion, or token documentation.
+
+        Current flow: audit token need and consumers -> define token/spec impact -> START WORK Project gate -> implement -> contrast/visual/docs evidence -> PR -> END WORK after merge or maintainer approval.
 
   - type: dropdown
     id: token-type
@@ -15,12 +17,23 @@ body:
       label: Token category
       options:
         - Colors
-        - Typography (fonts, sizes, weights, line-heights)
+        - Typography
         - Spacing / sizing
         - Shadows / elevation
         - Border radius
         - Animation / transitions
         - Multiple categories
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options:
+        - Squad 1
+        - Squad 2
+        - Squad 3
     validations:
       required: true
 
@@ -30,49 +43,62 @@ body:
       label: Motivation
       description: Why do these tokens need to change or be added?
       placeholder: |
-        Current red tokens fail WCAG AA contrast on light backgrounds.
-        We need accessible red variants that still align with brand identity.
+        Current limitation:
+        Design-system need:
+        Accessibility/contrast impact:
     validations:
       required: true
 
   - type: textarea
     id: proposed-tokens
     attributes:
-      label: Proposed tokens / values
-      description: List the new or updated token names and values (or describe the intent if values are TBD).
+      label: Proposed token changes
+      description: List token names/values when known, or describe the intended semantic role.
       placeholder: |
-        --color-primary-accessible: #c0392b  (replaces --color-primary in text contexts)
-        --color-primary-subtle: #f5b7b1      (backgrounds, low-emphasis uses)
+        Add/update/deprecate:
+        Consumers/components impacted:
+        Storybook/docs impact:
+    validations:
+      required: true
 
   - type: checkboxes
-    id: backward-compat
+    id: compatibility
     attributes:
-      label: Backward compatibility
+      label: Compatibility
       options:
-        - label: "Keep existing tokens and add new ones (no breaking change)"
-        - label: "Deprecate existing tokens (mark as deprecated in Storybook)"
-        - label: "Remove existing tokens (breaking â€” requires component migration)"
+        - label: Existing tokens remain compatible.
+        - label: Existing tokens are deprecated and migration notes are required.
+        - label: Existing tokens are removed or renamed and this is breaking.
+
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      placeholder: |
+        Contrast checks:
+        Component/story visual checks:
+        Build/test commands:
+        Documentation updates:
+    validations:
+      required: true
 
   - type: checkboxes
-    id: phases
+    id: workflow-gates
     attributes:
-      label: "âœ… Implementation phases"
+      label: Workflow gates
       options:
-        - label: "1. **Research** â€” audit current token usage, contrast ratios, brand constraints."
-        - label: "2. **Specification** â€” define new token names, values and rationale. Document in this issue."
-        - label: "3. **Implementation** â€” update `theme.css` / Tailwind config."
-        - label: "4. **Storybook** â€” update color/token pages, mark deprecated tokens."
-        - label: "5. **Code review** â€” visual + accessibility review."
-        - label: "6. **Merge to main** â€” project lead merges the PR."
+        - label: START WORK must assign the issue, move Project status to `In progress`, and record branch/worktree before implementation.
+        - label: PR must link this issue and include validation evidence.
+        - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 
   - type: textarea
     id: notes
     attributes:
-      label: "ðŸ“Ž Additional notes"
-      placeholder: Figma references, contrast tool links, accessibility requirements. Tag @Stack-and-Flow/maintainers for questions.
+      label: Additional notes
+      placeholder: Figma references, contrast tools, migration notes, related issues, or maintainer decisions.
 
   - type: textarea
     id: resources
     attributes:
-      label: "ðŸ”— Related resources"
-      placeholder: Figma, Coolors, accessibility checker, related issues.
+      label: Related resources
+      placeholder: Figma, accessibility checker, token references, screenshots, related issues.

@@ -1,54 +1,106 @@
 # GitHub Issue Body Template
 
-Canonical Stack-and-Flow issue body. Keep headings ASCII-only because `gh` CLI output can corrupt emoji/multibyte section markers in Windows PowerShell.
+Canonical Stack-and-Flow issue body for automated issue creation. Keep headings ASCII-only because `gh` CLI output can corrupt emoji or multibyte section markers in Windows PowerShell.
 
 ```markdown
-## Tarea: {ComponentName}
+## Task: {TaskName}
 
-### Referencia:
+### Category
 
-{reference_url}
+{category}
 
-### Fases del desarrollo
+### Team
 
-- [ ] 1. **Research de funcionalidad**
-  Investigar soluciones similares, patrones existentes y necesidades reales. Añadir capturas, enlaces o benchmarks si aplican.
+{team}
 
-- [ ] 2. **Definicion de funcionalidades**
-  Especificar que debe hacer el componente: props, estados, interaccion, accesibilidad, variantes, etc.
+### Reference
 
-- [ ] 3. **Implementacion del componente**
-  Desarrollo del componente en base a la definicion anterior. Incluir historias de Storybook si procede.
+{reference_url_or_not_applicable}
 
-- [ ] 4. **Documentacion del componente**
-  - [ ] Storybook documentado con controles y ejemplos de uso
-  - [ ] Documentacion escrita en JSDoc canonico de Storybook cuando aplique
-  - [ ] Seccion de casos de uso o guidelines
+### Scope
 
-- [ ] 5. **Code review y modificaciones**
-  - [ ] Revision funcional
-  - [ ] Revision visual (alineamiento con el design system)
-  - [ ] Correccion de errores o ajustes sugeridos
+This task is responsible for:
 
-- [ ] 6. **Merge en main**
-  Una vez aprobado, mergear la rama a `main` siguiendo el flujo de PR establecido. (Esta parte me encargo yo)
+- ...
 
----
+Out of scope:
 
-### Notas adicionales
+- ...
 
-_Anotar cualquier comentario, decision tomada o consideraciones especiales. (Nombra a egdev6 para cualquier consulta)_
+### Current workflow
 
----
+- [ ] Issue triaged with Team and Category fields set on the Project board.
+- [ ] Specification or plan recorded in this issue when behavior, API, accessibility, or tokens are affected.
+- [ ] START WORK completed before implementation: assignee set, Project status moved to `In progress`, branch/worktree recorded.
+- [ ] Implementation completed inside the approved scope.
+- [ ] Validation evidence recorded in the PR or issue.
+- [ ] PR opened and linked with `Closes #NNN`.
+- [ ] PR merged or maintainer explicitly approved closure.
+- [ ] END WORK completed: completion evidence added and Project status moved to `Done`.
 
-### Recursos relacionados
+### Specification or plan
 
-_Nombrar cualquier recurso externo_
+For component work, paste or link the approved `## Validated component spec` from `component-spec-proposer` before implementation starts.
+
+For non-component work, record:
+
+- Expected behavior/change:
+- Public API or consumer impact:
+- Accessibility impact:
+- Compatibility or migration notes:
+- Non-goals:
+
+### Accessibility impact
+
+- Pattern or standard: native / Radix / WAI-ARIA APG / WCAG / not applicable
+- Keyboard impact:
+- Screen reader impact:
+- Focus impact:
+- Contrast or reduced-motion impact:
+- Required accessibility validation:
+
+### Validation plan
+
+- TypeScript:
+- Unit tests:
+- Build/package:
+- Storybook or visual check:
+- Accessibility check:
+- Security/dependency check:
+
+### Work start state
+
+Filled during START WORK:
+
+- Assignee:
+- Branch:
+- Worktree:
+- Project item ID:
+- Project status: In progress
+
+### PR and completion evidence
+
+Filled during PR review or END WORK:
+
+- PR:
+- Validation evidence:
+- Component audit:
+- Visual review:
+- Follow-up issues:
+- Closure basis: merged PR / explicit maintainer approval
+
+### Notes
+
+Add decisions, tradeoffs, constraints, or maintainer guidance here.
+
+### Resources
+
+Add related links, Figma references, docs, logs, screenshots, or prior art here.
 ```
 
 ## Rules
 
 - Do not add emoji to section headings.
 - Avoid accent marks in headings; body text may use accents.
-- Replace `{ComponentName}` and `{reference_url}` before creating the issue.
+- Replace `{TaskName}`, `{category}`, `{team}`, and `{reference_url_or_not_applicable}` before creating the issue.
 - Write this body to a temp file and pass it with `--body-file`; do not pass multi-line markdown directly through `--body`.

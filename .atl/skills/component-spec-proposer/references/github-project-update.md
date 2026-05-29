@@ -19,15 +19,8 @@ item_id=$(gh project item-list 1 \
   --jq ".items[] | select(.content.url == \"$issue_url\") | .id")
 ```
 
-Set Project Status to `In progress`:
-
-```bash
-gh project item-edit \
-  --project-id PVT_kwDOEHd14s4BUsw- \
-  --id "$item_id" \
-  --field-id PVTSSF_lADOEHd14s4BUsw-zhCIcdo \
-  --single-select-option-id 47fc9ee4
-```
+Do not move Project Status to `In progress` from `component-spec-proposer`.
+That transition belongs to START WORK in `github-project-tasks`, after spec approval and immediately before implementation.
 
 Add the approved spec to the issue:
 
