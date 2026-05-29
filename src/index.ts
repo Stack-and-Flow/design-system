@@ -13,6 +13,7 @@ export { Icon } from './components/atoms/icon';
 export { IconButton } from './components/atoms/icon-button';
 export { Input } from './components/atoms/input';
 export { Link } from './components/atoms/link';
+export { Progress } from './components/atoms/progress';
 export { Select } from './components/atoms/select';
 export { Skeleton } from './components/atoms/skeleton';
 export { Spacer } from './components/atoms/spacer';

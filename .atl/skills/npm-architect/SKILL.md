@@ -41,25 +41,11 @@ When delegated: run requested scope, return SDD return envelope:
 
 ---
 
-## Current State (verified against actual codebase)
+## Current State Policy
 
-As of the last audit:
+Do not trust frozen package-state tables in this skill. The npm package shape changes over time, so the current state must be verified at runtime before proposing exports, build, dependency, or publishing changes.
 
-| Item | Status |
-|------|--------|
-| `package.json` has `name` | `@stack-and-flow/design-system` |
-| `package.json` has `version` | `1.0.0` |
-| `package.json` has `private: false` | Yes |
-| `package.json` has `exports` field | **Missing** |
-| `package.json` has `files` field | **Missing** |
-| `package.json` has `main` / `module` fields | **Missing** |
-| `package.json` has `sideEffects` field | **Missing** |
-| `src/index.ts` root entry point | **Missing** |
-| `vite.config.ts` has `lib` mode | **Missing** (currently configured for app/dev) |
-| Per-component `index.ts` files | Exist in every component directory |
-| `peerDependencies` declared | **Missing** (react, react-dom in `dependencies`) |
-
-The project is **not yet distributable**. This skill guides the full transformation.
+Use Phase 1 to inspect `package.json`, `src/index.ts`, `vite.config.ts`, `tsconfig.build.json`, and the existing component barrels. Report what exists now versus what the requested package goal requires.
 
 ---
 
@@ -94,45 +80,46 @@ This is the single entry point for consumers who import the full package:
 
 // Atoms
 export { Button } from './components/atoms/button';
-export * from './components/atoms/button/types';
+export type * from './components/atoms/button/types';
 
-export { default as Avatar } from './components/atoms/avatar';
-export * from './components/atoms/avatar/types';
+export { Avatar } from './components/atoms/avatar';
+export type * from './components/atoms/avatar/types';
 
-export { default as Badge } from './components/atoms/badge';
-export * from './components/atoms/badge/types';
+export { Badge } from './components/atoms/badge';
+export type * from './components/atoms/badge/types';
 
-export { default as Divider } from './components/atoms/divider';
-export * from './components/atoms/divider/types';
+export { Divider } from './components/atoms/divider';
+export type * from './components/atoms/divider/types';
 
-export { default as Dropdown } from './components/atoms/dropdown';
-export * from './components/atoms/dropdown/types';
+export { Dropdown } from './components/atoms/dropdown';
+export type * from './components/atoms/dropdown/types';
 
-export { default as Icon } from './components/atoms/icon';
+export { Icon } from './components/atoms/icon';
+export type * from './components/atoms/icon/types';
 
-export { default as IconButton } from './components/atoms/icon-button';
-export * from './components/atoms/icon-button/types';
+export { IconButton } from './components/atoms/icon-button';
+export type * from './components/atoms/icon-button/types';
 
-export { default as Input } from './components/atoms/input';
-export * from './components/atoms/input/types';
+export { Input } from './components/atoms/input';
+export type * from './components/atoms/input/types';
 
-export { default as Modal } from './components/atoms/modal';
-export * from './components/atoms/modal/types';
+export { Modal } from './components/organisms/modal';
+export type * from './components/organisms/modal/types';
 
-export { default as Skeleton } from './components/atoms/skeleton';
-export * from './components/atoms/skeleton/types';
+export { Skeleton } from './components/atoms/skeleton';
+export type * from './components/atoms/skeleton/types';
 
-export { default as Switch } from './components/atoms/switch';
-export * from './components/atoms/switch/types';
+export { Switch } from './components/atoms/switch';
+export type * from './components/atoms/switch/types';
 
-export { default as Text } from './components/atoms/text';
-export * from './components/atoms/text/types';
+export { Text } from './components/atoms/text';
+export type * from './components/atoms/text/types';
 
 // Molecules
-export { default as Snippet } from './components/molecules/snippet';
-export * from './components/molecules/snippet/types';
+export { Snippet } from './components/molecules/snippet';
+export type * from './components/molecules/snippet/types';
 
-// Utilities
+// Utilities intentionally exported as public API
 export { cn } from './lib/utils';
 ```
 

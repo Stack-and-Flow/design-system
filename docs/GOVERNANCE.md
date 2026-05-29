@@ -52,6 +52,7 @@ Responsabilidades:
 3. Project Lead o Maintainer revisa el código
 4. Si hay feedback → Contributor aplica cambios
 5. Project Lead aprueba y fusiona
+6. La tarea pasa a `Done` solo después de PR merged o aprobación explícita del Project Lead/maintainer, con evidencia de validación
 ```
 
 ### Criterios de aprobación
@@ -62,7 +63,7 @@ Un PR está listo para fusionar cuando:
 - ✅ El código sigue la estructura de 6 archivos y el patrón Container/Presentational
 - ✅ Los tipos son explícitos — sin `any`, sin `interface`
 - ✅ El componente tiene tests con cobertura mínima requerida
-- ✅ La story de Storybook está completa con controles y descripción
+- ✅ La story de Storybook está completa con `args`, controles vía JSDoc y documentación en bloque JSDoc encima de `const meta`
 - ✅ No hay valores hardcodeados — solo tokens del sistema
 - ✅ Los atributos ARIA están presentes y son correctos
 - ✅ El PR template está completamente rellenado

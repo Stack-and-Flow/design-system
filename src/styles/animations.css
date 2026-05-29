@@ -93,3 +93,24 @@
     opacity: 0;
   }
 }
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.progress-indeterminate-bar {
+  width: 30%;
+  will-change: transform;
+  animation: progress-indeterminate 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-indeterminate-bar {
+    animation: none;
+    transform: translateX(0);
+  }
+}

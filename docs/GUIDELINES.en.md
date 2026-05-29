@@ -18,17 +18,18 @@ Our UI is broken down into three main levels of complexity:
 
 Every single component MUST be split into logic (Container) and rendering (Presentational). We achieve this through custom hooks and `.tsx` files.
 
-### 5-File Structure
+### 6-File Structure
 
-Every component MUST live inside a kebab-case directory (`src/components/atoms/button/`) and contain EXACTLY these five files:
+Every component MUST live inside a kebab-case directory (`src/components/atoms/button/`) and contain EXACTLY these six files:
 
 | File | Purpose | Rule |
 | ---- | ------- | ---- |
-| `Button.tsx` | Presentational Component | ONLY JSX and rendering logic. Consumes the hook. |
-| `useButton.ts` | Container Hook | Contains ALL logic, state, and `cva` class generation. |
-| `types.ts` | Types & Variants | Defines component props using `type`, and exports `cva` variants. |
-| `index.ts` | Public API | Re-exports the component and types. |
-| `Button.stories.tsx` | Documentation | Contains Storybook definition, `args`, and `parameters.docs`. |
+| `types.ts` | Types & Variants | Defines component props using `type`, Storybook JSDoc controls, and `cva` variants. |
+| `useButton.ts` | Container Hook | Contains ALL logic, state, refs, handlers, and `cva` class generation. |
+| `Button.tsx` | Presentational Component | ONLY JSX. Consumes the hook. No state or `cva` calls. |
+| `Button.test.tsx` | Tests | Covers hook logic and observable component behavior. |
+| `Button.stories.tsx` | Documentation | Contains Storybook autodocs, `args`, and JSDoc blocks above `const meta` and story exports. |
+| `index.ts` | Public API | Re-exports the named component and type exports. |
 
 ### 1. Types & Variants (`types.ts`)
 ALL `cva` variants go here, never in the hook or component.
@@ -104,14 +105,13 @@ const Button: FC<ButtonProps & ComponentProps<'button'>> = ({ ...props }) => {
   );
 };
 
-export default Button;
+export { Button };
 ```
 
 ### 4. Public API (`index.ts`)
 ```typescript
-import Button from './Button';
-export * from './types';
-export default Button;
+export { Button } from './Button';
+export type * from './types';
 ```
 
 ---
@@ -121,7 +121,7 @@ export default Button;
 - **`type` over `interface`**: ALWAYS use `export type ComponentProps = {}`. Do NOT use `interface`.
 - **No `any`**: Explicit `any` is strictly prohibited. If you don't know the type, use `unknown` or narrow it down properly.
 - **Explicit Props**: Never implicitly type props. Everything MUST be explicitly defined in `types.ts`.
-- **Component definition**: Use `FC<ComponentProps>` and `export default Component`.
+- **Component definition**: Use `FC<ComponentProps>` and named component exports — never default component exports.
 
 ---
 
@@ -129,17 +129,10 @@ export default Button;
 
 - **English only**: All stories must be written in English.
 - **Mandatory Controls**: Use JSDoc comments (`/** @control text */`) in `types.ts` to power the controls.
-- **Mandatory Description**: Every component story MUST include a docs description:
-  ```typescript
-  parameters: {
-    docs: {
-      description: {
-        component: 'A versatile button component used to trigger actions.'
-      }
-    }
-  }
-  ```
-- **Args**: Define default `args` for the base story.
+- **Mandatory Description**: Every component story MUST include a JSDoc block immediately above `const meta` with `## Description` required. Use `## Dependencies` and `## Usage Guide` only when applicable.
+- **No `parameters.docs.description.component`**: component docs live in JSDoc above `const meta`, not in `parameters.docs.description.component`.
+- **Story-level docs**: add concise JSDoc immediately above every `export const StoryName`.
+- **Args**: Define default `args` for the base story without overriding `defaultVariants`.
 
 ---
 
@@ -260,7 +253,7 @@ describe('useButton — logic', () => {
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import Button from './Button';
+import { Button } from './Button';
 
 describe('Button — component behavior', () => {
   it('is disabled when isLoading is true', () => {
