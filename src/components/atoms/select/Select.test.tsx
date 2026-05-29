@@ -2,12 +2,6 @@ import { act, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-// spinners-react uses CSS animations not available in jsdom
-vi.mock('spinners-react', () => ({
-  // biome-ignore lint/style/useNamingConvention: matches the named export from spinners-react package
-  SpinnerCircular: () => <span data-loading-spinner={true} />
-}));
-
 import { Select } from './Select';
 import type { SelectOption } from './types';
 import { useSelect } from './useSelect';
@@ -378,8 +372,10 @@ describe('Select — interaction', () => {
       />
     );
 
-    await user.click(screen.getByRole('combobox'));
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
 
+    expect(trigger).toHaveFocus();
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
@@ -416,6 +412,19 @@ describe('Select — interaction', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     await user.keyboard('{ArrowDown}');
+    await user.keyboard('b');
+
+    expect(screen.getByRole('option', { name: 'Brazil' })).toHaveAttribute('data-focused', 'true');
+  });
+
+  it('falls back to the latest character when type-ahead query has no match', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('z');
     await user.keyboard('b');
 
     expect(screen.getByRole('option', { name: 'Brazil' })).toHaveAttribute('data-focused', 'true');
@@ -535,6 +544,19 @@ describe('Select — accessibility', () => {
     expect(document.getElementById(hintId ?? '')).toHaveTextContent('Required');
   });
 
+  it('applies legacy errorMessage class override to error hints', () => {
+    render(
+      <Select
+        label='Country'
+        options={defaultOptions}
+        hint={{ message: 'Required', type: 'error' }}
+        classNames={{ errorMessage: 'custom-error-message' }}
+      />
+    );
+
+    expect(screen.getByText('Required')).toHaveClass('custom-error-message');
+  });
+
   it('aria-describedby contains both description and hint IDs when both are provided', () => {
     render(
       <Select
@@ -561,6 +583,19 @@ describe('Select — accessibility', () => {
     const brazilOption = screen.getByRole('option', { name: 'Brazil' });
 
     expect(brazilOption).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('wraps portaled popover with scoped dark mode when rendered inside a dark container', async () => {
+    const user = userEvent.setup();
+    render(
+      <div className='dark'>
+        <Select label='Country' options={defaultOptions} placeholder='Select a country' />
+      </div>
+    );
+
+    await user.click(screen.getByRole('combobox'));
+
+    expect(screen.getByRole('listbox').parentElement).toHaveClass('dark');
   });
 
   it('renders hidden input for form integration', () => {

@@ -39,7 +39,9 @@ export const Select: FC<SelectProps> = (props) => {
     hasHint,
     hintIconProps,
     hintMessage,
-    hintMessageClassName
+    hintMessageClassName,
+    needsScopedDarkPortal,
+    portalContainer
   } = useSelect(props);
 
   return (
@@ -87,29 +89,36 @@ export const Select: FC<SelectProps> = (props) => {
       </div>
       <input {...hiddenInputProps} />
       {isOpen &&
+        portalContainer &&
         createPortal(
-          <div {...popoverProps} className={popoverClassName} style={popoverStyle}>
-            {isLoading ? (
-              <div className={selectLoadingVariants()} role='status' aria-live='polite'>
-                <span aria-hidden='true' className={selectSpinnerVariants()} />
-                <span>Loading options...</span>
-              </div>
-            ) : (
-              options.map((option, index) => (
-                <div key={option.key} className={getOptionClassName(option, index)} {...getOptionProps(option, index)}>
-                  {option.startContent}
-                  <span className='flex-1 truncate'>{option.label}</span>
-                  {option.description && (
-                    <span className='text-xs text-text-muted-light dark:text-text-muted-dark'>
-                      {option.description}
-                    </span>
-                  )}
-                  {option.endContent}
+          <div className={needsScopedDarkPortal ? 'dark' : undefined} style={{ display: 'contents' }}>
+            <div {...popoverProps} className={popoverClassName} style={popoverStyle}>
+              {isLoading ? (
+                <div className={selectLoadingVariants()} role='status' aria-live='polite'>
+                  <span aria-hidden='true' className={selectSpinnerVariants()} />
+                  <span>Loading options...</span>
                 </div>
-              ))
-            )}
+              ) : (
+                options.map((option, index) => (
+                  <div
+                    key={option.key}
+                    className={getOptionClassName(option, index)}
+                    {...getOptionProps(option, index)}
+                  >
+                    {option.startContent}
+                    <span className='flex-1 truncate'>{option.label}</span>
+                    {option.description && (
+                      <span className='text-xs text-text-muted-light dark:text-text-muted-dark'>
+                        {option.description}
+                      </span>
+                    )}
+                    {option.endContent}
+                  </div>
+                ))
+              )}
+            </div>
           </div>,
-          document.body
+          portalContainer
         )}
       {hasHint && (
         <div id={`${triggerProps.id}-hint`} className='flex items-center gap-2 py-0.5'>

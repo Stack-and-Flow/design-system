@@ -104,6 +104,8 @@ type UseSelectReturn = {
   hintMessage?: string;
   hintMessageClassName: string;
   effectiveHint?: SelectHint;
+  needsScopedDarkPortal: boolean;
+  portalContainer: HTMLElement | null;
 };
 
 export const useSelect = (props: SelectProps): UseSelectReturn => {
@@ -297,9 +299,11 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const handleTriggerMouseDown = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
       onMouseDownProp?.(e);
-      if (!e.defaultPrevented) {
-        e.preventDefault();
+      if (e.defaultPrevented) {
+        return;
       }
+      triggerRef.current?.focus();
+      e.preventDefault();
     },
     [onMouseDownProp]
   );
@@ -342,23 +346,39 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
 
   const handleTypeAhead = useCallback(
     (char: string) => {
-      const newQuery = (searchQuery + char.toLowerCase()).slice(0, 20);
-      setSearchQuery(newQuery);
+      const normalizedChar = char.toLowerCase();
+      const newQuery = (searchQuery + normalizedChar).slice(0, 20);
 
       const enabled = getEnabledIndices();
       const currentPos = enabled.indexOf(focusedIndex);
       const startFrom = currentPos >= 0 ? currentPos : -1;
 
-      for (let i = 0; i < enabled.length; i++) {
-        const idx = enabled[(startFrom + 1 + i) % enabled.length];
-        if (idx === undefined) {
-          continue;
+      const findMatchingIndex = (query: string) => {
+        for (let i = 0; i < enabled.length; i++) {
+          const idx = enabled[(startFrom + 1 + i) % enabled.length];
+          if (idx === undefined) {
+            continue;
+          }
+          const opt = options[idx];
+          if (opt?.label.toLowerCase().startsWith(query)) {
+            return idx;
+          }
         }
-        const opt = options[idx];
-        if (opt?.label.toLowerCase().startsWith(newQuery)) {
-          setFocusedIndex(idx);
-          break;
-        }
+        return undefined;
+      };
+
+      let matchedQuery = newQuery;
+      let matchedIndex = findMatchingIndex(newQuery);
+      if (matchedIndex === undefined && newQuery !== normalizedChar) {
+        matchedQuery = normalizedChar;
+        matchedIndex = findMatchingIndex(normalizedChar);
+      }
+
+      if (matchedIndex === undefined) {
+        setSearchQuery('');
+      } else {
+        setSearchQuery(matchedQuery);
+        setFocusedIndex(matchedIndex);
       }
 
       clearTimeout(searchTimeoutRef.current);
@@ -581,7 +601,16 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const hintIconProps = useMemo(() => getHintIconProps(effectiveHint?.type), [effectiveHint?.type]);
   const hasHint = Boolean(effectiveHint?.message);
   const hintMessage = effectiveHint?.message;
-  const hintMessageClassName = cn(hintMessageVariants({ tone: effectiveHint?.type ?? 'info' }), classNames?.hint);
+  const hintMessageClassName = cn(
+    hintMessageVariants({ tone: effectiveHint?.type ?? 'info' }),
+    classNames?.hint,
+    effectiveHint?.type === 'error' && classNames?.errorMessage
+  );
+  const closestDarkContainer = typeof document === 'undefined' ? null : containerRef.current?.closest('.dark');
+  const needsScopedDarkPortal = Boolean(
+    closestDarkContainer && closestDarkContainer.tagName !== 'HTML' && closestDarkContainer.tagName !== 'BODY'
+  );
+  const portalContainer = typeof document === 'undefined' ? null : document.body;
 
   return {
     isOpen,
@@ -624,6 +653,8 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     hintIconProps,
     hintMessage,
     hintMessageClassName,
-    effectiveHint
+    effectiveHint,
+    needsScopedDarkPortal,
+    portalContainer
   };
 };
