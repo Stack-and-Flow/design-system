@@ -139,19 +139,30 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   } = props;
 
   const resolvedSize = (size ?? 'md') as NonNullable<typeof size>;
+  const deprecationWarningsRef = useRef({ errorMessage: false, isInvalid: false, faded: false });
 
-  // Deprecation warnings
-  if (errorMessage !== undefined) {
-    console.warn(
-      '[Select] `errorMessage` is deprecated. Use `hint={{ message: errorMessage, type: "error" }}` instead.'
-    );
-  }
-  if (isInvalid) {
-    console.warn('[Select] `isInvalid` is deprecated. Use `hint={{ type: "error" }}` instead.');
-  }
-  if (variant === 'faded') {
-    console.warn('[Select] `variant="faded"` is deprecated. Use `variant="line"` instead.');
-  }
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      return;
+    }
+
+    const warned = deprecationWarningsRef.current;
+
+    if (errorMessage !== undefined && !warned.errorMessage) {
+      console.warn(
+        '[Select] `errorMessage` is deprecated. Use `hint={{ message: errorMessage, type: "error" }}` instead.'
+      );
+      warned.errorMessage = true;
+    }
+    if (isInvalid && !warned.isInvalid) {
+      console.warn('[Select] `isInvalid` is deprecated. Use `hint={{ type: "error" }}` instead.');
+      warned.isInvalid = true;
+    }
+    if (variant === 'faded' && !warned.faded) {
+      console.warn('[Select] `variant="faded"` is deprecated. Use `variant="line"` instead.');
+      warned.faded = true;
+    }
+  }, [errorMessage, isInvalid, variant]);
 
   const resolvedVariant = variant === 'faded' ? 'line' : variant;
   const effectiveHint = hint ?? (errorMessage ? { message: errorMessage, type: 'error' as const } : undefined);
@@ -163,7 +174,6 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
-  const skipNextClickRef = useRef(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -296,12 +306,6 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const handleTriggerClick = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
       onClickProp?.(e);
-      if (e.defaultPrevented) {
-        return;
-      }
-      if (skipNextClickRef.current) {
-        skipNextClickRef.current = false;
-      }
     },
     [onClickProp]
   );
@@ -330,10 +334,9 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
         setInternalValue(null);
       }
       onClear?.();
-      onChange?.('');
       triggerRef.current?.focus();
     },
-    [effectiveDisabled, isControlled, isLoading, onChange, onClear]
+    [effectiveDisabled, isControlled, isLoading, onClear]
   );
 
   const handleTypeAhead = useCallback(
@@ -459,6 +462,8 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   );
 
   const hasFloatingLabel = Boolean(label) && (isOpen || hasValue || Boolean(placeholder));
+  const activeDescendantId =
+    isOpen && focusedIndex >= 0 && options[focusedIndex] ? `${id}-option-${options[focusedIndex].key}` : undefined;
 
   const baseClassName = cn(selectBase({ fullWidth: isFullWidth }), className, classNames?.base);
   const triggerClassName = cn(
@@ -501,6 +506,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
     'aria-haspopup': 'listbox',
     'aria-expanded': isOpen,
     'aria-controls': isOpen ? `${id}-listbox` : undefined,
+    'aria-activedescendant': activeDescendantId,
     'aria-invalid': effectiveHint?.type === 'error' || isInvalid || undefined,
     'aria-required': isRequired || undefined,
     'aria-describedby':

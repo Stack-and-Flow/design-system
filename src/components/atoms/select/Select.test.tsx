@@ -238,15 +238,26 @@ describe('Select — interaction', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  it('clears value when clicking clear button', async () => {
+  it('clears value through onClear without emitting an empty onChange key', async () => {
     const user = userEvent.setup();
     const handleClear = vi.fn();
-    render(<Select label='Country' options={defaultOptions} value='ar' isClearable={true} onClear={handleClear} />);
+    const handleChange = vi.fn();
+    render(
+      <Select
+        label='Country'
+        options={defaultOptions}
+        value='ar'
+        isClearable={true}
+        onClear={handleClear}
+        onChange={handleChange}
+      />
+    );
 
     await user.click(screen.getByRole('combobox'));
     await user.click(screen.getByRole('button', { name: /clear/i }));
 
     expect(handleClear).toHaveBeenCalledTimes(1);
+    expect(handleChange).not.toHaveBeenCalled();
   });
 
   it('clears value from keyboard-accessible clear button', async () => {
@@ -274,6 +285,7 @@ describe('Select — interaction', () => {
 
     expect(screen.getByRole('listbox')).toBeInTheDocument();
     expect(screen.getByRole('option', { name: 'Argentina' })).toHaveAttribute('data-focused', 'true');
+    expect(trigger).toHaveAttribute('aria-activedescendant', expect.stringContaining('-option-ar'));
   });
 
   it('cycles through enabled items with ArrowUp and ArrowDown', async () => {
@@ -486,6 +498,20 @@ describe('Select — accessibility', () => {
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
   });
 
+  it('links the trigger to the active option while navigating the listbox', async () => {
+    const user = userEvent.setup();
+    render(<Select label='Country' options={defaultOptions} placeholder='Select a country' id='country-select' />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+
+    expect(trigger).toHaveAttribute('aria-activedescendant', 'country-select-option-ar');
+
+    await user.keyboard('{ArrowDown}');
+    expect(trigger).toHaveAttribute('aria-activedescendant', 'country-select-option-br');
+  });
+
   it('trigger has aria-invalid when isInvalid', () => {
     render(<Select label='Country' options={defaultOptions} isInvalid={true} />);
     expect(screen.getByRole('combobox')).toHaveAttribute('aria-invalid', 'true');
@@ -628,6 +654,16 @@ describe('Select — backward compatibility', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     render(<Select label='Country' options={defaultOptions} variant='faded' />);
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('faded'));
+    warnSpy.mockRestore();
+  });
+
+  it('emits each deprecation warning at most once per component instance', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { rerender } = render(<Select label='Country' options={defaultOptions} errorMessage='Legacy' />);
+
+    rerender(<Select label='Country' options={defaultOptions} errorMessage='Still legacy' />);
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
     warnSpy.mockRestore();
   });
 });
