@@ -77,26 +77,27 @@ This project uses GitHub Issues + GitHub Projects as the source workflow.
 Short path:
 
 1. Pick an issue from the [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1).
-2. Before implementing, run the **START WORK** flow:
+2. Before implementing, verify that the spec is defined and the issue has the `status:approved` label.
+3. Only then run **START WORK**:
    - assign the issue to the contributor;
    - move the Project item to `In progress`;
    - record the branch and worktree.
-3. Use issue-based branch names:
+4. Use issue-based branch names:
    - `feat/{issue-number}-{slug}`
    - `fix/{issue-number}-{slug}`
    - `docs/{issue-number}-{slug}`
-4. If you need a worktree, create it as a sibling of the repo:
+5. If you need a worktree, create it as a sibling of the repo:
    - `../design-system-{type}-{issue-number}-{slug}`
    - not under `/tmp`, unless explicitly requested.
-5. Implement with the 6-file pattern.
-6. Run tests/build/visual review as needed.
-7. Before commit/review, clean MCP artifacts:
+6. Implement with the 6-file pattern.
+7. Run tests/build/visual review as needed.
+8. Before commit/review, clean MCP artifacts:
 
 ```bash
 rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output
 ```
 
-8. When closing, run **END WORK** only with a merged PR or explicit maintainer/user approval, plus validation evidence.
+9. When closing, run **END WORK** only with a merged PR or explicit maintainer/user approval, plus validation evidence.
 
 Recommended docs:
 

@@ -107,7 +107,7 @@ Cuando vayas a implementar un componente, simplemente di:
 Implementa este componente: https://github.com/Stack-and-Flow/design-system/issues/XXX
 ```
 
-El agente cargará la skill `component-contributor` y seguirá el flujo actual: START WORK cuando aplique, lectura de spec validada, spec review, visual preflight, plan, implementación, visual review, component audit pre-PR y END WORK al cerrar la tarea.
+El agente cargará la skill `component-contributor` y seguirá el flujo actual: verificación del label `status:approved`, START WORK cuando aplique, lectura de spec validada, spec review, visual preflight, plan, implementación, visual review, component audit pre-PR y END WORK al cerrar la tarea.
 
 ---
 

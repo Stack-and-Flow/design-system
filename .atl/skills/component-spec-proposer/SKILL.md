@@ -36,7 +36,7 @@ Do not implement the component. Your job is to turn a vague task into a validate
 | Accessibility contract is vague or missing   | Stop and ask; do not produce a ready-to-approve spec.                          |
 | Composite keyboard/focus behavior unclear    | Ask for the intended pattern before validation.                                |
 | Expected a11y tests are missing              | Add them before asking for approval.                                           |
-| User approves proposal                       | Add the validated spec to the issue, then set Project Status to `In progress`. |
+| User approves proposal                       | Add the validated spec to the issue, then leave implementation blocked until a maintainer/project lead adds the issue label `status:approved`. |
 | User requests changes                        | Revise the proposal and ask for validation again.                              |
 
 ## Execution Steps
@@ -49,8 +49,8 @@ Do not implement the component. Your job is to turn a vague task into a validate
 6. Include an `Assumptions to validate` section for choices not explicit in the issue/reference, especially screen reader, focus, or keyboard decisions.
 7. Ask the user to approve, reject, or edit the proposal. Do not write to GitHub before approval.
 8. After approval, append or update a GitHub issue comment headed `## Validated component spec` using the approved spec.
-9. Locate the Project item for the issue and set Status to `In progress` using the project field IDs from `github-project-tasks`.
-10. Report the issue URL, project item ID, updated status, and next command/action: start `component-contributor`.
+9. Locate the Project item for the issue only to confirm it exists; do not move Project Status to `In progress` from this skill.
+10. Report the issue URL, project item ID, approval state, and next command/action: wait for the `status:approved` issue label, then run START WORK via `github-project-tasks`, then start `component-contributor`.
 
 ## Output Contract
 
@@ -78,7 +78,8 @@ After approval and GitHub update, return:
 **Issue**: #{number} {title}
 **Spec**: Added to issue as `Validated component spec`
 **Project setup**: {team/category present or missing setup}
-**Next**: Run START WORK via `github-project-tasks`, then run `component-contributor` for implementation.
+**Approval gate**: Waiting for issue label `status:approved`
+**Next**: After the issue has label `status:approved`, run START WORK via `github-project-tasks`, then run `component-contributor` for implementation.
 ```
 
 ## References

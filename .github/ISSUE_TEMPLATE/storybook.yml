@@ -9,7 +9,7 @@ body:
         ## Storybook / Docs Task
         Use this for stories, MDX docs, controls, usage guidelines, visual examples, or Storybook configuration.
 
-        Current flow: identify documentation gap -> define required stories/docs -> START WORK Project gate -> implement -> Storybook/manual visual evidence -> PR -> END WORK after merge or maintainer approval.
+        Current flow: identify documentation gap -> define required stories/docs -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> Storybook/manual visual evidence -> PR -> END WORK after merge or maintainer approval.
 
   - type: input
     id: affected-area
@@ -82,7 +82,7 @@ body:
     attributes:
       label: Workflow gates
       options:
-        - label: START WORK must assign the issue, move Project status to `In progress`, and record branch/worktree before implementation.
+        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
         - label: PR must link this issue and include validation evidence.
         - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 

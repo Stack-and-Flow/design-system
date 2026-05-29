@@ -26,6 +26,7 @@ Closes #<!-- issue number -->
 ## Workflow gates
 
 - [ ] Linked issue is present with `Closes #NNN` or maintainer approved an exception.
+- [ ] Linked issue has label `status:approved` before implementation starts.
 - [ ] Work was started through the Project flow: assignee set, Project status `In progress`, branch/worktree recorded.
 - [ ] PR title follows Conventional Commit format: `<type>(<optional scope>): <description>`.
 - [ ] Commits follow the same commitlint-enforced format.
