@@ -209,17 +209,20 @@ Every component test file MUST cover:
 
 ### Required Mocks
 
-Always mock these two packages — they import CSS animations or dynamic modules that break jsdom:
+Mock only the packages that the component imports. `lucide-react/dynamic.js` and `spinners-react` can break jsdom through dynamic modules or CSS animations, but each mock should exist only when the component actually uses that package:
 
 ```typescript
 vi.mock('lucide-react/dynamic.js', () => ({
   DynamicIcon: () => null
 }));
 
+// Only if the component imports spinners-react
 vi.mock('spinners-react', () => ({
   SpinnerCircular: () => null
 }));
 ```
+
+When a component renders a loading spinner, it must use `SpinnerCircular` from `spinners-react`, following `Button` as the reference. Do not implement component-local CSS spinners.
 
 Also mock any CSS files imported directly from the component:
 

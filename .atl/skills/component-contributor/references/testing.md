@@ -45,6 +45,7 @@ vi.mock('lucide-react/dynamic', () => ({
   DynamicIcon: () => null
 }));
 
+// Only when the component imports spinners-react
 vi.mock('spinners-react', () => ({
   // biome-ignore lint/style/useNamingConvention: must match library export name
   SpinnerCircular: () => null
@@ -60,7 +61,7 @@ import { useMyComponent } from './useMyComponent';
 
 **Why**: jsdom cannot handle dynamic imports (lucide-react/dynamic), CSS animations (spinners-react), or raw CSS files. Mocking them prevents test crashes that are unrelated to component logic.
 
-**Rule**: If your component imports any of these — mock them. If it imports a new third-party package with animations or dynamic loading, add a mock for it too.
+**Rule**: Mock only what the component imports. Any component that renders a loading spinner must import `SpinnerCircular` from `spinners-react`, following `Button` as the canonical example, and must mock that import in tests. Do not implement component-local CSS spinners.
 
 ---
 

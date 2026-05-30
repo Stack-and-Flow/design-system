@@ -42,6 +42,7 @@ No extra component files unless a spec explicitly approves a composition split.
 - If a token-backed gradient, `color-mix()`, or multi-layer shadow cannot be expressed as an existing utility, add a semantic class/token in `src/styles/theme.css` or `src/styles/base.css` first.
 - Custom fractional spacing tokens declared in `theme.css` use dash names (`p-0-75`, `p-1-25`, `min-w-4-5`), not dotted custom-token names. Built-in half-step utilities such as `p-0.5`, `gap-1.5`, and `px-2.5` remain valid.
 - Disabled state uses `opacity-40`, `pointer-events-none`, and cursor treatment; do not substitute grey colors.
+- Any component that renders a loading spinner must use `SpinnerCircular` from `spinners-react` for consistency with `Button`; do not implement component-local CSS spinners.
 
 ## Storybook and tests
 
