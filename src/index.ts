@@ -15,6 +15,7 @@ export { Input } from './components/atoms/input';
 export { Link } from './components/atoms/link';
 export { Progress } from './components/atoms/progress';
 export { Skeleton } from './components/atoms/skeleton';
+export { Slider } from './components/atoms/slider';
 export { Spacer } from './components/atoms/spacer';
 export { Switch } from './components/atoms/switch';
 export { Table } from './components/atoms/table';
