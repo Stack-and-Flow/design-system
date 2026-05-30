@@ -119,7 +119,10 @@ export type IconButtonProps = NativeIconButtonProps &
      * @default primary
      */
     variant?: IconButtonVariantProps['variant'];
-    /** @control text */
+    /**
+     * @control text
+     * @default image
+     */
     icon?: DynamicIconName;
     /**
      * @control select

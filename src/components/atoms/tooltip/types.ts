@@ -79,6 +79,7 @@ export type TooltipProps = Omit<ComponentProps<'span'>, 'children' | 'color' | '
   /**
    * Legacy alias for `position`.
    * @control select
+   * @default top
    */
   placement?: TooltipPosition;
   /**
@@ -89,6 +90,7 @@ export type TooltipProps = Omit<ComponentProps<'span'>, 'children' | 'color' | '
   /**
    * Legacy alias for `delayMs`.
    * @control number
+   * @default 0
    */
   delayShow?: number;
   /**

@@ -83,6 +83,7 @@ export const Default: Story = {
 - Does `meta.parameters.docs` avoid `description.component`?
 - Are examples aligned with the canonical component API and public docs style?
 - Does each story demonstrate one axis clearly?
+- Do public props in `types.ts` document runtime defaults with `@default`, matching hook/component defaults and CVA `defaultVariants`?
 
 ## Notes
 

@@ -52,28 +52,96 @@ export type BreadcrumbItem = {
   endContent?: BreadcrumbContent;
 };
 
-export type BreadcrumbProps = BreadcrumbVariants & {
+export type BreadcrumbProps = Omit<BreadcrumbVariants, 'rounded' | 'size' | 'variant'> & {
+  /** @control text */
   'aria-label'?: string;
+  /** @control text */
   containerClassName?: string;
+  /** @control object */
   collapsedElement?: ReactNode;
+  /** @control object */
   endContent?: BreadcrumbContent;
+  /**
+   * @control boolean
+   * @default false
+   */
   hideSeparator?: boolean;
+  /**
+   * @control object
+   * @default more-horizontal
+   */
   iconCollapse?: BreadcrumbContent;
+  /**
+   * @control number
+   * @default 18
+   */
   iconSizes?: IconSizes;
+  /**
+   * @control boolean
+   * @default false
+   */
   isNavigationDisabled?: boolean;
+  /** @control object */
   items: BreadcrumbItem[];
+  /**
+   * @control number
+   * @default 1
+   */
   itemsAfterCollapse?: number;
+  /**
+   * @control number
+   * @default 1
+   */
   itemsBeforeCollapse?: number;
+  /** @control text */
   linkClassName?: string;
+  /**
+   * @control number
+   * @default 0
+   */
   maxItem?: number;
+  /**
+   * @control number
+   * @default 0
+   */
   maxItems?: number;
   onCollapsedClick?: (hiddenItems: BreadcrumbItem[]) => void;
   onItemClick?: (item: BreadcrumbItem, index: number) => void;
+  /**
+   * @control select
+   * @default md
+   */
   radius?: BreadcrumbRounded;
+  /**
+   * @control select
+   * @default md
+   */
+  rounded?: BreadcrumbRounded;
+  /**
+   * @control select
+   * @default md
+   */
+  size?: BreadcrumbVariants['size'];
+  /**
+   * @control select
+   * @default regular
+   */
+  variant?: BreadcrumbVariants['variant'];
+  /**
+   * @control text
+   * @default /
+   */
   separator?: ReactNode;
+  /** @control text */
   separatorClassName?: string;
+  /**
+   * @control boolean
+   * @default false
+   */
   showTooltip?: boolean;
+  /** @control object */
   startContent?: BreadcrumbContent;
+  /** @control text */
   textClassName?: string;
 };
 

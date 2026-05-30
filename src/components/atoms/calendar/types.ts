@@ -855,7 +855,10 @@ export type CalendarProps = {
   /** @control object */
   selectedDate?: CalendarSelection;
   onDateChange?: (date: CalendarSelection) => void;
-  /** @control object */
+  /**
+   * @control object
+   * @default []
+   */
   disabledDates?: Date[];
   /**
    * @control select
@@ -902,7 +905,10 @@ export type CalendarProps = {
    * @default light
    */
   theme?: 'light' | 'dark';
-  /** @control object */
+  /**
+   * @control object
+   * @default []
+   */
   highlightedDates?: CalendarHighlightedDate[];
   /**
    * @control text

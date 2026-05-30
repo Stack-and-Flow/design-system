@@ -147,7 +147,7 @@ export type SliderProps = NativeSliderProps & {
   rounded?: SliderRounded;
   /** @control boolean @default true */
   fullWidth?: NonNullable<RootVariants['fullWidth']>;
-  /** Convenience accessible name for the single thumb. @control text */
+  /** Convenience accessible name for the single thumb. @control text @default Slider value */
   ariaLabel?: string;
   /** Distinguishable accessible names for explicit two-thumb range mode. @control object */
   thumbLabels?: [string, string];
