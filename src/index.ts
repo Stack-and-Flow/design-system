@@ -5,6 +5,7 @@ export { Avatar } from './components/atoms/avatar';
 export { Badge } from './components/atoms/badge';
 export { Button } from './components/atoms/button';
 export { Calendar } from './components/atoms/calendar';
+export { Checkbox } from './components/atoms/checkbox';
 export { Chip } from './components/atoms/chip';
 export { Divider } from './components/atoms/divider';
 export { Dropdown } from './components/atoms/dropdown';
