@@ -36,7 +36,8 @@ describe('sanitizeInlineHtml', () => {
     ).toBe('<strong>Safe</strong> link button  <span>focus</span> block ');
   });
 
-  it('extracts normalized text content from sanitized markup', () => {
+  it('extracts normalized decoded text content from sanitized markup', () => {
     expect(getSanitizedTextContent('<strong>Safe</strong><br><span>content</span>')).toBe('Safe content');
+    expect(getSanitizedTextContent('&nbsp;')).toBe('');
   });
 });

@@ -172,7 +172,7 @@ export const checkboxLabel = cva('select-none font-medium text-text-light dark:t
       lg: 'fs-h6'
     },
     disabled: {
-      true: 'text-text-secondary-light dark:text-text-secondary-dark',
+      true: '',
       false: ''
     }
   },

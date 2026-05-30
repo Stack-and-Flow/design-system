@@ -97,9 +97,7 @@ export function sanitizeInlineHtml(html: string): string {
 }
 
 export function getSanitizedTextContent(html: string): string {
-  return html
-    .replace(/<br\s*\/?>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  const document = new DOMParser().parseFromString(html.replace(/<br\s*\/?>/gi, ' '), 'text/html');
+
+  return (document.body.textContent ?? '').replace(/\s+/g, ' ').trim();
 }

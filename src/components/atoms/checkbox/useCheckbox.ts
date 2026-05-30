@@ -135,7 +135,7 @@ export const useCheckbox = ({
     if (inputRef.current) {
       inputRef.current.indeterminate = indeterminate;
     }
-  }, [indeterminate]);
+  }, [checked, indeterminate]);
 
   const handleBlockedToggle = (event: MouseEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>) => {
     if (readOnly) {

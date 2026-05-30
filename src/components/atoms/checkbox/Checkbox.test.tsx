@@ -1,7 +1,20 @@
 import { act, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
+import { type ChangeEvent, type ComponentProps, type KeyboardEvent, useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('lucide-react/dynamic.js', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
+  DynamicIcon: ({
+    name,
+    size,
+    className,
+    ...props
+  }: { name: string; size?: number; className?: string } & ComponentProps<'svg'>) => (
+    <svg data-testid='icon' data-icon={name} data-size={size} className={className} {...props} />
+  )
+}));
+
 import { Checkbox } from './Checkbox';
 import { useCheckbox } from './useCheckbox';
 
@@ -71,10 +84,13 @@ describe('useCheckbox — logic', () => {
     consoleError.mockRestore();
   });
 
-  it('throws when sanitized labelHtml loses all meaningful text and no fallback name exists', () => {
+  it.each([
+    '<img src="/image.png">',
+    '&nbsp;'
+  ])('throws when sanitized labelHtml loses all meaningful text and no fallback name exists for %s', (labelHtml) => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
-    expect(() => renderHook(() => useCheckbox({ labelHtml: '<img src="/image.png">' } as never))).toThrow(
+    expect(() => renderHook(() => useCheckbox({ labelHtml } as never))).toThrow(
       'Checkbox labelHtml must retain meaningful text after sanitization or be paired with ariaLabel/aria-labelledby.'
     );
 
@@ -255,6 +271,20 @@ describe('Checkbox — component behavior', () => {
     render(<Checkbox label='Select all rows' checked={false} indeterminate={true} />);
 
     const checkbox = screen.getByRole('checkbox', { name: 'Select all rows' });
+
+    expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
+    expect((checkbox as HTMLInputElement).indeterminate).toBe(true);
+  });
+
+  it('re-syncs indeterminate after native activation clears the DOM property', async () => {
+    const user = userEvent.setup();
+
+    render(<Checkbox label='Select all rows' indeterminate={true} />);
+
+    const checkbox = screen.getByRole('checkbox', { name: 'Select all rows' });
+    expect((checkbox as HTMLInputElement).indeterminate).toBe(true);
+
+    await user.click(checkbox);
 
     expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
     expect((checkbox as HTMLInputElement).indeterminate).toBe(true);
