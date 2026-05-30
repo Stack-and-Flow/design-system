@@ -199,7 +199,10 @@ export type PopoverProps = {
   children: ReactNode;
   /** @control boolean */
   open?: boolean;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
@@ -207,9 +210,15 @@ export type PopoverProps = {
 export type PopoverTriggerProps = {
   /** @control object */
   children: ReactNode;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default true
+   */
   asChild?: boolean;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   disabled?: boolean;
   /** @control text */
   className?: string;

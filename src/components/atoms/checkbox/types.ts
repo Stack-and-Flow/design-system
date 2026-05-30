@@ -306,21 +306,42 @@ type CheckboxCommonProps = {
   ariaDescribedBy?: string | string[];
   /** @control text */
   'aria-describedby'?: string;
-  /** @control select */
+  /**
+   * @control select
+   * @default default
+   */
   variant?: CheckboxVariant;
-  /** @control select */
+  /**
+   * @control select
+   * @default md
+   */
   size?: CheckboxSize;
   /** @control boolean */
   checked?: boolean;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   defaultChecked?: boolean;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   indeterminate?: boolean;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   disabled?: boolean;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   readOnly?: boolean;
-  /** @control boolean */
+  /**
+   * @control boolean
+   * @default false
+   */
   invalid?: boolean;
   /** @control action */
   onChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;

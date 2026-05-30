@@ -248,43 +248,145 @@ export type TableEvents = {
 type NativeTableProps = Omit<ComponentProps<'table'>, 'children' | 'className'>;
 
 export type TableProps<T extends TableRowData = TableRowData> = NativeTableProps & {
+  /** @control object */
   items?: T[];
+  /**
+   * @control object
+   * @default []
+   */
   columns?: TableColumn<T>[];
+  /**
+   * @control select
+   * @default auto
+   */
   layout?: TableLayout;
+  /**
+   * @control select
+   * @default md
+   */
   radius?: TableRadius;
+  /**
+   * @control select
+   * @default sm
+   */
   shadow?: TableShadow;
+  /**
+   * @control boolean
+   * @default false
+   */
   hideHeader?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   isStriped?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   isCompact?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   isHeaderSticky?: boolean;
+  /**
+   * @control boolean
+   * @default true
+   */
   fullWidth?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   removeWrapper?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   showSelectionCheckboxes?: boolean;
+  /** @control object */
   sortDescriptor?: SortDescriptor | null;
+  /** @control object */
   selectedKeys?: Selection;
+  /** @control object */
   defaultSelectedKeys?: Selection;
+  /** @control object */
   disabledKeys?: Selection;
+  /**
+   * @control boolean
+   * @default false
+   */
   disallowEmptySelection?: boolean;
+  /**
+   * @control select
+   * @default none
+   */
   selectionMode?: SelectionMode;
+  /**
+   * @control boolean
+   * @default false
+   */
   isKeyboardNavigationDisabled?: boolean;
+  /**
+   * @control object
+   * @default {}
+   */
   classNames?: TableClassNames;
+  /**
+   * @control object
+   * @default []
+   */
   data?: T[];
+  /**
+   * @control boolean
+   * @default false
+   */
   loading?: boolean;
+  /**
+   * @control text
+   * @default No data available
+   */
   emptyContent?: React.ReactNode;
   onRowClick?: (row: T) => void;
   rowKey?: (row: T) => React.Key;
   getRowLabel?: (row: T) => string;
+  /**
+   * @control select
+   * @default default
+   */
   variant?: TableVariant;
+  /**
+   * @control select
+   * @default md
+   */
   size?: TableSize;
+  /** @control text */
   className?: string;
+  /**
+   * @control boolean
+   * @default false
+   */
   pagination?: boolean;
+  /**
+   * @control number
+   * @default 10
+   */
   pageSize?: number;
+  /** @control number */
   totalRows?: number;
   onPageChange?: (page: number) => void;
+  /**
+   * @control select
+   * @default false
+   */
   rowSelection?: 'single' | 'multiple' | false;
+  /** @control object */
   selectedRows?: T[];
   onSelectRows?: (selectedRows: T[]) => void;
+  /** @control text */
   ariaLabel?: string;
+  /** @control text */
   ariaLabelledBy?: string;
 };
 

@@ -40,6 +40,7 @@ Audit against `.atl/skills/_shared/component-contract.md`:
 
 - required 6-file pattern and no unapproved extra files;
 - TypeScript rules and public prop typing;
+- Public prop JSDoc/default parity: compare `types.ts` props against CVA `defaultVariants`, hook/component destructuring defaults, alias/coalesced fallbacks, and boolean fallback chains; fail missing or stale `@default` docs.
 - CVA placement and hook/component responsibilities;
 - token usage and Tailwind v4 custom fractional naming;
 - named export and type export pattern;
@@ -101,6 +102,7 @@ Verdict:
 - [SEVERITY] `file:line` — Problem: ... Expected: ... Found: ... Rule: ...
 
 ### Validation evidence
+- `node scripts/verify-prop-default-docs.mjs`: pass/fail/not run — reason
 - `{command}`: pass/fail/not run — reason
 ```
 

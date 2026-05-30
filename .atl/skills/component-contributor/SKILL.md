@@ -118,6 +118,8 @@ Present a concise plan and wait for confirmation unless SDD delegation already a
 
 Implement files in this order: `types.ts` → hook → component → tests → stories → `index.ts`.
 
+After hook/component defaults are known, return to `types.ts` and verify every public prop with a runtime default has matching JSDoc `@default` metadata. Run `node scripts/verify-prop-default-docs.mjs` before handoff.
+
 Use `.atl/skills/_shared/component-contract.md` as the contract for each file. If a local mature component contradicts the shared contract, stop and ask whether to follow current code or update the contract.
 
 ### 4 — Explain decisions

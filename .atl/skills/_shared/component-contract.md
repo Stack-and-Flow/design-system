@@ -22,7 +22,9 @@ No extra component files unless a spec explicitly approves a composition split.
 - Use named component exports; avoid default component exports.
 - Reusable/systemic prop types live in `src/types`; component-local types stay component-specific.
 - `types.ts` imports `cva` and `VariantProps` from `class-variance-authority`; all CVA variants and `defaultVariants` live there.
-- Public props exposed in stories include Storybook JSDoc annotations: `@control type` and `@default value` when a default exists. Prose descriptions are optional unless the public API needs clarification.
+- Every public component prop declared through `types.ts` must have Storybook-facing JSDoc when it is story-exposed, including `@control type` where applicable.
+- Every public prop with a runtime default must document the same default with `@default value` in `types.ts`. Runtime defaults include CVA `defaultVariants`, hook/component destructuring defaults, alias/coalesced fallbacks, and boolean fallback chains such as `disabled ?? isDisabled ?? false`.
+- Run `node scripts/verify-prop-default-docs.mjs` before handoff; missing `@default` docs are a component contract violation. Prose descriptions are optional unless the public API needs clarification.
 - Hooks return explicit typed objects; never `any`.
 - No `Array<T>` when `T[]` is equivalent.
 - No non-null assertions, `@ts-ignore`, or `@ts-expect-error` without a documented reason.

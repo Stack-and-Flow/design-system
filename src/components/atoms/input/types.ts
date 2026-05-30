@@ -214,7 +214,10 @@ export type InputProps = NativeInputProps & {
    * @default false
    */
   rounded?: boolean;
-  /** @control text */
+  /**
+   * @control text
+   * @default ''
+   */
   label?: string;
   /**
    * @control boolean

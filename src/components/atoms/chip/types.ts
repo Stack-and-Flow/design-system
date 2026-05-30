@@ -216,14 +216,38 @@ export type ChipColorVariants = VariantProps<typeof chipVariants>['color'];
 export type ChipSizeVariants = VariantProps<typeof chipVariants>['size'];
 
 type ChipCustomProps = {
+  /** @control text */
   children?: React.ReactNode;
+  /**
+   * @control select
+   * @default solid
+   */
   variant?: ChipVariant;
+  /**
+   * @control select
+   * @default primary
+   */
   color?: ChipColorVariants;
+  /**
+   * @control select
+   * @default md
+   */
   size?: ChipSizeVariants;
+  /**
+   * @control select
+   * @default full
+   */
   radius?: RadiusSize;
+  /**
+   * @control select
+   * @default default
+   */
   animation?: Animation;
+  /** @control object */
   avatar?: React.ReactNode;
+  /** @control object */
   startContent?: React.ReactNode;
+  /** @control object */
   endContent?: React.ReactNode;
   /**
    * Preferred root element for the chip.
@@ -231,20 +255,46 @@ type ChipCustomProps = {
    * Note: when `closable` and interactive are combined, the chip is
    * rendered as a split-actions group (`div[role="group"]` with
    * two sibling buttons) to avoid nested interactive controls.
+   *
+   * @control select
    */
   as?: 'div' | 'button';
   onClick?: React.MouseEventHandler<HTMLElement>;
+  /**
+   * @control boolean
+   * @default false
+   */
   disabled?: boolean;
-  /** @deprecated Use `disabled` instead. */
+  /**
+   * @deprecated Use `disabled` instead.
+   * @control boolean
+   * @default false
+   */
   isDisabled?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   closable?: boolean;
   onClose?: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLElement>) => void;
+  /**
+   * @control boolean
+   * @default false
+   */
   selectable?: boolean;
+  /** @control boolean */
   selected?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
   defaultSelected?: boolean;
   onSelectedChange?: (selected: boolean) => void;
+  /** @control text */
   className?: string;
+  /** @control object */
   classNames?: Partial<Record<'base' | 'content' | 'dot' | 'avatar' | 'closeButton' | 'actionButton', string>>;
+  /** @control text */
   ariaLabel?: string;
 };
 

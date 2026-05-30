@@ -61,7 +61,7 @@ export type HeaderProps = Omit<HeaderVariantProps, 'font' | 'size'> &
     size?: HeaderSize;
     /**
      * @control select
-     * @default undefined
+     * @default h1
      */
     fontSize?: HeaderSize;
     /**

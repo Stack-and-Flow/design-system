@@ -39,6 +39,7 @@ Closes #<!-- issue number -->
 - [ ] Accessibility contract from the spec was implemented or deviations are explained below.
 - [ ] Follows the 6-file pattern: `types.ts`, `use*.ts`, `Component.tsx`, `Component.test.tsx`, `Component.stories.tsx`, `index.ts`.
 - [ ] CVA variants live in `types.ts`; JSX component has no state, CVA calls, or business logic.
+- [ ] Public props with runtime defaults have matching `@default` JSDoc in `types.ts` (`node scripts/verify-prop-default-docs.mjs`).
 - [ ] Uses design tokens from `theme.css`; no hardcoded colors or arbitrary color utilities.
 - [ ] Storybook covers default, variants, documented states, edge cases, and dark mode when visually different.
 - [ ] Component audit result is PASS or accepted PASS WITH WARNINGS.

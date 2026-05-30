@@ -133,6 +133,7 @@ The pre-PR review must check:
 - 6-file architecture and file responsibilities
 - CVA placement and TypeScript conventions
 - Storybook docs/controls/actions conventions
+- Public prop JSDoc `@default` coverage matching runtime defaults (`node scripts/verify-prop-default-docs.mjs`)
 - Token usage and visual states
 - Accessibility, focus visibility, disabled behavior, and keyboard support
 - Tests and build evidence
@@ -166,6 +167,7 @@ A PR will be rejected WITHOUT detailed feedback if:
 | Hardcoded colors/spacing       | Must use design tokens from `theme.css` |
 | Missing tests                  | Unit tests AND story required           |
 | Missing story                  | Storybook is the source of truth        |
+| Missing prop default docs      | `types.ts` must match runtime defaults  |
 | Container/Presentational mixed | Logic in `.tsx` file                    |
 
 ---
@@ -179,6 +181,7 @@ A PR is ready to merge when:
 - [ ] No `any`, no `interface`
 - [ ] Tests in `.test.tsx` cover hook logic + component behavior
 - [ ] Story has args, controls, and description (NO play functions)
+- [ ] Public prop defaults are documented in `types.ts` and `node scripts/verify-prop-default-docs.mjs` passes
 - [ ] No hardcoded values — only design tokens
 - [ ] ARIA attributes present and correct
 - [ ] PR template fully filled
