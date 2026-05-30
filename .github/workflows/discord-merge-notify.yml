@@ -1,0 +1,126 @@
+name: Discord Merge Notification
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  notify:
+    name: Notify Discord
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      STORYBOOK_URL: https://sf-design-system.netlify.app/
+
+    steps:
+      - name: Skip when Discord webhook is not configured
+        if: ${{ env.DISCORD_WEBHOOK_URL == '' }}
+        run: echo "DISCORD_WEBHOOK_URL is not configured; skipping Discord notification."
+
+      - name: Send merge summary to Discord
+        if: ${{ env.DISCORD_WEBHOOK_URL != '' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+            const storybookUrl = process.env.STORYBOOK_URL;
+            const { owner, repo } = context.repo;
+            const commitSha = context.sha;
+            const shortSha = commitSha.slice(0, 7);
+            const headCommit = context.payload.head_commit;
+
+            const associatedPulls = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner,
+              repo,
+              commit_sha: commitSha,
+            });
+            const pullRequest = associatedPulls.data[0];
+
+            let changedFiles = [];
+            if (pullRequest) {
+              const files = await github.paginate(github.rest.pulls.listFiles, {
+                owner,
+                repo,
+                pull_number: pullRequest.number,
+                per_page: 100,
+              });
+              changedFiles = files.map((file) => file.filename);
+            } else if (headCommit) {
+              changedFiles = [
+                ...(headCommit.added ?? []),
+                ...(headCommit.modified ?? []),
+                ...(headCommit.removed ?? []),
+              ];
+            }
+
+            const componentPaths = changedFiles
+              .map((file) => file.match(/^src\/components\/(atoms|molecules|organisms)\/([^/]+)/)?.[2])
+              .filter(Boolean);
+            const components = [...new Set(componentPaths)]
+              .map((component) => component.replace(/(^|-)(\w)/g, (_, prefix, letter) => letter.toUpperCase()))
+              .slice(0, 8);
+
+            const docsChanged = changedFiles.some((file) => file.startsWith('docs/') || file.includes('.stories.'));
+            const testsChanged = changedFiles.some((file) => file.endsWith('.test.ts') || file.endsWith('.test.tsx'));
+            const workflowsChanged = changedFiles.some((file) => file.startsWith('.github/workflows/'));
+
+            const changeTags = [
+              components.length > 0 ? `Componentes: ${components.join(', ')}` : null,
+              docsChanged ? 'Docs/Storybook' : null,
+              testsChanged ? 'Tests' : null,
+              workflowsChanged ? 'CI' : null,
+            ].filter(Boolean);
+
+            const title = pullRequest
+              ? `${pullRequest.title} (#${pullRequest.number})`
+              : headCommit?.message?.split('\n')[0] ?? `Merge en main (${shortSha})`;
+            const url = pullRequest?.html_url ?? headCommit?.url ?? `https://github.com/${owner}/${repo}/commit/${commitSha}`;
+            const author = pullRequest?.user?.login ?? headCommit?.author?.name ?? context.actor;
+            const summarySource = pullRequest?.body?.trim() || headCommit?.message || 'Sin descripción disponible.';
+            const summary = summarySource
+              .split('\n')
+              .map((line) => line.trim())
+              .filter(Boolean)
+              .find((line) => !line.startsWith('Closes #')) ?? summarySource.split('\n')[0];
+
+            const fileSummary = changedFiles.length > 0
+              ? `${changedFiles.length} archivo${changedFiles.length === 1 ? '' : 's'} cambiado${changedFiles.length === 1 ? '' : 's'}`
+              : 'Cambios detectados en main';
+
+            const fields = [
+              { name: 'Autor', value: author, inline: true },
+              { name: 'Commit', value: `[${shortSha}](https://github.com/${owner}/${repo}/commit/${commitSha})`, inline: true },
+              { name: 'Alcance', value: changeTags.length > 0 ? changeTags.join(' · ') : fileSummary, inline: false },
+              { name: 'Storybook', value: storybookUrl, inline: false },
+            ];
+
+            const payload = {
+              username: 'Stack-and-Flow Bot',
+              embeds: [
+                {
+                  title: `🚀 Merge en main: ${title}`.slice(0, 256),
+                  url,
+                  description: summary.slice(0, 4096),
+                  color: 0xdb143c,
+                  fields,
+                  footer: { text: `${owner}/${repo}` },
+                  timestamp: new Date().toISOString(),
+                },
+              ],
+            };
+
+            const response = await fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+              const body = await response.text();
+              throw new Error(`Discord webhook failed with ${response.status}: ${body}`);
+            }
