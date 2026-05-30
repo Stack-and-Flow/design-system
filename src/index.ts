@@ -14,6 +14,7 @@ export { Icon } from './components/atoms/icon';
 export { IconButton } from './components/atoms/icon-button';
 export { Input } from './components/atoms/input';
 export { Link } from './components/atoms/link';
+export { Popover } from './components/atoms/popover';
 export { Progress } from './components/atoms/progress';
 export { Skeleton } from './components/atoms/skeleton';
 export { Slider } from './components/atoms/slider';
