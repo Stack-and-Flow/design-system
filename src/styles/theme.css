@@ -519,3 +519,10 @@
 @utility max-w-modal-5xl {
   max-width: min(var(--size-modal-viewport), var(--size-modal-5xl));
 }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="popover-content"] {
+    animation: none !important;
+    transition: none !important;
+  }
+}
