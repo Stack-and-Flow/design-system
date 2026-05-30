@@ -366,6 +366,10 @@ export const usePopoverTrigger = ({
         return;
       }
 
+      if (event.currentTarget.tagName === 'INPUT' && event.detail === 0) {
+        return;
+      }
+
       toggleOpen(event.currentTarget);
     },
     [disabled, toggleOpen]
@@ -391,13 +395,14 @@ export const usePopoverTrigger = ({
       const currentTarget = event.currentTarget;
       const isButton = currentTarget.tagName === 'BUTTON';
       const isAnchor = currentTarget.tagName === 'A';
+      const isInput = currentTarget.tagName === 'INPUT';
 
-      if (event.key === ' ' && !isButton) {
+      if (event.key === ' ' && !isButton && !isInput) {
         event.preventDefault();
         toggleOpen(currentTarget);
       }
 
-      if (event.key === 'Enter' && !isButton && !isAnchor) {
+      if (event.key === 'Enter' && !isButton && !isAnchor && !isInput) {
         event.preventDefault();
         toggleOpen(currentTarget);
       }

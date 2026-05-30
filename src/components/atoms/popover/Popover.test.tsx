@@ -279,6 +279,29 @@ describe('Popover — component behavior', () => {
     expect(await screen.findByRole('dialog', { name: 'Custom trigger popover' })).toBeInTheDocument();
   });
 
+  it('preserves input trigger keyboard behavior while typing', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <Popover onOpenChange={onOpenChange} open={false}>
+        <Popover.Trigger>
+          <input aria-label='Search trigger' />
+        </Popover.Trigger>
+        <Popover.Content ariaLabel='Search suggestions'>Suggestions content</Popover.Content>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('textbox', { name: 'Search trigger' });
+    trigger.focus();
+
+    await user.keyboard('hello world{Enter}');
+
+    expect(trigger).toHaveValue('hello world');
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog', { name: 'Search suggestions' })).not.toBeInTheDocument();
+  });
+
   it('renders the frosted variant with an arrow while preserving scoped dark-mode portal rendering', async () => {
     const user = userEvent.setup();
 
