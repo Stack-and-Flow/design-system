@@ -48,7 +48,12 @@ const normalizeSliderValues = (
   }
 
   const finiteValues = value.filter((item) => Number.isFinite(item)).slice(0, 2);
-  return finiteValues.length > 0 ? finiteValues.map((item) => clamp(item, min, max)) : fallback;
+  if (finiteValues.length === 0) {
+    return fallback;
+  }
+
+  const clampedValues = finiteValues.map((item) => clamp(item, min, max));
+  return clampedValues.length === 2 ? [...clampedValues].sort((a, b) => a - b) : clampedValues;
 };
 
 const resolveThumbValues = (

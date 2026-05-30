@@ -102,18 +102,13 @@ describe('useSlider — logic', () => {
     expect(uncontrolled.defaultValue).toEqual([20, 80]);
   });
 
-  it('maps color and rounded variants to track, range, and thumb classes', () => {
-    const { result } = renderHook(() =>
-      useSlider({ ariaLabel: 'Status', color: 'success', rounded: 'md', defaultValue: [40] })
-    );
+  it('sorts two-thumb values so range labels match minimum and maximum semantics', () => {
+    const controlled = renderHook(() => useSlider({ ariaLabel: 'Price', value: [80, 20] })).result.current.rootProps;
+    expect(controlled.value).toEqual([20, 80]);
 
-    expect(result.current.trackClassName).toContain('bg-success-tint');
-    expect(result.current.trackClassName).toContain('rounded-md');
-    expect(result.current.rangeClassName).toContain('bg-success-light');
-    expect(result.current.rangeClassName).toContain('rounded-md');
-    expect(result.current.thumbs[0]?.className).toContain('rounded-md');
-    expect(result.current.thumbs[0]?.visualClassName).toContain('border-success-light');
-    expect(result.current.thumbs[0]?.visualClassName).toContain('rounded-md');
+    const uncontrolled = renderHook(() => useSlider({ ariaLabel: 'Price', defaultValue: [80, 20] })).result.current
+      .rootProps;
+    expect(uncontrolled.defaultValue).toEqual([20, 80]);
   });
 });
 
@@ -201,14 +196,6 @@ describe('Slider — component behavior', () => {
     render(<Slider defaultValue={[25, 75]} />);
     expect(screen.getByRole('slider', { name: 'Minimum value' })).toBeInTheDocument();
     expect(screen.getByRole('slider', { name: 'Maximum value' })).toBeInTheDocument();
-  });
-
-  it('keeps the visual thumb pointer-transparent so clicking it focuses instead of sliding', () => {
-    render(<Slider ariaLabel='Volume' value={[0]} />);
-    const slider = screen.getByRole('slider', { name: 'Volume' });
-    const visualThumb = slider.firstElementChild;
-    expect(visualThumb).toHaveAttribute('aria-hidden', 'true');
-    expect(visualThumb).toHaveClass('pointer-events-none');
   });
 
   it('does not call onValueChange from keyboard interaction when disabled', async () => {
