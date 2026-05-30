@@ -50,6 +50,16 @@ jobs:
                 per_page: 100,
               });
               changedFiles = files.map((file) => file.filename);
+            } else if (context.payload.commits?.length > 0) {
+              changedFiles = [
+                ...new Set(
+                  context.payload.commits.flatMap((commit) => [
+                    ...(commit.added ?? []),
+                    ...(commit.modified ?? []),
+                    ...(commit.removed ?? []),
+                  ])
+                ),
+              ];
             } else if (headCommit) {
               changedFiles = [
                 ...(headCommit.added ?? []),
@@ -81,21 +91,67 @@ jobs:
               : headCommit?.message?.split('\n')[0] ?? `Merge en main (${shortSha})`;
             const url = pullRequest?.html_url ?? headCommit?.url ?? `https://github.com/${owner}/${repo}/commit/${commitSha}`;
             const author = pullRequest?.user?.login ?? headCommit?.author?.name ?? context.actor;
-            const summarySource = pullRequest?.body?.trim() || headCommit?.message || 'Sin descripción disponible.';
-            const summary = summarySource
-              .split('\n')
-              .map((line) => line.trim())
+
+            const removeHtmlComments = (text) => text.replace(/<!--([\s\S]*?)-->/g, '');
+            const getMarkdownSection = (body, heading) => {
+              const lines = removeHtmlComments(body ?? '').split('\n');
+              const start = lines.findIndex((line) => line.trim().toLowerCase() === `## ${heading}`.toLowerCase());
+              if (start === -1) {
+                return [];
+              }
+
+              const sectionLines = [];
+              for (const line of lines.slice(start + 1)) {
+                if (/^##\s+/.test(line.trim())) {
+                  break;
+                }
+                sectionLines.push(line);
+              }
+              return sectionLines;
+            };
+
+            const cleanSummaryLines = (lines) =>
+              lines
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .filter((line) => !/^closes\s+#\d+/i.test(line))
+                .filter((line) => !/^[-*]\s+\[[ x]]\]/i.test(line))
+                .map((line) => line.replace(/^[-*]\s+/, '• '))
+                .slice(0, 6);
+
+            const prSummaryLines = cleanSummaryLines(getMarkdownSection(pullRequest?.body, 'Summary'));
+            const commitMessages = (context.payload.commits ?? [])
+              .map((commit) => commit.message?.split('\n')[0]?.trim())
               .filter(Boolean)
-              .find((line) => !line.startsWith('Closes #')) ?? summarySource.split('\n')[0];
+              .slice(0, 6)
+              .map((message) => `• ${message}`);
+            const fallbackSummary = headCommit?.message?.split('\n').map((line) => line.trim()).filter(Boolean).slice(0, 6) ?? [];
+            const changeSummaryLines = prSummaryLines.length > 0
+              ? prSummaryLines
+              : commitMessages.length > 0
+                ? commitMessages
+                : fallbackSummary;
+            const changeSummary = changeSummaryLines.length > 0
+              ? changeSummaryLines.join('\n')
+              : '• Cambios mergeados en main.';
 
             const fileSummary = changedFiles.length > 0
               ? `${changedFiles.length} archivo${changedFiles.length === 1 ? '' : 's'} cambiado${changedFiles.length === 1 ? '' : 's'}`
               : 'Cambios detectados en main';
+            const changedFilesPreview = changedFiles
+              .slice(0, 8)
+              .map((file) => `• ${file}`)
+              .join('\n');
+            const filesValue = changedFilesPreview
+              ? `${fileSummary}\n${changedFilesPreview}${changedFiles.length > 8 ? '\n• …' : ''}`
+              : fileSummary;
 
             const fields = [
               { name: 'Autor', value: author, inline: true },
               { name: 'Commit', value: `[${shortSha}](https://github.com/${owner}/${repo}/commit/${commitSha})`, inline: true },
+              { name: 'Qué cambió', value: changeSummary.slice(0, 1024), inline: false },
               { name: 'Alcance', value: changeTags.length > 0 ? changeTags.join(' · ') : fileSummary, inline: false },
+              { name: 'Archivos', value: filesValue.slice(0, 1024), inline: false },
               { name: 'Storybook', value: storybookUrl, inline: false },
             ];
 
@@ -105,7 +161,7 @@ jobs:
                 {
                   title: `🚀 Merge en main: ${title}`.slice(0, 256),
                   url,
-                  description: summary.slice(0, 4096),
+                  description: 'Resumen automático de los cambios mergeados en `main`.',
                   color: 0xdb143c,
                   fields,
                   footer: { text: `${owner}/${repo}` },
