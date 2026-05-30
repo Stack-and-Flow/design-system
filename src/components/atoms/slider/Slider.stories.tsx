@@ -30,7 +30,14 @@ export default meta;
 type Story = StoryObj<typeof Slider>;
 
 const frame = (children: ReactNode, gapClass = 'gap-3') => (
-  <div className={cn('flex w-96 max-w-full flex-col', gapClass)}>{children}</div>
+  <div
+    className={cn(
+      'flex w-96 max-w-full flex-col rounded-md border border-border-light bg-surface-light p-4 dark:border-border-dark dark:bg-surface-dark',
+      gapClass
+    )}
+  >
+    {children}
+  </div>
 );
 
 /**
