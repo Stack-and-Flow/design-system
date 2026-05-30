@@ -20,6 +20,11 @@ export const Slider: FC<SliderProps> = (props) => {
           aria-label={thumb['aria-label']}
           aria-labelledby={thumb['aria-labelledby']}
         >
+          {thumb.hiddenLabel ? (
+            <span id={thumb.hiddenLabel.id} className='sr-only'>
+              {thumb.hiddenLabel.text}
+            </span>
+          ) : null}
           <span aria-hidden='true' className={thumb.visualClassName} />
         </SliderPrimitive.Thumb>
       ))}

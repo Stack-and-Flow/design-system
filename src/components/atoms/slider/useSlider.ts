@@ -1,5 +1,5 @@
 import type * as SliderPrimitive from '@radix-ui/react-slider';
-import type { ComponentProps } from 'react';
+import { type ComponentProps, useId } from 'react';
 import { cn } from '@/lib/utils';
 import {
   type SliderProps,
@@ -19,6 +19,10 @@ type SliderThumbProps = {
   'aria-disabled'?: boolean;
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  hiddenLabel?: {
+    id: string;
+    text: string;
+  };
 };
 
 export type UseSliderReturn = {
@@ -63,7 +67,19 @@ const resolveThumbValues = (
   return fallback;
 };
 
-const resolveThumbAriaLabelledBy = (isRange: boolean, ariaLabelledBy: string | undefined): string | undefined => {
+const resolveThumbAriaLabelledBy = ({
+  isRange,
+  ariaLabelledBy,
+  hiddenLabelId
+}: {
+  isRange: boolean;
+  ariaLabelledBy?: string;
+  hiddenLabelId?: string;
+}): string | undefined => {
+  if (isRange && ariaLabelledBy && hiddenLabelId) {
+    return `${ariaLabelledBy} ${hiddenLabelId}`;
+  }
+
   if (isRange) {
     return undefined;
   }
@@ -86,6 +102,10 @@ const resolveThumbAriaLabel = ({
   ariaLabel?: string;
   nativeAriaLabel?: string;
 }): string | undefined => {
+  if (isRange && ariaLabelledBy) {
+    return undefined;
+  }
+
   if (isRange) {
     return rangeLabels[index];
   }
@@ -134,22 +154,31 @@ export const useSlider = ({
   const thumbValues = resolveThumbValues(normalizedValue, normalizedDefaultValue, singleFallback);
   const isRange = thumbValues.length === 2;
   const rangeLabels = thumbLabels ?? ['Minimum value', 'Maximum value'];
-  const thumbs = thumbValues.map((_, index) => ({
-    key: `thumb-${index}`,
-    className: sliderThumbVariants({ rounded }),
-    visualClassName: sliderThumbVisualVariants({ color, rounded, size }),
-    'aria-describedby': ariaDescribedBy,
-    'aria-disabled': disabled ? true : undefined,
-    'aria-labelledby': resolveThumbAriaLabelledBy(isRange, ariaLabelledBy),
-    'aria-label': resolveThumbAriaLabel({
-      isRange,
-      index,
-      rangeLabels,
-      ariaLabelledBy,
-      ariaLabel,
-      nativeAriaLabel
-    })
-  }));
+  const rangeThumbLabelBaseId = useId();
+  const thumbs = thumbValues.map((_, index) => {
+    const hiddenLabel =
+      isRange && ariaLabelledBy
+        ? { id: `${rangeThumbLabelBaseId}-thumb-${index}-label`, text: rangeLabels[index] }
+        : undefined;
+
+    return {
+      key: `thumb-${index}`,
+      className: sliderThumbVariants({ rounded }),
+      visualClassName: sliderThumbVisualVariants({ color, rounded, size }),
+      'aria-describedby': ariaDescribedBy,
+      'aria-disabled': disabled ? true : undefined,
+      'aria-labelledby': resolveThumbAriaLabelledBy({ isRange, ariaLabelledBy, hiddenLabelId: hiddenLabel?.id }),
+      'aria-label': resolveThumbAriaLabel({
+        isRange,
+        index,
+        rangeLabels,
+        ariaLabelledBy,
+        ariaLabel,
+        nativeAriaLabel
+      }),
+      hiddenLabel
+    };
+  });
 
   return {
     rootProps: {

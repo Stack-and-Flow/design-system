@@ -176,6 +176,27 @@ describe('Slider — component behavior', () => {
     expect(screen.getByRole('slider', { name: 'Maximum price' })).toHaveAttribute('aria-valuenow', '75');
   });
 
+  it('combines external field context with distinguishable thumb names in range mode', () => {
+    render(
+      <>
+        <span id='price-range-label'>Price range</span>
+        <Slider
+          aria-labelledby='price-range-label'
+          defaultValue={[25, 75]}
+          thumbLabels={['Minimum price', 'Maximum price']}
+        />
+      </>
+    );
+
+    const minimum = screen.getByRole('slider', { name: 'Price range Minimum price' });
+    const maximum = screen.getByRole('slider', { name: 'Price range Maximum price' });
+
+    expect(minimum).toHaveAttribute('aria-valuenow', '25');
+    expect(maximum).toHaveAttribute('aria-valuenow', '75');
+    expect(minimum).toHaveAccessibleName('Price range Minimum price');
+    expect(maximum).toHaveAccessibleName('Price range Maximum price');
+  });
+
   it('renders distinguishable fallback names for range mode without thumbLabels', () => {
     render(<Slider defaultValue={[25, 75]} />);
     expect(screen.getByRole('slider', { name: 'Minimum value' })).toBeInTheDocument();
