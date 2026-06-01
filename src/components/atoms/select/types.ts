@@ -282,9 +282,15 @@ export type SelectProps = NativeSelectTriggerProps &
     onOpenChange?: (isOpen: boolean) => void;
     /** @control text */
     ariaLabel?: string;
-    /** @control text */
+    /**
+     * @control text
+     * @default Clear selection
+     */
     clearAriaLabel?: string;
-    /** @control text */
+    /**
+     * @control text
+     * @default Loading options...
+     */
     loadingLabel?: string;
     /** @control text */
     placeholder?: string;

@@ -28,6 +28,16 @@ export { Tooltip } from './components/atoms/tooltip';
 // ─── Molecules ───────────────────────────────────────────────────────────────
 export { Accordion } from './components/molecules/accordion';
 export { Breadcrumb } from './components/molecules/breadcrumb';
+export {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationSummary
+} from './components/molecules/pagination';
 export { Snippet } from './components/molecules/snippet';
 
 // ─── Organisms ───────────────────────────────────────────────────────────────
