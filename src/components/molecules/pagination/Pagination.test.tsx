@@ -12,6 +12,7 @@ import {
   PaginationPrevious,
   PaginationSummary
 } from './Pagination';
+import type { PaginationControlClickHandler } from './types';
 import {
   usePagination,
   usePaginationControl,
@@ -231,6 +232,56 @@ describe('Pagination — component behavior', () => {
     );
 
     await user.click(screen.getByRole('button', { name: '5' }));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('activates button mode with Enter and Space', async () => {
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
+
+    render(
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationLink onClick={handleClick}>5</PaginationLink>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
+
+    const button = screen.getByRole('button', { name: '5' });
+    button.focus();
+
+    await user.keyboard('{Enter}');
+    expect(handleClick).toHaveBeenCalledTimes(1);
+
+    await user.keyboard(' ');
+    expect(handleClick).toHaveBeenCalledTimes(2);
+  });
+
+  it('activates anchor mode with Enter', async () => {
+    const user = userEvent.setup();
+    const handleClick: PaginationControlClickHandler = vi.fn((event) => {
+      event.preventDefault();
+    });
+
+    render(
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationLink href='?page=6' onClick={handleClick}>
+              6
+            </PaginationLink>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
+
+    const link = screen.getByRole('link', { name: '6' });
+    link.focus();
+
+    await user.keyboard('{Enter}');
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
