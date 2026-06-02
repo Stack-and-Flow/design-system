@@ -194,8 +194,8 @@ export const NestedContent: Story = {
           </Text>
         </div>
         <div className='flex flex-wrap gap-3'>
-          <Button text='Open workspace' variant='secondary' onClick={action('open-workspace-click')} />
-          <Button text='Learn more' variant='light' onClick={action('learn-more-click')} />
+          <Button text='Open workspace' onClick={action('open-workspace-click')} />
+          <Button text='Learn more' variant='ghost' onClick={action('learn-more-click')} />
         </div>
       </div>
     </CardContainer>

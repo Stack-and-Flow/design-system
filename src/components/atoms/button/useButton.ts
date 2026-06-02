@@ -36,7 +36,7 @@ export const useButton = ({
   type = 'button',
   ...props
 }: ButtonProps): UseButtonReturn => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
   const isDisabled = disabled || isLoading;
 
   useRipple(buttonRef);

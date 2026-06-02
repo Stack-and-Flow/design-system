@@ -36,7 +36,7 @@ export const useIconButton = ({
   'aria-pressed': ariaPressed,
   ...props
 }: IconButtonProps): UseIconButtonReturn => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
 
   useRipple(buttonRef);
 
