@@ -35,7 +35,7 @@
     "prepare": "lefthook install"
   },
   "dependencies": {
-    "@internationalized/date": "3.12.1",
+    "@internationalized/date": "3.12.2",
     "@radix-ui/react-avatar": "1.1.11",
     "@radix-ui/react-dialog": "1.1.15",
     "@radix-ui/react-dropdown-menu": "2.1.16",
@@ -58,9 +58,9 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.15",
-    "@commitlint/cli": "21.0.1",
-    "@commitlint/config-conventional": "21.0.1",
+    "@biomejs/biome": "2.4.16",
+    "@commitlint/cli": "21.0.2",
+    "@commitlint/config-conventional": "21.0.2",
     "@fontsource-variable/space-grotesk": "5.2.10",
     "@storybook/addon-a11y": "8.6.18",
     "@storybook/addon-actions": "8.6.18",
@@ -86,8 +86,8 @@
     "@vitest/coverage-v8": "3.2.4",
     "axe-playwright": "2.2.2",
     "jsdom": "29.1.1",
-    "lefthook": "2.1.8",
-    "lucide-react": "1.16.0",
+    "lefthook": "2.1.9",
+    "lucide-react": "1.17.0",
     "playwright": "1.60.0",
     "postcss": "8.5.15",
     "react": "18.3.1",
