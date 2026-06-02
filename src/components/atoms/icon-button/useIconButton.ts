@@ -1,4 +1,4 @@
-import { type MouseEvent, type RefObject, useRef } from 'react';
+import { type ComponentProps, type MouseEvent, useRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 import { cn } from '@/lib/utils';
 import { type IconButtonEmphasis, type IconButtonProps, type IconButtonSize, iconButtonVariants } from './types';
@@ -9,7 +9,7 @@ type UseIconButtonReturn = Omit<
 > & {
   ariaLabel: string;
   ariaPressed: IconButtonProps['aria-pressed'];
-  buttonRef: RefObject<HTMLButtonElement>;
+  buttonRef: ComponentProps<'button'>['ref'];
   className: string;
   disabled: boolean;
   handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -36,7 +36,7 @@ export const useIconButton = ({
   'aria-pressed': ariaPressed,
   ...props
 }: IconButtonProps): UseIconButtonReturn => {
-  const buttonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useRipple(buttonRef);
 
