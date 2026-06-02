@@ -24,7 +24,7 @@ jobs:
 
       - name: Send merge summary to Discord
         if: ${{ env.DISCORD_WEBHOOK_URL != '' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
