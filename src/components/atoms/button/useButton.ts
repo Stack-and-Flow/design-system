@@ -6,7 +6,7 @@ import { type ButtonEmphasis, type ButtonProps, buttonVariants } from './types';
 type UseButtonReturn = Omit<ButtonProps, 'onClick'> & {
   ariaLabel: string;
   ariaPressed: ButtonProps['aria-pressed'];
-  buttonRef: RefObject<HTMLButtonElement | null>;
+  buttonRef: RefObject<HTMLButtonElement>;
   className: string;
   contentClassName: string;
   disabled: boolean;

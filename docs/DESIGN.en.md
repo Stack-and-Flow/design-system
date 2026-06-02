@@ -71,6 +71,7 @@ The brand color. Two values depending on the mode:
 | `background-surface` | `#0B131E` | — | Solid cards, code blocks |
 | `background-surface-raised` | `#0F1824` | — | Table headers, subtle emphasis |
 | `navbar-bg` | `rgba(6,12,19,0.75)` | `rgba(255,255,255,0.7)` | Navbar with backdrop blur |
+| `card-backdrop-bg` | `rgba(6,12,19,0.38)` | `rgba(255,255,255,0.32)` | Floating CardContainer with `backdropBlur` |
 | `sidebar-mobile-bg` | `rgba(6,12,19,1.0)` | `#ffffff` | Mobile sidebar |
 | `dropdown-bg` | `#0B131E` | `#ffffff` | Dropdown menus |
 
@@ -184,8 +185,8 @@ Unlike a shadow-based elevation system, Stack-and-Flow uses an **opacity and blu
 |-------|------|-------------|-----|
 | **Base** | Opaque | `background: #060C13` + subtle grid | Page canvas |
 | **Raised** | Opaque | `background: #0B131E` + `border: 1px solid #172230` | Solid cards, code blocks, dropdowns |
-| **Frosted** | Translucent | `background: rgba(6,12,19,0.75)` + `backdrop-filter: blur(16px)` | Navbar, floating overlays |
-| **Frosted Light** | Translucent | `background: rgba(255,255,255,0.7)` + `backdrop-filter: blur(16px)` | Navbar in light mode |
+| **Frosted** | Translucent | `background: rgba(6,12,19,0.38)` + `border: rgba(255,0,54,0.5)` + `backdrop-filter: blur(20px)` | `CardContainer backdropBlur="md"` when floating above content |
+| **Frosted Light** | Translucent | `background: rgba(255,255,255,0.32)` + `border: rgba(255,0,54,0.5)` + `backdrop-filter: blur(20px)` | `CardContainer backdropBlur="md"` in light mode when floating above content |
 | **Tinted** | Tinted translucent | `background: rgba(255,0,54,0.06–0.15)` | Secondary buttons, hover states, active menus |
 | **Overlay** | Dark translucent | `background: rgba(0,0,0,0.6)` + `backdrop-filter: blur(4px)` | Modal backgrounds, sidebar backdrop |
 
@@ -198,12 +199,12 @@ border: 1px solid #172230;
 border-radius: 8px;
 ```
 
-**Frosted card** — use for elements that float above content (navbar, tooltips, popovers):
+**Frosted card** — use only when `CardContainer` floats above content (`backdropBlur="sm|md|lg"`):
 ```css
-background: rgba(6, 12, 19, 0.75);
-backdrop-filter: blur(16px);
--webkit-backdrop-filter: blur(16px);
-border: 1px solid rgba(255, 255, 255, 0.06);
+background: rgba(6, 12, 19, 0.38);
+backdrop-filter: blur(20px); /* md; sm=10px, lg=36px */
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 0, 54, 0.5);
 border-radius: 8px;
 ```
 
@@ -216,7 +217,7 @@ border-radius: 8px;
 
 ### Blur rule
 
-Only elements that literally float above others (navbar, mobile sidebar, modals, tooltips) use `backdrop-filter`. Content cards do not — they are opaque. This distinction is intentional: blur means “I am floating,” opaque means “I am content.”
+Only elements that literally float above others (navbar, mobile sidebar, modals, tooltips, or a `CardContainer` used as a floating surface) use `backdrop-filter`. Content cards do not — they are opaque. This distinction is intentional: blur means “I am floating,” opaque means “I am content.” In `CardContainer`, keep `backdropBlur="none"` for normal-flow cards and use `sm`, `md`, or `lg` only for glass/floating surfaces.
 
 ---
 

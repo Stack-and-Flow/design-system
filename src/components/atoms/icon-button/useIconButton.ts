@@ -9,7 +9,7 @@ type UseIconButtonReturn = Omit<
 > & {
   ariaLabel: string;
   ariaPressed: IconButtonProps['aria-pressed'];
-  buttonRef: RefObject<HTMLButtonElement | null>;
+  buttonRef: RefObject<HTMLButtonElement>;
   className: string;
   disabled: boolean;
   handleClick: (event: MouseEvent<HTMLButtonElement>) => void;
