@@ -18,10 +18,12 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 | Contributing  | [`docs/CONTRIBUTING.md`](../docs/CONTRIBUTING.md) |
 | Visual Design | [`docs/DESIGN.md`](../docs/DESIGN.md)             |
 
-**Stack**: React 19 · TypeScript strict · Tailwind v4 `@theme` · Radix UI · CVA · Storybook 8 · Biome · Lefthook · Vite · pnpm
+**Stack**: React 19 · TypeScript strict · Tailwind v4 `@theme` · Radix UI · CVA · Storybook 8 · Biome · Lefthook · Vite · pnpm 10.34.1
 
 **Available tooling**:
 
+- `pnpm run build` — builds the publishable package and sanitizes generated declarations
+- `pnpm run verify:package` — builds, packs, and verifies real React 18 + React 19 consumers
 - `pnpm run storybook` — starts Storybook with hot reload
 - `pnpm run test` — runs Vitest unit tests
 - `pnpm run test:coverage` — runs tests with coverage report
@@ -56,6 +58,9 @@ Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` wi
 - Token reference: `docs/DESIGN.md` — read it before building any component
 - Never modify `theme.css` without explicit user confirmation
 - Never add dependencies without explicit user confirmation
+- Repo package manager contract is `pnpm@10.34.1`; when docs, scripts, or workflows pin pnpm, use the exact version, not only `10`
+- For package-facing changes (package output, exports, generated declarations, peer ranges, React major upgrades, or CI/package distribution policy), require `pnpm run build`; require `pnpm run verify:package` when published output or consumer compatibility can change. Tests/Storybook alone are not enough for React major upgrades.
+- Generated declarations must not leak internal path aliases or CSS side-effect imports into the published `.d.ts` output
 - English only — code, comments, stories
 - Commit messages must follow the commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>`. PR titles should follow the same format for review consistency. Allowed types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`. Use scopes for domains such as `a11y`, `tokens`, or `infra` instead of inventing custom types.
 
@@ -72,9 +77,9 @@ Load the relevant skill for detailed workflows:
 | Reviewing an existing component — code quality, visual states, tokens, accessibility                                   | [`components-auditor`](skills/components-auditor/SKILL.md)           |
 | Auditing the design system package — token architecture, folder structure, npm distributable standards                 | [`system-auditor`](skills/system-auditor/SKILL.md)                   |
 | External project wants to use Stack-and-Flow as a base and customize its tokens                                        | [`bootstrapping`](skills/bootstrapping/SKILL.md)                     |
-| Contributor asks if their PR is ready for review, or agent must validate implementation before handoff                 | [`pr-reviewer`](skills/pr-reviewer/SKILL.md)                         |
-| Creating or auditing GitHub Project board tasks — issues, fields, phases, team assignments                             | [`github-project-tasks`](skills/github-project-tasks/SKILL.md)       |
-| Creating a release, bumping versions, generating changelogs, publishing to npm                                         | [`release-changeset`](skills/release-changeset/SKILL.md)             |
-| Preparing the package for npm distribution — exports map, vite lib mode, package.json hygiene, TypeScript declarations | [`npm-architect`](skills/npm-architect/SKILL.md)                     |
+| Contributor asks if their PR is ready for review, or agent must validate implementation before handoff, including package evidence when package-facing changes exist | [`pr-reviewer`](skills/pr-reviewer/SKILL.md)                         |
+| Creating or auditing GitHub Project board tasks — issues, fields, phases, team assignments                                                                 | [`github-project-tasks`](skills/github-project-tasks/SKILL.md)       |
+| Creating a release, bumping versions, generating changelogs, publishing to npm                                                                             | [`release-changeset`](skills/release-changeset/SKILL.md)             |
+| Preparing or auditing package distribution policy — exports map, package.json hygiene, package verification, consumer compatibility, TypeScript declarations | [`npm-architect`](skills/npm-architect/SKILL.md)                     |
 | Visual review — component states, glow, transitions, focus rings, contrast, accessibility visuals                    | [`visual-review`](skills/visual-review/SKILL.md)                     |
 | Creating git worktrees or isolated writer checkouts for this repo                                                     | [`worktree-location`](skills/worktree-location/SKILL.md)             |

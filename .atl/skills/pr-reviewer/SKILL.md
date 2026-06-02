@@ -13,6 +13,8 @@ metadata:
 
 Use this skill immediately before requesting human review or opening/submitting a PR. This is a **PR gate**, not the owner of component implementation rules.
 
+Package verification checks in this skill are conditional. Apply them only when the diff touches package output, exports, generated declarations, peer ranges, React major versions, or CI/package distribution behavior. Do not turn routine component PRs into package architecture reviews.
+
 For component-quality details, load:
 
 - `.atl/skills/_shared/component-contract.md`
@@ -31,6 +33,7 @@ Run first. If any check fails, return **REJECTED** and do not continue to option
 | Check | How to verify |
 | --- | --- |
 | CI/build/test evidence missing or failing | Inspect CI output or run the agreed local commands. |
+| Package compatibility evidence missing for package-facing changes | When the diff changes package output, exports, generated declarations, peer ranges, CI/package distribution policy, or a React major version, require `pnpm run build` and `pnpm run verify:package` evidence. Tests/Storybook alone are insufficient for React major upgrades. |
 | No linked issue | PR description must contain `Closes #NNN` unless maintainer explicitly waives it. |
 | Invalid PR title | Conventional Commit format: `<type>(<optional scope>): <description>`. |
 | PR template incomplete | No required placeholder sections left empty. |
@@ -70,6 +73,8 @@ Do not duplicate the component checklist here; cite the audit evidence and only 
 - [ ] TypeScript check passed or failure is explained.
 - [ ] Relevant unit tests passed.
 - [ ] Build passed when package/config/source exports changed.
+- [ ] `pnpm run verify:package` evidence is included when package output, exports, generated declarations, peer compatibility, CI package policy, or React major versions changed.
+- [ ] Generated declarations are publish-safe when declaration/package output changed: no leaked internal aliases or CSS side-effect imports.
 - [ ] Storybook build or manual visual evidence is included when stories/visuals changed.
 - [ ] Accessibility evidence is included for interactive components.
 
