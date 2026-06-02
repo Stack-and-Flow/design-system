@@ -16,7 +16,8 @@ metadata:
 
 - Someone asks how to publish the design system as an npm package
 - Someone asks how to enable per-component imports (`import { Button } from '@stack-and-flow/design-system/button'`)
-- Someone asks to configure tree-shaking, peer deps, or the build output
+- Someone asks to configure tree-shaking, peer deps, the build output, or package verification policy
+- Someone asks to review package exports, generated declarations, React peer compatibility, or CI/package manager contract drift
 - Delegated from `sdd-design` to design the distribution architecture
 
 ---
@@ -45,7 +46,18 @@ When delegated: run requested scope, return SDD return envelope:
 
 Do not trust frozen package-state tables in this skill. The npm package shape changes over time, so the current state must be verified at runtime before proposing exports, build, dependency, or publishing changes.
 
-Use Phase 1 to inspect `package.json`, `src/index.ts`, `vite.config.ts`, `tsconfig.build.json`, and the existing component barrels. Report what exists now versus what the requested package goal requires.
+Use Phase 1 to inspect `package.json`, the package scripts, the publish/consumer verification scripts, workflow pnpm pinning, and the existing exports/build setup. Report what exists now versus what the requested package goal requires.
+
+## Current repo maintenance contract
+
+Treat these as the current Stack-and-Flow package gates unless the repo changes again:
+
+- `package.json` is the source of truth for the package manager contract: `pnpm@10.34.1`
+- GitHub workflows that install pnpm should pin the same exact version, not a floating major such as `10`
+- `pnpm run build` is the publish-shape gate: it builds `dist/`, emits declarations, and runs `scripts/prepare-dist.mjs`
+- `pnpm run verify:package` is the consumer-compatibility gate: it builds, packs, and verifies real React 18 and React 19 consumers
+- Published declarations must not leak internal alias specifiers (`@/`, `@atoms/`, `@molecules/`, `@organisms/`, `@hooks/`, `@utils/`) or CSS side-effect imports
+- Apply these checks only when the work changes package output, exports, generated declarations, peer ranges, React major versions, or CI/package distribution behavior. Do not force routine component-only PRs through a package architecture audit.
 
 ---
 
@@ -54,17 +66,29 @@ Use Phase 1 to inspect `package.json`, `src/index.ts`, `vite.config.ts`, `tsconf
 Before making any change, read and report the current state:
 
 ```powershell
-# Check package.json fields
-Get-Content package.json | ConvertFrom-Json | Select-Object name, version, private, exports, files, main, module, sideEffects
+# Package contract
+Get-Content package.json | ConvertFrom-Json | Select-Object packageManager, exports, files, main, module, types, sideEffects, peerDependencies
 
-# Check if root entry exists
-Test-Path src/index.ts
+# Build and consumer verification commands
+Get-Content package.json | ConvertFrom-Json | Select-Object -ExpandProperty scripts | Select-Object build, 'verify:package'
 
-# Check vite config for lib mode
-Select-String "lib" vite.config.ts
+# Workflow pnpm pinning
+Get-ChildItem .github/workflows/*.yml | Select-String 'pnpm/action-setup|version:'
+
+# Published output hygiene / consumer verification helpers
+Get-Content scripts/prepare-dist.mjs
+Get-Content scripts/verify-package-consumption.mjs
 ```
 
-Report what exists vs what is needed. Present the full gap table before proceeding.
+At minimum, report:
+
+- exact `packageManager` value
+- whether workflows pin the same pnpm version
+- what `pnpm run build` does to publishable output
+- whether `verify:package` covers React 18 and React 19 consumers
+- whether generated declarations are sanitized for published consumption
+
+Present the full gap table before proceeding.
 
 ---
 
@@ -199,7 +223,7 @@ This requires an `exports` map in `package.json` with one entry per component.
       "types": "./dist/atoms/text/index.d.ts"
     },
     "./styles": {
-      "import": "./dist/styles/theme.css"
+      "import": "./dist/design-system.css"
     }
   }
 }
@@ -218,91 +242,24 @@ import '@stack-and-flow/design-system/styles';
 
 ## Phase 4 — Vite lib mode configuration
 
-The current `vite.config.ts` is configured for **development** (app mode). It needs a separate **build** configuration for **library mode**.
+Inspect the current Vite build before proposing a package architecture change. In the current repo, `vite.config.ts` already contains the library build configuration used by `pnpm run build`; do not assume a separate `vite.config.lib.ts` exists or is required.
 
-### Strategy: separate config files
+Current library-build expectations:
 
-Do NOT modify the existing `vite.config.ts` — it is needed for Storybook and dev. Create a new file:
+- `build.lib.entry` points at `src/index.ts`
+- ESM and CJS outputs are emitted from the configured Vite build
+- React, React DOM, JSX runtime, and icon package imports stay externalized for consumers
+- CSS output resolves to the exported package styles entry, currently `./styles` -> `./dist/design-system.css`
+- `tsconfig.build.json` and `scripts/prepare-dist.mjs` complete the declaration-output contract after Vite runs
 
-```
-vite.config.lib.ts   ← library build only
-vite.config.ts       ← dev + Storybook (unchanged)
-```
+Only introduce a separate Vite library config if the current config can no longer serve Storybook/test/dev and package output safely. If you propose that split, explain why the current unified config is insufficient and update scripts, exports, and verification evidence together.
 
-### vite.config.lib.ts
+### Keep the publish build command explicit
 
-```typescript
-import path from 'path';
-import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react-swc';
-import { defineConfig } from 'vite';
-import { glob } from 'glob';
-
-// Collect all component entry points automatically
-const componentEntries = Object.fromEntries(
-  glob
-    .sync('src/components/{atoms,molecules}/{*}/index.ts')
-    .map((file) => {
-      const name = file
-        .replace('src/components/atoms/', 'atoms/')
-        .replace('src/components/molecules/', 'molecules/')
-        .replace('/index.ts', '');
-      return [name, path.resolve(__dirname, file)];
-    })
-);
-
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  },
-  build: {
-    lib: {
-      entry: {
-        index: path.resolve(__dirname, 'src/index.ts'),
-        ...componentEntries
-      },
-      formats: ['es', 'cjs']
-    },
-    rollupOptions: {
-      // Externalize everything that consumers must install themselves
-      external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        /^@radix-ui\/.*/,
-        /^lucide-react.*/,
-        'class-variance-authority',
-        'clsx',
-        'tailwind-merge',
-        'spinners-react'
-      ],
-      output: {
-        // Preserve directory structure in output
-        preserveModules: true,
-        preserveModulesRoot: 'src',
-        // Separate CSS from JS
-        assetFileNames: 'styles/[name][extname]',
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM'
-        }
-      }
-    },
-    // Do not minify library code — consumers' bundlers will do it
-    minify: false,
-    // Generate sourcemaps for debugging
-    sourcemap: true
-  }
-});
-```
-
-### Add build script to package.json
+If the repo already ships a publish build, keep that command as the source of truth and make sure it includes declaration sanitization after emit. In the current repo, that contract is:
 
 ```json
-"build:lib": "vite build --config vite.config.lib.ts && tsc --emitDeclarationOnly --declaration --outDir dist"
+"build": "vite build && tsc --project tsconfig.build.json && node scripts/prepare-dist.mjs"
 ```
 
 ---
@@ -367,7 +324,7 @@ Tells bundlers which files have side effects (cannot be tree-shaken away).
 ```json
 {
   "sideEffects": [
-    "dist/styles/theme.css",
+    "dist/design-system.css",
     "**/*.css"
   ]
 }
@@ -391,75 +348,39 @@ For compatibility with older tooling that does not read `exports`:
 
 ## Phase 6 — TypeScript declarations
 
-The `tsc` command in the build script generates `.d.ts` files. Ensure `tsconfig.json` has:
+The declaration gate is the published `.d.ts` output, not only the TypeScript compiler flags.
 
-```json
-{
-  "compilerOptions": {
-    "declaration": true,
-    "declarationDir": "dist",
-    "emitDeclarationOnly": false
-  }
-}
-```
+`pnpm run build` already emits declarations and then runs `scripts/prepare-dist.mjs`, so inspect both the tsconfig settings and the post-processing script before proposing declaration changes.
 
-Or use a separate `tsconfig.build.json` that extends the base and overrides emit settings.
+Declaration checklist:
+
+- emitted `.d.ts` files resolve through public or relative specifiers, never internal aliases such as `@/` or `@atoms/`
+- `dist/index.d.ts` does not keep CSS side-effect imports such as `import './styles/global.css';`
+- post-build sanitization stays aligned with the actual alias scheme used in source
+- declaration fixes should target publish-safe output; do not require committing generated `dist/` files unless the workflow explicitly does so
 
 ---
 
-## Phase 7 — Verify the build
+## Phase 7 — Verify package output
 
-After configuring everything:
-
-```powershell
-# Build the library
-pnpm build:lib
-
-# Check the output structure
-Get-ChildItem dist -Recurse | Select-Object FullName
-```
-
-Expected output structure:
-
-```
-dist/
-  index.js              ← ESM full bundle
-  index.cjs             ← CJS full bundle
-  index.d.ts            ← TypeScript declarations
-  atoms/
-    button/
-      index.js
-      index.cjs
-      index.d.ts
-    input/
-      index.js
-      ...
-  styles/
-    theme.css           ← design tokens
-```
-
-### Smoke test the package locally
+Run this phase when the work changes package output, exports, generated declarations, peer ranges, CI/package distribution policy, or a React major version. Skip it for routine component-only changes that do not affect published package behavior.
 
 ```powershell
-# Pack without publishing
-pnpm pack
+# Publish-shape gate
+pnpm run build
 
-# In a test project
-pnpm add ../stack-and-flow-design-system-1.0.0.tgz
+# Consumer-compatibility gate
+pnpm run verify:package
 ```
 
-Then in the test project:
+Expected evidence:
 
-```typescript
-// Full package import
-import { Button } from '@stack-and-flow/design-system';
+- `pnpm run build` succeeds and leaves publishable output in `dist/`
+- `scripts/prepare-dist.mjs` has sanitized generated declarations for publish-safe consumption
+- `pnpm run verify:package` proves the packed package works for real React 18 and React 19 consumers
+- ESM/CJS root imports and the exported styles subpath resolve successfully
 
-// Per-component import
-import { Button } from '@stack-and-flow/design-system/button';
-
-// Styles
-import '@stack-and-flow/design-system/styles';
-```
+If the request is only documentation or skill text, do not run these commands just to satisfy ceremony. Cite the contract accurately instead.
 
 ---
 
@@ -469,22 +390,17 @@ import '@stack-and-flow/design-system/styles';
 |----------|--------|----------|--------|
 | Build tool | Vite lib mode | Rollup standalone | Already in project; consistent with dev config |
 | Module format | ESM + CJS | ESM only | CJS needed for Jest/older Node consumers |
-| Separate config file | `vite.config.lib.ts` | Modify existing config | Existing config is used by Storybook and dev — cannot change mode |
+| Vite config shape | Current `vite.config.ts` unless evidence requires split | Assume `vite.config.lib.ts` is needed | The current repo already builds the library from `vite.config.ts`; propose a split only with concrete evidence |
 | CSS distribution | Separate `./styles` export | Inline-in-JS | Inline CSS-in-JS would require a runtime; separate file is simpler and standard |
-| `preserveModules` | true | Single bundle | Enables per-component tree-shaking at the file level |
-| Radix in `dependencies` | Yes (not peerDep) | peerDep | Consumers may not have Radix; forcing them to install it is poor DX |
+| Package verification | `pnpm run verify:package` with React 18 + React 19 consumers | Tests/Storybook only for package compatibility | Consumer installs catch peer/export/declaration failures that app-level tests can miss |
+| Declaration hygiene | Post-build sanitized `.d.ts` output | Leaking source aliases or CSS side-effect imports | Published declarations must resolve outside this repository |
 
 ---
 
 ## Implementation order
 
-Follow this sequence — each step depends on the previous:
+For new package architecture work, follow the phases above in dependency order: first audit current package state, then align entry points, exports, Vite build behavior, package metadata, declarations, and verification evidence.
 
-1. **Phase 2** — create `src/index.ts` (no build changes yet, safe to do first)
-2. **Phase 5** — fix `package.json` (peer deps, files, sideEffects — no build needed)
-3. **Phase 4** — create `vite.config.lib.ts` (requires Phase 2 entry point to exist)
-4. **Phase 3** — add `exports` map to `package.json` (requires knowing dist paths from Phase 4)
-5. **Phase 6** — verify TypeScript declaration config
-6. **Phase 7** — run the build and verify output
+For current-maintenance work, do not blindly recreate old setup steps. Start from the existing `package.json`, `vite.config.ts`, `tsconfig.build.json`, `scripts/prepare-dist.mjs`, `scripts/verify-package-consumption.mjs`, and CI workflow pins, then change only the piece that the request requires.
 
-Do NOT skip steps or reorder — particularly, Phase 3 (exports map) references `dist/` paths that only exist after Phase 4 is configured and built.
+Do NOT skip verification for package-facing changes: exports, build output, generated declarations, peer ranges, React major versions, and CI/package distribution policy require build and package-consumption evidence.
