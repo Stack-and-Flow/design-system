@@ -3,6 +3,7 @@
   "private": false,
   "version": "1.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.34.1",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build && tsc --project tsconfig.build.json",
+    "build": "vite build && tsc --project tsconfig.build.json && node scripts/prepare-dist.mjs",
     "verify:package": "pnpm run build && node scripts/verify-package-consumption.mjs",
     "clean": "node -e \"['dist','node_modules','pnpm-lock.yaml','package-lock.json'].forEach(p=>require('fs').rmSync(p,{recursive:true,force:true}))\" && npm cache clean --force",
     "reinstall": "pnpm run clean && pnpm install",
@@ -100,14 +101,5 @@
     "typescript": "6.0.3",
     "vite": "6.4.2",
     "vitest": "4.1.8"
-  },
-  "pnpm": {
-    "overrides": {
-      "minimatch@10.2.5>brace-expansion": "5.0.6",
-      "ws": "8.20.1"
-    },
-    "patchedDependencies": {
-      "storybook-dark-mode@4.0.2": "patches/storybook-dark-mode@4.0.2.patch"
-    }
   }
 }
