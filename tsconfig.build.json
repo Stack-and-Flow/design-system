@@ -6,6 +6,7 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "declarationDir": "./dist",
+    "incremental": false,
     "rootDir": "./src",
     "types": ["node"]
   },
