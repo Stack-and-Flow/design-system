@@ -9,7 +9,7 @@
 These rules are system-wide and non-negotiable. Every component must comply with all of them.
 
 **Rule 1 — `backdrop-filter: blur` only on floating elements.**
-Only elements that literally float above page content (navbar, mobile sidebar, modal backdrops, sticky bars) use `backdrop-filter`. Content cards are opaque — they use `background: #0B131E`. `blur` signals "I am floating"; opaque signals "I am content". Never apply `backdrop-filter` to feature cards, release cards, pipeline cards, or any card that lives in normal document flow.
+Only elements that literally float above page content (navbar, mobile sidebar, modal backdrops, sticky bars, or an explicitly floating `CardContainer` with `backdropBlur` enabled) use `backdrop-filter`. Content cards are opaque — they use `background: #0B131E`. `blur` signals "I am floating"; opaque signals "I am content". Never apply `backdrop-filter` to feature cards, release cards, pipeline cards, or any card that lives in normal document flow. `CardContainer` defaults to `backdropBlur="none"`; `backdropBlur="sm" | "md" | "lg"` is only for floating/glass treatments above other content.
 
 **Rule 2 — Never animate gradient background directly. Use `::before` opacity instead.**
 A `linear-gradient` cannot be transitioned by the browser. Instead, place the hover gradient on a `::before` pseudo-element with `opacity: 0`, then transition only `opacity` to `1` on hover. This runs on the GPU compositor and produces a smooth fade. The background property on the element itself remains static or uses only simple `background-color` transitions.
@@ -638,23 +638,34 @@ z-index: 1;
 
 ### 3.10 Card — Frosted
 
-Used only for truly floating elements: navbar, sticky bars, mobile sidebar, modal overlays.
+Used only for explicitly floating CardContainer glass surfaces. Normal document-flow cards stay opaque.
 
 ```css
-background: rgba(6, 12, 19, 0.75); /* --color-navbar-dark */
-backdrop-filter: blur(16px);
--webkit-backdrop-filter: blur(16px);
-border: 1px solid rgba(255, 255, 255, 0.06);
+background: rgba(6, 12, 19, 0.38); /* --color-card-backdrop-dark */
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 0, 54, 0.5); /* --color-red-tint-border */
 border-radius: 8px; /* or 12px for larger panels */
 ```
 
 **Light mode:**
 
 ```css
-background: rgba(255, 255, 255, 0.7); /* --color-navbar-light */
-backdrop-filter: blur(16px);
--webkit-backdrop-filter: blur(16px);
+background: rgba(255, 255, 255, 0.32); /* --color-card-backdrop-light */
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 0, 54, 0.5); /* --color-red-tint-border */
 ```
+
+**CardContainer backdropBlur levels:**
+
+```css
+backdropBlur="sm"; /* --blur-card-sm: blur(10px) */
+backdropBlur="md"; /* --blur-card-md: blur(20px) */
+backdropBlur="lg"; /* --blur-card-lg: blur(36px) */
+```
+
+Use these only when the card is visually floating above other content. Leave `backdropBlur="none"` for normal content cards.
 
 **Sticky CTA bar specific (floats below navbar after scroll):**
 
@@ -709,15 +720,10 @@ box-shadow: 0 4px 30px rgba(255, 0, 54, 0.1);
 
 ```css
 /* Dark */
-background: rgba(
-  27,
-  27,
-  29,
-  0.6
-); /* reference; DESIGN.md spec: rgba(6,12,19,0.75) */
+background: rgba(6, 12, 19, 0.75); /* --color-navbar-dark */
 backdrop-filter: blur(16px);
 -webkit-backdrop-filter: blur(16px);
-border-bottom: 1px solid #1a1a1a; /* --ifm-color-emphasis-200 */
+border-bottom: 1px solid #172230; /* --color-border-dark */
 position: sticky;
 top: 0;
 z-index: 300; /* --z-navbar */
@@ -726,7 +732,7 @@ z-index: 300; /* --z-navbar */
 **Light mode:**
 
 ```css
-background: rgba(255, 255, 255, 0.7);
+background: rgba(255, 255, 255, 0.7); /* --color-navbar-light */
 backdrop-filter: blur(16px);
 -webkit-backdrop-filter: blur(16px);
 ```
@@ -1259,6 +1265,13 @@ Note: buttons ARE the exception — their `background` gradient transition is pe
 .navbar {
   background: rgba(6, 12, 19, 0.75);
   backdrop-filter: blur(16px);
+}
+
+/* ✅ CardContainer backdropBlur is allowed only when the card is floating */
+.floatingGlassCard {
+  background: rgba(6, 12, 19, 0.38);
+  border-color: rgba(255, 0, 54, 0.5);
+  backdrop-filter: blur(20px); /* CardContainer backdropBlur="md" */
 }
 ```
 

@@ -71,6 +71,7 @@ El color de marca. Dos valores según el modo:
 | `background-surface` | `#0B131E` | — | Cards sólidas, code blocks |
 | `background-surface-raised` | `#0F1824` | — | Headers de tabla, énfasis sutil |
 | `navbar-bg` | `rgba(6,12,19,0.75)` | `rgba(255,255,255,0.7)` | Navbar con backdrop-blur |
+| `card-backdrop-bg` | `rgba(6,12,19,0.38)` | `rgba(255,255,255,0.32)` | CardContainer flotante con `backdropBlur` |
 | `sidebar-mobile-bg` | `rgba(6,12,19,1.0)` | `#ffffff` | Sidebar mobile |
 | `dropdown-bg` | `#0B131E` | `#ffffff` | Menus desplegables |
 
@@ -184,8 +185,8 @@ A diferencia de un sistema de elevación con sombras, Stack-and-Flow usa un **si
 |-------|------|-------------|-----|
 | **Base** | Opaco | `background: #060C13` + grid sutil | Canvas de página |
 | **Raised** | Opaco | `background: #0B131E` + `border: 1px solid #172230` | Cards sólidas, code blocks, dropdowns |
-| **Frosted** | Semitransparente | `background: rgba(6,12,19,0.75)` + `backdrop-filter: blur(16px)` | Navbar, overlays flotantes |
-| **Frosted Light** | Semitransparente | `background: rgba(255,255,255,0.7)` + `backdrop-filter: blur(16px)` | Navbar en light mode |
+| **Frosted** | Semitransparente | `background: rgba(6,12,19,0.38)` + `border: rgba(255,0,54,0.5)` + `backdrop-filter: blur(20px)` | `CardContainer backdropBlur="md"` cuando flota sobre contenido |
+| **Frosted Light** | Semitransparente | `background: rgba(255,255,255,0.32)` + `border: rgba(255,0,54,0.5)` + `backdrop-filter: blur(20px)` | `CardContainer backdropBlur="md"` en light mode cuando flota sobre contenido |
 | **Tinted** | Semitransparente colored | `background: rgba(255,0,54,0.06–0.15)` | Botones secondary, hover states, menús activos |
 | **Overlay** | Semitransparente oscuro | `background: rgba(0,0,0,0.6)` + `backdrop-filter: blur(4px)` | Fondos de modal, sidebar backdrop |
 
@@ -198,12 +199,12 @@ border: 1px solid #172230;
 border-radius: 8px;
 ```
 
-**Card frosted** — usa para elementos que flotan sobre contenido (navbar, tooltips, popovers):
+**Card frosted** — usá solo cuando el `CardContainer` flota sobre contenido (`backdropBlur="sm|md|lg"`):
 ```css
-background: rgba(6, 12, 19, 0.75);
-backdrop-filter: blur(16px);
--webkit-backdrop-filter: blur(16px);
-border: 1px solid rgba(255, 255, 255, 0.06);
+background: rgba(6, 12, 19, 0.38);
+backdrop-filter: blur(20px); /* md; sm=10px, lg=36px */
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 0, 54, 0.5);
 border-radius: 8px;
 ```
 
@@ -216,7 +217,7 @@ border-radius: 8px;
 
 ### Regla de blur
 
-Solo los elementos que literalmente flotan sobre otros (navbar, mobile sidebar, modals, tooltips) usan `backdrop-filter`. Los cards de contenido no lo usan — son opacos. Esta distinción es intencional: el blur implica "estoy flotando", el opaco implica "soy contenido".
+Solo los elementos que literalmente flotan sobre otros (navbar, mobile sidebar, modals, tooltips o un `CardContainer` usado como superficie flotante) usan `backdrop-filter`. Los cards de contenido no lo usan — son opacos. Esta distinción es intencional: el blur implica "estoy flotando", el opaco implica "soy contenido". En `CardContainer`, mantené `backdropBlur="none"` para cards en flujo normal y usá `sm`, `md` o `lg` solo para superficies glass/floating.
 
 ---
 

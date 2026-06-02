@@ -1,4 +1,4 @@
-import { type MouseEvent, type RefObject, useRef } from 'react';
+import { type ComponentProps, type MouseEvent, useRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 import { cn } from '@/lib/utils';
 import { type ButtonEmphasis, type ButtonProps, buttonVariants } from './types';
@@ -6,7 +6,7 @@ import { type ButtonEmphasis, type ButtonProps, buttonVariants } from './types';
 type UseButtonReturn = Omit<ButtonProps, 'onClick'> & {
   ariaLabel: string;
   ariaPressed: ButtonProps['aria-pressed'];
-  buttonRef: RefObject<HTMLButtonElement | null>;
+  buttonRef: ComponentProps<'button'>['ref'];
   className: string;
   contentClassName: string;
   disabled: boolean;
