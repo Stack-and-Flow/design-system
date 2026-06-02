@@ -77,8 +77,8 @@ type UseSelectReturn = {
   description: string | undefined;
   options: SelectOption[];
   placeholder: string | undefined;
-  triggerRef: RefObject<HTMLButtonElement>;
-  popoverRef: RefObject<HTMLDivElement>;
+  triggerRef: RefObject<HTMLButtonElement | null>;
+  popoverRef: RefObject<HTMLDivElement | null>;
   handleItemSelect: (option: SelectOption) => void;
   handleClear: (e: MouseEvent<HTMLElement>) => void;
   handleKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => void;
@@ -181,7 +181,7 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -387,7 +387,9 @@ export const useSelect = (props: SelectProps): UseSelectReturn => {
         setFocusedIndex(matchedIndex);
       }
 
-      clearTimeout(searchTimeoutRef.current);
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
       searchTimeoutRef.current = setTimeout(() => setSearchQuery(''), 500);
     },
     [focusedIndex, getEnabledIndices, options, searchQuery]

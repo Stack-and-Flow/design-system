@@ -209,7 +209,7 @@ const hasPopoverSlot = ({ children, displayName }: { children: ReactNode; displa
       return true;
     }
 
-    if (!isValidElement(child)) {
+    if (!isValidElement<{ children?: ReactNode }>(child)) {
       return false;
     }
 
