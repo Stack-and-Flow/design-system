@@ -42,7 +42,14 @@ const consumerDirs = [];
 
 try {
   const packOutput = run('npm', ['pack', '--json', '--ignore-scripts', '--pack-destination', packDir]);
-  const [{ filename }] = JSON.parse(packOutput);
+  const jsonStart = packOutput.indexOf('[\n');
+  const jsonEnd = packOutput.lastIndexOf(']');
+
+  if (jsonStart === -1 || jsonEnd === -1) {
+    throw new Error(`Could not find npm pack JSON output: ${packOutput}`);
+  }
+
+  const [{ filename }] = JSON.parse(packOutput.slice(jsonStart, jsonEnd + 1));
   const tarballPath = resolve(packDir, filename);
 
   const matrices = [
