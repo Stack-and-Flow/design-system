@@ -318,6 +318,16 @@ font-size: 93%; /* --ifm-code-font-size */
 ```
 Highlighted line: `rgba(219,20,60,0.10)` (light) / `rgba(255,0,54,0.15)` (dark).
 
+### Drawer
+
+Drawer es una superficie flotante tipo dialog para tareas suplementarias, navegación, formularios y contenido largo. Usa el mismo overlay que Modal (`opacity`, `blur` o `transparent`) y un panel opaco `surface` con borde, sombra de modal y movimiento por `opacity` + `transform` solamente.
+
+- `start` y `end` son placements lógicos: en `md+` respetan LTR/RTL; en mobile se adaptan a bottom sheet.
+- `top`, `bottom` y el bottom sheet mobile usan utilidades `max-h-drawer-*` basadas en `--size-drawer-block-viewport`.
+- Los footers de bottom/mobile drawers usan safe area para no colisionar con home indicators.
+- Header y footer permanecen visibles; `Drawer.Body` es la región con scroll interno.
+- `prefers-reduced-motion` elimina las transiciones de entrada/salida sin cambiar semántica ni foco.
+
 ### Glow del GitHub Stars badge
 
 Patrón reutilizable para cualquier badge con métrica numérica:

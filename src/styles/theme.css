@@ -422,6 +422,9 @@
   --size-modal-4xl: 56rem;
   --size-modal-5xl: 64rem;
 
+  /* ── Drawer sizing ───────────────────────────────────────────── */
+  --size-drawer-block-viewport: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+
   /* ── Transiciones ────────────────────────────────────────────── */
   --transition-fast: 150ms ease-in-out;
   --transition-base: 250ms ease;
@@ -531,6 +534,34 @@
 
 @utility max-w-modal-5xl {
   max-width: min(var(--size-modal-viewport), var(--size-modal-5xl));
+}
+
+@utility max-h-drawer-xs {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-xs));
+}
+
+@utility max-h-drawer-sm {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-sm));
+}
+
+@utility max-h-drawer-md {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-md));
+}
+
+@utility max-h-drawer-lg {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-lg));
+}
+
+@utility max-h-drawer-xl {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-xl));
+}
+
+@utility max-h-drawer-full {
+  max-height: var(--size-drawer-block-viewport);
+}
+
+@utility pb-drawer-safe {
+  padding-bottom: max(var(--spacing-6), env(safe-area-inset-bottom));
 }
 
 @media (prefers-reduced-motion: reduce) {
