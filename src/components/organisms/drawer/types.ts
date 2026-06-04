@@ -1,3 +1,4 @@
+import type { DialogContentProps } from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ComponentProps, FC, FocusEvent, KeyboardEvent, MouseEvent, ReactElement, ReactNode } from 'react';
 
@@ -137,7 +138,7 @@ export type DrawerTriggerProps = Omit<ComponentProps<'button'>, 'children'> & {
   disabled?: boolean;
 };
 
-export type DrawerContentProps = Omit<ComponentProps<'div'>, 'children' | 'dir'> & {
+export type DrawerContentProps = Omit<DialogContentProps, 'children' | 'dir'> & {
   /** @control object */
   children: ReactNode;
   /**
