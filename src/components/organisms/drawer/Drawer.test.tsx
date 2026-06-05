@@ -79,6 +79,41 @@ describe('Drawer — dialog behavior and accessibility', () => {
     expect(screen.getByRole('dialog', { name: 'Account settings' })).toBeInTheDocument();
   });
 
+  it('keeps icon-only native fallback triggers at the minimum touch target width', () => {
+    render(
+      <Drawer>
+        <Drawer.Trigger aria-label='Open icon-only drawer'>☰</Drawer.Trigger>
+        <Drawer.Content>
+          <Drawer.Title>Icon-only drawer</Drawer.Title>
+          <Drawer.Body>Body</Drawer.Body>
+        </Drawer.Content>
+      </Drawer>
+    );
+
+    expect(screen.getByRole('button', { name: 'Open icon-only drawer' })).toHaveClass('min-w-11');
+  });
+
+  it('lets consumer Escape handlers prevent dismissal before internal Drawer handling runs', async () => {
+    const user = userEvent.setup();
+    const handleEscapeKeyDown = vi.fn((event: Event) => {
+      event.preventDefault();
+    });
+
+    render(
+      <Drawer defaultOpen={true}>
+        <Drawer.Content onEscapeKeyDown={handleEscapeKeyDown}>
+          <Drawer.Title>Consumer Escape drawer</Drawer.Title>
+          <Drawer.Body>Body</Drawer.Body>
+        </Drawer.Content>
+      </Drawer>
+    );
+
+    await user.keyboard('{Escape}');
+
+    expect(handleEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('dialog', { name: 'Consumer Escape drawer' })).toBeInTheDocument();
+  });
+
   it('only links aria-controls while the dialog content is mounted', async () => {
     render(<BasicDrawer />);
 

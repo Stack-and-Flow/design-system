@@ -163,6 +163,10 @@ type ComposableEvent = {
   stopPropagation: () => void;
 };
 
+type PreventableEvent = {
+  defaultPrevented: boolean;
+};
+
 const withComposedHandler = <TEvent extends ComposableEvent>(
   originalHandler: ((event: TEvent) => void) | undefined,
   nextHandler: (event: TEvent) => void,
@@ -175,6 +179,21 @@ const withComposedHandler = <TEvent extends ComposableEvent>(
       return;
     }
 
+    originalHandler?.(event);
+
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    nextHandler(event);
+  };
+};
+
+const withPreventableComposedHandler = <TEvent extends PreventableEvent>(
+  originalHandler: ((event: TEvent) => void) | undefined,
+  nextHandler: (event: TEvent) => void
+) => {
+  return (event: TEvent) => {
     originalHandler?.(event);
 
     if (event.defaultPrevented) {
@@ -356,7 +375,7 @@ export const useDrawerTrigger = ({
       'aria-haspopup': 'dialog',
       'data-disabled': disabled ? 'true' : undefined,
       className: cn(
-        'inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm font-semibold',
+        'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm font-semibold',
         'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
         'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40',
         className
@@ -425,6 +444,10 @@ export const useDrawerContent = ({
   className,
   closeOnEscape = true,
   dismissible = true,
+  onCloseAutoFocus,
+  onEscapeKeyDown,
+  onInteractOutside,
+  onPointerDownOutside,
   placement = 'end',
   size = 'md',
   ...restProps
@@ -470,10 +493,10 @@ export const useDrawerContent = ({
       ...restProps,
       id: contentId,
       className: cn(drawerPanelVariants({ placement, size }), className),
-      onCloseAutoFocus: handleCloseAutoFocus,
-      onPointerDownOutside: handlePointerDownOutside,
-      onInteractOutside: handleInteractOutside,
-      onEscapeKeyDown: handleEscapeKeyDown,
+      onCloseAutoFocus: withPreventableComposedHandler(onCloseAutoFocus, handleCloseAutoFocus),
+      onPointerDownOutside: withPreventableComposedHandler(onPointerDownOutside, handlePointerDownOutside),
+      onInteractOutside: withPreventableComposedHandler(onInteractOutside, handleInteractOutside),
+      onEscapeKeyDown: withPreventableComposedHandler(onEscapeKeyDown, handleEscapeKeyDown),
       'data-backdrop': backdrop,
       'data-block-size-utility': getBlockSizeUtility(size),
       'data-effective-placement': placement,
