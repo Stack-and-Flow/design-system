@@ -77,9 +77,9 @@ Este proyecto usa GitHub Issues + GitHub Projects como flujo de trabajo.
 Ruta corta:
 
 1. Elegí una issue del [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1).
-2. Antes de implementar, verificá que la spec esté definida y que la issue tenga el label `status:approved`.
+2. Antes de implementar, verificá que la spec esté definida, que la issue tenga el label `status:approved` y que no esté asignada a otra persona.
 3. Recién después ejecutá **START WORK**:
-   - asignar la issue al contributor;
+   - verificar assignees y asignar la issue al contributor;
    - mover el Project item a `In progress`;
    - registrar branch y worktree.
 4. Usá branch issue-based:

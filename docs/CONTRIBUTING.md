@@ -68,6 +68,9 @@ Storybook es nuestra única fuente de verdad. Todo componente DEBE estar complet
   - `## Description` obligatorio.
   - `## Dependencies` solo si usa otros componentes o primitives externas.
   - `## Usage Guide` solo si la utilización es compleja.
+- **Docs por story**: cada `export const StoryName` necesita JSDoc útil que explique el escenario y por qué importa. No uses texto de relleno que solo repite el nombre de la story.
+- **Sin stories redundantes**: cada story debe demostrar un estado, eje de variante, restricción de composición, comportamiento de accesibilidad o contexto de integración distinto.
+- **Sin story genérica `DarkMode`**: usa el toolbar dark-mode de Storybook para cobertura normal de tema. Añadí una story dark-mode dedicada solo para scope dark local, herencia de tema en portales o una regresión específica que el toolbar no pueda expresar, y documentá esa razón en JSDoc.
 - **Sin `parameters.docs.description.component`**: la documentación del componente vive en JSDoc encima de `const meta`.
 - **Sin `play` functions**: Las interacciones se testean en `ComponentName.test.tsx`, no en stories.
 
@@ -133,7 +136,7 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 
 ### Proceso de Pull Request
 
-1. Antes de implementar desde una issue, verificá que la spec esté definida y que la issue tenga el label `status:approved`; recién ahí corré **START WORK**: asignar la issue, moverla a `In progress` y registrar branch/worktree.
+1. Antes de implementar desde una issue, verificá que la spec esté definida, que la issue tenga el label `status:approved` y que no esté asignada a otra persona; recién ahí corré **START WORK**: verificar assignees, asignar la issue, moverla a `In progress` y registrar branch/worktree.
 2. Sube tu rama y abre un PR contra `main`.
 3. Usa un título de PR con el mismo formato Conventional Commit, por ejemplo `feat(button): add loading state`.
 4. Puedes pedir revisión automática a Copilot hasta que esté listo para revisión humana.
@@ -205,17 +208,18 @@ Resumen de fases:
 1. **Research** — investigas referencias, API, estados, accesibilidad y diseño.
 2. **Spec proposal** — usas `component-spec-proposer` para convertir la tarea y referencia en una spec validada en la issue.
 3. **Approval gate** — una vez escrita la spec, esperas el label `status:approved` en la issue; sin ese label no hay START WORK ni implementación bajo ningún concepto.
-4. **START WORK** — después del label `status:approved`, asignas la issue, la mueves a `In progress` y registras branch/worktree.
-5. **Spec intake** — con START WORK ya completado, `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
-6. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
-7. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
-8. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
-9. **Implementación** — el agente crea los 6 archivos y explica decisiones.
-10. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
-11. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
-12. **END WORK** — al cerrar, la tarea pasa a `Done` solo con PR merged o aprobación explícita, más evidencia de validación.
+4. **Assignee gate** — antes de cualquier acción sobre una issue linkeada, verificas assignees; si está asignada a otra persona, hace falta permiso explícito antes de reasignarla.
+5. **START WORK** — después del label `status:approved` y el assignee gate, asignas la issue, la mueves a `In progress` y registras branch/worktree.
+6. **Spec intake** — con START WORK ya completado, `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
+7. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
+8. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
+9. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.
+10. **Implementación** — el agente crea los 6 archivos y explica decisiones.
+11. **Visual review** — se corrigen issues CRITICAL o MAJOR antes de continuar.
+12. **Review pre-PR** — `components-auditor` valida arquitectura, tests, Storybook, tokens, visual y accesibilidad antes de abrir PR.
+13. **END WORK** — al cerrar, la tarea pasa a `Done` solo con PR merged o aprobación explícita, más evidencia de validación.
 
-> Para activar el flujo completo, primero pedí la spec con `component-spec-proposer`; después de validarla, esperá `status:approved`, compartí la URL de la issue y decí "implementa este componente".
+> Para activar el flujo completo, primero pedí la spec con `component-spec-proposer`; después de validarla, esperá `status:approved`, verificá que la issue no esté asignada a otra persona, compartí la URL de la issue y decí "implementa este componente".
 
 ---
 

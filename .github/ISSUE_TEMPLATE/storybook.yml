@@ -9,7 +9,7 @@ body:
         ## Storybook / Docs Task
         Use this for stories, MDX docs, controls, usage guidelines, visual examples, or Storybook configuration.
 
-        Current flow: identify documentation gap -> define required stories/docs -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> Storybook/manual visual evidence -> PR -> END WORK after merge or maintainer approval.
+        Current flow: identify documentation gap -> define required stories/docs -> wait for issue label `status:approved` -> assignee gate -> START WORK Project gate -> implement -> Storybook/manual visual evidence -> PR -> END WORK after merge or maintainer approval.
 
   - type: input
     id: affected-area
@@ -85,6 +85,8 @@ body:
       label: Storybook/docs gates
       options:
         - label: Stories follow project conventions and do not use Storybook `play` functions.
+        - label: Each story has useful JSDoc explaining the scenario and why it matters.
+        - label: Stories are non-redundant; generic `DarkMode` stories are avoided because Storybook has a global dark-mode toolbar.
         - label: Controls and args reflect the public API.
         - label: Visual states and edge cases are represented when relevant.
         - label: Accessibility notes are included for interactive examples when relevant.
@@ -94,7 +96,7 @@ body:
     attributes:
       label: Workflow gates
       options:
-        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: START WORK must run only after issue label `status:approved` and assignee ownership are verified; if assigned to someone else, get explicit permission before reassigning, then move Project status to `In progress` and record branch/worktree before implementation.
         - label: PR must link this issue and include validation evidence.
         - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 

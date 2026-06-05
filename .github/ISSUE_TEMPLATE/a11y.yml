@@ -9,7 +9,7 @@ body:
         ## Accessibility Task
         Use this for WCAG, ARIA, keyboard navigation, focus management, screen reader behavior, or contrast issues.
 
-        Current flow: reproduce/audit -> define expected accessible behavior -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> keyboard/screen reader/axe evidence -> PR -> END WORK after merge or maintainer approval.
+        Current flow: reproduce/audit -> define expected accessible behavior -> wait for issue label `status:approved` -> assignee gate -> START WORK Project gate -> implement -> keyboard/screen reader/axe evidence -> PR -> END WORK after merge or maintainer approval.
 
         Use `[FIX]` for accessibility defects and `[UPDATE]` for intentional accessibility improvements.
 
@@ -106,7 +106,7 @@ body:
     attributes:
       label: Workflow gates
       options:
-        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: START WORK must run only after issue label `status:approved` and assignee ownership are verified; if assigned to someone else, get explicit permission before reassigning, then move Project status to `In progress` and record branch/worktree before implementation.
         - label: PR must link this issue and include validation evidence.
         - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 

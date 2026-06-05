@@ -7,10 +7,10 @@ This is the canonical document for contributing components to the design system.
 ## Quick summary
 
 ```text
-Project task → Research → Spec proposal skill → Validated issue spec → wait for `status:approved` → START WORK → Spec review → Visual preflight → Plan → Implementation → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
+Project task → Research → Spec proposal skill → Validated issue spec → wait for `status:approved` → verify assignee → START WORK → Spec review → Visual preflight → Plan → Implementation → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
 ```
 
-Core rule: **AI executes, the contributor decides**. The spec, visual criteria, and checkpoint approvals remain human responsibility. After the validated spec is written in the task, implementation stays blocked until the linked issue has the `status:approved` label.
+Core rule: **AI executes, the contributor decides**. The spec, visual criteria, and checkpoint approvals remain human responsibility. After the validated spec is written in the task, implementation stays blocked until the linked issue has the `status:approved` label and is not assigned to someone else.
 
 ---
 
@@ -34,8 +34,9 @@ If these sources disagree, the authority order is: `GUIDELINES*.md` / `DESIGN*.m
 
 1. Pick a task in the [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1).
 2. Verify that it has an issue attached. The issue is the implementation contract.
-3. Do not run **START WORK** yet if the spec is not defined and approved. The contributor may research and propose the spec, but must not start implementation.
-4. If the user requested offline/no-network work, do not mutate GitHub: record the required follow-up. Do not start implementation until verifying that the issue has the `status:approved` label.
+3. Before taking a linked issue, verify assignees. If it is already assigned to someone else, stop and get explicit permission before reassigning or taking it over.
+4. Do not run **START WORK** yet if the spec is not defined and approved. The contributor may research and propose the spec, but must not start implementation.
+5. If the user requested offline/no-network work, do not mutate GitHub: record the required follow-up. Do not start implementation until verifying that the issue has the `status:approved` label and the assignee gate is satisfied.
 
 ---
 
@@ -86,9 +87,9 @@ The skill must:
 4. Wait for human approval.
 5. Only after approval, write `## Validated component spec` in the issue.
 6. Leave the task waiting for approval: do not move it to `In progress` from `component-spec-proposer`.
-7. Indicate the next step: wait for the `status:approved` issue label before starting `component-contributor`.
+7. Indicate the next step: wait for the `status:approved` issue label and verify the issue is unassigned or assigned to the contributor/user before starting `component-contributor`.
 
-Do not use `component-contributor` to implement until the spec is validated and the issue has the `status:approved` label.
+Do not use `component-contributor` to implement until the spec is validated, the issue has the `status:approved` label, and the assignee gate has passed.
 
 ---
 
@@ -119,8 +120,9 @@ After documenting the spec, the contributor must wait for explicit maintainer/pr
 Rules:
 
 - Do not create the implementation branch, plan, or code before `status:approved`.
+- Before any action on a linked issue, verify assignees. If it is assigned to someone else, stop and notify the user that explicit permission is required before reassigning it.
 - Do not move the Project item to `In progress` from the spec proposal phase.
-- When the `status:approved` label is present on the issue, run **START WORK**: assign the issue, move the Project item to `In progress`, confirm Team/Category, and record branch/worktree.
+- When the `status:approved` label is present and the assignee gate passes, run **START WORK**: assign the issue, move the Project item to `In progress`, confirm Team/Category, and record branch/worktree.
 - If the `status:approved` label is missing, stop and request approval; do not replace it with implicit chat approval.
 
 ---
@@ -173,10 +175,10 @@ Implement this component using component-contributor.
 
 Issue: {issue_url}
 
-Use the `## Validated component spec` section as the contract. Before reading the spec in detail, planning, or writing code, verify that the issue has the `status:approved` label; if it is missing, stop. Run START WORK before implementation intake. Do not invent props or behavior outside the spec. Pause at spec review, visual preflight, and plan checkpoints before writing code.
+Use the `## Validated component spec` section as the contract. Before reading the spec in detail, planning, or writing code, verify that the issue has the `status:approved` label and is not assigned to someone else; if the label is missing or the assignee gate fails, stop. Run START WORK before implementation intake. Do not invent props or behavior outside the spec. Pause at spec review, visual preflight, and plan checkpoints before writing code.
 ```
 
-The agent must load `component-contributor`, check the `status:approved` label, run START WORK, and only then consume the validated spec from `component-spec-proposer`. If it skips a phase, stop it.
+The agent must load `component-contributor`, check the `status:approved` label, verify assignees, run START WORK, and only then consume the validated spec from `component-spec-proposer`. If it skips a phase, stop it.
 
 ---
 
@@ -184,12 +186,12 @@ The agent must load `component-contributor`, check the `status:approved` label, 
 
 ### Phase 1 — Read the validated spec
 
-Before this phase, the agent must already have verified the `status:approved` label and completed START WORK. It then reads the `## Validated component spec` section in the issue and extracts the component, tier, props, variants, states, accessibility, reference, and design notes.
+Before this phase, the agent must already have verified the `status:approved` label, confirmed the issue is not assigned to someone else without explicit permission, and completed START WORK. It then reads the `## Validated component spec` section in the issue and extracts the component, tier, props, variants, states, accessibility, reference, and design notes.
 
 Expected output:
 
 - spec summary;
-- evidence of the `status:approved` label and START WORK;
+- evidence of the `status:approved` label, assignee gate, and START WORK;
 - questions if anything is ambiguous;
 - reference/token modules it plans to load.
 
@@ -420,7 +422,8 @@ Minimum checklist:
 - [ ] Relevant tests pass.
 - [ ] Build or required checks pass.
 - [ ] Pre-PR component review included or summarized.
-- [ ] Storybook docs have a JSDoc block above `const meta` and above every story export.
+- [ ] Storybook docs have a JSDoc block above `const meta` and useful scenario/purpose JSDoc above every story export.
+- [ ] Stories are non-redundant; no generic `DarkMode` story duplicates the toolbar.
 - [ ] `## Description` is present.
 - [ ] `## Dependencies` only when applicable.
 - [ ] `## Usage Guide` only when applicable.
@@ -473,6 +476,10 @@ Only when composition or usage has non-obvious constraints.
 
 All content inside the JSDoc block must be in English, including headings, prose, and lists.
 
+Each story-level JSDoc block above `export const StoryName` must explain the scenario and why it matters: state, variant axis, composition constraint, accessibility behavior, or integration context. Do not accept filler descriptions that only restate the story name.
+
+Use the Storybook dark-mode toolbar for normal theme coverage. Do not add a generic `DarkMode` story unless it demonstrates local dark scope, portal theme inheritance, or a theme-specific regression that the toolbar cannot express; the story JSDoc must state that reason.
+
 ---
 
 ## Rules the AI cannot skip
@@ -484,7 +491,8 @@ If the agent proposes any of the following, reject it:
 - using a single-file architecture;
 - omitting `.test.tsx` tests;
 - putting interactions in `play` functions instead of tests;
-- writing stories without args, controls, a JSDoc block above `const meta`, or JSDoc above every story export;
+- writing stories without args, controls, a JSDoc block above `const meta`, or useful JSDoc above every story export;
+- adding redundant stories that duplicate controls, args, another story, or normal dark-mode toolbar coverage;
 - using `description.component` in `parameters.docs`;
 - using `interface` or `any`;
 - hardcoding colors, spacing, or fonts;

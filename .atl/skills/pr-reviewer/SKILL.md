@@ -35,6 +35,7 @@ Run first. If any check fails, return **REJECTED** and do not continue to option
 | CI/build/test evidence missing or failing | Inspect CI output or run the agreed local commands. |
 | Package compatibility evidence missing for package-facing changes | When the diff changes package output, exports, generated declarations, peer ranges, CI/package distribution policy, or a React major version, require `pnpm run build` and `pnpm run verify:package` evidence. Tests/Storybook alone are insufficient for React major upgrades. |
 | No linked issue | PR description must contain `Closes #NNN` unless maintainer explicitly waives it. |
+| Linked issue assigned to someone else without permission evidence | Fetch linked issue assignees; if any assignee is not the contributor/user, require explicit reassignment/takeover permission before review proceeds. |
 | Invalid PR title | Conventional Commit format: `<type>(<optional scope>): <description>`. |
 | PR template incomplete | No required placeholder sections left empty. |
 | Branch/diff scope unclear | Diff contains unrelated work without an explicit explanation. |
@@ -80,6 +81,7 @@ Do not duplicate the component checklist here; cite the audit evidence and only 
 
 ### 4 — Git hygiene
 
+- [ ] Linked issue assignee gate passed before branch/work started, or explicit permission to reassign/take over is documented.
 - [ ] Branch name follows issue-derived project convention when applicable: `{type}/{issue-number}-{slug}` (for example `feat/123-button`) or has an approved exception.
 - [ ] Commit messages and PR title follow Conventional Commit format.
 - [ ] Allowed types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`.
@@ -112,6 +114,7 @@ Do not duplicate the component checklist here; cite the audit evidence and only 
 - [CRITICAL|MAJOR] `file:line` — {problem} — Fix: {what to do}
 
 ### Evidence checked
+- Linked issue assignee gate: {pass/fail/not applicable}
 - Component audit: {pass/fail/not applicable}
 - Visual review: {pass/fail/not applicable}
 - Typecheck/tests/build/storybook: {results}

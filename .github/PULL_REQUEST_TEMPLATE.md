@@ -27,6 +27,7 @@ Closes #<!-- issue number -->
 
 - [ ] Linked issue is present with `Closes #NNN` or maintainer approved an exception.
 - [ ] Linked issue has label `status:approved` before implementation starts.
+- [ ] Linked issue assignee was checked before work started; if it was assigned to someone else, explicit reassignment permission is documented.
 - [ ] Work was started through the Project flow: assignee set, Project status `In progress`, branch/worktree recorded.
 - [ ] PR title follows Conventional Commit format: `<type>(<optional scope>): <description>`.
 - [ ] Commits follow the same commitlint-enforced format.

@@ -34,7 +34,7 @@ Load by intent:
 | Radix primitive | `.atl/skills/component-contributor/references/radix-patterns.md` |
 | `className` merging | `.atl/skills/component-contributor/references/tailwind-merge.md` |
 | Contributor PR workflow | `.atl/skills/component-contributor/references/git-workflow.md` |
-| Starting from a GitHub issue or board task | `.atl/skills/github-project-tasks/SKILL.md` — verify issue label `status:approved`, then run START WORK before implementation |
+| Starting from a GitHub issue or board task | `.atl/skills/github-project-tasks/SKILL.md` — verify issue label `status:approved` and assignee ownership, then run START WORK before implementation |
 
 ## Workflow
 
@@ -42,19 +42,21 @@ Follow these phases in order. Do not skip gates because a component looks simple
 
 **Non-negotiable approval gate:** implementation must not start under any circumstance unless the linked GitHub issue has the exact label `status:approved`. Chat approval, assumptions, offline mode, or a local copy of the spec do not satisfy this gate.
 
+**Non-negotiable assignee gate:** before reading the implementation spec in detail, planning, creating a branch/worktree, mutating GitHub, or writing code from a linked issue, verify current assignees. If the issue is assigned to someone other than the contributor/user, stop and tell the user they must get explicit permission before reassigning it.
+
 ### 0 — Contributor onboarding
 
 Only when working directly with a contributor: confirm they understand React + strict TypeScript, Tailwind v4 tokens, CVA, the 6-file pattern, Storybook as docs, and tests in `.test.tsx`. If not, teach briefly before proceeding.
 
 ### 1 — Approval gate, START WORK, then spec intake
 
-If implementation will proceed from a GitHub issue or Project board card, first verify that the linked issue has the exact label `status:approved`. If it is missing, stop and ask for maintainer/project lead approval; do not read the implementation spec in detail, plan, or code.
+If implementation will proceed from a GitHub issue or Project board card, first verify that the linked issue has the exact label `status:approved` and is not assigned to someone else. If the label is missing, stop and ask for maintainer/project lead approval; do not read the implementation spec in detail, plan, or code. If another assignee is present, stop before any action and tell the user they need explicit permission before reassigning the issue.
 
-After the label is present, load `.atl/skills/github-project-tasks/SKILL.md` and run **START WORK** before spec intake, planning, or coding: assign the issue to the contributor/user, move Project status to `In progress`, and record the planned branch/worktree. Offline/no-network mode may only skip GitHub mutations after evidence confirms the issue already has `status:approved`; it never bypasses the approval gate.
+After the label and assignee gates pass, load `.atl/skills/github-project-tasks/SKILL.md` and run **START WORK** before spec intake, planning, or coding: verify assignees, assign the issue to the contributor/user, move Project status to `In progress`, and record the planned branch/worktree. Offline/no-network mode may only skip GitHub mutations after evidence confirms the issue already has `status:approved` and is unassigned or assigned to the contributor/user; it never bypasses the approval or assignee gates.
 
 Then extract component name, tier, props, variants, states, accessibility behavior, reference URL, and design notes. If the spec lives in a GitHub issue, read issue comments too; validated specs may live there.
 
-Stop and ask when the issue label `status:approved` is missing or cannot be verified, START WORK cannot be completed, or required behavior, accessibility, states, or variants are missing. Do not invent public API and do not begin implementation.
+Stop and ask when the issue label `status:approved` is missing or cannot be verified, the issue is assigned to someone else without explicit reassignment permission, START WORK cannot be completed, or required behavior, accessibility, states, or variants are missing. Do not invent public API and do not begin implementation.
 
 ### 1.5 — Spec critique
 

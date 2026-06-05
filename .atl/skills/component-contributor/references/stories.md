@@ -20,7 +20,10 @@ Use this reference BEFORE writing or reviewing stories. Do not improvise Storybo
   - `## Description` — required for every component; describe what it does and when to use it.
   - `## Dependencies` — include only when the story/component uses other design-system components or external primitives; list each dependency and why it is used.
   - `## Usage Guide` — include only when usage is complex; explain composition, constraints, or non-obvious behavior.
-- Story-level docs must be written as a JSDoc block immediately above each `export const StoryName`; do **not** render documentation cards, panels, helper text blocks, or usage notes inside the story canvas.
+- Story-level docs must be written as a useful JSDoc block immediately above each `export const StoryName`; do **not** render documentation cards, panels, helper text blocks, or usage notes inside the story canvas.
+- Each story must earn its place: demonstrate a distinct state, variant axis, composition constraint, accessibility behavior, or integration context. Do not add stories that duplicate coverage already provided by controls, args, or another story.
+- Do **not** add a generic `DarkMode` story just to show the component in dark theme. Storybook already provides global dark/light switching via the toolbar.
+- A dedicated dark-mode story is allowed only when it demonstrates behavior the global theme toggle cannot express, such as local dark-scope rendering, portal theme inheritance, or a theme-specific bug/regression case. State that reason in the story JSDoc.
 - Story render functions and decorators are examples only: they may provide layout needed to demonstrate the component, but not narrative documentation UI.
 - `Default` story args must not override the component `defaultVariants`.
 - Interactive components must include `Disabled` and interaction-focused stories as appropriate.
@@ -59,7 +62,7 @@ export default meta;
 type Story = StoryObj<typeof Component>;
 
 /**
- * Shows the default component configuration using its default variants.
+ * Demonstrates the component with its built-in default variants so consumers can compare other stories against the baseline API.
  */
 export const Default: Story = {
   args: {
@@ -78,7 +81,9 @@ export const Default: Story = {
 - Is the component-level docs JSDoc block immediately above `const meta`?
 - Does the component-level JSDoc block include required `## Description`?
 - Are `## Dependencies` and `## Usage Guide` included only when applicable?
-- Does each story have a concise JSDoc block immediately above its `export const StoryName`?
+- Does each story JSDoc explain the scenario and why it matters instead of restating the story name or saying only "Shows the component"?
+- Is every story necessary, with no duplicate coverage that controls, args, the global dark-mode toolbar, or another story already provide?
+- Are generic theme-only `DarkMode` stories absent unless they document a local scope, portal inheritance, or regression case that the toolbar cannot express?
 - Are documentation cards, panels, helper text blocks, and usage notes absent from the story canvas?
 - Does `meta.parameters.docs` avoid `description.component`?
 - Are examples aligned with the canonical component API and public docs style?
