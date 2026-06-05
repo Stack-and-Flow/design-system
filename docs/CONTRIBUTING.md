@@ -36,6 +36,17 @@ El design system usa **Space Grotesk Variable**, cargada vía `@fontsource-varia
 
 ---
 
+## Regla de idioma para documentación
+
+La documentación del repo es bilingüe por pares:
+
+- `*.md` base: español.
+- `*.en.md`: inglés.
+
+Si cambiás una guía, mantené ambos archivos alineados cuando exista el par. No reemplaces el archivo base español por prosa en inglés; el contenido inglés vive en el archivo `.en.md` correspondiente. Storybook, código, comentarios técnicos, identificadores y nombres públicos siguen en inglés.
+
+---
+
 ## Cómo crear un nuevo componente
 
 El flujo canónico para componentes está en [`CONTRIBUTOR-FLOW.md`](./CONTRIBUTOR-FLOW.md). Este documento solo resume las reglas principales.

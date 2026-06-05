@@ -36,6 +36,17 @@ The design system uses **Space Grotesk Variable**, loaded via `@fontsource-varia
 
 ---
 
+## Documentation Language Rule
+
+Repository documentation is bilingual by paired files:
+
+- Base `*.md`: Spanish.
+- `*.en.md`: English.
+
+When changing a guide, keep both files aligned when a pair exists. Do not replace the Spanish base file with English prose; English content belongs in the matching `.en.md` file. Storybook, code, technical comments, identifiers, and public names remain English.
+
+---
+
 ## How to Create a New Component
 
 The canonical component workflow is [`CONTRIBUTOR-FLOW.en.md`](./CONTRIBUTOR-FLOW.en.md). This document only summarizes the main rules.
