@@ -1,5 +1,5 @@
 import * as DrawerPrimitive from '@radix-ui/react-dialog';
-import { cloneElement, type FC, isValidElement, type ReactElement } from 'react';
+import { cloneElement, type FC, isValidElement, type ReactElement, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type {
   DrawerBodyProps,
@@ -26,12 +26,22 @@ import {
   useDrawerTrigger
 } from './useDrawer';
 
+type JsxCompatiblePrimitive = (props: { [key: string]: unknown; children?: ReactNode }) => ReactElement | null;
+
+const DialogRootPrimitive = DrawerPrimitive.Root as unknown as JsxCompatiblePrimitive;
+const DialogPortalPrimitive = DrawerPrimitive.Portal as unknown as JsxCompatiblePrimitive;
+const DialogOverlayPrimitive = DrawerPrimitive.Overlay as unknown as JsxCompatiblePrimitive;
+const DialogContentPrimitive = DrawerPrimitive.Content as unknown as JsxCompatiblePrimitive;
+const DialogTitlePrimitive = DrawerPrimitive.Title as unknown as JsxCompatiblePrimitive;
+const DialogDescriptionPrimitive = DrawerPrimitive.Description as unknown as JsxCompatiblePrimitive;
+const DialogClosePrimitive = DrawerPrimitive.Close as unknown as JsxCompatiblePrimitive;
+
 const DrawerRoot: FC<DrawerProps> = (props) => {
   const { contextValue, rootProps } = useDrawerRoot(props);
 
   return (
     <DrawerRootProvider value={contextValue}>
-      <DrawerPrimitive.Root {...rootProps}>{props.children}</DrawerPrimitive.Root>
+      <DialogRootPrimitive {...rootProps}>{props.children}</DialogRootPrimitive>
     </DrawerRootProvider>
   );
 };
@@ -54,12 +64,12 @@ const DrawerContent: FC<DrawerContentProps> = (props) => {
   const { children, contentProps, overlayProps } = useDrawerContent(props);
 
   return (
-    <DrawerPrimitive.Portal>
-      <DrawerPrimitive.Overlay {...overlayProps} data-slot='drawer-overlay' />
-      <DrawerPrimitive.Content {...contentProps} data-slot='drawer-content'>
+    <DialogPortalPrimitive>
+      <DialogOverlayPrimitive {...overlayProps} data-slot='drawer-overlay' />
+      <DialogContentPrimitive {...contentProps} data-slot='drawer-content'>
         {children}
-      </DrawerPrimitive.Content>
-    </DrawerPrimitive.Portal>
+      </DialogContentPrimitive>
+    </DialogPortalPrimitive>
   );
 };
 
@@ -77,9 +87,9 @@ const DrawerTitle: FC<DrawerTitleProps> = ({ children, className, ...props }) =>
   const { className: titleClassName } = useDrawerTitle({ children, className });
 
   return (
-    <DrawerPrimitive.Title {...props} className={titleClassName} data-slot='drawer-title'>
+    <DialogTitlePrimitive {...props} className={titleClassName} data-slot='drawer-title'>
       {children}
-    </DrawerPrimitive.Title>
+    </DialogTitlePrimitive>
   );
 };
 
@@ -87,9 +97,9 @@ const DrawerDescription: FC<DrawerDescriptionProps> = ({ children, className, ..
   const { className: descriptionClassName } = useDrawerDescription({ children, className });
 
   return (
-    <DrawerPrimitive.Description {...props} className={descriptionClassName} data-slot='drawer-description'>
+    <DialogDescriptionPrimitive {...props} className={descriptionClassName} data-slot='drawer-description'>
       {children}
-    </DrawerPrimitive.Description>
+    </DialogDescriptionPrimitive>
   );
 };
 
@@ -113,39 +123,71 @@ const DrawerFooter: FC<DrawerFooterProps> = ({ children, className, ...props }) 
   );
 };
 
-type DrawerCloseChild = ReactElement<{ className?: string }>;
+type PreventableEvent = {
+  defaultPrevented: boolean;
+};
+
+type DrawerCloseChild = ReactElement<{
+  [key: string]: unknown;
+  className?: string;
+  onClick?: DrawerCloseProps['onClick'];
+}>;
+
+const composeEventHandlers = <TEvent extends PreventableEvent>(
+  ...handlers: Array<((event: TEvent) => void) | undefined>
+) => {
+  const composedHandlers = handlers.filter((handler): handler is (event: TEvent) => void => Boolean(handler));
+
+  if (composedHandlers.length === 0) {
+    return undefined;
+  }
+
+  return (event: TEvent) => {
+    for (const handler of composedHandlers) {
+      handler(event);
+
+      if (event.defaultPrevented) {
+        return;
+      }
+    }
+  };
+};
 
 const DrawerClose: FC<DrawerCloseProps> = ({ asChild = false, children, className, type = 'button', ...props }) => {
   const { className: closeClassName } = useDrawerClose({ asChild, children, className, type, ...props });
 
   if (asChild && isValidElement(children)) {
     const closeChild = children as DrawerCloseChild;
+    const { onClick, ...forwardedProps } = props;
 
     return (
-      <DrawerPrimitive.Close asChild={true}>
+      <DialogClosePrimitive asChild={true}>
         {cloneElement(closeChild, {
-          className: cn(closeChild.props.className, closeClassName)
+          ...forwardedProps,
+          ...closeChild.props,
+          className: cn(closeChild.props.className, closeClassName),
+          onClick: composeEventHandlers(closeChild.props.onClick, onClick)
         })}
-      </DrawerPrimitive.Close>
+      </DialogClosePrimitive>
     );
   }
 
   if (children) {
     return (
-      <DrawerPrimitive.Close asChild={true}>
+      <DialogClosePrimitive asChild={true}>
         <button {...props} className={closeClassName} type={type}>
           {children}
         </button>
-      </DrawerPrimitive.Close>
+      </DialogClosePrimitive>
     );
   }
 
   return (
-    <DrawerPrimitive.Close asChild={true}>
+    <DialogClosePrimitive asChild={true}>
       <button {...props} aria-label={props['aria-label'] ?? 'Close drawer'} className={closeClassName} type={type}>
         <span aria-hidden={true}>×</span>
       </button>
-    </DrawerPrimitive.Close>
+    </DialogClosePrimitive>
   );
 };
 

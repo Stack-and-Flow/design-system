@@ -167,6 +167,26 @@ type PreventableEvent = {
   defaultPrevented: boolean;
 };
 
+const composeEventHandlers = <TEvent extends PreventableEvent>(
+  ...handlers: Array<((event: TEvent) => void) | undefined>
+) => {
+  const composedHandlers = handlers.filter((handler): handler is (event: TEvent) => void => Boolean(handler));
+
+  if (composedHandlers.length === 0) {
+    return undefined;
+  }
+
+  return (event: TEvent) => {
+    for (const handler of composedHandlers) {
+      handler(event);
+
+      if (event.defaultPrevented) {
+        return;
+      }
+    }
+  };
+};
+
 const withComposedHandler = <TEvent extends ComposableEvent>(
   originalHandler: ((event: TEvent) => void) | undefined,
   nextHandler: (event: TEvent) => void,
@@ -323,22 +343,36 @@ export const useDrawerTrigger = ({
 
   if (asChild && isValidElement(children)) {
     const triggerChild = children as DrawerTriggerElement;
+    const forwardedProps = nativeButtonProps as DrawerTriggerElement['props'];
+    const forwardedOnClick = onClick as ((event: MouseEvent<HTMLElement>) => void) | undefined;
+    const forwardedOnFocus = onFocus as ((event: FocusEvent<HTMLElement>) => void) | undefined;
     const isIntrinsicInteractive = isIntrinsicInteractiveTrigger(triggerChild);
+    const composedOnKeyDown = composeEventHandlers(triggerChild.props.onKeyDown, forwardedProps.onKeyDown);
     const childProps: DrawerTriggerElement['props'] = {
+      ...forwardedProps,
       ...triggerChild.props,
       className: cn(triggerChild.props.className, className),
       'aria-controls': open ? contentId : undefined,
       'aria-disabled': disabled || undefined,
       'aria-expanded': open,
       'aria-haspopup': 'dialog',
-      onClick: withComposedHandler(triggerChild.props.onClick, handleClick, disabled),
-      onFocus: withComposedHandler(triggerChild.props.onFocus, handleFocus, disabled)
+      onClick: withComposedHandler(
+        composeEventHandlers(triggerChild.props.onClick, forwardedOnClick),
+        handleClick,
+        disabled
+      ),
+      onFocus: withComposedHandler(
+        composeEventHandlers(triggerChild.props.onFocus, forwardedOnFocus),
+        handleFocus,
+        disabled
+      ),
+      onKeyDown: composedOnKeyDown
     };
 
     if (!isIntrinsicInteractive) {
       childProps.role = triggerChild.props.role ?? 'button';
       childProps.tabIndex = disabled ? -1 : (triggerChild.props.tabIndex ?? 0);
-      childProps.onKeyDown = withComposedHandler(triggerChild.props.onKeyDown, handleKeyboardActivation, disabled);
+      childProps.onKeyDown = withComposedHandler(composedOnKeyDown, handleKeyboardActivation, disabled);
     }
 
     if (disabled) {

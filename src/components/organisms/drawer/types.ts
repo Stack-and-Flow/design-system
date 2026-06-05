@@ -217,6 +217,7 @@ export type DrawerCompoundComponent = FC<DrawerProps> & {
 };
 
 export type DrawerTriggerElement = ReactElement<{
+  [key: string]: unknown;
   'aria-controls'?: string;
   'aria-disabled'?: boolean;
   'aria-expanded'?: boolean;

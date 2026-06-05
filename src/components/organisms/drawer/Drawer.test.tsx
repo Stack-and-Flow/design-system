@@ -560,6 +560,44 @@ describe('Drawer — composition edge cases', () => {
     });
   });
 
+  it('forwards wrapper props and handlers to asChild triggers', async () => {
+    const user = userEvent.setup();
+    const handleChildClick = vi.fn();
+    const handleWrapperClick = vi.fn();
+
+    render(
+      <Drawer>
+        <Drawer.Trigger
+          asChild={true}
+          aria-label='Open tracked drawer'
+          data-analytics='drawer-open'
+          id='tracked-drawer-trigger'
+          onClick={handleWrapperClick}
+          title='Tracked drawer trigger'
+        >
+          <button type='button' onClick={handleChildClick}>
+            Open tracked drawer by text
+          </button>
+        </Drawer.Trigger>
+        <Drawer.Content>
+          <Drawer.Title>Tracked trigger drawer</Drawer.Title>
+          <Drawer.Body>Body</Drawer.Body>
+        </Drawer.Content>
+      </Drawer>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open tracked drawer' });
+    expect(trigger).toHaveAttribute('id', 'tracked-drawer-trigger');
+    expect(trigger).toHaveAttribute('data-analytics', 'drawer-open');
+    expect(trigger).toHaveAttribute('title', 'Tracked drawer trigger');
+
+    await user.click(trigger);
+
+    expect(handleChildClick).toHaveBeenCalledTimes(1);
+    expect(handleWrapperClick).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('dialog', { name: 'Tracked trigger drawer' })).toBeInTheDocument();
+  });
+
   it('lets custom close controls rely on their own visible text or explicit accessible name', async () => {
     render(
       <Drawer defaultOpen={true}>
@@ -579,6 +617,46 @@ describe('Drawer — composition edge cases', () => {
     expect(screen.getByRole('button', { name: 'Dismiss panel' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close by text' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Close drawer' })).not.toBeInTheDocument();
+  });
+
+  it('forwards wrapper props and handlers to asChild close controls', async () => {
+    const user = userEvent.setup();
+    const handleChildClick = vi.fn();
+    const handleWrapperClick = vi.fn();
+
+    render(
+      <Drawer defaultOpen={true}>
+        <Drawer.Content>
+          <Drawer.Title>Tracked close drawer</Drawer.Title>
+          <Drawer.Body>Body</Drawer.Body>
+          <Drawer.Close
+            asChild={true}
+            aria-label='Dismiss tracked drawer'
+            data-analytics='drawer-close'
+            id='tracked-drawer-close'
+            onClick={handleWrapperClick}
+            title='Tracked drawer close'
+          >
+            <button type='button' onClick={handleChildClick}>
+              Close tracked drawer by text
+            </button>
+          </Drawer.Close>
+        </Drawer.Content>
+      </Drawer>
+    );
+
+    const close = screen.getByRole('button', { name: 'Dismiss tracked drawer' });
+    expect(close).toHaveAttribute('id', 'tracked-drawer-close');
+    expect(close).toHaveAttribute('data-analytics', 'drawer-close');
+    expect(close).toHaveAttribute('title', 'Tracked drawer close');
+
+    await user.click(close);
+
+    expect(handleChildClick).toHaveBeenCalledTimes(1);
+    expect(handleWrapperClick).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Tracked close drawer' })).not.toBeInTheDocument();
+    });
   });
 
   it('keeps an explicit close path available for a non-dismissible drawer', async () => {
