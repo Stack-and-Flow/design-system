@@ -17,8 +17,16 @@ const hasContent = (node: AlertProps['children']) => {
   });
 };
 
+const getPrefersReducedMotion = () => {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+};
+
 const usePrefersReducedMotion = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(getPrefersReducedMotion);
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {

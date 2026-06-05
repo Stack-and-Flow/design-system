@@ -1,5 +1,6 @@
 import { act, fireEvent, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let prefersReducedMotion = false;
@@ -125,10 +126,13 @@ describe('Alert — component behavior', () => {
 
     const closeButton = screen.getByRole('button', { name: 'Dismiss alert' });
 
+    const closeIcon = screen.getByTestId('icon-x');
+
     expect(alert).toHaveAttribute('aria-labelledby');
     expect(alert).not.toHaveAttribute('aria-describedby');
     expect(closeButton).toHaveClass('h-9', 'w-9');
-    expect(screen.getByTestId('icon-x')).toHaveAttribute('size', '14');
+    expect(closeIcon).toHaveAttribute('size', '14');
+    expect(closeIcon).toHaveClass('text-current', 'dark:text-current');
   });
 
   it('calls onOpenChange(false) and removes the alert after the exit motion in uncontrolled mode', async () => {
@@ -300,6 +304,14 @@ describe('Alert — component behavior', () => {
     await user.click(screen.getByRole('button', { name: 'Dismiss alert' }));
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('reads reduced motion preference during initial render before effects can run', () => {
+    setReducedMotion(true);
+
+    renderToString(<Alert dismissible={true} subtitle='Close immediately.' title='Reduced motion immediate' />);
+
+    expect(window.matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)');
   });
 
   it('renders valid falsy ReactNode content without breaking aria references', () => {

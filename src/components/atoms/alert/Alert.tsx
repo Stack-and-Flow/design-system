@@ -79,7 +79,14 @@ export const Alert: FC<AlertProps> = (props) => {
                   onKeyDown={handleCloseKeyDown}
                   type='button'
                 >
-                  <Icon decorative={true} name='x' size={14} tone='default' />
+                  <Icon
+                    color='text-current'
+                    colorDark='dark:text-current'
+                    decorative={true}
+                    name='x'
+                    size={14}
+                    tone='default'
+                  />
                 </button>
               )}
             </div>
