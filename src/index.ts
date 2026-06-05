@@ -1,6 +1,7 @@
 import './styles/global.css';
 
 // ─── Atoms ───────────────────────────────────────────────────────────────────
+export { Alert } from './components/atoms/alert';
 export { Avatar } from './components/atoms/avatar';
 export { Badge } from './components/atoms/badge';
 export { Button } from './components/atoms/button';
