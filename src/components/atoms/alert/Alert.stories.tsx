@@ -162,7 +162,7 @@ export const CustomStartAndEndContent: Story = {
     title: 'Deployment paused',
     subtitle: 'A reviewer must approve the release before it can continue.',
     startContent: <Icon color='text-current' decorative={true} name='shield-alert' size={20} />,
-    endContent: <Button onClick={action('review-click')} size='xs' text='Review now' variant='secondary' />
+    endContent: <Button onClick={action('review-click')} size='xs' text='Review now' variant='primary' />
   }
 };
 
