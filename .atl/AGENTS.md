@@ -62,6 +62,7 @@ Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` wi
 - For package-facing changes (package output, exports, generated declarations, peer ranges, React major upgrades, or CI/package distribution policy), require `pnpm run build`; require `pnpm run verify:package` when published output or consumer compatibility can change. Tests/Storybook alone are not enough for React major upgrades.
 - Generated declarations must not leak internal path aliases or CSS side-effect imports into the published `.d.ts` output
 - English only — code, comments, stories
+- Paired repository docs are bilingual: base `*.md` files are Spanish and matching `*.en.md` files are English. When editing docs under `docs/` or root README files, preserve that split, update both language variants when the content changes, and never replace the Spanish base file with English prose.
 - Commit messages must follow the commitlint-enforced Conventional Commit format: `<type>(<optional scope>): <description>`. PR titles should follow the same format for review consistency. Allowed types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`. Use scopes for domains such as `a11y`, `tokens`, or `infra` instead of inventing custom types.
 
 ---

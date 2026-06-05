@@ -38,6 +38,7 @@ Run first. If any check fails, return **REJECTED** and do not continue to option
 | Linked issue assigned to someone else without permission evidence | Fetch linked issue assignees; if any assignee is not the contributor/user, require explicit reassignment/takeover permission before review proceeds. |
 | Invalid PR title | Conventional Commit format: `<type>(<optional scope>): <description>`. |
 | PR template incomplete | No required placeholder sections left empty. |
+| Paired docs language split broken | For root/docs `*.md` + `*.en.md` pairs, base `*.md` must remain Spanish and matching `*.en.md` must remain English unless maintainers explicitly approve a language migration. |
 | Branch/diff scope unclear | Diff contains unrelated work without an explicit explanation. |
 | Component audit missing for component changes | Run or cite `components-auditor`; CRITICAL/MAJOR findings block PR. |
 | Storybook conventions contradicted | Use `component-contributor/references/stories.md` as source of truth; reject drift such as `parameters.docs.description.component`. |
@@ -56,6 +57,7 @@ Run after automatic rejection checks pass.
 - [ ] Generated/build/runtime artifacts are absent.
 - [ ] Review workload is reasonable; if over 400 changed lines, use chained PR strategy or record maintainer exception.
 - [ ] Public API changes are intentional and documented.
+- [ ] Paired docs keep the repository language split: Spanish in base `*.md`, English in matching `*.en.md`.
 
 ### 2 — Component quality evidence
 
