@@ -925,7 +925,36 @@ box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 
 ---
 
-### 3.16 Announcement Bar / Version Banner
+### 3.16 Drawer
+
+Drawer is a Radix Dialog-backed off-canvas dialog. It uses the approved compound anatomy: `Drawer.Trigger`, `Drawer.Content`, `Drawer.Header`, `Drawer.Title`, `Drawer.Description`, `Drawer.Body`, `Drawer.Footer`, and `Drawer.Close`. `Portal`, `Overlay`, and `Backdrop` remain internal to `Drawer.Content`.
+
+**Accessibility and anatomy:**
+
+- `Drawer.Title` is required so the dialog has an accessible name.
+- `Drawer.Description` is optional and should explain context when the title alone is not enough.
+- Built-in icon-only `Drawer.Close` is named `Close drawer`; custom close controls must provide visible text or their own accessible label.
+- Header and footer are non-scrolling; `Drawer.Body` is the internal scroll region for long content.
+
+**Placement and responsive behavior:**
+
+- `placement="start" | "end" | "top" | "bottom"`; default is `end`.
+- `start` and `end` are logical placements. On `md+`, LTR maps start/end to left/right and RTL maps start/end to right/left.
+- Below `md`, side placements adapt to effective bottom sheet layout.
+- Side sizes reuse `max-w-modal-*`; top, bottom, and mobile bottom layouts use `max-h-drawer-*` utilities based on `--size-drawer-block-viewport`.
+- Bottom and mobile-adapted drawers use safe-area padding for footer actions.
+
+**Dismissal and motion:**
+
+- `dismissible` controls outside/backdrop dismissal only.
+- `closeOnEscape` controls Escape-key dismissal only.
+- Explicit close controls remain available for non-dismissible drawers.
+- Overlay fades and panel slides by effective placement using `opacity` and `transform`; never use `transition: all`.
+- `motion-reduce` removes drawer entrance/exit motion while preserving focus management.
+
+---
+
+### 3.17 Announcement Bar / Version Banner
 
 **Announcement bar (Docusaurus global bar — full width above navbar):**
 
