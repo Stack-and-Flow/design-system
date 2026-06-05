@@ -159,7 +159,9 @@ export type * from "./types";
   };
   ```
 - **Sin `parameters.docs.description.component`**: la documentación del componente vive en el bloque JSDoc encima de `const meta`.
-- **Stories documentadas**: añade un bloque JSDoc corto encima de cada `export const StoryName`.
+- **Stories documentadas**: añade un bloque JSDoc útil encima de cada `export const StoryName`; debe explicar el escenario y por qué importa, no solo repetir el nombre de la story.
+- **Sin stories redundantes**: cada story debe demostrar un estado, eje de variante, restricción de composición, comportamiento de accesibilidad o contexto de integración distinto.
+- **Sin story genérica `DarkMode`**: usa el toolbar dark-mode de Storybook para cobertura normal de tema; las stories dark-mode dedicadas quedan solo para scope local, herencia en portales o regresiones de tema que el toolbar no pueda expresar.
 - **Args**: Define `args` por defecto para la story base sin pisar `defaultVariants`.
 
 ---

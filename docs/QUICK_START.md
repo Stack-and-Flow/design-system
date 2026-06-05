@@ -36,8 +36,8 @@ Ve al [tablero del proyecto en GitHub](https://github.com/orgs/Stack-and-Flow/pr
 
 > **¿Primera vez?** Busca issues etiquetados como `layer: atom` con `category: component` — son autocontenidos y bien definidos.
 
-Antes de escribir código, asegurate de que la spec esté definida y la issue tenga el label `status:approved`. Recién entonces corré **START WORK**:
-- asignate la issue;
+Antes de escribir código, asegurate de que la spec esté definida, la issue tenga el label `status:approved` y no esté asignada a otra persona. Recién entonces corré **START WORK**:
+- verificá assignees y asignate la issue;
 - movela a `In progress`;
 - registrá branch y worktree plan.
 

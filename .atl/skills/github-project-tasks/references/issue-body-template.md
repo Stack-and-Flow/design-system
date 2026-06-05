@@ -36,7 +36,8 @@ Out of scope:
 - [ ] Issue triaged with Team and Category fields set on the Project board, and GitHub milestone assigned.
 - [ ] Specification or plan recorded in this issue when behavior, API, accessibility, or tokens are affected.
 - [ ] Validated spec reviewed and linked issue labeled `status:approved` before implementation starts.
-- [ ] START WORK completed after label `status:approved`: assignee set, Project status moved to `In progress`, branch/worktree recorded.
+- [ ] Assignee ownership checked before START WORK; if assigned to someone else, explicit reassignment permission documented.
+- [ ] START WORK completed after label `status:approved` and assignee gate: assignee set, Project status moved to `In progress`, branch/worktree recorded.
 - [ ] Implementation completed inside the approved scope.
 - [ ] Validation evidence recorded in the PR or issue.
 - [ ] PR opened and linked with `Closes #NNN`.
@@ -45,7 +46,7 @@ Out of scope:
 
 ### Specification or plan
 
-For component work, paste or link the approved `## Validated component spec` from `component-spec-proposer` before implementation starts. After the spec is defined, the contributor waits for the issue label `status:approved`; no START WORK or implementation happens before that label.
+For component work, paste or link the approved `## Validated component spec` from `component-spec-proposer` before implementation starts. After the spec is defined, the contributor waits for the issue label `status:approved` and verifies assignee ownership; no START WORK or implementation happens before both gates pass.
 
 For non-component work, record:
 
@@ -78,6 +79,7 @@ For non-component work, record:
 Filled during START WORK:
 
 - Approval marker: issue label status:approved
+- Assignee gate: unassigned / assigned to contributor / explicit reassignment permission
 - Assignee:
 - Branch:
 - Worktree:

@@ -36,21 +36,23 @@ Do not implement the component. Your job is to turn a vague task into a validate
 | Accessibility contract is vague or missing   | Stop and ask; do not produce a ready-to-approve spec.                          |
 | Composite keyboard/focus behavior unclear    | Ask for the intended pattern before validation.                                |
 | Expected a11y tests are missing              | Add them before asking for approval.                                           |
+| Linked issue assigned to someone else       | Stop before GitHub writes or implementation handoff; tell the user they need explicit permission before reassigning or taking over the issue. |
 | User approves proposal                       | Add the validated spec to the issue, then leave implementation blocked until a maintainer/project lead adds the issue label `status:approved`. |
 | User requests changes                        | Revise the proposal and ask for validation again.                              |
 
 ## Execution Steps
 
-1. Read the GitHub issue, if provided: title, body, comments, assignees, and URL. If the rendered issue page does not expose the comment thread, fetch the issue comments via the GitHub API (`/repos/{owner}/{repo}/issues/{number}/comments`) or `gh api` before continuing.
-2. Fetch and study the reference URL. Extract behavior, states, accessibility, anatomy, and examples.
-3. Identify the semantic pattern: native element, Radix primitive, or WAI-ARIA/APG pattern. For composites, define roles, relationships, keyboard behavior, focus lifecycle, and announced states before proposing API details.
-4. Compare against project rules from `component-contributor`, especially Phase 1 requirements.
-5. Present a proposed spec using `references/spec-template.md` with concrete accessibility acceptance criteria and expected tests.
-6. Include an `Assumptions to validate` section for choices not explicit in the issue/reference, especially screen reader, focus, or keyboard decisions.
-7. Ask the user to approve, reject, or edit the proposal. Do not write to GitHub before approval.
-8. After approval, append or update a GitHub issue comment headed `## Validated component spec` using the approved spec.
-9. Locate the Project item for the issue only to confirm it exists; do not move Project Status to `In progress` from this skill.
-10. Report the issue URL, project item ID, approval state, and next command/action: wait for the `status:approved` issue label, then run START WORK via `github-project-tasks`, then start `component-contributor`.
+1. Read the GitHub issue metadata first, if provided: title, assignees, labels, and URL. Confirm the contributor/user before comparing assignees. If the issue is assigned to someone other than the contributor/user, stop before further workflow action or GitHub writes and tell the user they need explicit permission before reassigning or taking over the issue.
+2. Read the GitHub issue body and comments, if provided. If the rendered issue page does not expose the comment thread, fetch the issue comments via the GitHub API (`/repos/{owner}/{repo}/issues/{number}/comments`) or `gh api` before continuing.
+3. Fetch and study the reference URL. Extract behavior, states, accessibility, anatomy, and examples.
+4. Identify the semantic pattern: native element, Radix primitive, or WAI-ARIA/APG pattern. For composites, define roles, relationships, keyboard behavior, focus lifecycle, and announced states before proposing API details.
+5. Compare against project rules from `component-contributor`, especially Phase 1 requirements.
+6. Present a proposed spec using `references/spec-template.md` with concrete accessibility acceptance criteria and expected tests.
+7. Include an `Assumptions to validate` section for choices not explicit in the issue/reference, especially screen reader, focus, or keyboard decisions.
+8. Ask the user to approve, reject, or edit the proposal. Do not write to GitHub before approval.
+9. After approval, append or update a GitHub issue comment headed `## Validated component spec` using the approved spec.
+10. Locate the Project item for the issue only to confirm it exists; do not move Project Status to `In progress` from this skill.
+11. Report the issue URL, project item ID, approval state, and next command/action: wait for the `status:approved` issue label, then run START WORK via `github-project-tasks`, then start `component-contributor`.
 
 ## Output Contract
 
@@ -79,7 +81,7 @@ After approval and GitHub update, return:
 **Spec**: Added to issue as `Validated component spec`
 **Project setup**: {team/category present or missing setup}
 **Approval gate**: Waiting for issue label `status:approved`
-**Next**: After the issue has label `status:approved`, run START WORK via `github-project-tasks`, then run `component-contributor` for implementation.
+**Next**: After the issue has label `status:approved` and is unassigned or assigned to the contributor/user, run START WORK via `github-project-tasks`, then run `component-contributor` for implementation.
 ```
 
 ## References

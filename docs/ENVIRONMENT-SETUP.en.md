@@ -107,7 +107,7 @@ When you want to implement a component, simply say:
 Implement this component: https://github.com/Stack-and-Flow/design-system/issues/XXX
 ```
 
-The agent will load `component-contributor` and follow the current workflow: `status:approved` label verification, START WORK when applicable, validated spec reading, spec review, visual preflight, plan, implementation, visual review, pre-PR component audit, and END WORK when closing the task.
+The agent will load `component-contributor` and follow the current workflow: `status:approved` label verification, assignee verification, START WORK when applicable, validated spec reading, spec review, visual preflight, plan, implementation, visual review, pre-PR component audit, and END WORK when closing the task.
 
 ---
 

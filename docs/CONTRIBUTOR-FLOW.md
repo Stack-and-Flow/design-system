@@ -7,10 +7,10 @@ Este es el documento canónico para contribuir componentes al design system. `CO
 ## Resumen rápido
 
 ```text
-Project task → Research → Spec proposal skill → Validated issue spec → esperar `status:approved` → START WORK → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
+Project task → Research → Spec proposal skill → Validated issue spec → esperar `status:approved` → verificar assignee → START WORK → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
 ```
 
-La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana. Después de escribir la spec validada en la tarea, la implementación queda bloqueada hasta que la issue asociada tenga el label `status:approved`.
+La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana. Después de escribir la spec validada en la tarea, la implementación queda bloqueada hasta que la issue asociada tenga el label `status:approved` y no esté asignada a otra persona.
 
 ---
 
@@ -34,8 +34,9 @@ Si hay contradicción, el orden de autoridad es: `GUIDELINES.md` / `DESIGN.md` p
 
 1. Elegí una tarea en el [GitHub Projects Board](https://github.com/orgs/Stack-and-Flow/projects/1).
 2. Verificá que tenga issue asociada. La issue es el contrato de implementación.
-3. No corras **START WORK** todavía si la spec no está definida y aprobada. El contributor puede investigar y proponer la spec, pero no puede arrancar implementación.
-4. Si el usuario pidió trabajo offline/no-network, no mutés GitHub: dejá registrado el follow-up necesario. No empieces implementación hasta verificar que la issue tenga el label `status:approved`.
+3. Antes de tomar una issue linkeada, verificá los assignees. Si ya está asignada a otra persona, frená y pedí permiso explícito antes de reasignártela o tomarla.
+4. No corras **START WORK** todavía si la spec no está definida y aprobada. El contributor puede investigar y proponer la spec, pero no puede arrancar implementación.
+5. Si el usuario pidió trabajo offline/no-network, no mutés GitHub: dejá registrado el follow-up necesario. No empieces implementación hasta verificar que la issue tenga el label `status:approved` y que el assignee gate esté satisfecho.
 
 ---
 
@@ -86,9 +87,9 @@ La skill debe:
 4. Esperar aprobación humana.
 5. Recién después de la aprobación, escribir `## Validated component spec` en la issue.
 6. Dejar la tarea esperando aprobación: no moverla a `In progress` desde `component-spec-proposer`.
-7. Indicar el siguiente paso: esperar el marcador `status:approved` antes de arrancar `component-contributor`.
+7. Indicar el siguiente paso: esperar el marcador `status:approved` y verificar que la issue esté sin assignee o asignada al contributor/usuario antes de arrancar `component-contributor`.
 
-No uses `component-contributor` para implementar hasta que la spec esté validada y la issue tenga el label `status:approved`.
+No uses `component-contributor` para implementar hasta que la spec esté validada, la issue tenga el label `status:approved` y el assignee gate haya pasado.
 
 ---
 
@@ -119,8 +120,9 @@ Después de documentar la spec, el contributor debe esperar aprobación explíci
 Reglas:
 
 - No crear rama de implementación, plan ni código antes de `status:approved`.
+- Antes de cualquier acción sobre una issue linkeada, verificá assignees. Si está asignada a otra persona, frená y avisá que hace falta permiso explícito antes de reasignártela.
 - No mover el Project item a `In progress` desde la fase de spec proposal.
-- Cuando el label `status:approved` esté presente en la issue, corré **START WORK**: asignate la issue, mové el Project item a `In progress`, confirmá Team/Category y registrá branch/worktree.
+- Cuando el label `status:approved` esté presente y el assignee gate pase, corré **START WORK**: asignate la issue, mové el Project item a `In progress`, confirmá Team/Category y registrá branch/worktree.
 - Si falta el label `status:approved`, frená y pedí aprobación; no lo reemplaces por aprobación implícita en chat.
 
 ---
@@ -173,10 +175,10 @@ Implementá este componente usando component-contributor.
 
 Issue: {issue_url}
 
-Usá la sección `## Validated component spec` como contrato. Antes de leer la spec en detalle, planificar o escribir código, verificá que la issue tenga el label `status:approved`; si falta, frená. Ejecutá START WORK antes del intake de implementación. No inventes props ni comportamiento fuera de la spec. Pausá en los checkpoints de spec review, visual preflight y plan antes de escribir código.
+Usá la sección `## Validated component spec` como contrato. Antes de leer la spec en detalle, planificar o escribir código, verificá que la issue tenga el label `status:approved` y que no esté asignada a otra persona; si falta el label o el assignee gate falla, frená. Ejecutá START WORK antes del intake de implementación. No inventes props ni comportamiento fuera de la spec. Pausá en los checkpoints de spec review, visual preflight y plan antes de escribir código.
 ```
 
-El agente debe cargar `component-contributor`, comprobar el label `status:approved`, correr START WORK y recién después consumir la spec validada por `component-spec-proposer`. Si salta una fase, frenalo.
+El agente debe cargar `component-contributor`, comprobar el label `status:approved`, verificar assignees, correr START WORK y recién después consumir la spec validada por `component-spec-proposer`. Si salta una fase, frenalo.
 
 ---
 
@@ -184,12 +186,12 @@ El agente debe cargar `component-contributor`, comprobar el label `status:approv
 
 ### Fase 1 — Lectura de spec validada
 
-Antes de esta fase, el agente ya debe haber verificado el label `status:approved` y completado START WORK. Luego lee la sección `## Validated component spec` de la issue y extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
+Antes de esta fase, el agente ya debe haber verificado el label `status:approved`, confirmado que la issue no está asignada a otra persona sin permiso explícito y completado START WORK. Luego lee la sección `## Validated component spec` de la issue y extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
 
 Salida esperada:
 
 - resumen de la spec;
-- evidencia del label `status:approved` y START WORK;
+- evidencia del label `status:approved`, assignee gate y START WORK;
 - preguntas si algo es ambiguo;
 - módulos de referencia/tokens que va a cargar.
 
@@ -472,6 +474,10 @@ Only when composition or usage has non-obvious constraints.
 
 Todo el contenido del bloque JSDoc debe estar en inglés, incluidos headings, texto descriptivo y listas.
 
+Cada bloque JSDoc de story encima de `export const StoryName` debe explicar el escenario y por qué importa: estado, eje de variante, restricción de composición, comportamiento de accesibilidad o contexto de integración. No aceptes descripciones de relleno que solo repiten el nombre de la story.
+
+Usá el toolbar dark-mode de Storybook para cobertura normal de tema. No añadas una story genérica `DarkMode` salvo que demuestre scope dark local, herencia de tema en portales o una regresión específica que el toolbar no pueda expresar; el JSDoc de la story debe explicitar esa razón.
+
 ---
 
 ## Reglas que la IA no puede saltarse
@@ -483,7 +489,8 @@ Si el agente propone cualquiera de estas cosas, rechazalo:
 - usar una arquitectura de archivo único;
 - omitir tests `.test.tsx`;
 - meter interacciones en `play` functions en lugar de tests;
-- escribir stories sin args, controles o bloque JSDoc encima de `const meta`;
+- escribir stories sin args, controles, bloque JSDoc encima de `const meta` o JSDoc útil encima de cada story export;
+- añadir stories redundantes que dupliquen controles, args, otra story o la cobertura normal del toolbar dark-mode;
 - usar `description.component` en `parameters.docs`;
 - usar `interface` o `any`;
 - hardcodear colores, spacing o fuentes;

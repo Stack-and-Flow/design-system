@@ -52,6 +52,8 @@ Audit against `.atl/skills/_shared/component-contract.md`:
 Use the Storybook and testing references as the single source of truth. In particular:
 
 - story docs live in JSDoc above `const meta` and each story export;
+- each story JSDoc explains the scenario and why it matters, not just the story name;
+- story set is necessary and non-duplicative, including no generic theme-only `DarkMode` story when the global Storybook dark-mode toolbar covers the case;
 - `parameters.docs.description.component` is not used;
 - no manual `argTypes` unless a documented exception exists;
 - event args use `action(...)`;

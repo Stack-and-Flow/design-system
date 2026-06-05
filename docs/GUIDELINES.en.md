@@ -131,7 +131,9 @@ export type * from './types';
 - **Mandatory Controls**: Use JSDoc comments (`/** @control text */`) in `types.ts` to power the controls.
 - **Mandatory Description**: Every component story MUST include a JSDoc block immediately above `const meta` with `## Description` required. Use `## Dependencies` and `## Usage Guide` only when applicable.
 - **No `parameters.docs.description.component`**: component docs live in JSDoc above `const meta`, not in `parameters.docs.description.component`.
-- **Story-level docs**: add concise JSDoc immediately above every `export const StoryName`.
+- **Story-level docs**: add useful JSDoc immediately above every `export const StoryName`; it must explain the scenario and why it matters, not just restate the story name.
+- **No redundant stories**: each story must demonstrate a distinct state, variant axis, composition constraint, accessibility behavior, or integration context.
+- **No generic `DarkMode` story**: use the Storybook dark-mode toolbar for normal theme coverage; dedicated dark-mode stories are only for local scope, portal inheritance, or theme-specific regressions the toolbar cannot express.
 - **Args**: Define default `args` for the base story without overriding `defaultVariants`.
 
 ---

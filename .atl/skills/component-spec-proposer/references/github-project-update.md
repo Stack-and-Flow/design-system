@@ -20,7 +20,7 @@ item_id=$(gh project item-list 1 \
 ```
 
 Do not move Project Status to `In progress` from `component-spec-proposer`.
-That transition belongs to START WORK in `github-project-tasks`, after spec approval, after the linked issue has label `status:approved`, and immediately before implementation.
+That transition belongs to START WORK in `github-project-tasks`, after spec approval, after the linked issue has label `status:approved`, after assignee ownership is verified, and immediately before implementation. If the issue is assigned to someone else, stop and require explicit permission before reassignment/takeover.
 
 Add the approved spec to the issue:
 
@@ -32,4 +32,4 @@ gh issue comment NUMBER \
 
 If a previous `Validated component spec` comment exists, prefer editing it manually or with the GitHub API instead of adding duplicates.
 
-After writing the validated spec, report that the task is waiting for the issue label `status:approved`. Do not start `component-contributor` or move the Project item to `In progress` until that label is present.
+After writing the validated spec, report that the task is waiting for the issue label `status:approved` and assignee ownership verification. Do not start `component-contributor` or move the Project item to `In progress` until both gates pass.

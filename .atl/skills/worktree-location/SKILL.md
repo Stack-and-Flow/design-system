@@ -34,7 +34,9 @@ Instead:
 
 ## Branch and Worktree Naming
 
-When work starts from a GitHub issue, use the same naming convention as `github-project-tasks` START WORK:
+When work starts from a GitHub issue, first verify the `github-project-tasks` START WORK gates: the issue has `status:approved` and is unassigned or assigned to the contributor/user. If it is assigned to someone else, stop before creating a branch/worktree and require explicit permission before reassigning or taking it over.
+
+Then use the same naming convention as `github-project-tasks` START WORK:
 
 ```text
 branch:   {type}/{issue-number}-{slug}

@@ -14,7 +14,7 @@ metadata:
 Use this skill for Stack-and-Flow GitHub issue + Project board work. It has four modes:
 
 - **CREATE** — create issue(s), add to Project, set fields.
-- **START WORK** — after the linked issue has label `status:approved`, assign the issue, move the Project item to `In progress`, and record the branch/worktree plan before implementation starts.
+- **START WORK** — after the linked issue has label `status:approved`, verify the assignee is empty or already the contributor/user, assign the issue, move the Project item to `In progress`, and record the branch/worktree plan before implementation starts. If the issue is assigned to someone else, stop before any mutation and require explicit permission to reassign it.
 - **END WORK** — comment validation/PR evidence and move the Project item to `Done` only after the task is genuinely complete.
 - **AUDIT** — detect malformed existing issues or board items.
 
@@ -72,7 +72,8 @@ Option IDs:
 - Always write multi-line issue bodies to a temp file and pass `--body-file`.
 - Confirm task name, tier/type, reference URL when applicable, assignee, team, category, and milestone before CREATE.
 - Milestone is mandatory for CREATE. If it is missing, ask interactively before creating the issue; do not invent it.
-- Before implementation starts from a GitHub issue, require the exact issue label `status:approved`, then run START WORK: assign the issue to the contributor/user and move the Project item to `In progress`.
+- Before implementation starts from a GitHub issue, require the exact issue label `status:approved`, then run START WORK: verify current assignees, assign the issue to the contributor/user, and move the Project item to `In progress`.
+- If a linked issue is already assigned to someone other than the contributor/user, stop before assignment, Project status changes, branch/worktree actions, planning, or implementation. Notify the user: `Issue #{number} is already assigned to @{assignee}; ask for explicit permission before reassigning it.` Continue only after explicit permission is provided in the current task context.
 - Before marking a task done, run END WORK: add validation/PR evidence and move the Project item to `Done` only when merged or explicitly approved by the maintainer/user.
 - Do not invent a missing reference URL; ask or research.
 
@@ -134,7 +135,7 @@ $itemId = gh project item-add 1 `
 
 ## Mode 2 — START WORK
 
-Run this before implementation starts from an existing GitHub issue or board card, after the linked issue has label `status:approved`. Offline/no-network mode may skip GitHub mutations only after approval evidence confirms the label is present; it does not permit implementation without `status:approved`.
+Run this before implementation starts from an existing GitHub issue or board card, after the linked issue has label `status:approved`. Offline/no-network mode may skip GitHub mutations only after evidence confirms the label is present and the assignee gate is satisfied; it does not permit implementation without `status:approved` or against an issue assigned to someone else without explicit reassignment permission.
 
 Inputs required:
 
@@ -143,11 +144,12 @@ Inputs required:
 3. GitHub username of the contributor/user doing the work.
 4. Planned branch name.
 5. Planned worktree path when a worktree will be used.
+6. Explicit maintainer/user permission to reassign, only when the issue is already assigned to someone else.
 
 Steps:
 
 1. Confirm the issue is the right task and the contributor/user is correct.
-2. Verify the exact issue label `status:approved` is present. If it is missing, stop; do not move the Project item to `In progress`.
+2. Verify the exact issue label `status:approved` is present. If it is missing, stop; do not assign the issue or move the Project item to `In progress`.
 
 ```powershell
 $approvalLabel = gh issue view {issue_number} `
@@ -158,7 +160,21 @@ $approvalLabel = gh issue view {issue_number} `
 
 If `$approvalLabel` is empty, the approval gate is not satisfied. Stop; implementation must not start under any circumstance.
 
-3. Assign the issue:
+3. Verify assignee ownership before any mutation, branch/worktree action, planning, or implementation:
+
+```powershell
+$assignees = gh issue view {issue_number} `
+  --repo Stack-and-Flow/design-system `
+  --json assignees `
+  --jq '.assignees[].login'
+
+$ownedByContributor = $assignees | Select-String -SimpleMatch '{username}'
+$assignedToOther = $assignees | Where-Object { $_ -and $_ -ne '{username}' }
+```
+
+If `$assignedToOther` is not empty and explicit maintainer/user permission to reassign is not present in the current task context, stop before mutating GitHub or starting work. Notify the user: `Issue #{number} is already assigned to @{assignee}; ask for explicit permission before reassigning it.`
+
+4. Assign the issue when it is unassigned, already assigned to `{username}`, or explicit reassignment permission was provided:
 
 ```powershell
 gh issue edit {issue_number} `
@@ -166,8 +182,8 @@ gh issue edit {issue_number} `
   --add-assignee {username}
 ```
 
-4. Ensure the issue is on Project `1`. If not, add it with `gh project item-add`.
-5. Resolve the Project item ID for existing cards:
+5. Ensure the issue is on Project `1`. If not, add it with `gh project item-add`.
+6. Resolve the Project item ID for existing cards:
 
 ```powershell
 $issueUrl = "https://github.com/Stack-and-Flow/design-system/issues/{issue_number}"
@@ -180,7 +196,7 @@ $itemId = gh project item-list 1 `
 
 If `$itemId` is empty after adding/checking the Project item, stop and report the blocker.
 
-6. Move Project Status to `In progress`:
+7. Move Project Status to `In progress`:
 
 ```powershell
 gh project item-edit `
@@ -190,8 +206,8 @@ gh project item-edit `
   --single-select-option-id 47fc9ee4
 ```
 
-7. Confirm Team and Category are set. If missing, set them using the option IDs above.
-8. Report the work-start state:
+8. Confirm Team and Category are set. If missing, set them using the option IDs above.
+9. Report the work-start state:
 
 ```markdown
 ## Work Started
@@ -199,6 +215,7 @@ gh project item-edit `
 **Issue**: #{number} — {title}
 **Assignee**: @{username}
 **Approval gate**: issue label `status:approved` verified
+**Assignee gate**: issue was unassigned, already assigned to @{username}, or explicit reassignment permission was recorded
 **Project status**: In progress
 **Team**: {team}
 **Category**: {category}
@@ -206,7 +223,7 @@ gh project item-edit `
 **Worktree**: `{path or "not used"}`
 ```
 
-Do not start implementation if the `status:approved` label is missing or unverified. Do not start implementation if assignment, item lookup, or `In progress` status fails, unless the user explicitly asks to continue offline/no-network after the approval label has been verified.
+Do not start implementation if the `status:approved` label is missing or unverified. Do not start implementation if the assignee gate fails, assignment fails, item lookup fails, or `In progress` status fails, unless the user explicitly asks to continue offline/no-network after both the approval label and assignee gate have been verified.
 
 ## Branch and Worktree Naming
 
@@ -346,9 +363,10 @@ For START WORK, return the `## Work Started` report shown in Mode 2, or:
 ## Work Start Skipped
 
 **Issue**: #{number} — {title}
-**Reason**: offline/no-network requested or GitHub mutation failed after `status:approved` was verified
+**Reason**: offline/no-network requested, issue already assigned to someone else without explicit reassignment permission, or GitHub mutation failed after `status:approved` was verified
 **Approval gate**: issue label `status:approved` verified; if not verified, implementation remains blocked
-**Required follow-up**: assign issue, move Project status to `In progress`, confirm team/category
+**Assignee gate**: {unassigned / already assigned to @{username} / assigned to @{assignee}; explicit reassignment permission required}
+**Required follow-up**: get explicit permission before reassigning when assigned to someone else; then assign issue, move Project status to `In progress`, confirm team/category
 **Branch**: `{branch}`
 **Worktree**: `{path or "not used"}`
 ```

@@ -9,7 +9,7 @@ body:
         ## Infrastructure Task
         Use this for GitHub Actions, Vite, Biome, Lefthook, Storybook build, tests, release automation, or project tooling.
 
-        Current flow: define problem and risk -> plan exact config change -> wait for issue label `status:approved` -> START WORK Project gate -> implement -> verify with local command or workflow run -> PR -> END WORK after merge or maintainer approval.
+        Current flow: define problem and risk -> plan exact config change -> wait for issue label `status:approved` -> assignee gate -> START WORK Project gate -> implement -> verify with local command or workflow run -> PR -> END WORK after merge or maintainer approval.
 
   - type: dropdown
     id: area
@@ -89,7 +89,7 @@ body:
     attributes:
       label: Workflow gates
       options:
-        - label: START WORK must run only after issue label `status:approved`; it assigns the issue, moves Project status to `In progress`, and records branch/worktree before implementation.
+        - label: START WORK must run only after issue label `status:approved` and assignee ownership are verified; if assigned to someone else, get explicit permission before reassigning, then move Project status to `In progress` and record branch/worktree before implementation.
         - label: PR must link this issue and include validation evidence.
         - label: END WORK moves the Project item to `Done` only after merge or explicit maintainer approval.
 

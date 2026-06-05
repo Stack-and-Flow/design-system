@@ -34,8 +34,8 @@ Go to the [GitHub Project board](https://github.com/orgs/Stack-and-Flow/projects
 
 > **First time?** Look for issues tagged `layer: atom` with `category: component` — these are self-contained and well-defined.
 
-Before writing code, make sure the spec is defined and the issue has the `status:approved` label. Only then run **START WORK**:
-- assign the issue to yourself;
+Before writing code, make sure the spec is defined, the issue has the `status:approved` label, and the issue is not assigned to someone else. Only then run **START WORK**:
+- verify assignees and assign the issue to yourself;
 - move it to `In progress`;
 - record the branch and worktree plan.
 
