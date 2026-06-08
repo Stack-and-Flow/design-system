@@ -50,5 +50,5 @@ jobs:
           path: ./
           base: ${{ github.event.pull_request.base.sha }}
           head: ${{ github.event.pull_request.head.sha }}
-          version: 3.95.3
+          version: 3.95.5
           extra_args: --results=verified,unknown
