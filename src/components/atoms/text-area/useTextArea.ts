@@ -233,6 +233,48 @@ export const useTextArea = (
     runAutosize();
   }, [hasFloatingLabelOffset, runAutosize, size, value]);
 
+  useIsomorphicLayoutEffect(() => {
+    if (!autosize || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const textarea = textareaElementRef.current;
+
+    if (!textarea) {
+      return;
+    }
+
+    const observedWidths = new WeakMap<Element, number>();
+    const observer = new ResizeObserver((entries) => {
+      let shouldAutosize = false;
+
+      for (const entry of entries) {
+        const previousWidth = observedWidths.get(entry.target);
+        const nextWidth = entry.contentRect.width;
+
+        observedWidths.set(entry.target, nextWidth);
+
+        if (previousWidth !== undefined && previousWidth !== nextWidth) {
+          shouldAutosize = true;
+        }
+      }
+
+      if (shouldAutosize) {
+        runAutosize();
+      }
+    });
+
+    observer.observe(textarea);
+
+    if (textarea.parentElement) {
+      observer.observe(textarea.parentElement);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [autosize, runAutosize]);
+
   const textareaRef = useCallback(
     (node: HTMLTextAreaElement | null) => {
       textareaElementRef.current = node;

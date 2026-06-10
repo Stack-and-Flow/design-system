@@ -171,9 +171,9 @@ export const hintMessageVariants = cva('fs-small', {
   variants: {
     tone: {
       info: 'text-text-secondary-light dark:text-text-secondary-dark',
-      warning: 'text-[#92400e] dark:text-warning',
+      warning: 'text-warning-text-light dark:text-warning',
       error: 'text-error-light dark:text-error',
-      success: 'text-[#15803d] dark:text-success'
+      success: 'text-success-text-light dark:text-success'
     }
   },
   defaultVariants: {

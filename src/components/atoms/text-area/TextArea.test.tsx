@@ -1,4 +1,4 @@
-import { render, renderHook, screen } from '@testing-library/react';
+import { act, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createElement, createRef, type ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -62,7 +62,73 @@ const mockComputedTextAreaMetrics = () => {
   });
 };
 
+let restoreResizeObserver: (() => void) | undefined;
+
+const installResizeObserverMock = () => {
+  const originalResizeObserver = globalThis.ResizeObserver;
+  const observedElements = new Set<Element>();
+  let activeCallback: ResizeObserverCallback | undefined;
+  let activeObserver: ResizeObserver | undefined;
+  let constructorCalls = 0;
+
+  class MockResizeObserver {
+    constructor(callback: ResizeObserverCallback) {
+      activeCallback = callback;
+      activeObserver = this as unknown as ResizeObserver;
+      constructorCalls += 1;
+    }
+
+    observe(element: Element) {
+      observedElements.add(element);
+    }
+
+    unobserve(element: Element) {
+      observedElements.delete(element);
+    }
+
+    disconnect() {
+      observedElements.clear();
+    }
+  }
+
+  Object.defineProperty(globalThis, 'ResizeObserver', {
+    configurable: true,
+    writable: true,
+    value: MockResizeObserver
+  });
+
+  restoreResizeObserver = () => {
+    if (originalResizeObserver) {
+      Object.defineProperty(globalThis, 'ResizeObserver', {
+        configurable: true,
+        writable: true,
+        value: originalResizeObserver
+      });
+      return;
+    }
+
+    Reflect.deleteProperty(globalThis, 'ResizeObserver');
+  };
+
+  return {
+    get constructorCalls() {
+      return constructorCalls;
+    },
+    observedElements,
+    trigger: (observations: { target: Element; width: number }[]) => {
+      const entries = observations.map(({ target, width }) => ({
+        target,
+        contentRect: { width } as DOMRectReadOnly
+      })) as ResizeObserverEntry[];
+
+      activeCallback?.(entries, activeObserver as ResizeObserver);
+    }
+  };
+};
+
 afterEach(() => {
+  restoreResizeObserver?.();
+  restoreResizeObserver = undefined;
   vi.restoreAllMocks();
 });
 
@@ -501,6 +567,71 @@ describe('TextArea — component behavior', () => {
     rerender(renderControlledTextArea({ value: 'Short\nLonger', onValueChange: handleValueChange }));
 
     expect(screen.getByRole('textbox', { name: 'Controlled' }).style.height).toBe('120px');
+  });
+
+  it('recalculates autosize when ResizeObserver reports a width change', () => {
+    const resizeObserver = installResizeObserverMock();
+    mockComputedTextAreaMetrics();
+    setTextAreaScrollHeight(70);
+
+    render(<TextArea id='message' label='Message' autosize={true} minRows={1} />);
+    const textarea = screen.getByRole('textbox', { name: 'Message' });
+    const surface = screen.getByTestId('message-surface');
+
+    expect(resizeObserver.constructorCalls).toBe(1);
+    expect(resizeObserver.observedElements.has(textarea)).toBe(true);
+    expect(resizeObserver.observedElements.has(surface)).toBe(true);
+    expect(textarea.style.height).toBe('70px');
+
+    act(() => {
+      resizeObserver.trigger([
+        { target: textarea, width: 320 },
+        { target: surface, width: 320 }
+      ]);
+    });
+
+    setTextAreaScrollHeight(120);
+
+    act(() => {
+      resizeObserver.trigger([{ target: textarea, width: 260 }]);
+    });
+
+    expect(textarea.style.height).toBe('120px');
+  });
+
+  it('does not install a ResizeObserver when autosize is disabled', () => {
+    const resizeObserver = installResizeObserverMock();
+
+    render(<TextArea id='message' label='Message' autosize={false} />);
+
+    expect(resizeObserver.constructorCalls).toBe(0);
+  });
+
+  it('keeps autosize safe when ResizeObserver is unavailable', () => {
+    const originalResizeObserver = globalThis.ResizeObserver;
+
+    Object.defineProperty(globalThis, 'ResizeObserver', {
+      configurable: true,
+      writable: true,
+      value: undefined
+    });
+    restoreResizeObserver = () => {
+      if (originalResizeObserver) {
+        Object.defineProperty(globalThis, 'ResizeObserver', {
+          configurable: true,
+          writable: true,
+          value: originalResizeObserver
+        });
+        return;
+      }
+
+      Reflect.deleteProperty(globalThis, 'ResizeObserver');
+    };
+    mockComputedTextAreaMetrics();
+    setTextAreaScrollHeight(80);
+
+    expect(() => render(<TextArea id='message' label='Message' autosize={true} minRows={1} />)).not.toThrow();
+    expect(screen.getByRole('textbox', { name: 'Message' }).style.height).toBe('80px');
   });
 
   it('uses resize defaults and explicit resize overrides', () => {

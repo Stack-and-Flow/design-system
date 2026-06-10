@@ -78,6 +78,18 @@ export const Variants: Story = {
 };
 
 /**
+ * Demonstrates rounded TextArea geometry, which softens the multiline surface without becoming pill-shaped like single-line Input.
+ */
+export const Rounded: Story = {
+  args: {
+    id: 'textarea-rounded',
+    label: 'Rounded message',
+    rounded: true,
+    placeholder: 'Rounded multiline surface'
+  }
+};
+
+/**
  * Compares small, medium, and large sizes with textarea-appropriate minimum heights and typography.
  */
 export const Sizes: Story = {
