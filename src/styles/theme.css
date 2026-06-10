@@ -111,11 +111,13 @@
   --color-success: #22c55e; /* Dark */
   --color-success-light: #16a34a; /* Light */
   --color-success-dark: #138a3d;
+  --color-success-text-light: #15803d; /* Light hint text — AA on white */
   --color-success-tint: rgba(34, 197, 94, 0.12);
 
   --color-warning: #fbbf24; /* Dark */
   --color-warning-light: #d97706; /* Light */
   --color-warning-dark: #b58903;
+  --color-warning-text-light: #92400e; /* Light hint text — AA on white */
   --color-warning-tint: rgba(251, 191, 36, 0.12);
 
   --color-error: #ff0036; /* Dark — igual que brand en dark */
