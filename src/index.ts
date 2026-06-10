@@ -25,6 +25,7 @@ export { Spacer } from './components/atoms/spacer';
 export { Switch } from './components/atoms/switch';
 export { Table } from './components/atoms/table';
 export { Text } from './components/atoms/text';
+export { TextArea } from './components/atoms/text-area';
 export { Tooltip } from './components/atoms/tooltip';
 
 // ─── Molecules ───────────────────────────────────────────────────────────────

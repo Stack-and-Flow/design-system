@@ -1,10 +1,26 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import type { ChangeEvent, ComponentProps, ReactNode } from 'react';
+import type { ChangeEvent, ComponentProps } from 'react';
+import { hintMessageVariants as inputHintMessageVariants } from '@/components/atoms/input/types';
 
-export const inputVariants = cva(
+/** Re-exported from Input for consistency — avoids API drift. */
+export const hintMessageVariants = inputHintMessageVariants;
+
+export const textAreaWrapperVariants = cva('flex max-w-full flex-col gap-2', {
+  variants: {
+    fullWidth: {
+      true: 'w-full',
+      false: 'w-auto'
+    }
+  },
+  defaultVariants: {
+    fullWidth: false
+  }
+});
+
+export const textAreaSurfaceVariants = cva(
   [
-    'relative flex max-w-full justify-between overflow-hidden border py-2',
-    'cursor-text transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
+    'relative flex max-w-full overflow-hidden border cursor-text',
+    'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
     'focus-within:outline-none'
   ],
   {
@@ -14,6 +30,10 @@ export const inputVariants = cva(
           'bg-surface-light border-border-light hover:bg-surface-raised-light hover:border-border-strong-light',
           'dark:bg-surface-dark dark:border-border-dark dark:hover:bg-surface-raised-dark dark:hover:border-border-strong-dark'
         ],
+        bordered: [
+          'bg-surface-light border-border-strong-light hover:bg-surface-raised-light',
+          'dark:bg-surface-dark dark:border-border-strong-dark dark:hover:bg-surface-raised-dark'
+        ],
         underlined: [
           'bg-transparent border-border-light hover:border-border-strong-light',
           'dark:border-border-dark dark:hover:border-border-strong-dark'
@@ -22,20 +42,16 @@ export const inputVariants = cva(
           'bg-transparent border-t-transparent border-l-transparent border-r-transparent rounded-none!',
           'border-b-border-light hover:border-b-border-strong-light',
           'dark:border-b-border-dark dark:hover:border-b-border-strong-dark'
-        ],
-        bordered: [
-          'bg-surface-light border-border-strong-light hover:bg-surface-raised-light',
-          'dark:bg-surface-dark dark:border-border-strong-dark dark:hover:bg-surface-raised-dark'
         ]
       },
       rounded: {
-        true: 'rounded-full',
+        true: 'rounded-lg',
         false: 'rounded-md'
       },
       size: {
-        sm: 'h-12 px-3 fs-small',
-        md: 'h-14 px-4 fs-base',
-        lg: 'h-16 px-4 fs-h6'
+        sm: 'px-3 py-2',
+        md: 'px-4 py-3',
+        lg: 'px-4 py-3'
       },
       status: {
         default: '',
@@ -84,9 +100,9 @@ export const inputVariants = cva(
   }
 );
 
-export const labelVariants = cva(
+export const textAreaLabelVariants = cva(
   [
-    'absolute w-auto line-clamp-1 pt-0.5 text-text-light dark:text-text-dark',
+    'absolute z-10 w-auto line-clamp-1 pt-0.5 text-text-light dark:text-text-dark',
     'transition-[top,font-size,color] duration-200 ease-[ease]'
   ],
   {
@@ -97,128 +113,105 @@ export const labelVariants = cva(
         lg: 'left-4 font-medium'
       },
       state: {
-        resting: 'top-1/2 -translate-y-1/2',
-        floatingSm: 'top-0.5 fs-xs font-semibold',
+        floatingSm: 'top-1 fs-xs font-semibold',
         floatingMd: 'top-1.5 fs-small font-semibold',
         floatingLg: 'top-2 fs-small font-semibold'
       }
     },
-    compoundVariants: [
-      {
-        size: 'sm',
-        state: 'resting',
-        class: 'fs-small'
-      },
-      {
-        size: 'md',
-        state: 'resting',
-        class: 'fs-base'
-      },
-      {
-        size: 'lg',
-        state: 'resting',
-        class: 'fs-h6'
-      }
-    ],
     defaultVariants: {
       size: 'md',
-      state: 'resting'
+      state: 'floatingMd'
     }
   }
 );
 
-export const nativeInputVariants = cva(
+export const nativeTextAreaVariants = cva(
   [
-    'flex-1 border-none bg-transparent font-medium outline-none',
+    'min-h-full w-full flex-1 border-none bg-transparent p-0 font-medium outline-none',
     'text-text-light dark:text-text-dark placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark',
     'disabled:cursor-not-allowed'
   ],
   {
     variants: {
-      hasInlineAction: {
-        true: 'pr-6',
+      size: {
+        sm: 'fs-small leading-relaxed',
+        md: 'fs-base leading-relaxed',
+        lg: 'fs-h6 leading-relaxed'
+      },
+      hasFloatingLabel: {
+        true: 'pt-5',
         false: ''
+      },
+      resize: {
+        none: 'resize-none',
+        vertical: 'resize-y',
+        horizontal: 'resize-x',
+        both: 'resize'
       }
     },
     defaultVariants: {
-      hasInlineAction: false
+      size: 'md',
+      hasFloatingLabel: false,
+      resize: 'vertical'
     }
   }
 );
 
-export const inputInlineButtonVariants = cva(
-  [
-    'cursor-pointer rounded-sm bg-surface-light px-1 text-text-light hover:bg-surface-raised-light',
-    'dark:bg-surface-dark dark:text-text-dark dark:hover:bg-surface-raised-dark',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
-    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
-  ],
-  {
-    variants: {
-      shape: {
-        top: 'rounded-b-none',
-        bottom: 'rounded-t-none',
-        icon: 'rounded-full p-0.5'
-      }
-    },
-    defaultVariants: {
-      shape: 'icon'
-    }
-  }
-);
-
-export const hintMessageVariants = cva('fs-small', {
-  variants: {
-    tone: {
-      info: 'text-text-secondary-light dark:text-text-secondary-dark',
-      warning: 'text-[#92400e] dark:text-warning',
-      error: 'text-error-light dark:text-error',
-      success: 'text-[#15803d] dark:text-success'
-    }
-  },
-  defaultVariants: {
-    tone: 'info'
-  }
-});
-
-type InputVariantProps = VariantProps<typeof inputVariants>;
-type NativeInputProps = Omit<
-  ComponentProps<'input'>,
-  'children' | 'className' | 'disabled' | 'id' | 'onChange' | 'size' | 'type'
+type TextAreaVariantProps = VariantProps<typeof textAreaSurfaceVariants>;
+type NativeTextAreaProps = Omit<
+  ComponentProps<'textarea'>,
+  'children' | 'className' | 'disabled' | 'id' | 'onChange' | 'readOnly' | 'size'
 >;
 
-export type InputHintType = 'error' | 'warning' | 'success' | 'info';
-export type InputTypeVariant = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'hidden';
-export type InputVariant = NonNullable<InputVariantProps['variant']>;
-export type InputSize = NonNullable<InputVariantProps['size']>;
-export type InputHint = {
+export type TextAreaVariant = NonNullable<TextAreaVariantProps['variant']>;
+export type TextAreaSize = NonNullable<TextAreaVariantProps['size']>;
+export type TextAreaStatus = NonNullable<TextAreaVariantProps['status']>;
+export type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
+
+export type TextAreaHint = {
   message: string;
-  type: InputHintType;
+  type: 'error' | 'warning' | 'success' | 'info';
 };
 
-export type InputProps = NativeInputProps & {
+export type TextAreaProps = NativeTextAreaProps & {
   /** @control text */
   id: string;
+  /** @control text */
+  value?: string;
+  /** @control text */
+  defaultValue?: string;
+  onChange?: (event: ChangeEvent<HTMLTextAreaElement>, value: string) => void;
+  onValueChange?: (value: string) => void;
+  /**
+   * @control text
+   * @default ''
+   */
+  label?: string;
+  /** @control text */
+  placeholder?: string;
   /**
    * @control select
    * @default regular
    */
-  variant?: InputVariant;
+  variant?: TextAreaVariant;
   /**
    * @control select
-   * @default text
+   * @default md
    */
-  type?: InputTypeVariant;
+  size?: TextAreaSize;
   /**
    * @control boolean
    * @default false
    */
   rounded?: boolean;
   /**
-   * @control text
-   * @default ''
+   * Defaults to the resolved hint type when a hint is present.
+   * @control select
+   * @default default
    */
-  label?: string;
+  status?: TextAreaStatus;
+  /** @control object */
+  hint?: TextAreaHint;
   /**
    * @control boolean
    * @default false
@@ -230,28 +223,37 @@ export type InputProps = NativeInputProps & {
    */
   disabled?: boolean;
   /**
-   * @control select
-   * @default md
+   * @control boolean
+   * @default false
    */
-  size?: InputSize;
+  readOnly?: boolean;
   /**
    * @control boolean
    * @default false
    */
   isFullWidth?: boolean;
-  /** @control text */
-  placeholder?: string;
-  /** @control text */
-  className?: string;
-  /** @control object */
-  hint?: InputHint;
-  /** @control object */
-  startContent?: ReactNode;
-  /** @control object */
-  endContent?: ReactNode;
+  /**
+   * @control boolean
+   * @default false
+   */
+  autosize?: boolean;
+  /**
+   * @control number
+   * @default 3
+   */
+  minRows?: number;
+  /** @control number */
+  maxRows?: number;
+  /**
+   * Defaults to `none` when autosize is enabled.
+   * @control select
+   * @default vertical
+   */
+  resize?: TextAreaResize;
   /** @control text */
   ariaDescribedBy?: string | string[];
   /** @control text */
   ariaLabelledBy?: string | string[];
-  onChange?: (event: ChangeEvent<HTMLInputElement>, value: string) => void;
+  /** @control text */
+  className?: string;
 };
