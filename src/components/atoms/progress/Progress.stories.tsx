@@ -54,6 +54,7 @@ export const Colors: Story = {
       <Progress value={50} color='default' label='Default' className='w-96' />
       <Progress value={50} color='primary' label='Primary' className='w-96' />
       <Progress value={50} color='secondary' label='Secondary' className='w-96' />
+      <Progress value={50} color='info' label='Info' className='w-96' />
       <Progress value={50} color='success' label='Success' className='w-96' />
       <Progress value={50} color='warning' label='Warning' className='w-96' />
       <Progress value={50} color='danger' label='Danger' className='w-96' />

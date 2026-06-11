@@ -121,6 +121,17 @@ describe('Progress', () => {
     expect(progressbar.getAttribute('aria-label')).toBeNull();
   });
 
+  it('supports the info color variant', () => {
+    render(<Progress color='info' value={50} />);
+
+    const progressbar = screen.getByRole('progressbar');
+    const track = progressbar.querySelector('div');
+    const indicator = track?.querySelector('div');
+
+    expect(track).toHaveClass('bg-info-tint');
+    expect(indicator).toHaveClass('bg-info-light');
+  });
+
   it('falls back to a default aria-label when no external label is provided', () => {
     render(<Progress value={10} />);
 
