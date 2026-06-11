@@ -555,9 +555,8 @@ const setConfig = (config: Partial<ToastProviderRuntimeConfig>) => {
     promoteQueuedToast();
   }
 
-  if (state.visible.length > state.config.maxVisible) {
-    const overflow = state.visible.splice(state.config.maxVisible);
-    state.queue = [...overflow, ...state.queue];
+  while (state.visible.length > state.config.maxVisible) {
+    demoteOldestVisibleToast();
   }
 
   notify();

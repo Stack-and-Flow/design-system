@@ -519,6 +519,30 @@ describe('Toast — timers, queueing, and helper state', () => {
     expect(screen.queryByRole('alertdialog', { name: 'Promoted in background' })).not.toBeInTheDocument();
   });
 
+  it('safely demotes overflow toasts when maxVisible shrinks at runtime', () => {
+    vi.useFakeTimers();
+    const { rerender } = renderWithProvider({ maxVisible: 2 });
+
+    runInAct(() => toast({ title: 'Demoted timer toast', duration: 5000 }));
+    const visibleToastId = runInAct(() => toast({ title: 'Still visible toast', duration: 0 }));
+
+    rerender(
+      <ToastProvider maxVisible={1} motion='none'>
+        <button type='button'>Before</button>
+      </ToastProvider>
+    );
+
+    expect(screen.queryByRole('alertdialog', { name: 'Demoted timer toast' })).not.toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Still visible toast' })).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(6000);
+      toast.close(visibleToastId);
+    });
+
+    expect(screen.getByRole('alertdialog', { name: 'Demoted timer toast' })).toBeInTheDocument();
+  });
+
   it('promotes queued toasts using LIFO ordering when configured', () => {
     renderWithProvider({ maxVisible: 1, queueStrategy: 'lifo' });
 
