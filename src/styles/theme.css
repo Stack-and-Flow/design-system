@@ -88,6 +88,8 @@
   --color-red-tint-high: rgba(255, 0, 54, 0.15); /* Glow base / code highlight */
   --color-red-tint-strong: rgba(255, 0, 54, 0.3); /* Glow activo */
   --color-red-tint-border: rgba(255, 0, 54, 0.5); /* Borde neon botón secondary (light) */
+  --color-red-surface-light: color-mix(in srgb, var(--color-brand-light) 12%, var(--color-surface-light));
+  --color-red-surface-dark: color-mix(in srgb, var(--color-brand-dark) 18%, var(--color-surface-dark));
   --color-spinner-track: rgba(45, 6, 9, 0.2); /* Spinner secondary track */
 
   /* Tints de superficie — blancos y negros semitransparentes */
@@ -113,20 +115,28 @@
   --color-success-dark: #138a3d;
   --color-success-text-light: #15803d; /* Light hint text — AA on white */
   --color-success-tint: rgba(34, 197, 94, 0.12);
+  --color-success-surface-light: color-mix(in srgb, var(--color-success-light) 12%, var(--color-surface-light));
+  --color-success-surface-dark: color-mix(in srgb, var(--color-success) 18%, var(--color-surface-dark));
 
   --color-warning: #fbbf24; /* Dark */
   --color-warning-light: #d97706; /* Light */
   --color-warning-dark: #b58903;
   --color-warning-text-light: #92400e; /* Light hint text — AA on white */
   --color-warning-tint: rgba(251, 191, 36, 0.12);
+  --color-warning-surface-light: color-mix(in srgb, var(--color-warning-light) 12%, var(--color-surface-light));
+  --color-warning-surface-dark: color-mix(in srgb, var(--color-warning) 18%, var(--color-surface-dark));
 
   --color-error: #ff0036; /* Dark — igual que brand en dark */
   --color-error-light: #db143c; /* Light */
   --color-error-tint: rgba(255, 0, 54, 0.12);
+  --color-error-surface-light: color-mix(in srgb, var(--color-error-light) 12%, var(--color-surface-light));
+  --color-error-surface-dark: color-mix(in srgb, var(--color-error) 18%, var(--color-surface-dark));
 
   --color-info: #3b82f6;
   --color-info-light: #1d4ed8;
   --color-info-tint: rgba(59, 130, 246, 0.12);
+  --color-info-surface-light: color-mix(in srgb, var(--color-info-light) 12%, var(--color-surface-light));
+  --color-info-surface-dark: color-mix(in srgb, var(--color-info) 18%, var(--color-surface-dark));
 
   /* ── Colores de utilidad (paleta extendida) ──────────────────── */
   --color-yellow: #eab308;
@@ -487,6 +497,18 @@
 
 @utility z-modal {
   z-index: var(--z-modal);
+}
+
+@utility z-toast {
+  z-index: var(--z-toast);
+}
+
+@utility shadow-toast-focus-light {
+  box-shadow: var(--glow-focus-light), var(--shadow-dropdown-light);
+}
+
+@utility shadow-toast-focus-dark {
+  box-shadow: var(--glow-focus-dark), var(--shadow-dropdown);
 }
 
 @utility shadow-modal {
