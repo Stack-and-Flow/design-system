@@ -419,7 +419,10 @@ export type ToastProviderProps = NativeProviderProps & {
    * @default default
    */
   motion?: ToastMotion;
-  /** @control select */
+  /**
+   * @control select
+   * @default derived from placement
+   */
   swipeDirection?: ToastSwipeDirection;
   /**
    * @control number
