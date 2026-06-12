@@ -61,7 +61,7 @@ export const chipVariants = cva(
         color: 'primary',
         variant: 'flat',
         class:
-          'bg-red-tint-subtle text-brand-light dark:text-brand-dark-light data-[interactive=true]:hover:bg-red-tint-low'
+          'bg-red-surface-light text-text-light dark:bg-red-surface-dark dark:text-text-dark data-[interactive=true]:hover:bg-red-tint-low'
       },
       {
         color: 'primary',
@@ -120,7 +120,8 @@ export const chipVariants = cva(
       {
         color: 'success',
         variant: 'flat',
-        class: 'bg-success-tint text-text-light dark:text-success data-[interactive=true]:hover:bg-success-tint'
+        class:
+          'bg-success-surface-light text-text-light dark:bg-success-surface-dark dark:text-text-dark data-[interactive=true]:hover:bg-success-tint'
       },
       {
         color: 'success',
@@ -148,7 +149,8 @@ export const chipVariants = cva(
       {
         color: 'warning',
         variant: 'flat',
-        class: 'bg-warning-tint text-text-light dark:text-warning data-[interactive=true]:hover:bg-warning-tint'
+        class:
+          'bg-warning-surface-light text-text-light dark:bg-warning-surface-dark dark:text-text-dark data-[interactive=true]:hover:bg-warning-tint'
       },
       {
         color: 'warning',
@@ -176,7 +178,8 @@ export const chipVariants = cva(
       {
         color: 'danger',
         variant: 'flat',
-        class: 'bg-error-tint text-red-800 dark:text-error data-[interactive=true]:hover:bg-error-tint'
+        class:
+          'bg-error-surface-light text-text-light dark:bg-error-surface-dark dark:text-text-dark data-[interactive=true]:hover:bg-error-tint'
       },
       {
         color: 'danger',
