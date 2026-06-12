@@ -398,7 +398,7 @@ box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.15);
 
 ---
 
-### 3.5 Input — Error / Warning / Success States
+### 3.5 Input — Error / Warning / Success / Info States
 
 Estos estados cambian solo `border-color` y `box-shadow`. El fondo, el padding y la tipografía permanecen idénticos al estado por defecto.
 
@@ -421,6 +421,14 @@ box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
 ```css
 border-color: rgba(34, 197, 94, 0.7); /* --color-success: #22c55e */
 box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+```
+
+**Info:**
+
+```css
+border-color: rgba(29, 78, 216, 0.7); /* --color-info-light: #1d4ed8 */
+box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+/* dark: border-color: rgba(59, 130, 246, 1); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12); */
 ```
 
 **Texto del mensaje de error:**
@@ -1148,6 +1156,7 @@ background: linear-gradient(
 - [ ] Altura mínima `44px`
 - [ ] Texto del marcador de posición `#6a6b6c` — WCAG exime el marcador de posición del contraste (informativo, no funcional)
 - [ ] Estado Error: cambio de borde + sombra, color NOT del texto de entrada
+- [ ] Estado Info: cambio de borde + sombra con `--color-info-light` en claro y `--color-info` en oscuro; no tratarlo como helper neutral
 - [ ] Mensaje de error: `color: #ff0036` en oscuro / `#db143c` en claro; verifica el contraste sobre la superficie
 - [ ] Etiquetas siempre visibles; nunca inputs que dependan solo del placeholder
 - [ ] Anillo de enfoque: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` (más suave que el botón: 12%, no 40%)

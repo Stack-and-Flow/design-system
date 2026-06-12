@@ -86,7 +86,7 @@ Map the component to the design system before coding:
 
 - surface pattern: opaque, raised, tinted, or floating/frosted;
 - relevant tokens from `theme.css`;
-- base/hover/focus/active/disabled/loading/error states;
+- base/hover/focus/active/disabled/loading/error/info states;
 - focus ring, disabled treatment, touch target, contrast, reduced motion;
 - allowed Radix primitive, if any.
 

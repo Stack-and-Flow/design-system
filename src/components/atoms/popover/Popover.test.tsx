@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { Popover } from './Popover';
+import { popoverArrowVariants, popoverContentVariants, popoverHeaderVariants } from './types';
 import { PopoverRootProvider, usePopoverContent, usePopoverRoot } from './usePopover';
 
 const HeaderSlot = ({ children }: { children: ReactNode }) => <>{children}</>;
@@ -94,6 +95,12 @@ describe('usePopoverContent — logic', () => {
 
     expect(result.current.contentProps['aria-labelledby']).toMatch(/^popover-/);
     expect(result.current.contentProps['aria-label']).toBeUndefined();
+  });
+
+  it('maps the info color to semantic content, header, and arrow classes', () => {
+    expect(popoverContentVariants({ color: 'info' })).toContain('border-info-light/30');
+    expect(popoverHeaderVariants({ color: 'info' })).toContain('text-info-light');
+    expect(popoverArrowVariants({ color: 'info' })).toContain('fill-info-light/15');
   });
 });
 

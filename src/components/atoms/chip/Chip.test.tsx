@@ -45,6 +45,7 @@ describe('Chip — interactive and accessibility behavior', () => {
 
   it.each([
     ['primary', 'bg-red-surface-light', 'dark:bg-red-surface-dark', 'hover:bg-red-tint-low'],
+    ['info', 'bg-info-surface-light', 'dark:bg-info-surface-dark', 'hover:bg-info-tint'],
     ['success', 'bg-success-surface-light', 'dark:bg-success-surface-dark', 'hover:bg-success-tint'],
     ['warning', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark', 'hover:bg-warning-tint'],
     ['danger', 'bg-error-surface-light', 'dark:bg-error-surface-dark', 'hover:bg-error-tint']

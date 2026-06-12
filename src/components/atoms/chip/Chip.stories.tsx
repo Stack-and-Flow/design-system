@@ -67,6 +67,7 @@ export const Color: Story = {
       <Chip color='success'>Success</Chip>
       <Chip color='warning'>Warning</Chip>
       <Chip color='danger'>Danger</Chip>
+      <Chip color='info'>Info</Chip>
     </div>
   )
 };
@@ -115,6 +116,9 @@ export const VisualReviewMatrix: Story = {
           <Chip variant='solid' color='danger'>
             danger
           </Chip>
+          <Chip variant='solid' color='info'>
+            info
+          </Chip>
         </div>
       </section>
       <section className='grid gap-3'>
@@ -136,6 +140,9 @@ export const VisualReviewMatrix: Story = {
           </Chip>
           <Chip variant='flat' color='danger'>
             danger
+          </Chip>
+          <Chip variant='flat' color='info'>
+            info
           </Chip>
         </div>
       </section>
@@ -159,6 +166,9 @@ export const VisualReviewMatrix: Story = {
           <Chip variant='bordered' color='danger'>
             danger
           </Chip>
+          <Chip variant='bordered' color='info'>
+            info
+          </Chip>
         </div>
       </section>
       <section className='grid gap-3'>
@@ -180,6 +190,9 @@ export const VisualReviewMatrix: Story = {
           </Chip>
           <Chip variant='light' color='danger'>
             danger
+          </Chip>
+          <Chip variant='light' color='info'>
+            info
           </Chip>
         </div>
       </section>
@@ -203,6 +216,9 @@ export const VisualReviewMatrix: Story = {
           <Chip variant='faded' color='danger'>
             danger
           </Chip>
+          <Chip variant='faded' color='info'>
+            info
+          </Chip>
         </div>
       </section>
       <section className='grid gap-3'>
@@ -224,6 +240,9 @@ export const VisualReviewMatrix: Story = {
           </Chip>
           <Chip variant='dot' color='danger'>
             danger
+          </Chip>
+          <Chip variant='dot' color='info'>
+            info
           </Chip>
         </div>
       </section>
@@ -248,6 +267,9 @@ export const UsageReview: Story = {
           </Chip>
           <Chip color='danger' variant='faded'>
             Failing checks
+          </Chip>
+          <Chip color='info' variant='light'>
+            Needs context
           </Chip>
           <Chip color='secondary' variant='bordered'>
             Draft

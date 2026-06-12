@@ -76,7 +76,7 @@ export const selectTrigger = cva(
           'border-warning-light shadow-glow-input-warning-light hover:!border-warning-light focus-within:!border-warning-light dark:border-warning dark:shadow-glow-input-warning dark:hover:!border-warning dark:focus-within:!border-warning',
         success:
           'border-success-light shadow-glow-input-success-light hover:!border-success-light focus-within:!border-success-light dark:border-success dark:shadow-glow-input-success dark:hover:!border-success dark:focus-within:!border-success',
-        info: ''
+        info: 'border-info-light shadow-glow-input-info-light hover:!border-info-light focus-within:!border-info-light dark:border-info dark:shadow-glow-input-info dark:hover:!border-info dark:focus-within:!border-info'
       }
     },
     compoundVariants: [
@@ -97,6 +97,12 @@ export const selectTrigger = cva(
         status: 'success',
         class:
           'border-b-success-light dark:border-b-success shadow-glow-input-success-light dark:shadow-glow-input-success hover:!border-success-light dark:hover:!border-success'
+      },
+      {
+        variant: 'underlined',
+        status: 'info',
+        class:
+          'border-b-info-light dark:border-b-info shadow-glow-input-info-light dark:shadow-glow-input-info hover:!border-info-light dark:hover:!border-info'
       }
     ],
     defaultVariants: {

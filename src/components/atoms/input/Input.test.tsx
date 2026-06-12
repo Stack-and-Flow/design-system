@@ -41,6 +41,17 @@ describe('useInput — logic', () => {
     expect(result.current.inputProps['aria-describedby']).toBe('email-hint');
   });
 
+  it('maps info hints to semantic info styling and icon tone', () => {
+    const { result } = renderHook(() =>
+      useInput({ id: 'email', label: 'Email', hint: { type: 'info', message: 'Helpful guidance' } })
+    );
+
+    expect(result.current.containerProps.className).toContain('border-info-light');
+    expect(result.current.containerProps.className).toContain('shadow-glow-input-info-light');
+    expect(result.current.hintMessageClassName).toContain('text-info-light');
+    expect(result.current.hintIconProps).toMatchObject({ name: 'info', tone: 'info' });
+  });
+
   it('uses placeholder as an accessible name when no label or aria name is provided', () => {
     const { result } = renderHook(() => useInput({ id: 'search', placeholder: 'Search products' }));
     expect(result.current.inputProps['aria-label']).toBe('Search products');

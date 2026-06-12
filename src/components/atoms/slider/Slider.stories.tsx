@@ -216,6 +216,15 @@ export const Colors: Story = {
             onValueChange={action('danger-slider-change')}
           />
         </div>
+        <div className='flex flex-col gap-2'>
+          <span className='px-5 text-sm font-medium text-text-light dark:text-text-dark'>Info</span>
+          <Slider
+            ariaLabel='Info slider'
+            color='info'
+            defaultValue={[50]}
+            onValueChange={action('info-slider-change')}
+          />
+        </div>
       </>,
       'gap-6'
     )

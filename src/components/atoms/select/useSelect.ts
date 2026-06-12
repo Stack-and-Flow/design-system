@@ -34,7 +34,7 @@ const getHintIconProps = (type?: SelectHint['type']): HintIconProps | undefined 
     case 'success':
       return { name: 'circle-check', tone: 'success', size: 16 };
     case 'info':
-      return { name: 'info', tone: 'muted', size: 16 };
+      return { name: 'info', tone: 'info', size: 16 };
     default:
       return undefined;
   }

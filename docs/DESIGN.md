@@ -100,7 +100,7 @@ El color de marca. Dos valores según el modo:
 | Error / Danger | `--color-error` | `#ff0036` | `#db143c` |
 | Success | `--color-success` | `#22c55e` | `#16a34a` |
 | Warning | `--color-warning` | `#fbbf24` | `#d97706` |
-| Info | `--color-info` | `#55b3ff` | `#0077cc` |
+| Info | `--color-info` | `#3b82f6` | `#1d4ed8` |
 
 ### Transparencias funcionales (tints)
 

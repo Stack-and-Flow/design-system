@@ -68,6 +68,9 @@ export const Colors: Story = {
       <Tooltip content='Warning tooltip' color='warning'>
         <Button text='Warning' />
       </Tooltip>
+      <Tooltip content='Info tooltip' color='info'>
+        <Button text='Info' />
+      </Tooltip>
       <Tooltip content='Transparent tooltip' color='transparent'>
         <Button text='Transparent' />
       </Tooltip>

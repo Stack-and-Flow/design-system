@@ -87,6 +87,9 @@ export const Color: Story = {
       <Badge content={5} color='danger' ariaLabel='Danger badge'>
         <Avatar src='https://i.pravatar.cc/300?u=badge-color-danger' alt='Danger avatar' rounded='full' size='lg' />
       </Badge>
+      <Badge content={6} color='info' ariaLabel='Info badge'>
+        <Avatar src='https://i.pravatar.cc/300?u=badge-color-info' alt='Info avatar' rounded='full' size='lg' />
+      </Badge>
     </div>
   )
 };
@@ -103,6 +106,7 @@ export const Variant: Story = {
         <Badge content='success' color='success' variant='solid' rounded={false} />
         <Badge content='warning' color='warning' variant='solid' rounded={false} />
         <Badge content='danger' color='danger' variant='solid' rounded={false} />
+        <Badge content='info' color='info' variant='solid' rounded={false} />
       </div>
       <div className='flex flex-wrap items-center gap-2'>
         <Badge content='primary' color='primary' variant='flat' rounded={false} />
@@ -110,6 +114,7 @@ export const Variant: Story = {
         <Badge content='success' color='success' variant='flat' rounded={false} />
         <Badge content='warning' color='warning' variant='flat' rounded={false} />
         <Badge content='danger' color='danger' variant='flat' rounded={false} />
+        <Badge content='info' color='info' variant='flat' rounded={false} />
       </div>
       <div className='flex flex-wrap items-center gap-2'>
         <Badge content='primary' color='primary' variant='subtle' rounded={false} />
@@ -117,6 +122,7 @@ export const Variant: Story = {
         <Badge content='success' color='success' variant='subtle' rounded={false} />
         <Badge content='warning' color='warning' variant='subtle' rounded={false} />
         <Badge content='danger' color='danger' variant='subtle' rounded={false} />
+        <Badge content='info' color='info' variant='subtle' rounded={false} />
       </div>
     </div>
   )
