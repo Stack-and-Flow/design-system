@@ -39,11 +39,13 @@ const queueDemoToasts = (strategy: ToastQueueStrategy) => {
       id: `queue-${strategy}-demo-${index}`,
       title: `${strategy.toUpperCase()} notification ${index}`,
       description:
-        index <= 2
-          ? strategy === 'fifo'
-            ? 'Queued after notification 4 arrives. FIFO promotes notification 1 before notification 2.'
-            : 'Queued after notification 4 arrives. LIFO promotes notification 2 before notification 1.'
-          : 'Visible after the four-toast batch because the stack keeps the latest items on screen.'
+        strategy === 'fifo'
+          ? index <= 2
+            ? 'Remains visible when notifications 3 and 4 arrive. Closing a visible toast promotes notification 3 before notification 4.'
+            : 'Queued once the FIFO visible slots are full. Notification 3 promotes before notification 4.'
+          : index <= 2
+            ? 'Moves into the hidden queue as newer notifications arrive. Notification 2 promotes before notification 1.'
+            : 'Remains visible after the four-toast batch because LIFO keeps the newest notifications on screen.'
     });
   }
 };
@@ -418,8 +420,8 @@ const QueueStrategyDemo = (args: ComponentProps<typeof ToastProvider>) => {
 };
 
 /**
- * Demonstrates the queue promotion difference when the visible stack frees a slot.
- * Queue four toasts: the latest two stay visible, while notifications 1 and 2 move into the queue. Close one visible toast; FIFO promotes notification 1 first, while LIFO promotes notification 2 first.
+ * Demonstrates how `queueStrategy` changes both overflow handling and promotion order.
+ * With `fifo`, notifications 1 and 2 stay visible while notifications 3 and 4 wait in the queue. With `lifo`, notifications 3 and 4 stay visible while notifications 1 and 2 move into the queue. Closing a visible toast then promotes the next queued toast from the strategy-specific end.
  */
 export const QueueStrategy: Story = {
   render: (args) => <QueueStrategyDemo {...args} />

@@ -455,51 +455,78 @@ describe('Toast — timers, queueing, and helper state', () => {
     expect(screen.queryByRole('alertdialog', { name: 'Created in background' })).not.toBeInTheDocument();
   });
 
-  it('keeps the latest toasts visible while demoting older visible toasts into the queue', () => {
-    renderWithProvider({ maxVisible: 3 });
+  it('keeps existing visible toasts on screen and queues newer overflow toasts when using FIFO', () => {
+    renderWithProvider({ maxVisible: 2 });
 
-    runInAct(() => toast('First queued'));
-    runInAct(() => toast('Second visible'));
-    runInAct(() => toast('Third visible'));
-    const latestId = runInAct(() => toast('Fourth visible'));
+    runInAct(() => toast('First visible'));
+    const secondId = runInAct(() => toast('Second visible'));
+    runInAct(() => toast('Third queued'));
+    runInAct(() => toast('Fourth queued'));
 
-    expect(screen.queryByRole('alertdialog', { name: 'First queued' })).not.toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'First visible' })).toBeInTheDocument();
     expect(screen.getByRole('alertdialog', { name: 'Second visible' })).toBeInTheDocument();
-    expect(screen.getByRole('alertdialog', { name: 'Third visible' })).toBeInTheDocument();
-    expect(screen.getByRole('alertdialog', { name: 'Fourth visible' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Third queued' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Fourth queued' })).not.toBeInTheDocument();
 
     act(() => {
-      toast.close(latestId);
+      toast.close(secondId);
     });
 
-    expect(screen.getByRole('alertdialog', { name: 'First queued' })).toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'First visible' })).toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Third queued' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Fourth queued' })).not.toBeInTheDocument();
   });
 
-  it('promotes queued toasts using FIFO ordering by default', () => {
+  it('queues overflow toasts in FIFO order by default when maxVisible is 1', () => {
     renderWithProvider({ maxVisible: 1 });
 
-    runInAct(() => toast('First queued'));
-    runInAct(() => toast('Second queued'));
-    const thirdId = runInAct(() => toast('Third visible'));
+    const firstId = runInAct(() => toast('Toast A'));
+    const secondId = runInAct(() => toast('Toast B'));
+    runInAct(() => toast('Toast C'));
 
-    expect(screen.getByRole('alertdialog', { name: 'Third visible' })).toBeInTheDocument();
-    expect(screen.queryByRole('alertdialog', { name: 'First queued' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('alertdialog', { name: 'Second queued' })).not.toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Toast A' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast B' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast C' })).not.toBeInTheDocument();
 
     act(() => {
-      toast.close(thirdId);
+      toast.close(firstId);
     });
 
-    expect(screen.getByRole('alertdialog', { name: 'First queued' })).toBeInTheDocument();
-    expect(screen.queryByRole('alertdialog', { name: 'Second queued' })).not.toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Toast B' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast C' })).not.toBeInTheDocument();
+
+    act(() => {
+      toast.close(secondId);
+    });
+
+    expect(screen.getByRole('alertdialog', { name: 'Toast C' })).toBeInTheDocument();
+  });
+
+  it('keeps queued toast ordering stable when a FIFO overflow toast is closed before promotion', () => {
+    renderWithProvider({ maxVisible: 1 });
+
+    const firstId = runInAct(() => toast('Visible toast'));
+    const secondId = runInAct(() => toast('Queued toast B'));
+    runInAct(() => toast('Queued toast C'));
+
+    act(() => {
+      toast.close(secondId);
+    });
+
+    act(() => {
+      toast.close(firstId);
+    });
+
+    expect(screen.getByRole('alertdialog', { name: 'Queued toast C' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Queued toast B' })).not.toBeInTheDocument();
   });
 
   it('keeps queued toasts paused when they are promoted while the window is blurred', () => {
     vi.useFakeTimers();
     renderWithProvider({ maxVisible: 1 });
 
-    runInAct(() => toast({ title: 'Promoted in background' }));
     const blockingToastId = runInAct(() => toast({ title: 'Blocking toast', duration: 0 }));
+    runInAct(() => toast({ title: 'Promoted in background' }));
 
     fireEvent(window, new Event('blur'));
 
@@ -543,19 +570,51 @@ describe('Toast — timers, queueing, and helper state', () => {
     expect(screen.getByRole('alertdialog', { name: 'Demoted timer toast' })).toBeInTheDocument();
   });
 
-  it('promotes queued toasts using LIFO ordering when configured', () => {
+  it('keeps the newest toasts visible and promotes overflow in LIFO order when configured', () => {
+    renderWithProvider({ maxVisible: 2, queueStrategy: 'lifo' });
+
+    runInAct(() => toast('Toast A'));
+    runInAct(() => toast('Toast B'));
+    runInAct(() => toast('Toast C'));
+    const fourthId = runInAct(() => toast('Toast D'));
+
+    expect(screen.queryByRole('alertdialog', { name: 'Toast A' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast B' })).not.toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Toast C' })).toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Toast D' })).toBeInTheDocument();
+
+    act(() => {
+      toast.close(fourthId);
+    });
+
+    expect(screen.getByRole('alertdialog', { name: 'Toast B' })).toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Toast C' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast A' })).not.toBeInTheDocument();
+  });
+
+  it('promotes queued toasts using LIFO ordering when maxVisible is 1', () => {
     renderWithProvider({ maxVisible: 1, queueStrategy: 'lifo' });
 
-    runInAct(() => toast('First queued'));
-    runInAct(() => toast('Second queued'));
-    const thirdId = runInAct(() => toast('Third visible'));
+    runInAct(() => toast('Toast A'));
+    const secondId = runInAct(() => toast('Toast B'));
+    const thirdId = runInAct(() => toast('Toast C'));
+
+    expect(screen.getByRole('alertdialog', { name: 'Toast C' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast A' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast B' })).not.toBeInTheDocument();
 
     act(() => {
       toast.close(thirdId);
     });
 
-    expect(screen.getByRole('alertdialog', { name: 'Second queued' })).toBeInTheDocument();
-    expect(screen.queryByRole('alertdialog', { name: 'First queued' })).not.toBeInTheDocument();
+    expect(screen.getByRole('alertdialog', { name: 'Toast B' })).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'Toast A' })).not.toBeInTheDocument();
+
+    act(() => {
+      toast.close(secondId);
+    });
+
+    expect(screen.getByRole('alertdialog', { name: 'Toast A' })).toBeInTheDocument();
   });
 });
 
