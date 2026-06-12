@@ -19,7 +19,7 @@ const VariantRow = ({ children }: { children: ReactNode }) => (
  * Uses `lucide-react/dynamic.js` when the optional `icon` prop is provided.
  *
  * ## Usage Guide
- * Use `regular` for inline navigation, `outlined` for secondary call-to-action links, and `button` when a link must visually match a primary action while preserving link semantics when `href` is present. `size='xs'` makes action links denser through smaller type, icon, gap, padding, and height; use `sm` or above when the 44px action target is required. Use `emphasis='flat'` to reduce decorative glow on CTA variants without removing accessible focus feedback. When `href` is omitted, Link behaves as a local action control with button semantics and keyboard activation.
+ * Use `regular` for inline navigation, `outlined` for secondary call-to-action links, and `button` when a link must visually match a primary action while preserving link semantics when `href` is present. CTA link sizes use the shared `control` visual-height scale (`xs` 24px, `sm` 32px, `md` 40px, `lg` 48px); evaluate the 44px touch target separately for touch-first contexts. Use `emphasis='flat'` to reduce decorative glow on CTA variants without removing accessible focus feedback. When `href` is omitted, Link behaves as a local action control with button semantics and keyboard activation.
  */
 const meta: Meta<typeof Link> = {
   title: 'Atoms/Link',

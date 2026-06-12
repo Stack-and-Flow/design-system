@@ -43,6 +43,7 @@ Audit against `.atl/skills/_shared/component-contract.md`:
 - Public prop JSDoc/default parity: compare `types.ts` props against CVA `defaultVariants`, hook/component destructuring defaults, alias/coalesced fallbacks, and boolean fallback chains; fail missing or stale `@default` docs.
 - CVA placement and hook/component responsibilities;
 - token usage and Tailwind v4 custom fractional naming;
+- sizing consistency: comparable action controls use `control-*` tokens, form fields like `Input`/`Select` use `form-field-*` tokens when label/floating-label layout affects alignment, touch-target wrappers use `touch-target-min` when required, and compact exceptions are explicitly documented;
 - named export and type export pattern;
 - Radix primitive rules when applicable;
 - accessibility gates and reduced motion.
@@ -64,7 +65,7 @@ Use the Storybook and testing references as the single source of truth. In parti
 
 ### 4 — Visual audit
 
-Run the `visual-review` protocol for state completeness, glow, blur/gradient, transitions, gradient borders, focus, contrast, touch target, and reduced motion.
+Run the `visual-review` protocol for state completeness, glow, blur/gradient, transitions, gradient borders, focus, contrast, touch target, reduced motion, and consistency between shared control-height tokens versus documented compact exceptions.
 
 ### 5 — Severity and verdict
 

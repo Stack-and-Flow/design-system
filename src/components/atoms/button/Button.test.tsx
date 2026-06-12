@@ -113,7 +113,7 @@ describe('useButton — logic', () => {
 
   it('derives compact classes from size xs', () => {
     const { result } = renderHook(() => useButton({ text: 'Button', size: 'xs' }));
-    expect(result.current.className).toContain('h-9');
+    expect(result.current.className).toContain('h-control-xs');
     expect(result.current.className).toContain('px-2');
     expect(result.current.contentClassName).toContain('gap-1');
   });

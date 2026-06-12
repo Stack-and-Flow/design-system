@@ -206,7 +206,7 @@ describe('Snippet — component behavior', () => {
     const code = screen.getByText('pnpm install');
 
     expect(button).toHaveAttribute('aria-controls', 'install-snippet-content');
-    expect(button).toHaveClass('h-9', 'w-9');
+    expect(button).toHaveClass('h-control-xs', 'w-control-xs');
     expect(screen.getByTestId('snippet-icon')).toHaveAttribute('data-size', '14');
     expect(code.closest('pre')).toHaveAttribute('id', 'install-snippet-content');
     expect(screen.getByText('pnpm install').parentElement?.parentElement).not.toHaveAttribute(

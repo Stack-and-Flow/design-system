@@ -76,11 +76,15 @@ Aplicar `opacity: 0.4` a todo el componente comunica el estado disabled. Nunca c
 **Regla 9 — Los bordes con degradado usan un pseudo-elemento `::before`, nunca `border-image`.**
 `border-image` no funciona con `border-radius`: el degradado se recorta como un rectángulo y rompe la forma de píldora. La técnica correcta usa un `::before` posicionado de forma absoluta con `inset: -1.5px` y `z-index: -1`, usando el degradado como `background` y `border-radius: inherit`.
 
-**Regla 10 — El objetivo táctil predeterminado para elementos interactivos es de 44×44px.**
-Los botones y links de acción usan un mínimo predeterminado de `height: 44px` desde `sm` en adelante. Los nav links deben ofrecer al menos un área de `44px` de alto. Los items de dropdown usan como mínimo `padding: 7px 12px` con tipografía de 14px. Las escalas compactas o densas de componentes concretos pueden bajar de 44px solo cuando estén explícitamente aprobadas, documentadas en la prop o la story, implementadas sobre controles nativos y sigan siendo accesibles por teclado y focus; usa la escala predeterminada cuando el caso requiera objetivos touch-first. Calendar es una excepción densa aprobada porque las cuadrículas de fechas necesitan una densidad de escaneo compacta.
+**Regla 10 — La altura visual del control y el objetivo táctil no son lo mismo.**
+La escala visual compartida para controles de acción comparables es `xs | sm | md | lg` = `24px | 32px | 40px | 48px`, expuesta vía `--spacing-control-*` y utilidades Tailwind `h-control-*` / `w-control-*`. `Button`, `IconButton` y `Link` CTA (`button` / `outlined`) deben consumir esa escala para no divergir entre sí. `Link` `regular` sigue siendo una variante tipográfica inline.
+
+`Input` y `Select` son controles de formulario: su altura considera label, floating label, adornments y alineación entre campos, por lo que usan la escala semántica `form-field` (`--spacing-form-field-sm|md|lg` = `48px | 56px | 64px`) en vez de la escala visual de acciones. Si más campos comparten esa lógica, deben alinearse con `Input`/`Select`, no con `Button`.
+
+`--spacing-touch-target-min` (`44px`) es una guía de target táctil para superficies touch-first, CTA primarios en mobile o wrappers de hit area. No es una altura visual universal para todo control web. Los componentes compactos o densos pueden quedar por debajo de `44px` cuando eso está documentado, siguen usando controles nativos y mantienen foco/teclado accesibles. `Checkbox` y `Switch` son ejemplos donde el hit area puede crecer sin cambiar la forma visible; `TextArea`, `Chip` y `Badge` son excepciones intencionales con una semántica distinta.
 
 **Escala de tamaño de acción: `xs | sm | md | lg`.**
-En `Button`, `IconButton` y las variantes de Link usadas como acciones (`button` / `outlined`), `xs` es el tamaño compacto y denso: reduce tipografía, tamaño de icono, separación, padding horizontal y altura para que se vea claramente más pequeño que `sm`. `Link` `regular` sigue siendo una variante tipográfica inline, mientras que los CTA `sm` y superiores conservan el objetivo de 44px.
+En `Button`, `IconButton` y las variantes de Link usadas como acciones (`button` / `outlined`), `xs` es el tamaño compacto y denso. `sm`, `md` y `lg` siguen la misma escala visual semántica compartida, mientras que el target táctil se evalúa aparte según contexto.
 
 **Regla 11 — No animes propiedades que fuerzan layout.**
 No animes `width`, `height`, `top`, `left`, `margin` ni `padding`. Estas propiedades fuerzan reflow en cada frame. Para animaciones de posición usa `transform: translateY/translateX`. Para animaciones de tamaño usa `transform: scale`.
@@ -118,7 +122,7 @@ font-size: 1rem; /* body size; button--lg adds more padding */
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px; /* minimum; button--lg typically 0.65rem 1.75rem */
-min-height: 44px;
+height: var(--spacing-control-md); /* 40px visual height; use touch-target-min only when the surface is touch-first */
 cursor: pointer;
 box-shadow:
   0 0 0 1.5px rgba(255, 60, 90, 0.5),
@@ -200,7 +204,7 @@ font-size: 1rem;
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* 40px visual height; use touch-target-min only when the surface is touch-first */
 cursor: pointer;
 box-shadow:
   0 0 8px 2px rgba(255, 0, 54, 0.15),
@@ -289,7 +293,7 @@ color: #ffffff;
 font-weight: 600;
 letter-spacing: 0.01em;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* CTA visual height */
 transition:
   background 0.2s ease,
   border-color 0.2s ease,
@@ -346,7 +350,7 @@ font-family: "Space Grotesk Variable", system-ui, sans-serif;
 font-size: 1rem;
 font-weight: 500;
 padding: 10px 14px;
-min-height: 44px;
+height: var(--spacing-form-field-md); /* form-field md height; Input/Select align by field layout */
 width: 100%;
 transition:
   border-color 0.2s ease,
@@ -1140,7 +1144,7 @@ background: linear-gradient(
 
 ### Botones
 
-- [ ] Altura mínima `44px`
+- [ ] Altura visual alineada con la escala `control` (`h-control-xs|sm|md|lg`) según el size prop
 - [ ] Anillo de enfoque: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` oscuro / `0 0 0 3px rgba(219, 20, 60, 0.35)` claro
 - [ ] Anillo de enfoque fusionado con `box-shadow` existente; nunca lo reemplaza
 - [ ] Anillo de enfoque nunca oculto: no `outline: none` sin alternativa
@@ -1148,12 +1152,12 @@ background: linear-gradient(
 - [ ] Primary: texto `#ffffff` blanco sobre degradado rojo; el contraste pasa en ambos modos
 - [ ] Secondary en oscuro: `color: #ffffff` sobre `rgba(255,0,54,0.06)` — el contexto de fondo ya es oscuro y el borde comunica la señal visual
 - [ ] Secondary en claro: `color: #cc0030` — nunca `#ff0036` en modo claro (contraste insuficiente sobre blanco)
-- [ ] El objetivo táctil permanece al menos `44px` para los tamaños de acción predeterminados; Las variantes compactas/densas aprobadas explícitamente pueden utilizar objetivos visuales reducidos cuando están documentadas y son accesibles mediante teclado/enfoque.
+- [ ] El objetivo táctil se evalúa por contexto: usa `touch-target-min` (`44px`) en superficies touch-first o wrappers de hit area; las variantes compactas/densas documentadas pueden mantener una altura visual menor si siguen siendo accesibles.
 - [ ] `role="button"` si se implementa como elemento no `<button>`
 
 ### Entradas
 
-- [ ] Altura mínima `44px`
+- [ ] Altura visual alineada con la escala `form-field` (`h-form-field-sm|md|lg`) y consistente entre campos como `Input` y `Select`; no forzar `h-control-*` cuando el label/floating label forma parte del patrón
 - [ ] Texto del marcador de posición `#6a6b6c` — WCAG exime el marcador de posición del contraste (informativo, no funcional)
 - [ ] Estado Error: cambio de borde + sombra, color NOT del texto de entrada
 - [ ] Estado Info: cambio de borde + sombra con `--color-info-light` en claro y `--color-info` en oscuro; no tratarlo como helper neutral
@@ -1172,7 +1176,7 @@ background: linear-gradient(
 
 ### Dropdown / elementos de navegación
 
-- [ ] Cada elemento usa como mínimo `padding: 7px 12px`; con fuente de 14px eso da ~28px de alto, así que envuélvelo en un contenedor con `min-height: 44px` si hace falta
+- [ ] Cada elemento usa como mínimo `padding: 7px 12px`; en superficies touch-first o mobile, envuélvelo en un contenedor o item con `min-h-touch-target-min` si hace falta ampliar el hit area
 - [ ] Elemento activo: `color: #ff0036` — contraste 4.96:1 en la superficie `#0B131E` ✅
 - [ ] Pasar el cursor: cambio de fondo + cambio de color: dos señales simultáneas (no hover-only)
 - [ ] Navegación con teclado: el menú desplegable debe poder recorrerse con las teclas Tabulador/Flecha

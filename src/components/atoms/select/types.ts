@@ -64,9 +64,9 @@ export const selectTrigger = cva(
         ]
       },
       size: {
-        sm: 'h-12 px-3 fs-small gap-2',
-        md: 'h-14 px-4 fs-base gap-3',
-        lg: 'h-16 px-4 fs-h6 gap-3'
+        sm: 'h-form-field-sm px-3 fs-small gap-2',
+        md: 'h-form-field-md px-4 fs-base gap-3',
+        lg: 'h-form-field-lg px-4 fs-h6 gap-3'
       },
       status: {
         default: '',
@@ -252,7 +252,7 @@ export const selectLabel = cva(
 );
 
 export const selectLoadingVariants = cva(
-  'flex min-h-11 items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
+  'flex min-h-touch-target-min items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
 );
 
 export const selectClearButton = cva([

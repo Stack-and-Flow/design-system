@@ -642,11 +642,13 @@ All text values on their respective backgrounds meet at least WCAG AA (4.5:1). P
 > ⚠️ `#6a6b6c` (disabled/muted) does not meet AA on dark backgrounds — that is acceptable: WCAG explicitly exempts `disabled` states from the contrast requirement.
 
 ### Touch targets
-- Pill buttons: default minimum height `44px`
-- Action scale `xs | sm | md | lg`: `xs` is the dense compact variant for `Button`, `IconButton`, and CTA `Link` (`button` / `outlined`), with lower height and padding; use `sm` or above when you need to preserve the `44px` target
-- `Link` `regular` remains typographic and inline; CTA `sm` and above keep the minimum `44px` area
-- Nav links: minimum `44px` height including padding
-- Menu items: minimum `padding: 7px 12px` with 14px font
+- Shared visual control height uses the `control` scale: `xs = 24px`, `sm = 32px`, `md = 40px`, `lg = 48px`.
+- Tailwind v4 tokens: `--spacing-control-xs|sm|md|lg` generate `h-control-*` and `w-control-*`; `--spacing-form-field-sm|md|lg` generate `h-form-field-*`; `--spacing-touch-target-min` generates `min-h-touch-target-min`, `min-w-touch-target-min`, and `size-touch-target-min`.
+- `Button`, `IconButton`, and CTA `Link` (`button` / `outlined`) use that shared visual scale. `Link` `regular` remains typographic and inline.
+- `Input` and `Select` use the semantic `form-field` scale: `sm = 48px`, `md = 56px`, `lg = 64px`, because their height accounts for label, floating label, adornments, and field-to-field alignment.
+- `--spacing-touch-target-min` (`44px`) is touch-target guidance, not a universal visual height. Use it for touch-first surfaces or to expand the hit area of compact controls like `Checkbox` and `Switch` without enlarging their visible shape.
+- Other documented exceptions: `TextArea` stays multiline/content-driven; `Chip` keeps a compact tag/token scale; `Badge` remains informational, not a general interactive control.
+- Nav links and menu items should still provide a comfortable area in touch-first contexts, even when their visual height does not necessarily use the `control` scale.
 
 ### Focus visible
 - All interactive elements use `focus-visible` with `box-shadow: 0 0 0 3px rgba(255,0,54,0.4)` in dark mode and `box-shadow: 0 0 0 3px rgba(219,20,60,0.35)` in light mode

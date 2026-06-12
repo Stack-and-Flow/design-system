@@ -113,7 +113,8 @@ For every interactive component, check ALL of the following sections.
 ### 6. Accessibility
 
 **Buttons:**
-- [ ] Default action height is `44px`; compact/dense component variants may go below `44px` only when explicitly documented, visually approved, implemented on native controls, and still keyboard/focus accessible
+- [ ] Visual height follows the shared `control` scale (`24px`, `32px`, `40px`, `48px`) for comparable action controls; compact/dense exceptions must be explicitly documented
+- [ ] `touch-target-min` (`44px`) is required only for touch-first surfaces or hit-area wrappers; do not flag every visual height under `44px` as wrong by default
 - [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` dark / `0 0 0 3px rgba(219, 20, 60, 0.35)` light
 - [ ] Focus ring **merged** with existing `box-shadow` — adds as outermost layer, never replaces
 - [ ] `outline: none` must ALWAYS be paired with a visible `box-shadow` focus ring — never naked
@@ -124,7 +125,9 @@ For every interactive component, check ALL of the following sections.
 - [ ] `role="button"` if implemented as non-`<button>` element
 
 **Inputs:**
-- [ ] Minimum height `44px`
+- [ ] Form fields such as `Input` and `Select` use the semantic form-field height scale (`sm=h-form-field-sm`, `md=h-form-field-md`, `lg=h-form-field-lg`) because label/floating-label layout and field alignment are part of the pattern
+- [ ] Do not force `h-control-*` onto labeled form fields; reserve `control-*` for comparable action controls like Button/IconButton/CTA Link
+- [ ] Apply `touch-target-min` only when the context requires a larger touch surface than the visual control itself
 - [ ] Focus ring softer than button: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` — 12%, not 40%
 - [ ] Error state changes border + shadow only — NOT input text color
 - [ ] Info state changes border + shadow only, using semantic blue tokens instead of neutral helper styling
@@ -164,9 +167,9 @@ For every interactive component, check ALL of the following sections.
 
 When reporting issues, classify every finding with:
 
-- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, undocumented interactive element below the required target size, `outline: none` without alternative
+- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, missing required touch target in a touch-first context, or `outline: none` without alternative
 - **MAJOR** — Compositional rule violation: blur+gradient on same element, wrong glow layer count, flat border where gradient required, `border-image` used, `transition: all` used, layout property animated
-- **MINOR** — Inconsistency with spec: wrong duration (e.g. 300ms instead of 250ms for button), missing transition property (e.g. `border-color` absent on secondary), hover tint value off
+- **MINOR** — Inconsistency with spec: wrong duration (e.g. 300ms instead of 250ms for button), missing transition property (e.g. `border-color` absent on secondary), hover tint value off, or undocumented deviation from the shared control sizing scale
 - **SUGGESTION** — Enhancement opportunity: adding `will-change` to entrance animations, using token variable instead of raw value
 
 ---

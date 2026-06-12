@@ -338,7 +338,7 @@ Debe verificar:
 
 - base, hover, focus, active/pressed, disabled;
 - focus visible con `box-shadow`, nunca `outline` desnudo;
-- touch target mínimo `44×44px` en variantes por defecto; las variantes compactas/densas explícitamente aprobadas pueden ser menores si conservan accesibilidad por teclado y focus;
+- altura visual alineada con la escala semántica que aplique (`control` para acciones, `form-field` para campos), y `touch-target-min` (`44px`) solo para superficies touch-first o wrappers de hit area; las variantes compactas/densas documentadas pueden ser menores si conservan accesibilidad por teclado y focus;
 - contraste en light/dark;
 - transiciones específicas, nunca `transition-all`;
 - no animar propiedades de layout;

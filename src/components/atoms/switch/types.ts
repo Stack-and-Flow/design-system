@@ -29,7 +29,7 @@ export const switchBase = cva(
 
 export const switchWrapper = cva(
   [
-    'relative inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center',
+    'relative inline-flex min-h-touch-target-min min-w-touch-target-min shrink-0 items-center justify-center',
     'cursor-pointer transition-opacity duration-200 ease-out'
   ],
   {

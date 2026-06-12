@@ -168,6 +168,7 @@ Before requesting a review, verify:
 - [ ] The pre-PR component review has passed or is documented.
 - [ ] Tokens from `theme.css` are used (no hardcoded colors; arbitrary sizing/typography only in approved compact/dense CVA variants).
 - [ ] ARIA attributes are implemented for interactable elements.
+- [ ] Visual height aligns with the semantic scale that applies (`control` for actions, `form-field` for fields); `touch-target-min` (`44px`) is reserved for touch-first surfaces or hit-area wrappers. Documented compact/dense variants may be smaller if they keep keyboard/focus accessibility.
 - [ ] Conventional Commits are used for commit messages and the PR title.
 - [ ] Security checks pass, or any false positives are documented in the PR.
 - [ ] MCP cleanup ran before commit/review: `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`.

@@ -86,6 +86,8 @@ Map the component to the design system before coding:
 
 - surface pattern: opaque, raised, tinted, or floating/frosted;
 - relevant tokens from `theme.css`;
+- action control-height scale (`control-xs|sm|md|lg`) for comparable action controls, or semantic form-field scale (`form-field-sm|md|lg`) when the component behaves like `Input`/`Select` with label/floating-label layout;
+- whether the component uses visual control height tokens, form-field sizing, a separate `touch-target-min`, or a documented compact exception;
 - base/hover/focus/active/disabled/loading/error/info states;
 - focus ring, disabled treatment, touch target, contrast, reduced motion;
 - allowed Radix primitive, if any.

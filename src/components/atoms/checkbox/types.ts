@@ -38,7 +38,7 @@ export const checkboxHitArea = cva('relative inline-flex shrink-0 items-center j
 });
 
 export const checkboxInput = cva(
-  'peer absolute top-1/2 right-0 z-10 m-0 h-11 w-11 -translate-y-1/2 appearance-none rounded-xs opacity-0',
+  'peer absolute top-1/2 right-0 z-10 m-0 h-touch-target-min w-touch-target-min -translate-y-1/2 appearance-none rounded-xs opacity-0',
   {
     variants: {
       disabled: {

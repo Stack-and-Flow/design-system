@@ -45,6 +45,8 @@ describe('useSwitch — logic', () => {
   it('returns computed class names without exposing CVA logic to the component', () => {
     const { result } = renderHook(() => useSwitch({ label: 'Notifications' }));
     expect(result.current.rootClassName).toEqual(expect.any(String));
+    expect(result.current.switchWrapper).toContain('min-h-touch-target-min');
+    expect(result.current.switchWrapper).toContain('min-w-touch-target-min');
     expect(result.current.switchTrack).toEqual(expect.any(String));
     expect(result.current.switchThumb).toEqual(expect.any(String));
   });

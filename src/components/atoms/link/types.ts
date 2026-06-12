@@ -46,10 +46,10 @@ export const linkVariants = cva(
       }
     },
     compoundVariants: [
-      { variant: ['button', 'outlined'], size: 'xs', class: 'h-9 gap-0-75 px-2' },
-      { variant: ['button', 'outlined'], size: 'sm', class: 'h-11 gap-1 px-sm' },
-      { variant: ['button', 'outlined'], size: 'md', class: 'h-11 gap-1.5 px-md' },
-      { variant: ['button', 'outlined'], size: 'lg', class: 'h-12 gap-2 px-lg' },
+      { variant: ['button', 'outlined'], size: 'xs', class: 'h-control-xs gap-0-75 px-2' },
+      { variant: ['button', 'outlined'], size: 'sm', class: 'h-control-sm gap-1 px-sm' },
+      { variant: ['button', 'outlined'], size: 'md', class: 'h-control-md gap-1.5 px-md' },
+      { variant: ['button', 'outlined'], size: 'lg', class: 'h-control-lg gap-2 px-lg' },
       {
         variant: 'button',
         emphasis: 'default',

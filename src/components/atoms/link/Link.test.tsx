@@ -79,13 +79,13 @@ describe('useLink — logic', () => {
     expect(result.current.iconWidth).toBe(16);
   });
 
-  it('makes CTA-style xs visibly shorter while keeping sm at the 44px target height', () => {
+  it('maps CTA-style links to the shared control-height scale', () => {
     const { result: compactResult } = renderHook(() => useLink({ children: 'Docs', variant: 'button', size: 'xs' }));
     const { result: smallResult } = renderHook(() => useLink({ children: 'Docs', variant: 'outlined', size: 'sm' }));
 
-    expect(compactResult.current.className).toContain('h-9');
+    expect(compactResult.current.className).toContain('h-control-xs');
     expect(compactResult.current.className).toContain('px-2');
-    expect(smallResult.current.className).toContain('h-11');
+    expect(smallResult.current.className).toContain('h-control-sm');
   });
 
   it('suppresses decorative glow when emphasis is flat on CTA variants', () => {

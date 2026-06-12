@@ -138,6 +138,8 @@ describe('useCheckbox — logic', () => {
     const { result } = renderHook(() => useCheckbox({ label: 'Accept terms' }));
 
     expect(result.current.inputProps.className).toContain('peer');
+    expect(result.current.inputProps.className).toContain('h-touch-target-min');
+    expect(result.current.inputProps.className).toContain('w-touch-target-min');
     expect(result.current.controlClassName).toContain('peer-hover:bg-surface-raised-light');
     expect(result.current.controlClassName).toContain('peer-active:scale-[0.98]');
     expect(result.current.controlClassName).toContain('peer-focus-visible:shadow-glow-focus-light');

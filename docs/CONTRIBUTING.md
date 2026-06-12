@@ -173,7 +173,7 @@ Antes de pedir revisión, verifica:
 - [ ] Focus ring via `box-shadow` — nunca `outline` sin alternativa visible.
 - [ ] Disabled via `opacity: 0.4` — sin sustitución de color.
 - [ ] Sin `transition: all` — propiedades específicas enumeradas.
-- [ ] Touch target mínimo `44×44px` en controles interactivos por defecto; variantes compactas/densas explícitamente aprobadas pueden ser menores si conservan accesibilidad por teclado/focus.
+- [ ] Altura visual alineada con la escala semántica que aplique (`control` para acciones, `form-field` para campos); `touch-target-min` (`44px`) reservado para superficies touch-first o wrappers de hit area. Variantes compactas/densas documentadas pueden ser menores si conservan accesibilidad por teclado/focus.
 - [ ] Limpieza MCP hecha antes de commit/review: `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`.
 
 ### Checks de seguridad
