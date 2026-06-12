@@ -178,6 +178,24 @@ describe('useTextArea — logic', () => {
     expect(result.current.textareaProps['aria-invalid']).toBe('true');
   });
 
+  it('maps info hints to semantic info styling and icon tone', () => {
+    const { result } = renderHook(() =>
+      useTextArea(
+        {
+          id: 'message',
+          label: 'Message',
+          hint: { message: 'Helpful guidance', type: 'info' }
+        },
+        null
+      )
+    );
+
+    expect(result.current.surfaceProps.className).toContain('border-info-light');
+    expect(result.current.surfaceProps.className).toContain('shadow-glow-input-info-light');
+    expect(result.current.hintMessageClassName).toContain('text-info-light');
+    expect(result.current.hintIconProps).toMatchObject({ name: 'info', tone: 'info' });
+  });
+
   it('dedupes aria-describedby sources while preserving order', () => {
     const { result } = renderHook(() =>
       useTextArea(

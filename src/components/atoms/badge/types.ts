@@ -14,7 +14,8 @@ export const badgeVariants = cva(
         secondary: ['bg-surface-light text-text-light', 'dark:bg-surface-dark dark:text-text-dark'],
         success: 'bg-success-light text-white dark:bg-success dark:text-white',
         warning: 'bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
-        danger: 'bg-error-light text-white dark:bg-error dark:text-white'
+        danger: 'bg-error-light text-white dark:bg-error dark:text-white',
+        info: 'bg-info-light text-white dark:bg-info dark:text-text-light'
       },
       size: {
         sm: 'text-badge-sm min-w-4-5 h-4-5 px-1.5 py-0.5 mr-1-25 mt-0.5',
@@ -85,6 +86,14 @@ export const badgeVariants = cva(
         ]
       },
       {
+        variant: 'flat',
+        color: 'info',
+        class: [
+          'bg-info-surface-light border-info-light text-text-light',
+          'dark:bg-info-surface-dark dark:border-info dark:text-text-dark'
+        ]
+      },
+      {
         variant: 'subtle',
         color: 'primary',
         class: ['bg-red-tint-subtle text-brand-light', 'dark:bg-red-tint-subtle dark:text-brand-dark-light']
@@ -108,6 +117,11 @@ export const badgeVariants = cva(
         variant: 'subtle',
         color: 'danger',
         class: ['bg-error-tint text-error-light', 'dark:bg-error-tint dark:text-error']
+      },
+      {
+        variant: 'subtle',
+        color: 'info',
+        class: ['bg-info-tint text-info-light', 'dark:bg-info-tint dark:text-info']
       }
     ],
     defaultVariants: {

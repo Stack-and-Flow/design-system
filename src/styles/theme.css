@@ -285,6 +285,8 @@
   --glow-input-warning-light: 0 0 0 3px rgba(217, 119, 6, 0.15);
   --glow-input-success: 0 0 0 3px rgba(34, 197, 94, 0.12);
   --glow-input-success-light: 0 0 0 3px rgba(22, 163, 74, 0.15);
+  --glow-input-info: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  --glow-input-info-light: 0 0 0 3px rgba(29, 78, 216, 0.15);
   --shadow-glow-input-focus: var(--glow-input-focus);
   --shadow-glow-input-focus-light: var(--glow-input-focus-light);
   --shadow-glow-input-error: var(--glow-input-error);
@@ -293,6 +295,8 @@
   --shadow-glow-input-warning-light: var(--glow-input-warning-light);
   --shadow-glow-input-success: var(--glow-input-success);
   --shadow-glow-input-success-light: var(--glow-input-success-light);
+  --shadow-glow-input-info: var(--glow-input-info);
+  --shadow-glow-input-info-light: var(--glow-input-info-light);
 
   /* Glow ámbar — GitHub stars */
   --glow-amber: 0 0 0 3px rgba(255, 185, 0, 0.12);

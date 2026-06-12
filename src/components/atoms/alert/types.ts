@@ -18,7 +18,8 @@ export const alertVariants = cva(
         primary: '',
         success: '',
         warning: '',
-        danger: ''
+        danger: '',
+        info: ''
       },
       rounded: {
         true: 'rounded-lg',
@@ -89,6 +90,22 @@ export const alertVariants = cva(
         color: 'danger',
         variant: 'bordered',
         class: 'border-error-light text-text-light dark:border-error dark:text-text-dark'
+      },
+      {
+        color: 'info',
+        variant: 'solid',
+        class:
+          'border-info-light bg-info-surface-light text-text-light dark:border-info dark:bg-info-surface-dark dark:text-text-dark'
+      },
+      {
+        color: 'info',
+        variant: 'flat',
+        class: 'bg-info-surface-light text-text-light dark:bg-info-surface-dark dark:text-text-dark'
+      },
+      {
+        color: 'info',
+        variant: 'bordered',
+        class: 'border-info-light text-text-light dark:border-info dark:text-text-dark'
       }
     ],
     defaultVariants: {
@@ -111,7 +128,8 @@ export const defaultAlertIcons: Record<AlertColor, DynamicIconName> = {
   primary: 'info',
   success: 'circle-check',
   warning: 'triangle-alert',
-  danger: 'circle-x'
+  danger: 'circle-x',
+  info: 'badge-info'
 };
 
 export type AlertProps = NativeAlertProps & {

@@ -675,6 +675,17 @@ describe('Select — hint pattern', () => {
     expect(screen.getByText('Please select a country')).toBeInTheDocument();
   });
 
+  it('maps info hints to semantic info styling and icon tone', () => {
+    const { result } = renderHook(() =>
+      useSelect({ label: 'Country', options: defaultOptions, hint: { message: 'Helpful guidance', type: 'info' } })
+    );
+
+    expect(result.current.triggerClassName).toContain('border-info-light');
+    expect(result.current.triggerClassName).toContain('shadow-glow-input-info-light');
+    expect(result.current.hintMessageClassName).toContain('text-info-light');
+    expect(result.current.hintIconProps).toMatchObject({ name: 'info', tone: 'info' });
+  });
+
   it('derives error status from hint type', () => {
     render(<Select label='Country' options={defaultOptions} hint={{ message: 'Error', type: 'error' }} />);
     const trigger = screen.getByRole('combobox');

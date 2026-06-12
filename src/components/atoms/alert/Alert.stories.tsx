@@ -97,6 +97,7 @@ export const VariantSolid: Story = {
       <Alert color='success' subtitle='Success solid treatment.' title='Success' variant='solid' />
       <Alert color='warning' subtitle='Warning solid treatment.' title='Warning' variant='solid' />
       <Alert color='danger' subtitle='Danger solid treatment.' title='Danger' variant='solid' />
+      <Alert color='info' subtitle='Info solid treatment.' title='Info' variant='solid' />
     </div>
   )
 };
@@ -111,6 +112,7 @@ export const VariantBordered: Story = {
       <Alert color='success' subtitle='Success bordered treatment.' title='Success' variant='bordered' />
       <Alert color='warning' subtitle='Warning bordered treatment.' title='Warning' variant='bordered' />
       <Alert color='danger' subtitle='Danger bordered treatment.' title='Danger' variant='bordered' />
+      <Alert color='info' subtitle='Info bordered treatment.' title='Info' variant='bordered' />
     </div>
   )
 };
@@ -125,6 +127,7 @@ export const VariantFlat: Story = {
       <Alert color='success' subtitle='Success flat treatment.' title='Success' variant='flat' />
       <Alert color='warning' subtitle='Warning flat treatment.' title='Warning' variant='flat' />
       <Alert color='danger' subtitle='Danger flat treatment.' title='Danger' variant='flat' />
+      <Alert color='info' subtitle='Info flat treatment.' title='Info' variant='flat' />
     </div>
   )
 };
@@ -135,7 +138,7 @@ export const VariantFlat: Story = {
 export const CustomColor: Story = {
   args: {
     title: 'Informational note',
-    subtitle: 'Use className and custom startContent when the alert needs a non-standard semantic color.',
+    subtitle: 'Use className and custom startContent when the alert needs a custom token-backed surface.',
     className: 'border-info-light bg-info-surface-light dark:border-info dark:bg-info-surface-dark',
     startContent: (
       <Icon color='text-info-light' colorDark='dark:text-info' decorative={true} name='badge-info' size={20} />

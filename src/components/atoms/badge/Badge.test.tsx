@@ -71,6 +71,7 @@ describe('useBadge — logic', () => {
 
   it.each([
     ['primary', 'bg-red-surface-light', 'dark:bg-red-surface-dark'],
+    ['info', 'bg-info-surface-light', 'dark:bg-info-surface-dark'],
     ['success', 'bg-success-surface-light', 'dark:bg-success-surface-dark'],
     ['warning', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark'],
     ['danger', 'bg-error-surface-light', 'dark:bg-error-surface-dark']

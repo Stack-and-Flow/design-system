@@ -19,7 +19,8 @@ export const chipVariants = cva(
         secondary: '',
         success: '',
         warning: '',
-        danger: ''
+        danger: '',
+        info: ''
       },
 
       size: {
@@ -196,6 +197,35 @@ export const chipVariants = cva(
         color: 'danger',
         variant: 'light',
         class: 'text-red-800 dark:text-error data-[interactive=true]:hover:bg-error-tint'
+      },
+
+      {
+        color: 'info',
+        variant: 'solid',
+        class:
+          'bg-info-light text-white dark:bg-info dark:text-text-light data-[interactive=true]:hover:bg-blue dark:data-[interactive=true]:hover:bg-blue-light'
+      },
+      {
+        color: 'info',
+        variant: 'flat',
+        class:
+          'bg-info-surface-light text-text-light dark:bg-info-surface-dark dark:text-text-dark data-[interactive=true]:hover:bg-info-tint'
+      },
+      {
+        color: 'info',
+        variant: ['bordered', 'faded', 'dot'],
+        class:
+          'border-info-light text-info-light dark:border-info dark:text-info data-[interactive=true]:hover:border-blue dark:data-[interactive=true]:hover:border-blue-light'
+      },
+      {
+        color: 'info',
+        variant: ['faded', 'dot'],
+        class: 'bg-info-tint data-[interactive=true]:hover:bg-info-tint'
+      },
+      {
+        color: 'info',
+        variant: 'light',
+        class: 'text-info-light dark:text-info data-[interactive=true]:hover:bg-info-tint'
       }
     ],
 

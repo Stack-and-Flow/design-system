@@ -89,7 +89,8 @@ export function useChip(props: ChipProps) {
       'border-transparent bg-surface-raised-light text-text-light dark:bg-surface-raised-dark dark:text-text-dark',
     success: 'border-transparent bg-success-light text-text-light dark:bg-success dark:text-text-light',
     warning: 'border-transparent bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
-    danger: 'border-transparent bg-error-light text-white dark:bg-error dark:text-white'
+    danger: 'border-transparent bg-error-light text-white dark:bg-error dark:text-white',
+    info: 'border-transparent bg-info-light text-white dark:bg-info dark:text-text-light'
   };
 
   const dotClassByColor: Record<NonNullable<ChipProps['color']>, string> = {
@@ -97,7 +98,8 @@ export function useChip(props: ChipProps) {
     secondary: 'bg-text-secondary-light dark:bg-text-secondary-dark',
     success: 'bg-success-light dark:bg-success',
     warning: 'bg-warning-light dark:bg-warning',
-    danger: 'bg-error-light dark:bg-error'
+    danger: 'bg-error-light dark:bg-error',
+    info: 'bg-info-light dark:bg-info'
   };
 
   const closeButtonHoverByColor: Record<NonNullable<ChipProps['color']>, string> = {
@@ -105,7 +107,8 @@ export function useChip(props: ChipProps) {
     secondary: 'hover:bg-surface-raised-light dark:hover:bg-surface-raised-dark',
     success: 'hover:bg-success-tint',
     warning: 'hover:bg-warning-tint',
-    danger: 'hover:bg-error-tint'
+    danger: 'hover:bg-error-tint',
+    info: 'hover:bg-info-tint'
   };
 
   const slots = {

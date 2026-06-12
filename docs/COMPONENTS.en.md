@@ -398,7 +398,7 @@ box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.15);
 
 ---
 
-### 3.5 Input — Error / Warning / Success States
+### 3.5 Input — Error / Warning / Success / Info States
 
 States change only the `border-color` and `box-shadow`. Background, padding, and font remain identical to default.
 
@@ -421,6 +421,14 @@ box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
 ```css
 border-color: rgba(34, 197, 94, 0.7); /* --color-success: #22c55e */
 box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+```
+
+**Info:**
+
+```css
+border-color: rgba(29, 78, 216, 0.7); /* --color-info-light: #1d4ed8 */
+box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+/* dark: border-color: rgba(59, 130, 246, 1); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12); */
 ```
 
 **Error message text:**
@@ -1148,6 +1156,7 @@ background: linear-gradient(
 - [ ] Minimum height `44px`
 - [ ] Placeholder text `#6a6b6c` — WCAG exempts placeholder from contrast (informational, not functional)
 - [ ] Error state: border + shadow change, NOT color of input text
+- [ ] Info state: border + shadow change with `--color-info-light` in light mode and `--color-info` in dark mode; never treat it as neutral helper styling
 - [ ] Error message: `color: #ff0036` dark / `#db143c` light — check contrast on surface background
 - [ ] Labels always visible — never placeholder-only inputs
 - [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` (softer than button — 12% not 40%)

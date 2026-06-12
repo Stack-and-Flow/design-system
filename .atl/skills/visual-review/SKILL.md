@@ -127,6 +127,8 @@ For every interactive component, check ALL of the following sections.
 - [ ] Minimum height `44px`
 - [ ] Focus ring softer than button: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` — 12%, not 40%
 - [ ] Error state changes border + shadow only — NOT input text color
+- [ ] Info state changes border + shadow only, using semantic blue tokens instead of neutral helper styling
+- [ ] Info helper text/icon use semantic info color (`text-info-light` / `dark:text-info`) instead of muted secondary text
 - [ ] Error message: `#ff0036` dark / `#db143c` light — check contrast on surface background
 - [ ] Labels always visible — never placeholder-only inputs
 - [ ] Placeholder `#6a6b6c` — WCAG exempts placeholder (informational, not functional)

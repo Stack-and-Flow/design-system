@@ -52,6 +52,8 @@ describe('useAlert — logic', () => {
   });
 
   it.each([
+    ['info', 'solid', 'bg-info-surface-light', 'dark:bg-info-surface-dark'],
+    ['info', 'flat', 'bg-info-surface-light', 'dark:bg-info-surface-dark'],
     ['success', 'solid', 'bg-success-surface-light', 'dark:bg-success-surface-dark'],
     ['success', 'flat', 'bg-success-surface-light', 'dark:bg-success-surface-dark'],
     ['warning', 'solid', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark'],

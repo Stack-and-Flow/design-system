@@ -61,7 +61,7 @@ export const textAreaSurfaceVariants = cva(
           'border-warning-light shadow-glow-input-warning-light hover:!border-warning-light dark:border-warning dark:shadow-glow-input-warning dark:hover:!border-warning',
         success:
           'border-success-light shadow-glow-input-success-light hover:!border-success-light dark:border-success dark:shadow-glow-input-success dark:hover:!border-success',
-        info: ''
+        info: 'border-info-light shadow-glow-input-info-light hover:!border-info-light dark:border-info dark:shadow-glow-input-info dark:hover:!border-info'
       },
       focused: {
         true: '!border-brand-light/50 shadow-glow-input-focus-light dark:!border-brand-dark/50 dark:shadow-glow-input-focus',
@@ -87,6 +87,11 @@ export const textAreaSurfaceVariants = cva(
         focused: true,
         status: 'success',
         class: '!border-success-light dark:!border-success'
+      },
+      {
+        focused: true,
+        status: 'info',
+        class: '!border-info-light dark:!border-info'
       }
     ],
     defaultVariants: {

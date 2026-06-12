@@ -13,6 +13,7 @@ export const tooltipVariants = cva(
         default:
           'border-border-light bg-surface-raised-light text-text-light dark:border-border-dark dark:bg-surface-raised-dark dark:text-text-dark',
         primary: 'border-transparent bg-btn-primary text-white',
+        info: 'border-transparent bg-info-light text-white dark:bg-info dark:text-text-light',
         success: 'border-transparent bg-success-light text-text-light dark:bg-success dark:text-text-light',
         warning: 'border-transparent bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
         transparent:
@@ -43,7 +44,7 @@ export const tooltipVariants = cva(
   }
 );
 
-export type TooltipColor = 'default' | 'primary' | 'success' | 'warning' | 'transparent';
+export type TooltipColor = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'transparent';
 export type TooltipComplement = 'default' | 'arrow-bottom' | 'arrow-left' | 'arrow-right' | 'arrow-top';
 export type TooltipWidth = 'default' | 'md' | 'xl';
 export type TooltipPosition =
