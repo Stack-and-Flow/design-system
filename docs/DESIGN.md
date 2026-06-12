@@ -105,8 +105,8 @@ El color de marca. Dos valores según el modo:
 ### Transparencias funcionales (tints)
 
 Usadas en overlays, glows y estados interactivos.
-Usá los tints semánticos transparentes para énfasis inline, feedback de hover/active/focus y tracks de progress/slider.
-Usá los tokens de superficie semántica opaca (`*-surface-light` / `*-surface-dark`) para contenedores de estado o superficies flotantes/elevadas donde el contenido de abajo no debe transparentarse.
+Usa los tints semánticos transparentes para énfasis inline, feedback de hover/active/focus y tracks de progress/slider.
+Usa los tokens de superficie semántica opaca (`*-surface-light` / `*-surface-dark`) para contenedores de estado o superficies flotantes/elevadas donde el contenido de abajo no debe transparentarse.
 
 | Rol | Valor |
 |-----|-------|
