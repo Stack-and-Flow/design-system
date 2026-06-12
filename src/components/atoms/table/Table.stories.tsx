@@ -19,15 +19,15 @@ type UserData = {
 
 /**
  * StatusBadge component optimized for WCAG 2.1 AA accessibility compliance.
- * Uses design-system semantic colors that remain readable even with reduced opacity in disabled rows.
+ * Uses opaque semantic status surfaces so the badges stay legible over complex row backgrounds.
  */
 const statusBadgeClasses: Record<string, string> = {
   active:
-    'border border-success-light bg-success-tint text-text-light dark:border-success dark:bg-success-tint dark:text-text-dark',
+    'border border-success-light bg-success-surface-light text-text-light dark:border-success dark:bg-success-surface-dark dark:text-text-dark',
   inactive:
-    'border border-error-light bg-error-tint text-text-light dark:border-error dark:bg-error-tint dark:text-text-dark',
+    'border border-error-light bg-error-surface-light text-text-light dark:border-error dark:bg-error-surface-dark dark:text-text-dark',
   pending:
-    'border border-warning-light bg-warning-tint text-text-light dark:border-warning dark:bg-warning-tint dark:text-text-dark'
+    'border border-warning-light bg-warning-surface-light text-text-light dark:border-warning dark:bg-warning-surface-dark dark:text-text-dark'
 };
 
 const departmentBadgeClasses: Record<string, string> = {

@@ -104,7 +104,9 @@ The brand color. Two values depending on the mode:
 
 ### Functional transparencies (tints)
 
-Used in overlays, glows, and interactive states:
+Used in overlays, glows, and interactive states.
+Use transparent semantic tints for inline emphasis, hover/active/focus feedback, and progress/slider tracks.
+Use opaque semantic surface tokens (`*-surface-light` / `*-surface-dark`) for status containers or floating/elevated surfaces where underlying content must not bleed through.
 
 | Role | Value |
 |-----|-------|

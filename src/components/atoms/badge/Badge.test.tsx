@@ -1,6 +1,7 @@
 import { render, renderHook, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Badge } from './Badge';
+import { badgeVariants } from './types';
 import { useBadge } from './useBadge';
 
 describe('useBadge — logic', () => {
@@ -66,6 +67,18 @@ describe('useBadge — logic', () => {
 
     expect(defaultResult.current.shouldAnimateIn).toBe(true);
     expect(pulseResult.current.shouldAnimateIn).toBe(false);
+  });
+
+  it.each([
+    ['primary', 'bg-red-surface-light', 'dark:bg-red-surface-dark'],
+    ['success', 'bg-success-surface-light', 'dark:bg-success-surface-dark'],
+    ['warning', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark'],
+    ['danger', 'bg-error-surface-light', 'dark:bg-error-surface-dark']
+  ] as const)('uses opaque status surfaces for %s flat badges', (color, lightClass, darkClass) => {
+    const className = badgeVariants({ color, variant: 'flat' });
+
+    expect(className).toContain(lightClass);
+    expect(className).toContain(darkClass);
   });
 });
 

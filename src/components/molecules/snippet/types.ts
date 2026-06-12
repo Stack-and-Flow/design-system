@@ -49,7 +49,7 @@ export const snippetBase = cva(
       {
         variant: ['solid', 'shadow'],
         color: 'primary',
-        class: 'bg-red-tint-subtle border-brand-light/20 dark:bg-red-tint-low dark:border-brand-dark/30'
+        class: 'bg-red-surface-light border-brand-light/20 dark:bg-red-surface-dark dark:border-brand-dark/30'
       },
       {
         variant: ['solid', 'shadow'],
@@ -60,22 +60,22 @@ export const snippetBase = cva(
       {
         variant: ['solid', 'shadow'],
         color: 'success',
-        class: 'bg-success-tint border-success-light/30 dark:bg-success-tint dark:border-success/30'
+        class: 'bg-success-surface-light border-success-light/30 dark:bg-success-surface-dark dark:border-success/30'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'warning',
-        class: 'bg-warning-tint border-warning-light/30 dark:bg-warning-tint dark:border-warning/30'
+        class: 'bg-warning-surface-light border-warning-light/30 dark:bg-warning-surface-dark dark:border-warning/30'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'danger',
-        class: 'bg-error-tint border-error-light/30 dark:bg-error-tint dark:border-error/30'
+        class: 'bg-error-surface-light border-error-light/30 dark:bg-error-surface-dark dark:border-error/30'
       },
       {
         variant: ['solid', 'shadow'],
         color: 'info',
-        class: 'bg-info-tint border-info-light/30 dark:bg-info-tint dark:border-info/30'
+        class: 'bg-info-surface-light border-info-light/30 dark:bg-info-surface-dark dark:border-info/30'
       },
       {
         variant: 'outline',

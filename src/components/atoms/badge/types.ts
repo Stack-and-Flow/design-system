@@ -48,8 +48,8 @@ export const badgeVariants = cva(
         variant: 'flat',
         color: 'primary',
         class: [
-          'bg-red-tint-subtle border-brand-light text-brand-light',
-          'dark:bg-red-tint-subtle dark:border-brand-dark dark:text-brand-dark-light'
+          'bg-red-surface-light border-brand-light text-brand-light',
+          'dark:bg-red-surface-dark dark:border-brand-dark dark:text-brand-dark-light'
         ]
       },
       {
@@ -64,24 +64,24 @@ export const badgeVariants = cva(
         variant: 'flat',
         color: 'success',
         class: [
-          'bg-success-tint border-success-light text-success-light',
-          'dark:bg-success-tint dark:border-success dark:text-success'
+          'bg-success-surface-light border-success-light text-success-light',
+          'dark:bg-success-surface-dark dark:border-success dark:text-success'
         ]
       },
       {
         variant: 'flat',
         color: 'warning',
         class: [
-          'bg-warning-tint border-warning-light text-warning-light',
-          'dark:bg-warning-tint dark:border-warning dark:text-warning'
+          'bg-warning-surface-light border-warning-light text-warning-light',
+          'dark:bg-warning-surface-dark dark:border-warning dark:text-warning'
         ]
       },
       {
         variant: 'flat',
         color: 'danger',
         class: [
-          'bg-error-tint border-error-light text-error-light',
-          'dark:bg-error-tint dark:border-error dark:text-error'
+          'bg-error-surface-light border-error-light text-error-light',
+          'dark:bg-error-surface-dark dark:border-error dark:text-error'
         ]
       },
       {

@@ -130,13 +130,13 @@ export const VariantFlat: Story = {
 };
 
 /**
- * Shows a custom token-backed color treatment through className and startContent.
+ * Shows a custom token-backed status surface using the opaque semantic background tokens.
  */
 export const CustomColor: Story = {
   args: {
     title: 'Informational note',
     subtitle: 'Use className and custom startContent when the alert needs a non-standard semantic color.',
-    className: 'border-info-light bg-info-tint dark:border-info dark:bg-info-tint',
+    className: 'border-info-light bg-info-surface-light dark:border-info dark:bg-info-surface-dark',
     startContent: (
       <Icon color='text-info-light' colorDark='dark:text-info' decorative={true} name='badge-info' size={20} />
     )

@@ -160,11 +160,13 @@ export const Disabled: Story = {
 
 /**
  * Shows how token-backed utility classes can extend the component without bypassing the theme.
+ * Use opaque surface tokens for branded containers and keep tint tokens for interactive overlays.
  */
 export const CustomClassName: Story = {
   args: {
     children: 'Themed custom class',
-    className: 'border-brand-light bg-red-tint-subtle text-brand-light dark:border-brand-dark dark:text-brand-dark',
+    className:
+      'border-brand-light bg-red-surface-light text-brand-light dark:border-brand-dark dark:bg-red-surface-dark dark:text-brand-dark',
     onCopy: action('custom-class-copy')
   }
 };

@@ -11,6 +11,7 @@ vi.mock('lucide-react/dynamic.js', () => ({
 }));
 
 import { Alert } from './Alert';
+import { alertVariants } from './types';
 import { useAlert } from './useAlert';
 
 const setReducedMotion = (matches: boolean) => {
@@ -48,6 +49,20 @@ describe('useAlert — logic', () => {
     expect(result.current.resolvedIconName).toBe('info');
     expect(result.current.rootProps['data-state']).toBe('open');
     expect(result.current.shouldRender).toBe(true);
+  });
+
+  it.each([
+    ['success', 'solid', 'bg-success-surface-light', 'dark:bg-success-surface-dark'],
+    ['success', 'flat', 'bg-success-surface-light', 'dark:bg-success-surface-dark'],
+    ['warning', 'solid', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark'],
+    ['warning', 'flat', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark'],
+    ['danger', 'solid', 'bg-error-surface-light', 'dark:bg-error-surface-dark'],
+    ['danger', 'flat', 'bg-error-surface-light', 'dark:bg-error-surface-dark']
+  ] as const)('uses opaque status surfaces for %s %s alerts', (color, variant, lightClass, darkClass) => {
+    const className = alertVariants({ color, variant });
+
+    expect(className).toContain(lightClass);
+    expect(className).toContain(darkClass);
   });
 
   it('uses the provided iconName instead of the color default', () => {
