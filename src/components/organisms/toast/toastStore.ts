@@ -457,6 +457,12 @@ const enqueueToast = (toastItem: InternalToast) => {
   }
 
   if (state.visible.length >= state.config.maxVisible) {
+    if (state.config.queueStrategy === 'fifo') {
+      state.queue.push(toastItem);
+      notify();
+      return toastItem.id;
+    }
+
     demoteOldestVisibleToast();
   }
 

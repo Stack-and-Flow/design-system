@@ -198,6 +198,11 @@ export type ToastStatus = NonNullable<ToastVariantProps['status']>;
 export type ToastVariant = NonNullable<ToastVariantProps['variant']>;
 export type ToastSize = NonNullable<ToastVariantProps['size']>;
 export type ToastMotionState = NonNullable<ToastVariantProps['motionState']>;
+/**
+ * Controls toast overflow handling and promotion order.
+ * `fifo` keeps current visible toasts on screen and queues newer overflow toasts.
+ * `lifo` keeps the newest toast visible by demoting the oldest visible toast into the queue.
+ */
 export type ToastQueueStrategy = 'fifo' | 'lifo';
 export type ToastMotion = 'default' | 'none';
 export type ToastSwipeDirection = 'right' | 'left' | 'up' | 'down';
@@ -393,6 +398,9 @@ export type ToastProviderProps = NativeProviderProps & {
    */
   maxVisible?: number;
   /**
+   * Controls toast overflow handling and promotion order.
+   * `fifo` keeps current visible toasts on screen and queues newer overflow toasts.
+   * `lifo` keeps the newest toast visible by demoting the oldest visible toast into the queue.
    * @control select
    * @default fifo
    */
