@@ -131,7 +131,7 @@ describe('Select — render', () => {
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toHaveClass('min-h-11');
+    expect(screen.getByRole('status')).toHaveClass('min-h-touch-target-min');
     expect(screen.getByTestId('select-spinner')).toBeInTheDocument();
     expect(screen.getByText('Loading countries')).toBeInTheDocument();
   });

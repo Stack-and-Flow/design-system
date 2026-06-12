@@ -252,7 +252,7 @@ export const selectLabel = cva(
 );
 
 export const selectLoadingVariants = cva(
-  'flex min-h-11 items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
+  'flex min-h-touch-target-min items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
 );
 
 export const selectClearButton = cva([
