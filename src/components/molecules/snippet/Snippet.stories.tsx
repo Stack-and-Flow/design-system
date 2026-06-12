@@ -166,7 +166,7 @@ export const CustomClassName: Story = {
   args: {
     children: 'Themed custom class',
     className:
-      'border-brand-light bg-red-surface-light text-brand-light dark:border-brand-dark dark:bg-red-surface-dark dark:text-brand-dark',
+      'border-brand-light bg-red-surface-light text-text-light dark:border-brand-dark dark:bg-red-surface-dark dark:text-text-dark',
     onCopy: action('custom-class-copy')
   }
 };

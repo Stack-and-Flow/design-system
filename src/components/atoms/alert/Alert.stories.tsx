@@ -203,7 +203,7 @@ export const RichDescriptionContent: Story = {
       <span>
         The description accepts <strong>rich inline HTML</strong>, including{' '}
         <a
-          className='font-semibold underline underline-offset-2'
+          className='font-semibold text-current underline underline-offset-2'
           href='https://github.com/Stack-and-Flow/design-system/issues/13'
         >
           contextual links
