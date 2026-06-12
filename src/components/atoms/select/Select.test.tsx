@@ -131,6 +131,7 @@ describe('Select — render', () => {
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveClass('min-h-11');
     expect(screen.getByTestId('select-spinner')).toBeInTheDocument();
     expect(screen.getByText('Loading countries')).toBeInTheDocument();
   });
@@ -635,10 +636,16 @@ describe('Select — accessibility', () => {
 });
 
 describe('Select — size and variant smoke coverage', () => {
-  it.each(['sm', 'md', 'lg'] as const)('renders %s size as an accessible combobox', (size) => {
-    render(<Select label='Country' options={defaultOptions} size={size} placeholder='Select...' />);
+  it.each([
+    ['sm', 'h-form-field-sm'],
+    ['md', 'h-form-field-md'],
+    ['lg', 'h-form-field-lg']
+  ] as const)('maps %s size to the form-field height scale', (size, heightClassName) => {
+    const { result } = renderHook(() =>
+      useSelect({ label: 'Country', options: defaultOptions, size, placeholder: 'Select...' })
+    );
 
-    expect(screen.getByRole('combobox', { name: 'Country' })).toBeInTheDocument();
+    expect(result.current.triggerClassName).toContain(heightClassName);
   });
 
   it.each([

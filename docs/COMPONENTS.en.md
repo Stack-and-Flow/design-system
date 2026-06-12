@@ -76,11 +76,15 @@ Never use `outline: none` without an alternative visible focus indicator.
 **Rule 9 — Gradient borders use `::before` pseudo-element, never `border-image`.**
 `border-image` does not work with `border-radius` — the gradient clips to a rectangle, destroying the pill shape. The correct technique uses `::before` absolutely positioned with `inset: -1.5px` and `z-index: -1`, with the gradient as its `background` and `border-radius: inherit`.
 
-**Rule 10 — Default touch target is 44×44px for interactive elements.**
-Buttons and action-style links use a default minimum `height: 44px` from `sm` upward. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Component-specific compact/dense size scales may go below 44px only when explicitly approved, documented on the prop/story, implemented on native controls, and still keyboard/focus accessible; use the default scale when touch-first targets are required. Calendar is an approved dense component scale because date grids need compact scanning density.
+**Rule 10 — Visual control height and touch target are not the same thing.**
+The shared visual scale for comparable action controls is `xs | sm | md | lg` = `24px | 32px | 40px | 48px`, exposed through `--spacing-control-*` and Tailwind utilities `h-control-*` / `w-control-*`. `Button`, `IconButton`, and CTA `Link` (`button` / `outlined`) should consume that scale so their visual heights do not drift. `Link` `regular` remains inline typographic navigation.
+
+`Input` and `Select` are form controls: their height accounts for label, floating label, adornments, and alignment between fields, so they use the semantic `form-field` scale (`--spacing-form-field-sm|md|lg` = `48px | 56px | 64px`) instead of the visual action scale. If more fields share that logic, align them with `Input`/`Select`, not `Button`.
+
+`--spacing-touch-target-min` (`44px`) is touch-target guidance for touch-first surfaces, primary mobile CTAs, or hit-area wrappers. It is not a universal visual height for every web control. Compact or dense components may stay below `44px` when that is documented, they still use native controls, and keyboard/focus behavior remains accessible. `Checkbox` and `Switch` are examples where the hit area can grow without changing the visible shape; `TextArea`, `Chip`, and `Badge` are intentional exceptions with different semantics.
 
 **Action size scale — `xs | sm | md | lg`.**
-For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the dense compact size: reduce typography, icon size, gap, horizontal padding, and height so it is visibly smaller than `sm`. `Link` `regular` remains inline typography-only, while CTA-style `sm` and above keep the 44px target.
+For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the compact dense size. `sm`, `md`, and `lg` follow the same shared semantic visual scale, while touch target is evaluated separately by context.
 
 **Rule 11 — Never animate layout-forcing properties.**
 Do not animate `width`, `height`, `top`, `left`, `margin`, `padding`. These trigger layout reflow on every frame. For position animations use `transform: translateY/translateX`. For size animations use `transform: scale`.
@@ -118,7 +122,7 @@ font-size: 1rem; /* body size; button--lg adds more padding */
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px; /* minimum; button--lg typically 0.65rem 1.75rem */
-min-height: 44px;
+height: var(--spacing-control-md); /* default visual control height; use touch-target-min only for touch-first hit areas */
 cursor: pointer;
 box-shadow:
   0 0 0 1.5px rgba(255, 60, 90, 0.5),
@@ -200,7 +204,7 @@ font-size: 1rem;
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* default visual control height; use touch-target-min only for touch-first hit areas */
 cursor: pointer;
 box-shadow:
   0 0 8px 2px rgba(255, 0, 54, 0.15),
@@ -289,7 +293,7 @@ color: #ffffff;
 font-weight: 600;
 letter-spacing: 0.01em;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* default visual control height; use touch-target-min only for touch-first hit areas */
 transition:
   background 0.2s ease,
   border-color 0.2s ease,
@@ -346,7 +350,7 @@ font-family: "Space Grotesk Variable", system-ui, sans-serif;
 font-size: 1rem;
 font-weight: 500;
 padding: 10px 14px;
-min-height: 44px;
+height: var(--spacing-form-field-md); /* form-field md height; Input/Select align by field layout */
 width: 100%;
 transition:
   border-color 0.2s ease,
@@ -1140,7 +1144,7 @@ background: linear-gradient(
 
 ### Buttons
 
-- [ ] Minimum height `44px`
+- [ ] Visual height aligns with the `control` scale (`h-control-xs|sm|md|lg`) for the size prop
 - [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` dark / `0 0 0 3px rgba(219, 20, 60, 0.35)` light
 - [ ] Focus ring merged with existing `box-shadow` — never replaces it
 - [ ] Focus ring never hidden: no `outline: none` without alternative
@@ -1148,12 +1152,12 @@ background: linear-gradient(
 - [ ] Primary: white `#ffffff` text over red gradient — contrast passes in both modes
 - [ ] Secondary dark: `color: #ffffff` over `rgba(255,0,54,0.06)` — visually dark background context; border defines the affordance
 - [ ] Secondary light: `color: #cc0030` — NEVER `#ff0036` in light mode (insufficient contrast over white)
-- [ ] Touch target remains at least `44px` for default action sizes; explicitly approved compact/dense variants may use reduced visual targets when documented and keyboard/focus accessible
+- [ ] Touch target is evaluated by context: use `touch-target-min` (`44px`) on touch-first surfaces or hit-area wrappers; documented compact/dense variants may keep smaller visual height when keyboard/focus accessible
 - [ ] `role="button"` if implemented as non-`<button>` element
 
 ### Inputs
 
-- [ ] Minimum height `44px`
+- [ ] Visual height aligns with the `form-field` scale (`h-form-field-sm|md|lg`) and stays consistent between fields like `Input` and `Select`; do not force `h-control-*` when label/floating-label layout is part of the pattern
 - [ ] Placeholder text `#6a6b6c` — WCAG exempts placeholder from contrast (informational, not functional)
 - [ ] Error state: border + shadow change, NOT color of input text
 - [ ] Info state: border + shadow change with `--color-info-light` in light mode and `--color-info` in dark mode; never treat it as neutral helper styling
@@ -1172,7 +1176,7 @@ background: linear-gradient(
 
 ### Dropdown / nav items
 
-- [ ] Each item `padding: 7px 12px` minimum — 14px font achieves ~28px height; wrap in container with `min-height: 44px` if needed
+- [ ] Each item `padding: 7px 12px` minimum — 14px font achieves ~28px height; use `touch-target-min` wrappers when the menu is touch-first
 - [ ] Active item: `color: #ff0036` — contrast 4.96:1 on `#0B131E` surface ✅
 - [ ] Hover: background change + color change — two simultaneous signals (not hover-only)
 - [ ] Keyboard navigation: dropdown must be traversable with Tab/Arrow keys

@@ -10,7 +10,7 @@ import { IconButton } from './IconButton';
  * Uses Lucide dynamic icons for the visual glyph.
  *
  * ## Usage Guide
- * Provide a meaningful accessible name with `title`, `ariaLabel`, or `aria-label`. Use `xs` for dense, visibly shorter controls and `sm` or above for the 44px action target; legacy numeric sizes keep the exact icon size and map the button target to the closest named size. Use `emphasis='flat'` when a quiet context needs to reduce decorative glow without removing accessible focus feedback. Use `aria-pressed` only to announce toggle-button state to assistive technology.
+ * Provide a meaningful accessible name with `title`, `ariaLabel`, or `aria-label`. Named sizes use the shared `control` scale (`xs` 24px, `sm` 32px, `md` 40px, `lg` 48px); use touch-first wrappers or `lg` when target size matters. Legacy numeric sizes keep the exact icon size and map the button target to the closest named size. Use `emphasis='flat'` when a quiet context needs to reduce decorative glow without removing accessible focus feedback. Use `aria-pressed` only to announce toggle-button state to assistive technology.
  */
 const meta: Meta<typeof IconButton> = {
   title: 'Atoms/IconButton',

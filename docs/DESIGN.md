@@ -652,11 +652,13 @@ Todos los valores de texto sobre sus respectivos fondos cumplen WCAG AA (4.5:1) 
 > ⚠️ `#6a6b6c` (disabled/muted) no cumple AA sobre los fondos dark — es correcto: WCAG exime explícitamente los estados `disabled` del requisito de contraste.
 
 ### Targets táctiles
-- Botones pill: altura mínima por defecto `44px`
-- Escala de acciones `xs | sm | md | lg`: `xs` es la variante compacta densa para `Button`, `IconButton` y `Link` CTA (`button` / `outlined`), con menor altura y padding; usá `sm` o superior cuando necesitás conservar el target de `44px`
-- `Link` `regular` sigue siendo tipográfico e inline; los CTA `sm` y superiores mantienen el área mínima de `44px`
-- Nav links: área mínima `44px` de alto incluyendo padding
-- Elementos de menú: `padding: 7px 12px` mínimo con font 14px
+- La altura visual de los controles compartidos se define con la escala `control`: `xs = 24px`, `sm = 32px`, `md = 40px`, `lg = 48px`.
+- Tokens Tailwind v4: `--spacing-control-xs|sm|md|lg` generan utilidades `h-control-*` y `w-control-*`; `--spacing-form-field-sm|md|lg` generan `h-form-field-*`; `--spacing-touch-target-min` genera `min-h-touch-target-min`, `min-w-touch-target-min` y `size-touch-target-min`.
+- `Button`, `IconButton` y `Link` CTA (`button` / `outlined`) usan esa escala visual compartida. `Link` `regular` sigue siendo tipográfico e inline.
+- `Input` y `Select` usan la escala semántica `form-field`: `sm = 48px`, `md = 56px`, `lg = 64px`, porque su altura contempla label, floating label, adornments y alineación entre campos.
+- `--spacing-touch-target-min` (`44px`) es una guía de target táctil, no una altura visual universal. Úsalo para superficies touch-first o para ampliar el hit area de controles compactos como `Checkbox` y `Switch` sin agrandar su forma visible.
+- Otras excepciones documentadas: `TextArea` sigue siendo multiline/content-driven; `Chip` conserva una escala compacta de tag/token; `Badge` sigue siendo informativo, no un control interactivo general.
+- Nav links y elementos de menú deben seguir ofreciendo un área cómoda en contextos touch-first, aunque su altura visual no use necesariamente la escala `control`.
 
 ### Focus visible
 - Todos los elementos interactivos tienen `focus-visible` con `box-shadow: 0 0 0 3px rgba(255,0,54,0.4)` en dark y `box-shadow: 0 0 0 3px rgba(219,20,60,0.35)` en light

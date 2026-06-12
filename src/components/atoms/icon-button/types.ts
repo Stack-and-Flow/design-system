@@ -49,10 +49,10 @@ export const iconButtonVariants = cva(
         flat: ''
       },
       size: {
-        xs: 'h-9 w-9',
-        sm: 'h-11 w-11',
-        md: 'h-12 w-12',
-        lg: 'h-14 w-14'
+        xs: 'h-control-xs w-control-xs',
+        sm: 'h-control-sm w-control-sm',
+        md: 'h-control-md w-control-md',
+        lg: 'h-control-lg w-control-lg'
       }
     },
     compoundVariants: [

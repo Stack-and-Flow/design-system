@@ -33,9 +33,9 @@ export const inputVariants = cva(
         false: 'rounded-md'
       },
       size: {
-        sm: 'h-12 px-3 fs-small',
-        md: 'h-14 px-4 fs-base',
-        lg: 'h-16 px-4 fs-h6'
+        sm: 'h-form-field-sm px-3 fs-small',
+        md: 'h-form-field-md px-4 fs-base',
+        lg: 'h-form-field-lg px-4 fs-h6'
       },
       status: {
         default: '',

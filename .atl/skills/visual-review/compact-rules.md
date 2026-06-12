@@ -37,5 +37,8 @@
 ### Timing Reference
 - Buttons: 250ms ease | Cards: 300ms ease | Dropdowns: 150ms ease | Links: 200ms ease | Scroll fade-in: 560ms cubic-bezier(0.2, 0.8, 0.2, 1)
 
-### Minimum Touch Targets
-- Default interactive elements target `44×44px`; documented compact/dense variants may go below this when visually approved and still native-button, keyboard, focus-ring, and ARIA accessible
+### Control height and touch targets
+- Comparable action controls use the shared visual `control` scale (`24/32/40/48px`) when applicable.
+- Labeled form fields such as `Input`/`Select` use the semantic `form-field` scale (`48/56/64px`) when label/floating-label layout affects alignment.
+- `touch-target-min` (`44px`) is required for touch-first surfaces or hit-area wrappers, not every visual height.
+- Documented compact/dense variants may stay visually smaller when they remain native-button/control based, keyboard accessible, focus-visible, and ARIA accessible.

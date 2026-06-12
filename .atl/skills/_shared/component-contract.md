@@ -66,7 +66,7 @@ Only Radix UI primitives are allowed as base primitives. When Radix is used:
 ## Visual and accessibility gates
 
 - Visual rules live in `.atl/skills/visual-review/SKILL.md`; load it for state, glow, transition, gradient-border, contrast, and focus checks.
-- Default interactive controls target `44×44px`. Compact/dense variants may go smaller only when explicitly documented, visually approved, native-control based, keyboard accessible, and focus-visible.
+- Comparable action controls use the shared visual `control` scale (`24/32/40/48px`) when applicable. Labeled form fields such as `Input`/`Select` use the semantic `form-field` scale (`48/56/64px`) when label/floating-label layout affects alignment. `touch-target-min` (`44px`) is contextual guidance for touch-first surfaces or hit-area wrappers, not a universal visual height. Compact/dense variants may stay smaller only when explicitly documented, native-control based, keyboard accessible, and focus-visible.
 - Focus styling uses visible `box-shadow`; `outline: none` is valid only with an alternative focus ring.
 - Motion/transforms respect `prefers-reduced-motion`.
 

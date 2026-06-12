@@ -64,9 +64,9 @@ export const selectTrigger = cva(
         ]
       },
       size: {
-        sm: 'h-12 px-3 fs-small gap-2',
-        md: 'h-14 px-4 fs-base gap-3',
-        lg: 'h-16 px-4 fs-h6 gap-3'
+        sm: 'h-form-field-sm px-3 fs-small gap-2',
+        md: 'h-form-field-md px-4 fs-base gap-3',
+        lg: 'h-form-field-lg px-4 fs-h6 gap-3'
       },
       status: {
         default: '',

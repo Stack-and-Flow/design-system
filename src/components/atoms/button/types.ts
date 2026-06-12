@@ -53,10 +53,10 @@ export const buttonVariants = cva(
         false: ''
       },
       size: {
-        xs: 'h-9 px-2 fs-xs',
-        sm: 'px-sm h-11 fs-small',
-        md: 'px-md h-11 fs-base',
-        lg: 'px-lg h-12 fs-h6'
+        xs: 'h-control-xs px-2 fs-xs',
+        sm: 'px-sm h-control-sm fs-small',
+        md: 'px-md h-control-md fs-base',
+        lg: 'px-lg h-control-lg fs-h6'
       },
       fullWidth: {
         true: 'w-full',
