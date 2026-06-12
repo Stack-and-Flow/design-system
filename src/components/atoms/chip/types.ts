@@ -203,7 +203,7 @@ export const chipVariants = cva(
         color: 'info',
         variant: 'solid',
         class:
-          'bg-info-light text-white dark:bg-info dark:text-text-light data-[interactive=true]:hover:bg-blue dark:data-[interactive=true]:hover:bg-blue-light'
+          'bg-info-light text-white dark:bg-info dark:text-text-light data-[interactive=true]:hover:bg-info dark:data-[interactive=true]:hover:bg-blue-light'
       },
       {
         color: 'info',
@@ -215,7 +215,7 @@ export const chipVariants = cva(
         color: 'info',
         variant: ['bordered', 'faded', 'dot'],
         class:
-          'border-info-light text-info-light dark:border-info dark:text-info data-[interactive=true]:hover:border-blue dark:data-[interactive=true]:hover:border-blue-light'
+          'border-info-light text-info-light dark:border-info dark:text-info data-[interactive=true]:hover:border-info dark:data-[interactive=true]:hover:border-blue-light'
       },
       {
         color: 'info',
