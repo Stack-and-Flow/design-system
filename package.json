@@ -27,6 +27,7 @@
     "biome-staged": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
     "storybook": "storybook dev -p 6006",
     "storybook-build": "storybook build && node scripts/inject-preview-head.js",
+    "storybook-report": "node scripts/report-storybook-build.mjs",
     "storybook-clean-cache": "node -e \"require('fs').rmSync('node_modules/.cache/storybook',{recursive:true,force:true})\"",
     "pre-commit": "pnpm run biome-staged && tsc",
     "test": "vitest run",

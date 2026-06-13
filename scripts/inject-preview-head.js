@@ -37,14 +37,12 @@ if (previewHeadContent) {
   indexContent = indexContent.replace(/<link rel="icon".*?>/g, '');
   indexContent = indexContent.replace(/@font-face {[^}]*?Nunito Sans[^}]*?}/g, '');
 
-  // Inject the preview-head.html contents into the index.html head.
+  // Inject the preview-head.html metadata into the index.html head.
   const updatedIndexContent = indexContent.replace('</head>', `${previewHeadContent}\n</head>`);
 
   // Write the changes to index.html.
   fs.writeFileSync(indexPath, updatedIndexContent, 'utf-8');
-  console.log(
-    'Styles from preview-head.html and captured CSS link have been injected into index.html, and unwanted content has been removed.'
-  );
+  console.log('Injected preview-head metadata into index.html and removed Storybook default head entries.');
 
   // Read the contents of iframe.html.
   let iframeContent = fs.readFileSync(iframePath, 'utf-8');
@@ -55,9 +53,7 @@ if (previewHeadContent) {
   // Write the changes to iframe.html.
   const updatedIframeContent = iframeContent;
   fs.writeFileSync(iframePath, updatedIframeContent, 'utf-8');
-  console.log(
-    'Styles from preview-head.html have been injected into iframe.html, and unwanted content has been removed.'
-  );
+  console.log('Normalized iframe.html head entries after Storybook build.');
 } else {
-  console.warn('preview-head.html not found or is empty. No changes made to index.html.');
+  console.warn('preview-head.html not found or empty. Skipped index.html metadata injection.');
 }
