@@ -63,7 +63,7 @@ describe('useSwitch — logic', () => {
 
     expect(result.current.switchTrack).not.toContain('shadow-glow-btn-secondary');
     expect(result.current.switchTrack).not.toContain('shadow-glow-btn-primary');
-    expect(result.current.switchTrack).toContain('peer-focus-visible:shadow-glow-focus-light');
+    expect(result.current.switchTrack).toContain('peer-focus-visible:focus-ring');
   });
 
   it('treats the legacy disabled color as disabled semantics', () => {

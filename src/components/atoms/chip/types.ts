@@ -8,8 +8,7 @@ export const chipVariants = cva(
     'border transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-in-out',
     'disabled:pointer-events-none disabled:opacity-40',
     'data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-40',
-    'focus-visible:outline-none',
-    'data-[interactive=true]:focus-visible:shadow-glow-focus-light dark:data-[interactive=true]:focus-visible:shadow-glow-focus-dark',
+    'focus-visible:focus-ring',
     'motion-safe:data-[interactive=true]:active:translate-y-px motion-safe:data-[interactive=true]:active:scale-[0.98]'
   ],
   {

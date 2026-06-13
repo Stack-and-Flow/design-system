@@ -52,7 +52,7 @@ For every interactive component, check ALL of the following sections.
 
 - [ ] **Base state** — defined with correct background, border, glow/shadow, and text color
 - [ ] **Hover state** — defined; transitions tonally upward (lighter, more elevated), never darker or more muted
-- [ ] **Focus state** — defined with visible focus ring via `box-shadow`, NOT `outline`
+- [ ] **Focus state** — defined with the shared native `focus-ring` utility, not component-local shadow/glow focus
 - [ ] **Active/pressed state** — defined; gradient shifts darker + `transform: scale(0.98)`
 - [ ] **Disabled state** — `opacity: 0.4` + `cursor: not-allowed` + `pointer-events: none` — no color/grey substitution
 
@@ -64,7 +64,7 @@ For every interactive component, check ALL of the following sections.
 - [ ] Layer 3 — far dispersal: `0 0 40px 6px rgba(255, 0, 54, 0.18)` — present at base
 - [ ] Layer 4 — inset top highlight: `inset 0 1px 0 rgba(255, 255, 255, 0.15)` — present at base
 - [ ] Hover amplifies all 4 layers: ring `→ 0.7 opacity`, near `→ 22px/0.65`, far `→ 55px/0.28`, inset `→ 0.20`
-- [ ] Focus ring added as outermost layer: `0 0 0 3px rgba(255, 0, 54, 0.40)` — merged, not replacing existing layers
+- [ ] Focus-visible uses `focus-visible:focus-ring` while existing decorative glow layers remain unchanged
 
 **Button Secondary (always-on, 3-layer, no tight ring):**
 - [ ] Layer 1 — near glow: `0 0 8px 2px rgba(255, 0, 54, 0.15)`
@@ -115,9 +115,9 @@ For every interactive component, check ALL of the following sections.
 **Buttons:**
 - [ ] Visual height follows the shared `control` scale (`24px`, `32px`, `40px`, `48px`) for comparable action controls; compact/dense exceptions must be explicitly documented
 - [ ] `touch-target-min` (`44px`) is required only for touch-first surfaces or hit-area wrappers; do not flag every visual height under `44px` as wrong by default
-- [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` dark / `0 0 0 3px rgba(219, 20, 60, 0.35)` light
-- [ ] Focus ring **merged** with existing `box-shadow` — adds as outermost layer, never replaces
-- [ ] `outline: none` must ALWAYS be paired with a visible `box-shadow` focus ring — never naked
+- [ ] Focus ring: shared `focus-ring` utility with `outline: 2px solid var(--color-primary)` and `outline-offset: 2px`
+- [ ] Focus visibility does not depend on `box-shadow`, decorative glow, or emphasis mode
+- [ ] `outline: none` must ALWAYS be paired with `focus-visible:focus-ring` or an equivalent wrapper/peer/group selector — never naked
 - [ ] Disabled: `opacity: 0.4` only — no grey substitution — colors stay identical to base
 - [ ] Primary button: white `#ffffff` text over red gradient — always passes AA in both modes
 - [ ] Secondary dark mode: `color: #ffffff` — passes because border defines affordance on dark bg
@@ -128,7 +128,7 @@ For every interactive component, check ALL of the following sections.
 - [ ] Form fields such as `Input` and `Select` use the semantic form-field height scale (`sm=h-form-field-sm`, `md=h-form-field-md`, `lg=h-form-field-lg`) because label/floating-label layout and field alignment are part of the pattern
 - [ ] Do not force `h-control-*` onto labeled form fields; reserve `control-*` for comparable action controls like Button/IconButton/CTA Link
 - [ ] Apply `touch-target-min` only when the context requires a larger touch surface than the visual control itself
-- [ ] Focus ring softer than button: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` — 12%, not 40%
+- [ ] Field wrapper uses the same `focus-ring` utility when it contains a `:focus-visible` input/control
 - [ ] Error state changes border + shadow only — NOT input text color
 - [ ] Info state changes border + shadow only, using semantic blue tokens instead of neutral helper styling
 - [ ] Info helper text/icon use semantic info color (`text-info-light` / `dark:text-info`) instead of muted secondary text
@@ -140,7 +140,7 @@ For every interactive component, check ALL of the following sections.
 **Interactive Cards/Links:**
 - [ ] Cards with `href`: wrapped in `<a>` or `<Link>` — `text-decoration: none; color: inherit` on wrapper
 - [ ] `aria-label` on cards without explicit visible label
-- [ ] Focus ring on `<a>` wrapper: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`, `outline: none`
+- [ ] Focus ring on `<a>` wrapper: `focus-visible:focus-ring`, independent from any decorative glow
 - [ ] `transform: translateY(-6px)` on hover respects `@media (prefers-reduced-motion: reduce)`
 - [ ] All content children inside card have `position: relative; z-index: 1` to appear above `::before` overlay
 
@@ -167,7 +167,7 @@ For every interactive component, check ALL of the following sections.
 
 When reporting issues, classify every finding with:
 
-- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, missing required touch target in a touch-first context, or `outline: none` without alternative
+- **CRITICAL** — Accessibility failure: missing focus ring, insufficient contrast, no disabled state, missing required touch target in a touch-first context, or `outline: none` without `focus-visible:focus-ring`/equivalent
 - **MAJOR** — Compositional rule violation: blur+gradient on same element, wrong glow layer count, flat border where gradient required, `border-image` used, `transition: all` used, layout property animated
 - **MINOR** — Inconsistency with spec: wrong duration (e.g. 300ms instead of 250ms for button), missing transition property (e.g. `border-color` absent on secondary), hover tint value off, or undocumented deviation from the shared control sizing scale
 - **SUGGESTION** — Enhancement opportunity: adding `will-change` to entrance animations, using token variable instead of raw value
@@ -189,10 +189,10 @@ Rule: [Which compositional rule or section this violates]
 Example:
 ```
 [CRITICAL] Button.Primary — :focus-visible
-Problem: Uses `outline: 3px solid rgba(255,0,54,0.4)` — outline doesn't follow border-radius
-Expected: box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40) merged with existing glow layers
-Found: outline: 3px solid rgba(255,0,54,0.4); (no box-shadow on focus)
-Rule: COMPONENTS.md Rule 7 — Focus ring uses box-shadow, never outline
+Problem: Uses component-local `focus-visible:shadow-*`, so focus visibility can drift from the shared contract
+Expected: `focus-visible:focus-ring` applying `outline: 2px solid var(--color-primary)` and `outline-offset: 2px`
+Found: `focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark`
+Rule: COMPONENTS.md Rule 7 — Focus rings use the native `focus-ring` utility
 ```
 
 ---

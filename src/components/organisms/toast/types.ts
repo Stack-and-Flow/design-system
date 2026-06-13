@@ -21,7 +21,7 @@ export const toastVariants = cva(
   [
     'pointer-events-auto w-full transform-gpu overflow-hidden rounded-lg border shadow-modal will-change-transform dark:shadow-modal-dark',
     'transition-[opacity,transform,top,bottom,left,right,box-shadow,background-color,border-color] duration-200 ease-out motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:shadow-toast-focus-light dark:focus-visible:shadow-toast-focus-dark',
+    'focus-visible:focus-ring',
     'bg-surface-light text-text-light dark:bg-surface-dark dark:text-text-dark'
   ],
   {

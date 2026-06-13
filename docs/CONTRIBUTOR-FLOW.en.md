@@ -338,7 +338,7 @@ With the files complete, the agent performs a visual review before declaring the
 It must verify:
 
 - base, hover, focus, active/pressed, disabled;
-- focus-visible with `box-shadow`, never naked `outline`;
+- focus-visible with the shared `focus-ring` utility (`outline: 2px solid var(--color-primary)`, `2px` offset), never `outline: none` without restoring it;
 - visual height aligned with the semantic scale that applies (`control` for actions, `form-field` for fields), and `touch-target-min` (`44px`) only for touch-first surfaces or hit-area wrappers; documented compact/dense variants may be smaller if they keep keyboard accessibility and focus;
 - contrast in light/dark;
 - explicit transitions, never `transition-all`;

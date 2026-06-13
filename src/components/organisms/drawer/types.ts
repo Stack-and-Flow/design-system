@@ -97,7 +97,7 @@ export const drawerCloseVariants = cva(
     'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm font-semibold',
     'text-text-light dark:text-text-dark',
     'hover:bg-black-tint-low dark:hover:bg-white-tint-faint',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'focus-visible:focus-ring',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40',
     'transition-[background,box-shadow,color] duration-150 ease-out'
   ].join(' ')

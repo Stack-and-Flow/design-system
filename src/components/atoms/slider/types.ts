@@ -56,7 +56,7 @@ export const sliderRangeVariants = cva('absolute h-full', {
 });
 
 export const sliderThumbVariants = cva(
-  'group flex size-11 items-center justify-center transition-transform duration-150 ease-out active:scale-95 focus-visible:outline-none motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed',
+  'group flex size-11 items-center justify-center transition-transform duration-150 ease-out active:scale-95 focus-visible:focus-ring motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed',
   {
     variants: {
       rounded: {
@@ -72,7 +72,7 @@ export const sliderThumbVariants = cva(
 );
 
 export const sliderThumbVisualVariants = cva(
-  'pointer-events-none block border bg-background-light transition-[background-color,border-color,box-shadow] duration-150 ease-out group-focus-visible:shadow-glow-focus-light motion-reduce:transition-none dark:bg-surface-dark dark:group-focus-visible:shadow-glow-focus-dark',
+  'pointer-events-none block border bg-background-light transition-[background-color,border-color,box-shadow] duration-150 ease-out motion-reduce:transition-none dark:bg-surface-dark',
   {
     variants: {
       size: { sm: 'size-3', md: 'size-4', lg: 'size-5' },

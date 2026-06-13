@@ -754,6 +754,7 @@ export const useTableClasses = ({
     () =>
       cn(
         tableElementVariants({ fullWidth, layout }),
+        'focus-visible:focus-ring',
         size === 'sm' && 'text-sm',
         size === 'md' && 'text-base',
         size === 'lg' && 'text-lg',
@@ -776,11 +777,8 @@ export const useTableClasses = ({
           align: column?.align ?? 'start',
           allowsSorting: Boolean(column?.allowsSorting || column?.sortable)
         }),
-        'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
-        focusedCell &&
-          focusedCell.row === -1 &&
-          focusedCell.col === columnIndex &&
-          'shadow-glow-focus-light dark:shadow-glow-focus-dark',
+        'focus-visible:focus-ring',
+        focusedCell && focusedCell.row === -1 && focusedCell.col === columnIndex && 'focus-ring',
         classNames?.th
       ),
     [classNames?.th, focusedCell, size]
@@ -795,6 +793,7 @@ export const useTableClasses = ({
           isSelected,
           isStriped: Boolean(isStriped || variant === 'striped')
         }),
+        isInteractive && 'focus-visible:focus-ring',
         classNames?.tr
       ),
     [classNames?.tr, isStriped, variant]
@@ -804,10 +803,7 @@ export const useTableClasses = ({
     ({ align, columnIndex, rowIndex }: { align?: ColumnAlign; columnIndex: number; rowIndex: number }) =>
       cn(
         tableCellVariants({ align: align ?? 'start', isCompact, size }),
-        focusedCell &&
-          focusedCell.row === rowIndex &&
-          focusedCell.col === columnIndex &&
-          'shadow-glow-focus-light dark:shadow-glow-focus-dark',
+        focusedCell && focusedCell.row === rowIndex && focusedCell.col === columnIndex && 'focus-ring',
         classNames?.td
       ),
     [classNames?.td, focusedCell, isCompact, size]

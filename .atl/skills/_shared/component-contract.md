@@ -67,7 +67,7 @@ Only Radix UI primitives are allowed as base primitives. When Radix is used:
 
 - Visual rules live in `.atl/skills/visual-review/SKILL.md`; load it for state, glow, transition, gradient-border, contrast, and focus checks.
 - Comparable action controls use the shared visual `control` scale (`24/32/40/48px`) when applicable. Labeled form fields such as `Input`/`Select` use the semantic `form-field` scale (`48/56/64px`) when label/floating-label layout affects alignment. `touch-target-min` (`44px`) is contextual guidance for touch-first surfaces or hit-area wrappers, not a universal visual height. Compact/dense variants may stay smaller only when explicitly documented, native-control based, keyboard accessible, and focus-visible.
-- Focus styling uses visible `box-shadow`; `outline: none` is valid only with an alternative focus ring.
+- Focus styling uses the shared `focus-ring` utility (`outline: 2px solid var(--color-primary)`, `outline-offset: 2px`). Use `focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring`, or an equivalent wrapper selector; never rely on decorative glow/shadow for focus visibility.
 - Motion/transforms respect `prefers-reduced-motion`.
 
 ## `index.ts` pattern

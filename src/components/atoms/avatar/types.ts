@@ -11,8 +11,8 @@ export const avatarVariants = cva(
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40',
     'data-[interactive=true]:transition-[box-shadow,transform] data-[interactive=true]:duration-200 data-[interactive=true]:ease-out',
     'data-[interactive=true]:hover:scale-110 data-[interactive=true]:active:scale-100',
-    'data-[interactive=true]:focus-visible:outline-none',
-    'data-[interactive=true]:focus-visible:shadow-glow-focus-light dark:data-[interactive=true]:focus-visible:shadow-glow-focus-dark'
+    'data-[interactive=true]:focus-visible:focus-ring',
+    ''
   ],
   {
     variants: {

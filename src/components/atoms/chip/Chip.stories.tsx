@@ -427,7 +427,7 @@ export const WithClassNamesOverrides: Story = {
   args: {
     children: 'Custom Slots',
     classNames: {
-      base: 'bg-primary text-text-dark hover:bg-primary-hover focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+      base: 'bg-primary text-text-dark hover:bg-primary-hover focus-visible:focus-ring',
       content: 'tracking-wide',
       closeButton: 'bg-white-tint-high hover:bg-white-tint-strong'
     },

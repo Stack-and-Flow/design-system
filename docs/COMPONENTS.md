@@ -39,10 +39,10 @@ El navegador no puede interpolar un `linear-gradient`. En su lugar, coloca el de
 }
 ```
 
-**Regla 3 — El glow decorativo es semántico; el glow de focus es accesibilidad.**
+**Regla 3 — El glow decorativo es semántico; el indicador de focus es accesibilidad.**
 Trata el glow o la elevación decorativos como parte del contrato del componente, no como un simple interruptor visual. Un componente puede incluir glow decorativo en reposo, en hover o no incluirlo en absoluto según la semántica de su variante. Cuando la API lo permita, expón `emphasis="default" | "flat"` para que los contextos más sobrios puedan suprimir el glow decorativo sin alterar la jerarquía, el comportamiento ni la semántica.
 
-Los anillos o glows de `focus-visible` son otra cosa: son indicadores de accesibilidad y nunca deben desactivarse mediante `emphasis`, modos sobrios ni toggles de sombra decorativa. Nunca elimines `shadow-glow-focus-*`, los anillos de focus ni el glow de accesibilidad del estado seleccionado a través de controles decorativos de la API.
+El indicador `focus-visible` es otra cosa: es una señal de accesibilidad nativa y nunca debe desactivarse mediante `emphasis`, modos sobrios ni toggles de sombra decorativa. Todos los componentes focusables deben consumir la utilidad compartida `focus-ring` con `focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring` o un selector equivalente cuando el foco vive en un hijo.
 
 **Regla 4 — `backdrop-filter` y un degradado en el mismo elemento están prohibidos.**
 Un elemento con efecto esmerilado (`backdrop-filter: blur`) no debe llevar además una capa decorativa de fondo con degradado. Ambos recursos compiten visualmente (el blur ya aporta profundidad) y pueden generar artefactos de composición en la GPU. Elige una sola opción: superficie esmerilada O superficie con degradado.
@@ -62,13 +62,19 @@ transition: all 0.25s ease;
 **Regla 6 — El hover debe aclarar el tono tanto en primary como en secondary.**
 En `:hover`, el degradado del botón primary se aclara (`#ff1a4b → #ff3366` al inicio, `#cc0030 → #e0003a` al final) y la intensidad del glow aumenta. El tinte de fondo del botón secondary sube de `rgba(255,0,54,0.06)` a `rgba(255,0,54,0.12)` y también aumenta la opacidad del borde. El hover siempre debe hacer que los elementos se perciban más elevados, nunca más oscuros ni más apagados.
 
-**Regla 7 — El anillo de focus usa `box-shadow`, nunca `outline`.**
-`outline` no respeta `border-radius`: dibuja un rectángulo alrededor de un botón tipo píldora. `box-shadow` sí sigue la forma. Usa:
+**Regla 7 — El anillo de focus usa la utilidad nativa `focus-ring`.**
+El focus visible no depende de glows decorativos ni de sombras por variante. Usa la utilidad compartida `focus-ring`, que aplica el contrato nativo:
 
-- Oscuro: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`
-- Claro: `box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.35)`
+```css
+:focus-visible {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+```
 
-Nunca uses `outline: none` sin un indicador de focus visible alternativo.
+Nunca uses `outline: none` sin reponer este indicador visible con `focus-visible:focus-ring` o con una variante equivalente para wrappers, peers, groups o `:has(:focus-visible)`.
 
 **Regla 8 — El estado disabled usa opacidad; nunca cambio de color.**
 Aplicar `opacity: 0.4` a todo el componente comunica el estado disabled. Nunca cambies el color del texto, el color del borde ni el fondo a una variante "gris": eso crea una señal semántica falsa y rompe el sistema visual. Acompáñalo siempre con `cursor: not-allowed` y `pointer-events: none`.
@@ -99,7 +105,7 @@ Cuando una card tiene un overlay de degradado `::before` en hover, todos sus hij
 | Estado | Qué cambia | Qué nunca cambia |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | **hover** | `box-shadow` se intensifica; el degradado se aclara (primary); aumenta el tinte de fondo (secondary); sube la opacidad de `border-color`; `transform: translateY(-6px)` en cards | Radio de borde; peso tipográfico; color del texto (se mantiene en `#ffffff` en primary y secondary); dimensiones del componente |
-| **focus** | `box-shadow` añade un anillo de 3px: `0 0 0 3px rgba(255,0,54,0.40)` en oscuro / `0 0 0 3px rgba(219,20,60,0.35)` en claro, combinado con la sombra existente | Degradado; tinte de fondo; `border-color`; dimensiones |
+| **focus** | `focus-ring` aplica `outline: 2px solid var(--color-primary)` con `outline-offset: 2px` | Degradado; glow/sombra decorativa; tinte de fondo; `border-color`; dimensiones |
 | **active** | El degradado se oscurece (`#ff1a4b → #cc002b` en primary); la escala se comprime ligeramente (`transform: scale(0.98)`); el glow se contrae | Radio de borde; color del texto; peso tipográfico |
 | **disabled** | `opacity: 0.4`; `cursor: not-allowed`; `pointer-events: none` | Todos los colores se mantienen idénticos al estado base, sin sustitución por grises |
 
@@ -159,14 +165,11 @@ box-shadow:
 **Focus (oscuro):**
 
 ```css
-/* Merged with base box-shadow — add the focus ring as the outermost layer */
-box-shadow:
-  0 0 0 3px rgba(255, 0, 54, 0.4),
-  0 0 0 1.5px rgba(255, 60, 90, 0.5),
-  0 0 16px 4px rgba(255, 0, 54, 0.45),
-  0 0 40px 6px rgba(255, 0, 54, 0.18),
-  inset 0 1px 0 rgba(255, 255, 255, 0.15);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
+/* Existing decorative box-shadow remains unchanged. */
 ```
 
 **Active (oscuro):**
@@ -241,12 +244,11 @@ box-shadow:
 **Focus (oscuro):**
 
 ```css
-box-shadow:
-  0 0 0 3px rgba(255, 0, 54, 0.4),
-  0 0 8px 2px rgba(255, 0, 54, 0.15),
-  0 0 24px 4px rgba(255, 0, 54, 0.07),
-  inset 0 0 10px rgba(255, 0, 54, 0.04);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
+/* Existing decorative box-shadow remains unchanged. */
 ```
 
 **Active (oscuro):**
@@ -311,8 +313,10 @@ box-shadow: 0 0 8px 2px rgba(255, 0, 54, 0.15);
 **Focus:**
 
 ```css
-box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 **Nota sobre la variante inline `releaseLink`**: sigue el mismo patrón, pero con un padding más pequeño (`0.4rem 1rem`) y se usa dentro de cards:
@@ -373,8 +377,10 @@ border-color: #172230; /* slightly brighter than rest */
 
 ```css
 border-color: rgba(255, 0, 54, 0.5);
-box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 **Disabled:**
@@ -397,7 +403,10 @@ color: #0a0a0a;
 
 ```css
 border-color: rgba(219, 20, 60, 0.5);
-box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.15);
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 ---
@@ -1145,9 +1154,9 @@ background: linear-gradient(
 ### Botones
 
 - [ ] Altura visual alineada con la escala `control` (`h-control-xs|sm|md|lg`) según el size prop
-- [ ] Anillo de enfoque: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` oscuro / `0 0 0 3px rgba(219, 20, 60, 0.35)` claro
-- [ ] Anillo de enfoque fusionado con `box-shadow` existente; nunca lo reemplaza
-- [ ] Anillo de enfoque nunca oculto: no `outline: none` sin alternativa
+- [ ] Anillo de enfoque: utilidad compartida `focus-ring` con `outline: 2px solid var(--color-primary)` y `outline-offset: 2px`
+- [ ] El foco visible no depende de `box-shadow`, glow decorativo ni variante visual
+- [ ] Anillo de enfoque nunca oculto: no `outline: none` sin reponer `focus-visible:focus-ring` o equivalente
 - [ ] Deshabilitado: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none` — sin cambio de color
 - [ ] Primary: texto `#ffffff` blanco sobre degradado rojo; el contraste pasa en ambos modos
 - [ ] Secondary en oscuro: `color: #ffffff` sobre `rgba(255,0,54,0.06)` — el contexto de fondo ya es oscuro y el borde comunica la señal visual
@@ -1163,14 +1172,14 @@ background: linear-gradient(
 - [ ] Estado Info: cambio de borde + sombra con `--color-info-light` en claro y `--color-info` en oscuro; no tratarlo como helper neutral
 - [ ] Mensaje de error: `color: #ff0036` en oscuro / `#db143c` en claro; verifica el contraste sobre la superficie
 - [ ] Etiquetas siempre visibles; nunca inputs que dependan solo del placeholder
-- [ ] Anillo de enfoque: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` (más suave que el botón: 12%, no 40%)
+- [ ] Anillo de enfoque: el wrapper del campo usa la misma utilidad `focus-ring` cuando contiene un hijo `:focus-visible`
 - [ ] Deshabilitado: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none`
 
 ### Tarjetas/enlaces interactivos
 
 - [ ] Cards con `href` envueltas en `<a>` o `<Link>`: `text-decoration: none; color: inherit` en el contenedor, mientras que el texto real del CTA conserva el color
 - [ ] `aria-label` en tarjetas sin etiqueta visible explícita que describa el destino
-- [ ] Anillo de focus en el contenedor `<a>`: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`, `outline: none`
+- [ ] Anillo de focus en el contenedor `<a>`: `focus-visible:focus-ring`, independiente de cualquier glow decorativo
 - [ ] `transform: translateY(-6px)` en hover: respeta `@media (prefers-reduced-motion: reduce)` y pasa a `transform: none; transition: none`
 - [ ] `FeatureCard` usa `aria-label={title}` en el elemento `<article>` ✅
 
@@ -1337,27 +1346,25 @@ Un borde plano `#ff0036` con opacidad total es duro y rompe la suavidad del sist
 
 ---
 
-### ❌ `outline` para anillos de enfoque
+### ❌ Glows o sombras locales como único indicador de focus
 
 ```css
-/* ❌ Wrong — outline doesn't follow border-radius */
-.button:focus {
-  outline: 3px solid rgba(255, 0, 54, 0.4);
-}
-
-/* ✅ Correct — box-shadow follows border-radius perfectly */
+/* ❌ Wrong — component-local shadow focus drifts and can disappear with decorative glow */
 .button:focus-visible {
   outline: none;
-  box-shadow:
-    0 0 0 3px rgba(255, 0, 54, 0.4),
-    /* focus ring */ 0 0 0 1.5px rgba(255, 60, 90, 0.5),
-    /* existing glow layer 1 */ 0 0 16px 4px rgba(255, 0, 54, 0.45),
-    /* existing glow layer 2 */ 0 0 40px 6px rgba(255, 0, 54, 0.18),
-    /* existing glow layer 3 */ inset 0 1px 0 rgba(255, 255, 255, 0.15); /* existing glow layer 4 */
+  box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
+}
+
+/* ✅ Correct — one shared native focus contract */
+.button:focus-visible {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
 }
 ```
 
-En los botones tipo pastilla, `outline` se representa como un rectángulo con un espacio opcional, lo que destruye la forma. `box-shadow: 0 0 0 3px` se extiende como un anillo sólido que sigue a `border-radius: 9999px`.
+El indicador de focus no debe depender de glows decorativos, sombras por variante ni reglas locales difíciles de auditar. En componentes usa la utilidad compartida `focus-ring` (`focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring` o equivalente para wrappers).
 
 ---
 
@@ -1398,8 +1405,10 @@ Pasar el componente a gris no comunica por qué está deshabilitado y rompe la c
   color: #ffffff;
 }
 .navLink:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
   color: #ffffff;
 }
 .navLink:active {

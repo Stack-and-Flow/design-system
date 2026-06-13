@@ -307,7 +307,7 @@ border: 1px solid #202C3C;
 border-radius: 8px;
 color: #f9f9f9;
 ```
-Focus: brighter border + `box-shadow: 0 0 0 3px rgba(255,0,54,0.12)`.
+Focus: brighter border + shared `focus-ring` outline (`2px solid var(--color-primary)`, offset `2px`).
 Placeholder: `#6a6b6c`.
 
 ### Code blocks
@@ -651,8 +651,9 @@ All text values on their respective backgrounds meet at least WCAG AA (4.5:1). P
 - Nav links and menu items should still provide a comfortable area in touch-first contexts, even when their visual height does not necessarily use the `control` scale.
 
 ### Focus visible
-- All interactive elements use `focus-visible` with `box-shadow: 0 0 0 3px rgba(255,0,54,0.4)` in dark mode and `box-shadow: 0 0 0 3px rgba(219,20,60,0.35)` in light mode
-- Never `outline: none` without a visible alternative
+- All interactive elements consume the shared `focus-ring` utility on `focus-visible`.
+- Contract: `outline-style: solid`, `outline-color: var(--color-primary)`, `outline-width: 2px`, `outline-offset: 2px`.
+- Never use `outline: none` without restoring `focus-visible:focus-ring` or an equivalent variant for wrappers, peers, groups, or `:has(:focus-visible)`.
 
 ### Motion
 - Transitions: maximum `560ms`. Respect `prefers-reduced-motion`:

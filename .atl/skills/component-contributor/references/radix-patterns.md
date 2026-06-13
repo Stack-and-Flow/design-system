@@ -98,7 +98,7 @@ Key decisions:
     'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm',
     'transition-[background,color] duration-150 ease-[ease]',
     'hover:bg-white-tint-mid',
-    'focus-visible:outline-none focus-visible:shadow-(--glow-focus-dark)'
+    'focus-visible:focus-ring'
   )}
   onClick={element.onClick}
 >
@@ -106,7 +106,7 @@ Key decisions:
 </DropdownMenuPrimitive.Item>
 ```
 
-- Never use `outline` for focus — always `box-shadow` with the `--glow-focus-dark` token
+- Use the shared `focus-ring` utility for focus-visible; do not rely on component-local shadow/glow focus
 - `aria-disabled` mirrors `disabled` — required for screen readers
 - `cursor-default` not `cursor-pointer` — menu items behave like native menu, not links
 
@@ -213,7 +213,7 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 - ALWAYS use `Portal` for floating content — menus, dialogs, tooltips, popovers
 - ALWAYS use `asChild={true}` on `Trigger` to avoid extra DOM nodes
 - NEVER re-implement keyboard navigation — Radix handles it
-- NEVER use `outline` for focus — use `box-shadow` with `--glow-focus-dark`
+- NEVER rely on component-local focus shadow/glow — use `focus-visible:focus-ring` or the peer/group/wrapper equivalent
 - ALWAYS apply Radix `data-[state]` attributes for animations — never manage open/close state in CSS manually
 - Logic (open state, filtering, computed values) goes in the hook — NOT in the component file
 
@@ -224,6 +224,6 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 - [ ] Radix imported as namespace alias (`* as XxxPrimitive`)
 - [ ] Floating content wrapped in `Portal`
 - [ ] Trigger uses `asChild={true}`
-- [ ] Focus ring uses reusable glow classes such as `focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark` — no outline
+- [ ] Focus ring uses the shared `focus-ring` utility (`focus-visible:focus-ring`, peer/group variant, or wrapper equivalent)
 - [ ] Animations use `data-[state=open/closed]` attributes
 - [ ] All open/close logic lives in the hook

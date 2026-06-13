@@ -42,8 +42,8 @@ export const selectTrigger = cva(
     'relative flex w-full max-w-full justify-between overflow-hidden border py-2 cursor-pointer rounded-md',
     'text-text-light dark:text-text-dark',
     'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-    'focus-within:outline-none focus-within:!border-brand-light/50 focus-within:shadow-glow-input-focus-light',
-    'dark:focus-within:!border-brand-dark/50 dark:focus-within:shadow-glow-input-focus'
+    '[&:has(:focus-visible)]:focus-ring focus-within:!border-brand-light/50',
+    'dark:focus-within:!border-brand-dark/50'
   ],
   {
     variants: {
@@ -260,7 +260,7 @@ export const selectClearButton = cva([
   'border-none bg-transparent cursor-pointer',
   'text-text-secondary-light dark:text-text-secondary-dark',
   'hover:bg-white-tint-mid dark:hover:bg-white-tint-mid',
-  'focus-visible:outline-none focus-visible:shadow-glow-input-focus-light dark:focus-visible:shadow-glow-input-focus'
+  'focus-visible:focus-ring'
 ]);
 
 /** @deprecated Use hintMessageVariants with hint pattern instead. */

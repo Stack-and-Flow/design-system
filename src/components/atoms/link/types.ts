@@ -5,7 +5,7 @@ import type { DynamicIconName } from '@/types';
 export const linkVariants = cva(
   [
     'link relative w-auto cursor-pointer font-medium leading-normal',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'focus-visible:focus-ring',
     'data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-40'
   ],
   {

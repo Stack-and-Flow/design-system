@@ -410,7 +410,7 @@ export const useDrawerTrigger = ({
       'data-disabled': disabled ? 'true' : undefined,
       className: cn(
         'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm font-semibold',
-        'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+        'focus-visible:focus-ring',
         'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40',
         className
       ),

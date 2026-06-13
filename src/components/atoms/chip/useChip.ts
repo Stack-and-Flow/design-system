@@ -118,8 +118,8 @@ export function useChip(props: ChipProps) {
       className,
       classNames?.base,
       interactive ? 'cursor-pointer' : 'cursor-auto',
-      splitActions && 'focus-within:shadow-glow-focus-light dark:focus-within:shadow-glow-focus-dark',
-      isSelected && `${selectedClassByColor[normalizedColor]} shadow-glow-focus-light dark:shadow-glow-focus-dark`,
+      splitActions && '[&:has(:focus-visible)]:focus-ring',
+      isSelected && selectedClassByColor[normalizedColor],
       iconBySize
     ),
     content: cn('truncate', classNames?.content),
@@ -132,7 +132,7 @@ export function useChip(props: ChipProps) {
 
     actionButton: cn(
       'inline-flex flex-1 items-center justify-center gap-1 rounded-[inherit] border-0 bg-transparent p-0 m-0 text-inherit',
-      'focus-visible:outline-none transition-transform duration-200 ease-in-out motion-safe:active:translate-y-px motion-safe:active:scale-95',
+      'focus-visible:focus-ring transition-transform duration-200 ease-in-out motion-safe:active:translate-y-px motion-safe:active:scale-95',
       'disabled:cursor-not-allowed disabled:opacity-40',
       classNames?.actionButton
     ),
@@ -146,7 +146,7 @@ export function useChip(props: ChipProps) {
       'text-current/70 hover:text-current',
       closeButtonHoverByColor[normalizedColor],
       'hover:ring-0',
-      'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+      'focus-visible:focus-ring',
       'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40',
       classNames?.closeButton
     )
