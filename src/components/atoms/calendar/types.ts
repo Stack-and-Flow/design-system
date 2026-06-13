@@ -65,7 +65,7 @@ export const calendarIconButtonVariants = cva(
   [
     'inline-flex items-center justify-center rounded-full',
     'transition-[background,border-color,box-shadow,color,opacity] duration-150 ease-out',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+    'focus-visible:focus-ring'
   ],
   {
     variants: {
@@ -106,7 +106,7 @@ export const calendarTriggerButtonVariants = cva(
   [
     'inline-flex items-center justify-center rounded-md font-semibold',
     'transition-[background,border-color,box-shadow,color,opacity] duration-150 ease-out',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+    'focus-visible:focus-ring'
   ],
   {
     variants: {
@@ -215,7 +215,7 @@ export const calendarDayButtonVariants = cva(
   [
     'inline-flex items-center justify-center font-medium select-none',
     'transition-[background,border-color,box-shadow,color,opacity] duration-150 ease-out',
-    'focus-visible:outline-none'
+    'focus-visible:focus-ring'
   ],
   {
     variants: {
@@ -241,7 +241,7 @@ export const calendarDayButtonVariants = cva(
         false: 'text-text-tertiary-light dark:text-text-tertiary-dark'
       },
       interactive: {
-        true: ['cursor-pointer', 'focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'],
+        true: ['cursor-pointer', 'focus-visible:focus-ring'],
         false: 'cursor-default'
       },
       disabled: {
@@ -415,7 +415,7 @@ export const calendarPickerOptionVariants = cva(
   [
     'inline-flex items-center justify-center rounded-md font-medium',
     'transition-[background,border-color,box-shadow,color,opacity] duration-150 ease-out',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+    'focus-visible:focus-ring'
   ],
   {
     variants: {

@@ -13,7 +13,7 @@ const breadcrumbTextSizeClass = {
 } as const;
 
 const breadcrumbItemBaseClass =
-  'inline-flex min-w-0 max-w-full items-center gap-1 border-b border-transparent font-medium text-text-light no-underline transition-[color,border-color,box-shadow] duration-200 ease-[ease] hover:border-brand-light-dark/80 hover:text-brand-light-dark hover:no-underline focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:text-text-dark dark:hover:border-brand-dark-light dark:hover:text-brand-dark-light dark:focus-visible:shadow-glow-focus-dark';
+  'inline-flex min-w-0 max-w-full items-center gap-1 border-b border-transparent font-medium text-text-light no-underline transition-[color,border-color,box-shadow] duration-200 ease-[ease] hover:border-brand-light-dark/80 hover:text-brand-light-dark hover:no-underline focus-visible:focus-ring dark:text-text-dark dark:hover:border-brand-dark-light dark:hover:text-brand-dark-light';
 
 const Breadcrumb: FC<BreadcrumbProps> = ({
   'aria-label': ariaLabel,
@@ -85,7 +85,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
       <>
         <button
           type='button'
-          className='inline-flex h-7 min-w-7 items-center justify-center gap-1 rounded-sm border border-transparent px-1 text-text-light transition-[background-color,border-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:text-text-dark dark:hover:border-white-tint-high dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light dark:focus-visible:shadow-glow-focus-dark'
+          className='inline-flex h-7 min-w-7 items-center justify-center gap-1 rounded-sm border border-transparent px-1 text-text-light transition-[background-color,border-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark focus-visible:focus-ring dark:text-text-dark dark:hover:border-white-tint-high dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light'
           aria-label={`Show ${hiddenItems.length} hidden breadcrumb items`}
           aria-expanded={isCollapsedMenuOpen}
           aria-controls={collapsedMenuId}
@@ -102,14 +102,14 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
           <div
             id={collapsedMenuId}
             role='list'
-            className='absolute left-0 top-full z-20 mt-2 min-w-40 rounded-md border border-border-light bg-background-light p-1 shadow-[var(--shadow-dropdown-light)] dark:border-border-dark dark:bg-surface-dark dark:shadow-[var(--shadow-dropdown)]'
+            className='absolute left-0 top-full z-20 mt-2 min-w-40 rounded-md border border-border-light bg-background-light p-1 shadow-dropdown-light dark:border-border-dark dark:bg-surface-dark dark:shadow-dropdown'
           >
             {hiddenItems.map((item, itemPosition) => {
               const itemIndex = hiddenItemIndexes[itemPosition];
               const itemKey = `${item.href ?? item.title}-${itemIndex}`;
               const isHiddenItemInteractive = !isNavigationDisabled && !item.disabled && Boolean(item.href);
               const hiddenItemClassName =
-                'flex w-full min-w-0 items-center gap-2 rounded-sm px-3 py-2 font-medium text-text-light no-underline transition-[background-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark hover:no-underline focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:text-text-dark dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light dark:focus-visible:shadow-glow-focus-dark';
+                'flex w-full min-w-0 items-center gap-2 rounded-sm px-3 py-2 font-medium text-text-light no-underline transition-[background-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark hover:no-underline focus-visible:focus-ring dark:text-text-dark dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light';
 
               return (
                 <div key={itemKey} role='listitem'>

@@ -246,7 +246,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
           {isSortable ? (
             <button
               type='button'
-              className='inline-flex min-h-11 items-center gap-2 text-left text-inherit focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+              className='inline-flex min-h-11 items-center gap-2 text-left text-inherit focus-visible:focus-ring'
               aria-label={columnLabel}
               onClick={() => tableState.handleSort(column.key)}
             >
@@ -263,7 +263,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
               value={tableState.filterValues[String(column.key)] ?? ''}
               onChange={(event) => tableState.setFilter(String(column.key), event.target.value)}
               onClick={(event) => event.stopPropagation()}
-              className='min-h-11 w-24 rounded-md border border-border-light bg-background-light px-2 py-1 text-sm text-text-light placeholder:text-text-tertiary-light focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:border-border-dark dark:bg-surface-raised-dark dark:text-text-dark dark:placeholder:text-text-tertiary-dark dark:focus-visible:shadow-glow-focus-dark'
+              className='min-h-11 w-24 rounded-md border border-border-light bg-background-light px-2 py-1 text-sm text-text-light placeholder:text-text-tertiary-light focus-visible:focus-ring dark:border-border-dark dark:bg-surface-raised-dark dark:text-text-dark dark:placeholder:text-text-tertiary-dark'
               aria-label={`Filter by ${columnLabel}`}
             />
           )}
@@ -550,7 +550,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
             type='button'
             onClick={() => tableState.handlePageChange(tableState.currentPage - 1)}
             disabled={tableState.currentPage === 1}
-            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light-darkest transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:outline-none focus-visible:shadow-glow-focus-light disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light dark:focus-visible:shadow-glow-focus-dark'
+            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light-darkest transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:focus-ring disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light'
             aria-label='Go to previous page'
           >
             Previous
@@ -562,7 +562,7 @@ export const Table = <T extends TableRowData>(props: CompleteTableProps<T>) => {
             type='button'
             onClick={() => tableState.handlePageChange(tableState.currentPage + 1)}
             disabled={tableState.currentPage === tableState.totalPages}
-            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light-darkest transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:outline-none focus-visible:shadow-glow-focus-light disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light dark:focus-visible:shadow-glow-focus-dark'
+            className='inline-flex min-h-11 items-center rounded-md border border-red-tint-border bg-red-tint-subtle px-3 py-2 text-brand-light-darkest transition-[background-color,border-color,box-shadow,color] duration-200 ease-out hover:bg-red-tint-active hover:border-brand-light focus-visible:focus-ring disabled:cursor-not-allowed disabled:opacity-40 dark:text-text-dark dark:hover:border-brand-dark-light'
             aria-label='Go to next page'
           >
             Next

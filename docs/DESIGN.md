@@ -307,7 +307,7 @@ border: 1px solid #202C3C;
 border-radius: 8px;
 color: #f9f9f9;
 ```
-Focus: borde brightens + `box-shadow: 0 0 0 3px rgba(255,0,54,0.12)`.
+Focus: el borde se aclara + outline compartido `focus-ring` (`2px solid var(--color-primary)`, offset `2px`).
 Placeholder: `#6a6b6c`.
 
 ### Code blocks
@@ -661,8 +661,9 @@ Todos los valores de texto sobre sus respectivos fondos cumplen WCAG AA (4.5:1) 
 - Nav links y elementos de menú deben seguir ofreciendo un área cómoda en contextos touch-first, aunque su altura visual no use necesariamente la escala `control`.
 
 ### Focus visible
-- Todos los elementos interactivos tienen `focus-visible` con `box-shadow: 0 0 0 3px rgba(255,0,54,0.4)` en dark y `box-shadow: 0 0 0 3px rgba(219,20,60,0.35)` en light
-- Nunca `outline: none` sin alternativa visible
+- Todos los elementos interactivos consumen la utilidad compartida `focus-ring` en `focus-visible`.
+- Contrato: `outline-style: solid`, `outline-color: var(--color-primary)`, `outline-width: 2px`, `outline-offset: 2px`.
+- Nunca `outline: none` sin reponer `focus-visible:focus-ring` o una variante equivalente para wrappers, peers, groups o `:has(:focus-visible)`.
 
 ### Motion
 - Transiciones: máximo `560ms`. Respetar `prefers-reduced-motion`:

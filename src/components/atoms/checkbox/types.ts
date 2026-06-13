@@ -63,7 +63,7 @@ export const checkboxControl = cva(
     'transition-[background-color,border-color,box-shadow,scale,color] duration-200 ease-out',
     'peer-hover:bg-surface-raised-light dark:peer-hover:bg-surface-raised-dark',
     'peer-active:scale-[0.98]',
-    'peer-focus-visible:shadow-glow-focus-light dark:peer-focus-visible:shadow-glow-focus-dark'
+    'peer-focus-visible:focus-ring'
   ],
   {
     variants: {

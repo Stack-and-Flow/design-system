@@ -56,8 +56,7 @@ export const popoverContentVariants = cva(
 );
 
 export const popoverTriggerVariants = cva([
-  'outline-none focus-visible:outline-none',
-  'focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+  'outline-none focus-visible:focus-ring',
   'data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-40',
   'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
 ]);

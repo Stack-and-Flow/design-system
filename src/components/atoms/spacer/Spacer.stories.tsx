@@ -3,7 +3,7 @@ import { Spacer } from './Spacer';
 
 const frameClass =
   'inline-flex rounded-md border border-border-light bg-surface-light p-4 dark:border-border-dark dark:bg-surface-dark';
-const markerClass = 'rounded-sm bg-primary shadow-glow-focus-light dark:shadow-glow-focus-dark';
+const markerClass = 'rounded-sm bg-primary focus-ring';
 
 /**
  * ## Description

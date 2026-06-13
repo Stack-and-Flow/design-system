@@ -53,7 +53,7 @@ export const switchTrack = cva(
     'hover:bg-surface-raised-light dark:hover:bg-white-tint-heavy',
     'peer-checked:hover:bg-brand-light-darker! dark:peer-checked:hover:bg-brand-dark-darkest!',
     'active:scale-[0.98]',
-    'peer-focus-visible:shadow-glow-focus-light dark:peer-focus-visible:shadow-glow-focus-dark',
+    'peer-focus-visible:focus-ring',
     'peer-checked:[&>span[data-thumb=true]]:bg-white dark:peer-checked:[&>span[data-thumb=true]]:bg-white',
     'peer-checked:[&>span[data-thumb=true]>span[data-thumb-icon=true]]:text-brand-light dark:peer-checked:[&>span[data-thumb=true]>span[data-thumb-icon=true]]:text-brand-dark-dark',
     'peer-checked:[&>span[data-start-content=true]]:opacity-0 peer-checked:[&>span[data-end-content=true]]:opacity-100'

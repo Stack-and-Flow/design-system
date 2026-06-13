@@ -5,7 +5,7 @@ export const inputVariants = cva(
   [
     'relative flex max-w-full justify-between overflow-hidden border py-2',
     'cursor-text transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-    'focus-within:outline-none'
+    '[&:has(:focus-visible)]:focus-ring'
   ],
   {
     variants: {
@@ -48,7 +48,7 @@ export const inputVariants = cva(
         info: 'border-info-light shadow-glow-input-info-light hover:!border-info-light dark:border-info dark:shadow-glow-input-info dark:hover:!border-info'
       },
       focused: {
-        true: '!border-brand-light/50 shadow-glow-input-focus-light dark:!border-brand-dark/50 dark:shadow-glow-input-focus',
+        true: '!border-brand-light/50 dark:!border-brand-dark/50',
         false: ''
       },
       fullWidth: {
@@ -155,7 +155,7 @@ export const inputInlineButtonVariants = cva(
   [
     'cursor-pointer rounded-sm bg-surface-light px-1 text-text-light hover:bg-surface-raised-light',
     'dark:bg-surface-dark dark:text-text-dark dark:hover:bg-surface-raised-dark',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'focus-visible:focus-ring',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
   ],
   {

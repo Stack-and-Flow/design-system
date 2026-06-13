@@ -275,7 +275,7 @@ export const useAlert = (props: AlertProps): UseAlertReturn => {
     closeButtonClassName: cn(
       '-mt-1.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-transparent text-current/70',
       'transition-[background-color,color,box-shadow] duration-200 ease-out',
-      'hover:text-current focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+      'hover:text-current focus-visible:focus-ring',
       closeButtonHoverClassName
     ),
     titleId,

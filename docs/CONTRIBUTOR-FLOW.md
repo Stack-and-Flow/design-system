@@ -337,7 +337,7 @@ Con los archivos completos, el agente revisa visualmente antes de declarar termi
 Debe verificar:
 
 - base, hover, focus, active/pressed, disabled;
-- focus visible con `box-shadow`, nunca `outline` desnudo;
+- focus visible con la utilidad compartida `focus-ring` (`outline: 2px solid var(--color-primary)`, offset `2px`), nunca `outline: none` sin reponerla;
 - altura visual alineada con la escala semántica que aplique (`control` para acciones, `form-field` para campos), y `touch-target-min` (`44px`) solo para superficies touch-first o wrappers de hit area; las variantes compactas/densas documentadas pueden ser menores si conservan accesibilidad por teclado y focus;
 - contraste en light/dark;
 - transiciones específicas, nunca `transition-all`;

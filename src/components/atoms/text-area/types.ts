@@ -21,7 +21,7 @@ export const textAreaSurfaceVariants = cva(
   [
     'relative flex max-w-full overflow-hidden border cursor-text',
     'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-    'focus-within:outline-none'
+    '[&:has(:focus-visible)]:focus-ring'
   ],
   {
     variants: {
@@ -64,7 +64,7 @@ export const textAreaSurfaceVariants = cva(
         info: 'border-info-light shadow-glow-input-info-light hover:!border-info-light dark:border-info dark:shadow-glow-input-info dark:hover:!border-info'
       },
       focused: {
-        true: '!border-brand-light/50 shadow-glow-input-focus-light dark:!border-brand-dark/50 dark:shadow-glow-input-focus',
+        true: '!border-brand-light/50 dark:!border-brand-dark/50',
         false: ''
       },
       fullWidth: {

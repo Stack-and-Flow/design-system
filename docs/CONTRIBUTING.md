@@ -170,7 +170,7 @@ Antes de pedir revisión, verifica:
 - [ ] Se usan Conventional Commits en mensajes de commit y título del PR.
 - [ ] Los checks de seguridad pasan o los falsos positivos están documentados en el PR.
 - [ ] Estados visuales implementados: hover, focus, active/pressed, disabled.
-- [ ] Focus ring via `box-shadow` — nunca `outline` sin alternativa visible.
+- [ ] Focus visible vía utilidad compartida `focus-ring` (`outline: 2px solid var(--color-primary)`, offset `2px`) — nunca `outline: none` sin `focus-visible:focus-ring` o equivalente.
 - [ ] Disabled via `opacity: 0.4` — sin sustitución de color.
 - [ ] Sin `transition: all` — propiedades específicas enumeradas.
 - [ ] Altura visual alineada con la escala semántica que aplique (`control` para acciones, `form-field` para campos); `touch-target-min` (`44px`) reservado para superficies touch-first o wrappers de hit area. Variantes compactas/densas documentadas pueden ser menores si conservan accesibilidad por teclado/focus.

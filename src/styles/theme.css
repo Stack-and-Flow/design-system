@@ -515,12 +515,11 @@
   z-index: var(--z-toast);
 }
 
-@utility shadow-toast-focus-light {
-  box-shadow: var(--glow-focus-light), var(--shadow-dropdown-light);
-}
-
-@utility shadow-toast-focus-dark {
-  box-shadow: var(--glow-focus-dark), var(--shadow-dropdown);
+@utility focus-ring {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
 }
 
 @utility shadow-modal {
