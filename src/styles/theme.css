@@ -522,14 +522,6 @@
   outline-offset: 2px;
 }
 
-@utility shadow-toast-focus-light {
-  box-shadow: var(--shadow-dropdown-light);
-}
-
-@utility shadow-toast-focus-dark {
-  box-shadow: var(--shadow-dropdown);
-}
-
 @utility shadow-modal {
   box-shadow: var(--shadow-dropdown-light);
 }

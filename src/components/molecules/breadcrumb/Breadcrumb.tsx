@@ -102,7 +102,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
           <div
             id={collapsedMenuId}
             role='list'
-            className='absolute left-0 top-full z-20 mt-2 min-w-40 rounded-md border border-border-light bg-background-light p-1 shadow-dropdown-light dark:border-border-dark dark:bg-surface-dark dark:shadow-dropdown-dark'
+            className='absolute left-0 top-full z-20 mt-2 min-w-40 rounded-md border border-border-light bg-background-light p-1 shadow-dropdown-light dark:border-border-dark dark:bg-surface-dark dark:shadow-dropdown'
           >
             {hiddenItems.map((item, itemPosition) => {
               const itemIndex = hiddenItemIndexes[itemPosition];

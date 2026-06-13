@@ -39,7 +39,6 @@ export const dropdownItemVariants = cva(
     'relative flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-sm px-3 py-2 text-sm',
     'transition-[background,color,box-shadow] duration-150 ease-out',
     'focus-visible:focus-ring',
-    '',
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40'
   ],
   {
@@ -73,8 +72,7 @@ export const dropdownSubTriggerVariants = cva([
   'dark:hover:bg-white-tint-mid dark:hover:!text-text-dark',
   'data-[highlighted]:bg-surface-raised-light data-[highlighted]:!text-text-light',
   'dark:data-[highlighted]:bg-white-tint-mid dark:data-[highlighted]:!text-text-dark',
-  'focus-visible:focus-ring',
-  ''
+  'focus-visible:focus-ring'
 ]);
 
 export const dropdownSubContentVariants = cva([
@@ -97,7 +95,6 @@ export const dropdownLoadingVariants = cva(
 export const dropdownTriggerVariants = cva([
   'inline-flex min-h-11 min-w-11 items-center justify-center rounded-md',
   'focus-visible:focus-ring',
-  '',
   'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
 ]);
 

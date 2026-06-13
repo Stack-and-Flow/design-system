@@ -44,13 +44,6 @@ opencode.json
 # Local Pi runtime state
 .pi/
 .pi-lens/
-.atl/*
-!.atl/AGENTS.md
-!.atl/skill-registry.md
-!.atl/skills/
-!.atl/skills/**
-.atl/.skill-registry.cache.json
 
 # Local SDD/OpenSpec artifacts
 openspec/
-.atl/
