@@ -13,7 +13,7 @@ const breadcrumbTextSizeClass = {
 } as const;
 
 const breadcrumbItemBaseClass =
-  'inline-flex min-w-0 max-w-full items-center gap-1 border-b border-transparent font-medium text-text-light no-underline transition-[color,border-color,box-shadow] duration-200 ease-[ease] hover:border-brand-light-dark/80 hover:text-brand-light-dark hover:no-underline focus-visible:focus-ring dark:text-text-dark dark:hover:border-brand-dark-light dark:hover:text-brand-dark-light ';
+  'inline-flex min-w-0 max-w-full items-center gap-1 border-b border-transparent font-medium text-text-light no-underline transition-[color,border-color,box-shadow] duration-200 ease-[ease] hover:border-brand-light-dark/80 hover:text-brand-light-dark hover:no-underline focus-visible:focus-ring dark:text-text-dark dark:hover:border-brand-dark-light dark:hover:text-brand-dark-light';
 
 const Breadcrumb: FC<BreadcrumbProps> = ({
   'aria-label': ariaLabel,
@@ -85,7 +85,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
       <>
         <button
           type='button'
-          className='inline-flex h-7 min-w-7 items-center justify-center gap-1 rounded-sm border border-transparent px-1 text-text-light transition-[background-color,border-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark focus-visible:focus-ring dark:text-text-dark dark:hover:border-white-tint-high dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light '
+          className='inline-flex h-7 min-w-7 items-center justify-center gap-1 rounded-sm border border-transparent px-1 text-text-light transition-[background-color,border-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark focus-visible:focus-ring dark:text-text-dark dark:hover:border-white-tint-high dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light'
           aria-label={`Show ${hiddenItems.length} hidden breadcrumb items`}
           aria-expanded={isCollapsedMenuOpen}
           aria-controls={collapsedMenuId}
@@ -109,7 +109,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
               const itemKey = `${item.href ?? item.title}-${itemIndex}`;
               const isHiddenItemInteractive = !isNavigationDisabled && !item.disabled && Boolean(item.href);
               const hiddenItemClassName =
-                'flex w-full min-w-0 items-center gap-2 rounded-sm px-3 py-2 font-medium text-text-light no-underline transition-[background-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark hover:no-underline focus-visible:focus-ring dark:text-text-dark dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light ';
+                'flex w-full min-w-0 items-center gap-2 rounded-sm px-3 py-2 font-medium text-text-light no-underline transition-[background-color,color,box-shadow] duration-200 ease-[ease] hover:bg-black-tint-low hover:text-brand-light-dark hover:no-underline focus-visible:focus-ring dark:text-text-dark dark:hover:bg-white-tint-faint dark:hover:text-brand-dark-light';
 
               return (
                 <div key={itemKey} role='listitem'>
