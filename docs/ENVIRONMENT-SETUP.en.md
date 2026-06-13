@@ -94,7 +94,7 @@ See the official opencode documentation for up-to-date tutorials and walkthrough
 
 ### How gentle-ai works in this project
 
-You do not need manual setup. When you open the project directory in opencode, `.atl/AGENTS.md` is injected automatically as base context for all agents. That means the agent already knows:
+You do not need manual setup. When you open the project directory in opencode, `AGENTS.md` is injected automatically as base context for all agents. That means the agent already knows:
 
 - the 6-file architecture and the rules for each file;
 - which design tokens are available and how to use them;
@@ -263,4 +263,4 @@ Try clearing the cache: `pnpm run storybook-clean-cache && pnpm run storybook`.
 Run `pnpm exec lefthook install` manually.
 
 **opencode does not load project context**
-Make sure you open the project root directory (`design-system/`), not a subfolder. `.atl/AGENTS.md` must exist at the root of the workspace you opened.
+Make sure you open the project root directory (`design-system/`), not a subfolder. `AGENTS.md` must exist at the root of the workspace you opened.
