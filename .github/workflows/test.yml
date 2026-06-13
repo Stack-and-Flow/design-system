@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify .atl gitignore policy
+        run: node scripts/verify-atl-gitignore.mjs
+
       - name: Verify prop default docs
         run: node scripts/verify-prop-default-docs.mjs
 
