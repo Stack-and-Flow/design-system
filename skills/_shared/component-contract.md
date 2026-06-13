@@ -46,8 +46,8 @@ No extra component files unless a spec explicitly approves a composition split.
 
 ## Storybook and tests
 
-- Story rules live in `.atl/skills/component-contributor/references/stories.md`; load it before writing or reviewing stories.
-- Test rules live in `.atl/skills/component-contributor/references/testing.md`; load it before writing or reviewing tests.
+- Story rules live in `skills/component-contributor/references/stories.md`; load it before writing or reviewing stories.
+- Test rules live in `skills/component-contributor/references/testing.md`; load it before writing or reviewing tests.
 - Tests cover hook return values, DOM rendering, ARIA, interactions, disabled states, and keyboard behavior when applicable.
 - Mocks are declared before component imports.
 - Do not test internal CSS class strings.
@@ -61,11 +61,11 @@ Only Radix UI primitives are allowed as base primitives. When Radix is used:
 - Use `Portal` for floating content.
 - Use `asChild={true}` on triggers when composing with design-system components.
 - Prefer `data-[state=open/closed]` attributes for animations over manual state classes.
-- Load `.atl/skills/component-contributor/references/radix-patterns.md` before implementing or auditing Radix-based components.
+- Load `skills/component-contributor/references/radix-patterns.md` before implementing or auditing Radix-based components.
 
 ## Visual and accessibility gates
 
-- Visual rules live in `.atl/skills/visual-review/SKILL.md`; load it for state, glow, transition, gradient-border, contrast, and focus checks.
+- Visual rules live in `skills/visual-review/SKILL.md`; load it for state, glow, transition, gradient-border, contrast, and focus checks.
 - Comparable action controls use the shared visual `control` scale (`24/32/40/48px`) when applicable. Labeled form fields such as `Input`/`Select` use the semantic `form-field` scale (`48/56/64px`) when label/floating-label layout affects alignment. `touch-target-min` (`44px`) is contextual guidance for touch-first surfaces or hit-area wrappers, not a universal visual height. Compact/dense variants may stay smaller only when explicitly documented, native-control based, keyboard accessible, and focus-visible.
 - Focus styling uses the shared `focus-ring` utility (`outline: 2px solid var(--color-primary)`, `outline-offset: 2px`). Use `focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring`, or an equivalent wrapper selector; never rely on decorative glow/shadow for focus visibility.
 - Motion/transforms respect `prefers-reduced-motion`.

@@ -17,10 +17,10 @@ Package verification checks in this skill are conditional. Apply them only when 
 
 For component-quality details, load:
 
-- `.atl/skills/_shared/component-contract.md`
-- `.atl/skills/components-auditor/SKILL.md`
-- `.atl/skills/component-contributor/references/stories.md`
-- `.atl/skills/visual-review/SKILL.md`
+- `skills/_shared/component-contract.md`
+- `skills/components-auditor/SKILL.md`
+- `skills/component-contributor/references/stories.md`
+- `skills/visual-review/SKILL.md`
 
 ## When Delegated by SDD Orchestrator
 

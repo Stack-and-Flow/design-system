@@ -134,7 +134,7 @@ A commit NEEDS a changeset if it:
 
 A commit does NOT need a changeset if it:
 - Only changes docs (`docs:`)
-- Only changes agent/docs policy text such as `.atl/AGENTS.md` or `.atl/skills/*` with no consumer-visible package/runtime behavior change (`docs:` or `chore:`)
+- Only changes agent/docs policy text such as `AGENTS.md` or `skills/*` with no consumer-visible package/runtime behavior change (`docs:` or `chore:`)
 - Only changes tests (`test:`)
 - Only changes CI, internal tooling, or config (`ci:`, `chore:`, `build:`)
 - Only changes formatting (`style:`)

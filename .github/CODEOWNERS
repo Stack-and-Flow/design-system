@@ -15,7 +15,8 @@ GUIDELINES.md @egdev6
 GUIDELINES.en.md @egdev6
 GOVERNANCE.md @egdev6
 GOVERNANCE.en.md @egdev6
-.atl/ @egdev6
+AGENTS.md @egdev6
+skills/ @egdev6
 
 # CI/CD workflows — requires explicit approval
 .github/workflows/ @egdev6

@@ -5,8 +5,8 @@ pre-commit:
       glob: "*.{ts,tsx,js,jsx,json,css}"
       run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
       stage_fixed: true
-    atl-gitignore:
-      run: "node scripts/verify-atl-gitignore.mjs"
+    harness-skills:
+      run: "node scripts/verify-harness-skill-boundaries.mjs"
     prop-docs:
       run: "node scripts/verify-prop-default-docs.mjs"
     typecheck:
@@ -18,7 +18,7 @@ commit-msg:
 pre-push:
   parallel: false
   commands:
-    atl-gitignore:
-      run: "node scripts/verify-atl-gitignore.mjs"
+    harness-skills:
+      run: "node scripts/verify-harness-skill-boundaries.mjs"
     test:
       run: "pnpm exec vitest run --run"

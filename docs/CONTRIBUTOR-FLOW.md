@@ -22,11 +22,11 @@ La regla central: **la IA ejecuta, el contributor decide**. La spec, los criteri
 | Arquitectura y reglas de código | [`GUIDELINES.md`](./GUIDELINES.md)                 |
 | Tokens y lenguaje visual        | [`DESIGN.md`](./DESIGN.md), `src/styles/theme.css` |
 | Estados visuales por componente | [`COMPONENTS.md`](./COMPONENTS.md)                 |
-| Toma y validación de specs      | `.atl/skills/component-spec-proposer/SKILL.md`     |
-| Flujo detallado con IA          | `.atl/skills/component-contributor/SKILL.md`       |
-| Auditoría pre-PR                | `.atl/skills/components-auditor/SKILL.md`          |
+| Toma y validación de specs      | `skills/component-spec-proposer/SKILL.md`     |
+| Flujo detallado con IA          | `skills/component-contributor/SKILL.md`       |
+| Auditoría pre-PR                | `skills/components-auditor/SKILL.md`          |
 
-Si hay contradicción, el orden de autoridad es: `GUIDELINES.md` / `DESIGN.md` para código visual, `.atl/skills/*` para ejecución asistida por agentes, y este documento para el flujo humano.
+Si hay contradicción, el orden de autoridad es: `GUIDELINES.md` / `DESIGN.md` para código visual, `skills/*` para ejecución asistida por agentes, y este documento para el flujo humano.
 
 ---
 

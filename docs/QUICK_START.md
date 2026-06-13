@@ -135,7 +135,7 @@ Este proyecto soporta [opencode](https://opencode.ai/) con contexto preconfigura
 opencode
 ```
 
-El agente carga automáticamente las reglas del proyecto desde `.atl/AGENTS.md` — no necesitas configuración manual. Lee [CONTRIBUTING.md](./CONTRIBUTING.md#trabajar-con-agentes-ia) para el flujo completo de trabajo con IA.
+El agente carga automáticamente las reglas del proyecto desde `AGENTS.md` — no necesitas configuración manual. Lee [CONTRIBUTING.md](./CONTRIBUTING.md#trabajar-con-agentes-ia) para el flujo completo de trabajo con IA.
 
 ---
 

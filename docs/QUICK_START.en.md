@@ -133,7 +133,7 @@ This project supports [opencode](https://opencode.ai/) with pre-configured conte
 opencode
 ```
 
-The agent automatically loads the project rules from `.atl/AGENTS.md` — no manual setup needed. Read [CONTRIBUTING.en.md](./CONTRIBUTING.en.md#working-with-ai-agents) for the full AI workflow.
+The agent automatically loads the project rules from `AGENTS.md` — no manual setup needed. Read [CONTRIBUTING.en.md](./CONTRIBUTING.en.md#working-with-ai-agents) for the full AI workflow.
 
 ---
 

@@ -22,11 +22,11 @@ Core rule: **AI executes, the contributor decides**. The spec, visual criteria, 
 | Architecture and code rules | [`GUIDELINES.en.md`](./GUIDELINES.en.md) |
 | Tokens and visual language | [`DESIGN.en.md`](./DESIGN.en.md), `src/styles/theme.css` |
 | Component visual states | [`COMPONENTS.en.md`](./COMPONENTS.en.md) |
-| Spec intake and validation | `.atl/skills/component-spec-proposer/SKILL.md` |
-| Detailed AI workflow | `.atl/skills/component-contributor/SKILL.md` |
-| Pre-PR audit | `.atl/skills/components-auditor/SKILL.md` |
+| Spec intake and validation | `skills/component-spec-proposer/SKILL.md` |
+| Detailed AI workflow | `skills/component-contributor/SKILL.md` |
+| Pre-PR audit | `skills/components-auditor/SKILL.md` |
 
-If these sources disagree, the authority order is: `GUIDELINES*.md` / `DESIGN*.md` for code and visual rules, `.atl/skills/*` for agent-assisted execution, and this document for the human workflow.
+If these sources disagree, the authority order is: `GUIDELINES*.md` / `DESIGN*.md` for code and visual rules, `skills/*` for agent-assisted execution, and this document for the human workflow.
 
 ---
 

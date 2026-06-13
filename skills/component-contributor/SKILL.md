@@ -19,8 +19,8 @@ When delegated from `sdd-apply`, skip contributor onboarding and return the SDD 
 
 Load these before implementation:
 
-1. `.atl/skills/_shared/component-contract.md` — structure, TypeScript, tokens, tests, stories, exports, Radix, accessibility gates.
-2. `.atl/skills/component-contributor/references/biome-rules.md` — before writing any `.ts`/`.tsx`.
+1. `skills/_shared/component-contract.md` — structure, TypeScript, tokens, tests, stories, exports, Radix, accessibility gates.
+2. `skills/component-contributor/references/biome-rules.md` — before writing any `.ts`/`.tsx`.
 3. `docs/DESIGN.md` and `src/styles/theme.css` — before choosing tokens or judging visuals.
 4. `docs/COMPONENTS.md` — for interactive/visual state rules when present.
 
@@ -28,13 +28,13 @@ Load by intent:
 
 | Need | Reference |
 | --- | --- |
-| Storybook | `.atl/skills/component-contributor/references/stories.md` |
-| Tests | `.atl/skills/component-contributor/references/testing.md` |
-| Native HTML element props | `.atl/skills/component-contributor/references/html-extension.md` |
-| Radix primitive | `.atl/skills/component-contributor/references/radix-patterns.md` |
-| `className` merging | `.atl/skills/component-contributor/references/tailwind-merge.md` |
-| Contributor PR workflow | `.atl/skills/component-contributor/references/git-workflow.md` |
-| Starting from a GitHub issue or board task | `.atl/skills/github-project-tasks/SKILL.md` — verify issue label `status:approved` and assignee ownership, then run START WORK before implementation |
+| Storybook | `skills/component-contributor/references/stories.md` |
+| Tests | `skills/component-contributor/references/testing.md` |
+| Native HTML element props | `skills/component-contributor/references/html-extension.md` |
+| Radix primitive | `skills/component-contributor/references/radix-patterns.md` |
+| `className` merging | `skills/component-contributor/references/tailwind-merge.md` |
+| Contributor PR workflow | `skills/component-contributor/references/git-workflow.md` |
+| Starting from a GitHub issue or board task | `skills/github-project-tasks/SKILL.md` — verify issue label `status:approved` and assignee ownership, then run START WORK before implementation |
 
 ## Workflow
 
@@ -52,7 +52,7 @@ Only when working directly with a contributor: confirm they understand React + s
 
 If implementation will proceed from a GitHub issue or Project board card, first verify that the linked issue has the exact label `status:approved` and is not assigned to someone else. If the label is missing, stop and ask for maintainer/project lead approval; do not read the implementation spec in detail, plan, or code. If another assignee is present, stop before any action and tell the user they need explicit permission before reassigning the issue.
 
-After the label and assignee gates pass, load `.atl/skills/github-project-tasks/SKILL.md` and run **START WORK** before spec intake, planning, or coding: verify assignees, assign the issue to the contributor/user, move Project status to `In progress`, and record the planned branch/worktree. Offline/no-network mode may only skip GitHub mutations after evidence confirms the issue already has `status:approved` and is unassigned or assigned to the contributor/user; it never bypasses the approval or assignee gates.
+After the label and assignee gates pass, load `skills/github-project-tasks/SKILL.md` and run **START WORK** before spec intake, planning, or coding: verify assignees, assign the issue to the contributor/user, move Project status to `In progress`, and record the planned branch/worktree. Offline/no-network mode may only skip GitHub mutations after evidence confirms the issue already has `status:approved` and is unassigned or assigned to the contributor/user; it never bypasses the approval or assignee gates.
 
 Then extract component name, tier, props, variants, states, accessibility behavior, reference URL, and design notes. If the spec lives in a GitHub issue, read issue comments too; validated specs may live there.
 
@@ -124,7 +124,7 @@ Implement files in this order: `types.ts` → hook → component → tests → s
 
 After hook/component defaults are known, return to `types.ts` and verify every public prop with a runtime default has matching JSDoc `@default` metadata. Run `node scripts/verify-prop-default-docs.mjs` before handoff.
 
-Use `.atl/skills/_shared/component-contract.md` as the contract for each file. If a local mature component contradicts the shared contract, stop and ask whether to follow current code or update the contract.
+Use `skills/_shared/component-contract.md` as the contract for each file. If a local mature component contradicts the shared contract, stop and ask whether to follow current code or update the contract.
 
 ### 4 — Explain decisions
 
@@ -132,15 +132,15 @@ After each file, briefly explain the non-obvious decisions: CVA shape, token cho
 
 ### 5 — Visual review
 
-Load `.atl/skills/visual-review/SKILL.md` and run the full visual gate. Fix CRITICAL and MAJOR visual issues before claiming completion.
+Load `skills/visual-review/SKILL.md` and run the full visual gate. Fix CRITICAL and MAJOR visual issues before claiming completion.
 
 ### 6 — Component audit before PR
 
-Load `.atl/skills/components-auditor/SKILL.md` for the final component audit. Do not open a PR with CRITICAL or MAJOR findings.
+Load `skills/components-auditor/SKILL.md` for the final component audit. Do not open a PR with CRITICAL or MAJOR findings.
 
 ### 7 — End work handoff
 
-If the component work came from a GitHub issue or Project board card, use `.atl/skills/github-project-tasks/SKILL.md` END WORK only after validation evidence exists and the PR is merged or the maintainer/user explicitly approves closing the task. If working offline/no-network, return the END WORK follow-up instead of mutating GitHub.
+If the component work came from a GitHub issue or Project board card, use `skills/github-project-tasks/SKILL.md` END WORK only after validation evidence exists and the PR is merged or the maintainer/user explicitly approves closing the task. If working offline/no-network, return the END WORK follow-up instead of mutating GitHub.
 
 ## Output Contract
 

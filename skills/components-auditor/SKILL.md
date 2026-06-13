@@ -19,12 +19,12 @@ This skill owns **audit execution and reporting**. It consumes shared references
 
 Always read in this order:
 
-1. `.atl/skills/_shared/component-contract.md` — authoritative component contract.
-2. `.atl/skills/component-contributor/references/stories.md` — Storybook conventions.
-3. `.atl/skills/component-contributor/references/testing.md` — test conventions when tests are in scope.
+1. `skills/_shared/component-contract.md` — authoritative component contract.
+2. `skills/component-contributor/references/stories.md` — Storybook conventions.
+3. `skills/component-contributor/references/testing.md` — test conventions when tests are in scope.
 4. `docs/GUIDELINES.md` — coding conventions.
 5. `docs/DESIGN.md`, `docs/COMPONENTS.md` when present, and `src/styles/theme.css` — token and visual source of truth.
-6. `.atl/skills/visual-review/SKILL.md` — full visual review protocol.
+6. `skills/visual-review/SKILL.md` — full visual review protocol.
 
 Never flag a token value as wrong without checking `theme.css` first.
 
@@ -32,11 +32,11 @@ Never flag a token value as wrong without checking `theme.css` first.
 
 ### 1 — Scope and evidence
 
-Identify component directory, tier, changed files, spec/issue reference, and relevant existing patterns. If the component uses Radix, also load `.atl/skills/component-contributor/references/radix-patterns.md`.
+Identify component directory, tier, changed files, spec/issue reference, and relevant existing patterns. If the component uses Radix, also load `skills/component-contributor/references/radix-patterns.md`.
 
 ### 2 — Contract audit
 
-Audit against `.atl/skills/_shared/component-contract.md`:
+Audit against `skills/_shared/component-contract.md`:
 
 - required 6-file pattern and no unapproved extra files;
 - TypeScript rules and public prop typing;

@@ -1,3 +1,4 @@
 *.ts whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 *.tsx whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 *.css whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+*.mjs whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

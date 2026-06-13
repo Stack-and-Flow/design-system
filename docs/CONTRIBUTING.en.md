@@ -194,7 +194,7 @@ However, two rules are non-negotiable:
 
 ### Using gentle-ai (opencode)
 
-If you use [opencode](https://opencode.ai/), this project includes `.atl/AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
+If you use [opencode](https://opencode.ai/), this project includes `AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
 
 The agents will already know:
 
@@ -204,6 +204,8 @@ The agents will already know:
 - The full list of anti-patterns that cause PR rejection
 
 **To activate**: simply open the project directory in opencode. No manual setup required — context loads automatically.
+
+Shared team skills live in `skills/`. The `.atl/` directory is local generated gentle-ai state — registry/cache — and must stay ignored because it can mix project skills with the user's personal skills.
 
 ---
 

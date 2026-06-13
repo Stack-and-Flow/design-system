@@ -24,7 +24,7 @@ When delegated from `sdd-tasks`, run CREATE for each implementation task and ret
 
 Before writing an issue body, read:
 
-- `.atl/skills/github-project-tasks/references/issue-body-template.md`
+- `skills/github-project-tasks/references/issue-body-template.md`
 
 That template is the single source of truth for the issue body. Do not duplicate it in this skill.
 

@@ -1,7 +1,7 @@
 # Agent Context — Stack-and-Flow Design System
 
 This file is injected automatically as context for all agents working in this project.
-Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
+Keep it minimal — detailed workflows live in skills (`skills/`).
 
 ---
 
@@ -14,9 +14,9 @@ Keep it minimal — detailed workflows live in skills (`.atl/skills/`).
 | Package       | `@stack-and-flow/design-system`                   |
 | Repo          | https://github.com/Stack-and-Flow/design-system   |
 | Storybook     | https://sf-design-system.netlify.app/             |
-| Guidelines    | [`docs/GUIDELINES.md`](../docs/GUIDELINES.md)     |
-| Contributing  | [`docs/CONTRIBUTING.md`](../docs/CONTRIBUTING.md) |
-| Visual Design | [`docs/DESIGN.md`](../docs/DESIGN.md)             |
+| Guidelines    | [`docs/GUIDELINES.md`](docs/GUIDELINES.md)       |
+| Contributing  | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)   |
+| Visual Design | [`docs/DESIGN.md`](docs/DESIGN.md)               |
 
 **Stack**: React 19 · TypeScript strict · Tailwind v4 `@theme` · Radix UI · CVA · Storybook 8 · Biome · Lefthook · Vite · pnpm 10.34.1
 
