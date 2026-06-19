@@ -74,15 +74,16 @@ const createAnimationApiMock = vi.fn((_animation: AnimationItem) => {
   return animationApi;
 });
 
+const lottieModuleMocks = vi.hoisted(() => ({
+  getLottieApi: vi.fn(),
+  getLottiePlayer: vi.fn()
+}));
+const getLottiePlayerMock = lottieModuleMocks.getLottiePlayer;
+const getLottieApiMock = lottieModuleMocks.getLottieApi;
+
 vi.mock('@/lib/lottie', () => ({
-  getLottieModules: vi.fn(async () => ({
-    lottie: {
-      loadAnimation: loadAnimationMock
-    },
-    lottieApi: {
-      createAnimationApi: createAnimationApiMock
-    }
-  }))
+  getLottieApi: lottieModuleMocks.getLottieApi,
+  getLottiePlayer: lottieModuleMocks.getLottiePlayer
 }));
 
 import { LottieAnimation } from './LottieAnimation';
@@ -112,6 +113,14 @@ beforeEach(() => {
   mockAnimationApis.length = 0;
   loadAnimationMock.mockClear();
   createAnimationApiMock.mockClear();
+  getLottiePlayerMock.mockClear();
+  getLottiePlayerMock.mockImplementation(async () => ({
+    loadAnimation: loadAnimationMock
+  }));
+  getLottieApiMock.mockClear();
+  getLottieApiMock.mockImplementation(async () => ({
+    createAnimationApi: createAnimationApiMock
+  }));
 
   Object.defineProperty(window, 'matchMedia', {
     configurable: true,
@@ -323,6 +332,53 @@ describe('LottieAnimation — component behavior', () => {
         })
       })
     );
+  });
+
+  it('does not load lottie-api unless animationControl is provided', async () => {
+    render(<LottieAnimation animationData={sampleAnimationData} ariaLabel='Default animation' />);
+
+    await waitFor(() => {
+      expect(loadAnimationMock).toHaveBeenCalledTimes(1);
+    });
+
+    expect(getLottieApiMock).not.toHaveBeenCalled();
+    expect(createAnimationApiMock).not.toHaveBeenCalled();
+  });
+
+  it('reports Lottie player load failures without throwing an unhandled error', async () => {
+    const loadError = new Error('Lottie chunk failed');
+    const handleError = vi.fn();
+    getLottiePlayerMock.mockRejectedValueOnce(loadError);
+
+    render(<LottieAnimation animationData={sampleAnimationData} ariaLabel='Broken animation' onError={handleError} />);
+
+    await waitFor(() => {
+      expect(handleError).toHaveBeenCalledWith(loadError);
+    });
+
+    expect(loadAnimationMock).not.toHaveBeenCalled();
+  });
+
+  it('keeps default playback when optional lottie-api control setup fails', async () => {
+    const controlError = new Error('Control setup failed');
+    const handleError = vi.fn();
+    getLottieApiMock.mockRejectedValueOnce(controlError);
+
+    render(
+      <LottieAnimation
+        animationControl={{ spinner: [0.5, 0.5] }}
+        animationData={sampleAnimationData}
+        ariaLabel='Control fallback animation'
+        onError={handleError}
+      />
+    );
+
+    await waitFor(() => {
+      expect(loadAnimationMock).toHaveBeenCalledTimes(1);
+      expect(handleError).toHaveBeenCalledWith(controlError);
+    });
+
+    expect(mockAnimations[0]?.play).toHaveBeenCalled();
   });
 
   it('destroys the animation on unmount', async () => {

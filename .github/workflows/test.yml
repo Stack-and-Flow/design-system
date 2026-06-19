@@ -38,6 +38,9 @@ jobs:
       - name: Verify prop default docs
         run: node scripts/verify-prop-default-docs.mjs
 
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
       - name: Run tests
         run: pnpm test
 

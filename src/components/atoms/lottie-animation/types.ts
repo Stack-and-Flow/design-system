@@ -98,6 +98,11 @@ type LottieAnimationBaseProps = {
   /** @control object */
   eventListeners?: LottieEventListener[];
   /**
+   * Called when dynamic imports, Lottie initialization, or optional keypath control setup fail.
+   * @control false
+   */
+  onError?: (error: unknown) => void;
+  /**
    * @control text
    * @default 100%
    */

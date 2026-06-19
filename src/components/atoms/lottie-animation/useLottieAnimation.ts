@@ -9,7 +9,7 @@ import type {
 } from 'lottie-web';
 import type { AriaRole, ComponentProps, CSSProperties } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getLottieModules } from '@/lib/lottie';
+import { getLottieApi, getLottiePlayer } from '@/lib/lottie';
 import { cn } from '@/lib/utils';
 import { type LottieAnimationControl, type LottieAnimationProps, lottieAnimationVariants } from './types';
 
@@ -229,6 +229,7 @@ export const useLottieAnimation = (props: LottieAnimationProps): UseLottieAnimat
     rendererSettings,
     animationControl,
     eventListeners,
+    onError,
     width,
     height,
     disabled = false,
@@ -266,39 +267,60 @@ export const useLottieAnimation = (props: LottieAnimationProps): UseLottieAnimat
     let animationInstance: AnimationItem | null = null;
 
     const initializeAnimation = async () => {
-      const { lottie, lottieApi } = await getLottieModules();
-      if (disposed || !containerRef.current) {
-        return;
-      }
+      try {
+        const lottie = await getLottiePlayer();
+        if (disposed || !containerRef.current) {
+          return;
+        }
 
-      const loadOptions: AnimationConfigWithData<RendererType> = {
-        animationData,
-        assetsPath,
-        autoplay: shouldAutoplay,
-        container,
-        loop,
-        renderer,
-        rendererSettings: resolvedRendererSettings
-      };
+        const loadOptions: AnimationConfigWithData<RendererType> = {
+          animationData,
+          assetsPath,
+          autoplay: shouldAutoplay,
+          container,
+          loop,
+          renderer,
+          rendererSettings: resolvedRendererSettings
+        };
 
-      animationInstance = lottie.loadAnimation(loadOptions);
-      animationInstance.setDirection(direction);
-      animationInstance.setSpeed(speed);
-      animationInstance.loop = loop;
+        animationInstance = lottie.loadAnimation(loadOptions);
+        animationInstance.setDirection(direction);
+        animationInstance.setSpeed(speed);
+        animationInstance.loop = loop;
 
-      const animationApi = lottieApi.createAnimationApi(animationInstance);
-      applyAnimationControl(animationApi, animationControl);
+        if (animationControl) {
+          try {
+            const lottieApi = await getLottieApi();
+            if (!disposed && animationInstance) {
+              const animationApi = lottieApi.createAnimationApi(animationInstance);
+              applyAnimationControl(animationApi, animationControl);
+            }
+          } catch (error) {
+            if (!disposed) {
+              onError?.(error);
+            }
+          }
+        }
 
-      if (stopped) {
-        animationInstance.stop();
-      } else if (paused || !shouldAutoplay) {
-        animationInstance.pause();
-      } else {
-        animationInstance.play();
-      }
+        if (disposed || !animationInstance) {
+          animationInstance?.destroy();
+          return;
+        }
 
-      if (!disposed) {
+        if (stopped) {
+          animationInstance.stop();
+        } else if (paused || !shouldAutoplay) {
+          animationInstance.pause();
+        } else {
+          animationInstance.play();
+        }
+
         setAnimation(animationInstance);
+      } catch (error) {
+        if (!disposed) {
+          onError?.(error);
+          setAnimation(null);
+        }
       }
     };
 
@@ -322,7 +344,8 @@ export const useLottieAnimation = (props: LottieAnimationProps): UseLottieAnimat
     renderer,
     resolvedRendererSettings,
     respectReducedMotion,
-    hasResolvedReducedMotion
+    hasResolvedReducedMotion,
+    onError
   ]);
 
   useEffect(() => {

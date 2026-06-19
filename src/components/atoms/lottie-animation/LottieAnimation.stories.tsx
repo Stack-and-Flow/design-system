@@ -236,6 +236,9 @@ const ResponsiveContainerDemo = () => {
  * ## Usage Guide
  * Use `interactive={true}` only when the animation itself acts as a button. The interactive story toggles playback on click so the relationship between user action and controlled props is visible. Use the default meaningful non-interactive mode for informative motion and `decorative={true}` when the animation is purely ornamental. Use parent layout, `width`, `height`, `className`, or the narrow `style` layout escape hatch for sizing.
  *
+ * ## Trust boundary
+ * Pass trusted, repository-owned or otherwise pre-vetted Lottie JSON. `lottie-web` renders the supplied JSON and may request external assets referenced by that data or by `assetsPath`; sanitize or allow-list user-uploaded animation files before they reach this component.
+ *
  * ## Demo asset
  * The stories use a repository-owned Lottie JSON fixture with multiple animated layers: a pulsing ring, orbiting dot, moving control dot, progress beam, and core pulse. This makes playback, speed, direction, sizing, event listeners, and `animationControl` differences visible without relying on external assets.
  */
