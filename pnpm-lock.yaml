@@ -41,6 +41,12 @@ importers:
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      lottie-api:
+        specifier: 1.0.3
+        version: 1.0.3
+      lottie-web:
+        specifier: 5.13.0
+        version: 5.13.0
       spinners-react:
         specifier: 1.0.11
         version: 1.0.11(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -3432,6 +3438,12 @@ packages:
   loglevel@1.9.2:
     resolution: {integrity: sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==}
     engines: {node: '>= 0.6.0'}
+
+  lottie-api@1.0.3:
+    resolution: {integrity: sha512-TB8sytVs/o7/xrT76Gq1p49SpvV/KRz9g7wJpNXC6c0CjqowvQaBy+ynLR5R+cGu9ORwmNSwphC0Zy1r9QZtZQ==}
+
+  lottie-web@5.13.0:
+    resolution: {integrity: sha512-+gfBXl6sxXMPe8tKQm7qzLnUy5DUPJPKIyRHwtpCpyUEYjHYRJC/5gjUvdkuO2c3JllrPtHXH5UJJK8LRYl5yQ==}
 
   loupe@3.2.1:
     resolution: {integrity: sha512-CdzqowRJCeLU72bHvWqwRBBlLcMEtIvGrlvef74kMnV2AolS9Y8xUv1I0U/MNAWMhBlKIoyuEgoJ0t/bbwHbLQ==}
@@ -7872,6 +7884,10 @@ snapshots:
   lodash@4.18.1: {}
 
   loglevel@1.9.2: {}
+
+  lottie-api@1.0.3: {}
+
+  lottie-web@5.13.0: {}
 
   loupe@3.2.1: {}
 

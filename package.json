@@ -45,6 +45,8 @@
     "@radix-ui/react-slider": "1.4.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "lottie-api": "1.0.3",
+    "lottie-web": "5.13.0",
     "spinners-react": "1.0.11",
     "tailwind-merge": "3.6.0"
   },

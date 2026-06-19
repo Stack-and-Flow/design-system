@@ -41,6 +41,9 @@ const config: StorybookConfig = {
         hmr: true
       },
       cache: false,
+      optimizeDeps: {
+        exclude: ['lottie-api', 'lottie-web']
+      },
       build: {
         rollupOptions: {
           output: {
