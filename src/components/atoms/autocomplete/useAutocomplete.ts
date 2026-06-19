@@ -96,7 +96,7 @@ const getHintIconProps = (type?: AutocompleteHint['type']): HintIconProps | unde
       return { name: 'circle-check', tone: 'success', size: 16 };
     }
     case 'info': {
-      return { name: 'info', tone: 'muted', size: 16 };
+      return { name: 'info', tone: 'info', size: 16 };
     }
     default: {
       return undefined;
@@ -538,8 +538,9 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
           break;
         }
         case 'Enter': {
+          event.preventDefault();
+
           if (activeOptionKey) {
-            event.preventDefault();
             const option = enabledFilteredOptions.find((item) => item.key === activeOptionKey);
             if (option) {
               selectOption(option);
@@ -548,7 +549,6 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
           }
 
           if (enabledFilteredOptions.length === 1) {
-            event.preventDefault();
             const [onlyOption] = enabledFilteredOptions;
             if (onlyOption) {
               selectOption(onlyOption);
@@ -563,21 +563,35 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
         }
         case 'Tab': {
           event.preventDefault();
-          // Use document-level focusable query instead of fragile sibling traversal
-          const triggerEl = triggerRef.current;
-          if (triggerEl) {
-            const allFocusable = Array.from(
-              document.querySelectorAll<HTMLElement>(
-                'button:not([disabled]), [href], input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-              )
-            );
-            const triggerIndex = allFocusable.indexOf(triggerEl);
-            if (triggerIndex !== -1) {
-              const nextIndex = event.shiftKey ? triggerIndex - 1 : triggerIndex + 1;
-              allFocusable[nextIndex]?.focus();
-            }
-          }
           closePopover('tab');
+
+          const container = triggerContainerRef.current;
+          if (!container) {
+            break;
+          }
+
+          const allFocusable = Array.from(
+            document.querySelectorAll<HTMLElement>(
+              'button:not([disabled]), [href], input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            )
+          );
+
+          const internalIndices = allFocusable
+            .map((el, i) => (container.contains(el) ? i : -1))
+            .filter((i) => i !== -1);
+
+          if (internalIndices.length === 0) {
+            break;
+          }
+
+          const firstInternal = Math.min(...internalIndices);
+          const lastInternal = Math.max(...internalIndices);
+
+          if (event.shiftKey) {
+            allFocusable[firstInternal - 1]?.focus();
+          } else {
+            allFocusable[lastInternal + 1]?.focus();
+          }
           break;
         }
         case 'Home': {

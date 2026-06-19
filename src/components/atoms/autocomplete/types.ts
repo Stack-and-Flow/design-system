@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 import type { ComponentProps, ReactNode } from 'react';
 import { hintMessageVariants as inputHintMessageVariants, inputVariants } from '@/components/atoms/input/types';
 
@@ -286,7 +286,7 @@ export const autocompleteSearchInput = cva(
       }
     },
     defaultVariants: {
-      size: 'sm'
+      size: 'md'
     }
   }
 );
@@ -297,133 +297,141 @@ export const autocompleteEmptyMessage = cva(
 
 export const autocompleteFilterContainer = cva('flex flex-col overflow-y-auto flex-1 min-h-0');
 
-type AutocompleteVariantProps = VariantProps<typeof selectTrigger>;
 type NativeAutocompleteTriggerProps = Omit<
   ComponentProps<'button'>,
   'children' | 'className' | 'defaultValue' | 'disabled' | 'onChange' | 'value'
 >;
 
-export type AutocompleteProps = NativeAutocompleteTriggerProps &
-  AutocompleteVariantProps & {
-    /** @control object */
-    options: AutocompleteOption[];
-    /** @control text */
-    value?: string | null;
-    /**
-     * @control text
-     * @default null
-     */
-    defaultValue?: string | null;
-    /**
-     * Callback fired when the selected value changes.
-     * @param key The key of the newly selected option.
-     */
-    onChange?: (key: string) => void;
-    /** Callback fired when the clear button is activated. */
-    onClear?: () => void;
-    /** Callback fired when the popover opens or closes. */
-    onOpenChange?: (isOpen: boolean) => void;
-    /**
-     * @control text
-     * @default Search...
-     */
-    searchPlaceholder?: string;
-    /**
-     * @control text
-     * @default Search options
-     */
-    searchAriaLabel?: string;
-    /**
-     * @control text
-     * @default Options
-     */
-    listboxAriaLabel?: string;
-    /**
-     * @control text
-     * @default No results found.
-     */
-    emptyMessage?: string;
-    /**
-     * Custom filter function invoked for each option against the current search query.
-     * @default Matches the option label with a case-insensitive substring comparison.
-     */
-    filterFn?: (option: AutocompleteOption, query: string) => boolean;
-    /** @control text */
-    placeholder?: string;
-    /** @control text */
+export type AutocompleteProps = NativeAutocompleteTriggerProps & {
+  /** Visual appearance of the trigger.
+   * @control select
+   * @default 'regular'
+   */
+  variant?: 'regular' | 'bordered' | 'faded' | 'line' | 'underlined';
+  /** Size scale for the trigger, label, and list items.
+   * @control select
+   * @default 'md'
+   */
+  size?: 'sm' | 'md' | 'lg';
+  /** @control object */
+  options: AutocompleteOption[];
+  /** @control text */
+  value?: string | null;
+  /**
+   * @control text
+   * @default null
+   */
+  defaultValue?: string | null;
+  /**
+   * Callback fired when the selected value changes.
+   * @param key The key of the newly selected option.
+   */
+  onChange?: (key: string) => void;
+  /** Callback fired when the clear button is activated. */
+  onClear?: () => void;
+  /** Callback fired when the popover opens or closes. */
+  onOpenChange?: (isOpen: boolean) => void;
+  /**
+   * @control text
+   * @default Search...
+   */
+  searchPlaceholder?: string;
+  /**
+   * @control text
+   * @default Search options
+   */
+  searchAriaLabel?: string;
+  /**
+   * @control text
+   * @default Options
+   */
+  listboxAriaLabel?: string;
+  /**
+   * @control text
+   * @default No results found.
+   */
+  emptyMessage?: string;
+  /**
+   * Custom filter function invoked for each option against the current search query.
+   * @default Matches the option label with a case-insensitive substring comparison.
+   */
+  filterFn?: (option: AutocompleteOption, query: string) => boolean;
+  /** @control text */
+  placeholder?: string;
+  /** @control text */
+  label?: string;
+  /** @control text */
+  description?: string;
+  /**
+   * @control text
+   * @deprecated Use `hint` instead. `errorMessage` maps to `hint: { message: errorMessage, type: 'error' }`.
+   */
+  errorMessage?: string;
+  /**
+   * @control boolean
+   * @default false
+   * @deprecated Use `hint` instead. `isInvalid` maps to the effective error state when no explicit `hint` is provided.
+   */
+  isInvalid?: boolean;
+  /** @control text */
+  ariaLabel?: string;
+  /**
+   * @control text
+   * @default Clear selection
+   */
+  clearAriaLabel?: string;
+  /**
+   * @control text
+   * @default Loading options...
+   */
+  loadingLabel?: string;
+  /**
+   * @control boolean
+   * @default false
+   */
+  isDisabled?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
+  isRequired?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
+  isLoading?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
+  isClearable?: boolean;
+  /**
+   * @control boolean
+   * @default false
+   */
+  isFullWidth?: boolean;
+  /** @control text */
+  name?: string;
+  /** @control text */
+  id?: string;
+  /** @control text */
+  className?: string;
+  /** @control object */
+  classNames?: {
+    base?: string;
+    trigger?: string;
+    container?: string;
+    value?: string;
+    indicator?: string;
+    popover?: string;
+    item?: string;
+    clearButton?: string;
     label?: string;
-    /** @control text */
-    description?: string;
-    /**
-     * @control text
-     * @deprecated Use `hint` instead. `errorMessage` maps to `hint: { message: errorMessage, type: 'error' }`.
-     */
     errorMessage?: string;
-    /**
-     * @control boolean
-     * @default false
-     * @deprecated Use `hint` instead. `isInvalid` maps to the effective error state when no explicit `hint` is provided.
-     */
-    isInvalid?: boolean;
-    /** @control text */
-    ariaLabel?: string;
-    /**
-     * @control text
-     * @default Clear selection
-     */
-    clearAriaLabel?: string;
-    /**
-     * @control text
-     * @default Loading options...
-     */
-    loadingLabel?: string;
-    /**
-     * @control boolean
-     * @default false
-     */
-    isDisabled?: boolean;
-    /**
-     * @control boolean
-     * @default false
-     */
-    isRequired?: boolean;
-    /**
-     * @control boolean
-     * @default false
-     */
-    isLoading?: boolean;
-    /**
-     * @control boolean
-     * @default false
-     */
-    isClearable?: boolean;
-    /**
-     * @control boolean
-     * @default false
-     */
-    isFullWidth?: boolean;
-    /** @control text */
-    name?: string;
-    /** @control text */
-    id?: string;
-    /** @control text */
-    className?: string;
-    /** @control object */
-    classNames?: {
-      base?: string;
-      trigger?: string;
-      container?: string;
-      value?: string;
-      indicator?: string;
-      popover?: string;
-      item?: string;
-      clearButton?: string;
-      label?: string;
-      errorMessage?: string;
-      hint?: string;
-      searchInput?: string;
-      emptyMessage?: string;
-    };
-    /** @control object */
-    hint?: AutocompleteHint;
+    hint?: string;
+    searchInput?: string;
+    emptyMessage?: string;
   };
+  /** @control object */
+  hint?: AutocompleteHint;
+};

@@ -119,7 +119,12 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
               ref={popoverRef as React.RefObject<HTMLDivElement>}
               className={popoverClassName}
               style={popoverStyle}
-              onMouseDown={(e) => e.preventDefault()}
+              onMouseDown={(e) => {
+                const target = e.target as HTMLElement;
+                if (!target.closest('input, textarea, [contenteditable]')) {
+                  e.preventDefault();
+                }
+              }}
             >
               {isLoading ? (
                 <div className={selectLoadingVariants()} role='status' aria-live='polite'>

@@ -269,13 +269,3 @@ export const WithDisabledOptions: Story = {
     ]
   }
 };
-
-/**
- * Shows the single-result Enter flow by narrowing the list to one expected match through the initial data set.
- */
-export const SingleMatchEnter: Story = {
-  args: {
-    ...Default.args,
-    options: countryOptions
-  }
-};
