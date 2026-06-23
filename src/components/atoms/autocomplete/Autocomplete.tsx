@@ -140,9 +140,17 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
                   </div>
 
                   {shouldShowEmptyState && (
-                    <div className={emptyMessageClassName} role='status' aria-live='polite'>
-                      {emptyMessage}
-                    </div>
+                    <>
+                      <div
+                        role='listbox'
+                        id={`${triggerProps.id}-listbox`}
+                        aria-label={label ?? listboxAriaLabel}
+                        className={filterContainerClassName}
+                      />
+                      <div className={emptyMessageClassName} role='status' aria-live='polite'>
+                        {emptyMessage}
+                      </div>
+                    </>
                   )}
 
                   {shouldShowList && (

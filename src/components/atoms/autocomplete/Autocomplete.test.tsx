@@ -197,6 +197,42 @@ describe('Autocomplete — component behavior', () => {
     expect(screen.queryByRole('combobox', { name: 'Search options' })).not.toBeInTheDocument();
   });
 
+  it('closes the loading popover on Escape from the trigger', async () => {
+    const user = userEvent.setup();
+    render(<Autocomplete label='Country' options={defaultOptions} isLoading={true} loadingLabel='Loading countries' />);
+
+    const trigger = screen.getByRole('button', { name: 'Country' });
+    await user.click(trigger);
+
+    expect(screen.getByText('Loading countries')).toBeInTheDocument();
+    await user.keyboard('{Escape}');
+
+    expect(screen.queryByText('Loading countries')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(trigger).toHaveFocus();
+    });
+  });
+
+  it('closes the loading popover on Tab and moves focus out of the component', async () => {
+    const user = userEvent.setup();
+    render(
+      <div>
+        <Autocomplete label='Country' options={defaultOptions} isLoading={true} loadingLabel='Loading countries' />
+        <button type='button'>Next field</button>
+      </div>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Country' });
+    await user.click(trigger);
+
+    expect(screen.getByText('Loading countries')).toBeInTheDocument();
+
+    await user.tab();
+
+    expect(screen.queryByText('Loading countries')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next field' })).toHaveFocus();
+  });
+
   it('renders and wires the clear button without toggling the popover', async () => {
     const user = userEvent.setup();
     const handleClear = vi.fn();
@@ -235,6 +271,20 @@ describe('Autocomplete — component behavior', () => {
     const emptyDiv = screen.getByText('No results');
     expect(emptyDiv).toHaveAttribute('role', 'status');
     expect(emptyDiv).toHaveAttribute('aria-live', 'polite');
+  });
+
+  it('renders an empty listbox that matches the search input aria-controls', async () => {
+    const user = userEvent.setup();
+    render(<Autocomplete label='Country' options={[]} emptyMessage='No results' />);
+
+    await user.click(screen.getByRole('button', { name: 'Country' }));
+    const searchInput = screen.getByRole('combobox', { name: 'Search options' });
+    const listboxId = searchInput.getAttribute('aria-controls');
+
+    expect(listboxId).toBeTruthy();
+    const listbox = document.getElementById(listboxId ?? '');
+    expect(listbox).toBeInTheDocument();
+    expect(listbox).toHaveAttribute('role', 'listbox');
   });
 
   it('warns in development when neither label nor ariaLabel is provided', () => {
@@ -345,5 +395,20 @@ describe('Autocomplete — component behavior', () => {
     );
 
     expect(warnSpy).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not submit the form when pressing Enter with the popover open and no resolved selection', async () => {
+    const user = userEvent.setup();
+    const handleSubmit = vi.fn();
+    render(
+      <form onSubmit={handleSubmit}>
+        <Autocomplete label='Country' options={[]} emptyMessage='No results' />
+      </form>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Country' }));
+    await user.keyboard('{Enter}');
+
+    expect(handleSubmit).not.toHaveBeenCalled();
   });
 });

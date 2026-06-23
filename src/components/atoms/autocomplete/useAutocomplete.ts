@@ -489,6 +489,36 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
     [onClickProp]
   );
 
+  const handleTriggerKeyDown: NonNullable<ComponentProps<'button'>['onKeyDown']> = useCallback(
+    (event) => {
+      rest.onKeyDown?.(event);
+
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      if (!isOpen || !isLoading) {
+        return;
+      }
+
+      switch (event.key) {
+        case 'Escape': {
+          event.preventDefault();
+          closePopover('escape');
+          break;
+        }
+        case 'Tab': {
+          closePopover('tab');
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    },
+    [closePopover, isLoading, isOpen, rest]
+  );
+
   const handleContainerClick = useCallback(
     (event: MouseEvent<HTMLDivElement>) => {
       if (effectiveDisabled || event.defaultPrevented) {
@@ -677,7 +707,8 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
     disabled: effectiveDisabled,
     'aria-disabled': effectiveDisabled || undefined,
     onMouseDown: handleTriggerMouseDown,
-    onClick: handleTriggerClick
+    onClick: handleTriggerClick,
+    onKeyDown: handleTriggerKeyDown
   };
 
   const searchInputProps: ComponentProps<'input'> = {
