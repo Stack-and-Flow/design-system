@@ -82,12 +82,14 @@ const focusableSelector = [
 ].join(',');
 
 const selectedTextColorClasses: Record<TabsColor, string> = {
-  primary: 'text-brand-light dark:text-brand-dark',
-  success: 'text-success-light dark:text-success',
-  warning: 'text-warning-light dark:text-warning',
+  primary: 'text-brand-light-darkest dark:text-brand-dark',
+  success: 'text-success-text-light dark:text-success',
+  warning: 'text-warning-text-light dark:text-warning',
   info: 'text-info-light dark:text-info',
-  error: 'text-error-light dark:text-error'
+  error: 'text-brand-light-darkest dark:text-error'
 };
+
+const selectedTextOnCursorColorClass = 'text-text-light dark:text-text-dark';
 
 const lightHoverColorClasses: Record<TabsColor, string> = {
   primary: 'hover:bg-red-tint-subtle dark:hover:bg-red-tint-low',
@@ -699,7 +701,7 @@ export const useTabs = ({
         disabled: item.disabled,
         withIcon: item.icon !== undefined
       }),
-      item.selected && selectedTextColorClasses[color],
+      item.selected && (variant === 'underlined' ? selectedTextColorClasses[color] : selectedTextOnCursorColorClass),
       variant !== 'solid' && !item.selected && lightHoverColorClasses[color],
       disableAnimation && 'transition-none',
       classNames.tab

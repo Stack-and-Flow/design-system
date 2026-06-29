@@ -67,9 +67,11 @@ export const Tabs: FC<TabsProps> = (props) => {
 
   const renderTabs = () => (
     <div {...tabListProps} className={listClassName}>
-      {shouldRenderCursor && <span aria-hidden={true} className={cursorClassName} style={cursorStyle} />}
+      {shouldRenderCursor && (
+        <span aria-hidden={true} className={cursorClassName} role='presentation' style={cursorStyle} />
+      )}
       {items.map((item) => (
-        <div key={item.key} className={tabWrapperClassName}>
+        <div key={item.key} className={tabWrapperClassName} role='presentation'>
           <button {...getButtonTabProps(item)} className={getTabClassName(item)}>
             <TabLabel icon={item.icon} tabContentClassName={tabContentClassName} title={item.title} />
           </button>
