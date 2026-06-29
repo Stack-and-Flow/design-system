@@ -82,11 +82,11 @@ const focusableSelector = [
 ].join(',');
 
 const selectedTextColorClasses: Record<TabsColor, string> = {
-  primary: 'text-brand-light-darkest dark:text-brand-dark',
+  primary: 'text-brand-light dark:text-brand-dark',
   success: 'text-success-text-light dark:text-success',
   warning: 'text-warning-text-light dark:text-warning',
   info: 'text-info-light dark:text-info',
-  error: 'text-brand-light-darkest dark:text-error'
+  error: 'text-error-light dark:text-error'
 };
 
 const selectedTextOnCursorColorClass = 'text-text-light dark:text-text-dark';
@@ -101,8 +101,8 @@ const lightHoverColorClasses: Record<TabsColor, string> = {
 
 const cursorToneClasses: Record<TabsColor, Record<'solid' | 'bordered' | 'light' | 'underlined', string>> = {
   primary: {
-    solid: 'border-red-tint-border bg-red-surface-light dark:border-brand-dark/30 dark:bg-red-surface-dark',
-    bordered: 'border-red-tint-border bg-red-surface-light dark:border-brand-dark/30 dark:bg-red-surface-dark',
+    solid: 'border-red-tint-border bg-red-tint-low dark:border-brand-dark/30 dark:bg-red-tint-low',
+    bordered: 'border-red-tint-border bg-red-tint-low dark:border-brand-dark/30 dark:bg-red-tint-low',
     light: 'bg-red-tint-subtle dark:bg-red-tint-low',
     underlined: 'bg-brand-light dark:bg-brand-dark'
   },
