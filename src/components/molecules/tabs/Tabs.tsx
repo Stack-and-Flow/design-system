@@ -1,4 +1,5 @@
-import type { FC, ReactNode } from 'react';
+import { cloneElement, type FC, isValidElement, type ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 import type { TabsProps } from './types';
 import { useTabs } from './useTabs';
 
@@ -8,10 +9,20 @@ type TabLabelProps = {
   title: ReactNode;
 };
 
+const renderTabIcon = (icon?: ReactNode) => {
+  if (!isValidElement<{ className?: string }>(icon)) {
+    return icon;
+  }
+
+  return cloneElement(icon, {
+    className: cn(icon.props.className, 'text-current')
+  });
+};
+
 const TabLabel: FC<TabLabelProps> = ({ icon, tabContentClassName, title }) => {
   return (
     <span className={tabContentClassName}>
-      {icon}
+      {renderTabIcon(icon)}
       <span className='truncate'>{title}</span>
     </span>
   );

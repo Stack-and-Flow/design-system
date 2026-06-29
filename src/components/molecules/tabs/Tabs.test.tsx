@@ -1,10 +1,23 @@
+import { Icon } from '@atoms/icon';
 import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useState } from 'react';
+import { type ComponentProps, useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Tabs } from './Tabs';
 import type { TabsItem, TabsProps } from './types';
 import { useTabs } from './useTabs';
+
+vi.mock('lucide-react/dynamic.js', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
+  DynamicIcon: ({
+    name,
+    size,
+    className,
+    ...props
+  }: { name: string; size?: number; className?: string } & ComponentProps<'svg'>) => (
+    <svg data-icon={name} data-size={size} className={className} {...props} />
+  )
+}));
 
 const items: TabsItem[] = [
   {
@@ -126,6 +139,29 @@ describe('Tabs — component behavior', () => {
     expect(screen.getByRole('tablist', { name: 'Documentation sections' })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByRole('tabpanel', { name: 'Overview' })).toHaveTextContent('Overview panel');
+  });
+
+  it('makes tab icons inherit the tab text color', () => {
+    render(
+      <Tabs
+        items={[
+          {
+            key: 'overview',
+            title: 'Overview',
+            icon: <Icon decorative={true} name='layout-dashboard' size={18} />,
+            content: 'Overview panel'
+          },
+          items[1] as TabsItem
+        ]}
+        aria-label='Documentation sections'
+      />
+    );
+
+    const overviewTab = screen.getByRole('tab', { name: 'Overview' });
+    const icon = overviewTab.querySelector('svg');
+
+    expect(overviewTab).toHaveClass('text-brand-light');
+    expect(icon).toHaveClass('text-current');
   });
 
   it('renders an empty tablist safely when items is empty', () => {

@@ -89,7 +89,8 @@ const selectedTextColorClasses: Record<TabsColor, string> = {
   error: 'text-error-light dark:text-error'
 };
 
-const selectedTextOnCursorColorClass = 'text-text-light dark:text-text-dark';
+const selectedTextOnFilledCursorColorClass = 'text-text-light dark:text-text-dark';
+const cursorlessTextColors: readonly TabsColor[] = ['primary', 'error'];
 
 const lightHoverColorClasses: Record<TabsColor, string> = {
   primary: 'hover:bg-red-tint-subtle dark:hover:bg-red-tint-low',
@@ -101,9 +102,9 @@ const lightHoverColorClasses: Record<TabsColor, string> = {
 
 const cursorToneClasses: Record<TabsColor, Record<'solid' | 'bordered' | 'light' | 'underlined', string>> = {
   primary: {
-    solid: 'border-red-tint-border bg-red-tint-low dark:border-brand-dark/30 dark:bg-red-tint-low',
-    bordered: 'border-red-tint-border bg-red-tint-low dark:border-brand-dark/30 dark:bg-red-tint-low',
-    light: 'bg-red-tint-subtle dark:bg-red-tint-low',
+    solid: 'border-red-tint-border bg-transparent dark:border-brand-dark/50',
+    bordered: 'border-red-tint-border bg-transparent dark:border-brand-dark/50',
+    light: 'bg-transparent',
     underlined: 'bg-brand-light dark:bg-brand-dark'
   },
   success: {
@@ -125,9 +126,9 @@ const cursorToneClasses: Record<TabsColor, Record<'solid' | 'bordered' | 'light'
     underlined: 'bg-info-light dark:bg-info'
   },
   error: {
-    solid: 'border-error-light/30 bg-error-surface-light dark:border-error/30 dark:bg-error-surface-dark',
-    bordered: 'border-error-light/30 bg-error-surface-light dark:border-error/30 dark:bg-error-surface-dark',
-    light: 'bg-error-tint',
+    solid: 'border-error-light/50 bg-transparent dark:border-error/50',
+    bordered: 'border-error-light/50 bg-transparent dark:border-error/50',
+    light: 'bg-transparent',
     underlined: 'bg-error-light dark:bg-error'
   }
 };
@@ -701,7 +702,10 @@ export const useTabs = ({
         disabled: item.disabled,
         withIcon: item.icon !== undefined
       }),
-      item.selected && (variant === 'underlined' ? selectedTextColorClasses[color] : selectedTextOnCursorColorClass),
+      item.selected &&
+        (variant === 'underlined' || cursorlessTextColors.includes(color)
+          ? selectedTextColorClasses[color]
+          : selectedTextOnFilledCursorColorClass),
       variant !== 'solid' && !item.selected && lightHoverColorClasses[color],
       disableAnimation && 'transition-none',
       classNames.tab
