@@ -130,6 +130,16 @@ describe('useTabs — logic', () => {
     expect(warnSpy).toHaveBeenCalledWith('[Tabs] Invalid variant `ghost`; falling back to `solid`.');
     expect(warnSpy).toHaveBeenCalledWith('[Tabs] Invalid color `brand`; falling back to `primary`.');
   });
+
+  it('keeps tablist before panels in DOM while reverse placements handle visual order with flex direction', () => {
+    const bottom = renderHook(() => useTabs({ items, placement: 'bottom', 'aria-label': 'Documentation sections' }));
+    const right = renderHook(() => useTabs({ items, placement: 'right', 'aria-label': 'Documentation sections' }));
+
+    expect(bottom.result.current.renderPanelsFirst).toBe(false);
+    expect(bottom.result.current.rootProps.className).toContain('flex-col-reverse');
+    expect(right.result.current.renderPanelsFirst).toBe(false);
+    expect(right.result.current.rootProps.className).toContain('flex-row-reverse');
+  });
 });
 
 describe('Tabs — component behavior', () => {

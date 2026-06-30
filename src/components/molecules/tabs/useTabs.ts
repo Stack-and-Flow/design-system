@@ -220,7 +220,7 @@ export const useTabs = ({
   const activationMode = normalizeVisualProp(activationModeProp, tabsActivationModeValues, 'automatic');
   const orientation = placement === 'left' || placement === 'right' ? 'vertical' : 'horizontal';
   const isManualActivation = activationMode === 'manual';
-  const renderPanelsFirst = placement === 'bottom' || placement === 'right';
+  const renderPanelsFirst = false;
   const disabledKeySet = useMemo(() => new Set(disabledKeys ?? []), [disabledKeys]);
   const tabListRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef(new Map<string, HTMLElement | null>());

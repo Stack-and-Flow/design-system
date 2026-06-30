@@ -113,6 +113,114 @@ export const FullWidth: Story = {
 };
 
 /**
+ * Compare the `size` prop across the shared control scale. The prop changes tab selector height, label size, horizontal padding, and panel typography.
+ */
+export const Sizes: Story = {
+  render: () => {
+    return (
+      <div className='flex w-full flex-col gap-6'>
+        <div className='flex w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Small
+          </span>
+          <Tabs items={baseItems} aria-label='Small documentation sections' size='sm' />
+        </div>
+        <div className='flex w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Medium
+          </span>
+          <Tabs items={baseItems} aria-label='Medium documentation sections' size='md' />
+        </div>
+        <div className='flex w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Large
+          </span>
+          <Tabs items={baseItems} aria-label='Large documentation sections' size='lg' />
+        </div>
+      </div>
+    );
+  }
+};
+
+/**
+ * Compare the `radius` prop on tab buttons and the active cursor. The outer tablist surface intentionally keeps its structural radius stable.
+ */
+export const Radius: Story = {
+  render: () => {
+    return (
+      <div className='grid w-full gap-4 md:grid-cols-2'>
+        <div className='flex w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            None
+          </span>
+          <Tabs items={baseItems} aria-label='No radius documentation sections' radius='none' />
+        </div>
+        <div className='flex w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Small
+          </span>
+          <Tabs items={baseItems} aria-label='Small radius documentation sections' radius='sm' />
+        </div>
+        <div className='flex w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Medium
+          </span>
+          <Tabs items={baseItems} aria-label='Medium radius documentation sections' radius='md' />
+        </div>
+        <div className='flex w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Large
+          </span>
+          <Tabs items={baseItems} aria-label='Large radius documentation sections' radius='lg' />
+        </div>
+        <div className='flex w-full flex-col gap-2 md:col-span-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Full
+          </span>
+          <Tabs items={baseItems} aria-label='Full radius documentation sections' radius='full' />
+        </div>
+      </div>
+    );
+  }
+};
+
+/**
+ * Compare all `placement` values so reviewers can verify orientation, panel order, and cursor alignment.
+ */
+export const Placements: Story = {
+  render: () => {
+    return (
+      <div className='grid w-full gap-6 lg:grid-cols-2'>
+        <div className='flex min-h-48 w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Top
+          </span>
+          <Tabs items={baseItems} aria-label='Top placement documentation sections' placement='top' />
+        </div>
+        <div className='flex min-h-48 w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Bottom
+          </span>
+          <Tabs items={baseItems} aria-label='Bottom placement documentation sections' placement='bottom' />
+        </div>
+        <div className='flex min-h-48 w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Left
+          </span>
+          <Tabs items={baseItems} aria-label='Left placement documentation sections' placement='left' />
+        </div>
+        <div className='flex min-h-48 w-full flex-col gap-2'>
+          <span className='fs-small font-semibold tracking-ui text-text-secondary-light dark:text-text-secondary-dark'>
+            Right
+          </span>
+          <Tabs items={baseItems} aria-label='Right placement documentation sections' placement='right' />
+        </div>
+      </div>
+    );
+  }
+};
+
+/**
  * This story isolates the semantic `color` prop so reviewers can compare accent treatments without mixing it with other variant differences.
  */
 export const Colors: Story = {
