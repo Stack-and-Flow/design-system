@@ -143,7 +143,7 @@ export const Sizes: Story = {
 };
 
 /**
- * Compare the `radius` prop on tab buttons and the active cursor. The outer tablist surface intentionally keeps its structural radius stable.
+ * Compare the `radius` prop on the tablist container, tab buttons, and active cursor.
  */
 export const Radius: Story = {
   render: () => {

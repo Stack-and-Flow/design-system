@@ -89,13 +89,15 @@ const selectedTextColorClasses: Record<TabsColor, string> = {
   error: 'text-error-light dark:text-error'
 };
 
-const selectedTextOnFilledCursorColorClasses: Record<TabsColor, string> = {
+const selectedTextOnSolidCursorColorClasses: Record<TabsColor, string> = {
   primary: 'text-white dark:text-white',
   success: 'text-text-light dark:text-background-dark',
   warning: 'text-text-light dark:text-background-dark',
   info: 'text-white dark:text-white',
   error: 'text-white dark:text-white'
 };
+
+const semanticSelectedTextVariants: readonly TabsVariant[] = ['bordered', 'light', 'underlined'];
 
 const lightHoverColorClasses: Record<TabsColor, string> = {
   primary: 'hover:bg-red-tint-subtle dark:hover:bg-red-tint-low',
@@ -108,32 +110,32 @@ const lightHoverColorClasses: Record<TabsColor, string> = {
 const cursorToneClasses: Record<TabsColor, Record<'solid' | 'bordered' | 'light' | 'underlined', string>> = {
   primary: {
     solid: 'border-brand-light bg-brand-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
-    bordered: 'border-brand-light bg-brand-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
-    light: 'bg-brand-light dark:bg-brand-dark-darker',
+    bordered: 'border-brand-light bg-red-tint-subtle dark:border-brand-dark dark:bg-red-tint-low',
+    light: 'bg-red-tint-subtle dark:bg-red-tint-low',
     underlined: 'bg-brand-light dark:bg-brand-dark'
   },
   success: {
     solid: 'border-success-light bg-success-light dark:border-success dark:bg-success',
-    bordered: 'border-success-light bg-success-light dark:border-success dark:bg-success',
-    light: 'bg-success-light dark:bg-success',
+    bordered: 'border-success-light bg-success-tint dark:border-success dark:bg-success-tint',
+    light: 'bg-success-tint',
     underlined: 'bg-success-light dark:bg-success'
   },
   warning: {
     solid: 'border-warning-light bg-warning-light dark:border-warning dark:bg-warning',
-    bordered: 'border-warning-light bg-warning-light dark:border-warning dark:bg-warning',
-    light: 'bg-warning-light dark:bg-warning',
+    bordered: 'border-warning-light bg-warning-tint dark:border-warning dark:bg-warning-tint',
+    light: 'bg-warning-tint',
     underlined: 'bg-warning-light dark:bg-warning'
   },
   info: {
     solid: 'border-info-light bg-info-light dark:border-blue-dark dark:bg-blue-dark',
-    bordered: 'border-info-light bg-info-light dark:border-blue-dark dark:bg-blue-dark',
-    light: 'bg-info-light dark:bg-blue-dark',
+    bordered: 'border-info-light bg-info-tint dark:border-info dark:bg-info-tint',
+    light: 'bg-info-tint',
     underlined: 'bg-info-light dark:bg-info'
   },
   error: {
     solid: 'border-error-light bg-error-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
-    bordered: 'border-error-light bg-error-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
-    light: 'bg-error-light dark:bg-brand-dark-darker',
+    bordered: 'border-error-light bg-error-tint dark:border-error dark:bg-error-tint',
+    light: 'bg-error-tint',
     underlined: 'bg-error-light dark:bg-error'
   }
 };
@@ -677,7 +679,7 @@ export const useTabs = ({
   } satisfies ComponentProps<'div'>;
 
   const listClassName = cn(
-    tabsListVariants({ variant, placement, fullWidth }),
+    tabsListVariants({ variant, placement, fullWidth, radius: variant === 'underlined' ? 'none' : radius }),
     fullWidth && orientation === 'vertical' && 'min-w-56',
     disableAnimation && 'transition-none',
     classNames.tabList
@@ -708,7 +710,9 @@ export const useTabs = ({
         withIcon: item.icon !== undefined
       }),
       item.selected &&
-        (variant === 'underlined' ? selectedTextColorClasses[color] : selectedTextOnFilledCursorColorClasses[color]),
+        (semanticSelectedTextVariants.includes(variant)
+          ? selectedTextColorClasses[color]
+          : selectedTextOnSolidCursorColorClasses[color]),
       variant !== 'solid' && !item.selected && lightHoverColorClasses[color],
       disableAnimation && 'transition-none',
       classNames.tab

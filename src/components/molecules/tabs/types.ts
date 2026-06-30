@@ -28,12 +28,11 @@ export const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        solid:
-          'rounded-xl border border-border-light bg-surface-light p-1 dark:border-border-dark dark:bg-surface-dark',
+        solid: 'border border-border-light bg-surface-light p-1 dark:border-border-dark dark:bg-surface-dark',
         bordered:
-          'rounded-xl border border-border-strong-light bg-background-light p-1 dark:border-border-strong-dark dark:bg-background-dark',
-        light: 'rounded-xl bg-transparent p-1',
-        underlined: 'rounded-none border-b border-border-light bg-transparent p-0 dark:border-border-dark'
+          'border border-border-strong-light bg-background-light p-1 dark:border-border-strong-dark dark:bg-background-dark',
+        light: 'bg-transparent p-1',
+        underlined: 'border-b border-border-light bg-transparent p-0 dark:border-border-dark'
       },
       placement: {
         top: 'grid grid-flow-col auto-cols-fr gap-1',
@@ -44,12 +43,20 @@ export const tabsListVariants = cva(
       fullWidth: {
         true: 'w-full',
         false: 'w-fit'
+      },
+      radius: {
+        none: 'rounded-none',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
+        full: 'rounded-pill'
       }
     },
     defaultVariants: {
       variant: 'solid',
       placement: 'top',
-      fullWidth: false
+      fullWidth: false,
+      radius: 'md'
     }
   }
 );
