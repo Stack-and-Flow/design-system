@@ -89,8 +89,13 @@ const selectedTextColorClasses: Record<TabsColor, string> = {
   error: 'text-error-light dark:text-error'
 };
 
-const selectedTextOnFilledCursorColorClass = 'text-text-light dark:text-text-dark';
-const cursorlessTextColors: readonly TabsColor[] = ['primary', 'error'];
+const selectedTextOnFilledCursorColorClasses: Record<TabsColor, string> = {
+  primary: 'text-white dark:text-white',
+  success: 'text-text-light dark:text-background-dark',
+  warning: 'text-text-light dark:text-background-dark',
+  info: 'text-white dark:text-white',
+  error: 'text-white dark:text-white'
+};
 
 const lightHoverColorClasses: Record<TabsColor, string> = {
   primary: 'hover:bg-red-tint-subtle dark:hover:bg-red-tint-low',
@@ -102,33 +107,33 @@ const lightHoverColorClasses: Record<TabsColor, string> = {
 
 const cursorToneClasses: Record<TabsColor, Record<'solid' | 'bordered' | 'light' | 'underlined', string>> = {
   primary: {
-    solid: 'border-red-tint-border bg-transparent dark:border-brand-dark/50',
-    bordered: 'border-red-tint-border bg-transparent dark:border-brand-dark/50',
-    light: 'bg-transparent',
+    solid: 'border-brand-light bg-brand-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
+    bordered: 'border-brand-light bg-brand-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
+    light: 'bg-brand-light dark:bg-brand-dark-darker',
     underlined: 'bg-brand-light dark:bg-brand-dark'
   },
   success: {
-    solid: 'border-success-light/30 bg-success-surface-light dark:border-success/30 dark:bg-success-surface-dark',
-    bordered: 'border-success-light/30 bg-success-surface-light dark:border-success/30 dark:bg-success-surface-dark',
-    light: 'bg-success-tint',
+    solid: 'border-success-light bg-success-light dark:border-success dark:bg-success',
+    bordered: 'border-success-light bg-success-light dark:border-success dark:bg-success',
+    light: 'bg-success-light dark:bg-success',
     underlined: 'bg-success-light dark:bg-success'
   },
   warning: {
-    solid: 'border-warning-light/30 bg-warning-surface-light dark:border-warning/30 dark:bg-warning-surface-dark',
-    bordered: 'border-warning-light/30 bg-warning-surface-light dark:border-warning/30 dark:bg-warning-surface-dark',
-    light: 'bg-warning-tint',
+    solid: 'border-warning-light bg-warning-light dark:border-warning dark:bg-warning',
+    bordered: 'border-warning-light bg-warning-light dark:border-warning dark:bg-warning',
+    light: 'bg-warning-light dark:bg-warning',
     underlined: 'bg-warning-light dark:bg-warning'
   },
   info: {
-    solid: 'border-info-light/30 bg-info-surface-light dark:border-info/30 dark:bg-info-surface-dark',
-    bordered: 'border-info-light/30 bg-info-surface-light dark:border-info/30 dark:bg-info-surface-dark',
-    light: 'bg-info-tint',
+    solid: 'border-info-light bg-info-light dark:border-blue-dark dark:bg-blue-dark',
+    bordered: 'border-info-light bg-info-light dark:border-blue-dark dark:bg-blue-dark',
+    light: 'bg-info-light dark:bg-blue-dark',
     underlined: 'bg-info-light dark:bg-info'
   },
   error: {
-    solid: 'border-error-light/50 bg-transparent dark:border-error/50',
-    bordered: 'border-error-light/50 bg-transparent dark:border-error/50',
-    light: 'bg-transparent',
+    solid: 'border-error-light bg-error-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
+    bordered: 'border-error-light bg-error-light dark:border-brand-dark-darker dark:bg-brand-dark-darker',
+    light: 'bg-error-light dark:bg-brand-dark-darker',
     underlined: 'bg-error-light dark:bg-error'
   }
 };
@@ -703,9 +708,7 @@ export const useTabs = ({
         withIcon: item.icon !== undefined
       }),
       item.selected &&
-        (variant === 'underlined' || cursorlessTextColors.includes(color)
-          ? selectedTextColorClasses[color]
-          : selectedTextOnFilledCursorColorClass),
+        (variant === 'underlined' ? selectedTextColorClasses[color] : selectedTextOnFilledCursorColorClasses[color]),
       variant !== 'solid' && !item.selected && lightHoverColorClasses[color],
       disableAnimation && 'transition-none',
       classNames.tab

@@ -160,7 +160,7 @@ describe('Tabs — component behavior', () => {
     const overviewTab = screen.getByRole('tab', { name: 'Overview' });
     const icon = overviewTab.querySelector('svg');
 
-    expect(overviewTab).toHaveClass('text-brand-light');
+    expect(overviewTab).toHaveClass('text-white');
     expect(icon).toHaveClass('text-current');
   });
 
