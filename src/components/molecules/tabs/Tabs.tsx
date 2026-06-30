@@ -15,7 +15,7 @@ const renderTabIcon = (icon?: ReactNode) => {
   }
 
   return cloneElement(icon, {
-    className: cn(icon.props.className, 'text-current')
+    className: cn(icon.props.className, 'text-current dark:text-current')
   });
 };
 

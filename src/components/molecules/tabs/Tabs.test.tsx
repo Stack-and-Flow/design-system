@@ -171,7 +171,7 @@ describe('Tabs — component behavior', () => {
     const icon = overviewTab.querySelector('svg');
 
     expect(overviewTab).toHaveClass('text-white');
-    expect(icon).toHaveClass('text-current');
+    expect(icon).toHaveClass('text-current', 'dark:text-current');
   });
 
   it('renders an empty tablist safely when items is empty', () => {
