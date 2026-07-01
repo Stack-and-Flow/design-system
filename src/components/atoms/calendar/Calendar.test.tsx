@@ -200,6 +200,42 @@ describe('Calendar — component behavior', () => {
     expect(screen.getByRole('button', { name: getDateMatcher(firstEnabledDate) })).toHaveAttribute('tabindex', '0');
   });
 
+  it('does not focus a day on mount by default', () => {
+    render(<Calendar selectedDate={baseDate} />);
+
+    expect(screen.getByRole('button', { name: getDateMatcher(baseDate) })).not.toHaveFocus();
+    expect(document.body).toHaveFocus();
+  });
+
+  it('focuses the selected enabled date on mount when autoFocusOnMount is true', () => {
+    render(<Calendar selectedDate={baseDate} autoFocusOnMount={true} />);
+
+    expect(screen.getByRole('button', { name: getDateMatcher(baseDate) })).toHaveFocus();
+  });
+
+  it('focuses the first enabled fallback on mount when the selected date is unavailable', () => {
+    const fallbackDate = new Date(2025, 7, 15);
+
+    render(<Calendar selectedDate={baseDate} disabledDates={[baseDate]} autoFocusOnMount={true} />);
+
+    expect(screen.getByRole('button', { name: getDateMatcher(baseDate) })).toBeDisabled();
+    expect(screen.getByRole('button', { name: getDateMatcher(fallbackDate) })).toHaveFocus();
+  });
+
+  it('does not focus a day on mount when disabled', () => {
+    render(<Calendar selectedDate={baseDate} disabled={true} autoFocusOnMount={true} />);
+
+    expect(screen.getByRole('button', { name: getDateMatcher(baseDate) })).not.toHaveFocus();
+    expect(document.body).toHaveFocus();
+  });
+
+  it('does not focus a day on mount when read-only', () => {
+    render(<Calendar selectedDate={baseDate} readOnly={true} autoFocusOnMount={true} />);
+
+    expect(screen.getByRole('button', { name: getDateMatcher(baseDate) })).not.toHaveFocus();
+    expect(document.body).toHaveFocus();
+  });
+
   it('skips disabled dates during keyboard navigation', async () => {
     const user = userEvent.setup();
 

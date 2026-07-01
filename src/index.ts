@@ -32,6 +32,7 @@ export { Tooltip } from './components/atoms/tooltip';
 // ─── Molecules ───────────────────────────────────────────────────────────────
 export { Accordion } from './components/molecules/accordion';
 export { Breadcrumb } from './components/molecules/breadcrumb';
+export { DatePicker } from './components/molecules/date-picker';
 export {
   Pagination,
   PaginationContent,

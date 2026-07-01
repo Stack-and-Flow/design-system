@@ -266,6 +266,24 @@ describe('Popover — component behavior', () => {
     expect(screen.queryByRole('dialog', { name: 'Disabled content' })).not.toBeInTheDocument();
   });
 
+  it('preserves an as-child trigger aria-disabled state without disabling focusable buttons', () => {
+    render(
+      <Popover>
+        <Popover.Trigger>
+          <button type='button' aria-disabled={true}>
+            Read-only trigger
+          </button>
+        </Popover.Trigger>
+        <Popover.Content ariaLabel='Read-only content'>Read-only body</Popover.Content>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Read-only trigger' });
+
+    expect(trigger).not.toBeDisabled();
+    expect(trigger).toHaveAttribute('aria-disabled', 'true');
+  });
+
   it('supports a non-button custom trigger with keyboard activation', async () => {
     const user = userEvent.setup();
 

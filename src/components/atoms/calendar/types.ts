@@ -856,6 +856,11 @@ export type CalendarProps = {
   selectedDate?: CalendarSelection;
   onDateChange?: (date: CalendarSelection) => void;
   /**
+   * @control boolean
+   * @default false
+   */
+  autoFocusOnMount?: boolean;
+  /**
    * @control object
    * @default []
    */

@@ -419,7 +419,7 @@ export const usePopoverTrigger = ({
       'aria-controls': contentId,
       'aria-expanded': open,
       'aria-haspopup': 'dialog',
-      'aria-disabled': disabled || undefined,
+      'aria-disabled': disabled ? true : triggerChild.props['aria-disabled'],
       onClick: withComposedHandler(triggerChild.props.onClick, handleIntrinsicClick),
       onFocus: withComposedHandler(triggerChild.props.onFocus, handleIntrinsicFocus),
       onKeyDown: withComposedHandler(triggerChild.props.onKeyDown, handleIntrinsicKeyDown)
