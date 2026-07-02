@@ -418,6 +418,9 @@
   --spacing-form-field-sm: 3rem; /* 48px */
   --spacing-form-field-md: 3.5rem; /* 56px */
   --spacing-form-field-lg: 4rem; /* 64px */
+  --spacing-search-input-sm: 2rem; /* 32px */
+  --spacing-search-input-md: 2.25rem; /* 36px */
+  --spacing-search-input-lg: 2.5rem; /* 40px */
   --spacing-touch-target-min: 2.75rem; /* 44px */
   --spacing-16: 4rem; /* 64px */
   --spacing-20: 5rem; /* 80px */
