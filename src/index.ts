@@ -44,6 +44,7 @@ export {
   PaginationSummary
 } from './components/molecules/pagination';
 export { Snippet } from './components/molecules/snippet';
+export { Tabs } from './components/molecules/tabs';
 
 // ─── Organisms ───────────────────────────────────────────────────────────────
 export { Drawer } from './components/organisms/drawer';
