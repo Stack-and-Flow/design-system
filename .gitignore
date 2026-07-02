@@ -45,6 +45,7 @@ opencode.json
 .pi/
 .pi-lens/
 .atl/
+context.md
 
 # Local SDD/OpenSpec artifacts
 openspec/
