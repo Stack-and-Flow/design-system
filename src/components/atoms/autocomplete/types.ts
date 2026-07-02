@@ -275,7 +275,8 @@ export const autocompleteSearchInput = cva(
       fullWidth: false,
       status: 'default'
     }),
-    'focus-visible:focus-ring'
+    'focus-visible:focus-ring',
+    'text-text-light dark:text-text-dark'
   ],
   {
     variants: {
@@ -292,7 +293,7 @@ export const autocompleteSearchInput = cva(
 );
 
 export const autocompleteEmptyMessage = cva(
-  'flex min-h-11 items-center justify-center px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
+  'flex min-h-touch-target-min items-center justify-center px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
 );
 
 export const autocompleteFilterContainer = cva('flex flex-col overflow-y-auto flex-1 min-h-0');

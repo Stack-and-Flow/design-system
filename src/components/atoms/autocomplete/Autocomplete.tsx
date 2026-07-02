@@ -93,6 +93,7 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
           {showClearButton && (
             <button
               type='button'
+              tabIndex={-1}
               aria-label={clearAriaLabel}
               className={clearButtonClassName}
               onClick={(event) => {
