@@ -251,15 +251,39 @@ const getTriggerElementFromAnchor = (anchorElement: HTMLSpanElement | null): HTM
 
 const withComposedHandler = <TEvent>(
   originalHandler: ((event: TEvent) => void) | undefined,
-  nextHandler: (event: TEvent) => void
+  nextHandler: (event: TEvent) => void,
+  shouldBlock?: (event: TEvent) => boolean
 ) => {
   return (event: TEvent) => {
+    if (shouldBlock?.(event)) {
+      return;
+    }
+
     originalHandler?.(event);
     nextHandler(event);
   };
 };
 
 const isAriaDisabledTrigger = (element: HTMLElement) => element.getAttribute('aria-disabled') === 'true';
+const isKeyboardActivationKey = (key: string) => key === 'Enter' || key === ' ';
+
+const shouldBlockAriaDisabledClick = (event: MouseEvent<HTMLElement>): boolean => {
+  if (!isAriaDisabledTrigger(event.currentTarget)) {
+    return false;
+  }
+
+  event.preventDefault();
+  return true;
+};
+
+const shouldBlockAriaDisabledKeyboardActivation = (event: KeyboardEvent<HTMLElement>): boolean => {
+  if (!isAriaDisabledTrigger(event.currentTarget) || !isKeyboardActivationKey(event.key)) {
+    return false;
+  }
+
+  event.preventDefault();
+  return true;
+};
 
 export const PopoverRootProvider = ({ children, value }: PopoverRootProviderProps) => {
   return createElement(PopoverRootContext.Provider, { value }, children);
@@ -422,9 +446,13 @@ export const usePopoverTrigger = ({
       'aria-expanded': open,
       'aria-haspopup': 'dialog',
       'aria-disabled': disabled ? true : triggerChild.props['aria-disabled'],
-      onClick: withComposedHandler(triggerChild.props.onClick, handleIntrinsicClick),
+      onClick: withComposedHandler(triggerChild.props.onClick, handleIntrinsicClick, shouldBlockAriaDisabledClick),
       onFocus: withComposedHandler(triggerChild.props.onFocus, handleIntrinsicFocus),
-      onKeyDown: withComposedHandler(triggerChild.props.onKeyDown, handleIntrinsicKeyDown)
+      onKeyDown: withComposedHandler(
+        triggerChild.props.onKeyDown,
+        handleIntrinsicKeyDown,
+        shouldBlockAriaDisabledKeyboardActivation
+      )
     };
 
     if (!isIntrinsicInteractiveTrigger(triggerChild)) {
