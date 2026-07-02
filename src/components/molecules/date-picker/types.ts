@@ -163,7 +163,9 @@ export type DatePickerFirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 export type DatePickerFormatOptions = Intl.DateTimeFormatOptions;
 export type DatePickerOpenChangeSource = 'trigger' | 'calendar' | 'clear' | 'programmatic';
 
-export type DatePickerProps = {
+type DatePickerRootProps = Omit<ComponentProps<'div'>, 'defaultValue' | 'id'>;
+
+type DatePickerOwnProps = {
   /** @control text */
   id: string;
   /** @control text */
@@ -283,6 +285,8 @@ export type DatePickerProps = {
   ariaLabelledBy?: string | string[];
 };
 
+export type DatePickerProps = DatePickerOwnProps & DatePickerRootProps;
+
 export type UseDatePickerReturn = {
   calendarProps: DatePickerCalendarProps;
   clearButtonProps: ComponentProps<'button'>;
@@ -305,6 +309,7 @@ export type UseDatePickerReturn = {
   popoverClassName?: string;
   readOnlyDescriptionId?: string;
   requestOpenChange: (open: boolean, source?: DatePickerOpenChangeSource) => void;
+  rootProps: DatePickerRootProps;
   requiredDescriptionId?: string;
   sanitizedFormatOptions: Intl.DateTimeFormatOptions;
   selectDate: (date: Date | null) => void;

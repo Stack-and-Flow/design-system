@@ -869,13 +869,13 @@ export const useCalendar = ({
   }, [months]);
 
   useEffect(() => {
-    if (hasAutoFocusAttemptedOnMountRef.current) {
+    if (hasAutoFocusAttemptedOnMountRef.current || !show) {
       return;
     }
 
     hasAutoFocusAttemptedOnMountRef.current = true;
 
-    if (!autoFocusOnMount || !show || disabled || readOnly || isPickerOpen) {
+    if (!autoFocusOnMount || disabled || readOnly || isPickerOpen) {
       return;
     }
 
@@ -1001,7 +1001,7 @@ export const useCalendar = ({
     headerClassName: calendarHeaderVariants({ size }),
     headerLabel,
     liveRegionLabel: headerLabel,
-    monthHeadingClassName: calendarMonthHeadingVariants({ size }),
+    monthHeadingClassName: cn(calendarMonthHeadingVariants({ size }), months.length === 1 && 'sr-only'),
     monthPickerLabel,
     monthSectionClassName: calendarMonthSectionVariants({ size }),
     monthsLayoutClassName: calendarMonthsLayoutVariants({ size }),

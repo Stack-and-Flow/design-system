@@ -70,11 +70,29 @@ describe('useCalendar — logic', () => {
 });
 
 describe('Calendar — component behavior', () => {
-  it('renders a labeled calendar grid and month heading', () => {
+  it('keeps a single-month heading accessible while visually hidden', () => {
     render(<Calendar selectedDate={baseDate} />);
 
-    expect(screen.getByRole('grid', { name: /august 2025/i })).toBeInTheDocument();
+    const grid = screen.getByRole('grid', { name: /august 2025/i });
+    const heading = screen.getByRole('heading', { name: /august 2025/i });
+
+    expect(heading).toHaveClass('sr-only');
+    expect(grid).toHaveAttribute('aria-labelledby', heading.id);
     expect(screen.getByRole('button', { name: /choose month and year/i })).toBeInTheDocument();
+  });
+
+  it('keeps month headings visible in multi-month layouts', () => {
+    render(<Calendar selectedDate={baseDate} visibleMonths={2} />);
+
+    const augustGrid = screen.getByRole('grid', { name: /august 2025/i });
+    const septemberGrid = screen.getByRole('grid', { name: /september 2025/i });
+    const augustHeading = screen.getByRole('heading', { name: /august 2025/i });
+    const septemberHeading = screen.getByRole('heading', { name: /september 2025/i });
+
+    expect(augustHeading).not.toHaveClass('sr-only');
+    expect(septemberHeading).not.toHaveClass('sr-only');
+    expect(augustGrid).toHaveAttribute('aria-labelledby', augustHeading.id);
+    expect(septemberGrid).toHaveAttribute('aria-labelledby', septemberHeading.id);
   });
 
   it('selects a single date when an enabled day button is clicked', async () => {
@@ -209,6 +227,17 @@ describe('Calendar — component behavior', () => {
 
   it('focuses the selected enabled date on mount when autoFocusOnMount is true', () => {
     render(<Calendar selectedDate={baseDate} autoFocusOnMount={true} />);
+
+    expect(screen.getByRole('button', { name: getDateMatcher(baseDate) })).toHaveFocus();
+  });
+
+  it('focuses the selected enabled date when shown after hidden mount with autoFocusOnMount', () => {
+    const { rerender } = render(<Calendar selectedDate={baseDate} autoFocusOnMount={true} show={false} />);
+
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+    expect(document.body).toHaveFocus();
+
+    rerender(<Calendar selectedDate={baseDate} autoFocusOnMount={true} show={true} />);
 
     expect(screen.getByRole('button', { name: getDateMatcher(baseDate) })).toHaveFocus();
   });

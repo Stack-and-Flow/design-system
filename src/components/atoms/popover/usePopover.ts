@@ -259,6 +259,8 @@ const withComposedHandler = <TEvent>(
   };
 };
 
+const isAriaDisabledTrigger = (element: HTMLElement) => element.getAttribute('aria-disabled') === 'true';
+
 export const PopoverRootProvider = ({ children, value }: PopoverRootProviderProps) => {
   return createElement(PopoverRootContext.Provider, { value }, children);
 };
@@ -362,7 +364,7 @@ export const usePopoverTrigger = ({
 
   const handleIntrinsicClick = useCallback(
     (event: MouseEvent<HTMLElement>) => {
-      if (event.defaultPrevented || disabled) {
+      if (event.defaultPrevented || disabled || isAriaDisabledTrigger(event.currentTarget)) {
         return;
       }
 
@@ -388,7 +390,7 @@ export const usePopoverTrigger = ({
 
   const handleIntrinsicKeyDown = useCallback(
     (event: KeyboardEvent<HTMLElement>) => {
-      if (event.defaultPrevented || disabled) {
+      if (event.defaultPrevented || disabled || isAriaDisabledTrigger(event.currentTarget)) {
         return;
       }
 

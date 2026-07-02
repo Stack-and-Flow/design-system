@@ -111,6 +111,16 @@ describe('useDatePicker — logic', () => {
     });
   });
 
+  it('fits the popover to the calendar while allowing consumer width overrides', () => {
+    const defaultWidth = renderHook(() => useDatePicker({ id: 'fit-popover' }));
+    const consumerWidth = renderHook(() =>
+      useDatePicker({ id: 'custom-popover-width', popoverClassName: 'w-full custom-popover-class' })
+    );
+
+    expect(defaultWidth.result.current.popoverClassName).toBe('w-fit');
+    expect(consumerWidth.result.current.popoverClassName).toBe('w-full custom-popover-class');
+  });
+
   it('serializes hidden input dates with local date getters instead of ISO UTC slicing', () => {
     const boundaryDate = new Date('2024-01-01T00:00:00.000Z');
     vi.spyOn(boundaryDate, 'getFullYear').mockReturnValue(2023);
@@ -236,6 +246,63 @@ describe('useDatePicker — logic', () => {
 
     act(() => {
       result.current.selectDate(unavailableDate);
+    });
+
+    expect(result.current.effectiveOpen).toBe(true);
+    expect(handleDateChange).not.toHaveBeenCalled();
+    expect(handleOpenChange).not.toHaveBeenCalled();
+  });
+
+  it('accepts min and max boundary dates while rejecting dates outside the range', () => {
+    const handleDateChange = vi.fn();
+    const handleOpenChange = vi.fn();
+    const minDate = new Date(2024, 4, 10);
+    const maxDate = new Date(2024, 4, 20);
+    const beforeMin = new Date(2024, 4, 9);
+    const atMin = new Date(2024, 4, 10);
+    const atMax = new Date(2024, 4, 20);
+    const afterMax = new Date(2024, 4, 21);
+    const { result } = renderHook(() =>
+      useDatePicker({
+        id: 'bounded-direct-selection',
+        open: true,
+        minDate,
+        maxDate,
+        onDateChange: handleDateChange,
+        onOpenChange: handleOpenChange
+      })
+    );
+
+    act(() => {
+      result.current.selectDate(beforeMin);
+    });
+
+    expect(result.current.effectiveOpen).toBe(true);
+    expect(handleDateChange).not.toHaveBeenCalled();
+    expect(handleOpenChange).not.toHaveBeenCalled();
+
+    act(() => {
+      result.current.selectDate(atMin);
+    });
+
+    expect(handleDateChange).toHaveBeenCalledWith(atMin);
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
+
+    handleDateChange.mockClear();
+    handleOpenChange.mockClear();
+
+    act(() => {
+      result.current.selectDate(atMax);
+    });
+
+    expect(handleDateChange).toHaveBeenCalledWith(atMax);
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
+
+    handleDateChange.mockClear();
+    handleOpenChange.mockClear();
+
+    act(() => {
+      result.current.selectDate(afterMax);
     });
 
     expect(result.current.effectiveOpen).toBe(true);
@@ -371,6 +438,29 @@ describe('DatePicker — component behavior', () => {
     expect(screen.getByRole('button', { name: 'Choose deadline Select date' })).toHaveTextContent('Select date');
   });
 
+  it('forwards native root props to the DatePicker wrapper', () => {
+    render(
+      <DatePicker
+        id='native-root-date'
+        aria-label='Native root label'
+        data-integration='booking-form'
+        data-testid='date-picker-root'
+        dir='rtl'
+        style={{ display: 'block' }}
+        title='Native root title'
+      />
+    );
+
+    const root = screen.getByTestId('date-picker-root');
+
+    expect(root).toHaveAttribute('data-slot', 'date-picker');
+    expect(root).toHaveAttribute('aria-label', 'Native root label');
+    expect(root).toHaveAttribute('data-integration', 'booking-form');
+    expect(root).toHaveAttribute('dir', 'rtl');
+    expect(root).toHaveAttribute('title', 'Native root title');
+    expect(root).toHaveStyle({ display: 'block' });
+  });
+
   it('includes the selected display value in trigger accessible names', () => {
     const selectedDate = new Date(2024, 4, 15);
     const { rerender } = render(<DatePicker id='start-date' label='Start date' value={selectedDate} locale='en-US' />);
@@ -443,7 +533,10 @@ describe('DatePicker — component behavior', () => {
 
     await user.click(screen.getByRole('button', { name: /Booking date/ }));
 
-    expect(await screen.findByRole('dialog', { name: 'Booking date calendar' })).toHaveClass('custom-popover-class');
+    expect(await screen.findByRole('dialog', { name: 'Booking date calendar' })).toHaveClass(
+      'w-fit',
+      'custom-popover-class'
+    );
     expect(screen.getByRole('application', { name: 'Mock calendar' })).toHaveAttribute('data-autofocus', 'true');
 
     const calendarProps = getLastCalendarProps();
@@ -525,8 +618,11 @@ describe('DatePicker — component behavior', () => {
     );
 
     const readOnlyTrigger = screen.getByRole('button', { name: 'Blocked date Jul 4, 2024' });
+    const readOnlyField = container.querySelector('[data-slot="date-picker-field"]');
     expect(readOnlyTrigger).not.toBeDisabled();
     expect(readOnlyTrigger).toHaveAttribute('aria-disabled', 'true');
+    expect(readOnlyField).not.toHaveClass('opacity-40');
+    expect(readOnlyField).not.toHaveClass('cursor-not-allowed');
     expect(getHiddenInput(container, 'blocked')).toHaveValue('2024-07-04');
     expect(screen.queryByRole('button', { name: 'Clear selected date' })).not.toBeInTheDocument();
 

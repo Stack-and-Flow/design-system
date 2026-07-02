@@ -8,7 +8,7 @@ export const DatePicker: FC<DatePickerProps> = (props) => {
   const datePicker = useDatePicker(props);
 
   return (
-    <div className={datePicker.wrapperClassName} data-slot='date-picker'>
+    <div {...datePicker.rootProps} className={datePicker.wrapperClassName} data-slot='date-picker'>
       {datePicker.hiddenInputProps && <input {...datePicker.hiddenInputProps} />}
 
       {datePicker.label && (

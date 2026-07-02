@@ -249,7 +249,8 @@ export const useDatePicker = ({
   fieldClassName,
   popoverClassName,
   ariaDescribedBy,
-  ariaLabelledBy
+  ariaLabelledBy,
+  ...rootProps
 }: DatePickerProps): UseDatePickerReturn => {
   const [internalSelectedDate, setInternalSelectedDate] = useState<Date | null>(defaultValue);
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
@@ -411,7 +412,7 @@ export const useDatePicker = ({
         status,
         variant
       }),
-      (disabled || readOnly) && 'cursor-not-allowed opacity-40',
+      disabled && 'cursor-not-allowed opacity-40',
       fieldClassName
     ),
     firstDayOfWeek: sanitizedFirstDayOfWeek,
@@ -426,9 +427,10 @@ export const useDatePicker = ({
     labelId,
     messageClassName: datePickerMessageVariants({ tone: status === 'default' ? 'info' : status }),
     popoverAriaLabel,
-    popoverClassName,
+    popoverClassName: cn('w-fit', popoverClassName),
     readOnlyDescriptionId,
     requestOpenChange,
+    rootProps,
     requiredDescriptionId,
     sanitizedFormatOptions,
     selectDate,
