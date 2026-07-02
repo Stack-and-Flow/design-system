@@ -331,13 +331,27 @@ describe('Tabs — component behavior', () => {
     expect(screen.getByText('API panel').closest('[role="tabpanel"]')).toHaveAttribute('hidden');
   });
 
-  it('renders only the selected panel when destroyInactiveTabPanel is true', async () => {
+  it('renders only the selected panel content when destroyInactiveTabPanel is true while preserving tabpanel ids', async () => {
     const user = userEvent.setup();
     render(<Tabs items={items} aria-label='Documentation sections' destroyInactiveTabPanel={true} />);
+
+    for (const tab of screen.getAllByRole('tab')) {
+      const panelId = tab.getAttribute('aria-controls');
+
+      expect(panelId).not.toBeNull();
+      expect(document.getElementById(panelId ?? '')).not.toBeNull();
+    }
 
     expect(screen.queryByText('Usage panel')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('tab', { name: 'Usage' }));
+
+    for (const tab of screen.getAllByRole('tab')) {
+      const panelId = tab.getAttribute('aria-controls');
+
+      expect(panelId).not.toBeNull();
+      expect(document.getElementById(panelId ?? '')).not.toBeNull();
+    }
 
     expect(screen.getByText('Usage panel')).toBeInTheDocument();
     expect(screen.queryByText('Overview panel')).not.toBeInTheDocument();

@@ -49,27 +49,11 @@ export const Tabs: FC<TabsProps> = (props) => {
   } = useTabs(props);
 
   const renderPanels = () => {
-    if (props.destroyInactiveTabPanel) {
-      const selectedItem = items.find((item) => item.selected);
-
-      if (!selectedItem) {
-        return null;
-      }
-
-      return (
-        <div className={panelContainerClassName}>
-          <div {...getPanelProps(selectedItem)} ref={registerPanelRef(selectedItem.key)} className={panelClassName}>
-            {selectedItem.content}
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className={panelContainerClassName}>
         {items.map((item) => (
           <div key={item.key} {...getPanelProps(item)} ref={registerPanelRef(item.key)} className={panelClassName}>
-            {item.content}
+            {props.destroyInactiveTabPanel && !item.selected ? null : item.content}
           </div>
         ))}
       </div>
