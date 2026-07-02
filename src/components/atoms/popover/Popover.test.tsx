@@ -266,6 +266,126 @@ describe('Popover — component behavior', () => {
     expect(screen.queryByRole('dialog', { name: 'Disabled content' })).not.toBeInTheDocument();
   });
 
+  it('preserves an as-child trigger aria-disabled state without disabling focusable buttons', () => {
+    render(
+      <Popover>
+        <Popover.Trigger>
+          <button type='button' aria-disabled={true}>
+            Read-only trigger
+          </button>
+        </Popover.Trigger>
+        <Popover.Content ariaLabel='Read-only content'>Read-only body</Popover.Content>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Read-only trigger' });
+
+    expect(trigger).not.toBeDisabled();
+    expect(trigger).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('does not call child onClick or open from click when an as-child trigger is aria-disabled', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const onOpenChange = vi.fn();
+
+    render(
+      <Popover onOpenChange={onOpenChange}>
+        <Popover.Trigger>
+          <button type='button' aria-disabled={true} onClick={onClick}>
+            Read-only click trigger
+          </button>
+        </Popover.Trigger>
+        <Popover.Content ariaLabel='Read-only click content'>Read-only click body</Popover.Content>
+      </Popover>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Read-only click trigger' }));
+
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog', { name: 'Read-only click content' })).not.toBeInTheDocument();
+  });
+
+  it('prevents default, skips child onClick, and does not open for aria-disabled anchor triggers', () => {
+    const onClick = vi.fn();
+    const onOpenChange = vi.fn();
+
+    render(
+      <Popover onOpenChange={onOpenChange}>
+        <Popover.Trigger>
+          <a href='/disabled-popover-target' aria-disabled={true} onClick={onClick}>
+            Read-only anchor trigger
+          </a>
+        </Popover.Trigger>
+        <Popover.Content ariaLabel='Read-only anchor content'>Read-only anchor body</Popover.Content>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('link', { name: 'Read-only anchor trigger' });
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+    const wasNotCanceled = trigger.dispatchEvent(clickEvent);
+
+    expect(wasNotCanceled).toBe(false);
+    expect(clickEvent.defaultPrevented).toBe(true);
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog', { name: 'Read-only anchor content' })).not.toBeInTheDocument();
+  });
+
+  it('does not call child onKeyDown or open from keyboard activation when an as-child trigger is aria-disabled', async () => {
+    const user = userEvent.setup();
+    const onKeyDown = vi.fn();
+    const onOpenChange = vi.fn();
+
+    render(
+      <Popover onOpenChange={onOpenChange}>
+        <Popover.Trigger>
+          <button type='button' aria-disabled={true} onKeyDown={onKeyDown}>
+            Read-only keyboard trigger
+          </button>
+        </Popover.Trigger>
+        <Popover.Content ariaLabel='Read-only keyboard content'>Read-only keyboard body</Popover.Content>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Read-only keyboard trigger' });
+    trigger.focus();
+
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
+
+    expect(onKeyDown).not.toHaveBeenCalled();
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog', { name: 'Read-only keyboard content' })).not.toBeInTheDocument();
+  });
+
+  it('preserves child onKeyDown for aria-disabled non-activation keys', async () => {
+    const user = userEvent.setup();
+    const onKeyDown = vi.fn();
+    const onOpenChange = vi.fn();
+
+    render(
+      <Popover onOpenChange={onOpenChange}>
+        <Popover.Trigger>
+          <button type='button' aria-disabled={true} onKeyDown={onKeyDown}>
+            Read-only non-activation trigger
+          </button>
+        </Popover.Trigger>
+        <Popover.Content ariaLabel='Read-only non-activation content'>Read-only non-activation body</Popover.Content>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Read-only non-activation trigger' });
+    trigger.focus();
+
+    await user.keyboard('{ArrowDown}');
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog', { name: 'Read-only non-activation content' })).not.toBeInTheDocument();
+  });
+
   it('supports a non-button custom trigger with keyboard activation', async () => {
     const user = userEvent.setup();
 

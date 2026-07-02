@@ -405,6 +405,7 @@ export const useCalendar = ({
   color = 'default',
   selectedDate,
   onDateChange,
+  autoFocusOnMount = false,
   disabledDates = EMPTY_DISABLED_DATES,
   variant = 'filled',
   size = 'md',
@@ -520,6 +521,7 @@ export const useCalendar = ({
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const dayButtonRefs = useRef(new Map<string, HTMLButtonElement>());
   const pendingFocusKeyRef = useRef<string | null>(null);
+  const hasAutoFocusAttemptedOnMountRef = useRef(false);
   const pickerCloseButtonRef = useRef<HTMLButtonElement | null>(null);
   const togglePickerButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -866,6 +868,26 @@ export const useCalendar = ({
     pendingFocusKeyRef.current = null;
   }, [months]);
 
+  useEffect(() => {
+    if (hasAutoFocusAttemptedOnMountRef.current || !show) {
+      return;
+    }
+
+    hasAutoFocusAttemptedOnMountRef.current = true;
+
+    if (!autoFocusOnMount || disabled || readOnly || isPickerOpen) {
+      return;
+    }
+
+    const focusedElement = dayButtonRefs.current.get(toDateKey(effectiveFocusedDate));
+
+    if (!focusedElement || focusedElement.disabled) {
+      return;
+    }
+
+    focusedElement.focus();
+  }, [autoFocusOnMount, disabled, effectiveFocusedDate, isPickerOpen, readOnly, show]);
+
   const headerLabel = useMemo(() => buildHeaderLabel(locale, monthDates), [locale, monthDates]);
   const calendarLabel = `${localizedText.calendarGrid}: ${headerLabel}`;
 
@@ -979,7 +1001,7 @@ export const useCalendar = ({
     headerClassName: calendarHeaderVariants({ size }),
     headerLabel,
     liveRegionLabel: headerLabel,
-    monthHeadingClassName: calendarMonthHeadingVariants({ size }),
+    monthHeadingClassName: cn(calendarMonthHeadingVariants({ size }), months.length === 1 && 'sr-only'),
     monthPickerLabel,
     monthSectionClassName: calendarMonthSectionVariants({ size }),
     monthsLayoutClassName: calendarMonthsLayoutVariants({ size }),
