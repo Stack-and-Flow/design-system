@@ -60,6 +60,46 @@ export const WithInitialValue: Story = {
 };
 
 /**
+ * Shows the supported size options side by side for visual comparison.
+ */
+export const Sizes: Story = {
+  render: () => (
+    <div className='flex items-end gap-4'>
+      <div className='w-56'>
+        <DatePicker
+          id='storybook-date-picker-size-sm'
+          label='Small'
+          size='sm'
+          placeholder='Select date'
+          onDateChange={action('sm-date-change')}
+          onOpenChange={action('sm-open-change')}
+        />
+      </div>
+      <div className='w-56'>
+        <DatePicker
+          id='storybook-date-picker-size-md'
+          label='Medium'
+          size='md'
+          placeholder='Select date'
+          onDateChange={action('md-date-change')}
+          onOpenChange={action('md-open-change')}
+        />
+      </div>
+      <div className='w-56'>
+        <DatePicker
+          id='storybook-date-picker-size-lg'
+          label='Large'
+          size='lg'
+          placeholder='Select date'
+          onDateChange={action('lg-date-change')}
+          onOpenChange={action('lg-open-change')}
+        />
+      </div>
+    </div>
+  )
+};
+
+/**
  * Controlled usage keeps the selected date in parent state while still reporting Storybook actions.
  */
 export const Controlled: Story = {
