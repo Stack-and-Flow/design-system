@@ -395,6 +395,7 @@ export const Controlled: Story = {
         items={baseItems}
         value={value}
         aria-label='Controlled documentation sections'
+        disableAnimation={true}
         onValueChange={(nextValue) => {
           action('value change')(nextValue);
           setValue(nextValue);
