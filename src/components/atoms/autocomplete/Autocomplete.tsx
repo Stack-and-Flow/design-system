@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { SpinnerCircular } from 'spinners-react';
 import { Icon } from '../icon';
 import type { AutocompleteProps } from './types';
-import { selectDescription, selectLoadingVariants, selectPlaceholder } from './types';
 import { useAutocomplete } from './useAutocomplete';
 
 export const Autocomplete: FC<AutocompleteProps> = (props) => {
@@ -34,6 +33,13 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
     searchInputClassName,
     emptyMessageClassName,
     filterContainerClassName,
+    descriptionClassName,
+    placeholderClassName,
+    loadingClassName,
+    portalScopeClassName,
+    shouldShowEmptyState,
+    shouldShowList,
+    listboxId,
     getOptionClassName,
     popoverStyle,
     triggerProps,
@@ -44,23 +50,20 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
     hiddenInputProps,
     containerProps,
     handleClear,
+    handlePopoverMouseDown,
     hasHint,
     hintIconProps,
     hintMessage,
     hintMessageClassName,
-    needsScopedDarkPortal,
     portalContainer,
     listboxAriaLabel,
     popoverRef
   } = useAutocomplete(props);
 
-  const shouldShowEmptyState = !isLoading && filteredOptions.length === 0;
-  const shouldShowList = !isLoading && filteredOptions.length > 0;
-
   return (
     <div className={baseClassName}>
       {description && (
-        <div {...descriptionProps} className={selectDescription()}>
+        <div {...descriptionProps} className={descriptionClassName}>
           {description}
         </div>
       )}
@@ -83,7 +86,7 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
               {hasValue && selectedOption ? (
                 selectedOption.label
               ) : (
-                <span className={selectPlaceholder()}>{placeholder}</span>
+                <span className={placeholderClassName}>{placeholder}</span>
               )}
             </span>
           </button>
@@ -91,15 +94,7 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
 
         <div className={actionGroupClassName}>
           {showClearButton && (
-            <button
-              type='button'
-              tabIndex={-1}
-              aria-label={clearAriaLabel}
-              className={clearButtonClassName}
-              onClick={(event) => {
-                handleClear(event);
-              }}
-            >
+            <button type='button' aria-label={clearAriaLabel} className={clearButtonClassName} onClick={handleClear}>
               <Icon name='x' size={16} decorative={true} />
             </button>
           )}
@@ -115,20 +110,15 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
       {isOpen &&
         portalContainer &&
         createPortal(
-          <div className={needsScopedDarkPortal ? 'dark' : undefined} style={{ display: 'contents' }}>
+          <div className={portalScopeClassName} style={{ display: 'contents' }}>
             <div
-              ref={popoverRef as React.RefObject<HTMLDivElement>}
+              ref={popoverRef}
               className={popoverClassName}
               style={popoverStyle}
-              onMouseDown={(e) => {
-                const target = e.target as HTMLElement;
-                if (!target.closest('input, textarea, [contenteditable]')) {
-                  e.preventDefault();
-                }
-              }}
+              onMouseDown={handlePopoverMouseDown}
             >
               {isLoading ? (
-                <div className={selectLoadingVariants()} role='status' aria-live='polite'>
+                <div className={loadingClassName} role='status' aria-live='polite'>
                   <span aria-hidden='true' className='inline-flex text-brand-light dark:text-brand-dark'>
                     <SpinnerCircular color='currentColor' thickness={200} size='1.25em' />
                   </span>
@@ -144,7 +134,7 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
                     <>
                       <div
                         role='listbox'
-                        id={`${triggerProps.id}-listbox`}
+                        id={listboxId}
                         aria-label={label ?? listboxAriaLabel}
                         className={filterContainerClassName}
                       />
@@ -157,7 +147,7 @@ export const Autocomplete: FC<AutocompleteProps> = (props) => {
                   {shouldShowList && (
                     <div
                       role='listbox'
-                      id={`${triggerProps.id}-listbox`}
+                      id={listboxId}
                       aria-label={label ?? listboxAriaLabel}
                       className={filterContainerClassName}
                     >

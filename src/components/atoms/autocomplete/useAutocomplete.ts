@@ -13,10 +13,13 @@ import {
   selectBase,
   selectClearButton,
   selectContent,
+  selectDescription,
   selectIndicator,
   selectItem,
   selectLabel,
+  selectLoadingVariants,
   selectNativeTrigger,
+  selectPlaceholder,
   selectPopover,
   selectTrigger,
   selectValue
@@ -65,6 +68,13 @@ type UseAutocompleteReturn = {
   searchInputClassName: string;
   emptyMessageClassName: string;
   filterContainerClassName: string;
+  descriptionClassName: string;
+  placeholderClassName: string;
+  loadingClassName: string;
+  portalScopeClassName: string | undefined;
+  shouldShowEmptyState: boolean;
+  shouldShowList: boolean;
+  listboxId: string;
   getOptionClassName: (option: AutocompleteOption) => string;
   popoverStyle: CSSProperties;
   triggerProps: ComponentProps<'button'>;
@@ -75,6 +85,7 @@ type UseAutocompleteReturn = {
   hiddenInputProps: ComponentProps<'input'>;
   containerProps: ComponentProps<'div'>;
   handleClear: (e: MouseEvent<HTMLElement>) => void;
+  handlePopoverMouseDown: NonNullable<ComponentProps<'div'>['onMouseDown']>;
   hasHint: boolean;
   hintIconProps?: HintIconProps;
   hintMessage?: string;
@@ -249,11 +260,7 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
       onOpenChange?.(false);
       setIsOpen(false);
 
-      if (reason === 'outside') {
-        setTimeout(() => {
-          triggerRef.current?.focus();
-        }, 0);
-      } else if (reason !== 'tab') {
+      if (reason !== 'tab' && reason !== 'outside') {
         triggerRef.current?.focus();
       }
     },
@@ -643,6 +650,9 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
   );
 
   const hasFloatingLabel = Boolean(label) && (isOpen || hasValue || Boolean(placeholder));
+  const shouldShowEmptyState = !isLoading && filteredOptions.length === 0;
+  const shouldShowList = !isLoading && filteredOptions.length > 0;
+  const listboxId = `${id}-listbox`;
   const portalContainer = typeof document === 'undefined' ? null : document.body;
 
   const baseClassName = cn(selectBase({ fullWidth: isFullWidth }), className, classNames?.base);
@@ -674,6 +684,10 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
   );
   const emptyMessageClassName = cn(autocompleteEmptyMessage(), classNames?.emptyMessage);
   const filterContainerClassName = autocompleteFilterContainer();
+  const descriptionClassName = selectDescription();
+  const placeholderClassName = selectPlaceholder();
+  const loadingClassName = selectLoadingVariants();
+  const portalScopeClassName = needsScopedDarkPortal ? 'dark' : undefined;
 
   const getOptionClassName = useCallback(
     (option: AutocompleteOption) => {
@@ -688,6 +702,14 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
     },
     [classNames?.item, resolvedSize, selectedValue]
   );
+
+  const handlePopoverMouseDown: NonNullable<ComponentProps<'div'>['onMouseDown']> = useCallback((event) => {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('input, textarea, [contenteditable]')) {
+      event.preventDefault();
+    }
+  }, []);
 
   const triggerProps: ComponentProps<'button'> = {
     ...rest,
@@ -719,7 +741,7 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
     placeholder: searchPlaceholder,
     'aria-label': searchAriaLabel,
     'aria-expanded': true,
-    'aria-controls': `${id}-listbox`,
+    'aria-controls': listboxId,
     'aria-activedescendant': activeDescendantId,
     'aria-autocomplete': 'list',
     onChange: handleSearchChange,
@@ -803,6 +825,13 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
     searchInputClassName,
     emptyMessageClassName,
     filterContainerClassName,
+    descriptionClassName,
+    placeholderClassName,
+    loadingClassName,
+    portalScopeClassName,
+    shouldShowEmptyState,
+    shouldShowList,
+    listboxId,
     getOptionClassName,
     popoverStyle,
     triggerProps,
@@ -813,6 +842,7 @@ export const useAutocomplete = (props: AutocompleteProps): UseAutocompleteReturn
     hiddenInputProps,
     containerProps,
     handleClear,
+    handlePopoverMouseDown,
     hasHint,
     hintIconProps,
     hintMessage,

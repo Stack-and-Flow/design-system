@@ -240,13 +240,45 @@ describe('Autocomplete — component behavior', () => {
       <Autocomplete label='Country' options={defaultOptions} value='ar' isClearable={true} onClear={handleClear} />
     );
 
-    await user.click(screen.getByRole('button', { name: 'Country' }));
+    const trigger = screen.getByRole('button', { name: 'Country' });
+    await user.click(trigger);
     expect(screen.getByRole('listbox')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Clear selection' }));
 
     expect(handleClear).toHaveBeenCalledTimes(1);
     expect(screen.getByRole('listbox')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(trigger).toHaveFocus();
+    });
+  });
+
+  it('keeps the clear button keyboard reachable and clears without opening the popover', async () => {
+    const user = userEvent.setup();
+    const handleClear = vi.fn();
+    render(
+      <div>
+        <Autocomplete label='Country' options={defaultOptions} value='ar' isClearable={true} onClear={handleClear} />
+        <button type='button'>Next field</button>
+      </div>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Country' });
+    const clearButton = screen.getByRole('button', { name: 'Clear selection' });
+
+    await user.tab();
+    expect(trigger).toHaveFocus();
+
+    await user.tab();
+    expect(clearButton).toHaveFocus();
+
+    await user.keyboard('{Enter}');
+
+    expect(handleClear).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(trigger).toHaveFocus();
+    });
   });
 
   it('navigates to first/last option with Home/End keys without prior arrow press', async () => {
@@ -344,7 +376,7 @@ describe('Autocomplete — component behavior', () => {
     expect(screen.getByRole('button', { name: 'Next field' })).toHaveFocus();
   });
 
-  it('closes on outside click and restores focus to the trigger', async () => {
+  it('closes on outside click and keeps focus on the clicked control', async () => {
     const user = userEvent.setup();
     render(
       <div>
@@ -354,12 +386,13 @@ describe('Autocomplete — component behavior', () => {
     );
 
     const trigger = screen.getByRole('button', { name: 'Country' });
+    const outsideButton = screen.getByRole('button', { name: 'Outside' });
     await user.click(trigger);
-    await user.click(screen.getByRole('button', { name: 'Outside' }));
+    await user.click(outsideButton);
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     await waitFor(() => {
-      expect(trigger).toHaveFocus();
+      expect(outsideButton).toHaveFocus();
     });
   });
 
