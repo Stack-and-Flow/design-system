@@ -95,9 +95,7 @@ export const datePickerValueVariants = cva(
   {
     variants: {
       hasValue: {
-        true: 'text-text-light dark:text-text-dark',
-        false: 'text-text-secondary-light dark:text-text-muted-dark'
-      }
+        false: 'text-text-secondary-light dark:text-text-secondary-dark'
     },
     defaultVariants: {
       hasValue: false
