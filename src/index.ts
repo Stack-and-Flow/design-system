@@ -33,6 +33,7 @@ export { Tooltip } from './components/atoms/tooltip';
 // ─── Molecules ───────────────────────────────────────────────────────────────
 export { Accordion } from './components/molecules/accordion';
 export { Breadcrumb } from './components/molecules/breadcrumb';
+export { DatePicker } from './components/molecules/date-picker';
 export {
   Pagination,
   PaginationContent,
@@ -44,6 +45,7 @@ export {
   PaginationSummary
 } from './components/molecules/pagination';
 export { Snippet } from './components/molecules/snippet';
+export { Tabs } from './components/molecules/tabs';
 
 // ─── Organisms ───────────────────────────────────────────────────────────────
 export { Drawer } from './components/organisms/drawer';
