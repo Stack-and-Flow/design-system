@@ -35,6 +35,17 @@ export const Default: Story = {
 };
 
 /**
+ * Time component without a visible label.
+ */
+export const WithoutLabel: Story = {
+  args: {
+    ...Default.args,
+    id: 'time-no-label',
+    label: undefined
+  }
+};
+
+/**
  * Time component with disabled state.
  */
 export const Disabled: Story = {
