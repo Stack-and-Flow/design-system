@@ -147,24 +147,34 @@ export const useTime = ({
 
   const getMinValue = (segmentName: string): number => (segmentName === 'hour' && hourCycle === 12 ? 1 : 0);
 
+  const toggleDayPeriod = (current?: string): 'AM' | 'PM' => (current === 'PM' ? 'AM' : 'PM');
+
+  const clampSegments = (prev: TimeSegments, segmentName: string, value: string): TimeSegments => {
+    const next = { ...prev, [segmentName]: value };
+
+    if (segmentName === 'dayPeriod') {
+      const upper = value.toUpperCase();
+      next.dayPeriod = upper === 'AM' || upper === 'PM' ? upper : 'AM';
+    }
+    if (segmentName === 'hour') {
+      const max = hourCycle === 12 ? 12 : 23;
+      if ((parseInt(next.hour, 10) || 0) > max) {
+        next.hour = String(max);
+      }
+    }
+    if (segmentName === 'minute' && (parseInt(value, 10) || 0) > 59) {
+      next.minute = '59';
+    }
+    if (segmentName === 'second' && next.second !== undefined && (parseInt(value, 10) || 0) > 59) {
+      next.second = '59';
+    }
+    return next;
+  };
+
   const updateSegment = (segmentName: string, value: string): void => {
-    setSegments((prev) => {
-      const next = { ...prev, [segmentName]: value };
-      if (segmentName === 'hour') {
-        const max = hourCycle === 12 ? 12 : 23;
-        if ((parseInt(next.hour, 10) || 0) > max) {
-          next.hour = String(max);
-        }
-      }
-      if (segmentName === 'minute' && (parseInt(value, 10) || 0) > 59) {
-        next.minute = '59';
-      }
-      if (segmentName === 'second' && next.second !== undefined && (parseInt(value, 10) || 0) > 59) {
-        next.second = '59';
-      }
-      return next;
-    });
-    onChange?.({ ...segments, [segmentName]: value });
+    const next = clampSegments(segments, segmentName, value);
+    setSegments(next);
+    onChange?.(next);
   };
 
   const handleSegmentFocus = (segmentName: string, e: FocusEvent<HTMLInputElement>): void => {
@@ -188,14 +198,20 @@ export const useTime = ({
     const min = getMinValue(segmentName);
     const current = parseInt((segments[segmentName as keyof TimeSegments] as string) || '0', 10) || min;
 
-    if (e.key === 'ArrowUp') {
+    if (segmentName === 'dayPeriod' && (e.key === 'a' || e.key === 'A' || e.key === 'p' || e.key === 'P')) {
       e.preventDefault();
-      updateSegment(segmentName, String(current >= max ? min : current + 1));
+      updateSegment(segmentName, e.key.toUpperCase() === 'A' ? 'AM' : 'PM');
       return;
     }
-    if (e.key === 'ArrowDown') {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
-      updateSegment(segmentName, String(current <= min ? max : current - 1));
+      if (segmentName === 'dayPeriod') {
+        updateSegment(segmentName, toggleDayPeriod(segments.dayPeriod));
+      } else if (e.key === 'ArrowUp') {
+        updateSegment(segmentName, String(current >= max ? min : current + 1));
+      } else {
+        updateSegment(segmentName, String(current <= min ? max : current - 1));
+      }
       return;
     }
     if (e.key === 'ArrowRight') {
@@ -217,12 +233,22 @@ export const useTime = ({
   };
 
   const handleSegmentInput = (segmentName: string, value: string): void => {
-    if (segmentName !== 'dayPeriod' && !/^\d*$/.test(value)) {
+    if (segmentName === 'dayPeriod') {
+      const upper = value.toUpperCase();
+      if (upper.includes('P')) {
+        updateSegment(segmentName, 'PM');
+      } else if (upper.includes('A')) {
+        updateSegment(segmentName, 'AM');
+      }
       return;
     }
+    if (!/^\d*$/.test(value)) {
+      return;
+    }
+
     const sanitized = value.slice(0, 2);
     updateSegment(segmentName, sanitized);
-    if (sanitized.length === 2 && segmentName !== 'dayPeriod') {
+    if (sanitized.length === 2) {
       const max = getMaxValue(segmentName);
       if (parseInt(sanitized, 10) <= max) {
         requestAnimationFrame(() => focusNextSegment(segmentName));
@@ -232,13 +258,20 @@ export const useTime = ({
 
   const handleContainerClick = (e: MouseEvent<HTMLDivElement>): void => {
     const target = e.target as HTMLElement;
-    if (target === containerRef.current || target.closest('[data-time-wrapper]')) {
-      hourRef.current?.focus();
+    const isSegmentInput = [hourRef, minuteRef, secondRef, dayPeriodRef].some((ref) => ref.current === target);
+    if (isSegmentInput || !target.closest('[data-time-wrapper]')) {
+      return;
     }
+    hourRef.current?.focus();
   };
 
   const stepActiveSegment = (direction: 'up' | 'down'): void => {
     const target = activeSegment ?? getSegmentOrder()[0];
+    if (target === 'dayPeriod') {
+      updateSegment(target, toggleDayPeriod(segments.dayPeriod));
+      requestAnimationFrame(() => getRefForSegment(target).current?.focus());
+      return;
+    }
     const max = getMaxValue(target);
     const min = getMinValue(target);
     const current = parseInt((segments[target as keyof TimeSegments] as string) || '0', 10);

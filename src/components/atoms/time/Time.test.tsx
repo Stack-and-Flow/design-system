@@ -9,7 +9,7 @@
  * WHAT we do NOT test: specific CSS class strings, internal refs
  */
 
-import { render, renderHook, screen } from '@testing-library/react';
+import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -84,6 +84,11 @@ describe('useTime — logic', () => {
   it('returns hasHint: true when hint is provided', () => {
     const { result } = renderHook(() => useTime({ id: 'test-time', hint: { type: 'info', message: 'Enter time' } }));
     expect(result.current.hasHint).toBe(true);
+  });
+
+  it('defaults dayPeriod to AM in 12h mode', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hourCycle: 12 }));
+    expect(result.current.segments.dayPeriod).toBe('AM');
   });
 });
 
@@ -208,5 +213,67 @@ describe('Time — component behavior', () => {
     render(<Time id='test-time' showSteppers={true} disabled={true} />);
     expect(screen.getByRole('button', { name: 'Increase value' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Decrease value' })).toBeDisabled();
+  });
+
+  it('preserves focus on the clicked segment instead of always focusing hour', async () => {
+    const user = userEvent.setup();
+    render(<Time id='test-time' hourCycle={12} />);
+
+    const minuteInput = screen.getByRole('spinbutton', { name: 'Minutes' });
+    const dayPeriodInput = screen.getByRole('spinbutton', { name: 'AM or PM' });
+
+    await user.click(minuteInput);
+    expect(minuteInput).toHaveFocus();
+
+    await user.click(dayPeriodInput);
+    expect(dayPeriodInput).toHaveFocus();
+  });
+
+  it('ignores invalid AM/PM values like "1" or "2" instead of applying them', () => {
+    const handleChange = vi.fn();
+    render(<Time id='test-time' hourCycle={12} onChange={handleChange} />);
+
+    const dayPeriodInput = screen.getByRole('spinbutton', { name: 'AM or PM' });
+
+    fireEvent.change(dayPeriodInput, { target: { value: '1' } });
+
+    expect(dayPeriodInput).toHaveValue('AM');
+    expect(handleChange).not.toHaveBeenCalled();
+  });
+
+  it('toggles AM/PM with arrow keys and with direct A/P key presses', async () => {
+    const handleChange = vi.fn();
+    const user = userEvent.setup();
+    render(<Time id='test-time' hourCycle={12} onChange={handleChange} />);
+
+    const dayPeriodInput = screen.getByRole('spinbutton', { name: 'AM or PM' });
+    await user.click(dayPeriodInput);
+
+    await user.keyboard('{ArrowUp}');
+    expect(dayPeriodInput).toHaveValue('PM');
+
+    await user.keyboard('{ArrowDown}');
+    expect(dayPeriodInput).toHaveValue('AM');
+
+    await user.keyboard('p');
+    expect(dayPeriodInput).toHaveValue('PM');
+
+    await user.keyboard('a');
+    expect(dayPeriodInput).toHaveValue('AM');
+
+    expect(handleChange).toHaveBeenCalledWith(expect.objectContaining({ dayPeriod: 'PM' }));
+  });
+
+  it('clamps out-of-range hour input and emits the clamped value via onChange', async () => {
+    const handleChange = vi.fn();
+    const user = userEvent.setup();
+    render(<Time id='test-time' onChange={handleChange} />);
+
+    const hourInput = screen.getByRole('spinbutton', { name: 'Hours' });
+    await user.click(hourInput);
+    await user.type(hourInput, '99');
+
+    expect(hourInput).toHaveValue('23');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '23' }));
   });
 });

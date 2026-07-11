@@ -2,19 +2,18 @@ import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import Time from './Time';
 
+/**
+ * A time input component with individually editable segments (hour, minute, optional second).
+ * Segments are keyboard-navigable and support arrow key increment/decrement.
+ * Includes stepper buttons for pointer-based control.
+ * Supports 12h/24h formats, all Input variants, hint states, and rounded style.
+ */
 const meta: Meta<typeof Time> = {
   title: 'Atoms/Time',
   component: Time,
   parameters: {
     docs: {
-      autodocs: true,
-      description: {
-        component:
-          'A time input component with individually editable segments (hour, minute, optional second). ' +
-          'Segments are keyboard-navigable and support arrow key increment/decrement. ' +
-          'Includes stepper buttons for pointer-based control. ' +
-          'Supports 12h/24h formats, all Input variants, hint states, and rounded style.'
-      }
+      autodocs: true
     }
   },
   tags: ['autodocs']
@@ -24,6 +23,9 @@ export default meta;
 
 type Story = StoryObj<typeof Time>;
 
+/**
+ * Default time component with hour and minute segments.
+ */
 export const Default: Story = {
   args: {
     id: 'time-default',
@@ -32,6 +34,9 @@ export const Default: Story = {
   }
 };
 
+/**
+ * Time component with disabled state.
+ */
 export const Disabled: Story = {
   args: {
     ...Default.args,
@@ -40,6 +45,9 @@ export const Disabled: Story = {
   }
 };
 
+/**
+ * Time component with required indicator.
+ */
 export const Required: Story = {
   args: {
     ...Default.args,
@@ -48,6 +56,9 @@ export const Required: Story = {
   }
 };
 
+/**
+ * Time component with info hint message.
+ */
 export const WithHintInfo: Story = {
   args: {
     ...Default.args,
@@ -56,6 +67,9 @@ export const WithHintInfo: Story = {
   }
 };
 
+/**
+ * Time component with error hint message.
+ */
 export const WithHintError: Story = {
   args: {
     ...Default.args,
@@ -64,6 +78,9 @@ export const WithHintError: Story = {
   }
 };
 
+/**
+ * Time component with warning hint message.
+ */
 export const WithHintWarning: Story = {
   args: {
     ...Default.args,
@@ -72,6 +89,9 @@ export const WithHintWarning: Story = {
   }
 };
 
+/**
+ * Time component with success hint message.
+ */
 export const WithHintSuccess: Story = {
   args: {
     ...Default.args,
@@ -80,6 +100,9 @@ export const WithHintSuccess: Story = {
   }
 };
 
+/**
+ * Time component with bordered variant.
+ */
 export const BorderedVariant: Story = {
   args: {
     ...Default.args,
@@ -88,6 +111,9 @@ export const BorderedVariant: Story = {
   }
 };
 
+/**
+ * Time component with underlined variant.
+ */
 export const UnderlinedVariant: Story = {
   args: {
     ...Default.args,
@@ -96,6 +122,9 @@ export const UnderlinedVariant: Story = {
   }
 };
 
+/**
+ * Time component with line variant.
+ */
 export const LineVariant: Story = {
   args: {
     ...Default.args,
@@ -104,6 +133,9 @@ export const LineVariant: Story = {
   }
 };
 
+/**
+ * Time component with rounded style.
+ */
 export const Rounded: Story = {
   args: {
     ...Default.args,
@@ -112,6 +144,9 @@ export const Rounded: Story = {
   }
 };
 
+/**
+ * Time component with different sizes.
+ */
 export const Sizes: Story = {
   render: () => (
     <div className='flex flex-col gap-4'>
@@ -122,6 +157,9 @@ export const Sizes: Story = {
   )
 };
 
+/**
+ * Time component with seconds granularity.
+ */
 export const WithSeconds: Story = {
   args: {
     ...Default.args,
@@ -131,6 +169,9 @@ export const WithSeconds: Story = {
   }
 };
 
+/**
+ * Time component in 12-hour format with AM/PM segment.
+ */
 export const TwelveHourFormat: Story = {
   args: {
     ...Default.args,
@@ -140,6 +181,9 @@ export const TwelveHourFormat: Story = {
   }
 };
 
+/**
+ * Time component with clock icon.
+ */
 export const WithClockIcon: Story = {
   args: {
     ...Default.args,
@@ -148,6 +192,9 @@ export const WithClockIcon: Story = {
   }
 };
 
+/**
+ * Time component with full width.
+ */
 export const FullWidth: Story = {
   args: {
     ...Default.args,
@@ -156,6 +203,9 @@ export const FullWidth: Story = {
   }
 };
 
+/**
+ * Time component with stepper buttons.
+ */
 export const WithSteppers: Story = {
   args: {
     ...Default.args,
@@ -165,6 +215,9 @@ export const WithSteppers: Story = {
   }
 };
 
+/**
+ * Time component with combined states.
+ */
 export const CombinedStates: Story = {
   args: {
     ...Default.args,
