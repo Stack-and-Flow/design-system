@@ -506,6 +506,13 @@ describe('Table — component behavior', () => {
     expect(document.getElementById(activeDescendantId ?? '')).toHaveTextContent('Carla');
   });
 
+  it('uses the shared focus-ring for grid and interactive row focus', () => {
+    render(<Table columns={columns} items={rows} onRowClick={vi.fn()} />);
+
+    expect(screen.getByRole('grid')).toHaveClass('focus-visible:focus-ring');
+    expect(screen.getAllByRole('row')[1]).toHaveClass('focus-visible:focus-ring');
+  });
+
   it('is exported from the package root', () => {
     expect(RootTable).toBe(Table);
   });

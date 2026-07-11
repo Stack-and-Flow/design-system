@@ -5,7 +5,7 @@ export const inputVariants = cva(
   [
     'relative flex max-w-full justify-between overflow-hidden border py-2',
     'cursor-text transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-    'focus-within:outline-none'
+    '[&:has(:focus-visible)]:focus-ring'
   ],
   {
     variants: {
@@ -33,9 +33,9 @@ export const inputVariants = cva(
         false: 'rounded-md'
       },
       size: {
-        sm: 'h-12 px-3 fs-small',
-        md: 'h-14 px-4 fs-base',
-        lg: 'h-16 px-4 fs-h6'
+        sm: 'h-form-field-sm px-3 fs-small',
+        md: 'h-form-field-md px-4 fs-base',
+        lg: 'h-form-field-lg px-4 fs-h6'
       },
       status: {
         default: '',
@@ -45,10 +45,10 @@ export const inputVariants = cva(
           'border-warning-light shadow-glow-input-warning-light hover:!border-warning-light dark:border-warning dark:shadow-glow-input-warning dark:hover:!border-warning',
         success:
           'border-success-light shadow-glow-input-success-light hover:!border-success-light dark:border-success dark:shadow-glow-input-success dark:hover:!border-success',
-        info: ''
+        info: 'border-info-light shadow-glow-input-info-light hover:!border-info-light dark:border-info dark:shadow-glow-input-info dark:hover:!border-info'
       },
       focused: {
-        true: '!border-brand-light/50 shadow-glow-input-focus-light dark:!border-brand-dark/50 dark:shadow-glow-input-focus',
+        true: '!border-brand-light/50 dark:!border-brand-dark/50',
         false: ''
       },
       fullWidth: {
@@ -71,6 +71,11 @@ export const inputVariants = cva(
         focused: true,
         status: 'success',
         class: '!border-success-light dark:!border-success'
+      },
+      {
+        focused: true,
+        status: 'info',
+        class: '!border-info-light dark:!border-info'
       }
     ],
     defaultVariants: {
@@ -150,7 +155,7 @@ export const inputInlineButtonVariants = cva(
   [
     'cursor-pointer rounded-sm bg-surface-light px-1 text-text-light hover:bg-surface-raised-light',
     'dark:bg-surface-dark dark:text-text-dark dark:hover:bg-surface-raised-dark',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+    'focus-visible:focus-ring',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
   ],
   {
@@ -170,10 +175,10 @@ export const inputInlineButtonVariants = cva(
 export const hintMessageVariants = cva('fs-small', {
   variants: {
     tone: {
-      info: 'text-text-secondary-light dark:text-text-secondary-dark',
-      warning: 'text-warning-light dark:text-warning',
+      info: 'text-info-light dark:text-info',
+      warning: 'text-warning-text-light dark:text-warning',
       error: 'text-error-light dark:text-error',
-      success: 'text-success-light dark:text-success'
+      success: 'text-success-text-light dark:text-success'
     }
   },
   defaultVariants: {

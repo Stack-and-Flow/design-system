@@ -42,8 +42,8 @@ export const selectTrigger = cva(
     'relative flex w-full max-w-full justify-between overflow-hidden border py-2 cursor-pointer rounded-md',
     'text-text-light dark:text-text-dark',
     'transition-[background,border-color,box-shadow] duration-200 ease-[ease]',
-    'focus-within:outline-none focus-within:!border-brand-light/50 focus-within:shadow-glow-input-focus-light',
-    'dark:focus-within:!border-brand-dark/50 dark:focus-within:shadow-glow-input-focus'
+    '[&:has(:focus-visible)]:focus-ring focus-within:!border-brand-light/50',
+    'dark:focus-within:!border-brand-dark/50'
   ],
   {
     variants: {
@@ -64,9 +64,9 @@ export const selectTrigger = cva(
         ]
       },
       size: {
-        sm: 'h-12 px-3 fs-small gap-2',
-        md: 'h-14 px-4 fs-base gap-3',
-        lg: 'h-16 px-4 fs-h6 gap-3'
+        sm: 'h-form-field-sm px-3 fs-small gap-2',
+        md: 'h-form-field-md px-4 fs-base gap-3',
+        lg: 'h-form-field-lg px-4 fs-h6 gap-3'
       },
       status: {
         default: '',
@@ -76,7 +76,7 @@ export const selectTrigger = cva(
           'border-warning-light shadow-glow-input-warning-light hover:!border-warning-light focus-within:!border-warning-light dark:border-warning dark:shadow-glow-input-warning dark:hover:!border-warning dark:focus-within:!border-warning',
         success:
           'border-success-light shadow-glow-input-success-light hover:!border-success-light focus-within:!border-success-light dark:border-success dark:shadow-glow-input-success dark:hover:!border-success dark:focus-within:!border-success',
-        info: ''
+        info: 'border-info-light shadow-glow-input-info-light hover:!border-info-light focus-within:!border-info-light dark:border-info dark:shadow-glow-input-info dark:hover:!border-info dark:focus-within:!border-info'
       }
     },
     compoundVariants: [
@@ -97,6 +97,12 @@ export const selectTrigger = cva(
         status: 'success',
         class:
           'border-b-success-light dark:border-b-success shadow-glow-input-success-light dark:shadow-glow-input-success hover:!border-success-light dark:hover:!border-success'
+      },
+      {
+        variant: 'underlined',
+        status: 'info',
+        class:
+          'border-b-info-light dark:border-b-info shadow-glow-input-info-light dark:shadow-glow-input-info hover:!border-info-light dark:hover:!border-info'
       }
     ],
     defaultVariants: {
@@ -246,7 +252,7 @@ export const selectLabel = cva(
 );
 
 export const selectLoadingVariants = cva(
-  'flex min-h-11 items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
+  'flex min-h-touch-target-min items-center justify-center gap-2 px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark'
 );
 
 export const selectClearButton = cva([
@@ -254,7 +260,7 @@ export const selectClearButton = cva([
   'border-none bg-transparent cursor-pointer',
   'text-text-secondary-light dark:text-text-secondary-dark',
   'hover:bg-white-tint-mid dark:hover:bg-white-tint-mid',
-  'focus-visible:outline-none focus-visible:shadow-glow-input-focus-light dark:focus-visible:shadow-glow-input-focus'
+  'focus-visible:focus-ring'
 ]);
 
 /** @deprecated Use hintMessageVariants with hint pattern instead. */

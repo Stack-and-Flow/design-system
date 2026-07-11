@@ -45,6 +45,8 @@ describe('useSwitch — logic', () => {
   it('returns computed class names without exposing CVA logic to the component', () => {
     const { result } = renderHook(() => useSwitch({ label: 'Notifications' }));
     expect(result.current.rootClassName).toEqual(expect.any(String));
+    expect(result.current.switchWrapper).toContain('min-h-touch-target-min');
+    expect(result.current.switchWrapper).toContain('min-w-touch-target-min');
     expect(result.current.switchTrack).toEqual(expect.any(String));
     expect(result.current.switchThumb).toEqual(expect.any(String));
   });
@@ -61,7 +63,7 @@ describe('useSwitch — logic', () => {
 
     expect(result.current.switchTrack).not.toContain('shadow-glow-btn-secondary');
     expect(result.current.switchTrack).not.toContain('shadow-glow-btn-primary');
-    expect(result.current.switchTrack).toContain('peer-focus-visible:shadow-glow-focus-light');
+    expect(result.current.switchTrack).toContain('peer-focus-visible:focus-ring');
   });
 
   it('treats the legacy disabled color as disabled semantics', () => {

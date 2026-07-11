@@ -29,35 +29,31 @@ if (fs.existsSync(fontsDir)) {
 const previewHeadContent = fs.existsSync(previewHeadPath) ? fs.readFileSync(previewHeadPath, 'utf-8') : '';
 
 if (previewHeadContent) {
-  // Leer el contenido de index.html
+  // Read the contents of index.html.
   let indexContent = fs.readFileSync(indexPath, 'utf-8');
 
-  // Eliminar el <title>, favicon y fuentes de Nunito del <head>
+  // Remove the title, favicon, and Nunito font declarations from the head.
   indexContent = indexContent.replace(/<title>.*?<\/title>/, '');
   indexContent = indexContent.replace(/<link rel="icon".*?>/g, '');
   indexContent = indexContent.replace(/@font-face {[^}]*?Nunito Sans[^}]*?}/g, '');
 
-  // Inyectar el contenido de preview-head.html y el link capturado en el <head> de index.html
+  // Inject the preview-head.html metadata into the index.html head.
   const updatedIndexContent = indexContent.replace('</head>', `${previewHeadContent}\n</head>`);
 
-  // Escribir los cambios en index.html
+  // Write the changes to index.html.
   fs.writeFileSync(indexPath, updatedIndexContent, 'utf-8');
-  console.log(
-    'Styles from preview-head.html and captured CSS link have been injected into index.html, and unwanted content has been removed.'
-  );
+  console.log('Injected preview-head metadata into index.html and removed Storybook default head entries.');
 
-  // Leer el contenido de iframe.html
+  // Read the contents of iframe.html.
   let iframeContent = fs.readFileSync(iframePath, 'utf-8');
-  // Eliminar el <title>, favicon y fuentes de Nunito del <head>
+  // Remove the title, favicon, and Nunito font declarations from the head.
   iframeContent = iframeContent.replace(/<title>.*?<\/title>/, '');
   iframeContent = iframeContent.replace(/<link rel="icon".*?>/g, '');
   iframeContent = iframeContent.replace(/@font-face {[^}]*?Nunito Sans[^}]*?}/g, '');
-  // Escribir los cambios en iframe.html
+  // Write the changes to iframe.html.
   const updatedIframeContent = iframeContent;
   fs.writeFileSync(iframePath, updatedIframeContent, 'utf-8');
-  console.log(
-    'Styles from preview-head.html have been injected into iframe.html, and unwanted content has been removed.'
-  );
+  console.log('Normalized iframe.html head entries after Storybook build.');
 } else {
-  console.warn('preview-head.html not found or is empty. No changes made to index.html.');
+  console.warn('preview-head.html not found or empty. Skipped index.html metadata injection.');
 }

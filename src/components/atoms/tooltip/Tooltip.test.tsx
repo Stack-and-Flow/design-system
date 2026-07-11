@@ -5,6 +5,7 @@ import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@t
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Tooltip } from './Tooltip';
+import { tooltipVariants } from './types';
 import { useTooltip } from './useTooltip';
 
 afterEach(() => {
@@ -61,6 +62,11 @@ describe('useTooltip — logic', () => {
     expect(result.current.enableHover).toBe(true);
     expect(result.current.enableFocus).toBe(true);
     expect(result.current.enableClick).toBe(false);
+  });
+
+  it('maps the info color to the semantic tooltip surface', () => {
+    expect(tooltipVariants({ color: 'info' })).toContain('bg-info-light');
+    expect(tooltipVariants({ color: 'info' })).toContain('dark:bg-info');
   });
 });
 

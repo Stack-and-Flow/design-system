@@ -94,7 +94,7 @@ Consulta la documentación oficial de opencode para tutoriales y walkthroughs ac
 
 ### Cómo funciona gentle-ai en este proyecto
 
-No necesitas configuración manual. Al abrir el directorio del proyecto en opencode, el archivo `.atl/AGENTS.md` se inyecta automáticamente como contexto base para todos los agentes. Esto significa que el agente ya conoce:
+No necesitas configuración manual. Al abrir el directorio del proyecto en opencode, el archivo `AGENTS.md` se inyecta automáticamente como contexto base para todos los agentes. Esto significa que el agente ya conoce:
 
 - La arquitectura de 6 archivos y las reglas de cada uno
 - Los tokens de diseño disponibles y cómo usarlos
@@ -107,7 +107,7 @@ Cuando vayas a implementar un componente, simplemente di:
 Implementa este componente: https://github.com/Stack-and-Flow/design-system/issues/XXX
 ```
 
-El agente cargará la skill `component-contributor` y seguirá el flujo actual: verificación del label `status:approved`, START WORK cuando aplique, lectura de spec validada, spec review, visual preflight, plan, implementación, visual review, component audit pre-PR y END WORK al cerrar la tarea.
+El agente cargará la skill `component-contributor` y seguirá el flujo actual: verificación del label `status:approved`, verificación de assignees, START WORK cuando aplique, lectura de spec validada, spec review, visual preflight, plan, implementación, visual review, component audit pre-PR y END WORK al cerrar la tarea.
 
 ---
 
@@ -263,4 +263,4 @@ Prueba limpiar la caché: `pnpm run storybook-clean-cache && pnpm run storybook`
 Ejecuta `pnpm exec lefthook install` manualmente.
 
 **opencode no carga el contexto del proyecto**
-Asegúrate de abrir el directorio raíz del proyecto (`design-system/`), no una subcarpeta. El archivo `.atl/AGENTS.md` debe estar en la raíz del workspace abierto.
+Asegúrate de abrir el directorio raíz del proyecto (`design-system/`), no una subcarpeta. El archivo `AGENTS.md` debe estar en la raíz del workspace abierto.

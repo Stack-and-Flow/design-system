@@ -23,6 +23,7 @@ export const sliderTrackVariants = cva(
         default: 'border-red-tint-low bg-red-tint-subtle dark:border-red-tint-active dark:bg-red-tint-low',
         primary: 'border-red-tint-active bg-red-tint-low dark:border-red-tint-strong dark:bg-red-tint-active',
         secondary: 'border-border-light bg-border-light dark:border-border-dark dark:bg-surface-raised-dark',
+        info: 'border-info-tint bg-info-tint',
         success: 'border-success-tint bg-success-tint',
         warning: 'border-warning-tint bg-warning-tint',
         danger: 'border-error-tint bg-error-tint'
@@ -45,6 +46,7 @@ export const sliderRangeVariants = cva('absolute h-full', {
       default: 'bg-brand-light dark:bg-brand-dark',
       primary: 'bg-brand-light-dark dark:bg-brand-dark-light',
       secondary: 'bg-text-secondary-light dark:bg-border-strong-dark',
+      info: 'bg-info-light dark:bg-info',
       success: 'bg-success-light dark:bg-success',
       warning: 'bg-warning-light dark:bg-warning',
       danger: 'bg-error-light dark:bg-error'
@@ -54,7 +56,7 @@ export const sliderRangeVariants = cva('absolute h-full', {
 });
 
 export const sliderThumbVariants = cva(
-  'group flex size-11 items-center justify-center transition-transform duration-150 ease-out active:scale-95 focus-visible:outline-none motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed',
+  'group flex size-11 items-center justify-center transition-transform duration-150 ease-out active:scale-95 focus-visible:focus-ring motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed',
   {
     variants: {
       rounded: {
@@ -70,7 +72,7 @@ export const sliderThumbVariants = cva(
 );
 
 export const sliderThumbVisualVariants = cva(
-  'pointer-events-none block border bg-background-light transition-[background-color,border-color,box-shadow] duration-150 ease-out group-focus-visible:shadow-glow-focus-light motion-reduce:transition-none dark:bg-surface-dark dark:group-focus-visible:shadow-glow-focus-dark',
+  'pointer-events-none block border bg-background-light transition-[background-color,border-color,box-shadow] duration-150 ease-out motion-reduce:transition-none dark:bg-surface-dark',
   {
     variants: {
       size: { sm: 'size-3', md: 'size-4', lg: 'size-5' },
@@ -88,6 +90,7 @@ export const sliderThumbVisualVariants = cva(
           'border-brand-light-dark group-hover:border-brand-light-light dark:border-brand-dark-light dark:group-hover:border-brand-dark-lighter',
         secondary:
           'border-text-secondary-light group-hover:border-text-light dark:border-border-strong-dark dark:group-hover:border-text-secondary-dark',
+        info: 'border-info-light group-hover:border-info dark:border-info dark:group-hover:border-blue-light',
         success:
           'border-success-light group-hover:border-success dark:border-success dark:group-hover:border-green-light',
         warning:

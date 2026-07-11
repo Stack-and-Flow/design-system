@@ -36,6 +36,17 @@ The design system uses **Space Grotesk Variable**, loaded via `@fontsource-varia
 
 ---
 
+## Documentation Language Rule
+
+Repository documentation is bilingual by paired files:
+
+- Base `*.md`: Spanish.
+- `*.en.md`: English.
+
+When changing a guide, keep both files aligned when a pair exists. Do not replace the Spanish base file with English prose; English content belongs in the matching `.en.md` file. Storybook, code, technical comments, identifiers, and public names remain English.
+
+---
+
 ## How to Create a New Component
 
 The canonical component workflow is [`CONTRIBUTOR-FLOW.en.md`](./CONTRIBUTOR-FLOW.en.md). This document only summarizes the main rules.
@@ -54,7 +65,7 @@ Every component MUST strictly follow the Atomic Design + Container/Presentationa
    └── index.ts             # Re-exports
    ```
 3. **Implement in order**: `types.ts` → hook → component → tests → stories → `index.ts`.
-4. **Design visual semantics deliberately**: decorative glow/elevation belongs to the component contract. When consumers may need a quieter version of a glow-bearing control, prefer `emphasis="default" | "flat"` over a raw `glow?: boolean` prop. Never let decorative emphasis disable focus-visible/accessibility glow.
+4. **Design visual semantics deliberately**: decorative glow/elevation belongs to the component contract. When consumers may need a quieter version of a glow-bearing control, prefer `emphasis="default" | "flat"` over a raw `glow?: boolean` prop. Never let decorative emphasis disable the shared `focus-ring` focus-visible indicator.
 5. **Review before PR**: run the pre-PR component review defined in `CONTRIBUTOR-FLOW.en.md`.
 
 ---
@@ -69,6 +80,9 @@ Storybook is our single source of truth. Every component MUST be fully documente
   - `## Description` is required.
   - `## Dependencies` only when the component uses other components or external primitives.
   - `## Usage Guide` only when usage is complex.
+- **Story-level docs**: every `export const StoryName` needs useful JSDoc that explains the scenario and why it matters. Do not use filler that only restates the story name.
+- **No redundant stories**: each story must demonstrate a distinct state, variant axis, composition constraint, accessibility behavior, or integration context.
+- **No generic `DarkMode` story**: use the Storybook dark-mode toolbar for normal theme coverage. Add a dedicated dark-mode story only for local dark scope, portal theme inheritance, or a theme-specific regression that the toolbar cannot express, and document that reason in JSDoc.
 - **No `parameters.docs.description.component`**: component docs live in JSDoc above `const meta`.
 - **No `play` functions**: Interactions are tested in `ComponentName.test.tsx`, not in stories.
 
@@ -134,7 +148,7 @@ echo "feat(button): add loading state" | pnpm exec commitlint
 
 ### Pull Request Process
 
-1. Before implementing from an issue, verify that the spec is defined and the issue has the `status:approved` label; only then run **START WORK**: assign the issue, move it to `In progress`, and record the branch/worktree plan.
+1. Before implementing from an issue, verify that the spec is defined, the issue has the `status:approved` label, and the issue is not assigned to someone else; only then run **START WORK**: verify assignees, assign the issue, move it to `In progress`, and record the branch/worktree plan.
 2. Push your branch and open a PR against `main`.
 3. Use a PR title with the same Conventional Commit format, for example `feat(button): add loading state`.
 4. You can request automated Copilot review until the PR is ready for human review.
@@ -154,6 +168,7 @@ Before requesting a review, verify:
 - [ ] The pre-PR component review has passed or is documented.
 - [ ] Tokens from `theme.css` are used (no hardcoded colors; arbitrary sizing/typography only in approved compact/dense CVA variants).
 - [ ] ARIA attributes are implemented for interactable elements.
+- [ ] Visual height aligns with the semantic scale that applies (`control` for actions, `form-field` for fields); `touch-target-min` (`44px`) is reserved for touch-first surfaces or hit-area wrappers. Documented compact/dense variants may be smaller if they keep keyboard/focus accessibility.
 - [ ] Conventional Commits are used for commit messages and the PR title.
 - [ ] Security checks pass, or any false positives are documented in the PR.
 - [ ] MCP cleanup ran before commit/review: `rm -rf .playwright-mcp page-*.png page-*.jpeg *.md.playwright-output`.
@@ -179,7 +194,7 @@ However, two rules are non-negotiable:
 
 ### Using gentle-ai (opencode)
 
-If you use [opencode](https://opencode.ai/), this project includes `.atl/AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
+If you use [opencode](https://opencode.ai/), this project includes `AGENTS.md` — a context file that is automatically injected into all agents when you open the project.
 
 The agents will already know:
 
@@ -189,6 +204,8 @@ The agents will already know:
 - The full list of anti-patterns that cause PR rejection
 
 **To activate**: simply open the project directory in opencode. No manual setup required — context loads automatically.
+
+Shared team skills live in `skills/`. The `.atl/` directory is local generated gentle-ai state — registry/cache — and must stay ignored because it can mix project skills with the user's personal skills.
 
 ---
 
@@ -201,17 +218,18 @@ Phase summary:
 1. **Research** — investigate references, API, states, accessibility, and design.
 2. **Spec proposal** — use `component-spec-proposer` to turn the task and reference into a validated issue spec.
 3. **Approval gate** — once the spec is written, wait for the `status:approved` label on the issue; without that label there is no START WORK or implementation under any circumstance.
-4. **START WORK** — after the `status:approved` label, assign the issue, move it to `In progress`, and record branch/worktree.
-5. **Spec intake** — with START WORK already completed, `component-contributor` reads the `## Validated component spec` section without inventing behavior.
-6. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
-7. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
-8. **Plan** — review and approve files, variants, tests, stories, and accessibility.
-9. **Implementation** — the agent creates the 6 files and explains decisions.
-10. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
-11. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
-12. **END WORK** — move the task to `Done` only with a merged PR or explicit maintainer/user approval plus validation evidence.
+4. **Assignee gate** — before any action on a linked issue, verify assignees; if it is assigned to someone else, explicit permission is required before reassigning it.
+5. **START WORK** — after the `status:approved` label and assignee gate, assign the issue, move it to `In progress`, and record branch/worktree.
+6. **Spec intake** — with START WORK already completed, `component-contributor` reads the `## Validated component spec` section without inventing behavior.
+7. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
+8. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
+9. **Plan** — review and approve files, variants, tests, stories, and accessibility.
+10. **Implementation** — the agent creates the 6 files and explains decisions.
+11. **Visual review** — CRITICAL or MAJOR issues are fixed before continuing.
+12. **Pre-PR review** — `components-auditor` validates architecture, tests, Storybook, tokens, visual states, and accessibility before PR.
+13. **END WORK** — move the task to `Done` only with a merged PR or explicit maintainer/user approval plus validation evidence.
 
-> To activate the full flow, first prepare the spec with `component-spec-proposer`; after validation, wait for `status:approved`, share the issue URL, and ask the agent to implement the component.
+> To activate the full flow, first prepare the spec with `component-spec-proposer`; after validation, wait for `status:approved`, verify the issue is not assigned to someone else, share the issue URL, and ask the agent to implement the component.
 
 ---
 

@@ -100,11 +100,13 @@ El color de marca. Dos valores según el modo:
 | Error / Danger | `--color-error` | `#ff0036` | `#db143c` |
 | Success | `--color-success` | `#22c55e` | `#16a34a` |
 | Warning | `--color-warning` | `#fbbf24` | `#d97706` |
-| Info | `--color-info` | `#55b3ff` | `#0077cc` |
+| Info | `--color-info` | `#3b82f6` | `#1d4ed8` |
 
 ### Transparencias funcionales (tints)
 
-Usadas en overlays, glows y estados interactivos:
+Usadas en overlays, glows y estados interactivos.
+Usa los tints semánticos transparentes para énfasis inline, feedback de hover/active/focus y tracks de progress/slider.
+Usa los tokens de superficie semántica opaca (`*-surface-light` / `*-surface-dark`) para contenedores de estado o superficies flotantes/elevadas donde el contenido de abajo no debe transparentarse.
 
 | Rol | Valor |
 |-----|-------|
@@ -305,7 +307,7 @@ border: 1px solid #202C3C;
 border-radius: 8px;
 color: #f9f9f9;
 ```
-Focus: borde brightens + `box-shadow: 0 0 0 3px rgba(255,0,54,0.12)`.
+Focus: el borde se aclara + outline compartido `focus-ring` (`2px solid var(--color-primary)`, offset `2px`).
 Placeholder: `#6a6b6c`.
 
 ### Code blocks
@@ -317,6 +319,16 @@ border-radius: 8px;
 font-size: 93%; /* --ifm-code-font-size */
 ```
 Highlighted line: `rgba(219,20,60,0.10)` (light) / `rgba(255,0,54,0.15)` (dark).
+
+### Drawer
+
+Drawer es una superficie flotante tipo dialog para tareas suplementarias, navegación, formularios y contenido largo. Usa el mismo overlay que Modal (`opacity`, `blur` o `transparent`) y un panel opaco `surface` con borde, sombra de modal y movimiento por `opacity` + `transform` solamente.
+
+- `start` y `end` son placements lógicos: en `md+` respetan LTR/RTL; en mobile se adaptan a bottom sheet.
+- `top`, `bottom` y el bottom sheet mobile usan utilidades `max-h-drawer-*` basadas en `--size-drawer-block-viewport`.
+- Los footers de bottom/mobile drawers usan safe area para no colisionar con home indicators.
+- Header y footer permanecen visibles; `Drawer.Body` es la región con scroll interno.
+- `prefers-reduced-motion` elimina las transiciones de entrada/salida sin cambiar semántica ni foco.
 
 ### Glow del GitHub Stars badge
 
@@ -640,15 +652,18 @@ Todos los valores de texto sobre sus respectivos fondos cumplen WCAG AA (4.5:1) 
 > ⚠️ `#6a6b6c` (disabled/muted) no cumple AA sobre los fondos dark — es correcto: WCAG exime explícitamente los estados `disabled` del requisito de contraste.
 
 ### Targets táctiles
-- Botones pill: altura mínima por defecto `44px`
-- Escala de acciones `xs | sm | md | lg`: `xs` es la variante compacta densa para `Button`, `IconButton` y `Link` CTA (`button` / `outlined`), con menor altura y padding; usá `sm` o superior cuando necesitás conservar el target de `44px`
-- `Link` `regular` sigue siendo tipográfico e inline; los CTA `sm` y superiores mantienen el área mínima de `44px`
-- Nav links: área mínima `44px` de alto incluyendo padding
-- Elementos de menú: `padding: 7px 12px` mínimo con font 14px
+- La altura visual de los controles compartidos se define con la escala `control`: `xs = 24px`, `sm = 32px`, `md = 40px`, `lg = 48px`.
+- Tokens Tailwind v4: `--spacing-control-xs|sm|md|lg` generan utilidades `h-control-*` y `w-control-*`; `--spacing-form-field-sm|md|lg` generan `h-form-field-*`; `--spacing-touch-target-min` genera `min-h-touch-target-min`, `min-w-touch-target-min` y `size-touch-target-min`.
+- `Button`, `IconButton` y `Link` CTA (`button` / `outlined`) usan esa escala visual compartida. `Link` `regular` sigue siendo tipográfico e inline.
+- `Input` y `Select` usan la escala semántica `form-field`: `sm = 48px`, `md = 56px`, `lg = 64px`, porque su altura contempla label, floating label, adornments y alineación entre campos.
+- `--spacing-touch-target-min` (`44px`) es una guía de target táctil, no una altura visual universal. Úsalo para superficies touch-first o para ampliar el hit area de controles compactos como `Checkbox` y `Switch` sin agrandar su forma visible.
+- Otras excepciones documentadas: `TextArea` sigue siendo multiline/content-driven; `Chip` conserva una escala compacta de tag/token; `Badge` sigue siendo informativo, no un control interactivo general.
+- Nav links y elementos de menú deben seguir ofreciendo un área cómoda en contextos touch-first, aunque su altura visual no use necesariamente la escala `control`.
 
 ### Focus visible
-- Todos los elementos interactivos tienen `focus-visible` con `box-shadow: 0 0 0 3px rgba(255,0,54,0.4)` en dark y `box-shadow: 0 0 0 3px rgba(219,20,60,0.35)` en light
-- Nunca `outline: none` sin alternativa visible
+- Todos los elementos interactivos consumen la utilidad compartida `focus-ring` en `focus-visible`.
+- Contrato: `outline-style: solid`, `outline-color: var(--color-primary)`, `outline-width: 2px`, `outline-offset: 2px`.
+- Nunca `outline: none` sin reponer `focus-visible:focus-ring` o una variante equivalente para wrappers, peers, groups o `:has(:focus-visible)`.
 
 ### Motion
 - Transiciones: máximo `560ms`. Respetar `prefers-reduced-motion`:

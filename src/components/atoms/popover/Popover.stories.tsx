@@ -318,6 +318,16 @@ export const ColorAccents: Story = {
           <Popover.Body>Accent color applies to the header and related floating details.</Popover.Body>
         </Popover.Content>
       </Popover>
+
+      <Popover>
+        <Popover.Trigger>
+          <TriggerButton>info</TriggerButton>
+        </Popover.Trigger>
+        <Popover.Content color='info'>
+          <Popover.Header>info accent</Popover.Header>
+          <Popover.Body>Accent color applies to the header and related floating details.</Popover.Body>
+        </Popover.Content>
+      </Popover>
     </div>
   )
 };

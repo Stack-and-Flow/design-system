@@ -66,6 +66,19 @@ describe('useSnippet — logic', () => {
     expect(snippetBase({ variant: 'shadow' })).toContain('border-border-strong-light');
   });
 
+  it.each([
+    ['primary', 'bg-red-surface-light', 'dark:bg-red-surface-dark'],
+    ['success', 'bg-success-surface-light', 'dark:bg-success-surface-dark'],
+    ['warning', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark'],
+    ['danger', 'bg-error-surface-light', 'dark:bg-error-surface-dark'],
+    ['info', 'bg-info-surface-light', 'dark:bg-info-surface-dark']
+  ] as const)('uses opaque status surfaces for %s solid snippets', (color, lightClass, darkClass) => {
+    const className = snippetBase({ color, variant: 'solid' });
+
+    expect(className).toContain(lightClass);
+    expect(className).toContain(darkClass);
+  });
+
   it('maps provided aria props to the copy button and preserves the root id', () => {
     const { result } = renderHook(() =>
       useSnippet({
@@ -193,7 +206,7 @@ describe('Snippet — component behavior', () => {
     const code = screen.getByText('pnpm install');
 
     expect(button).toHaveAttribute('aria-controls', 'install-snippet-content');
-    expect(button).toHaveClass('h-9', 'w-9');
+    expect(button).toHaveClass('h-control-xs', 'w-control-xs');
     expect(screen.getByTestId('snippet-icon')).toHaveAttribute('data-size', '14');
     expect(code.closest('pre')).toHaveAttribute('id', 'install-snippet-content');
     expect(screen.getByText('pnpm install').parentElement?.parentElement).not.toHaveAttribute(

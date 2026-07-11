@@ -50,7 +50,7 @@ export const paginationControlVariants = cva(
     'hover:border-brand-light-darkest hover:bg-red-tint-subtle hover:text-brand-light-darkest hover:no-underline',
     'dark:hover:border-brand-dark-light dark:hover:bg-red-tint-subtle dark:hover:text-brand-dark-light',
     'active:scale-[0.98]',
-    'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark'
+    'focus-visible:focus-ring'
   ],
   {
     variants: {

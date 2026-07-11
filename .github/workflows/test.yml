@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -32,8 +32,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify harness skill boundaries
+        run: node scripts/verify-harness-skill-boundaries.mjs
+
       - name: Verify prop default docs
         run: node scripts/verify-prop-default-docs.mjs
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
 
       - name: Run tests
         run: pnpm test
@@ -44,7 +50,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6

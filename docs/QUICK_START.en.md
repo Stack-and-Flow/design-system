@@ -34,8 +34,8 @@ Go to the [GitHub Project board](https://github.com/orgs/Stack-and-Flow/projects
 
 > **First time?** Look for issues tagged `layer: atom` with `category: component` — these are self-contained and well-defined.
 
-Before writing code, make sure the spec is defined and the issue has the `status:approved` label. Only then run **START WORK**:
-- assign the issue to yourself;
+Before writing code, make sure the spec is defined, the issue has the `status:approved` label, and the issue is not assigned to someone else. Only then run **START WORK**:
+- verify assignees and assign the issue to yourself;
 - move it to `In progress`;
 - record the branch and worktree plan.
 
@@ -133,7 +133,7 @@ This project supports [opencode](https://opencode.ai/) with pre-configured conte
 opencode
 ```
 
-The agent automatically loads the project rules from `.atl/AGENTS.md` — no manual setup needed. Read [CONTRIBUTING.en.md](./CONTRIBUTING.en.md#working-with-ai-agents) for the full AI workflow.
+The agent automatically loads the project rules from `AGENTS.md` — no manual setup needed. Read [CONTRIBUTING.en.md](./CONTRIBUTING.en.md#working-with-ai-agents) for the full AI workflow.
 
 ---
 

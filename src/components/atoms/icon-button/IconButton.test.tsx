@@ -58,8 +58,8 @@ describe('useIconButton — logic', () => {
     expect(smallResult.current.size).toBe('sm');
     expect(largeResult.current.iconSize).toBe(24);
     expect(largeResult.current.size).toBe('lg');
-    expect(compactResult.current.className).toContain('h-9');
-    expect(compactResult.current.className).toContain('w-9');
+    expect(compactResult.current.className).toContain('h-control-xs');
+    expect(compactResult.current.className).toContain('w-control-xs');
     expect(compactResult.current.className).not.toBe(largeResult.current.className);
   });
 

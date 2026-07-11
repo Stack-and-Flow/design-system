@@ -43,6 +43,20 @@ describe('Chip — interactive and accessibility behavior', () => {
     expect(result.current.propsBase['data-interactive']).toBe('false');
   });
 
+  it.each([
+    ['primary', 'bg-red-surface-light', 'dark:bg-red-surface-dark', 'hover:bg-red-tint-low'],
+    ['info', 'bg-info-surface-light', 'dark:bg-info-surface-dark', 'hover:bg-info-tint'],
+    ['success', 'bg-success-surface-light', 'dark:bg-success-surface-dark', 'hover:bg-success-tint'],
+    ['warning', 'bg-warning-surface-light', 'dark:bg-warning-surface-dark', 'hover:bg-warning-tint'],
+    ['danger', 'bg-error-surface-light', 'dark:bg-error-surface-dark', 'hover:bg-error-tint']
+  ] as const)('uses opaque status surfaces for %s flat chips while leaving hover tints intact', (color, lightClass, darkClass, hoverClass) => {
+    const { result } = renderHook(() => useChip({ color, variant: 'flat' }));
+
+    expect(result.current.slots.base).toContain(lightClass);
+    expect(result.current.slots.base).toContain(darkClass);
+    expect(result.current.slots.base).toContain(hoverClass);
+  });
+
   it('handles disabled and isDisabled alias in useChip', () => {
     const { result: disabledResult } = renderHook(() => useChip({ disabled: true }));
     expect(disabledResult.current.isDisabled).toBe(true);

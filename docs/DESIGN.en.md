@@ -100,11 +100,13 @@ The brand color. Two values depending on the mode:
 | Error / Danger | `--color-error` | `#ff0036` | `#db143c` |
 | Success | `--color-success` | `#22c55e` | `#16a34a` |
 | Warning | `--color-warning` | `#fbbf24` | `#d97706` |
-| Info | `--color-info` | `#55b3ff` | `#0077cc` |
+| Info | `--color-info` | `#3b82f6` | `#1d4ed8` |
 
 ### Functional transparencies (tints)
 
-Used in overlays, glows, and interactive states:
+Used in overlays, glows, and interactive states.
+Use transparent semantic tints for inline emphasis, hover/active/focus feedback, and progress/slider tracks.
+Use opaque semantic surface tokens (`*-surface-light` / `*-surface-dark`) for status containers or floating/elevated surfaces where underlying content must not bleed through.
 
 | Role | Value |
 |-----|-------|
@@ -305,7 +307,7 @@ border: 1px solid #202C3C;
 border-radius: 8px;
 color: #f9f9f9;
 ```
-Focus: brighter border + `box-shadow: 0 0 0 3px rgba(255,0,54,0.12)`.
+Focus: brighter border + shared `focus-ring` outline (`2px solid var(--color-primary)`, offset `2px`).
 Placeholder: `#6a6b6c`.
 
 ### Code blocks
@@ -640,15 +642,18 @@ All text values on their respective backgrounds meet at least WCAG AA (4.5:1). P
 > ⚠️ `#6a6b6c` (disabled/muted) does not meet AA on dark backgrounds — that is acceptable: WCAG explicitly exempts `disabled` states from the contrast requirement.
 
 ### Touch targets
-- Pill buttons: default minimum height `44px`
-- Action scale `xs | sm | md | lg`: `xs` is the dense compact variant for `Button`, `IconButton`, and CTA `Link` (`button` / `outlined`), with lower height and padding; use `sm` or above when you need to preserve the `44px` target
-- `Link` `regular` remains typographic and inline; CTA `sm` and above keep the minimum `44px` area
-- Nav links: minimum `44px` height including padding
-- Menu items: minimum `padding: 7px 12px` with 14px font
+- Shared visual control height uses the `control` scale: `xs = 24px`, `sm = 32px`, `md = 40px`, `lg = 48px`.
+- Tailwind v4 tokens: `--spacing-control-xs|sm|md|lg` generate `h-control-*` and `w-control-*`; `--spacing-form-field-sm|md|lg` generate `h-form-field-*`; `--spacing-touch-target-min` generates `min-h-touch-target-min`, `min-w-touch-target-min`, and `size-touch-target-min`.
+- `Button`, `IconButton`, and CTA `Link` (`button` / `outlined`) use that shared visual scale. `Link` `regular` remains typographic and inline.
+- `Input` and `Select` use the semantic `form-field` scale: `sm = 48px`, `md = 56px`, `lg = 64px`, because their height accounts for label, floating label, adornments, and field-to-field alignment.
+- `--spacing-touch-target-min` (`44px`) is touch-target guidance, not a universal visual height. Use it for touch-first surfaces or to expand the hit area of compact controls like `Checkbox` and `Switch` without enlarging their visible shape.
+- Other documented exceptions: `TextArea` stays multiline/content-driven; `Chip` keeps a compact tag/token scale; `Badge` remains informational, not a general interactive control.
+- Nav links and menu items should still provide a comfortable area in touch-first contexts, even when their visual height does not necessarily use the `control` scale.
 
 ### Focus visible
-- All interactive elements use `focus-visible` with `box-shadow: 0 0 0 3px rgba(255,0,54,0.4)` in dark mode and `box-shadow: 0 0 0 3px rgba(219,20,60,0.35)` in light mode
-- Never `outline: none` without a visible alternative
+- All interactive elements consume the shared `focus-ring` utility on `focus-visible`.
+- Contract: `outline-style: solid`, `outline-color: var(--color-primary)`, `outline-width: 2px`, `outline-offset: 2px`.
+- Never use `outline: none` without restoring `focus-visible:focus-ring` or an equivalent variant for wrappers, peers, groups, or `:has(:focus-visible)`.
 
 ### Motion
 - Transitions: maximum `560ms`. Respect `prefers-reduced-motion`:

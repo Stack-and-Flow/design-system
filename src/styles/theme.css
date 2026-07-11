@@ -88,6 +88,8 @@
   --color-red-tint-high: rgba(255, 0, 54, 0.15); /* Glow base / code highlight */
   --color-red-tint-strong: rgba(255, 0, 54, 0.3); /* Glow activo */
   --color-red-tint-border: rgba(255, 0, 54, 0.5); /* Borde neon botón secondary (light) */
+  --color-red-surface-light: color-mix(in srgb, var(--color-brand-light) 12%, var(--color-surface-light));
+  --color-red-surface-dark: color-mix(in srgb, var(--color-brand-dark) 18%, var(--color-surface-dark));
   --color-spinner-track: rgba(45, 6, 9, 0.2); /* Spinner secondary track */
 
   /* Tints de superficie — blancos y negros semitransparentes */
@@ -111,20 +113,30 @@
   --color-success: #22c55e; /* Dark */
   --color-success-light: #16a34a; /* Light */
   --color-success-dark: #138a3d;
+  --color-success-text-light: #15803d; /* Light hint text — AA on white */
   --color-success-tint: rgba(34, 197, 94, 0.12);
+  --color-success-surface-light: color-mix(in srgb, var(--color-success-light) 12%, var(--color-surface-light));
+  --color-success-surface-dark: color-mix(in srgb, var(--color-success) 18%, var(--color-surface-dark));
 
   --color-warning: #fbbf24; /* Dark */
   --color-warning-light: #d97706; /* Light */
   --color-warning-dark: #b58903;
+  --color-warning-text-light: #92400e; /* Light hint text — AA on white */
   --color-warning-tint: rgba(251, 191, 36, 0.12);
+  --color-warning-surface-light: color-mix(in srgb, var(--color-warning-light) 12%, var(--color-surface-light));
+  --color-warning-surface-dark: color-mix(in srgb, var(--color-warning) 18%, var(--color-surface-dark));
 
   --color-error: #ff0036; /* Dark — igual que brand en dark */
   --color-error-light: #db143c; /* Light */
   --color-error-tint: rgba(255, 0, 54, 0.12);
+  --color-error-surface-light: color-mix(in srgb, var(--color-error-light) 12%, var(--color-surface-light));
+  --color-error-surface-dark: color-mix(in srgb, var(--color-error) 18%, var(--color-surface-dark));
 
   --color-info: #3b82f6;
   --color-info-light: #1d4ed8;
   --color-info-tint: rgba(59, 130, 246, 0.12);
+  --color-info-surface-light: color-mix(in srgb, var(--color-info-light) 12%, var(--color-surface-light));
+  --color-info-surface-dark: color-mix(in srgb, var(--color-info) 18%, var(--color-surface-dark));
 
   /* ── Colores de utilidad (paleta extendida) ──────────────────── */
   --color-yellow: #eab308;
@@ -273,6 +285,8 @@
   --glow-input-warning-light: 0 0 0 3px rgba(217, 119, 6, 0.15);
   --glow-input-success: 0 0 0 3px rgba(34, 197, 94, 0.12);
   --glow-input-success-light: 0 0 0 3px rgba(22, 163, 74, 0.15);
+  --glow-input-info: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  --glow-input-info-light: 0 0 0 3px rgba(29, 78, 216, 0.15);
   --shadow-glow-input-focus: var(--glow-input-focus);
   --shadow-glow-input-focus-light: var(--glow-input-focus-light);
   --shadow-glow-input-error: var(--glow-input-error);
@@ -281,6 +295,8 @@
   --shadow-glow-input-warning-light: var(--glow-input-warning-light);
   --shadow-glow-input-success: var(--glow-input-success);
   --shadow-glow-input-success-light: var(--glow-input-success-light);
+  --shadow-glow-input-info: var(--glow-input-info);
+  --shadow-glow-input-info-light: var(--glow-input-info-light);
 
   /* Glow ámbar — GitHub stars */
   --glow-amber: 0 0 0 3px rgba(255, 185, 0, 0.12);
@@ -395,6 +411,17 @@
   --spacing-8: 2rem; /* 32px */
   --spacing-10: 2.5rem; /* 40px */
   --spacing-12: 3rem; /* 48px */
+  --spacing-control-xs: 1.5rem; /* 24px */
+  --spacing-control-sm: 2rem; /* 32px */
+  --spacing-control-md: 2.5rem; /* 40px */
+  --spacing-control-lg: 3rem; /* 48px */
+  --spacing-form-field-sm: 3rem; /* 48px */
+  --spacing-form-field-md: 3.5rem; /* 56px */
+  --spacing-form-field-lg: 4rem; /* 64px */
+  --spacing-search-input-sm: 2rem; /* 32px */
+  --spacing-search-input-md: 2.25rem; /* 36px */
+  --spacing-search-input-lg: 2.5rem; /* 40px */
+  --spacing-touch-target-min: 2.75rem; /* 44px */
   --spacing-16: 4rem; /* 64px */
   --spacing-20: 5rem; /* 80px */
   --spacing-24: 6rem; /* 96px */
@@ -421,6 +448,9 @@
   --size-modal-3xl: 48rem;
   --size-modal-4xl: 56rem;
   --size-modal-5xl: 64rem;
+
+  /* ── Drawer sizing ───────────────────────────────────────────── */
+  --size-drawer-block-viewport: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 
   /* ── Transiciones ────────────────────────────────────────────── */
   --transition-fast: 150ms ease-in-out;
@@ -484,6 +514,17 @@
   z-index: var(--z-modal);
 }
 
+@utility z-toast {
+  z-index: var(--z-toast);
+}
+
+@utility focus-ring {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+
 @utility shadow-modal {
   box-shadow: var(--shadow-dropdown-light);
 }
@@ -531,6 +572,34 @@
 
 @utility max-w-modal-5xl {
   max-width: min(var(--size-modal-viewport), var(--size-modal-5xl));
+}
+
+@utility max-h-drawer-xs {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-xs));
+}
+
+@utility max-h-drawer-sm {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-sm));
+}
+
+@utility max-h-drawer-md {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-md));
+}
+
+@utility max-h-drawer-lg {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-lg));
+}
+
+@utility max-h-drawer-xl {
+  max-height: min(var(--size-drawer-block-viewport), var(--size-modal-xl));
+}
+
+@utility max-h-drawer-full {
+  max-height: var(--size-drawer-block-viewport);
+}
+
+@utility pb-drawer-safe {
+  padding-bottom: max(var(--spacing-6), env(safe-area-inset-bottom));
 }
 
 @media (prefers-reduced-motion: reduce) {

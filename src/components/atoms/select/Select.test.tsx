@@ -131,6 +131,7 @@ describe('Select — render', () => {
 
     await user.click(screen.getByRole('combobox'));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveClass('min-h-touch-target-min');
     expect(screen.getByTestId('select-spinner')).toBeInTheDocument();
     expect(screen.getByText('Loading countries')).toBeInTheDocument();
   });
@@ -635,10 +636,16 @@ describe('Select — accessibility', () => {
 });
 
 describe('Select — size and variant smoke coverage', () => {
-  it.each(['sm', 'md', 'lg'] as const)('renders %s size as an accessible combobox', (size) => {
-    render(<Select label='Country' options={defaultOptions} size={size} placeholder='Select...' />);
+  it.each([
+    ['sm', 'h-form-field-sm'],
+    ['md', 'h-form-field-md'],
+    ['lg', 'h-form-field-lg']
+  ] as const)('maps %s size to the form-field height scale', (size, heightClassName) => {
+    const { result } = renderHook(() =>
+      useSelect({ label: 'Country', options: defaultOptions, size, placeholder: 'Select...' })
+    );
 
-    expect(screen.getByRole('combobox', { name: 'Country' })).toBeInTheDocument();
+    expect(result.current.triggerClassName).toContain(heightClassName);
   });
 
   it.each([
@@ -673,6 +680,17 @@ describe('Select — hint pattern', () => {
       <Select label='Country' options={defaultOptions} hint={{ message: 'Please select a country', type: 'info' }} />
     );
     expect(screen.getByText('Please select a country')).toBeInTheDocument();
+  });
+
+  it('maps info hints to semantic info styling and icon tone', () => {
+    const { result } = renderHook(() =>
+      useSelect({ label: 'Country', options: defaultOptions, hint: { message: 'Helpful guidance', type: 'info' } })
+    );
+
+    expect(result.current.triggerClassName).toContain('border-info-light');
+    expect(result.current.triggerClassName).toContain('shadow-glow-input-info-light');
+    expect(result.current.hintMessageClassName).toContain('text-info-light');
+    expect(result.current.hintIconProps).toMatchObject({ name: 'info', tone: 'info' });
   });
 
   it('derives error status from hint type', () => {

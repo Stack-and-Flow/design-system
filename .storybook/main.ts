@@ -41,22 +41,19 @@ const config: StorybookConfig = {
         hmr: true
       },
       cache: false,
+      optimizeDeps: {
+        exclude: ['lottie-api', 'lottie-web']
+      },
       build: {
         rollupOptions: {
-          treeshake: false,
           output: {
-            assetFileNames: (assetInfo: { name?: string }) => {
-              if (assetInfo.name?.includes('preview') && assetInfo.name?.endsWith('.css')) {
-                return 'assets/preview.css';
-              }
-              return assetInfo.name ? `assets/${assetInfo.name}` : 'assets/[name].[hash][extname]';
-            }
+            assetFileNames: 'assets/[name]-[hash][extname]'
           }
         }
       },
       css: {
         preprocessorOptions: {
-          postcss: true // Asegúrate de que PostCSS esté habilitado
+          postcss: true // Ensure PostCSS stays enabled for Storybook styles.
         }
       }
     });

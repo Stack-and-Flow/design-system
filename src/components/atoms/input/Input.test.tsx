@@ -41,6 +41,17 @@ describe('useInput — logic', () => {
     expect(result.current.inputProps['aria-describedby']).toBe('email-hint');
   });
 
+  it('maps info hints to semantic info styling and icon tone', () => {
+    const { result } = renderHook(() =>
+      useInput({ id: 'email', label: 'Email', hint: { type: 'info', message: 'Helpful guidance' } })
+    );
+
+    expect(result.current.containerProps.className).toContain('border-info-light');
+    expect(result.current.containerProps.className).toContain('shadow-glow-input-info-light');
+    expect(result.current.hintMessageClassName).toContain('text-info-light');
+    expect(result.current.hintIconProps).toMatchObject({ name: 'info', tone: 'info' });
+  });
+
   it('uses placeholder as an accessible name when no label or aria name is provided', () => {
     const { result } = renderHook(() => useInput({ id: 'search', placeholder: 'Search products' }));
     expect(result.current.inputProps['aria-label']).toBe('Search products');
@@ -83,10 +94,19 @@ describe('useInput — logic', () => {
     expect(result.current.wrapperClassName).toContain('w-full');
   });
 
+  it.each([
+    ['sm', 'h-form-field-sm'],
+    ['md', 'h-form-field-md'],
+    ['lg', 'h-form-field-lg']
+  ] as const)('maps %s size to the form-field height scale', (size, heightClassName) => {
+    const { result } = renderHook(() => useInput({ id: 'email', label: 'Email', size, startContent: '$' }));
+
+    expect(result.current.containerProps.className).toContain(heightClassName);
+  });
+
   it('uses compact content spacing for the small size', () => {
     const { result } = renderHook(() => useInput({ id: 'email', label: 'Email', size: 'sm', startContent: '$' }));
 
-    expect(result.current.containerProps.className).toContain('h-12');
     expect(result.current.containerProps.className).toContain('px-3');
     expect(result.current.contentClassName).toContain('gap-2');
     expect(result.current.adornmentClassName).toContain('fs-small');

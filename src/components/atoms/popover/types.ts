@@ -29,6 +29,7 @@ export const popoverContentVariants = cva(
         neutral: 'border-border-light dark:border-border-dark',
         primary: 'border-brand-light/20 dark:border-brand-dark/30',
         secondary: 'border-indigo/20 dark:border-indigo-light/30',
+        info: 'border-info-light/30 dark:border-info/30',
         success: 'border-success-light/30 dark:border-success/30',
         warning: 'border-warning-light/30 dark:border-warning/30',
         danger: 'border-error-light/30 dark:border-error/30'
@@ -55,8 +56,7 @@ export const popoverContentVariants = cva(
 );
 
 export const popoverTriggerVariants = cva([
-  'outline-none focus-visible:outline-none',
-  'focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+  'outline-none focus-visible:focus-ring',
   'data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-40',
   'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40'
 ]);
@@ -72,6 +72,7 @@ export const popoverHeaderVariants = cva('border-b px-4 font-semibold tracking-n
       neutral: 'border-border-light text-text-light dark:border-border-dark dark:text-text-dark',
       primary: 'border-border-light text-brand-light dark:border-border-dark dark:text-brand-dark',
       secondary: 'border-border-light text-indigo-dark dark:border-border-dark dark:text-indigo-light',
+      info: 'border-border-light text-info-light dark:border-border-dark dark:text-info',
       success: 'border-border-light text-success-light dark:border-border-dark dark:text-success',
       warning: 'border-border-light text-warning-light dark:border-border-dark dark:text-warning',
       danger: 'border-border-light text-error-light dark:border-border-dark dark:text-error'
@@ -125,6 +126,7 @@ export const popoverArrowVariants = cva('drop-shadow-sm', {
       neutral: 'fill-background-light dark:fill-surface-dark',
       primary: 'fill-brand-light/15 dark:fill-brand-dark/20',
       secondary: 'fill-indigo/15 dark:fill-indigo-light/20',
+      info: 'fill-info-light/15 dark:fill-info/20',
       success: 'fill-success-light/15 dark:fill-success/20',
       warning: 'fill-warning-light/15 dark:fill-warning/20',
       danger: 'fill-error-light/15 dark:fill-error/20'
@@ -144,6 +146,11 @@ export const popoverArrowVariants = cva('drop-shadow-sm', {
     {
       variant: 'frosted',
       color: 'secondary',
+      class: 'fill-navbar-light dark:fill-navbar-dark'
+    },
+    {
+      variant: 'frosted',
+      color: 'info',
       class: 'fill-navbar-light dark:fill-navbar-dark'
     },
     {

@@ -1,18 +1,18 @@
-# Stack-and-Flow — Component Visual Specification
+# Stack-and-Flow — Especificación visual de componentes
 
-> Reference for AI agents writing or reviewing component code. Covers every interactive state, glow system, transition rules, gradient border technique, and accessibility requirements. Derived from the Agent Teams reference project and Stack-and-Flow tokens.
+> Referencia para agentes de IA que escriben o revisan código de componentes. Cubre todos los estados interactivos, el sistema de glow, las reglas de transición, la técnica de bordes con degradado y los requisitos de accesibilidad. Se basa en los tokens de Stack-and-Flow y en el contrato visual actual del proyecto.
 
 ---
 
-## 1. Compositional Principles
+## 1. Principios de composición
 
-These rules are system-wide and non-negotiable. Every component must comply with all of them.
+Estas reglas se aplican a todo el sistema y no admiten excepciones. Todos los componentes deben cumplirlas.
 
-**Rule 1 — `backdrop-filter: blur` only on floating elements.**
-Only elements that literally float above page content (navbar, mobile sidebar, modal backdrops, sticky bars, or an explicitly floating `CardContainer` with `backdropBlur` enabled) use `backdrop-filter`. Content cards are opaque — they use `background: #0B131E`. `blur` signals "I am floating"; opaque signals "I am content". Never apply `backdrop-filter` to feature cards, release cards, pipeline cards, or any card that lives in normal document flow. `CardContainer` defaults to `backdropBlur="none"`; `backdropBlur="sm" | "md" | "lg"` is only for floating/glass treatments above other content.
+**Regla 1 — `backdrop-filter: blur` solo en elementos flotantes.**
+Solo los elementos que realmente flotan sobre el contenido de la página (navbar, barra lateral móvil, fondos de modal, barras sticky o un `CardContainer` explícitamente flotante con `backdropBlur` activado) usan `backdrop-filter`. Las cards de contenido son opacas: usan `background: #0B131E`. El `blur` comunica "estoy flotando"; una superficie opaca comunica "soy contenido". Nunca apliques `backdrop-filter` a cards de features, release cards, pipeline cards ni a ninguna card que viva en el flujo normal del documento. `CardContainer` usa `backdropBlur="none"` por defecto; `backdropBlur="sm" | "md" | "lg"` queda reservado para tratamientos flotantes o glass por encima de otros contenidos.
 
-**Rule 2 — Never animate gradient background directly. Use `::before` opacity instead.**
-A `linear-gradient` cannot be transitioned by the browser. Instead, place the hover gradient on a `::before` pseudo-element with `opacity: 0`, then transition only `opacity` to `1` on hover. This runs on the GPU compositor and produces a smooth fade. The background property on the element itself remains static or uses only simple `background-color` transitions.
+**Regla 2 — Nunca animes el fondo con degradado directamente. Usa la opacidad de `::before` en su lugar.**
+El navegador no puede interpolar un `linear-gradient`. En su lugar, coloca el degradado de hover en un pseudo-elemento `::before` con `opacity: 0` y anima solo `opacity` hasta `1` al hacer hover. Eso se ejecuta en el compositor de la GPU y produce una transición suave. El `background` del elemento principal permanece estático o usa solo transiciones simples de `background-color`.
 
 ```css
 /* ✅ Correct pattern */
@@ -39,16 +39,16 @@ A `linear-gradient` cannot be transitioned by the browser. Instead, place the ho
 }
 ```
 
-**Rule 3 — Decorative glow is semantic; focus glow is accessibility.**
-Treat decorative glow/elevation as part of the component contract, not as a raw visual toggle. A component may ship with decorative glow at rest, on hover, or not at all depending on its variant semantics. Where the component API supports it, expose `emphasis="default" | "flat"` so quiet contexts can suppress decorative glow without changing hierarchy, behavior, or semantics.
+**Regla 3 — El glow decorativo es semántico; el indicador de focus es accesibilidad.**
+Trata el glow o la elevación decorativos como parte del contrato del componente, no como un simple interruptor visual. Un componente puede incluir glow decorativo en reposo, en hover o no incluirlo en absoluto según la semántica de su variante. Cuando la API lo permita, expón `emphasis="default" | "flat"` para que los contextos más sobrios puedan suprimir el glow decorativo sin alterar la jerarquía, el comportamiento ni la semántica.
 
-Focus-visible rings/glows are different: they are accessibility affordances and must never be disabled by `emphasis`, quiet modes, or decorative shadow toggles. Never remove `shadow-glow-focus-*`, focus rings, or selected-state accessibility glow through decorative API controls.
+El indicador `focus-visible` es otra cosa: es una señal de accesibilidad nativa y nunca debe desactivarse mediante `emphasis`, modos sobrios ni toggles de sombra decorativa. Todos los componentes focusables deben consumir la utilidad compartida `focus-ring` con `focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring` o un selector equivalente cuando el foco vive en un hijo.
 
-**Rule 4 — `backdrop-filter` and gradient on the same element are forbidden.**
-A frosted element (`backdrop-filter: blur`) must not also carry a decorative gradient background layer. They conflict visually (the blur already creates depth) and can cause GPU compositing artifacts. Choose one: frosted surface OR gradient surface.
+**Regla 4 — `backdrop-filter` y un degradado en el mismo elemento están prohibidos.**
+Un elemento con efecto esmerilado (`backdrop-filter: blur`) no debe llevar además una capa decorativa de fondo con degradado. Ambos recursos compiten visualmente (el blur ya aporta profundidad) y pueden generar artefactos de composición en la GPU. Elige una sola opción: superficie esmerilada O superficie con degradado.
 
-**Rule 5 — Never use `transition: all`.**
-Always enumerate exactly the properties being animated. `transition: all` animates every CSS property including layout-forcing ones (`width`, `height`, `top`, `left`, `padding`), which triggers reflow and causes jank. Permitted properties to animate: `opacity`, `transform`, `box-shadow`, `background-color`, `border-color`, `color`, `gap`.
+**Regla 5 — No uses nunca `transition: all`.**
+Enumera siempre exactamente las propiedades que se animan. `transition: all` anima todas las propiedades CSS, incluidas las que fuerzan layout (`width`, `height`, `top`, `left`, `padding`), lo que dispara reflow y genera tirones visuales. Las propiedades permitidas para animar son: `opacity`, `transform`, `box-shadow`, `background-color`, `border-color`, `color`, `gap`.
 
 ```css
 /* ✅ Correct */
@@ -59,53 +59,63 @@ transition:
 transition: all 0.25s ease;
 ```
 
-**Rule 6 — Hover direction is tonally upward for both primary and secondary.**
-On `:hover`, primary button gradient shifts lighter (`#ff1a4b → #ff3366` start, `#cc0030 → #e0003a` end) and glow intensity increases. Secondary button background tint increases from `rgba(255,0,54,0.06)` to `rgba(255,0,54,0.12)` and border opacity increases. Hover always makes elements feel more elevated — never darker or more muted.
+**Regla 6 — El hover debe aclarar el tono tanto en primary como en secondary.**
+En `:hover`, el degradado del botón primary se aclara (`#ff1a4b → #ff3366` al inicio, `#cc0030 → #e0003a` al final) y la intensidad del glow aumenta. El tinte de fondo del botón secondary sube de `rgba(255,0,54,0.06)` a `rgba(255,0,54,0.12)` y también aumenta la opacidad del borde. El hover siempre debe hacer que los elementos se perciban más elevados, nunca más oscuros ni más apagados.
 
-**Rule 7 — Focus ring uses `box-shadow`, never `outline`.**
-`outline` does not respect `border-radius` — it draws a rectangle around a pill button. `box-shadow` follows the shape. Use:
+**Regla 7 — El anillo de focus usa la utilidad nativa `focus-ring`.**
+El focus visible no depende de glows decorativos ni de sombras por variante. Usa la utilidad compartida `focus-ring`, que aplica el contrato nativo:
 
-- Dark: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`
-- Light: `box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.35)`
+```css
+:focus-visible {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+```
 
-Never use `outline: none` without an alternative visible focus indicator.
+Nunca uses `outline: none` sin reponer este indicador visible con `focus-visible:focus-ring` o con una variante equivalente para wrappers, peers, groups o `:has(:focus-visible)`.
 
-**Rule 8 — Disabled state uses opacity, never color change.**
-`opacity: 0.4` on the entire component signals disabled. Never change text color, border color, or background to a "grey" variant — this creates a fake semantic signal and breaks the visual system. Always pair with `cursor: not-allowed` and `pointer-events: none`.
+**Regla 8 — El estado disabled usa opacidad; nunca cambio de color.**
+Aplicar `opacity: 0.4` a todo el componente comunica el estado disabled. Nunca cambies el color del texto, el color del borde ni el fondo a una variante "gris": eso crea una señal semántica falsa y rompe el sistema visual. Acompáñalo siempre con `cursor: not-allowed` y `pointer-events: none`.
 
-**Rule 9 — Gradient borders use `::before` pseudo-element, never `border-image`.**
-`border-image` does not work with `border-radius` — the gradient clips to a rectangle, destroying the pill shape. The correct technique uses `::before` absolutely positioned with `inset: -1.5px` and `z-index: -1`, with the gradient as its `background` and `border-radius: inherit`.
+**Regla 9 — Los bordes con degradado usan un pseudo-elemento `::before`, nunca `border-image`.**
+`border-image` no funciona con `border-radius`: el degradado se recorta como un rectángulo y rompe la forma de píldora. La técnica correcta usa un `::before` posicionado de forma absoluta con `inset: -1.5px` y `z-index: -1`, usando el degradado como `background` y `border-radius: inherit`.
 
-**Rule 10 — Default touch target is 44×44px for interactive elements.**
-Buttons and action-style links use a default minimum `height: 44px` from `sm` upward. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Component-specific compact/dense size scales may go below 44px only when explicitly approved, documented on the prop/story, implemented on native controls, and still keyboard/focus accessible; use the default scale when touch-first targets are required. Calendar is an approved dense component scale because date grids need compact scanning density.
+**Regla 10 — La altura visual del control y el objetivo táctil no son lo mismo.**
+La escala visual compartida para controles de acción comparables es `xs | sm | md | lg` = `24px | 32px | 40px | 48px`, expuesta vía `--spacing-control-*` y utilidades Tailwind `h-control-*` / `w-control-*`. `Button`, `IconButton` y `Link` CTA (`button` / `outlined`) deben consumir esa escala para no divergir entre sí. `Link` `regular` sigue siendo una variante tipográfica inline.
 
-**Action size scale — `xs | sm | md | lg`.**
-For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the dense compact size: reduce typography, icon size, gap, horizontal padding, and height so it is visibly smaller than `sm`. `Link` `regular` remains inline typography-only, while CTA-style `sm` and above keep the 44px target.
+`Input` y `Select` son controles de formulario: su altura considera label, floating label, adornments y alineación entre campos, por lo que usan la escala semántica `form-field` (`--spacing-form-field-sm|md|lg` = `48px | 56px | 64px`) en vez de la escala visual de acciones. Si más campos comparten esa lógica, deben alinearse con `Input`/`Select`, no con `Button`.
 
-**Rule 11 — Never animate layout-forcing properties.**
-Do not animate `width`, `height`, `top`, `left`, `margin`, `padding`. These trigger layout reflow on every frame. For position animations use `transform: translateY/translateX`. For size animations use `transform: scale`.
+`--spacing-touch-target-min` (`44px`) es una guía de target táctil para superficies touch-first, CTA primarios en mobile o wrappers de hit area. No es una altura visual universal para todo control web. Los componentes compactos o densos pueden quedar por debajo de `44px` cuando eso está documentado, siguen usando controles nativos y mantienen foco/teclado accesibles. `Checkbox` y `Switch` son ejemplos donde el hit area puede crecer sin cambiar la forma visible; `TextArea`, `Chip` y `Badge` son excepciones intencionales con una semántica distinta.
 
-**Rule 12 — Cards that are interactive links use `position: relative; z-index: 1` on content children.**
-When a card has a `::before` hover gradient overlay, all content children need `position: relative; z-index: 1` to appear above the overlay. Forgetting this causes text and icons to be covered by the gradient layer on hover.
+**Escala de tamaño de acción: `xs | sm | md | lg`.**
+En `Button`, `IconButton` y las variantes de Link usadas como acciones (`button` / `outlined`), `xs` es el tamaño compacto y denso. `sm`, `md` y `lg` siguen la misma escala visual semántica compartida, mientras que el target táctil se evalúa aparte según contexto.
+
+**Regla 11 — No animes propiedades que fuerzan layout.**
+No animes `width`, `height`, `top`, `left`, `margin` ni `padding`. Estas propiedades fuerzan reflow en cada frame. Para animaciones de posición usa `transform: translateY/translateX`. Para animaciones de tamaño usa `transform: scale`.
+
+**Regla 12 — Las cards que funcionan como enlaces interactivos usan `position: relative; z-index: 1` en sus hijos de contenido.**
+Cuando una card tiene un overlay de degradado `::before` en hover, todos sus hijos de contenido necesitan `position: relative; z-index: 1` para quedar por encima del overlay. Si se omite, el texto y los iconos quedan tapados por la capa de degradado durante el hover.
 
 ---
 
-## 2. State Behavior Reference
+## 2. Referencia de comportamiento por estado
 
-| State        | What changes                                                                                                                                                                 | What never changes                                                                                  |
+| Estado | Qué cambia | Qué nunca cambia |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| **hover**    | `box-shadow` intensifies; gradient shifts lighter (primary); background tint increases (secondary); `border-color` opacity increases; `transform: translateY(-6px)` on cards | Border radius; font weight; text color (stays `#ffffff` on primary/secondary); component dimensions |
-| **focus**    | `box-shadow` adds 3px ring: `0 0 0 3px rgba(255,0,54,0.40)` dark / `0 0 0 3px rgba(219,20,60,0.35)` light, merged with existing shadow                                       | Gradient; background tint; `border-color`; dimensions                                               |
-| **active**   | Gradient shifts darker (`#ff1a4b → #cc002b` primary); scale compresses slightly (`transform: scale(0.98)`); glow contracts                                                   | Border radius; text color; font weight                                                              |
-| **disabled** | `opacity: 0.4`; `cursor: not-allowed`; `pointer-events: none`                                                                                                                | All colors stay identical to base state — no grey substitution                                      |
+| **hover** | `box-shadow` se intensifica; el degradado se aclara (primary); aumenta el tinte de fondo (secondary); sube la opacidad de `border-color`; `transform: translateY(-6px)` en cards | Radio de borde; peso tipográfico; color del texto (se mantiene en `#ffffff` en primary y secondary); dimensiones del componente |
+| **focus** | `focus-ring` aplica `outline: 2px solid var(--color-primary)` con `outline-offset: 2px` | Degradado; glow/sombra decorativa; tinte de fondo; `border-color`; dimensiones |
+| **active** | El degradado se oscurece (`#ff1a4b → #cc002b` en primary); la escala se comprime ligeramente (`transform: scale(0.98)`); el glow se contrae | Radio de borde; color del texto; peso tipográfico |
+| **disabled** | `opacity: 0.4`; `cursor: not-allowed`; `pointer-events: none` | Todos los colores se mantienen idénticos al estado base, sin sustitución por grises |
 
 ---
 
-## 3. Components
+## 3. Componentes
 
 ### 3.1 Button — Primary
 
-**Base (dark):**
+**Base (oscuro):**
 
 ```css
 background: linear-gradient(135deg, #ff1a4b 0%, #cc0030 100%);
@@ -118,7 +128,7 @@ font-size: 1rem; /* body size; button--lg adds more padding */
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px; /* minimum; button--lg typically 0.65rem 1.75rem */
-min-height: 44px;
+height: var(--spacing-control-md); /* 40px visual height; use touch-target-min only when the surface is touch-first */
 cursor: pointer;
 box-shadow:
   0 0 0 1.5px rgba(255, 60, 90, 0.5),
@@ -130,7 +140,7 @@ transition:
   background 0.25s ease;
 ```
 
-**Hover (dark):**
+**Hover (oscuro):**
 
 ```css
 background: linear-gradient(135deg, #ff3366 0%, #e0003a 100%);
@@ -141,7 +151,7 @@ box-shadow:
   inset 0 1px 0 rgba(255, 255, 255, 0.2);
 ```
 
-**Hero variant hover (stronger glow — used in hero / sticky bar):**
+**Hover de la variante hero (glow más intenso; se usa en hero / sticky bar):**
 
 ```css
 background: linear-gradient(135deg, #ff3366 0%, #e0003a 100%);
@@ -152,20 +162,17 @@ box-shadow:
   inset 0 1px 0 rgba(255, 255, 255, 0.22);
 ```
 
-**Focus (dark):**
+**Focus (oscuro):**
 
 ```css
-/* Merged with base box-shadow — add the focus ring as the outermost layer */
-box-shadow:
-  0 0 0 3px rgba(255, 0, 54, 0.4),
-  0 0 0 1.5px rgba(255, 60, 90, 0.5),
-  0 0 16px 4px rgba(255, 0, 54, 0.45),
-  0 0 40px 6px rgba(255, 0, 54, 0.18),
-  inset 0 1px 0 rgba(255, 255, 255, 0.15);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
+/* Existing decorative box-shadow remains unchanged. */
 ```
 
-**Active (dark):**
+**Active (oscuro):**
 
 ```css
 transform: scale(0.98);
@@ -181,14 +188,14 @@ pointer-events: none;
 /* gradient, glow, and colors remain identical to base — no grey substitution */
 ```
 
-**Light mode:**
-No differences for primary button — white text over red gradient passes contrast in both modes. The gradient values and glow remain the same.
+**Modo claro:**
+No hay diferencias para el botón principal: el texto blanco sobre un degradado rojo pasa el contraste en ambos modos. Los valores de gradiente y el brillo siguen siendo los mismos.
 
 ---
 
 ### 3.2 Button — Secondary
 
-**Base (dark):**
+**Base (oscuro):**
 
 ```css
 background: rgba(255, 0, 54, 0.06);
@@ -200,7 +207,7 @@ font-size: 1rem;
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* 40px visual height; use touch-target-min only when the surface is touch-first */
 cursor: pointer;
 box-shadow:
   0 0 8px 2px rgba(255, 0, 54, 0.15),
@@ -212,7 +219,7 @@ transition:
   border-color 0.25s ease;
 ```
 
-**Hero / sticky bar base (slightly stronger glow):**
+**Base para hero / sticky bar (glow ligeramente más fuerte):**
 
 ```css
 background: rgba(255, 0, 54, 0.06);
@@ -223,7 +230,7 @@ box-shadow:
   inset 0 0 12px rgba(255, 0, 54, 0.05);
 ```
 
-**Hover (dark):**
+**Hover (oscuro):**
 
 ```css
 background: rgba(255, 0, 54, 0.12);
@@ -234,18 +241,17 @@ box-shadow:
   inset 0 0 16px rgba(255, 0, 54, 0.08);
 ```
 
-**Focus (dark):**
+**Focus (oscuro):**
 
 ```css
-box-shadow:
-  0 0 0 3px rgba(255, 0, 54, 0.4),
-  0 0 8px 2px rgba(255, 0, 54, 0.15),
-  0 0 24px 4px rgba(255, 0, 54, 0.07),
-  inset 0 0 10px rgba(255, 0, 54, 0.04);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
+/* Existing decorative box-shadow remains unchanged. */
 ```
 
-**Active (dark):**
+**Active (oscuro):**
 
 ```css
 transform: scale(0.98);
@@ -260,7 +266,7 @@ cursor: not-allowed;
 pointer-events: none;
 ```
 
-**Light mode:**
+**Modo claro:**
 
 ```css
 color: #cc0030;
@@ -268,7 +274,7 @@ border-color: rgba(219, 20, 60, 0.5);
 /* background remains rgba(255,0,54,0.06) */
 ```
 
-**Light mode hover:**
+**Hover en modo claro:**
 
 ```css
 color: #8c0b26;
@@ -279,7 +285,7 @@ border-color: rgba(219, 20, 60, 0.8);
 
 ### 3.3 Button — Ghost / Outlined
 
-Ghost/outlined is implemented as a secondary button without the inset glow. Used in context where the element is inside a card or section with colored background:
+La variante ghost/outlined se implementa como un botón secondary sin glow interno. Se usa cuando el elemento vive dentro de una card o una sección con fondo de color:
 
 ```css
 background: transparent;
@@ -289,7 +295,7 @@ color: #ffffff;
 font-weight: 600;
 letter-spacing: 0.01em;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* CTA visual height */
 transition:
   background 0.2s ease,
   border-color 0.2s ease,
@@ -307,11 +313,13 @@ box-shadow: 0 0 8px 2px rgba(255, 0, 54, 0.15);
 **Focus:**
 
 ```css
-box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
-**Note on `releaseLink` inline variant** — same pattern but smaller padding (`0.4rem 1rem`) and used inside cards:
+**Nota sobre la variante inline `releaseLink`**: sigue el mismo patrón, pero con un padding más pequeño (`0.4rem 1rem`) y se usa dentro de cards:
 
 ```css
 display: inline-flex;
@@ -346,14 +354,14 @@ font-family: "Space Grotesk Variable", system-ui, sans-serif;
 font-size: 1rem;
 font-weight: 500;
 padding: 10px 14px;
-min-height: 44px;
+height: var(--spacing-form-field-md); /* form-field md height; Input/Select align by field layout */
 width: 100%;
 transition:
   border-color 0.2s ease,
   box-shadow 0.2s ease;
 ```
 
-**Placeholder:**
+**Marcador de posición:**
 
 ```css
 color: #6a6b6c;
@@ -369,8 +377,10 @@ border-color: #172230; /* slightly brighter than rest */
 
 ```css
 border-color: rgba(255, 0, 54, 0.5);
-box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 **Disabled:**
@@ -381,7 +391,7 @@ cursor: not-allowed;
 pointer-events: none;
 ```
 
-**Light mode:**
+**Modo claro:**
 
 ```css
 background: #ffffff;
@@ -389,18 +399,21 @@ border-color: rgba(0, 0, 0, 0.18);
 color: #0a0a0a;
 ```
 
-**Light mode focus:**
+**Focus en modo claro:**
 
 ```css
 border-color: rgba(219, 20, 60, 0.5);
-box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.15);
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 ---
 
-### 3.5 Input — Error / Warning / Success States
+### 3.5 Input — Error / Warning / Success / Info States
 
-States change only the `border-color` and `box-shadow`. Background, padding, and font remain identical to default.
+Estos estados cambian solo `border-color` y `box-shadow`. El fondo, el padding y la tipografía permanecen idénticos al estado por defecto.
 
 **Error:**
 
@@ -423,7 +436,15 @@ border-color: rgba(34, 197, 94, 0.7); /* --color-success: #22c55e */
 box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
 ```
 
-**Error message text:**
+**Info:**
+
+```css
+border-color: rgba(29, 78, 216, 0.7); /* --color-info-light: #1d4ed8 */
+box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+/* dark: border-color: rgba(59, 130, 246, 1); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12); */
+```
+
+**Texto del mensaje de error:**
 
 ```css
 color: #ff0036; /* dark */
@@ -447,14 +468,14 @@ min-width: 150px;
 z-index: 100; /* --z-dropdown */
 ```
 
-**Light mode:**
+**Modo claro:**
 
 ```css
 background: #ffffff;
 box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 ```
 
-**Positioning:** the panel appears below the trigger with a small gap. `position: absolute; top: calc(100% + 4px); left: 0`.
+**Posicionamiento:** el panel aparece debajo del trigger con un pequeño espacio. `position: absolute; top: calc(100% + 4px); left: 0`.
 
 ---
 
@@ -474,28 +495,28 @@ text-decoration: none;
 display: block;
 ```
 
-**Hover (dark):**
+**Hover (oscuro):**
 
 ```css
 background: rgba(255, 255, 255, 0.07);
 color: #ffffff;
 ```
 
-**Hover (light):**
+**Hover (claro):**
 
 ```css
 background: rgba(0, 0, 0, 0.05);
 color: #000000;
 ```
 
-**Active/selected (dark):**
+**Active/seleccionado (oscuro):**
 
 ```css
 color: #ff0036; /* --color-brand-dark */
 background: rgba(255, 0, 54, 0.08);
 ```
 
-**Active/selected (light):**
+**Active/seleccionado (claro):**
 
 ```css
 color: #db143c; /* --color-brand-light */
@@ -506,7 +527,7 @@ background: rgba(219, 20, 60, 0.06);
 
 ### 3.8 Badge / Tag
 
-**Brand / "New" — dark:**
+**Marca / "Nuevo" — oscuro:**
 
 ```css
 background: #22c55e; /* success */
@@ -521,14 +542,14 @@ display: inline-block;
 vertical-align: middle;
 ```
 
-**"New" — light:**
+**"Nuevo" — claro:**
 
 ```css
 background: #16a34a;
 color: #ffffff;
 ```
 
-**Brand pill badge (e.g. version tag, release tag):**
+**Badge de marca tipo píldora (por ejemplo, etiqueta de versión o de release):**
 
 ```css
 display: inline-flex;
@@ -546,7 +567,7 @@ font-weight: 600;
 letter-spacing: 0.02em;
 ```
 
-**Beta/warning pill badge:**
+**Badge tipo píldora beta/de advertencia:**
 
 ```css
 background: color-mix(in srgb, #f59e0b 15%, transparent);
@@ -565,7 +586,7 @@ text-transform: uppercase;
 
 ### 3.9 Card — Opaque
 
-Used for feature cards, release list items, tech cards, pipeline steps, code blocks, and any structured content.
+Se usa para cards de features, elementos de listas de releases, cards tecnológicas, pasos de pipeline, bloques de código y cualquier otro contenido estructurado.
 
 ```css
 background: rgba(255, 255, 255, 0.025); /* visually ~#0B131E in dark context */
@@ -580,7 +601,7 @@ transition:
   transform 0.3s ease;
 ```
 
-**`::before` gradient overlay (always present, triggers on hover):**
+**Overlay de degradado en `::before` (siempre presente; se activa en hover):**
 
 ```css
 .card::before {
@@ -612,14 +633,14 @@ box-shadow:
 transform: translateY(-6px);
 ```
 
-**Light mode base:**
+**Base en modo claro:**
 
 ```css
 background: rgba(0, 0, 0, 0.02);
 border-color: rgba(0, 0, 0, 0.08);
 ```
 
-**Light mode hover:**
+**Hover en modo claro:**
 
 ```css
 border-color: #db143c; /* var(--color-brand-light) */
@@ -627,7 +648,7 @@ box-shadow: 0 8px 40px rgba(255, 0, 54, 0.1);
 /* No transform: translateY in light mode — optional, not consistently applied */
 ```
 
-**Content children inside card must have:**
+**Los elementos de contenido dentro de la card deben tener:**
 
 ```css
 position: relative;
@@ -638,7 +659,7 @@ z-index: 1;
 
 ### 3.10 Card — Frosted
 
-Used only for explicitly floating CardContainer glass surfaces. Normal document-flow cards stay opaque.
+Se usa solo para superficies tipo glass de `CardContainer` que flotan explícitamente. Las cards normales en el flujo del documento se mantienen opacas.
 
 ```css
 background: rgba(6, 12, 19, 0.38); /* --color-card-backdrop-dark */
@@ -648,7 +669,7 @@ border: 1px solid rgba(255, 0, 54, 0.5); /* --color-red-tint-border */
 border-radius: 8px; /* or 12px for larger panels */
 ```
 
-**Light mode:**
+**Modo claro:**
 
 ```css
 background: rgba(255, 255, 255, 0.32); /* --color-card-backdrop-light */
@@ -657,7 +678,7 @@ backdrop-filter: blur(20px);
 border: 1px solid rgba(255, 0, 54, 0.5); /* --color-red-tint-border */
 ```
 
-**CardContainer backdropBlur levels:**
+**Niveles de `backdropBlur` en `CardContainer`:**
 
 ```css
 backdropBlur="sm"; /* --blur-card-sm: blur(10px) */
@@ -665,9 +686,9 @@ backdropBlur="md"; /* --blur-card-md: blur(20px) */
 backdropBlur="lg"; /* --blur-card-lg: blur(36px) */
 ```
 
-Use these only when the card is visually floating above other content. Leave `backdropBlur="none"` for normal content cards.
+Úsalos solo cuando la card esté flotando visualmente por encima de otro contenido. Deja `backdropBlur="none"` para cards de contenido normal.
 
-**Sticky CTA bar specific (floats below navbar after scroll):**
+**Barra CTA fija (flota debajo de la navbar tras hacer scroll):**
 
 ```css
 background: rgba(27, 27, 29, 0.6);
@@ -677,13 +698,13 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 ```
 
-**CRITICAL:** Do NOT combine `backdrop-filter` with a gradient `background`. Choose one.
+**CRÍTICO:** NO combines `backdrop-filter` con un `background` con degradado. Elige una sola opción.
 
 ---
 
 ### 3.11 Card — Tinted (Active)
 
-Used for active sidebar items, active menu items, highlighted feature variants:
+Se usa para elementos activos de la barra lateral, elementos activos del menú y variantes de features destacadas:
 
 ```css
 background: rgba(255, 0, 54, 0.08); /* --color-red-tint-low */
@@ -691,7 +712,7 @@ border: 1px solid rgba(255, 0, 54, 0.2);
 border-radius: 8px;
 ```
 
-**Active sidebar link specifically:**
+**Enlace activo de la barra lateral:**
 
 ```css
 background: rgba(255, 0, 54, 0.1); /* --color-red-tint-mid */
@@ -701,7 +722,7 @@ border-radius: 8px;
 /* No additional border on sidebar links */
 ```
 
-**Hover on tinted card:**
+**Hover sobre la card tintada:**
 
 ```css
 border-color: rgba(255, 0, 54, 0.38);
@@ -729,7 +750,7 @@ top: 0;
 z-index: 300; /* --z-navbar */
 ```
 
-**Light mode:**
+**Modo claro:**
 
 ```css
 background: rgba(255, 255, 255, 0.7); /* --color-navbar-light */
@@ -737,9 +758,9 @@ backdrop-filter: blur(16px);
 -webkit-backdrop-filter: blur(16px);
 ```
 
-**Logo image:** `width: 32px; height: 32px` — explicit size prevents CLS.
+**Imagen del logotipo:** `width: 32px; height: 32px`: el tamaño explícito impide CLS.
 
-**Nav links:**
+**Enlaces de navegación:**
 
 ```css
 font-size: 0.85rem;
@@ -749,11 +770,11 @@ transition: color 0.2s ease;
 text-decoration: none;
 ```
 
-**Nav link hover:** `color: #ffffff;`
+**Hover de los enlaces de navegación:** `color: #ffffff;`
 
-**Light mode nav links:** `color: #333333;` → `color: #000000;` hover.
+**Enlaces de navegación en modo claro:** `color: #333333;` → `color: #000000;` en hover.
 
-**Mobile sidebar panel:**
+**Panel de la barra lateral móvil:**
 
 ```css
 background: rgba(27, 27, 29, 1);
@@ -766,7 +787,7 @@ transition:
   transform 0.25s ease;
 ```
 
-**Mobile sidebar — show state:**
+**Barra lateral móvil: mostrar estado:**
 
 ```css
 opacity: 1;
@@ -775,7 +796,7 @@ z-index: 1000;
 height: 100dvh;
 ```
 
-**Mobile sidebar backdrop:**
+**Fondo de la barra lateral móvil:**
 
 ```css
 background: rgba(0, 0, 0, 0.6);
@@ -789,7 +810,7 @@ transition: opacity 0.25s ease;
 
 ### 3.13 Link — Inline
 
-Links within body text (announcement bar, release notes, inline CTAs):
+Enlaces dentro del cuerpo del texto (announcement bar, notas de release, CTA inline):
 
 ```css
 color: #ff4d6d; /* slightly lighter than brand for inline legibility */
@@ -808,9 +829,9 @@ color: #ff8099;
 border-bottom-color: rgba(255, 128, 153, 0.7);
 ```
 
-**Light mode inline link:** same pattern but use `#db143c` → `#c41136` hover.
+**Link inline en modo claro:** sigue el mismo patrón, pero usa `#db143c` → `#c41136` en hover.
 
-**Inline CTA link (featureCta — "Learn more →"):**
+**Link inline CTA (`featureCta` — "Más información →"):**
 
 ```css
 color: var(--color-primary); /* #ff0036 dark / #db143c light */
@@ -823,7 +844,7 @@ transition: gap 0.2s ease;
 text-decoration: none;
 ```
 
-**Inline CTA hover:** `gap: 0.55rem;` — the arrow slides right.
+**Hover del inline CTA:** `gap: 0.55rem;` — la flecha se desplaza hacia la derecha.
 
 ---
 
@@ -842,14 +863,14 @@ text-decoration: none;
 display: block;
 ```
 
-**Hover (dark):**
+**Hover (oscuro):**
 
 ```css
 background: rgba(255, 255, 255, 0.05); /* --color-white-tint-faint */
 color: #ffffff;
 ```
 
-**Active (dark):**
+**Active (oscuro):**
 
 ```css
 background: rgba(255, 0, 54, 0.1); /* --color-red-tint-mid */
@@ -857,7 +878,7 @@ color: #ff0036;
 font-weight: 600;
 ```
 
-**Mobile sidebar nav link:**
+**Enlace de navegación de la barra lateral móvil:**
 
 ```css
 padding: 0.6rem 1rem;
@@ -873,9 +894,9 @@ transition:
 
 ### 3.15 Modal / Dialog
 
-No existing Modal component in reference codebase. Use the established surface and overlay tokens:
+No existe un componente Modal en el código de referencia. Usa los tokens ya definidos para superficie y overlay:
 
-**Backdrop:**
+**Fondo:**
 
 ```css
 position: fixed;
@@ -908,14 +929,14 @@ transition:
   transform 0.25s ease;
 ```
 
-**Open state:**
+**Estado abierto:**
 
 ```css
 opacity: 1;
 transform: translate(-50%, -50%) scale(1);
 ```
 
-**Light mode panel:**
+**Panel en modo claro:**
 
 ```css
 background: #ffffff;
@@ -927,7 +948,7 @@ box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 
 ### 3.16 Announcement Bar / Version Banner
 
-**Announcement bar (Docusaurus global bar — full width above navbar):**
+**Announcement Bar** (barra global de Docusaurus, a ancho completo sobre la navbar):
 
 ```css
 border-bottom: 1px solid rgba(255, 0, 54, 0.35);
@@ -937,7 +958,7 @@ letter-spacing: 0.01em;
 /* Hidden on mobile: display: none at max-width: 768px */
 ```
 
-**Link inside bar:**
+**Link dentro de la barra:**
 
 ```css
 color: #ff4d6d;
@@ -949,14 +970,14 @@ transition:
   border-color 0.2s ease;
 ```
 
-**Link hover:**
+**Hover del link:**
 
 ```css
 color: #ff8099;
 border-bottom-color: rgba(255, 128, 153, 0.7);
 ```
 
-**Version Banner (custom component — dark strip between bar and page):**
+**Version Banner** (componente personalizado: franja oscura entre la barra y la página):
 
 ```css
 background-color: #0d0d0d;
@@ -968,15 +989,15 @@ line-height: 1.5;
 /* Hidden on mobile: display: none at max-width: 768px */
 ```
 
-**Links in version banner:** Same `#ff4d6d` / `#db143c` light mode pattern as inline links.
+**Enlaces del version banner:** siguen el mismo patrón `#ff4d6d` / `#db143c` en modo claro que los links inline.
 
 ---
 
-## 4. Glow System
+## 4. Sistema de resplandor
 
-### 4-Layer Pattern (Button Primary — canonical example)
+### Patrón de 4 capas (Button Primary — ejemplo canónico)
 
-The primary button glow has four layers with distinct purposes:
+El glow del botón primary tiene cuatro capas, cada una con un propósito distinto:
 
 ```css
 box-shadow:
@@ -998,7 +1019,7 @@ box-shadow:
   inset 0 1px 0 rgba(255, 255, 255, 0.15);
 ```
 
-### Hover amplification:
+### Amplificación en hover:
 
 ```css
 box-shadow:
@@ -1011,22 +1032,22 @@ box-shadow:
   inset 0 1px 0 rgba(255, 255, 255, 0.2); /* inset: 0.20 vs 0.15 */
 ```
 
-### Decorative glow timing and emphasis
+### Temporización y énfasis del glow decorativo
 
-| Element                                   | Default decorative glow behavior                                   | `emphasis="flat"`                                                                  |
+| Elemento | Comportamiento decorativo predeterminado del glow | `emphasis="flat"` |
 | ----------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| Button Primary                            | **Always-on** — 4-layer glow at rest, amplified on hover           | Removes decorative glow, keeps focus ring                                          |
-| Button Secondary / Outlined               | **Always-on** — soft contained glow at rest, amplified on hover    | Removes decorative glow, keeps focus ring                                          |
-| IconButton Primary / Secondary / Outlined | Matches button semantics for the same variant family               | Removes decorative glow, keeps focus ring                                          |
-| CTA Link `button` / `outlined`            | Decorative glow by variant contract                                | Removes decorative glow, keeps focus ring                                          |
-| Chip                                     | No decorative glow API; color/variant carries status semantics     | N/A — focus/selected accessibility glow remains independent                          |
-| Switch `emphasis="default"`               | Decorative glow by emphasis contract                               | `emphasis="flat"` removes decorative glow, keeps focus ring                        |
-| Feature Card                              | **Hover-only** — no glow at rest, box-shadow appears on hover      | N/A unless a component-specific API is added                                       |
-| Nav Badge (GitHub stars)                  | **Hover-only** — amber ring appears only on hover                  | N/A unless a component-specific API is added                                       |
-| Logo icon (glowing)                       | **Always-on** — `filter: drop-shadow(0 0 20px rgba(255,0,54,0.4))` | Component-specific decision                                                        |
-| Inline CTA links                          | **No glow** — color transition only                                | No effect                                                                          |
+| Button Primary | **Siempre activo**: glow de 4 capas en reposo, amplificado en hover | Elimina el glow decorativo y mantiene el anillo de focus |
+| Button Secondary / Outlined | **Siempre activo**: glow suave y contenido en reposo, amplificado en hover | Elimina el glow decorativo y mantiene el anillo de focus |
+| IconButton Primary / Secondary / Outlined | Sigue la misma semántica visual que los botones de la misma familia de variantes | Elimina el glow decorativo y mantiene el anillo de focus |
+| CTA Link `button` / `outlined` | Glow decorativo según el contrato de su variante | Elimina el glow decorativo y mantiene el anillo de focus |
+| Chip | No tiene API de glow decorativo; el color o la variante cargan la semántica de estado | N/A — el glow de focus/selección de accesibilidad sigue siendo independiente |
+| Switch `emphasis="default"` | Glow decorativo según el contrato de énfasis | `emphasis="flat"` elimina el glow decorativo y mantiene el anillo de focus |
+| Feature Card | **Solo en hover**: sin glow en reposo; `box-shadow` aparece en hover | N/A salvo que se añada una API específica del componente |
+| Nav Badge (estrellas de GitHub) | **Solo en hover**: el anillo ámbar aparece únicamente al pasar el cursor | N/A salvo que se añada una API específica del componente |
+| Icono del logo (con glow) | **Siempre activo** — `filter: drop-shadow(0 0 20px rgba(255,0,54,0.4))` | Decisión específica del componente |
+| Links inline CTA | **Sin glow**: solo transición de color | Sin efecto |
 
-### Secondary button glow (3-layer, contained):
+### Glow del botón Secondary (3 capas, contenido):
 
 ```css
 box-shadow:
@@ -1038,19 +1059,19 @@ box-shadow:
   inset 0 0 10px rgba(255, 0, 54, 0.04);
 ```
 
-No tight ring layer — secondary doesn't need a border simulation because it already has a real `border: 1.5px solid`.
+No hay una capa de anillo ceñido: secondary no necesita simular un borde porque ya tiene un `border: 1.5px solid` real.
 
 ---
 
-## 5. Gradient Border Technique
+## 5. Técnica del borde degradado
 
-### Why `border-image` fails with `border-radius`
+### Por qué `border-image` falla con `border-radius`
 
-`border-image` replaces the `border` rendering and ignores `border-radius`. A pill button (`border-radius: 9999px`) with `border-image` renders as a rectangle with gradient edge clips at the corners. There is no workaround for this in CSS — `border-image` is fundamentally incompatible with `border-radius`.
+`border-image` reemplaza la representación `border` e ignora `border-radius`. Un botón tipo pastilla (`border-radius: 9999px`) con `border-image` se representa como un rectángulo con clips de borde degradados en las esquinas. No existe una solución alternativa para esto en CSS: `border-image` es fundamentalmente incompatible con `border-radius`.
 
-### The `::before` pseudo-element technique
+### Técnica con pseudo-elemento `::before`
 
-The gradient border is created by positioning a pseudo-element behind the component that extends 1.5px in every direction using `inset: -1.5px`. The parent has `border: 1.5px solid transparent` and `background-clip: padding-box` to prevent the parent's background from showing through the border area.
+El borde con degradado se crea colocando un pseudo-elemento detrás del componente y haciéndolo crecer 1.5px en cada dirección mediante `inset: -1.5px`. El elemento padre usa `border: 1.5px solid transparent` y `background-clip: padding-box` para evitar que el fondo del propio padre se vea a través del área del borde.
 
 ```css
 .gradient-border-component {
@@ -1076,11 +1097,11 @@ The gradient border is created by positioning a pseudo-element behind the compon
 }
 ```
 
-### GPU compositing benefit
+### Ventaja de composición en GPU
 
-The `::before` gradient is a static painted layer. On hover, we transition only `opacity` on the `::before` (or swap the background with a higher-opacity version). Since `opacity` changes are handled by the GPU compositor — not the main thread — this avoids layout and paint work. Animating `background` directly on a gradient would repaint every frame.
+El degradado de `::before` es una capa estática ya pintada. En hover solo se anima `opacity` sobre `::before` (o se sustituye el fondo por una versión con mayor opacidad). Como los cambios de `opacity` los resuelve el compositor de la GPU y no el hilo principal, se evita trabajo de layout y repintado. Animar `background` directamente sobre un degradado obligaría a repintar cada frame.
 
-### Exact gradient values — Secondary button (ghost destello):
+### Valores exactos del degradado: botón Secondary (resaltado ghost):
 
 ```css
 /* Tight directional gradient — white flash from top-left, red dominance mid, fades to transparent */
@@ -1092,99 +1113,100 @@ background: linear-gradient(
 );
 ```
 
-### When to use gradient border
+### Cuándo usar un borde con degradado
 
-- Secondary / ghost buttons that need visual weight without solid fill
-- Input fields in focus state (transition `::before` opacity from 0 to 1)
-- Active cards with accent border
-- Never on structural separators, table borders, or layout containers
+- Botones secondary o ghost que necesitan peso visual sin relleno sólido
+- Campos de input en estado de focus (transición de la opacidad de `::before` de 0 a 1)
+- Cards activas con borde acentuado
+- Nunca en separadores estructurales, bordes de tablas ni contenedores de layout.
 
 ---
 
-## 6. Transition Rules
+## 6. Reglas de transición
 
-| Interaction type                           | Duration              | Easing                           | Properties                                 |
+| Tipo de interacción | Duración | Easing | Propiedades |
 | ------------------------------------------ | --------------------- | -------------------------------- | ------------------------------------------ |
-| Button hover (primary/secondary)           | 250ms                 | `ease`                           | `box-shadow`, `background`                 |
-| Button hover (secondary — includes border) | 250ms                 | `ease`                           | `box-shadow`, `background`, `border-color` |
-| Card hover                                 | 300ms                 | `ease`                           | `border-color`, `box-shadow`, `transform`  |
-| Card `::before` gradient reveal            | 300ms                 | implicit `ease`                  | `opacity`                                  |
-| Dropdown / menu item hover                 | 150ms                 | `ease`                           | `background`, `color`                      |
-| Inline link hover                          | 200ms                 | `ease`                           | `color`, `border-color`                    |
-| Locale switcher / nav badge hover          | 200ms                 | `ease`                           | `border-color`, `box-shadow`               |
-| GitHub stars badge parts                   | 200ms                 | `ease`                           | `background`, `color`                      |
-| Modal / sidebar entrance                   | 250ms                 | `ease`                           | `opacity`, `transform`                     |
-| Sticky bar entrance                        | 350ms                 | `ease`                           | `opacity`, `transform`                     |
-| Scroll fade-in (IntersectionObserver)      | 560ms                 | `cubic-bezier(0.2, 0.8, 0.2, 1)` | `opacity`, `transform`                     |
-| Pipeline hover expand                      | 400–450ms             | `cubic-bezier(0.4, 0, 0.2, 1)`   | `flex`, `max-width`                        |
-| Pipeline right panel fade-in               | 200ms (delayed 450ms) | `ease`                           | `opacity`                                  |
-| Nav link color                             | 200ms                 | `ease`                           | `color`                                    |
+| Hover de Button (primary/secondary) | 250ms | `ease` | `box-shadow`, `background` |
+| Hover de Button (secondary — incluye borde) | 250ms | `ease` | `box-shadow`, `background`, `border-color` |
+| Hover de Card | 300ms | `ease` | `border-color`, `box-shadow`, `transform` |
+| Revelado del degradado `::before` en Card | 300ms | `ease` implícito | `opacity` |
+| Hover de Dropdown / item de menú | 150ms | `ease` | `background`, `color` |
+| Hover de link inline | 200ms | `ease` | `color`, `border-color` |
+| Hover de locale switcher / nav badge | 200ms | `ease` | `border-color`, `box-shadow` |
+| Partes del badge de estrellas de GitHub | 200ms | `ease` | `background`, `color` |
+| Entrada de modal / barra lateral | 250ms | `ease` | `opacity`, `transform` |
+| Entrada de barra sticky | 350ms | `ease` | `opacity`, `transform` |
+| Scroll fade-in (`IntersectionObserver`) | 560ms | `cubic-bezier(0.2, 0.8, 0.2, 1)` | `opacity`, `transform` |
+| Expansión hover de pipeline | 400–450ms | `cubic-bezier(0.4, 0, 0.2, 1)` | `flex`, `max-width` |
+| Fade-in del panel derecho de pipeline | 200ms (retraso de 450ms) | `ease` | `opacity` |
+| Color de enlaces de navegación | 200ms | `ease` | `color` |
 
-**Rule:** NEVER use `transition: all`. Always enumerate exact properties.
+**Regla:** NO uses nunca `transition: all`. Enumera siempre las propiedades exactas.
 
-**Permitted animatable properties:** `opacity`, `transform`, `box-shadow`, `background-color`, `border-color`, `color`, `gap`, `flex`, `max-width` (for expand patterns), `filter` (for icon glows).
+**Propiedades animables permitidas:** `opacity`, `transform`, `box-shadow`, `background-color`, `border-color`, `color`, `gap`, `flex`, `max-width` (para patrones de expansión), `filter` (para brillos de iconos).
 
-**NEVER animate:** `width`, `height`, `top`, `right`, `bottom`, `left`, `margin`, `padding` — these trigger layout reflow.
-
----
-
-## 7. Accessibility Checklist
-
-### Buttons
-
-- [ ] Minimum height `44px`
-- [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` dark / `0 0 0 3px rgba(219, 20, 60, 0.35)` light
-- [ ] Focus ring merged with existing `box-shadow` — never replaces it
-- [ ] Focus ring never hidden: no `outline: none` without alternative
-- [ ] Disabled: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none` — no color change
-- [ ] Primary: white `#ffffff` text over red gradient — contrast passes in both modes
-- [ ] Secondary dark: `color: #ffffff` over `rgba(255,0,54,0.06)` — visually dark background context; border defines the affordance
-- [ ] Secondary light: `color: #cc0030` — NEVER `#ff0036` in light mode (insufficient contrast over white)
-- [ ] Touch target remains at least `44px` for default action sizes; explicitly approved compact/dense variants may use reduced visual targets when documented and keyboard/focus accessible
-- [ ] `role="button"` if implemented as non-`<button>` element
-
-### Inputs
-
-- [ ] Minimum height `44px`
-- [ ] Placeholder text `#6a6b6c` — WCAG exempts placeholder from contrast (informational, not functional)
-- [ ] Error state: border + shadow change, NOT color of input text
-- [ ] Error message: `color: #ff0036` dark / `#db143c` light — check contrast on surface background
-- [ ] Labels always visible — never placeholder-only inputs
-- [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` (softer than button — 12% not 40%)
-- [ ] Disabled: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none`
-
-### Interactive cards / links
-
-- [ ] Cards with `href` wrapped in `<a>` or `<Link>`: `text-decoration: none; color: inherit` on wrapper, actual CTA text carries the color
-- [ ] `aria-label` on cards without explicit visible label describing destination
-- [ ] Focus ring on the `<a>` wrapper: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`, `outline: none`
-- [ ] `transform: translateY(-6px)` on hover: respects `@media (prefers-reduced-motion: reduce)` — set `transform: none; transition: none`
-- [ ] `FeatureCard` uses `aria-label={title}` on the `<article>` element ✅
-
-### Dropdown / nav items
-
-- [ ] Each item `padding: 7px 12px` minimum — 14px font achieves ~28px height; wrap in container with `min-height: 44px` if needed
-- [ ] Active item: `color: #ff0036` — contrast 4.96:1 on `#0B131E` surface ✅
-- [ ] Hover: background change + color change — two simultaneous signals (not hover-only)
-- [ ] Keyboard navigation: dropdown must be traversable with Tab/Arrow keys
-
-### Announcements / banners
-
-- [ ] `font-size` minimum `0.85rem` (13.6px) for announcement bars
-- [ ] Link color `#ff4d6d` — check contrast on bar background color
-- [ ] Hidden on mobile (`display: none` at `max-width: 768px`) — ensure content is accessible another way
-
-### Motion
-
-- [ ] `@media (prefers-reduced-motion: reduce)` disables all scroll fade-ins, card transform, pipeline animations
-- [ ] Ambient background glows (`glowPulse`, `spotBreath`) set `animation: none` under reduced-motion
-- [ ] Maximum transition duration: 560ms (scroll fade-in) — interactive transitions max 300ms
+**No animes nunca:** `width`, `height`, `top`, `right`, `bottom`, `left`, `margin`, `padding`; todas ellas fuerzan reflow.
 
 ---
 
-## 8. Anti-Patterns
+## 7. Lista de verificación de accesibilidad
 
-### ❌ Using `transition: all`
+### Botones
+
+- [ ] Altura visual alineada con la escala `control` (`h-control-xs|sm|md|lg`) según el size prop
+- [ ] Anillo de enfoque: utilidad compartida `focus-ring` con `outline: 2px solid var(--color-primary)` y `outline-offset: 2px`
+- [ ] El foco visible no depende de `box-shadow`, glow decorativo ni variante visual
+- [ ] Anillo de enfoque nunca oculto: no `outline: none` sin reponer `focus-visible:focus-ring` o equivalente
+- [ ] Deshabilitado: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none` — sin cambio de color
+- [ ] Primary: texto `#ffffff` blanco sobre degradado rojo; el contraste pasa en ambos modos
+- [ ] Secondary en oscuro: `color: #ffffff` sobre `rgba(255,0,54,0.06)` — el contexto de fondo ya es oscuro y el borde comunica la señal visual
+- [ ] Secondary en claro: `color: #cc0030` — nunca `#ff0036` en modo claro (contraste insuficiente sobre blanco)
+- [ ] El objetivo táctil se evalúa por contexto: usa `touch-target-min` (`44px`) en superficies touch-first o wrappers de hit area; las variantes compactas/densas documentadas pueden mantener una altura visual menor si siguen siendo accesibles.
+- [ ] `role="button"` si se implementa como elemento no `<button>`
+
+### Entradas
+
+- [ ] Altura visual alineada con la escala `form-field` (`h-form-field-sm|md|lg`) y consistente entre campos como `Input` y `Select`; no forzar `h-control-*` cuando el label/floating label forma parte del patrón
+- [ ] Texto del marcador de posición `#6a6b6c` — WCAG exime el marcador de posición del contraste (informativo, no funcional)
+- [ ] Estado Error: cambio de borde + sombra, color NOT del texto de entrada
+- [ ] Estado Info: cambio de borde + sombra con `--color-info-light` en claro y `--color-info` en oscuro; no tratarlo como helper neutral
+- [ ] Mensaje de error: `color: #ff0036` en oscuro / `#db143c` en claro; verifica el contraste sobre la superficie
+- [ ] Etiquetas siempre visibles; nunca inputs que dependan solo del placeholder
+- [ ] Anillo de enfoque: el wrapper del campo usa la misma utilidad `focus-ring` cuando contiene un hijo `:focus-visible`
+- [ ] Deshabilitado: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none`
+
+### Tarjetas/enlaces interactivos
+
+- [ ] Cards con `href` envueltas en `<a>` o `<Link>`: `text-decoration: none; color: inherit` en el contenedor, mientras que el texto real del CTA conserva el color
+- [ ] `aria-label` en tarjetas sin etiqueta visible explícita que describa el destino
+- [ ] Anillo de focus en el contenedor `<a>`: `focus-visible:focus-ring`, independiente de cualquier glow decorativo
+- [ ] `transform: translateY(-6px)` en hover: respeta `@media (prefers-reduced-motion: reduce)` y pasa a `transform: none; transition: none`
+- [ ] `FeatureCard` usa `aria-label={title}` en el elemento `<article>` ✅
+
+### Dropdown / elementos de navegación
+
+- [ ] Cada elemento usa como mínimo `padding: 7px 12px`; en superficies touch-first o mobile, envuélvelo en un contenedor o item con `min-h-touch-target-min` si hace falta ampliar el hit area
+- [ ] Elemento activo: `color: #ff0036` — contraste 4.96:1 en la superficie `#0B131E` ✅
+- [ ] Pasar el cursor: cambio de fondo + cambio de color: dos señales simultáneas (no hover-only)
+- [ ] Navegación con teclado: el menú desplegable debe poder recorrerse con las teclas Tabulador/Flecha
+
+### Anuncios/banners
+
+- [ ] `font-size` mínimo `0.85rem` (13.6px) para barras de anuncios
+- [ ] Color del link `#ff4d6d`: comprueba el contraste sobre el fondo de la barra
+- [ ] Oculto en móvil (`display: none` en `max-width: 768px`): asegúrate de que el contenido siga siendo accesible de otra forma
+
+### Movimiento
+
+- [ ] `@media (prefers-reduced-motion: reduce)` desactiva todos los scroll fade-ins, los `transform` de cards y las animaciones de pipeline
+- [ ] Los glows ambientales del fondo (`glowPulse`, `spotBreath`) pasan a `animation: none` con reduced-motion
+- [ ] Duración máxima de transición: 560ms (scroll fade-in); las transiciones interactivas no superan 300ms
+
+---
+
+## 8. Antipatrones
+
+### ❌ Usando `transition: all`
 
 ```css
 /* ❌ Wrong — animates every property including layout-forcing ones */
@@ -1200,11 +1222,11 @@ background: linear-gradient(
 }
 ```
 
-Animating `all` will trigger layout reflow if any dimensional property changes, causing jank. It also animates `color`, `opacity`, and `transform` simultaneously even when they shouldn't be.
+Animar `all` fuerza reflow si cambia cualquier propiedad dimensional y provoca tirones visuales. Además, anima `color`, `opacity` y `transform` al mismo tiempo incluso cuando no corresponde.
 
 ---
 
-### ❌ Animating gradient background directly
+### ❌ Animar el fondo degradado directamente
 
 ```css
 /* ❌ Wrong — gradients cannot be interpolated; transition is ignored */
@@ -1242,11 +1264,11 @@ Animating `all` will trigger layout reflow if any dimensional property changes, 
 }
 ```
 
-Note: buttons ARE the exception — their `background` gradient transition is permitted and works because the browser animates between a static base and static hover state (it paints both, and cross-fades). This still uses `transition: box-shadow 0.25s ease, background 0.25s ease` explicitly.
+Nota: los botones SON la excepción. Su transición de degradado en `background` está permitida y funciona porque el navegador anima entre un estado base estático y un estado de hover también estático (pinta ambos y hace un fundido cruzado). Aun así, se declara explícitamente como `transition: box-shadow 0.25s ease, background 0.25s ease`.
 
 ---
 
-### ❌ `backdrop-filter` on content cards
+### ❌ `backdrop-filter` en tarjetas de contenido
 
 ```css
 /* ❌ Wrong — content cards are opaque, not floating */
@@ -1275,11 +1297,11 @@ Note: buttons ARE the exception — their `background` gradient transition is pe
 }
 ```
 
-Blur on content cards creates a visual hierarchy confusion: it signals "floating" when the card is grounded content. It also has significant GPU cost on long pages with many cards.
+Aplicar blur a las cards de contenido confunde la jerarquía visual: comunica "estoy flotando" cuando en realidad la card es contenido asentado. Además, tiene un coste importante de GPU en páginas largas con muchas cards.
 
 ---
 
-### ❌ Single-layer glow
+### ❌ Brillo de una sola capa
 
 ```css
 /* ❌ Wrong — flat single shadow lacks depth and looks cheap */
@@ -1297,11 +1319,11 @@ Blur on content cards creates a visual hierarchy confusion: it signals "floating
 }
 ```
 
-Single-layer glows have no tight ring, no near halo, no far dispersal, and no inset highlight. The result looks like a blurry shadow, not a neon glow.
+Los glows de una sola capa no tienen anillo ceñido, halo cercano, dispersión amplia ni resaltado interno. El resultado se parece más a una sombra borrosa que a un glow tipo neón.
 
 ---
 
-### ❌ Flat border on secondary button
+### ❌ Borde plano en el botón secundario
 
 ```css
 /* ❌ Wrong — flat opaque border loses the brand energy */
@@ -1320,35 +1342,33 @@ Single-layer glows have no tight ring, no near halo, no far dispersal, and no in
 }
 ```
 
-A flat `#ff0036` border at full opacity is harsh and breaks the softness of the system. The correct approach uses semitransparent border at 55% opacity paired with a complementary glow.
+Un borde plano `#ff0036` con opacidad total es duro y rompe la suavidad del sistema. El enfoque correcto utiliza un borde semitransparente con un 55 % de opacidad combinado con un brillo complementario.
 
 ---
 
-### ❌ `outline` for focus rings
+### ❌ Glows o sombras locales como único indicador de focus
 
 ```css
-/* ❌ Wrong — outline doesn't follow border-radius */
-.button:focus {
-  outline: 3px solid rgba(255, 0, 54, 0.4);
-}
-
-/* ✅ Correct — box-shadow follows border-radius perfectly */
+/* ❌ Wrong — component-local shadow focus drifts and can disappear with decorative glow */
 .button:focus-visible {
   outline: none;
-  box-shadow:
-    0 0 0 3px rgba(255, 0, 54, 0.4),
-    /* focus ring */ 0 0 0 1.5px rgba(255, 60, 90, 0.5),
-    /* existing glow layer 1 */ 0 0 16px 4px rgba(255, 0, 54, 0.45),
-    /* existing glow layer 2 */ 0 0 40px 6px rgba(255, 0, 54, 0.18),
-    /* existing glow layer 3 */ inset 0 1px 0 rgba(255, 255, 255, 0.15); /* existing glow layer 4 */
+  box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
+}
+
+/* ✅ Correct — one shared native focus contract */
+.button:focus-visible {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
 }
 ```
 
-On pill buttons, `outline` renders as a rectangle with optional gap, destroying the shape. `box-shadow: 0 0 0 3px` spreads as a solid ring that follows `border-radius: 9999px`.
+El indicador de focus no debe depender de glows decorativos, sombras por variante ni reglas locales difíciles de auditar. En componentes usa la utilidad compartida `focus-ring` (`focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring` o equivalente para wrappers).
 
 ---
 
-### ❌ Color change for disabled state
+### ❌ Cambio de color para estado deshabilitado
 
 ```css
 /* ❌ Wrong — grey substitution creates false semantic signals */
@@ -1366,11 +1386,11 @@ On pill buttons, `outline` renders as a rectangle with optional gap, destroying 
 }
 ```
 
-Changing to grey doesn't communicate WHY it's disabled and breaks visual consistency. Opacity at 0.4 preserves the component's identity while clearly signaling unavailability.
+Pasar el componente a gris no comunica por qué está deshabilitado y rompe la coherencia visual. La opacidad al 0,4 preserva la identidad del componente y, a la vez, deja clara su indisponibilidad.
 
 ---
 
-### ❌ Hover as the only state indicator
+### ❌ Colocar el cursor como único indicador de estado
 
 ```css
 /* ❌ Wrong — hover-only, no focus/active state */
@@ -1385,8 +1405,10 @@ Changing to grey doesn't communicate WHY it's disabled and breaks visual consist
   color: #ffffff;
 }
 .navLink:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
   color: #ffffff;
 }
 .navLink:active {
@@ -1394,11 +1416,11 @@ Changing to grey doesn't communicate WHY it's disabled and breaks visual consist
 }
 ```
 
-Hover-only indicators are inaccessible to keyboard users. The `:focus-visible` pseudo-class shows the ring only for keyboard navigation (not mouse click focus), which is the correct modern approach.
+Los indicadores que existen solo en hover son inaccesibles para quienes navegan con teclado. La pseudo-clase `:focus-visible` muestra el anillo solo en navegación por teclado (no cuando el focus llega desde un clic de ratón), que es el comportamiento moderno correcto.
 
 ---
 
-### ❌ `border-image` for gradient borders
+### ❌ `border-image` para bordes degradados
 
 ```css
 /* ❌ Wrong — border-image ignores border-radius */
@@ -1435,11 +1457,11 @@ Hover-only indicators are inaccessible to keyboard users. The `:focus-visible` p
 }
 ```
 
-`border-image` with `slice: 1` literally clips the gradient to rectangular segments, completely ignoring `border-radius`. This has been a CSS limitation since `border-image` was introduced.
+`border-image` con `slice: 1` literalmente recorta el degradado en segmentos rectangulares, ignorando por completo `border-radius`. Esta ha sido una limitación de CSS desde que se introdujo `border-image`.
 
 ---
 
-### ❌ Mixing `backdrop-filter` and gradient on the same element
+### ❌ Mezclando `backdrop-filter` y degradado en el mismo elemento
 
 ```css
 /* ❌ Wrong — frosted + gradient is visually noisy and GPU-expensive */
@@ -1459,11 +1481,11 @@ Hover-only indicators are inaccessible to keyboard users. The `:focus-visible` p
 }
 ```
 
-`backdrop-filter: blur` already creates a visual depth effect by showing a blurred version of what's behind. Adding a gradient on top creates competing depth signals and reduces legibility. Reserve gradients for opaque elements.
+`backdrop-filter: blur` ya crea profundidad visual al mostrar una versión difuminada de lo que hay detrás. Añadir un degradado por encima introduce señales de profundidad contradictorias y reduce la legibilidad. Reserva los degradados para elementos opacos.
 
 ---
 
-### ❌ Using `#000000` as dark background
+### ❌ Usando `#000000` como fondo oscuro
 
 ```css
 /* ❌ Wrong — pure black has no chromatic identity */
@@ -1471,17 +1493,17 @@ Hover-only indicators are inaccessible to keyboard users. The `:focus-visible` p
   background: #000000;
 }
 
-/* ✅ Correct — azul-slate deep with cold tint */
+/* ✅ Correct — deep blue-slate with a cold tint */
 .page {
   background: #060c13; /* --color-background-dark: H215 S50 */
 }
 ```
 
-The canonical dark background is `#060C13` (azul-slate, H215 S50 — a perceptible cold tint). Pure black `#000000` looks lifeless and has no relationship with the rest of the color system. The warm red brand color has more presence and resonance against the cold-tinted dark.
+El fondo oscuro canónico es `#060C13` (azul pizarra, H215 S50: un matiz frío perceptible). El negro puro `#000000` se ve apagado y no guarda relación con el resto del sistema de color. El rojo cálido de la marca gana más presencia y resonancia sobre ese fondo oscuro con matiz frío.
 
 ---
 
-### ❌ Using `#ff0036` as text color in light mode
+### ❌ Usar `#ff0036` como color de texto en modo claro
 
 ```css
 /* ❌ Wrong — #ff0036 over white fails WCAG AA */
@@ -1499,11 +1521,11 @@ The canonical dark background is `#060C13` (azul-slate, H215 S50 — a perceptib
 }
 ```
 
-`#ff0036` achieves only ~3.9:1 on pure white — below WCAG AA (4.5:1). Always use `#cc0030` or `#db143c` as the minimum red in light contexts.
+`#ff0036` alcanza solo ~3,9:1 sobre blanco puro, por debajo de WCAG AA (4,5:1). Usa siempre `#cc0030` o `#db143c` como mínimo en contextos claros.
 
 ---
 
-### ❌ Placing the grid background inside cards or dropdowns
+### ❌ Colocar el fondo de la cuadrícula dentro de tarjetas o menús desplegables
 
 ```css
 /* ❌ Wrong — grid only belongs on root canvas */
@@ -1528,4 +1550,4 @@ The canonical dark background is `#060C13` (azul-slate, H215 S50 — a perceptib
 }
 ```
 
-The grid is a page canvas texture, not a surface texture. Applied to cards/dropdowns it creates excessive visual noise and reduces readability of content.
+La cuadrícula es una textura del lienzo de página, no una textura de superficie. Si se aplica a cards o dropdowns, introduce demasiado ruido visual y reduce la legibilidad del contenido.

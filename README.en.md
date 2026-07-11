@@ -77,9 +77,9 @@ This project uses GitHub Issues + GitHub Projects as the source workflow.
 Short path:
 
 1. Pick an issue from the [Project Board](https://github.com/orgs/Stack-and-Flow/projects/1).
-2. Before implementing, verify that the spec is defined and the issue has the `status:approved` label.
+2. Before implementing, verify that the spec is defined, the issue has the `status:approved` label, and the issue is not assigned to someone else.
 3. Only then run **START WORK**:
-   - assign the issue to the contributor;
+   - verify assignees and assign the issue to the contributor;
    - move the Project item to `In progress`;
    - record the branch and worktree.
 4. Use issue-based branch names:

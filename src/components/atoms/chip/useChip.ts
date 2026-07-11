@@ -89,7 +89,8 @@ export function useChip(props: ChipProps) {
       'border-transparent bg-surface-raised-light text-text-light dark:bg-surface-raised-dark dark:text-text-dark',
     success: 'border-transparent bg-success-light text-text-light dark:bg-success dark:text-text-light',
     warning: 'border-transparent bg-warning-light text-text-light dark:bg-warning dark:text-text-light',
-    danger: 'border-transparent bg-error-light text-white dark:bg-error dark:text-white'
+    danger: 'border-transparent bg-error-light text-white dark:bg-error dark:text-white',
+    info: 'border-transparent bg-info-light text-white dark:bg-info dark:text-text-light'
   };
 
   const dotClassByColor: Record<NonNullable<ChipProps['color']>, string> = {
@@ -97,7 +98,8 @@ export function useChip(props: ChipProps) {
     secondary: 'bg-text-secondary-light dark:bg-text-secondary-dark',
     success: 'bg-success-light dark:bg-success',
     warning: 'bg-warning-light dark:bg-warning',
-    danger: 'bg-error-light dark:bg-error'
+    danger: 'bg-error-light dark:bg-error',
+    info: 'bg-info-light dark:bg-info'
   };
 
   const closeButtonHoverByColor: Record<NonNullable<ChipProps['color']>, string> = {
@@ -105,7 +107,8 @@ export function useChip(props: ChipProps) {
     secondary: 'hover:bg-surface-raised-light dark:hover:bg-surface-raised-dark',
     success: 'hover:bg-success-tint',
     warning: 'hover:bg-warning-tint',
-    danger: 'hover:bg-error-tint'
+    danger: 'hover:bg-error-tint',
+    info: 'hover:bg-info-tint'
   };
 
   const slots = {
@@ -115,8 +118,8 @@ export function useChip(props: ChipProps) {
       className,
       classNames?.base,
       interactive ? 'cursor-pointer' : 'cursor-auto',
-      splitActions && 'focus-within:shadow-glow-focus-light dark:focus-within:shadow-glow-focus-dark',
-      isSelected && `${selectedClassByColor[normalizedColor]} shadow-glow-focus-light dark:shadow-glow-focus-dark`,
+      splitActions && '[&:has(:focus-visible)]:focus-ring',
+      isSelected && selectedClassByColor[normalizedColor],
       iconBySize
     ),
     content: cn('truncate', classNames?.content),
@@ -129,7 +132,7 @@ export function useChip(props: ChipProps) {
 
     actionButton: cn(
       'inline-flex flex-1 items-center justify-center gap-1 rounded-[inherit] border-0 bg-transparent p-0 m-0 text-inherit',
-      'focus-visible:outline-none transition-transform duration-200 ease-in-out motion-safe:active:translate-y-px motion-safe:active:scale-95',
+      'focus-visible:focus-ring transition-transform duration-200 ease-in-out motion-safe:active:translate-y-px motion-safe:active:scale-95',
       'disabled:cursor-not-allowed disabled:opacity-40',
       classNames?.actionButton
     ),
@@ -143,7 +146,7 @@ export function useChip(props: ChipProps) {
       'text-current/70 hover:text-current',
       closeButtonHoverByColor[normalizedColor],
       'hover:ring-0',
-      'focus-visible:outline-none focus-visible:shadow-glow-focus-light dark:focus-visible:shadow-glow-focus-dark',
+      'focus-visible:focus-ring',
       'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40',
       classNames?.closeButton
     )

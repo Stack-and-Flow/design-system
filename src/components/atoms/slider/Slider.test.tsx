@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Slider as RootSlider } from '../../../index';
 import { Slider } from './Slider';
+import { sliderRangeVariants, sliderThumbVisualVariants, sliderTrackVariants } from './types';
 import { useSlider } from './useSlider';
 
 class ResizeObserverMock implements ResizeObserver {
@@ -109,6 +110,13 @@ describe('useSlider — logic', () => {
     const uncontrolled = renderHook(() => useSlider({ ariaLabel: 'Price', defaultValue: [80, 20] })).result.current
       .rootProps;
     expect(uncontrolled.defaultValue).toEqual([20, 80]);
+  });
+
+  it('maps the info color to semantic track, range, and thumb classes', () => {
+    expect(sliderTrackVariants({ color: 'info' })).toContain('bg-info-tint');
+    expect(sliderTrackVariants({ color: 'info' })).toContain('border-info-tint');
+    expect(sliderRangeVariants({ color: 'info' })).toContain('bg-info-light');
+    expect(sliderThumbVisualVariants({ color: 'info' })).toContain('border-info-light');
   });
 });
 

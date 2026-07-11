@@ -1,10 +1,15 @@
 allowBuilds:
-  '@swc/core': true
+  "@swc/core": true
   esbuild: true
   lefthook: true
   unrs-resolver: true
 overrides:
   minimatch@10.2.5>brace-expansion: 5.0.6
   ws: 8.20.1
+auditConfig:
+  ignoreGhsas:
+    # esbuild is only pulled through Jest's esbuild-register Node path for Storybook test-runner.
+    # GHSA-gv7w-rqvm-qjhr affects the Deno module installer path and does not apply here.
+    - GHSA-gv7w-rqvm-qjhr
 patchedDependencies:
   storybook-dark-mode@4.0.2: patches/storybook-dark-mode@4.0.2.patch

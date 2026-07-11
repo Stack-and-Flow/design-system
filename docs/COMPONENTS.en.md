@@ -39,10 +39,10 @@ A `linear-gradient` cannot be transitioned by the browser. Instead, place the ho
 }
 ```
 
-**Rule 3 — Decorative glow is semantic; focus glow is accessibility.**
+**Rule 3 — Decorative glow is semantic; focus indication is accessibility.**
 Treat decorative glow/elevation as part of the component contract, not as a raw visual toggle. A component may ship with decorative glow at rest, on hover, or not at all depending on its variant semantics. Where the component API supports it, expose `emphasis="default" | "flat"` so quiet contexts can suppress decorative glow without changing hierarchy, behavior, or semantics.
 
-Focus-visible rings/glows are different: they are accessibility affordances and must never be disabled by `emphasis`, quiet modes, or decorative shadow toggles. Never remove `shadow-glow-focus-*`, focus rings, or selected-state accessibility glow through decorative API controls.
+The `focus-visible` indicator is different: it is a native accessibility signal and must never be disabled by `emphasis`, quiet modes, or decorative shadow toggles. Every focusable component should consume the shared `focus-ring` utility with `focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring`, or an equivalent selector when focus lives on a child.
 
 **Rule 4 — `backdrop-filter` and gradient on the same element are forbidden.**
 A frosted element (`backdrop-filter: blur`) must not also carry a decorative gradient background layer. They conflict visually (the blur already creates depth) and can cause GPU compositing artifacts. Choose one: frosted surface OR gradient surface.
@@ -62,13 +62,19 @@ transition: all 0.25s ease;
 **Rule 6 — Hover direction is tonally upward for both primary and secondary.**
 On `:hover`, primary button gradient shifts lighter (`#ff1a4b → #ff3366` start, `#cc0030 → #e0003a` end) and glow intensity increases. Secondary button background tint increases from `rgba(255,0,54,0.06)` to `rgba(255,0,54,0.12)` and border opacity increases. Hover always makes elements feel more elevated — never darker or more muted.
 
-**Rule 7 — Focus ring uses `box-shadow`, never `outline`.**
-`outline` does not respect `border-radius` — it draws a rectangle around a pill button. `box-shadow` follows the shape. Use:
+**Rule 7 — Focus rings use the native `focus-ring` utility.**
+Visible focus does not depend on decorative glow or variant shadows. Use the shared `focus-ring` utility, which applies the native contract:
 
-- Dark: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`
-- Light: `box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.35)`
+```css
+:focus-visible {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+```
 
-Never use `outline: none` without an alternative visible focus indicator.
+Never use `outline: none` without restoring this visible indicator with `focus-visible:focus-ring` or an equivalent variant for wrappers, peers, groups, or `:has(:focus-visible)`.
 
 **Rule 8 — Disabled state uses opacity, never color change.**
 `opacity: 0.4` on the entire component signals disabled. Never change text color, border color, or background to a "grey" variant — this creates a fake semantic signal and breaks the visual system. Always pair with `cursor: not-allowed` and `pointer-events: none`.
@@ -76,11 +82,15 @@ Never use `outline: none` without an alternative visible focus indicator.
 **Rule 9 — Gradient borders use `::before` pseudo-element, never `border-image`.**
 `border-image` does not work with `border-radius` — the gradient clips to a rectangle, destroying the pill shape. The correct technique uses `::before` absolutely positioned with `inset: -1.5px` and `z-index: -1`, with the gradient as its `background` and `border-radius: inherit`.
 
-**Rule 10 — Default touch target is 44×44px for interactive elements.**
-Buttons and action-style links use a default minimum `height: 44px` from `sm` upward. Nav links: minimum `44px` high area. Dropdown items: `padding: 7px 12px` minimum with 14px font. Component-specific compact/dense size scales may go below 44px only when explicitly approved, documented on the prop/story, implemented on native controls, and still keyboard/focus accessible; use the default scale when touch-first targets are required. Calendar is an approved dense component scale because date grids need compact scanning density.
+**Rule 10 — Visual control height and touch target are not the same thing.**
+The shared visual scale for comparable action controls is `xs | sm | md | lg` = `24px | 32px | 40px | 48px`, exposed through `--spacing-control-*` and Tailwind utilities `h-control-*` / `w-control-*`. `Button`, `IconButton`, and CTA `Link` (`button` / `outlined`) should consume that scale so their visual heights do not drift. `Link` `regular` remains inline typographic navigation.
+
+`Input` and `Select` are form controls: their height accounts for label, floating label, adornments, and alignment between fields, so they use the semantic `form-field` scale (`--spacing-form-field-sm|md|lg` = `48px | 56px | 64px`) instead of the visual action scale. If more fields share that logic, align them with `Input`/`Select`, not `Button`.
+
+`--spacing-touch-target-min` (`44px`) is touch-target guidance for touch-first surfaces, primary mobile CTAs, or hit-area wrappers. It is not a universal visual height for every web control. Compact or dense components may stay below `44px` when that is documented, they still use native controls, and keyboard/focus behavior remains accessible. `Checkbox` and `Switch` are examples where the hit area can grow without changing the visible shape; `TextArea`, `Chip`, and `Badge` are intentional exceptions with different semantics.
 
 **Action size scale — `xs | sm | md | lg`.**
-For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the dense compact size: reduce typography, icon size, gap, horizontal padding, and height so it is visibly smaller than `sm`. `Link` `regular` remains inline typography-only, while CTA-style `sm` and above keep the 44px target.
+For `Button`, `IconButton`, and Link variants used as actions (`button` / `outlined`), `xs` is the compact dense size. `sm`, `md`, and `lg` follow the same shared semantic visual scale, while touch target is evaluated separately by context.
 
 **Rule 11 — Never animate layout-forcing properties.**
 Do not animate `width`, `height`, `top`, `left`, `margin`, `padding`. These trigger layout reflow on every frame. For position animations use `transform: translateY/translateX`. For size animations use `transform: scale`.
@@ -95,7 +105,7 @@ When a card has a `::before` hover gradient overlay, all content children need `
 | State        | What changes                                                                                                                                                                 | What never changes                                                                                  |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | **hover**    | `box-shadow` intensifies; gradient shifts lighter (primary); background tint increases (secondary); `border-color` opacity increases; `transform: translateY(-6px)` on cards | Border radius; font weight; text color (stays `#ffffff` on primary/secondary); component dimensions |
-| **focus**    | `box-shadow` adds 3px ring: `0 0 0 3px rgba(255,0,54,0.40)` dark / `0 0 0 3px rgba(219,20,60,0.35)` light, merged with existing shadow                                       | Gradient; background tint; `border-color`; dimensions                                               |
+| **focus**    | `focus-ring` applies `outline: 2px solid var(--color-primary)` with `outline-offset: 2px`                                                                                   | Gradient; decorative glow/shadow; background tint; `border-color`; dimensions                       |
 | **active**   | Gradient shifts darker (`#ff1a4b → #cc002b` primary); scale compresses slightly (`transform: scale(0.98)`); glow contracts                                                   | Border radius; text color; font weight                                                              |
 | **disabled** | `opacity: 0.4`; `cursor: not-allowed`; `pointer-events: none`                                                                                                                | All colors stay identical to base state — no grey substitution                                      |
 
@@ -118,7 +128,7 @@ font-size: 1rem; /* body size; button--lg adds more padding */
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px; /* minimum; button--lg typically 0.65rem 1.75rem */
-min-height: 44px;
+height: var(--spacing-control-md); /* default visual control height; use touch-target-min only for touch-first hit areas */
 cursor: pointer;
 box-shadow:
   0 0 0 1.5px rgba(255, 60, 90, 0.5),
@@ -155,14 +165,11 @@ box-shadow:
 **Focus (dark):**
 
 ```css
-/* Merged with base box-shadow — add the focus ring as the outermost layer */
-box-shadow:
-  0 0 0 3px rgba(255, 0, 54, 0.4),
-  0 0 0 1.5px rgba(255, 60, 90, 0.5),
-  0 0 16px 4px rgba(255, 0, 54, 0.45),
-  0 0 40px 6px rgba(255, 0, 54, 0.18),
-  inset 0 1px 0 rgba(255, 255, 255, 0.15);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
+/* Existing decorative box-shadow remains unchanged. */
 ```
 
 **Active (dark):**
@@ -200,7 +207,7 @@ font-size: 1rem;
 letter-spacing: 0.01em;
 line-height: 1.6;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* default visual control height; use touch-target-min only for touch-first hit areas */
 cursor: pointer;
 box-shadow:
   0 0 8px 2px rgba(255, 0, 54, 0.15),
@@ -237,12 +244,11 @@ box-shadow:
 **Focus (dark):**
 
 ```css
-box-shadow:
-  0 0 0 3px rgba(255, 0, 54, 0.4),
-  0 0 8px 2px rgba(255, 0, 54, 0.15),
-  0 0 24px 4px rgba(255, 0, 54, 0.07),
-  inset 0 0 10px rgba(255, 0, 54, 0.04);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
+/* Existing decorative box-shadow remains unchanged. */
 ```
 
 **Active (dark):**
@@ -289,7 +295,7 @@ color: #ffffff;
 font-weight: 600;
 letter-spacing: 0.01em;
 padding: 10px 20px;
-min-height: 44px;
+height: var(--spacing-control-md); /* default visual control height; use touch-target-min only for touch-first hit areas */
 transition:
   background 0.2s ease,
   border-color 0.2s ease,
@@ -307,8 +313,10 @@ box-shadow: 0 0 8px 2px rgba(255, 0, 54, 0.15);
 **Focus:**
 
 ```css
-box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 **Note on `releaseLink` inline variant** — same pattern but smaller padding (`0.4rem 1rem`) and used inside cards:
@@ -346,7 +354,7 @@ font-family: "Space Grotesk Variable", system-ui, sans-serif;
 font-size: 1rem;
 font-weight: 500;
 padding: 10px 14px;
-min-height: 44px;
+height: var(--spacing-form-field-md); /* form-field md height; Input/Select align by field layout */
 width: 100%;
 transition:
   border-color 0.2s ease,
@@ -369,8 +377,10 @@ border-color: #172230; /* slightly brighter than rest */
 
 ```css
 border-color: rgba(255, 0, 54, 0.5);
-box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12);
-outline: none;
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 **Disabled:**
@@ -393,12 +403,15 @@ color: #0a0a0a;
 
 ```css
 border-color: rgba(219, 20, 60, 0.5);
-box-shadow: 0 0 0 3px rgba(219, 20, 60, 0.15);
+outline-style: solid;
+outline-color: var(--color-primary);
+outline-width: 2px;
+outline-offset: 2px;
 ```
 
 ---
 
-### 3.5 Input — Error / Warning / Success States
+### 3.5 Input — Error / Warning / Success / Info States
 
 States change only the `border-color` and `box-shadow`. Background, padding, and font remain identical to default.
 
@@ -421,6 +434,14 @@ box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
 ```css
 border-color: rgba(34, 197, 94, 0.7); /* --color-success: #22c55e */
 box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+```
+
+**Info:**
+
+```css
+border-color: rgba(29, 78, 216, 0.7); /* --color-info-light: #1d4ed8 */
+box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+/* dark: border-color: rgba(59, 130, 246, 1); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12); */
 ```
 
 **Error message text:**
@@ -1132,38 +1153,39 @@ background: linear-gradient(
 
 ### Buttons
 
-- [ ] Minimum height `44px`
-- [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)` dark / `0 0 0 3px rgba(219, 20, 60, 0.35)` light
-- [ ] Focus ring merged with existing `box-shadow` — never replaces it
-- [ ] Focus ring never hidden: no `outline: none` without alternative
+- [ ] Visual height aligns with the `control` scale (`h-control-xs|sm|md|lg`) for the size prop
+- [ ] Focus ring: shared `focus-ring` utility with `outline: 2px solid var(--color-primary)` and `outline-offset: 2px`
+- [ ] Visible focus does not depend on `box-shadow`, decorative glow, or the visual variant
+- [ ] Focus ring never hidden: no `outline: none` without restoring `focus-visible:focus-ring` or equivalent
 - [ ] Disabled: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none` — no color change
 - [ ] Primary: white `#ffffff` text over red gradient — contrast passes in both modes
 - [ ] Secondary dark: `color: #ffffff` over `rgba(255,0,54,0.06)` — visually dark background context; border defines the affordance
 - [ ] Secondary light: `color: #cc0030` — NEVER `#ff0036` in light mode (insufficient contrast over white)
-- [ ] Touch target remains at least `44px` for default action sizes; explicitly approved compact/dense variants may use reduced visual targets when documented and keyboard/focus accessible
+- [ ] Touch target is evaluated by context: use `touch-target-min` (`44px`) on touch-first surfaces or hit-area wrappers; documented compact/dense variants may keep smaller visual height when keyboard/focus accessible
 - [ ] `role="button"` if implemented as non-`<button>` element
 
 ### Inputs
 
-- [ ] Minimum height `44px`
+- [ ] Visual height aligns with the `form-field` scale (`h-form-field-sm|md|lg`) and stays consistent between fields like `Input` and `Select`; do not force `h-control-*` when label/floating-label layout is part of the pattern
 - [ ] Placeholder text `#6a6b6c` — WCAG exempts placeholder from contrast (informational, not functional)
 - [ ] Error state: border + shadow change, NOT color of input text
+- [ ] Info state: border + shadow change with `--color-info-light` in light mode and `--color-info` in dark mode; never treat it as neutral helper styling
 - [ ] Error message: `color: #ff0036` dark / `#db143c` light — check contrast on surface background
 - [ ] Labels always visible — never placeholder-only inputs
-- [ ] Focus ring: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.12)` (softer than button — 12% not 40%)
+- [ ] Focus ring: the field wrapper uses the same `focus-ring` utility when it contains a `:focus-visible` child
 - [ ] Disabled: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none`
 
 ### Interactive cards / links
 
 - [ ] Cards with `href` wrapped in `<a>` or `<Link>`: `text-decoration: none; color: inherit` on wrapper, actual CTA text carries the color
 - [ ] `aria-label` on cards without explicit visible label describing destination
-- [ ] Focus ring on the `<a>` wrapper: `box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.40)`, `outline: none`
+- [ ] Focus ring on the `<a>` wrapper: `focus-visible:focus-ring`, independent from any decorative glow
 - [ ] `transform: translateY(-6px)` on hover: respects `@media (prefers-reduced-motion: reduce)` — set `transform: none; transition: none`
 - [ ] `FeatureCard` uses `aria-label={title}` on the `<article>` element ✅
 
 ### Dropdown / nav items
 
-- [ ] Each item `padding: 7px 12px` minimum — 14px font achieves ~28px height; wrap in container with `min-height: 44px` if needed
+- [ ] Each item `padding: 7px 12px` minimum — 14px font achieves ~28px height; use `touch-target-min` wrappers when the menu is touch-first
 - [ ] Active item: `color: #ff0036` — contrast 4.96:1 on `#0B131E` surface ✅
 - [ ] Hover: background change + color change — two simultaneous signals (not hover-only)
 - [ ] Keyboard navigation: dropdown must be traversable with Tab/Arrow keys
@@ -1324,27 +1346,25 @@ A flat `#ff0036` border at full opacity is harsh and breaks the softness of the 
 
 ---
 
-### ❌ `outline` for focus rings
+### ❌ Local glows or shadows as the only focus indicator
 
 ```css
-/* ❌ Wrong — outline doesn't follow border-radius */
-.button:focus {
-  outline: 3px solid rgba(255, 0, 54, 0.4);
-}
-
-/* ✅ Correct — box-shadow follows border-radius perfectly */
+/* ❌ Wrong — component-local shadow focus drifts and can disappear with decorative glow */
 .button:focus-visible {
   outline: none;
-  box-shadow:
-    0 0 0 3px rgba(255, 0, 54, 0.4),
-    /* focus ring */ 0 0 0 1.5px rgba(255, 60, 90, 0.5),
-    /* existing glow layer 1 */ 0 0 16px 4px rgba(255, 0, 54, 0.45),
-    /* existing glow layer 2 */ 0 0 40px 6px rgba(255, 0, 54, 0.18),
-    /* existing glow layer 3 */ inset 0 1px 0 rgba(255, 255, 255, 0.15); /* existing glow layer 4 */
+  box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
+}
+
+/* ✅ Correct — one shared native focus contract */
+.button:focus-visible {
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
 }
 ```
 
-On pill buttons, `outline` renders as a rectangle with optional gap, destroying the shape. `box-shadow: 0 0 0 3px` spreads as a solid ring that follows `border-radius: 9999px`.
+The focus indicator must not depend on decorative glow, variant shadows, or local rules that are hard to audit. In components, use the shared `focus-ring` utility (`focus-visible:focus-ring`, `peer-focus-visible:focus-ring`, `group-focus-visible:focus-ring`, or a wrapper equivalent).
 
 ---
 
@@ -1385,8 +1405,10 @@ Changing to grey doesn't communicate WHY it's disabled and breaks visual consist
   color: #ffffff;
 }
 .navLink:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 0, 54, 0.4);
+  outline-style: solid;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 2px;
   color: #ffffff;
 }
 .navLink:active {
