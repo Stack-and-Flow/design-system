@@ -28,6 +28,7 @@ export { Switch } from './components/atoms/switch';
 export { Table } from './components/atoms/table';
 export { Text } from './components/atoms/text';
 export { TextArea } from './components/atoms/text-area';
+export { Time } from './components/atoms/time';
 export { Tooltip } from './components/atoms/tooltip';
 
 // ─── Molecules ───────────────────────────────────────────────────────────────

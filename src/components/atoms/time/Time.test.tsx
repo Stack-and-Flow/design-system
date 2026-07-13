@@ -1,0 +1,416 @@
+/**
+ * Time.test.tsx — Tests for Stack-and-Flow Design System Time component
+ *
+ * STRATEGY:
+ * - Hook (useTime): tested with renderHook → pure logic, no DOM rendering
+ * - Component (Time): tested with render + screen + userEvent → observable behavior
+ *
+ * WHAT we test: segment state, navigation, ARIA attrs, disabled states, keyboard behavior, hint system
+ * WHAT we do NOT test: specific CSS class strings, internal refs
+ */
+
+import { fireEvent, render, renderHook, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+
+// --- Mocks (declared before component import) ---
+
+vi.mock('lucide-react/dynamic', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
+  DynamicIcon: () => null
+}));
+
+vi.mock('spinners-react', () => ({
+  // biome-ignore lint/style/useNamingConvention: must match library export name
+  SpinnerCircular: () => null
+}));
+
+// --- Imports after mocks ---
+
+import { Time } from './Time';
+import { useTime } from './useTime';
+
+// ─────────────────────────────────────────────
+// HOOK TESTS — useTime
+// ─────────────────────────────────────────────
+
+describe('useTime — logic', () => {
+  it('returns disabled: false by default', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time' }));
+    expect(result.current.disabled).toBe(false);
+  });
+
+  it('returns isInvalid: false by default', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time' }));
+    expect(result.current.isInvalid).toBe(false);
+  });
+
+  it('returns isInvalid: true when hint type is error', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hint: { type: 'error', message: 'Error' } }));
+    expect(result.current.isInvalid).toBe(true);
+  });
+
+  it('returns disabled: true when disabled prop is true', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', disabled: true }));
+    expect(result.current.disabled).toBe(true);
+  });
+
+  it('returns default granularity as minute', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time' }));
+    expect(result.current.granularity).toBe('minute');
+  });
+
+  it('returns default hourCycle as 24', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time' }));
+    expect(result.current.hourCycle).toBe(24);
+  });
+
+  it('passes id correctly to return value', () => {
+    const { result } = renderHook(() => useTime({ id: 'appointment-time' }));
+    expect(result.current.id).toBe('appointment-time');
+  });
+
+  it('returns segments with empty values by default', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time' }));
+    expect(result.current.segments.hour).toBe('');
+    expect(result.current.segments.minute).toBe('');
+  });
+
+  it('returns hasHint: false when no hint is provided', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time' }));
+    expect(result.current.hasHint).toBe(false);
+  });
+
+  it('returns hasHint: true when hint is provided', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hint: { type: 'info', message: 'Enter time' } }));
+    expect(result.current.hasHint).toBe(true);
+  });
+
+  it('uses the semantic info tone for info hint icons', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hint: { type: 'info', message: 'Enter time' } }));
+    expect(result.current.hintIconProps).toEqual({ name: 'info', tone: 'info', size: 16 });
+  });
+
+  it('aligns with Input form-field sizing tokens', () => {
+    const { result: small } = renderHook(() => useTime({ id: 'test-time-sm', size: 'sm' }));
+    const { result: medium } = renderHook(() => useTime({ id: 'test-time-md', size: 'md' }));
+    const { result: large } = renderHook(() => useTime({ id: 'test-time-lg', size: 'lg' }));
+
+    expect(small.current.containerClassName).toContain('h-form-field-sm');
+    expect(medium.current.containerClassName).toContain('h-form-field-md');
+    expect(large.current.containerClassName).toContain('h-form-field-lg');
+  });
+
+  it('aligns info hint visuals with Input semantic status tokens', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hint: { type: 'info', message: 'Enter time' } }));
+
+    expect(result.current.containerClassName).toContain('border-info-light');
+    expect(result.current.containerClassName).toContain('shadow-glow-input-info-light');
+    expect(result.current.hintMessageClassName).toContain('text-info-light');
+  });
+
+  it('defaults dayPeriod to AM in 12h mode', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hourCycle: 12 }));
+    expect(result.current.segments.dayPeriod).toBe('AM');
+  });
+});
+
+// ─────────────────────────────────────────────
+// COMPONENT TESTS — Time
+// ─────────────────────────────────────────────
+
+describe('Time — component behavior', () => {
+  it('renders a time input group in the DOM', () => {
+    render(<Time id='test-time' />);
+    expect(screen.getByRole('group', { name: 'Time' })).toBeInTheDocument();
+  });
+
+  it('renders hour and minute segments', () => {
+    render(<Time id='test-time' />);
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Minutes' })).toBeInTheDocument();
+  });
+
+  it('keeps segment focus visually neutral and delegates focus styling to the wrapper', async () => {
+    const user = userEvent.setup();
+    render(<Time id='test-time' />);
+
+    const hourInput = screen.getByRole('spinbutton', { name: 'Hours' });
+    await user.click(hourInput);
+
+    expect(hourInput.className).not.toContain('bg-brand');
+    expect(hourInput.className).not.toContain('text-brand');
+  });
+
+  it('does NOT render second segment by default', () => {
+    render(<Time id='test-time' />);
+    expect(screen.queryByRole('spinbutton', { name: 'Seconds' })).not.toBeInTheDocument();
+  });
+
+  it('renders second segment when granularity is second', () => {
+    render(<Time id='test-time' granularity='second' />);
+    expect(screen.getByRole('spinbutton', { name: 'Seconds' })).toBeInTheDocument();
+  });
+
+  it('displays the label when provided', () => {
+    render(<Time id='test-time' label='Appointment Time' />);
+    expect(screen.getByText('Appointment Time')).toBeInTheDocument();
+  });
+
+  it('uses external labels for the group without overriding segment names', () => {
+    render(
+      <>
+        <span id='external-time-label'>External time label</span>
+        <Time id='test-time' ariaLabelledBy='external-time-label' />
+      </>
+    );
+
+    expect(screen.getByRole('group', { name: 'External time label' })).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Minutes' })).toBeInTheDocument();
+  });
+
+  it('combines visible and external labels for the group without overriding segment names', () => {
+    render(
+      <>
+        <span id='external-time-label'>External context</span>
+        <Time id='test-time' label='Appointment Time' ariaLabelledBy='external-time-label' />
+      </>
+    );
+
+    expect(screen.getByRole('group', { name: 'Appointment Time External context' })).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toBeInTheDocument();
+  });
+
+  it('renders required indicator when isRequired is true', () => {
+    render(<Time id='test-time' label='Meeting Time' isRequired={true} />);
+    expect(screen.getByText('*')).toBeInTheDocument();
+  });
+
+  it('is disabled when disabled prop is true', () => {
+    render(<Time id='test-time' label='Disabled Time' disabled={true} />);
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toBeDisabled();
+  });
+
+  it('applies aria-invalid when hint type is error', () => {
+    render(<Time id='test-time' label='Invalid Time' hint={{ type: 'error', message: 'Error' }} />);
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  it('applies aria-required when isRequired is true', () => {
+    render(<Time id='test-time' label='Required Time' isRequired={true} />);
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toHaveAttribute('aria-required', 'true');
+  });
+
+  it('displays error hint message when hint type is error', () => {
+    render(<Time id='test-time' hint={{ type: 'error', message: 'Please enter a valid time' }} />);
+    expect(screen.getByText('Please enter a valid time')).toBeInTheDocument();
+  });
+
+  it('displays info hint message when hint type is info', () => {
+    render(<Time id='test-time' hint={{ type: 'info', message: 'Enter the meeting start time' }} />);
+    expect(screen.getByText('Enter the meeting start time')).toBeInTheDocument();
+  });
+
+  it('accepts numeric input in hour segment', async () => {
+    const user = userEvent.setup();
+    render(<Time id='test-time' />);
+    const hourInput = screen.getByRole('spinbutton', { name: 'Hours' });
+
+    await user.click(hourInput);
+    await user.type(hourInput, '14');
+
+    expect(hourInput).toHaveValue('14');
+  });
+
+  it('exposes zero as aria-valuenow for numeric segments', async () => {
+    const user = userEvent.setup();
+    render(<Time id='test-time' />);
+    const minuteInput = screen.getByRole('spinbutton', { name: 'Minutes' });
+
+    expect(minuteInput).not.toHaveAttribute('aria-valuenow');
+
+    await user.click(minuteInput);
+    await user.type(minuteInput, '0');
+
+    expect(minuteInput).toHaveAttribute('aria-valuenow', '0');
+  });
+
+  it('calls onChange when segment value changes', async () => {
+    const handleChange = vi.fn();
+    const user = userEvent.setup();
+    render(<Time id='test-time' onChange={handleChange} />);
+    const hourInput = screen.getByRole('spinbutton', { name: 'Hours' });
+
+    await user.click(hourInput);
+    await user.type(hourInput, '10');
+
+    expect(handleChange).toHaveBeenCalled();
+  });
+
+  it('renders dayPeriod segment when hourCycle is 12', () => {
+    render(<Time id='test-time' hourCycle={12} />);
+    expect(screen.getByRole('spinbutton', { name: 'AM or PM' })).toBeInTheDocument();
+  });
+
+  it('does NOT render dayPeriod segment when hourCycle is 24', () => {
+    render(<Time id='test-time' hourCycle={24} />);
+    expect(screen.queryByRole('spinbutton', { name: 'AM or PM' })).not.toBeInTheDocument();
+  });
+
+  it('handles full width configuration correctly without breaking layout', () => {
+    const { container } = render(<Time id='test-time' label='Full Width' isFullWidth={true} />);
+    const wrapper = container.querySelector('[data-time-wrapper]');
+    expect(wrapper).toBeInTheDocument();
+  });
+
+  it('renders label inside the container when label is provided', () => {
+    const { container } = render(<Time id='test-time' label='Start Time' />);
+    const wrapper = container.querySelector('[data-time-wrapper]');
+    expect(wrapper).toContainElement(screen.getByText('Start Time'));
+  });
+
+  it('does NOT render stepper buttons by default', () => {
+    render(<Time id='test-time' />);
+    expect(screen.queryByRole('button', { name: 'Increase value' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Decrease value' })).not.toBeInTheDocument();
+  });
+
+  it('renders increment and decrement stepper buttons when showSteppers is true', () => {
+    render(<Time id='test-time' showSteppers={true} />);
+    expect(screen.getByRole('button', { name: 'Increase value' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Decrease value' })).toBeInTheDocument();
+  });
+
+  it('stepper buttons are disabled when the component is disabled', () => {
+    render(<Time id='test-time' showSteppers={true} disabled={true} />);
+    expect(screen.getByRole('button', { name: 'Increase value' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Decrease value' })).toBeDisabled();
+  });
+
+  it('preserves focus on the clicked segment instead of always focusing hour', async () => {
+    const user = userEvent.setup();
+    render(<Time id='test-time' hourCycle={12} />);
+
+    const minuteInput = screen.getByRole('spinbutton', { name: 'Minutes' });
+    const dayPeriodInput = screen.getByRole('spinbutton', { name: 'AM or PM' });
+
+    await user.click(minuteInput);
+    expect(minuteInput).toHaveFocus();
+
+    await user.click(dayPeriodInput);
+    expect(dayPeriodInput).toHaveFocus();
+  });
+
+  it('ignores invalid AM/PM values like "1" or "2" instead of applying them', () => {
+    const handleChange = vi.fn();
+    render(<Time id='test-time' hourCycle={12} onChange={handleChange} />);
+
+    const dayPeriodInput = screen.getByRole('spinbutton', { name: 'AM or PM' });
+
+    fireEvent.change(dayPeriodInput, { target: { value: '1' } });
+
+    expect(dayPeriodInput).toHaveValue('AM');
+    expect(handleChange).not.toHaveBeenCalled();
+  });
+
+  it('toggles AM/PM with arrow keys and with direct A/P key presses', async () => {
+    const handleChange = vi.fn();
+    const user = userEvent.setup();
+    render(<Time id='test-time' hourCycle={12} onChange={handleChange} />);
+
+    const dayPeriodInput = screen.getByRole('spinbutton', { name: 'AM or PM' });
+    await user.click(dayPeriodInput);
+
+    await user.keyboard('{ArrowUp}');
+    expect(dayPeriodInput).toHaveValue('PM');
+
+    await user.keyboard('{ArrowDown}');
+    expect(dayPeriodInput).toHaveValue('AM');
+
+    await user.keyboard('p');
+    expect(dayPeriodInput).toHaveValue('PM');
+
+    await user.keyboard('a');
+    expect(dayPeriodInput).toHaveValue('AM');
+
+    expect(handleChange).toHaveBeenCalledWith(expect.objectContaining({ dayPeriod: 'PM' }));
+  });
+
+  it('clamps out-of-range hour input and emits the clamped value via onChange', async () => {
+    const handleChange = vi.fn();
+    const user = userEvent.setup();
+    render(<Time id='test-time' onChange={handleChange} />);
+
+    const hourInput = screen.getByRole('spinbutton', { name: 'Hours' });
+    await user.click(hourInput);
+    await user.type(hourInput, '99');
+
+    expect(hourInput).toHaveValue('23');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '23' }));
+  });
+
+  it('enforces exact lower/upper boundary clamping for hours and minutes in both 12h and 24h modes', async () => {
+    const handleChange = vi.fn();
+    const user = userEvent.setup();
+    const { unmount } = render(<Time id='test-time-12' hourCycle={12} onChange={handleChange} />);
+
+    // 1. Test a single typed 0 in 12h mode never emits an invalid hour
+    const hourInput12 = screen.getByRole('spinbutton', { name: 'Hours' });
+    await user.click(hourInput12);
+    await user.type(hourInput12, '0');
+    expect(hourInput12).toHaveValue('0');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '1' }));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 2. Test leading-zero valid 12h hours can be typed without becoming 12
+    await user.clear(hourInput12);
+    await user.type(hourInput12, '09');
+    expect(hourInput12).toHaveValue('09');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '09' }));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 3. Test pasted 00 in 12h mode clamps to 1
+    await user.clear(hourInput12);
+    fireEvent.change(hourInput12, { target: { value: '00' } });
+    expect(hourInput12).toHaveValue('1');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '1' }));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 4. Test 12 in 12h mode is accepted
+    await user.clear(hourInput12);
+    await user.type(hourInput12, '12');
+    expect(hourInput12).toHaveValue('12');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 5. Test 23 in 12h mode clamps to 12
+    await user.clear(hourInput12);
+    await user.type(hourInput12, '23');
+    expect(hourInput12).toHaveValue('12');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    unmount();
+
+    // 6. Test 23 in 24h mode is accepted
+    const handleChange24 = vi.fn();
+    render(<Time id='test-time-24' hourCycle={24} onChange={handleChange24} />);
+    const hourInput24 = screen.getByRole('spinbutton', { name: 'Hours' });
+    await user.click(hourInput24);
+    await user.type(hourInput24, '23');
+    expect(hourInput24).toHaveValue('23');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 7. Test 59 in minutes is accepted
+    const minuteInput = screen.getByRole('spinbutton', { name: 'Minutes' });
+    await user.click(minuteInput);
+    await user.type(minuteInput, '59');
+    expect(minuteInput).toHaveValue('59');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 8. Test 60 in minutes clamps to 59
+    await user.clear(minuteInput);
+    await user.type(minuteInput, '60');
+    expect(minuteInput).toHaveValue('59');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  });
+});
