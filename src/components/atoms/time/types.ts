@@ -33,9 +33,9 @@ export const timeVariants = cva(
         false: 'rounded-md'
       },
       size: {
-        sm: 'h-12 px-3 fs-small',
-        md: 'h-14 px-4 fs-base',
-        lg: 'h-16 px-4 fs-h6'
+        sm: 'h-form-field-sm px-3 fs-small',
+        md: 'h-form-field-md px-4 fs-base',
+        lg: 'h-form-field-lg px-4 fs-h6'
       },
       status: {
         default: '',
@@ -45,7 +45,7 @@ export const timeVariants = cva(
           'border-warning-light shadow-glow-input-warning-light hover:!border-warning-light dark:border-warning dark:shadow-glow-input-warning dark:hover:!border-warning',
         success:
           'border-success-light shadow-glow-input-success-light hover:!border-success-light dark:border-success dark:shadow-glow-input-success dark:hover:!border-success',
-        info: ''
+        info: 'border-info-light shadow-glow-input-info-light hover:!border-info-light dark:border-info dark:shadow-glow-input-info dark:hover:!border-info'
       },
       focused: {
         true: '!border-brand-light/50 dark:!border-brand-dark/50',
@@ -59,7 +59,8 @@ export const timeVariants = cva(
     compoundVariants: [
       { focused: true, status: 'error', class: '!border-error-light dark:!border-error' },
       { focused: true, status: 'warning', class: '!border-warning-light dark:!border-warning' },
-      { focused: true, status: 'success', class: '!border-success-light dark:!border-success' }
+      { focused: true, status: 'success', class: '!border-success-light dark:!border-success' },
+      { focused: true, status: 'info', class: '!border-info-light dark:!border-info' }
     ],
     defaultVariants: {
       variant: 'regular',
@@ -107,7 +108,7 @@ export const labelVariants = cva(
 export const hintMessageVariants = cva('fs-small', {
   variants: {
     tone: {
-      info: 'text-text-secondary-light dark:text-text-secondary-dark',
+      info: 'text-info-light dark:text-info',
       warning: 'text-warning-light dark:text-warning',
       error: 'text-error-light dark:text-error',
       success: 'text-success-light dark:text-success'

@@ -86,6 +86,29 @@ describe('useTime — logic', () => {
     expect(result.current.hasHint).toBe(true);
   });
 
+  it('uses the semantic info tone for info hint icons', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hint: { type: 'info', message: 'Enter time' } }));
+    expect(result.current.hintIconProps).toEqual({ name: 'info', tone: 'info', size: 16 });
+  });
+
+  it('aligns with Input form-field sizing tokens', () => {
+    const { result: small } = renderHook(() => useTime({ id: 'test-time-sm', size: 'sm' }));
+    const { result: medium } = renderHook(() => useTime({ id: 'test-time-md', size: 'md' }));
+    const { result: large } = renderHook(() => useTime({ id: 'test-time-lg', size: 'lg' }));
+
+    expect(small.current.containerClassName).toContain('h-form-field-sm');
+    expect(medium.current.containerClassName).toContain('h-form-field-md');
+    expect(large.current.containerClassName).toContain('h-form-field-lg');
+  });
+
+  it('aligns info hint visuals with Input semantic status tokens', () => {
+    const { result } = renderHook(() => useTime({ id: 'test-time', hint: { type: 'info', message: 'Enter time' } }));
+
+    expect(result.current.containerClassName).toContain('border-info-light');
+    expect(result.current.containerClassName).toContain('shadow-glow-input-info-light');
+    expect(result.current.hintMessageClassName).toContain('text-info-light');
+  });
+
   it('defaults dayPeriod to AM in 12h mode', () => {
     const { result } = renderHook(() => useTime({ id: 'test-time', hourCycle: 12 }));
     expect(result.current.segments.dayPeriod).toBe('AM');
@@ -106,6 +129,17 @@ describe('Time — component behavior', () => {
     render(<Time id='test-time' />);
     expect(screen.getByRole('spinbutton', { name: 'Hours' })).toBeInTheDocument();
     expect(screen.getByRole('spinbutton', { name: 'Minutes' })).toBeInTheDocument();
+  });
+
+  it('keeps segment focus visually neutral and delegates focus styling to the wrapper', async () => {
+    const user = userEvent.setup();
+    render(<Time id='test-time' />);
+
+    const hourInput = screen.getByRole('spinbutton', { name: 'Hours' });
+    await user.click(hourInput);
+
+    expect(hourInput.className).not.toContain('bg-brand');
+    expect(hourInput.className).not.toContain('text-brand');
   });
 
   it('does NOT render second segment by default', () => {

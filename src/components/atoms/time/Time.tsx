@@ -25,7 +25,6 @@ export const Time: FC<TimeComponentProps> = (props) => {
     hourCycle,
     name,
     segments,
-    activeSegment,
     hourRef,
     minuteRef,
     secondRef,
@@ -56,7 +55,6 @@ export const Time: FC<TimeComponentProps> = (props) => {
   } = useTime(props);
 
   const renderSegment = (segmentName: string) => {
-    const isActive = activeSegment === segmentName;
     const ref =
       segmentName === 'hour'
         ? hourRef
@@ -94,7 +92,6 @@ export const Time: FC<TimeComponentProps> = (props) => {
           size === 'sm' && 'fs-small',
           size === 'md' && 'fs-base',
           size === 'lg' && 'fs-h6',
-          isActive && 'bg-brand-light/10 text-brand-light dark:bg-brand-dark/20 dark:text-brand-dark rounded-sm px-0.5',
           disabled && 'cursor-not-allowed'
         )}
         maxLength={2}
