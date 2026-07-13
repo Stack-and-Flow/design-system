@@ -198,7 +198,7 @@ export type TimeProps = {
   showClockIcon?: boolean;
   /** @control object */
   hint?: TimeHint;
-  onChange?: (value: TimeSegments | null) => void;
+  onChange?: (value: TimeSegments) => void;
 };
 
 export type TimeComponentProps = TimeProps &

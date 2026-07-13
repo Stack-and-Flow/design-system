@@ -82,7 +82,6 @@ export const Time: FC<TimeComponentProps> = (props) => {
         aria-invalid={isInvalid ? 'true' : 'false'}
         aria-describedby={describedBy}
         aria-required={isRequired}
-        aria-labelledby={labelledBy}
         role='spinbutton'
         className={cn(
           'text-center bg-transparent outline-none border-none font-medium',
@@ -135,8 +134,8 @@ export const Time: FC<TimeComponentProps> = (props) => {
           <div
             className='flex items-center gap-0.5'
             role='group'
-            aria-labelledby={hasLabel ? `${id}-label` : undefined}
-            aria-label={hasLabel ? undefined : 'Time'}
+            aria-labelledby={[hasLabel ? `${id}-label` : undefined, labelledBy].filter(Boolean).join(' ') || undefined}
+            aria-label={hasLabel || labelledBy ? undefined : 'Time'}
           >
             {renderSegment('hour')}
             <span className='select-none text-text-muted-light dark:text-text-muted-dark font-medium'>:</span>

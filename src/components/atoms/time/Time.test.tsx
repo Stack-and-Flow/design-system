@@ -157,6 +157,31 @@ describe('Time — component behavior', () => {
     expect(screen.getByText('Appointment Time')).toBeInTheDocument();
   });
 
+  it('uses external labels for the group without overriding segment names', () => {
+    render(
+      <>
+        <span id='external-time-label'>External time label</span>
+        <Time id='test-time' ariaLabelledBy='external-time-label' />
+      </>
+    );
+
+    expect(screen.getByRole('group', { name: 'External time label' })).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Minutes' })).toBeInTheDocument();
+  });
+
+  it('combines visible and external labels for the group without overriding segment names', () => {
+    render(
+      <>
+        <span id='external-time-label'>External context</span>
+        <Time id='test-time' label='Appointment Time' ariaLabelledBy='external-time-label' />
+      </>
+    );
+
+    expect(screen.getByRole('group', { name: 'Appointment Time External context' })).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Hours' })).toBeInTheDocument();
+  });
+
   it('renders required indicator when isRequired is true', () => {
     render(<Time id='test-time' label='Meeting Time' isRequired={true} />);
     expect(screen.getByText('*')).toBeInTheDocument();
