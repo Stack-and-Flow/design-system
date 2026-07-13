@@ -1,12 +1,16 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import Time from './Time';
+import { Time } from './Time';
 
 /**
- * A time input component with individually editable segments (hour, minute, optional second).
- * Segments are keyboard-navigable and support arrow key increment/decrement.
- * Includes stepper buttons for pointer-based control.
- * Supports 12h/24h formats, all Input variants, hint states, and rounded style.
+ * ## Description
+ * A high-fidelity, segmented time input component that allows users to edit hours, minutes, and optional seconds individually.
+ *
+ * ## Dependencies
+ * Consumes the `useTime` hook for segment layout and Keyboard accessibility, and `Icon` for decorators and stepper button controls.
+ *
+ * ## Usage Guide
+ * Use the arrow keys (`ArrowUp`/`ArrowDown`) or mouse scroll/buttons to cycle through values. Use `ArrowLeft`/`ArrowRight` to transition focus between segments. Use the `hourCycle` prop to toggle between 12-hour format with AM/PM and standard 24-hour format.
  */
 const meta: Meta<typeof Time> = {
   title: 'Atoms/Time',
@@ -24,7 +28,7 @@ export default meta;
 type Story = StoryObj<typeof Time>;
 
 /**
- * Default time component with hour and minute segments.
+ * Demonstrates the default time component with hour and minute segments to showcase the basic interactive states and structure.
  */
 export const Default: Story = {
   args: {
@@ -35,7 +39,7 @@ export const Default: Story = {
 };
 
 /**
- * Time component without a visible label.
+ * Illustrates the time component rendered without a visible label for self-contained layouts or compact UI contexts.
  */
 export const WithoutLabel: Story = {
   args: {
@@ -46,7 +50,7 @@ export const WithoutLabel: Story = {
 };
 
 /**
- * Time component with disabled state.
+ * Shows the time component in a completely disabled state, verifying that segment selection and pointer events are blocked.
  */
 export const Disabled: Story = {
   args: {
@@ -57,7 +61,7 @@ export const Disabled: Story = {
 };
 
 /**
- * Time component with required indicator.
+ * Highlights a mandatory field scenario using the required indicator asterisk beside the label text.
  */
 export const Required: Story = {
   args: {
@@ -68,7 +72,7 @@ export const Required: Story = {
 };
 
 /**
- * Time component with info hint message.
+ * Shows how supportive hint text and icons are styled for informational contextual messages.
  */
 export const WithHintInfo: Story = {
   args: {
@@ -79,7 +83,7 @@ export const WithHintInfo: Story = {
 };
 
 /**
- * Time component with error hint message.
+ * Validates the error validation feedback layout and color geometry when an invalid input is entered.
  */
 export const WithHintError: Story = {
   args: {
@@ -90,7 +94,7 @@ export const WithHintError: Story = {
 };
 
 /**
- * Time component with warning hint message.
+ * Showcases the warning hint variant to notify users of non-blocking scheduling warnings or slots conflict.
  */
 export const WithHintWarning: Story = {
   args: {
@@ -101,7 +105,7 @@ export const WithHintWarning: Story = {
 };
 
 /**
- * Time component with success hint message.
+ * Verifies the success indicator state when the chosen time slot passes business rules validation.
  */
 export const WithHintSuccess: Story = {
   args: {
@@ -112,7 +116,7 @@ export const WithHintSuccess: Story = {
 };
 
 /**
- * Time component with bordered variant.
+ * Shows the bordered variant layout for applications needing higher contrast border definitions.
  */
 export const BorderedVariant: Story = {
   args: {
@@ -123,7 +127,7 @@ export const BorderedVariant: Story = {
 };
 
 /**
- * Time component with underlined variant.
+ * Shows the underlined variant to support classic minimalist web-form styles.
  */
 export const UnderlinedVariant: Story = {
   args: {
@@ -134,7 +138,7 @@ export const UnderlinedVariant: Story = {
 };
 
 /**
- * Time component with line variant.
+ * Demonstrates a bottom-bordered style that matches line-variant design system themes.
  */
 export const LineVariant: Story = {
   args: {
@@ -145,7 +149,7 @@ export const LineVariant: Story = {
 };
 
 /**
- * Time component with rounded style.
+ * Demonstrates the pill-rounded geometry variant for modern fluid layouts.
  */
 export const Rounded: Story = {
   args: {
@@ -156,7 +160,7 @@ export const Rounded: Story = {
 };
 
 /**
- * Time component with different sizes.
+ * Compares the scale of the component across small, medium, and large field sizes.
  */
 export const Sizes: Story = {
   render: () => (
@@ -169,7 +173,7 @@ export const Sizes: Story = {
 };
 
 /**
- * Time component with seconds granularity.
+ * Demonstrates full precision temporal inputs including seconds granularity.
  */
 export const WithSeconds: Story = {
   args: {
@@ -181,7 +185,7 @@ export const WithSeconds: Story = {
 };
 
 /**
- * Time component in 12-hour format with AM/PM segment.
+ * Illustrates 12-hour AM/PM format support, ensuring proper selection/navigation boundaries.
  */
 export const TwelveHourFormat: Story = {
   args: {
@@ -193,7 +197,7 @@ export const TwelveHourFormat: Story = {
 };
 
 /**
- * Time component with clock icon.
+ * Includes a decorative clock adornment inside the input's start content area.
  */
 export const WithClockIcon: Story = {
   args: {
@@ -204,7 +208,7 @@ export const WithClockIcon: Story = {
 };
 
 /**
- * Time component with full width.
+ * Displays the component stretched to 100% width, ideal for full-width grid layouts.
  */
 export const FullWidth: Story = {
   args: {
@@ -215,7 +219,7 @@ export const FullWidth: Story = {
 };
 
 /**
- * Time component with stepper buttons.
+ * Features increment/decrement side steppers to offer standard mouse click adjustments.
  */
 export const WithSteppers: Story = {
   args: {
@@ -227,7 +231,7 @@ export const WithSteppers: Story = {
 };
 
 /**
- * Time component with combined states.
+ * Synthesizes multiple layout properties, labels, and adornments into a complex composite form field configuration.
  */
 export const CombinedStates: Story = {
   args: {

@@ -158,15 +158,31 @@ export const useTime = ({
     }
     if (segmentName === 'hour') {
       const max = hourCycle === 12 ? 12 : 23;
-      if ((parseInt(next.hour, 10) || 0) > max) {
-        next.hour = String(max);
+      const min = hourCycle === 12 ? 1 : 0;
+      const parsed = parseInt(next.hour, 10);
+      if (!isNaN(parsed)) {
+        if (parsed > max) {
+          next.hour = String(max);
+        } else if (parsed < min && value === '00') {
+          next.hour = String(min);
+        }
       }
     }
-    if (segmentName === 'minute' && (parseInt(value, 10) || 0) > 59) {
-      next.minute = '59';
+    if (segmentName === 'minute') {
+      const parsed = parseInt(value, 10);
+      if (parsed > 59) {
+        next.minute = '59';
+      } else if (parsed < 0) {
+        next.minute = '0';
+      }
     }
-    if (segmentName === 'second' && next.second !== undefined && (parseInt(value, 10) || 0) > 59) {
-      next.second = '59';
+    if (segmentName === 'second' && next.second !== undefined) {
+      const parsed = parseInt(value, 10);
+      if (parsed > 59) {
+        next.second = '59';
+      } else if (parsed < 0) {
+        next.second = '0';
+      }
     }
     return next;
   };
@@ -184,6 +200,23 @@ export const useTime = ({
   };
 
   const handleSegmentBlur = (e: FocusEvent<HTMLInputElement>): void => {
+    if (activeSegment) {
+      const segmentName = activeSegment;
+      const min = getMinValue(segmentName);
+      const max = getMaxValue(segmentName);
+      const currentVal = segments[segmentName as keyof TimeSegments];
+      if (currentVal !== undefined && segmentName !== 'dayPeriod') {
+        const parsed = parseInt(currentVal, 10);
+        if (!isNaN(parsed) && currentVal !== '') {
+          if (parsed < min) {
+            updateSegment(segmentName, String(min));
+          } else if (parsed > max) {
+            updateSegment(segmentName, String(max));
+          }
+        }
+      }
+    }
+
     const related = e.relatedTarget as HTMLElement | null;
     if (related && containerRef.current?.contains(related)) {
       return;
@@ -402,6 +435,8 @@ export const useTime = ({
     getPlaceholder,
     getLabelForSegment,
     getSegmentDisplayValue,
+    getMinValue,
+    getMaxValue,
     incrementButtonProps: {
       type: 'button' as const,
       'aria-label': 'Increase value',

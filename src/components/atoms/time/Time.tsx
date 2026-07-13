@@ -4,7 +4,7 @@ import { Icon } from '../icon';
 import type { TimeComponentProps } from './types';
 import { useTime } from './useTime';
 
-const Time: FC<TimeComponentProps> = (props) => {
+export const Time: FC<TimeComponentProps> = (props) => {
   const {
     containerRef,
     containerClassName,
@@ -45,6 +45,8 @@ const Time: FC<TimeComponentProps> = (props) => {
     getPlaceholder,
     getLabelForSegment,
     getSegmentDisplayValue,
+    getMinValue,
+    getMaxValue,
     incrementButtonProps,
     decrementButtonProps,
     showSteppers,
@@ -65,6 +67,7 @@ const Time: FC<TimeComponentProps> = (props) => {
 
     return (
       <input
+        id={segmentName === 'hour' ? `${id}-hour` : `${id}-${segmentName}`}
         ref={ref}
         type='text'
         inputMode={segmentName === 'dayPeriod' ? 'text' : 'numeric'}
@@ -73,13 +76,16 @@ const Time: FC<TimeComponentProps> = (props) => {
         disabled={disabled}
         name={name ? `${name}-${segmentName}` : undefined}
         aria-label={getLabelForSegment(segmentName)}
-        aria-valuemin={segmentName === 'dayPeriod' ? undefined : 0}
-        aria-valuemax={
-          segmentName === 'dayPeriod' ? undefined : segmentName === 'hour' ? (hourCycle === 12 ? 12 : 23) : 59
-        }
+        aria-valuemin={segmentName === 'dayPeriod' ? 0 : getMinValue(segmentName)}
+        aria-valuemax={segmentName === 'dayPeriod' ? 1 : getMaxValue(segmentName)}
         aria-valuenow={
-          segmentName === 'dayPeriod' ? undefined : parseInt(getSegmentDisplayValue(segmentName), 10) || undefined
+          segmentName === 'dayPeriod'
+            ? getSegmentDisplayValue(segmentName).toUpperCase() === 'PM'
+              ? 1
+              : 0
+            : parseInt(getSegmentDisplayValue(segmentName), 10) || undefined
         }
+        aria-valuetext={segmentName === 'dayPeriod' ? getSegmentDisplayValue(segmentName) : undefined}
         aria-invalid={isInvalid ? 'true' : 'false'}
         aria-describedby={describedBy}
         aria-required={isRequired}
@@ -93,7 +99,7 @@ const Time: FC<TimeComponentProps> = (props) => {
           size === 'sm' && 'fs-small',
           size === 'md' && 'fs-base',
           size === 'lg' && 'fs-h6',
-          isActive && 'shadow-glow-focus-light dark:shadow-glow-focus-dark rounded-sm',
+          isActive && 'bg-brand-light/10 text-brand-light dark:bg-brand-dark/20 dark:text-brand-dark rounded-sm px-0.5',
           disabled && 'cursor-not-allowed'
         )}
         maxLength={2}
@@ -178,5 +184,3 @@ const Time: FC<TimeComponentProps> = (props) => {
     </div>
   );
 };
-
-export default Time;
