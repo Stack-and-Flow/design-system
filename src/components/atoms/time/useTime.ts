@@ -160,10 +160,10 @@ export const useTime = ({
       const max = hourCycle === 12 ? 12 : 23;
       const min = hourCycle === 12 ? 1 : 0;
       const parsed = parseInt(next.hour, 10);
-      if (!isNaN(parsed)) {
+      if (!Number.isNaN(parsed)) {
         if (parsed > max) {
           next.hour = String(max);
-        } else if (parsed < min && value === '00') {
+        } else if (parsed < min && !(hourCycle === 12 && value === '0')) {
           next.hour = String(min);
         }
       }
@@ -187,10 +187,33 @@ export const useTime = ({
     return next;
   };
 
+  const normalizeSegmentsForChange = (next: TimeSegments, segmentName: string): TimeSegments => {
+    if (segmentName !== 'hour' || next.hour === '') {
+      return next;
+    }
+
+    const parsed = parseInt(next.hour, 10);
+    if (Number.isNaN(parsed)) {
+      return next;
+    }
+
+    const min = getMinValue('hour');
+    const max = getMaxValue('hour');
+
+    if (parsed < min) {
+      return { ...next, hour: String(min) };
+    }
+    if (parsed > max) {
+      return { ...next, hour: String(max) };
+    }
+
+    return next;
+  };
+
   const updateSegment = (segmentName: string, value: string): void => {
     const next = clampSegments(segments, segmentName, value);
     setSegments(next);
-    onChange?.(next);
+    onChange?.(normalizeSegmentsForChange(next, segmentName));
   };
 
   const handleSegmentFocus = (segmentName: string, e: FocusEvent<HTMLInputElement>): void => {
@@ -207,7 +230,7 @@ export const useTime = ({
       const currentVal = segments[segmentName as keyof TimeSegments];
       if (currentVal !== undefined && segmentName !== 'dayPeriod') {
         const parsed = parseInt(currentVal, 10);
-        if (!isNaN(parsed) && currentVal !== '') {
+        if (!Number.isNaN(parsed) && currentVal !== '') {
           if (parsed < min) {
             updateSegment(segmentName, String(min));
           } else if (parsed > max) {
@@ -341,6 +364,34 @@ export const useTime = ({
   const getSegmentDisplayValue = (segmentName: string): string =>
     (segments[segmentName as keyof TimeSegments] as string | undefined) ?? '';
 
+  const getSegmentAriaValueNow = (segmentName: string): number | undefined => {
+    if (segmentName === 'dayPeriod') {
+      return getSegmentDisplayValue(segmentName).toUpperCase() === 'PM' ? 1 : 0;
+    }
+
+    const value = getSegmentDisplayValue(segmentName);
+    if (value === '') {
+      return undefined;
+    }
+
+    const parsed = parseInt(value, 10);
+    if (Number.isNaN(parsed)) {
+      return undefined;
+    }
+
+    const min = getMinValue(segmentName);
+    const max = getMaxValue(segmentName);
+
+    if (parsed < min) {
+      return min;
+    }
+    if (parsed > max) {
+      return max;
+    }
+
+    return parsed;
+  };
+
   useEffect(() => {
     if (granularity === 'second' && segments.second === undefined) {
       setSegments((prev) => ({ ...prev, second: '' }));
@@ -435,6 +486,7 @@ export const useTime = ({
     getPlaceholder,
     getLabelForSegment,
     getSegmentDisplayValue,
+    getSegmentAriaValueNow,
     getMinValue,
     getMaxValue,
     incrementButtonProps: {

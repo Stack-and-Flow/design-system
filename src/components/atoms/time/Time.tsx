@@ -45,6 +45,7 @@ export const Time: FC<TimeComponentProps> = (props) => {
     getPlaceholder,
     getLabelForSegment,
     getSegmentDisplayValue,
+    getSegmentAriaValueNow,
     getMinValue,
     getMaxValue,
     incrementButtonProps,
@@ -78,13 +79,7 @@ export const Time: FC<TimeComponentProps> = (props) => {
         aria-label={getLabelForSegment(segmentName)}
         aria-valuemin={segmentName === 'dayPeriod' ? 0 : getMinValue(segmentName)}
         aria-valuemax={segmentName === 'dayPeriod' ? 1 : getMaxValue(segmentName)}
-        aria-valuenow={
-          segmentName === 'dayPeriod'
-            ? getSegmentDisplayValue(segmentName).toUpperCase() === 'PM'
-              ? 1
-              : 0
-            : parseInt(getSegmentDisplayValue(segmentName), 10) || undefined
-        }
+        aria-valuenow={getSegmentAriaValueNow(segmentName)}
         aria-valuetext={segmentName === 'dayPeriod' ? getSegmentDisplayValue(segmentName) : undefined}
         aria-invalid={isInvalid ? 'true' : 'false'}
         aria-describedby={describedBy}

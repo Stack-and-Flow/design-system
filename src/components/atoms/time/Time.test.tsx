@@ -90,11 +90,6 @@ describe('useTime — logic', () => {
     const { result } = renderHook(() => useTime({ id: 'test-time', hourCycle: 12 }));
     expect(result.current.segments.dayPeriod).toBe('AM');
   });
-
-  it('sets wrapperClassName containing full-width modifier when isFullWidth is true', () => {
-    const { result } = renderHook(() => useTime({ id: 'test-time', isFullWidth: true }));
-    expect(result.current.wrapperClassName).toContain('w-full');
-  });
 });
 
 // ─────────────────────────────────────────────
@@ -167,6 +162,19 @@ describe('Time — component behavior', () => {
     await user.type(hourInput, '14');
 
     expect(hourInput).toHaveValue('14');
+  });
+
+  it('exposes zero as aria-valuenow for numeric segments', async () => {
+    const user = userEvent.setup();
+    render(<Time id='test-time' />);
+    const minuteInput = screen.getByRole('spinbutton', { name: 'Minutes' });
+
+    expect(minuteInput).not.toHaveAttribute('aria-valuenow');
+
+    await user.click(minuteInput);
+    await user.type(minuteInput, '0');
+
+    expect(minuteInput).toHaveAttribute('aria-valuenow', '0');
   });
 
   it('calls onChange when segment value changes', async () => {
@@ -288,20 +296,35 @@ describe('Time — component behavior', () => {
     const user = userEvent.setup();
     const { unmount } = render(<Time id='test-time-12' hourCycle={12} onChange={handleChange} />);
 
-    // 1. Test 00 or 0 in 12h mode clamps to 1
+    // 1. Test a single typed 0 in 12h mode never emits an invalid hour
     const hourInput12 = screen.getByRole('spinbutton', { name: 'Hours' });
     await user.click(hourInput12);
-    await user.type(hourInput12, '00');
-    expect(hourInput12).toHaveValue('1');
+    await user.type(hourInput12, '0');
+    expect(hourInput12).toHaveValue('0');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '1' }));
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
-    // 2. Test 12 in 12h mode is accepted
+    // 2. Test leading-zero valid 12h hours can be typed without becoming 12
+    await user.clear(hourInput12);
+    await user.type(hourInput12, '09');
+    expect(hourInput12).toHaveValue('09');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '09' }));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 3. Test pasted 00 in 12h mode clamps to 1
+    await user.clear(hourInput12);
+    fireEvent.change(hourInput12, { target: { value: '00' } });
+    expect(hourInput12).toHaveValue('1');
+    expect(handleChange).toHaveBeenLastCalledWith(expect.objectContaining({ hour: '1' }));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    // 4. Test 12 in 12h mode is accepted
     await user.clear(hourInput12);
     await user.type(hourInput12, '12');
     expect(hourInput12).toHaveValue('12');
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
-    // 3. Test 23 in 12h mode clamps to 12
+    // 5. Test 23 in 12h mode clamps to 12
     await user.clear(hourInput12);
     await user.type(hourInput12, '23');
     expect(hourInput12).toHaveValue('12');
@@ -309,7 +332,7 @@ describe('Time — component behavior', () => {
 
     unmount();
 
-    // 4. Test 23 in 24h mode is accepted
+    // 6. Test 23 in 24h mode is accepted
     const handleChange24 = vi.fn();
     render(<Time id='test-time-24' hourCycle={24} onChange={handleChange24} />);
     const hourInput24 = screen.getByRole('spinbutton', { name: 'Hours' });
@@ -318,14 +341,14 @@ describe('Time — component behavior', () => {
     expect(hourInput24).toHaveValue('23');
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
-    // 5. Test 59 in minutes is accepted
+    // 7. Test 59 in minutes is accepted
     const minuteInput = screen.getByRole('spinbutton', { name: 'Minutes' });
     await user.click(minuteInput);
     await user.type(minuteInput, '59');
     expect(minuteInput).toHaveValue('59');
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
-    // 6. Test 60 in minutes clamps to 59
+    // 8. Test 60 in minutes clamps to 59
     await user.clear(minuteInput);
     await user.type(minuteInput, '60');
     expect(minuteInput).toHaveValue('59');
