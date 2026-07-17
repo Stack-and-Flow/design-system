@@ -44,6 +44,8 @@ Follow these phases in order. Do not skip gates because a component looks simple
 
 **Non-negotiable assignee gate:** before reading the implementation spec in detail, planning, creating a branch/worktree, mutating GitHub, or writing code from a linked issue, verify current assignees. If the issue is assigned to someone other than the contributor/user, stop and tell the user they must get explicit permission before reassigning it.
 
+**Non-negotiable validated handoff gate:** implementation intake must read `## Validated component spec` plus the immediately following `## Cataloging decision` from the same issue comment/update. Stop if either section is missing, standalone, ambiguous, contains blockers/questions, or conflicts with the other.
+
 ### 0 — Contributor onboarding
 
 Only when working directly with a contributor: confirm they understand React + strict TypeScript, Tailwind v4 tokens, CVA, the 6-file pattern, Storybook as docs, and tests in `.test.tsx`. If not, teach briefly before proceeding.
@@ -54,9 +56,11 @@ If implementation will proceed from a GitHub issue or Project board card, first 
 
 After the label and assignee gates pass, load `skills/github-project-tasks/SKILL.md` and run **START WORK** before spec intake, planning, or coding: verify assignees, assign the issue to the contributor/user, move Project status to `In progress`, and record the planned branch/worktree. Offline/no-network mode may only skip GitHub mutations after evidence confirms the issue already has `status:approved` and is unassigned or assigned to the contributor/user; it never bypasses the approval or assignee gates.
 
-Then extract component name, tier, props, variants, states, accessibility behavior, reference URL, and design notes. If the spec lives in a GitHub issue, read issue comments too; validated specs may live there.
+Then extract component name, tier, props, variants, states, accessibility behavior, reference URL, design notes, and the cataloging decision summary, reuse/extraction instructions, child issue candidates, and target issue. If the spec lives in a GitHub issue, read issue comments too; validated specs may live there.
 
-Stop and ask when the issue label `status:approved` is missing or cannot be verified, the issue is assigned to someone else without explicit reassignment permission, START WORK cannot be completed, or required behavior, accessibility, states, or variants are missing. Do not invent public API and do not begin implementation.
+Primitive tier specs may proceed only when the validated `## Cataloging decision` explicitly approves primitive support and path. If the repo has no primitive implementation support or the decision does not explicitly approve it, stop and defer to the V1 inventory/recatalogation issue instead of silently implementing the component as an atom.
+
+Stop and ask when the issue label `status:approved` is missing or cannot be verified, the issue is assigned to someone else without explicit reassignment permission, START WORK cannot be completed, the adjacent validated spec/cataloging handoff is missing or unresolved, the spec conflicts with the cataloging decision, primitive support is not explicitly approved for a primitive spec, or required behavior, accessibility, states, or variants are missing. Do not invent public API and do not begin implementation.
 
 ### 1.5 — Spec critique
 
@@ -67,6 +71,11 @@ Before planning, return:
 
 ### Gaps found
 - {missing requirement and impact}
+
+### Cataloging decision summary
+- Decision: {reuse existing / keep in parent / split/extract / needs child issue / defer to V1 inventory}
+- Reuse/extraction: {summary}
+- Child candidates: {none or list}
 
 ### Risks found
 - {implementation/product risk and mitigation}
@@ -100,8 +109,8 @@ Present a concise plan and wait for confirmation unless SDD delegation already a
 ## Implementation Plan
 
 **Component**: {ComponentName}
-**Tier**: atoms / molecules / organisms
-**Directory**: `src/components/{tier}/{kebab-name}/`
+**Tier**: primitives / atoms / molecules / organisms
+**Directory**: `src/components/{tier}/{kebab-name}/` (primitive only when explicitly approved by the validated cataloging decision and supported by the repo)
 
 ### Files
 1. `types.ts` — props, CVA variants, defaults
@@ -114,6 +123,7 @@ Present a concise plan and wait for confirmation unless SDD delegation already a
 ### Decisions
 - Tokens: {list}
 - Radix primitive: {yes/no; which one}
+- Cataloging decision: {reuse/extraction/child candidates summary}
 - States and accessibility: {summary}
 - Validation: {tests/build/storybook/manual visual checks}
 ```

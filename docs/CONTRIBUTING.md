@@ -13,19 +13,26 @@ Es **obligatorio** tener instalado:
 ## Configuración local
 
 1. **Clona el repositorio**:
+
    ```bash
    git clone https://github.com/Stack-and-Flow/design-system.git
    cd design-system
    ```
+
 2. **Establece la versión correcta de Node**:
+
    ```bash
    nvm use
    ```
+
 3. **Instala las dependencias**:
+
    ```bash
    pnpm install
    ```
+
 4. **Inicia Storybook**:
+
    ```bash
    pnpm run storybook
    ```
@@ -55,6 +62,7 @@ Todo componente DEBE seguir estrictamente la arquitectura Atomic Design + Contai
 
 1. **Determina el nivel correcto**: Decide si es un `atom`, `molecule` u `organism`.
 2. **Crea la estructura**: Si creas un átomo `Button`, la estructura DEBE ser exactamente:
+
    ```text
    src/components/atoms/button/
    ├── types.ts             # Tipos, props públicas, JSDoc controls y variantes CVA
@@ -64,6 +72,7 @@ Todo componente DEBE seguir estrictamente la arquitectura Atomic Design + Contai
    ├── Button.stories.tsx   # Documentación Storybook
    └── index.ts             # Re-exportaciones
    ```
+
 3. **Implementa en orden**: `types.ts` → hook → componente → tests → stories → `index.ts`.
 4. **Revisa antes del PR**: ejecuta la review pre-PR del componente definida en `CONTRIBUTOR-FLOW.md`.
 
@@ -223,7 +232,7 @@ Resumen de fases:
 3. **Approval gate** — una vez escrita la spec, esperas el label `status:approved` en la issue; sin ese label no hay START WORK ni implementación bajo ningún concepto.
 4. **Assignee gate** — antes de cualquier acción sobre una issue linkeada, verificas assignees; si está asignada a otra persona, hace falta permiso explícito antes de reasignarla.
 5. **START WORK** — después del label `status:approved` y el assignee gate, asignas la issue, la mueves a `In progress` y registras branch/worktree.
-6. **Spec intake** — con START WORK ya completado, `component-contributor` lee la sección `## Validated component spec` sin inventar comportamiento.
+6. **Spec intake** — con START WORK ya completado, `component-contributor` lee `## Validated component spec` y el `## Cataloging decision` inmediatamente siguiente sin inventar comportamiento.
 7. **Review de spec** — el agente critica gaps, riesgos e inconsistencias antes de planificar.
 8. **Prefase visual** — el agente alinea tokens, superficie, estados, focus, transición y dark mode antes del plan.
 9. **Plan** — revisas y apruebas archivos, variantes, tests, stories y accesibilidad.

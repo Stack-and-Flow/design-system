@@ -13,19 +13,26 @@ You MUST have the following installed:
 ## Local Setup
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/Stack-and-Flow/design-system.git
    cd design-system
    ```
+
 2. **Set the correct Node version**:
+
    ```bash
    nvm use
    ```
+
 3. **Install dependencies**:
+
    ```bash
    pnpm install
    ```
+
 4. **Start Storybook**:
+
    ```bash
    pnpm run storybook
    ```
@@ -55,6 +62,7 @@ Every component MUST strictly follow the Atomic Design + Container/Presentationa
 
 1. **Locate the right tier**: Decide if it's an `atom`, `molecule`, or `organism`.
 2. **Create the structure**: If you create a `Button` atom, the structure MUST be exactly:
+
    ```text
    src/components/atoms/button/
    ├── types.ts             # Types, public props, JSDoc controls, CVA variants
@@ -64,6 +72,7 @@ Every component MUST strictly follow the Atomic Design + Container/Presentationa
    ├── Button.stories.tsx   # Storybook documentation
    └── index.ts             # Re-exports
    ```
+
 3. **Implement in order**: `types.ts` → hook → component → tests → stories → `index.ts`.
 4. **Design visual semantics deliberately**: decorative glow/elevation belongs to the component contract. When consumers may need a quieter version of a glow-bearing control, prefer `emphasis="default" | "flat"` over a raw `glow?: boolean` prop. Never let decorative emphasis disable the shared `focus-ring` focus-visible indicator.
 5. **Review before PR**: run the pre-PR component review defined in `CONTRIBUTOR-FLOW.en.md`.
@@ -220,7 +229,7 @@ Phase summary:
 3. **Approval gate** — once the spec is written, wait for the `status:approved` label on the issue; without that label there is no START WORK or implementation under any circumstance.
 4. **Assignee gate** — before any action on a linked issue, verify assignees; if it is assigned to someone else, explicit permission is required before reassigning it.
 5. **START WORK** — after the `status:approved` label and assignee gate, assign the issue, move it to `In progress`, and record branch/worktree.
-6. **Spec intake** — with START WORK already completed, `component-contributor` reads the `## Validated component spec` section without inventing behavior.
+6. **Spec intake** — with START WORK already completed, `component-contributor` reads `## Validated component spec` and the immediately following `## Cataloging decision` without inventing behavior.
 7. **Spec review** — the agent critiques gaps, risks, and inconsistencies before planning.
 8. **Visual preflight** — tokens, surfaces, states, focus, transitions, and dark mode are aligned before the plan.
 9. **Plan** — review and approve files, variants, tests, stories, and accessibility.

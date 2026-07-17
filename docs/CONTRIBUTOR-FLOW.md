@@ -7,7 +7,7 @@ Este es el documento canónico para contribuir componentes al design system. `CO
 ## Resumen rápido
 
 ```text
-Project task → Research → Spec proposal skill → Validated issue spec → esperar `status:approved` → verificar assignee → START WORK → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
+Project task → Research → Spec proposal skill → Cataloging validator → Validated issue spec → esperar `status:approved` → verificar assignee → START WORK → Spec review → Visual preflight → Plan → Implementación → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
 ```
 
 La regla central: **la IA ejecuta, el contributor decide**. La spec, los criterios visuales y la aprobación de checkpoints son responsabilidad humana. Después de escribir la spec validada en la tarea, la implementación queda bloqueada hasta que la issue asociada tenga el label `status:approved` y no esté asignada a otra persona.
@@ -22,7 +22,9 @@ La regla central: **la IA ejecuta, el contributor decide**. La spec, los criteri
 | Arquitectura y reglas de código | [`GUIDELINES.md`](./GUIDELINES.md)                 |
 | Tokens y lenguaje visual        | [`DESIGN.md`](./DESIGN.md), `src/styles/theme.css` |
 | Estados visuales por componente | [`COMPONENTS.md`](./COMPONENTS.md)                 |
-| Toma y validación de specs      | `skills/component-spec-proposer/SKILL.md`     |
+| Catalogación y recatalogación V1 | [`COMPONENT-CATALOGING.md`](./COMPONENT-CATALOGING.md) |
+| Toma y propuesta de specs       | `skills/component-spec-proposer/SKILL.md`     |
+| Validación de catalogación de specs | `skills/component-spec-cataloging-validator/SKILL.md` |
 | Flujo detallado con IA          | `skills/component-contributor/SKILL.md`       |
 | Auditoría pre-PR                | `skills/components-auditor/SKILL.md`          |
 
@@ -47,7 +49,7 @@ Antes de pedir implementación, investigá el componente.
 Checklist mínimo:
 
 - Referencias: Radix UI primitives, MDN o WAI-ARIA APG según aplique.
-- Nivel atómico: `atom`, `molecule` u `organism`.
+- Tier de catálogo: consultá [`COMPONENT-CATALOGING.md`](./COMPONENT-CATALOGING.md) para decidir `primitives`, `atoms`, `molecules` u `organisms` y documentar follow-ups V1.
 - Props: nombre, tipo, default, required/optional.
 - Variantes CVA: keys y valores.
 - Estados: base, hover, focus, active/pressed, disabled, loading, error, empty si aplica.
@@ -60,34 +62,61 @@ No hagas research a medias. Si la issue está incompleta, el componente sale inc
 
 ## Paso 3 — Tomar y validar la spec con `component-spec-proposer`
 
-Antes de implementar, usá la skill `component-spec-proposer` para convertir la tarea y su referencia en una spec validada.
+Antes de implementar, usá la skill `component-spec-proposer` para convertir la issue en una spec validada. Hay dos variantes válidas de intake: capture-first y reference-component-first; ambas terminan en el mismo gate de aprobación.
 
-Cuándo usarla:
+| Variante | Cuándo aplica | Qué registra la issue |
+| -------- | ------------- | --------------------- |
+| A — capture-first | Maintainer/usuario captura una idea de componente desde una conversación o necesidad de producto, aunque todavía no exista una referencia externa. | Contexto conocido, constraints, unknowns, tier esperado y cualquier referencia o patrón faltante. |
+| B — reference-component-first | El usuario trae una URL de HeroUI, Radix, MDN, WAI-ARIA APG u otro componente de referencia. | Comportamiento de referencia y cómo se adapta a Stack-and-Flow; no se copia a ciegas. |
 
-- La issue tiene una referencia Radix UI primitive, MDN, APG o similar.
-- La tarea todavía es vaga o tiene decisiones abiertas.
-- Necesitás preparar la issue antes de pasar a implementación.
+Convergencia obligatoria:
 
-Prompt sugerido:
+```text
+issue capturada o referencia → spec propuesta → assumptions/preguntas → validación de catalogación → validación humana → `## Validated component spec` en la issue → esperar label `status:approved` → START WORK → component-contributor
+```
+
+Antes de pedir aprobación humana o escribir `## Validated component spec`, corré `component-spec-cataloging-validator`. Ese gate contrasta la propuesta contra [`COMPONENT-CATALOGING.md`](./COMPONENT-CATALOGING.md), inspecciona el catálogo actual y devuelve `## Draft cataloging decision` con reuse, extracción, split, child issue candidates y target issue, o `## Cataloging blockers/questions` si no puede completar la validación. Si hay blockers/questions, no se pide aprobación todavía. Si hacen falta child issues, `component-child-issues` se usa después, solo con la decisión final validada.
+
+Cuando se escribe en la issue, `## Cataloging decision` debe quedar inmediatamente después de `## Validated component spec` en el mismo comentario o actualización, para que el contrato de implementación y la decisión de catálogo se revisen juntos. Ese heading exacto se reserva para la versión final aprobada y no debe contener blockers/questions sin resolver.
+
+`status:approved` es un **label de la issue**. El Project Status `In progress` pertenece a **START WORK**, no a la fase de propuesta de spec.
+
+Prompt capture-first:
 
 ```text
 Prepará la spec para este componente usando component-spec-proposer.
 
 Issue: {issue_url}
+Intake: capture-first desde esta conversación/necesidad de producto.
+Contexto conocido: {context}
+Referencia: pendiente o desconocida
+
+No implementes todavía. Proponé la spec, listá assumptions/preguntas, marcá referencias o patrones faltantes, corré `component-spec-cataloging-validator` y esperá mi aprobación de la spec y `## Draft cataloging decision` antes de escribir en GitHub. Si hay `## Cataloging blockers/questions`, no pidas aprobación todavía.
+```
+
+Prompt reference-component-first:
+
+```text
+Prepará la spec para este componente usando component-spec-proposer.
+
+Issue: {issue_url}
+Intake: reference-component-first
 Referencia: {reference_url}
 
-No implementes todavía. Primero proponé la spec, listá assumptions a validar y esperá mi aprobación antes de escribir en GitHub.
+No implementes todavía. Adaptá la referencia a Stack-and-Flow, proponé la spec, listá assumptions a validar, corré `component-spec-cataloging-validator` y esperá mi aprobación de la spec y `## Draft cataloging decision` antes de escribir en GitHub. Si hay `## Cataloging blockers/questions`, no pidas aprobación todavía.
 ```
 
 La skill debe:
 
-1. Leer la issue y la referencia.
+1. Leer la issue y, si existe, la referencia.
 2. Proponer una spec usando la plantilla de `component-spec-proposer`.
-3. Listar assumptions a validar.
-4. Esperar aprobación humana.
-5. Recién después de la aprobación, escribir `## Validated component spec` en la issue.
-6. Dejar la tarea esperando aprobación: no moverla a `In progress` desde `component-spec-proposer`.
-7. Indicar el siguiente paso: esperar el marcador `status:approved` y verificar que la issue esté sin assignee o asignada al contributor/usuario antes de arrancar `component-contributor`.
+3. Listar assumptions a validar, incluyendo referencias o patrones faltantes en capture-first.
+4. Pasar la propuesta por `component-spec-cataloging-validator` antes de aprobación humana.
+5. Incluir `## Draft cataloging decision` cuando la validación pase, con `### Child issue candidates` determinístico cuando aplique; si hay blockers/questions, mostrar `## Cataloging blockers/questions` y frenar.
+6. Esperar aprobación humana de la spec propuesta y de `## Draft cataloging decision`.
+7. Recién después de esa aprobación, escribir `## Validated component spec` y el `## Cataloging decision` validado inmediatamente después en el mismo comentario o actualización de la issue.
+8. Dejar la tarea esperando aprobación: no moverla a `In progress` desde `component-spec-proposer`.
+9. Indicar el siguiente paso: esperar el label de issue `status:approved` y verificar que la issue esté sin assignee o asignada al contributor/usuario antes de arrancar `component-contributor`.
 
 No uses `component-contributor` para implementar hasta que la spec esté validada, la issue tenga el label `status:approved` y el assignee gate haya pasado.
 
@@ -100,12 +129,12 @@ La spec validada debe quedar en la issue como contrato verificable.
 | Campo              | Qué debe decir                                             |
 | ------------------ | ---------------------------------------------------------- |
 | Component name     | PascalCase                                                 |
-| Atomic tier        | atom / molecule / organism                                 |
+| Catalog tier       | primitive / atom / molecule / organism                     |
 | Props              | Nombre, tipo TypeScript, default, required/optional        |
 | CVA variants       | Variant keys y valores posibles                            |
 | States             | Descripción visual y de comportamiento por estado          |
 | Accessibility      | Roles, atributos, teclado, focus, reduced motion si aplica |
-| Reference URL      | Radix UI primitives, MDN, APG, etc.                       |
+| Intake source / Reference | capture-first o reference-component-first; URL o patrón fuente si existe |
 | Design notes       | Decisiones visuales específicas del sistema                |
 | Story requirements | Default, Disabled, variantes clave, edge cases             |
 
@@ -175,7 +204,7 @@ Implementá este componente usando component-contributor.
 
 Issue: {issue_url}
 
-Usá la sección `## Validated component spec` como contrato. Antes de leer la spec en detalle, planificar o escribir código, verificá que la issue tenga el label `status:approved` y que no esté asignada a otra persona; si falta el label o el assignee gate falla, frená. Ejecutá START WORK antes del intake de implementación. No inventes props ni comportamiento fuera de la spec. Pausá en los checkpoints de spec review, visual preflight y plan antes de escribir código.
+Usá la sección `## Validated component spec` y el `## Cataloging decision` inmediatamente siguiente en el mismo comentario/actualización como contrato. Antes de leer la spec en detalle, planificar o escribir código, verificá que la issue tenga el label `status:approved` y que no esté asignada a otra persona; si falta el label o el assignee gate falla, frená. Ejecutá START WORK antes del intake de implementación. No inventes props ni comportamiento fuera de la spec o de la decisión de catálogo. Pausá en los checkpoints de spec review, visual preflight y plan antes de escribir código.
 ```
 
 El agente debe cargar `component-contributor`, comprobar el label `status:approved`, verificar assignees, correr START WORK y recién después consumir la spec validada por `component-spec-proposer`. Si salta una fase, frenalo.
@@ -186,13 +215,16 @@ El agente debe cargar `component-contributor`, comprobar el label `status:approv
 
 ### Fase 1 — Lectura de spec validada
 
-Antes de esta fase, el agente ya debe haber verificado el label `status:approved`, confirmado que la issue no está asignada a otra persona sin permiso explícito y completado START WORK. Luego lee la sección `## Validated component spec` de la issue y extrae componente, tier, props, variantes, estados, accesibilidad, referencia y notas de diseño.
+Antes de esta fase, el agente ya debe haber verificado el label `status:approved`, confirmado que la issue no está asignada a otra persona sin permiso explícito y completado START WORK. Luego lee `## Validated component spec` y el `## Cataloging decision` inmediatamente siguiente en el mismo comentario/actualización, y extrae componente, tier, props, variantes, estados, accesibilidad, referencia, notas de diseño, reuse/extracción y child candidates.
+
+Si el tier es `primitive`, solo puede avanzar cuando `## Cataloging decision` aprueba explícitamente soporte/ruta primitive; si no, debe frenar y deferir a la issue de inventario/recatalogación V1. No se implementa silenciosamente como `atom`.
 
 Salida esperada:
 
 - resumen de la spec;
+- resumen de la decisión de catálogo, reuse/extracción y child candidates;
 - evidencia del label `status:approved`, assignee gate y START WORK;
-- preguntas si algo es ambiguo;
+- preguntas si algo es ambiguo o si hay conflicto spec/catálogo;
 - módulos de referencia/tokens que va a cargar.
 
 **Checkpoint humano:** no avances si el agente inventa props, estados o comportamiento que no estén en la spec validada. Si aparece una decisión nueva, volvé a spec proposal o actualizá la issue antes de implementar.

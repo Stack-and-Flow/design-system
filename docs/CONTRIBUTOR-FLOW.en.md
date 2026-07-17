@@ -7,7 +7,7 @@ This is the canonical document for contributing components to the design system.
 ## Quick summary
 
 ```text
-Project task → Research → Spec proposal skill → Validated issue spec → wait for `status:approved` → verify assignee → START WORK → Spec review → Visual preflight → Plan → Implementation → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
+Project task → Research → Spec proposal skill → Cataloging validator → Validated issue spec → wait for `status:approved` → verify assignee → START WORK → Spec review → Visual preflight → Plan → Implementation → Visual review → Pre-PR component review → PR → Review → Merge → END WORK
 ```
 
 Core rule: **AI executes, the contributor decides**. The spec, visual criteria, and checkpoint approvals remain human responsibility. After the validated spec is written in the task, implementation stays blocked until the linked issue has the `status:approved` label and is not assigned to someone else.
@@ -22,7 +22,9 @@ Core rule: **AI executes, the contributor decides**. The spec, visual criteria, 
 | Architecture and code rules | [`GUIDELINES.en.md`](./GUIDELINES.en.md) |
 | Tokens and visual language | [`DESIGN.en.md`](./DESIGN.en.md), `src/styles/theme.css` |
 | Component visual states | [`COMPONENTS.en.md`](./COMPONENTS.en.md) |
-| Spec intake and validation | `skills/component-spec-proposer/SKILL.md` |
+| Cataloging and V1 recatalogation | [`COMPONENT-CATALOGING.en.md`](./COMPONENT-CATALOGING.en.md) |
+| Spec intake and proposal | `skills/component-spec-proposer/SKILL.md` |
+| Spec cataloging validation | `skills/component-spec-cataloging-validator/SKILL.md` |
 | Detailed AI workflow | `skills/component-contributor/SKILL.md` |
 | Pre-PR audit | `skills/components-auditor/SKILL.md` |
 
@@ -47,7 +49,7 @@ Before asking for implementation, research the component.
 Minimum checklist:
 
 - References: Radix UI primitives, MDN, or WAI-ARIA APG as applicable.
-- Atomic tier: `atom`, `molecule`, or `organism`.
+- Catalog tier: use [`COMPONENT-CATALOGING.en.md`](./COMPONENT-CATALOGING.en.md) to decide `primitives`, `atoms`, `molecules`, or `organisms` and document V1 follow-ups.
 - Props: name, type, default, required/optional.
 - CVA variants: keys and values.
 - States: base, hover, focus, active/pressed, disabled, loading, error, empty when relevant.
@@ -60,34 +62,61 @@ Do not do partial research. If the issue is incomplete, the component will be in
 
 ## Step 3 — Take and validate the spec with `component-spec-proposer`
 
-Before implementing, use the `component-spec-proposer` skill to turn the task and its reference into a validated spec.
+Before implementing, use the `component-spec-proposer` skill to turn the issue into a validated spec. There are two valid intake variants: capture-first and reference-component-first; both end at the same approval gate.
 
-When to use it:
+| Variant | When it applies | What the issue records |
+| ------- | --------------- | ---------------------- |
+| A — capture-first | A maintainer/user captures a component idea from a conversation or product need, even when no external reference exists yet. | Known context, constraints, unknowns, intended tier, and any missing reference or pattern. |
+| B — reference-component-first | The user provides a HeroUI, Radix, MDN, WAI-ARIA APG, or other reference component URL. | Reference behavior and how it adapts to Stack-and-Flow; it is not copied blindly. |
 
-- The issue references a Radix UI primitive, MDN, APG, or similar.
-- The task is still vague or has open decisions.
-- You need to prepare the issue before implementation.
+Mandatory convergence:
 
-Suggested prompt:
+```text
+captured issue or reference → proposed spec → assumptions/questions → cataloging validation → human validation → `## Validated component spec` in the issue → wait for `status:approved` label → START WORK → component-contributor
+```
+
+Before requesting human approval or writing `## Validated component spec`, run `component-spec-cataloging-validator`. That gate checks the proposal against [`COMPONENT-CATALOGING.en.md`](./COMPONENT-CATALOGING.en.md), inspects the current catalog, and returns `## Draft cataloging decision` with reuse, extraction, split, child issue candidates, and target issue, or `## Cataloging blockers/questions` when validation cannot complete. If blockers/questions remain, do not request approval yet. If child issues are needed, use `component-child-issues` later, only after the final decision is validated.
+
+When written to the issue, `## Cataloging decision` should sit immediately after `## Validated component spec` in the same comment or update, so the implementation contract and cataloging decision are reviewed together. This exact heading is reserved for the approved final version and must not contain unresolved blockers/questions.
+
+`status:approved` is an **issue label**. Project Status `In progress` belongs to **START WORK**, not to the spec proposal phase.
+
+Capture-first prompt:
 
 ```text
 Prepare the spec for this component using component-spec-proposer.
 
 Issue: {issue_url}
+Intake: capture-first from this conversation/product need.
+Known context: {context}
+Reference: pending or unknown
+
+Do not implement yet. Propose the spec, list assumptions/questions, flag missing references or patterns, run `component-spec-cataloging-validator`, and wait for my approval of the spec and `## Draft cataloging decision` before writing back to GitHub. If there are `## Cataloging blockers/questions`, do not request approval yet.
+```
+
+Reference-component-first prompt:
+
+```text
+Prepare the spec for this component using component-spec-proposer.
+
+Issue: {issue_url}
+Intake: reference-component-first
 Reference: {reference_url}
 
-Do not implement yet. First propose the spec, list assumptions to validate, and wait for my approval before writing back to GitHub.
+Do not implement yet. Adapt the reference to Stack-and-Flow, propose the spec, list assumptions to validate, run `component-spec-cataloging-validator`, and wait for my approval of the spec and `## Draft cataloging decision` before writing back to GitHub. If there are `## Cataloging blockers/questions`, do not request approval yet.
 ```
 
 The skill must:
 
-1. Read the issue and the reference.
+1. Read the issue and, when present, the reference.
 2. Propose a spec using the `component-spec-proposer` template.
-3. List assumptions to validate.
-4. Wait for human approval.
-5. Only after approval, write `## Validated component spec` in the issue.
-6. Leave the task waiting for approval: do not move it to `In progress` from `component-spec-proposer`.
-7. Indicate the next step: wait for the `status:approved` issue label and verify the issue is unassigned or assigned to the contributor/user before starting `component-contributor`.
+3. List assumptions to validate, including missing references or patterns in capture-first intake.
+4. Pass the proposal through `component-spec-cataloging-validator` before human approval.
+5. Include `## Draft cataloging decision` when validation passes, with deterministic `### Child issue candidates` when applicable; if blockers/questions remain, show `## Cataloging blockers/questions` and stop.
+6. Wait for human approval of both the proposed spec and `## Draft cataloging decision`.
+7. Only after that approval, write `## Validated component spec` and the validated `## Cataloging decision` immediately after it in the same issue comment or update.
+8. Leave the task waiting for approval: do not move it to `In progress` from `component-spec-proposer`.
+9. Indicate the next step: wait for the `status:approved` issue label and verify the issue is unassigned or assigned to the contributor/user before starting `component-contributor`.
 
 Do not use `component-contributor` to implement until the spec is validated, the issue has the `status:approved` label, and the assignee gate has passed.
 
@@ -100,12 +129,12 @@ The validated spec must live in the issue as a verifiable contract.
 | Field | What it must say |
 | ------------------ | ---------------------------------------------------------- |
 | Component name | PascalCase |
-| Atomic tier | atom / molecule / organism |
+| Catalog tier | primitive / atom / molecule / organism |
 | Props | Name, TypeScript type, default, required/optional |
 | CVA variants | Variant keys and possible values |
 | States | Visual and behavioral description per state |
 | Accessibility | Roles, attributes, keyboard, focus, reduced motion when applicable |
-| Reference URL | Radix UI primitives, MDN, APG, etc. |
+| Intake source / Reference | capture-first or reference-component-first; URL or pattern source when available |
 | Design notes | System-specific visual decisions |
 | Story requirements | Default, Disabled, key variants, edge cases |
 
@@ -175,7 +204,7 @@ Implement this component using component-contributor.
 
 Issue: {issue_url}
 
-Use the `## Validated component spec` section as the contract. Before reading the spec in detail, planning, or writing code, verify that the issue has the `status:approved` label and is not assigned to someone else; if the label is missing or the assignee gate fails, stop. Run START WORK before implementation intake. Do not invent props or behavior outside the spec. Pause at spec review, visual preflight, and plan checkpoints before writing code.
+Use the `## Validated component spec` section and the immediately following `## Cataloging decision` in the same comment/update as the contract. Before reading the spec in detail, planning, or writing code, verify that the issue has the `status:approved` label and is not assigned to someone else; if the label is missing or the assignee gate fails, stop. Run START WORK before implementation intake. Do not invent props or behavior outside the spec or cataloging decision. Pause at spec review, visual preflight, and plan checkpoints before writing code.
 ```
 
 The agent must load `component-contributor`, check the `status:approved` label, verify assignees, run START WORK, and only then consume the validated spec from `component-spec-proposer`. If it skips a phase, stop it.
@@ -186,13 +215,16 @@ The agent must load `component-contributor`, check the `status:approved` label, 
 
 ### Phase 1 — Read the validated spec
 
-Before this phase, the agent must already have verified the `status:approved` label, confirmed the issue is not assigned to someone else without explicit permission, and completed START WORK. It then reads the `## Validated component spec` section in the issue and extracts the component, tier, props, variants, states, accessibility, reference, and design notes.
+Before this phase, the agent must already have verified the `status:approved` label, confirmed the issue is not assigned to someone else without explicit permission, and completed START WORK. It then reads `## Validated component spec` and the immediately following `## Cataloging decision` in the same comment/update, and extracts the component, tier, props, variants, states, accessibility, reference, design notes, reuse/extraction, and child candidates.
+
+If the tier is `primitive`, the agent may proceed only when `## Cataloging decision` explicitly approves primitive support/path; otherwise it must stop and defer to the V1 inventory/recatalogation issue. Do not silently implement primitives as atoms.
 
 Expected output:
 
 - spec summary;
+- cataloging decision summary, reuse/extraction, and child candidates;
 - evidence of the `status:approved` label, assignee gate, and START WORK;
-- questions if anything is ambiguous;
+- questions if anything is ambiguous or if the spec conflicts with cataloging;
 - reference/token modules it plans to load.
 
 **Human checkpoint:** do not continue if the agent invents props, states, or behavior that are not in the validated spec. If a new decision appears, go back to spec proposal or update the issue before implementation.

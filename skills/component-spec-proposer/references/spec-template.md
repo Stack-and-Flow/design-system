@@ -3,15 +3,18 @@
 Use this exact structure for proposals and for the final GitHub issue comment.
 Keep headings ASCII-safe.
 
+The `## Validated component spec` heading below is the final GitHub comment heading only. Before human approval, present the same spec body under `## Component Spec Proposal: {ComponentName}` and omit the final-only validated heading.
+
 ```markdown
 ## Validated component spec
 
 ### Component
 
 - Name:
-- Atomic level:
-- Directory:
-- Reference URL:
+- Catalog tier: primitive / atom / molecule / organism
+- Directory: src/components/{primitives|atoms|molecules|organisms}/{kebab-name}/
+- Intake source: capture-first / reference-component-first
+- Reference URL or pattern source:
 
 ### Scope
 
@@ -132,6 +135,12 @@ Do not implement:
   - Disabled/invalid/loading/empty states, if applicable:
   - Axe/Storybook/manual notes:
 ```
+
+## Cataloging decision placement
+
+After the validated spec, append the validator output as a sibling section with the exact heading `## Cataloging decision`. Do not nest it inside the validated spec's `###` sections; it must immediately follow `## Validated component spec` in the same approved issue comment/update and must not contain unresolved blockers/questions.
+
+Before approval, use only draft headings such as `## Draft cataloging decision` or `## Cataloging blockers/questions`; never use the final `## Cataloging decision` heading in a proposal.
 
 ## Proposal guidance
 

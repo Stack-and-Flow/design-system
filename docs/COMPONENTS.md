@@ -2,6 +2,8 @@
 
 > Referencia para agentes de IA que escriben o revisan código de componentes. Cubre todos los estados interactivos, el sistema de glow, las reglas de transición, la técnica de bordes con degradado y los requisitos de accesibilidad. Se basa en los tokens de Stack-and-Flow y en el contrato visual actual del proyecto.
 
+Para decidir tier, split o follow-up de recatalogación V1, usá [`COMPONENT-CATALOGING.md`](./COMPONENT-CATALOGING.md).
+
 ---
 
 ## 1. Principios de composición
