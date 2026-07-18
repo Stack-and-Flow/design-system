@@ -12,8 +12,8 @@ Keep it minimal — detailed workflows live in skills (`skills/`).
 | Key           | Value                                             |
 | ------------- | ------------------------------------------------- |
 | Package       | `@stack-and-flow/design-system`                   |
-| Repo          | https://github.com/Stack-and-Flow/design-system   |
-| Storybook     | https://sf-design-system.netlify.app/             |
+| Repo          | <https://github.com/Stack-and-Flow/design-system>   |
+| Storybook     | <https://sf-design-system.netlify.app/>             |
 | Guidelines    | [`docs/GUIDELINES.md`](docs/GUIDELINES.md)       |
 | Contributing  | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)   |
 | Visual Design | [`docs/DESIGN.md`](docs/DESIGN.md)               |
@@ -32,7 +32,7 @@ Keep it minimal — detailed workflows live in skills (`skills/`).
 
 ## Structure
 
-Components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` with exactly 6 files:
+Implemented components live in `src/components/{atoms|molecules|organisms}/{kebab-name}/` with exactly 6 files by default. `primitive` remains a catalog tier, but `src/components/primitives/...` is only valid when a validated cataloging decision explicitly approves primitive implementation support and path:
 
 | File                        | Role                                              |
 | --------------------------- | ------------------------------------------------- |
@@ -74,7 +74,9 @@ Load the relevant skill for detailed workflows:
 | Trigger                                                                                                                | Skill                                                                |
 | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | Contributor shares a GitHub issue URL or component spec and asks to implement it                                       | [`component-contributor`](skills/component-contributor/SKILL.md)     |
-| User provides a HeroUI/reference component and wants an implementation-ready spec before coding                        | [`component-spec-proposer`](skills/component-spec-proposer/SKILL.md) |
+| User provides a capture-first component idea or reference-component-first URL and wants a validated issue spec before coding | [`component-spec-proposer`](skills/component-spec-proposer/SKILL.md) |
+| Validating a proposed component spec against catalog tiers, existing components, and reuse/extraction opportunities before approval | [`component-spec-cataloging-validator`](skills/component-spec-cataloging-validator/SKILL.md) |
+| Creating or reusing child issues from a validated component cataloging decision for independently reviewable primitives/atoms/molecules/organisms | [`component-child-issues`](skills/component-child-issues/SKILL.md)   |
 | Reviewing an existing component — code quality, visual states, tokens, accessibility                                   | [`components-auditor`](skills/components-auditor/SKILL.md)           |
 | Auditing the design system package — token architecture, folder structure, npm distributable standards                 | [`system-auditor`](skills/system-auditor/SKILL.md)                   |
 | External project wants to use Stack-and-Flow as a base and customize its tokens                                        | [`bootstrapping`](skills/bootstrapping/SKILL.md)                     |

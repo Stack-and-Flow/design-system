@@ -2,6 +2,8 @@
 
 > Reference for AI agents writing or reviewing component code. Covers every interactive state, glow system, transition rules, gradient border technique, and accessibility requirements. Derived from Stack-and-Flow tokens and the current project visual contract.
 
+For tier, split, or V1 recatalogation follow-up decisions, use [`COMPONENT-CATALOGING.en.md`](./COMPONENT-CATALOGING.en.md).
+
 ---
 
 ## 1. Compositional Principles
