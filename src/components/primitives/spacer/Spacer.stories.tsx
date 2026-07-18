@@ -8,8 +8,8 @@ const markerClass = 'rounded-sm bg-primary focus-ring';
 /**
  * ## Description
  * Spacer renders decorative, token-based empty space between layout elements.
- * Use it when a composition needs an explicit spacing atom instead of coupling
- * adjacent components with one-off margins.
+ * Use it when a composition needs an explicit spacing primitive instead of
+ * coupling adjacent components with one-off margins.
  *
  * ## Usage Guide
  * Prefer `axis` and `size` for new usage. `spaceX` and `spaceY` remain available
@@ -17,7 +17,7 @@ const markerClass = 'rounded-sm bg-primary focus-ring';
  * invisible; these stories show its effect through the distance between markers.
  */
 const meta: Meta<typeof Spacer> = {
-  title: 'Atoms/Spacer',
+  title: 'Primitives/Spacer',
   component: Spacer,
   parameters: {
     docs: {

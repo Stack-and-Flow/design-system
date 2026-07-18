@@ -23,14 +23,12 @@ export { Progress } from './components/atoms/progress';
 export { Select } from './components/atoms/select';
 export { Skeleton } from './components/atoms/skeleton';
 export { Slider } from './components/atoms/slider';
-export { Spacer } from './components/atoms/spacer';
 export { Switch } from './components/atoms/switch';
 export { Table } from './components/atoms/table';
 export { Text } from './components/atoms/text';
 export { TextArea } from './components/atoms/text-area';
 export { Time } from './components/atoms/time';
 export { Tooltip } from './components/atoms/tooltip';
-
 // ─── Molecules ───────────────────────────────────────────────────────────────
 export { Accordion } from './components/molecules/accordion';
 export { Breadcrumb } from './components/molecules/breadcrumb';
@@ -47,10 +45,11 @@ export {
 } from './components/molecules/pagination';
 export { Snippet } from './components/molecules/snippet';
 export { Tabs } from './components/molecules/tabs';
-
 // ─── Organisms ───────────────────────────────────────────────────────────────
 export { Drawer } from './components/organisms/drawer';
 export { Footer } from './components/organisms/footer';
 export { NavigationHeader } from './components/organisms/header';
 export { Modal } from './components/organisms/modal';
 export { ToastProvider, toast } from './components/organisms/toast';
+// ─── Primitives ──────────────────────────────────────────────────────────────
+export { Spacer } from './components/primitives/spacer';
