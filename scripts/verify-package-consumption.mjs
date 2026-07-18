@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Button } from '@stack-and-flow/design-system';
+import { Button, Spacer } from '@stack-and-flow/design-system';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const loadCjs = createRequire(import.meta.url);
@@ -15,8 +15,16 @@ if (typeof Button !== 'function') {
   throw new TypeError(`Expected ESM Button export to be a function, received ${typeof Button}`);
 }
 
+if (typeof Spacer !== 'function') {
+  throw new TypeError(`Expected ESM Spacer export to be a function, received ${typeof Spacer}`);
+}
+
 if (typeof cjsExports.Button !== 'function') {
   throw new TypeError(`Expected CJS Button export to be a function, received ${typeof cjsExports.Button}`);
+}
+
+if (typeof cjsExports.Spacer !== 'function') {
+  throw new TypeError(`Expected CJS Spacer export to be a function, received ${typeof cjsExports.Spacer}`);
 }
 
 const cssPath = resolve(packageRoot, 'dist/design-system.css');
@@ -120,12 +128,66 @@ try {
 
     writeFileSync(
       resolve(consumerDir, 'consumer.tsx'),
-      `import type { ComponentProps } from 'react';\nimport { Button, Popover, Select } from '@stack-and-flow/design-system';\n\nconst buttonProps: ComponentProps<typeof Button> = {\n  text: 'Save',\n  type: 'button'\n};\n\nconst selectProps: ComponentProps<typeof Select> = {\n  ariaLabel: 'Framework',\n  options: [{ key: 'react', label: 'React' }]\n};\n\nconst button = <Button {...buttonProps} />;\nconst select = <Select {...selectProps} />;\nconst popover = (\n  <Popover>\n    <Popover.Trigger>Open</Popover.Trigger>\n    <Popover.Content>Content</Popover.Content>\n  </Popover>\n);\n\nvoid button;\nvoid select;\nvoid popover;\n`
+      `import type { ComponentProps } from 'react';
+import { Button, Popover, Select, Spacer } from '@stack-and-flow/design-system';
+
+const buttonProps: ComponentProps<typeof Button> = {
+  text: 'Save',
+  type: 'button'
+};
+
+const spacerProps: ComponentProps<typeof Spacer> = {
+  axis: 'vertical',
+  size: 8
+};
+
+const selectProps: ComponentProps<typeof Select> = {
+  ariaLabel: 'Framework',
+  options: [{ key: 'react', label: 'React' }]
+};
+
+const button = <Button {...buttonProps} />;
+const spacer = <Spacer {...spacerProps} />;
+const select = <Select {...selectProps} />;
+const popover = (
+  <Popover>
+    <Popover.Trigger>Open</Popover.Trigger>
+    <Popover.Content>Content</Popover.Content>
+  </Popover>
+);
+
+void button;
+void spacer;
+void select;
+void popover;
+`
     );
 
     writeFileSync(
       resolve(consumerDir, 'smoke.mjs'),
-      `import { createRequire } from 'node:module';\nimport { Button } from '@stack-and-flow/design-system';\n\nconst require = createRequire(import.meta.url);\nconst cjsExports = require('@stack-and-flow/design-system');\nconst stylesPath = require.resolve('@stack-and-flow/design-system/styles');\n\nif (typeof Button !== 'function') {\n  throw new TypeError('Expected ESM Button export to be a function');\n}\nif (typeof cjsExports.Button !== 'function') {\n  throw new TypeError('Expected CJS Button export to be a function');\n}\nif (!stylesPath.endsWith('dist/design-system.css')) {\n  throw new Error(\`Expected styles subpath to resolve to dist/design-system.css, received ${stylesPath}\`);\n}\n`
+      `import { createRequire } from 'node:module';
+import { Button, Spacer } from '@stack-and-flow/design-system';
+
+const require = createRequire(import.meta.url);
+const cjsExports = require('@stack-and-flow/design-system');
+const stylesPath = require.resolve('@stack-and-flow/design-system/styles');
+
+if (typeof Button !== 'function') {
+  throw new TypeError('Expected ESM Button export to be a function');
+}
+if (typeof Spacer !== 'function') {
+  throw new TypeError('Expected ESM Spacer export to be a function');
+}
+if (typeof cjsExports.Button !== 'function') {
+  throw new TypeError('Expected CJS Button export to be a function');
+}
+if (typeof cjsExports.Spacer !== 'function') {
+  throw new TypeError('Expected CJS Spacer export to be a function');
+}
+if (!stylesPath.endsWith('dist/design-system.css')) {
+  throw new Error(\`Expected styles subpath to resolve to dist/design-system.css, received \${stylesPath}\`);
+}
+`
     );
 
     run('npm', ['install', '--silent', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: consumerDir });
@@ -144,5 +206,5 @@ try {
 }
 
 console.log(
-  'Package consumption verified: ESM/CJS root Button imports, styles subpath, and React 18/19 consumers are available.'
+  'Package consumption verified: ESM/CJS root Button and Spacer imports, styles subpath, and React 18/19 consumers are available.'
 );

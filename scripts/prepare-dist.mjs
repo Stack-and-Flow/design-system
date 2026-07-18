@@ -30,6 +30,7 @@ const getDeclarationFiles = (dir) => {
 
 const aliasTargets = [
   ['@/', distRoot],
+  ['@primitives/', resolve(distRoot, 'components/primitives')],
   ['@atoms/', resolve(distRoot, 'components/atoms')],
   ['@molecules/', resolve(distRoot, 'components/molecules')],
   ['@organisms/', resolve(distRoot, 'components/organisms')],

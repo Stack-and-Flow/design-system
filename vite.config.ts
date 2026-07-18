@@ -6,6 +6,7 @@ import { defineConfig, type UserConfig } from 'vite';
 const aliases = {
   '@': path.resolve(__dirname, './src'),
   '@assets': path.resolve(__dirname, './src/assets'),
+  '@primitives': path.resolve(__dirname, './src/components/primitives'),
   '@atoms': path.resolve(__dirname, './src/components/atoms'),
   '@molecules': path.resolve(__dirname, './src/components/molecules'),
   '@organisms': path.resolve(__dirname, './src/components/organisms'),
