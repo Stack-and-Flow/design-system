@@ -102,6 +102,13 @@ This is the single entry point for consumers who import the full package:
 ```typescript
 // src/index.ts — public API barrel
 
+// Primitives
+export { Divider } from './components/primitives/divider';
+export type * from './components/primitives/divider/types';
+
+export { Spacer } from './components/primitives/spacer';
+export type * from './components/primitives/spacer/types';
+
 // Atoms
 export { Button } from './components/atoms/button';
 export type * from './components/atoms/button/types';
@@ -111,9 +118,6 @@ export type * from './components/atoms/avatar/types';
 
 export { Badge } from './components/atoms/badge';
 export type * from './components/atoms/badge/types';
-
-export { Divider } from './components/atoms/divider';
-export type * from './components/atoms/divider/types';
 
 export { Dropdown } from './components/atoms/dropdown';
 export type * from './components/atoms/dropdown/types';
@@ -148,6 +152,7 @@ export { cn } from './lib/utils';
 ```
 
 **Rules**:
+
 - ONLY export what is part of the public API — no internal hooks, no internal utils beyond `cn`
 - Every component export must have a corresponding type export
 - `export type` for type-only re-exports (Biome enforces this)
@@ -188,9 +193,9 @@ This requires an `exports` map in `package.json` with one entry per component.
       "types": "./dist/atoms/badge/index.d.ts"
     },
     "./divider": {
-      "import": "./dist/atoms/divider/index.js",
-      "require": "./dist/atoms/divider/index.cjs",
-      "types": "./dist/atoms/divider/index.d.ts"
+      "import": "./dist/primitives/divider/index.js",
+      "require": "./dist/primitives/divider/index.cjs",
+      "types": "./dist/primitives/divider/index.d.ts"
     },
     "./dropdown": {
       "import": "./dist/atoms/dropdown/index.js",
@@ -234,6 +239,7 @@ ESM consumers use `import`. CJS consumers (Jest, older Node tooling) use `requir
 
 **Why a `./styles` entry?**
 Consumers need to import the CSS tokens. Without a declared export path, bundlers may not resolve it correctly. The explicit `./styles` entry makes it:
+
 ```typescript
 import '@stack-and-flow/design-system/styles';
 ```

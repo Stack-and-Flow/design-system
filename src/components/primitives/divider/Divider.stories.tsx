@@ -22,7 +22,7 @@ const VariantLabel = ({ children }: { children: string }) => <span className={la
  * custom inline styles or decorative effects.
  */
 const meta: Meta<typeof Divider> = {
-  title: 'Atoms/Divider',
+  title: 'Primitives/Divider',
   component: Divider,
   parameters: {
     docs: {

@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Button, Spacer } from '@stack-and-flow/design-system';
+import { Button, Divider, Spacer } from '@stack-and-flow/design-system';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const loadCjs = createRequire(import.meta.url);
@@ -15,12 +15,20 @@ if (typeof Button !== 'function') {
   throw new TypeError(`Expected ESM Button export to be a function, received ${typeof Button}`);
 }
 
+if (typeof Divider !== 'function') {
+  throw new TypeError(`Expected ESM Divider export to be a function, received ${typeof Divider}`);
+}
+
 if (typeof Spacer !== 'function') {
   throw new TypeError(`Expected ESM Spacer export to be a function, received ${typeof Spacer}`);
 }
 
 if (typeof cjsExports.Button !== 'function') {
   throw new TypeError(`Expected CJS Button export to be a function, received ${typeof cjsExports.Button}`);
+}
+
+if (typeof cjsExports.Divider !== 'function') {
+  throw new TypeError(`Expected CJS Divider export to be a function, received ${typeof cjsExports.Divider}`);
 }
 
 if (typeof cjsExports.Spacer !== 'function') {
@@ -129,11 +137,16 @@ try {
     writeFileSync(
       resolve(consumerDir, 'consumer.tsx'),
       `import type { ComponentProps } from 'react';
-import { Button, Popover, Select, Spacer } from '@stack-and-flow/design-system';
+import { Button, Divider, Popover, Select, Spacer } from '@stack-and-flow/design-system';
 
 const buttonProps: ComponentProps<typeof Button> = {
   text: 'Save',
   type: 'button'
+};
+
+const dividerProps: ComponentProps<typeof Divider> = {
+  decorative: true,
+  orientation: 'horizontal'
 };
 
 const spacerProps: ComponentProps<typeof Spacer> = {
@@ -147,6 +160,7 @@ const selectProps: ComponentProps<typeof Select> = {
 };
 
 const button = <Button {...buttonProps} />;
+const divider = <Divider {...dividerProps} />;
 const spacer = <Spacer {...spacerProps} />;
 const select = <Select {...selectProps} />;
 const popover = (
@@ -157,6 +171,7 @@ const popover = (
 );
 
 void button;
+void divider;
 void spacer;
 void select;
 void popover;
@@ -166,7 +181,7 @@ void popover;
     writeFileSync(
       resolve(consumerDir, 'smoke.mjs'),
       `import { createRequire } from 'node:module';
-import { Button, Spacer } from '@stack-and-flow/design-system';
+import { Button, Divider, Spacer } from '@stack-and-flow/design-system';
 
 const require = createRequire(import.meta.url);
 const cjsExports = require('@stack-and-flow/design-system');
@@ -175,11 +190,17 @@ const stylesPath = require.resolve('@stack-and-flow/design-system/styles');
 if (typeof Button !== 'function') {
   throw new TypeError('Expected ESM Button export to be a function');
 }
+if (typeof Divider !== 'function') {
+  throw new TypeError('Expected ESM Divider export to be a function');
+}
 if (typeof Spacer !== 'function') {
   throw new TypeError('Expected ESM Spacer export to be a function');
 }
 if (typeof cjsExports.Button !== 'function') {
   throw new TypeError('Expected CJS Button export to be a function');
+}
+if (typeof cjsExports.Divider !== 'function') {
+  throw new TypeError('Expected CJS Divider export to be a function');
 }
 if (typeof cjsExports.Spacer !== 'function') {
   throw new TypeError('Expected CJS Spacer export to be a function');
@@ -206,5 +227,5 @@ if (!stylesPath.endsWith('dist/design-system.css')) {
 }
 
 console.log(
-  'Package consumption verified: ESM/CJS root Button and Spacer imports, styles subpath, and React 18/19 consumers are available.'
+  'Package consumption verified: ESM/CJS root Button, Divider, and Spacer imports, styles subpath, and React 18/19 consumers are available.'
 );

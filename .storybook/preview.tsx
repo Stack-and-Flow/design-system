@@ -1,7 +1,8 @@
+/// <reference types="vite/client" />
+
 import { ArgTypes } from '@storybook/addon-docs';
 import { Description, Primary, Stories, Subtitle, Title } from '@storybook/blocks';
 import type { Preview } from '@storybook/react';
-import React from 'react';
 import '../src/styles/global.css';
 import theme from './theme';
 import { withDarkMode } from './withDarkMode';
@@ -24,7 +25,7 @@ const preview: Preview = {
     options: {
       theme: theme,
       storySort: {
-        order: ['Controls', 'Docs', 'Stories']
+        order: ['Primitives', 'Atoms', 'Molecules', 'Organisms', 'Controls', 'Docs', 'Stories']
       }
     },
     controls: {
