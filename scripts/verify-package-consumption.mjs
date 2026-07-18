@@ -137,6 +137,12 @@ try {
     writeFileSync(
       resolve(consumerDir, 'consumer.tsx'),
       `import type { ComponentProps } from 'react';
+import type {
+  DividerColor,
+  DividerProps,
+  SpacerProps,
+  SpacerScale
+} from '@stack-and-flow/design-system';
 import { Button, Divider, Popover, Select, Spacer } from '@stack-and-flow/design-system';
 
 const buttonProps: ComponentProps<typeof Button> = {
@@ -144,15 +150,20 @@ const buttonProps: ComponentProps<typeof Button> = {
   type: 'button'
 };
 
+const dividerColor: DividerColor = 'bg-primary';
 const dividerProps: ComponentProps<typeof Divider> = {
+  color: dividerColor,
   decorative: true,
   orientation: 'horizontal'
 };
+const explicitDividerProps: DividerProps = dividerProps;
 
+const spacerScale: SpacerScale = 8;
 const spacerProps: ComponentProps<typeof Spacer> = {
   axis: 'vertical',
-  size: 8
+  size: spacerScale
 };
+const explicitSpacerProps: SpacerProps = spacerProps;
 
 const selectProps: ComponentProps<typeof Select> = {
   ariaLabel: 'Framework',
@@ -172,7 +183,9 @@ const popover = (
 
 void button;
 void divider;
+void explicitDividerProps;
 void spacer;
+void explicitSpacerProps;
 void select;
 void popover;
 `

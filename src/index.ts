@@ -52,4 +52,6 @@ export { Modal } from './components/organisms/modal';
 export { ToastProvider, toast } from './components/organisms/toast';
 // ─── Primitives ──────────────────────────────────────────────────────────────
 export { Divider } from './components/primitives/divider';
+export type * from './components/primitives/divider/types';
 export { Spacer } from './components/primitives/spacer';
+export type * from './components/primitives/spacer/types';
