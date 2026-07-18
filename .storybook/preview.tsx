@@ -1,5 +1,3 @@
-/// <reference types="vite/client" />
-
 import { ArgTypes } from '@storybook/addon-docs';
 import { Description, Primary, Stories, Subtitle, Title } from '@storybook/blocks';
 import type { Preview } from '@storybook/react';

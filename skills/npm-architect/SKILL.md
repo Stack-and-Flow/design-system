@@ -99,6 +99,9 @@ Present the full gap table before proceeding.
 This is the single entry point for consumers who import the full package:
 `import { Button } from '@stack-and-flow/design-system'`
 
+This is an illustrative excerpt, not a complete copy/paste barrel. Use the real
+`src/index.ts` as the source of truth when taxonomy or root type exports change.
+
 ```typescript
 // src/index.ts — public API barrel
 
