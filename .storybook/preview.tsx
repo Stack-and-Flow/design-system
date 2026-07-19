@@ -23,7 +23,25 @@ const preview: Preview = {
     options: {
       theme: theme,
       storySort: {
-        order: ['Primitives', 'Atoms', 'Molecules', 'Organisms', 'Controls', 'Docs', 'Stories']
+        order: [
+          'Design System',
+          [
+            'Welcome',
+            'Component Methodology',
+            'Primitive Colors',
+            'Semantic Colors',
+            'Breakpoints',
+            'Typography',
+            'Animations'
+          ],
+          'Primitives',
+          'Atoms',
+          'Molecules',
+          'Organisms',
+          'Controls',
+          'Docs',
+          'Stories'
+        ]
       }
     },
     controls: {
