@@ -10,7 +10,6 @@ export { Calendar } from './components/atoms/calendar';
 export { CardContainer } from './components/atoms/card-container';
 export { Checkbox } from './components/atoms/checkbox';
 export { Chip } from './components/atoms/chip';
-export { Divider } from './components/atoms/divider';
 export { Dropdown } from './components/atoms/dropdown';
 export { Header } from './components/atoms/header';
 export { Icon } from './components/atoms/icon';
@@ -52,4 +51,7 @@ export { NavigationHeader } from './components/organisms/header';
 export { Modal } from './components/organisms/modal';
 export { ToastProvider, toast } from './components/organisms/toast';
 // ─── Primitives ──────────────────────────────────────────────────────────────
+export { Divider } from './components/primitives/divider';
+export type * from './components/primitives/divider/types';
 export { Spacer } from './components/primitives/spacer';
+export type * from './components/primitives/spacer/types';
