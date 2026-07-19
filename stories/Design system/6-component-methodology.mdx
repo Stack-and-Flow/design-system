@@ -1,0 +1,81 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Design System/Component Methodology" />
+
+export const H2 = ({ children }) => (
+  <h2 style={{ color: '#ff0036', fontSize: '1.125rem', fontWeight: 700, paddingBottom: '12px', marginTop: '2rem', marginBottom: '1rem', borderBottom: '1px solid #172230' }}>
+    {children}
+  </h2>
+);
+
+export const Card = ({ children }) => (
+  <div style={{ background: '#0B131E', border: '1px solid #172230', borderRadius: '8px', padding: '1.25rem 1.5rem' }}>
+    {children}
+  </div>
+);
+
+export const LinkCard = ({ href, title, description }) => (
+  <a href={href} target="_blank" rel="noopener noreferrer" style={{ display: 'block', background: '#0B131E', border: '1px solid #172230', borderRadius: '8px', padding: '1rem 1.25rem', color: '#cccccc', textDecoration: 'none' }}>
+    <strong style={{ display: 'block', color: '#ffffff', marginBottom: '4px' }}>{title}</strong>
+    <span style={{ color: '#888888', fontSize: '13px' }}>{description}</span>
+  </a>
+);
+
+# Component Methodology
+
+<div style={{ color: '#cccccc', marginBottom: '2rem', maxWidth: '760px', lineHeight: 1.6 }}>
+  Stack-and-Flow follows <strong style={{ color: '#ffffff' }}>Atomic Design</strong> and the <strong style={{ color: '#ffffff' }}>Container/Presentational pattern</strong>. Components should be easy to understand, token-driven, accessible, and safe to reuse across React applications.
+</div>
+
+<H2>Composition model</H2>
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+  {[
+    { tier: 'Primitives', description: 'Low-level visual building blocks for spacing, dividers, and foundational layout pieces.' },
+    { tier: 'Atoms', description: 'Single-purpose UI controls such as Button, Input, Badge, Text, and Avatar.' },
+    { tier: 'Molecules', description: 'Small composed patterns such as Tabs, Breadcrumb, Accordion, and Pagination.' },
+    { tier: 'Organisms', description: 'Larger interactive structures such as Modal, Drawer, and Toast.' },
+  ].map(({ tier, description }) => (
+    <Card key={tier}>
+      <div style={{ color: '#ff335e', fontSize: '13px', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>{tier}</div>
+      <div style={{ color: '#cccccc', fontSize: '14px', lineHeight: 1.5 }}>{description}</div>
+    </Card>
+  ))}
+</div>
+
+<H2>Component anatomy</H2>
+
+<Card>
+  <div style={{ color: '#cccccc', marginBottom: '1rem' }}>Implemented components use a predictable file layout by default:</div>
+  <pre style={{ margin: 0, color: '#cccccc', background: '#060B12', border: '1px solid #172230', borderRadius: '6px', padding: '1rem', overflowX: 'auto' }}><code>{`ComponentName.tsx         // Presentational JSX
+useComponentName.ts       // State, effects, handlers, CVA classes
+types.ts                  // Public types and variants
+ComponentName.test.tsx    // Hook and component coverage
+ComponentName.stories.tsx // Documentation and examples
+index.ts                  // Public re-exports`}</code></pre>
+</Card>
+
+<H2>Rules that protect consistency</H2>
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+  {[
+    'Use tokens for color, spacing, radius, typography, shadows, and motion.',
+    'Keep JSX presentational and move behavior into the component hook.',
+    'Model variants with CVA and typed props.',
+    'Write accessibility and interaction tests with the component.',
+    'Use type aliases, avoid any, and keep the public API explicit.',
+    'Do not duplicate docs here: link to the source-of-truth project docs.',
+  ].map((rule) => (
+    <Card key={rule}>
+      <div style={{ color: '#cccccc', lineHeight: 1.5 }}>{rule}</div>
+    </Card>
+  ))}
+</div>
+
+<H2>Project docs</H2>
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+  <LinkCard href="https://github.com/Stack-and-Flow/design-system/blob/main/docs/GUIDELINES.en.md" title="Guidelines" description="Architecture, component structure, conventions, and non-negotiable implementation rules." />
+  <LinkCard href="https://github.com/Stack-and-Flow/design-system/blob/main/docs/DESIGN.en.md" title="Visual Design" description="Tokens, typography, colors, breakpoints, motion, and visual design reference." />
+  <LinkCard href="https://github.com/Stack-and-Flow/design-system/blob/main/docs/CONTRIBUTING.en.md" title="Contributing" description="How to set up the project, work on changes, and prepare contributions." />
+</div>
