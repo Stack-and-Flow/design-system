@@ -18,7 +18,7 @@ const swatchClass = 'flex flex-col gap-2';
  * Skeleton instances to preview the shape of loading content without hardcoding dimensions.
  */
 const meta: Meta<typeof Skeleton> = {
-  title: 'Atoms/Skeleton',
+  title: 'Primitives/Skeleton',
   component: Skeleton,
   parameters: {
     docs: {
@@ -31,6 +31,7 @@ export default meta;
 
 type Story = StoryObj<typeof Skeleton>;
 
+/** Demonstrates the default text placeholder footprint and medium radius used by the component defaults. */
 export const Default: Story = {
   render: () => (
     <div className={frameClass}>
