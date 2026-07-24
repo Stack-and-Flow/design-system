@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Button, Divider, Spacer } from '@stack-and-flow/design-system';
+import { Button, Divider, Skeleton, Spacer } from '@stack-and-flow/design-system';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const loadCjs = createRequire(import.meta.url);
@@ -23,6 +23,10 @@ if (typeof Spacer !== 'function') {
   throw new TypeError(`Expected ESM Spacer export to be a function, received ${typeof Spacer}`);
 }
 
+if (typeof Skeleton !== 'function') {
+  throw new TypeError(`Expected ESM Skeleton export to be a function, received ${typeof Skeleton}`);
+}
+
 if (typeof cjsExports.Button !== 'function') {
   throw new TypeError(`Expected CJS Button export to be a function, received ${typeof cjsExports.Button}`);
 }
@@ -33,6 +37,10 @@ if (typeof cjsExports.Divider !== 'function') {
 
 if (typeof cjsExports.Spacer !== 'function') {
   throw new TypeError(`Expected CJS Spacer export to be a function, received ${typeof cjsExports.Spacer}`);
+}
+
+if (typeof cjsExports.Skeleton !== 'function') {
+  throw new TypeError(`Expected CJS Skeleton export to be a function, received ${typeof cjsExports.Skeleton}`);
 }
 
 const cssPath = resolve(packageRoot, 'dist/design-system.css');
@@ -140,10 +148,13 @@ try {
 import type {
   DividerColor,
   DividerProps,
+  SkeletonProps,
+  SkeletonRounded,
+  SkeletonSize,
   SpacerProps,
   SpacerScale
 } from '@stack-and-flow/design-system';
-import { Button, Divider, Popover, Select, Spacer } from '@stack-and-flow/design-system';
+import { Button, Divider, Popover, Select, Skeleton, Spacer } from '@stack-and-flow/design-system';
 
 const buttonProps: ComponentProps<typeof Button> = {
   text: 'Save',
@@ -165,6 +176,17 @@ const spacerProps: ComponentProps<typeof Spacer> = {
 };
 const explicitSpacerProps: SpacerProps = spacerProps;
 
+const skeletonSize: SkeletonSize = 'title';
+const skeletonRounded: SkeletonRounded = 'lg';
+const skeletonProps: ComponentProps<typeof Skeleton> = {
+  size: skeletonSize,
+  rounded: skeletonRounded,
+  ariaHidden: false,
+  role: 'status',
+  'aria-label': 'Loading profile'
+};
+const explicitSkeletonProps: SkeletonProps = skeletonProps;
+
 const selectProps: ComponentProps<typeof Select> = {
   ariaLabel: 'Framework',
   options: [{ key: 'react', label: 'React' }]
@@ -173,6 +195,7 @@ const selectProps: ComponentProps<typeof Select> = {
 const button = <Button {...buttonProps} />;
 const divider = <Divider {...dividerProps} />;
 const spacer = <Spacer {...spacerProps} />;
+const skeleton = <Skeleton {...skeletonProps} />;
 const select = <Select {...selectProps} />;
 const popover = (
   <Popover>
@@ -186,6 +209,8 @@ void divider;
 void explicitDividerProps;
 void spacer;
 void explicitSpacerProps;
+void skeleton;
+void explicitSkeletonProps;
 void select;
 void popover;
 `
@@ -194,7 +219,7 @@ void popover;
     writeFileSync(
       resolve(consumerDir, 'smoke.mjs'),
       `import { createRequire } from 'node:module';
-import { Button, Divider, Spacer } from '@stack-and-flow/design-system';
+import { Button, Divider, Skeleton, Spacer } from '@stack-and-flow/design-system';
 
 const require = createRequire(import.meta.url);
 const cjsExports = require('@stack-and-flow/design-system');
@@ -209,6 +234,9 @@ if (typeof Divider !== 'function') {
 if (typeof Spacer !== 'function') {
   throw new TypeError('Expected ESM Spacer export to be a function');
 }
+if (typeof Skeleton !== 'function') {
+  throw new TypeError('Expected ESM Skeleton export to be a function');
+}
 if (typeof cjsExports.Button !== 'function') {
   throw new TypeError('Expected CJS Button export to be a function');
 }
@@ -217,6 +245,9 @@ if (typeof cjsExports.Divider !== 'function') {
 }
 if (typeof cjsExports.Spacer !== 'function') {
   throw new TypeError('Expected CJS Spacer export to be a function');
+}
+if (typeof cjsExports.Skeleton !== 'function') {
+  throw new TypeError('Expected CJS Skeleton export to be a function');
 }
 if (!stylesPath.endsWith('dist/design-system.css')) {
   throw new Error(\`Expected styles subpath to resolve to dist/design-system.css, received \${stylesPath}\`);
@@ -240,5 +271,5 @@ if (!stylesPath.endsWith('dist/design-system.css')) {
 }
 
 console.log(
-  'Package consumption verified: ESM/CJS root Button, Divider, and Spacer imports, styles subpath, and React 18/19 consumers are available.'
+  'Package consumption verified: ESM/CJS root Button, Divider, Skeleton, and Spacer imports, styles subpath, and React 18/19 consumers are available.'
 );
