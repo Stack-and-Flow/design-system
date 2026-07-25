@@ -20,7 +20,6 @@ export { LottieAnimation } from './components/atoms/lottie-animation';
 export { Popover } from './components/atoms/popover';
 export { Progress } from './components/atoms/progress';
 export { Select } from './components/atoms/select';
-export { Skeleton } from './components/atoms/skeleton';
 export { Slider } from './components/atoms/slider';
 export { Switch } from './components/atoms/switch';
 export { Table } from './components/atoms/table';
@@ -53,5 +52,7 @@ export { ToastProvider, toast } from './components/organisms/toast';
 // ─── Primitives ──────────────────────────────────────────────────────────────
 export { Divider } from './components/primitives/divider';
 export type * from './components/primitives/divider/types';
+export { Skeleton } from './components/primitives/skeleton';
+export type * from './components/primitives/skeleton/types';
 export { Spacer } from './components/primitives/spacer';
 export type * from './components/primitives/spacer/types';
