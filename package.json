@@ -89,7 +89,7 @@
     "@vitejs/plugin-react-swc": "4.3.2",
     "@vitest/coverage-v8": "4.1.10",
     "axe-playwright": "2.2.2",
-    "jsdom": "29.1.1",
+    "jsdom": "30.0.1",
     "lefthook": "2.1.10",
     "lucide-react": "1.27.0",
     "playwright": "1.62.0",
